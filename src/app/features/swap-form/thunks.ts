@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AMM } from '@voltz-protocol/v1-sdk';
+
+import { RootState } from '../../store';
 
 const rejectThunkWithError = (
   thunkAPI: {
@@ -15,11 +16,14 @@ const rejectThunkWithError = (
 
 export const initialiseCashflowCalculator = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  {
-    amm: AMM;
-  }
->('aMMs/initialiseCasfhlowCalculator', async ({ amm }, thunkAPI) => {
+  void,
+  { state: RootState }
+>('aMMs/initialiseCashFlowCalculator', async (_, thunkAPI) => {
   try {
+    const amm = thunkAPI.getState().swapForm.amm;
+    if (!amm) {
+      return;
+    }
     const { scaled: variableFactor } = await amm.variableFactor(
       amm.termStartTimestampInMS,
       Date.now(),

@@ -5,8 +5,8 @@ import { stringToBigFloat } from '../../../utilities/number';
 import { initialiseCashflowCalculator } from './thunks';
 
 type SliceState = {
-  amm: AMM | undefined;
-  position: Position | undefined;
+  amm: AMM | null;
+  position: Position | null;
   // State of prospective swap
   prospectiveSwap: {
     // User-inputted notional amount
@@ -28,8 +28,8 @@ type SliceState = {
 };
 
 const initialState: SliceState = {
-  amm: undefined,
-  position: undefined,
+  amm: null,
+  position: null,
   prospectiveSwap: {
     notionalAmount: '0',
   },
@@ -71,20 +71,16 @@ export const slice = createSlice({
         state.cashflowCalculator.status = 'succeeded';
       }
     },
-    updateCashflowCalculatorAction: (
-      state,
-      {
-        payload: { amm },
-      }: PayloadAction<{
-        amm: AMM; //TODO Alex: remove amm and use amm from state
-      }>,
-    ) => {
+    updateCashflowCalculatorAction: (state) => {
+      if (!state.amm) {
+        return;
+      }
       if (state.cashflowCalculator.status === 'failed') {
         return;
       }
 
-      const { additionalCashflow, totalCashflow } = amm.getExpectedCashflowInfo({
-        position: state.position as Position | undefined, //TODO Alex
+      const { additionalCashflow, totalCashflow } = state.amm.getExpectedCashflowInfo({
+        position: state.position as Position, //TODO Alex
         fixedTokenDeltaBalance: Number(state.prospectiveSwap.notionalAmount), //TODO Alex
         variableTokenDeltaBalance: -Number(state.prospectiveSwap.notionalAmount), //TODO Alex
         variableFactorStartNow: state.cashflowCalculator.variableFactorStartNow,
@@ -93,6 +89,19 @@ export const slice = createSlice({
 
       state.cashflowCalculator.additionalCashflow = additionalCashflow;
       state.cashflowCalculator.totalCashflow = totalCashflow;
+    },
+    setSwapFormAMMAction: (
+      state,
+      {
+        payload: { amm },
+      }: PayloadAction<{
+        amm: AMM;
+      }>,
+    ) => {
+      if (!amm) {
+        return;
+      }
+      state.amm = amm;
     },
   },
   extraReducers: (builder) => {
@@ -109,6 +118,10 @@ export const slice = createSlice({
       });
   },
 });
-export const { setNotionalAmountAction, setPredictedApyAction, updateCashflowCalculatorAction } =
-  slice.actions;
+export const {
+  setSwapFormAMMAction,
+  setNotionalAmountAction,
+  setPredictedApyAction,
+  updateCashflowCalculatorAction,
+} = slice.actions;
 export const swapFormReducer = slice.reducer;

@@ -7,13 +7,12 @@ import {
   updateCashflowCalculatorAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useAMMs } from '../../../../hooks/useAMMs';
+import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { NotionalAmountBox } from './NotionalAmount.styled';
 type NotionalAmountProps = {};
 
 export const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = () => {
-  //TODO Alex: get AMM as selected for this swap form
-  const { aMMs, loading, error } = useAMMs();
+  const { aMM } = useSwapFormAMM();
 
   const notionalAmount = useAppSelector(selectNotionalAmount);
   const dispatch = useAppDispatch();
@@ -27,15 +26,11 @@ export const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = () =
           value,
         }),
       );
-      if (!loading && !error && aMMs.length > 0) {
-        dispatch(
-          updateCashflowCalculatorAction({
-            amm: aMMs[0],
-          }),
-        );
+      if (aMM) {
+        dispatch(updateCashflowCalculatorAction());
       }
     },
-    [dispatch, aMMs, loading, error],
+    [dispatch, aMM],
   );
 
   return (

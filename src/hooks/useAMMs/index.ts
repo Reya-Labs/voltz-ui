@@ -19,6 +19,7 @@ export type UseAMMsResult = {
   borrowAMMs: BorrowAMM[];
   loading: boolean;
   error: boolean;
+  idle: boolean;
 };
 
 export const useAMMs = (): UseAMMsResult => {
@@ -66,6 +67,7 @@ export const useAMMs = (): UseAMMsResult => {
     aMMs,
     traderAMMs,
     borrowAMMs,
+    idle: aMMsLoadedState === 'idle',
     loading: aMMsLoadedState === 'pending',
     error: aMMsLoadedState === 'failed',
   };

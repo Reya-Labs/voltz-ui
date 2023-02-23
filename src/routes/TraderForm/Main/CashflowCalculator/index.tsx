@@ -8,11 +8,11 @@ import {
   selectTotalCashflow,
   setPredictedApyAction,
   updateCashflowCalculatorAction,
-} from '../../../app/features/swap-form';
-import { initialiseCashflowCalculator } from '../../../app/features/swap-form/thunks';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { useAMMs } from '../../../hooks/useAMMs';
-import { formatCurrency } from '../../../utilities/number';
+} from '../../../../app/features/swap-form';
+import { initialiseCashflowCalculator } from '../../../../app/features/swap-form/thunks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
+import { formatCurrency } from '../../../../utilities/number';
 import {
   AdditionalCashFlowBox,
   CashFlowCalculatorBox,
@@ -26,8 +26,7 @@ type CashFlowCalculatorProps = {};
 
 export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps> = () => {
   const dispatch = useAppDispatch();
-  //TODO Alex: get AMM as selected for this swap form
-  const { aMMs, loading, error } = useAMMs();
+  const { aMM } = useSwapFormAMM();
 
   const status = useAppSelector(selectCashflowCalculatorStatus);
   const predictedApy = useAppSelector(selectPredictedApy);
@@ -37,10 +36,11 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
 
   //TODO Alex
   useEffect(() => {
-    if (!loading && !error && aMMs.length > 0 && status === 'idle') {
-      void dispatch(initialiseCashflowCalculator({ amm: aMMs[0] }));
+    if (!aMM) {
+      return;
     }
-  }, [aMMs, loading, error]);
+    void dispatch(initialiseCashflowCalculator());
+  }, [dispatch, aMM]);
 
   const handleOnChange = useCallback(
     (value?: string) => {
@@ -52,16 +52,11 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
           value,
         }),
       );
-      if (!loading && !error && aMMs.length > 0) {
-        //TODO Alex
-        dispatch(
-          updateCashflowCalculatorAction({
-            amm: aMMs[0],
-          }),
-        );
+      if (aMM) {
+        dispatch(updateCashflowCalculatorAction());
       }
     },
-    [dispatch, aMMs],
+    [dispatch, aMM],
   );
 
   return (

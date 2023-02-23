@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CashFlowCalculator } from '../CashflowCalculator';
+import { CashFlowCalculator } from './CashflowCalculator';
 import { Chart } from './Chart';
 import { MainBox } from './Main.styled';
 import { PoolHeader } from './PoolHeader';

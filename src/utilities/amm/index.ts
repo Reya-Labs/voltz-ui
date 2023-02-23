@@ -75,3 +75,44 @@ export const isBorrowing = (rateOracleProtocolId: number): boolean => {
 export const isAaveV3 = (pools: NetworkConfiguration['pools'], ammId: string): boolean => {
   return pools.find((pool) => pool.id.toLowerCase() === ammId.toLowerCase())?.isAaveV3 ?? false;
 };
+
+const getProtocolName = (protocolId: number): string => {
+  switch (protocolId) {
+    case 1: {
+      return 'aave';
+    }
+    case 2: {
+      return 'compound';
+    }
+    case 3: {
+      return 'lido';
+    }
+    case 4: {
+      return 'rocket';
+    }
+    case 5: {
+      return 'aaveBorrowing';
+    }
+    case 6: {
+      return 'compoundBorrowing';
+    }
+    case 7: {
+      return 'aaveV3';
+    }
+    case 8: {
+      return 'glp';
+    }
+    default:
+      throw new Error('Not supported protocolId');
+  }
+};
+
+export const generatePoolId = (amm: AMM) => {
+  const timestamp = new Date(amm.termEndTimestampInMS).toISOString().split('T')[0];
+
+  return `${getProtocolName(amm.rateOracle.protocolId)}-${amm.underlyingToken.name}-${timestamp}`;
+};
+
+export const generateAmmIdForRoute = (amm: AMM) => {
+  return amm.id.substring(amm.id.length - 4);
+};

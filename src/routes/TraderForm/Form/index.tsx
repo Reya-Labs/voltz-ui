@@ -7,6 +7,7 @@ import { NotionalAmount } from './NotionalAmount';
 import { NotionalSwap } from './NotionalSwap';
 
 export const Form: React.FunctionComponent = () => {
+  // TODO: move the mode to the redux store
   const [mode, setMode] = useState<'fixed' | 'variable'>('fixed');
   return (
     <FormBox>

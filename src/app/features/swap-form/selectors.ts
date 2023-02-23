@@ -13,3 +13,4 @@ export const selectAdditionalCashflow = (state: RootState) =>
   state.swapForm.cashflowCalculator.additionalCashflow;
 export const selectTotalCashflow = (state: RootState) =>
   state.swapForm.cashflowCalculator.totalCashflow;
+export const selectSwapFormAMM = (state: RootState) => state.swapForm.amm;
