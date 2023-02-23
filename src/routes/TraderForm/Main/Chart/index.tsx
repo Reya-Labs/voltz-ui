@@ -13,7 +13,7 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
         data={mockData}
         yMarker={2.35}
         yMarkerColorToken="skyBlueCrayola3"
-        yMarkerText="Fixed rate:"
+        yMarkerText="Fixed rate"
       />
     </ChartBox>
   );
