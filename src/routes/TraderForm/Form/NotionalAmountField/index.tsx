@@ -1,4 +1,4 @@
-import { CurrencyField, Typography } from 'brokoli-ui';
+import { TokenField } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
@@ -8,10 +8,10 @@ import {
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
-import { NotionalAmountBox } from './NotionalAmount.styled';
+import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 type NotionalAmountProps = {};
 
-export const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = () => {
+export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const { aMM } = useSwapFormAMM();
 
   const notionalAmount = useAppSelector(selectNotionalAmount);
@@ -33,12 +33,20 @@ export const NotionalAmount: React.FunctionComponent<NotionalAmountProps> = () =
     [dispatch, aMM],
   );
 
+  // todo: Alex handle error logic, and other values
   return (
-    <NotionalAmountBox>
-      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-        Notional amount
-      </Typography>
-      <CurrencyField suffix=" USDC" value={notionalAmount} onChange={handleOnChange} />
-    </NotionalAmountBox>
+    <NotionalAmountFieldBox>
+      <TokenField
+        bottomLeftText="Fixed Liquidity Available"
+        bottomRightTextColorToken="lavenderWeb"
+        bottomRightTextValue={290000.34}
+        error={false}
+        label="Notional amount"
+        token="usdc"
+        tooltip="TODO: Tooltip message here!"
+        value={notionalAmount}
+        onChange={handleOnChange}
+      />
+    </NotionalAmountFieldBox>
   );
 };
