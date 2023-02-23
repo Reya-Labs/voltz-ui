@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import { Ellipsis } from '../../../components/atomic/Ellipsis/Ellipsis';
 import { FormBox } from './Form.styled';
+import { MarginAmountField } from './MarginAmountField';
 import { NotionalAmountField } from './NotionalAmountField';
 import { NotionalSwap } from './NotionalSwap';
 
@@ -16,6 +17,7 @@ export const Form: React.FunctionComponent = () => {
       </Typography>
       <NotionalSwap fixedRate={5.49} mode={mode} variableRate={2.49} onSwap={setMode} />
       <NotionalAmountField />
+      <MarginAmountField />
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodyExtraLargeRegular">
         Engineers at work 👨🛠📋 <Ellipsis />
       </Typography>

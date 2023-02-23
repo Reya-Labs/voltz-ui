@@ -14,7 +14,7 @@ type PoolHeaderProps = {};
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   return (
     <PoolHeaderBox>
-      <MarketToken market="aave" token="usdc" />
+      <MarketToken market="Aave" token="usdc" />
       <PoolHeaderDetailsBox>
         <FixedBox>
           <LabelTokenTypography

@@ -39,6 +39,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       <TokenField
         bottomLeftText="Fixed Liquidity Available"
         bottomRightTextColorToken="lavenderWeb"
+        bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
         bottomRightTextValue={290000.34}
         error={false}
         label="Notional amount"
