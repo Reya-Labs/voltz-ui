@@ -8,7 +8,7 @@ import {
   setModeAction,
 } from '../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { FormBox, , FormOuterBox, TitleBox } from './Form.styled';
+import { FormBox, FormOuterBox, TitleBox } from './Form.styled';
 import { LeverageField } from './LeverageField';
 import { MarginAmountField } from './MarginAmountField';
 import { NotionalAmountField } from './NotionalAmountField';
@@ -46,10 +46,11 @@ export const Form: React.FunctionComponent = () => {
         </Typography>
       </TitleBox>
       <FormBox>
-        <NotionalSwap fixedRate={fixedRateInfo.value}
-                      mode={mode}
-                      variableRate={variableRateInfo.value}
-                      onSwap={handleOnChange}
+        <NotionalSwap
+          fixedRate={fixedRateInfo.value}
+          mode={mode}
+          variableRate={variableRateInfo.value}
+          onSwap={handleOnChange}
         />
         <NotionalAmountField />
         <LeverageField />

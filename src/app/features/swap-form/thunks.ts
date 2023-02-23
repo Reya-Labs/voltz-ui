@@ -50,6 +50,24 @@ export const getVariableRateThunk = createAsyncThunk<
   }
 });
 
+export const getAvailableNotionalsThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/getAvailableNotionals', async (_, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().swapForm.amm;
+    if (!amm) {
+      return;
+    }
+
+    const availableNotionals = await amm.getAvailableNotionals();
+    return availableNotionals;
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
 export const initialiseCashflowCalculatorThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,
