@@ -4,12 +4,13 @@ import React, { useCallback, useEffect } from 'react';
 import {
   selectAdditionalCashflow,
   selectCashflowCalculatorStatus,
+  selectCashflowCalculatorValidation,
   selectPredictedApy,
   selectTotalCashflow,
   setPredictedApyAction,
   updateCashflowCalculatorAction,
 } from '../../../../app/features/swap-form';
-import { initialiseCashflowCalculator } from '../../../../app/features/swap-form/thunks';
+import { initialiseCashflowCalculatorThunk } from '../../../../app/features/swap-form/thunks';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { formatCurrency } from '../../../../utilities/number';
@@ -29,17 +30,18 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
   const { aMM } = useSwapFormAMM();
 
   const status = useAppSelector(selectCashflowCalculatorStatus);
+  const valid = useAppSelector(selectCashflowCalculatorValidation);
+
   const predictedApy = useAppSelector(selectPredictedApy);
 
   const additonalCashflow = useAppSelector(selectAdditionalCashflow);
   const totalCashflow = useAppSelector(selectTotalCashflow);
 
-  //TODO Alex
   useEffect(() => {
     if (!aMM) {
       return;
     }
-    void dispatch(initialiseCashflowCalculator());
+    void dispatch(initialiseCashflowCalculatorThunk());
   }, [dispatch, aMM]);
 
   const handleOnChange = useCallback(
@@ -72,8 +74,9 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             Expected Variable APY
           </Typography>
           <CurrencyField
-            disabled={status === 'idle'}
-            error={status === 'failed'}
+            allowNegativeValue={false}
+            disabled={status !== 'success'}
+            error={!valid}
             suffix="%"
             value={predictedApy}
             onChange={handleOnChange}

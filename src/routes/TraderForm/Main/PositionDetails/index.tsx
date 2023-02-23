@@ -1,6 +1,8 @@
 import { LabelTokenTypography } from 'brokoli-ui';
 import React from 'react';
 
+import { selectMode } from '../../../../app/features/swap-form';
+import { useAppSelector } from '../../../../app/hooks';
 import {
   CashFlowBox,
   NotionalBox,
@@ -14,17 +16,19 @@ import {
 type PositionDetailsProps = {};
 
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
+  const mode = useAppSelector(selectMode);
+
   return (
     <PositionDetailsBox>
       <PositionDetailsLeftBox>
         <LabelTokenTypography
-          colorToken="skyBlueCrayola"
+          colorToken={mode === 'fixed' ? 'skyBlueCrayola' : 'ultramarineBlue'}
           label="New position"
           labelColorToken="lavenderWeb"
           labelTypographyToken="primaryBodyMediumBold"
           token=""
           typographyToken="secondaryBodySmallRegular"
-          value="Fixed Taker"
+          value={mode === 'fixed' ? 'Fixed Taker' : 'Variable Taker'}
         />
       </PositionDetailsLeftBox>
       <PositionDetailsRightBox>

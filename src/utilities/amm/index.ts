@@ -100,7 +100,7 @@ const getProtocolName = (protocolId: number): string => {
       return 'aaveV3';
     }
     case 8: {
-      return 'glp';
+      return 'gmxGlp';
     }
     default:
       throw new Error('Not supported protocolId');

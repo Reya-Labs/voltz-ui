@@ -1,7 +1,10 @@
 import { Page as BrokoliPage } from 'brokoli-ui';
 import * as React from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { getFixedRateThunk, getVariableRateThunk } from '../../app/features/swap-form/thunks';
+import { useAppDispatch } from '../../app/hooks';
 import { Loading } from '../../components/atomic/Loading/Loading';
 import { Panel } from '../../components/atomic/Panel/Panel';
 import { useSwapFormAMM } from '../../hooks/useSwapFormAMM';
@@ -20,8 +23,17 @@ import {
 } from './TraderForm.styled';
 
 export const TraderFormRoute: React.FunctionComponent = () => {
+  const dispatch = useAppDispatch();
   const { form } = useParams();
   const { aMM, loading, error, idle } = useSwapFormAMM();
+
+  useEffect(() => {
+    if (!aMM) {
+      return;
+    }
+    void dispatch(getFixedRateThunk());
+    void dispatch(getVariableRateThunk());
+  }, [dispatch, aMM]);
 
   let pageContent = (
     <MainAndFormSectionBox data-testid="BrokoliPage-MainAndFormSectionBox">

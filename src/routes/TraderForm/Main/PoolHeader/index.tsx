@@ -1,6 +1,11 @@
 import { LabelTokenTypography, MarketToken } from 'brokoli-ui';
 import React from 'react';
 
+import { selectFixedRateInfo, selectVariableRateInfo } from '../../../../app/features/swap-form';
+import { useAppSelector } from '../../../../app/hooks';
+import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
+import { formatTimestamp } from '../../../../utilities/date';
+import { formatNumber } from '../../../../utilities/number';
 import {
   FixedBox,
   MaturityBox,
@@ -12,6 +17,10 @@ import {
 type PoolHeaderProps = {};
 
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
+  const { aMM } = useSwapFormAMM();
+  const fixedRateInfo = useAppSelector(selectFixedRateInfo);
+  const variableRateInfo = useAppSelector(selectVariableRateInfo);
+
   return (
     <PoolHeaderBox>
       <MarketToken market="Aave" token="usdc" />
@@ -24,20 +33,22 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
             labelTypographyToken="primaryBodyXSmallRegular"
             token="%"
             typographyToken="secondaryBodyMediumBold"
-            value={5.33}
+            value={fixedRateInfo.status !== 'success' ? '--' : formatNumber(fixedRateInfo.value)}
           />
         </FixedBox>
         <VariableBox>
           <LabelTokenTypography
             colorToken="lavenderWeb"
-            differenceValue={-2}
+            // differenceValue={-2} //TODO Alex
             label="Variable"
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"
             token="%"
             tooltip="TODO: Missing tooltip"
             typographyToken="secondaryBodyMediumBold"
-            value={2.49}
+            value={
+              variableRateInfo.status !== 'success' ? '--' : formatNumber(variableRateInfo.value)
+            }
           />
         </VariableBox>
         <MaturityBox>
@@ -48,7 +59,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
             labelTypographyToken="primaryBodyXSmallRegular"
             token=""
             typographyToken="secondaryBodyMediumBold"
-            value="03 May 2023"
+            value={aMM ? formatTimestamp(aMM.termEndTimestampInMS) : '--'}
           />
         </MaturityBox>
       </PoolHeaderDetailsBox>
