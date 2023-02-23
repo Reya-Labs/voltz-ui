@@ -3,6 +3,7 @@ import { AMM, Position } from '@voltz-protocol/v1-sdk';
 
 import { stringToBigFloat } from '../../../utilities/number';
 import {
+  getAvailableNotionalsThunk,
   getFixedRateThunk,
   getVariableRateThunk,
   initialiseCashflowCalculatorThunk,
@@ -21,12 +22,19 @@ type SliceState = {
     value: number;
     status: ThunkStatus;
   };
+  availableNotionals: {
+    value: Record<'fixed' | 'variable', number>;
+    status: ThunkStatus;
+  };
   // State of prospective swap
   prospectiveSwap: {
     // Direction of trade: FT or VT
     mode: 'fixed' | 'variable';
     // User-inputted notional amount
-    notionalAmount: string;
+    notionalAmount: {
+      value: string;
+      error: string | null;
+    };
   };
   // State of cashflow calculator
   cashflowCalculator: {
@@ -57,9 +65,19 @@ const initialState: SliceState = {
     value: 0,
     status: 'idle',
   },
+  availableNotionals: {
+    value: {
+      fixed: 0,
+      variable: 0,
+    },
+    status: 'idle',
+  },
   prospectiveSwap: {
     mode: 'fixed',
-    notionalAmount: '0',
+    notionalAmount: {
+      value: '0',
+      error: null,
+    },
   },
   cashflowCalculator: {
     predictedApy: '0',
@@ -95,7 +113,12 @@ export const slice = createSlice({
         value: string;
       }>,
     ) => {
-      state.prospectiveSwap.notionalAmount = value;
+      state.prospectiveSwap.notionalAmount.value = value;
+      let error = null;
+      if (stringToBigFloat(value) > state.availableNotionals.value[state.prospectiveSwap.mode]) {
+        error = 'Not enough liquidity. Available:';
+      }
+      state.prospectiveSwap.notionalAmount.error = error;
     },
     setPredictedApyAction: (
       state,
@@ -201,6 +224,37 @@ export const slice = createSlice({
       .addCase(getVariableRateThunk.fulfilled, (state, { payload }) => {
         state.variableRate = {
           value: (payload as number) * 100,
+          status: 'success',
+        };
+      })
+      .addCase(getAvailableNotionalsThunk.pending, (state) => {
+        state.availableNotionals = {
+          value: {
+            fixed: 0,
+            variable: 0,
+          },
+          status: 'pending',
+        };
+      })
+      .addCase(getAvailableNotionalsThunk.rejected, (state) => {
+        state.availableNotionals = {
+          value: {
+            fixed: 0,
+            variable: 0,
+          },
+          status: 'error',
+        };
+      })
+      .addCase(getAvailableNotionalsThunk.fulfilled, (state, { payload }) => {
+        const { availableNotionalFT, availableNotionalVT } = payload as {
+          availableNotionalFT: number;
+          availableNotionalVT: number;
+        };
+        state.availableNotionals = {
+          value: {
+            fixed: availableNotionalFT,
+            variable: availableNotionalVT,
+          },
           status: 'success',
         };
       });

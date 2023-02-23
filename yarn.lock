@@ -7197,26 +7197,26 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/subgraph-data@1.16.0":
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/subgraph-data/-/subgraph-data-1.16.0.tgz#a2dfe2b1721705cddde030481e8b2e80d90c39b4"
-  integrity sha512-bd8e5I7ogkXIi4wMDUkqjpgq++QqIHUDoHF9nvtF1qiUNYDuU2kZrEQ9fFTu84TPZdevnk2upKRnkLPL7Wu9dA==
+"@voltz-protocol/subgraph-data@1.18.1":
+  version "1.18.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/subgraph-data/-/subgraph-data-1.18.1.tgz#0c562c1841238e5cc66e8295be774e99c0b719a4"
+  integrity sha512-8Q2KKD2KrMmQrWIx/f7CAP+oDDdke+1FjiZc54ntVGdZ2JJlCum7gHTnWvYRqp0uhAxTrjeDaaWCmNbGIRGOew==
   dependencies:
     ethers "5.5.4"
     graphql "16.3.0"
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.73.0":
-  version "1.73.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.73.0.tgz#def70b63c0c321555a123de01ba11d68c436c559"
-  integrity sha512-NH35YgxKxH/AZoP69bL28/9TVZayj0ADuB3OiauNmbWaSNUqk/o+ZVzltwe/+CDQYJmSPqFPzBjmMko78kuSBA==
+"@voltz-protocol/v1-sdk@1.75.1":
+  version "1.75.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.75.1.tgz#c79419288a4d91ffe6ff05aa2133c7c058d85b96"
+  integrity sha512-cYpBQIrnw3X6rH8Zsr4C/ZLJrnrX1cUYVnxDTP1HXlbviPjQoKOImw3YS/42AEHXkshScefAia2Be9jNOHmz1A==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
-    "@voltz-protocol/subgraph-data" "1.16.0"
+    "@voltz-protocol/subgraph-data" "1.18.1"
     axios "^0.27.2"
     big.js "^6.1.1"
     coingecko-api "^1.0.10"

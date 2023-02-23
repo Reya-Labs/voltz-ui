@@ -3,7 +3,11 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { getFixedRateThunk, getVariableRateThunk } from '../../app/features/swap-form/thunks';
+import {
+  getAvailableNotionalsThunk,
+  getFixedRateThunk,
+  getVariableRateThunk,
+} from '../../app/features/swap-form/thunks';
 import { useAppDispatch } from '../../app/hooks';
 import { Loading } from '../../components/atomic/Loading/Loading';
 import { Panel } from '../../components/atomic/Panel/Panel';
@@ -33,6 +37,7 @@ export const TraderFormRoute: React.FunctionComponent = () => {
     }
     void dispatch(getFixedRateThunk());
     void dispatch(getVariableRateThunk());
+    void dispatch(getAvailableNotionalsThunk());
   }, [dispatch, aMM]);
 
   let pageContent = (
