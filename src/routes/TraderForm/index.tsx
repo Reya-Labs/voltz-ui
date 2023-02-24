@@ -1,9 +1,7 @@
-import { Page as BrokoliPage } from 'brokoli-ui';
+import { Page as BrokoliPage, RainbowLoader } from 'brokoli-ui';
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Loading } from '../../components/atomic/Loading/Loading';
-import { Panel } from '../../components/atomic/Panel/Panel';
 import { useSwapFormAMM } from '../../hooks/useSwapFormAMM';
 import { NoVaultFound } from '../LPOptimisers/VaultFormRoute/NoVaultFound/NoVaultFound';
 import { Form } from './Form';
@@ -12,6 +10,7 @@ import { Main } from './Main';
 import { NoAMMFound } from './NoAMMFound/NoAMMFound';
 import { TopPanel } from './TopPanel';
 import {
+  LoadingBox,
   MainAndFormSectionBox,
   MainSectionBox,
   PageSectionBox,
@@ -40,19 +39,9 @@ export const TraderFormRoute: React.FunctionComponent = () => {
 
   if (loading || idle) {
     pageContent = (
-      <Panel
-        sx={{
-          width: '400px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          height: '500px',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-        variant="grey-dashed"
-      >
-        <Loading />
-      </Panel>
+      <LoadingBox>
+        <RainbowLoader height={7} text="Fetching best rates..." width={520} />
+      </LoadingBox>
     );
   }
 
