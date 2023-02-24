@@ -16,6 +16,7 @@ export const FormBox = styled('div')`
   backdrop-filter: blur(4px);
 `;
 export const TitleBox = styled('div')`
+  box-sizing: border-box;
   width: 100%;
   position: sticky;
   top: 0;
