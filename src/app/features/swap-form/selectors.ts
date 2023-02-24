@@ -13,8 +13,6 @@ export const selectNotionalAmount = (state: RootState) =>
 // ------------ Cashflow Calculator Selectors ------------
 export const selectCashflowCalculatorStatus = (state: RootState) =>
   state.swapForm.cashflowCalculator.variableFactorStartNow.status;
-export const selectCashflowCalculatorValidation = (state: RootState) =>
-  state.swapForm.cashflowCalculator.valid;
 export const selectPredictedApy = (state: RootState) =>
   state.swapForm.cashflowCalculator.predictedApy;
 export const selectAdditionalCashflow = (state: RootState) =>

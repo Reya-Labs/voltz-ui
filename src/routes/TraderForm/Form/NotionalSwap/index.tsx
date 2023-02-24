@@ -1,7 +1,15 @@
 import { TokenTypography, Typography, TypographyWithTooltip } from 'brokoli-ui';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import MovingComponent from 'react-moving-text';
 
+import {
+  selectFixedRateInfo,
+  selectMode,
+  selectVariableRateInfo,
+  setModeAction,
+} from '../../../../app/features/swap-form';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { formatNumber } from '../../../../utilities/number';
 import { ReactComponent as ArrowsSvg } from './arrows.svg';
 import {
   BottomTextContent,
@@ -13,19 +21,37 @@ import {
   TopTextContent,
 } from './NotionalSwap.styled';
 
-export const NotionalSwap: React.FunctionComponent<{
-  fixedRate: number;
-  variableRate: number;
-  mode: 'fixed' | 'variable';
-  onSwap: (nextMode: 'fixed' | 'variable') => void;
-}> = ({ variableRate, mode, onSwap, fixedRate }) => {
+export const NotionalSwap: React.FunctionComponent<{}> = () => {
+  const dispatch = useAppDispatch();
+
+  const fixedRateInfo = useAppSelector(selectFixedRateInfo);
+  const variableRateInfo = useAppSelector(selectVariableRateInfo);
+  const mode = useAppSelector(selectMode);
+
+  const fixedRate = formatNumber(fixedRateInfo.value);
+  const variableRate = formatNumber(variableRateInfo.value);
+  const isFixedMode = mode === 'fixed';
+
+  const onSwap = useCallback(
+    (value?: 'fixed' | 'variable') => {
+      if (!value) {
+        return;
+      }
+      dispatch(
+        setModeAction({
+          value,
+        }),
+      );
+    },
+    [dispatch],
+  );
+
   const [animate, setAnimate] = useState(false);
   useEffect(() => {
     if (animate) {
       setTimeout(() => setAnimate(false), 500);
     }
   }, [animate]);
-  const isFixedMode = mode === 'fixed';
 
   return (
     <NotionalSwapWrapperBox>

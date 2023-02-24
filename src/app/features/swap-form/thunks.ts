@@ -43,8 +43,8 @@ export const getVariableRateThunk = createAsyncThunk<
       return;
     }
 
-    const fixedRate = await amm.getInstantApy();
-    return fixedRate;
+    const variableRate = await amm.getInstantApy();
+    return variableRate * 100;
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

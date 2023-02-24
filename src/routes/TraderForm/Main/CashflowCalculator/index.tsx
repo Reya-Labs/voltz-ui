@@ -4,7 +4,6 @@ import React, { useCallback, useEffect } from 'react';
 import {
   selectAdditionalCashflow,
   selectCashflowCalculatorStatus,
-  selectCashflowCalculatorValidation,
   selectPredictedApy,
   selectTotalCashflow,
   setPredictedApyAction,
@@ -30,7 +29,6 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
   const { aMM } = useSwapFormAMM();
 
   const status = useAppSelector(selectCashflowCalculatorStatus);
-  const valid = useAppSelector(selectCashflowCalculatorValidation);
 
   const predictedApy = useAppSelector(selectPredictedApy);
 
@@ -76,7 +74,6 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
           <CurrencyField
             allowNegativeValue={false}
             disabled={status !== 'success'}
-            error={!valid}
             suffix="%"
             value={predictedApy}
             onChange={handleOnChange}
