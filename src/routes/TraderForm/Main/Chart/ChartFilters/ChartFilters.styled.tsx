@@ -11,7 +11,9 @@ export const ChartFiltersBox = styled('div')`
   width: 40px;
 `;
 
-export const ChartFilterButtonBox = styled('div')<{ active: boolean }>`
+export const ChartFilterButtonBox = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'active' && prop !== 'disabled',
+})<{ disabled: boolean; active: boolean }>`
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -23,7 +25,7 @@ export const ChartFilterButtonBox = styled('div')<{ active: boolean }>`
 
   border-radius: 4px;
   transition: background 300ms ease-in;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   &:hover {
     background: ${colors.lavenderWeb7};

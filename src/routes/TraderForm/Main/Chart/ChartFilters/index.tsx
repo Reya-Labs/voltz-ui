@@ -35,17 +35,19 @@ export const ChartFilters: React.FunctionComponent<ChartFiltersProps> = ({
         <ChartFilterButtonBox
           key={`${id}_${label}`}
           active={id === activeModeId || id === activeTimeRangeId}
+          disabled={disabled}
+          onClick={() => {
+            if (disabled) {
+              return;
+            }
+            if (isMode) {
+              onModeChange(id);
+            } else {
+              onTimeRangeChange(id);
+            }
+          }}
         >
-          <ChartFilterButton
-            disabled={disabled}
-            onClick={() => {
-              if (isMode) {
-                onModeChange(id);
-              } else {
-                onTimeRangeChange(id);
-              }
-            }}
-          >
+          <ChartFilterButton disabled={disabled}>
             <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
               {label}
             </Typography>
