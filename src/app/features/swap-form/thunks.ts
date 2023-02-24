@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { InfoPostSwapV1 } from '@voltz-protocol/v1-sdk';
 
+import { stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 
 const rejectThunkWithError = (
@@ -84,6 +86,38 @@ export const initialiseCashflowCalculatorThunk = createAsyncThunk<
     );
 
     return variableFactor;
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const getInfoPostSwapThunk = createAsyncThunk<
+  Awaited<
+    | { notionalAmount: number; infoPostSwapV1: InfoPostSwapV1 }
+    | ReturnType<typeof rejectThunkWithError>
+  >,
+  void,
+  { state: RootState }
+>('swapForm/getInfoPostSwap', async (_, thunkAPI) => {
+  try {
+    const swapFormState = thunkAPI.getState().swapForm;
+    const amm = swapFormState.amm;
+    if (!amm) {
+      return;
+    }
+
+    const notionalAmount = stringToBigFloat(swapFormState.prospectiveSwap.notionalAmount.value);
+    const infoPostSwapV1 = await amm.getInfoPostSwapV1({
+      isFT: swapFormState.prospectiveSwap.mode === 'fixed',
+      notional: notionalAmount,
+      fixedLow: 1,
+      fixedHigh: 999,
+    });
+
+    return {
+      notionalAmount,
+      infoPostSwap: infoPostSwapV1,
+    };
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

@@ -1,12 +1,15 @@
 import { TokenField } from 'brokoli-ui';
+// eslint-disable-next-line no-restricted-imports
+import { TokenIconProps } from 'brokoli-ui/dist/esm/types/components/TokenField/TokenIcon';
+import debounce from 'lodash.debounce';
 import React, { useCallback } from 'react';
 
 import {
+  getInfoPostSwapThunk,
   selectAvailableNotionals,
   selectMode,
   selectNotionalAmount,
   setNotionalAmountAction,
-  updateCashflowCalculatorAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
@@ -15,14 +18,22 @@ import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 type NotionalAmountProps = {};
 
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
-  const { aMM } = useSwapFormAMM();
-
   const notionalAmount = useAppSelector(selectNotionalAmount);
 
   const mode = useAppSelector(selectMode);
   const availableNotionals = useAppSelector(selectAvailableNotionals);
 
   const dispatch = useAppDispatch();
+
+  const { aMM } = useSwapFormAMM();
+
+  const getInfoPostSwap = useCallback(
+    debounce(() => {
+      void dispatch(getInfoPostSwapThunk());
+    }, 1000),
+    [dispatch],
+  );
+
   const handleOnChange = useCallback(
     (value?: string) => {
       if (!value) {
@@ -34,12 +45,11 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
         }),
       );
 
-      dispatch(updateCashflowCalculatorAction());
+      getInfoPostSwap();
     },
-    [dispatch, aMM],
+    [dispatch, getInfoPostSwap],
   );
 
-  // todo: Alex handle error logic, and other values
   return (
     <NotionalAmountFieldBox>
       <TokenField
@@ -50,7 +60,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
         bottomRightTextValue={formatNumber(availableNotionals.value[mode])}
         error={notionalAmount.error !== null}
         label="Notional amount"
-        token="usdc"
+        token={aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenIconProps['token']) : 'usdc'} // TODO Alex
         tooltip="TODO: Tooltip message here!"
         value={notionalAmount.value}
         onChange={handleOnChange}

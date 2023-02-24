@@ -1,10 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
+import { Signer } from 'ethers';
+// eslint-disable-next-line no-restricted-imports
+import { WritableDraft } from 'immer/dist/internal';
 
 import { stringToBigFloat } from '../../../utilities/number';
 import {
   getAvailableNotionalsThunk,
   getFixedRateThunk,
+  getInfoPostSwapThunk,
   getVariableRateThunk,
   initialiseCashflowCalculatorThunk,
 } from './thunks';
@@ -34,6 +38,30 @@ type SliceState = {
     notionalAmount: {
       value: string;
       error: string | null;
+    };
+    // User-inputted margin amount
+    marginAmount: {
+      value: string;
+      error: string | null;
+    };
+    infoPostSwap: {
+      value: {
+        // Margin requirement for prospective swap
+        marginRequirement: number;
+        // Average fixed rate obtained by the prospective swap
+        averageFixedRate: number;
+
+        // Token balance deltas resulted by prospective swap
+        fixedTokenDeltaBalance: number;
+        variableTokenDeltaBalance: number;
+        fixedTokenDeltaUnbalanced: number;
+
+        // Extra information about prospective swap
+        fee: number;
+        slippage: number;
+        gasFeeETH: number;
+      };
+      status: ThunkStatus;
     };
   };
   // State of cashflow calculator
@@ -76,6 +104,23 @@ const initialState: SliceState = {
       value: '0',
       error: null,
     },
+    marginAmount: {
+      value: '0',
+      error: null,
+    },
+    infoPostSwap: {
+      value: {
+        marginRequirement: 0,
+        averageFixedRate: 0,
+        fixedTokenDeltaBalance: 0,
+        variableTokenDeltaBalance: 0,
+        fixedTokenDeltaUnbalanced: 0,
+        fee: 0,
+        slippage: 0,
+        gasFeeETH: 0,
+      },
+      status: 'idle',
+    },
   },
   cashflowCalculator: {
     predictedApy: '0',
@@ -86,6 +131,50 @@ const initialState: SliceState = {
     additionalCashflow: 0,
     totalCashflow: 0,
   },
+};
+
+const updateCashflowCalculator = (state: WritableDraft<SliceState>): void => {
+  if (!state.amm) {
+    return;
+  }
+  if (state.cashflowCalculator.variableFactorStartNow.status !== 'success') {
+    return;
+  }
+
+  const { additionalCashflow, totalCashflow } = state.amm.getExpectedCashflowInfo({
+    position: state.position as Position,
+    fixedTokenDeltaBalance: state.prospectiveSwap.infoPostSwap.value.fixedTokenDeltaBalance,
+    variableTokenDeltaBalance: state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance,
+    variableFactorStartNow: state.cashflowCalculator.variableFactorStartNow.value,
+    predictedVariableApy: stringToBigFloat(state.cashflowCalculator.predictedApy),
+  });
+
+  state.cashflowCalculator.additionalCashflow = additionalCashflow;
+  state.cashflowCalculator.totalCashflow = totalCashflow;
+};
+
+const validateUserInput = (state: WritableDraft<SliceState>): void => {
+  {
+    let error = null;
+    if (
+      stringToBigFloat(state.prospectiveSwap.notionalAmount.value) >
+      state.availableNotionals.value[state.prospectiveSwap.mode]
+    ) {
+      error = 'Not enough liquidity. Available:';
+    }
+    state.prospectiveSwap.notionalAmount.error = error;
+  }
+
+  {
+    let error = null;
+    if (
+      stringToBigFloat(state.prospectiveSwap.marginAmount.value) <
+      state.prospectiveSwap.infoPostSwap.value.marginRequirement
+    ) {
+      error = 'Margin too low. Additional margin required:';
+    }
+    state.prospectiveSwap.marginAmount.error = error;
+  }
 };
 
 export const slice = createSlice({
@@ -111,11 +200,18 @@ export const slice = createSlice({
       }>,
     ) => {
       state.prospectiveSwap.notionalAmount.value = value;
-      let error = null;
-      if (stringToBigFloat(value) > state.availableNotionals.value[state.prospectiveSwap.mode]) {
-        error = 'Not enough liquidity. Available:';
-      }
-      state.prospectiveSwap.notionalAmount.error = error;
+      validateUserInput(state);
+    },
+    setMarginAmountAction: (
+      state,
+      {
+        payload: { value },
+      }: PayloadAction<{
+        value: string;
+      }>,
+    ) => {
+      state.prospectiveSwap.marginAmount.value = value;
+      validateUserInput(state);
     },
     setPredictedApyAction: (
       state,
@@ -126,25 +222,7 @@ export const slice = createSlice({
       }>,
     ) => {
       state.cashflowCalculator.predictedApy = value;
-    },
-    updateCashflowCalculatorAction: (state) => {
-      if (!state.amm) {
-        return;
-      }
-      if (state.cashflowCalculator.variableFactorStartNow.status !== 'success') {
-        return;
-      }
-
-      const { additionalCashflow, totalCashflow } = state.amm.getExpectedCashflowInfo({
-        position: state.position as Position,
-        fixedTokenDeltaBalance: Number(state.prospectiveSwap.notionalAmount), //TODO Alex
-        variableTokenDeltaBalance: -Number(state.prospectiveSwap.notionalAmount), //TODO Alex
-        variableFactorStartNow: state.cashflowCalculator.variableFactorStartNow.value,
-        predictedVariableApy: stringToBigFloat(state.cashflowCalculator.predictedApy),
-      });
-
-      state.cashflowCalculator.additionalCashflow = additionalCashflow;
-      state.cashflowCalculator.totalCashflow = totalCashflow;
+      updateCashflowCalculator(state);
     },
     setSwapFormAMMAction: (
       state,
@@ -155,6 +233,20 @@ export const slice = createSlice({
       }>,
     ) => {
       state.amm = amm;
+    },
+    setSignerForAMMAction: (
+      state,
+      {
+        payload: { signer },
+      }: PayloadAction<{
+        signer: Signer | null;
+      }>,
+    ) => {
+      if (!state.amm) {
+        return;
+      }
+
+      state.amm.signer = signer;
     },
   },
   extraReducers: (builder) => {
@@ -243,6 +335,62 @@ export const slice = createSlice({
           },
           status: 'success',
         };
+      })
+      .addCase(getInfoPostSwapThunk.pending, (state) => {
+        state.prospectiveSwap.infoPostSwap = {
+          value: {
+            marginRequirement: 0,
+            averageFixedRate: 0,
+            fixedTokenDeltaBalance: 0,
+            variableTokenDeltaBalance: 0,
+            fixedTokenDeltaUnbalanced: 0,
+            fee: 0,
+            slippage: 0,
+            gasFeeETH: 0,
+          },
+          status: 'pending',
+        };
+      })
+      .addCase(getInfoPostSwapThunk.rejected, (state) => {
+        state.prospectiveSwap.infoPostSwap = {
+          value: {
+            marginRequirement: 0,
+            averageFixedRate: 0,
+            fixedTokenDeltaBalance: 0,
+            variableTokenDeltaBalance: 0,
+            fixedTokenDeltaUnbalanced: 0,
+            fee: 0,
+            slippage: 0,
+            gasFeeETH: 0,
+          },
+          status: 'error',
+        };
+      })
+      .addCase(getInfoPostSwapThunk.fulfilled, (state, { payload }) => {
+        const { notionalAmount, infoPostSwap } = payload as {
+          notionalAmount: number;
+          infoPostSwap: InfoPostSwapV1;
+        };
+        state.prospectiveSwap.infoPostSwap = {
+          value: {
+            marginRequirement: infoPostSwap.marginRequirement,
+            averageFixedRate: infoPostSwap.averageFixedRate,
+            fixedTokenDeltaBalance: infoPostSwap.fixedTokenDeltaBalance,
+            variableTokenDeltaBalance: infoPostSwap.variableTokenDeltaBalance,
+            fixedTokenDeltaUnbalanced: infoPostSwap.fixedTokenDeltaUnbalanced,
+            fee: infoPostSwap.fee,
+            slippage: infoPostSwap.slippage,
+            gasFeeETH: infoPostSwap.gasFeeETH,
+          },
+          status: 'success',
+        };
+        if (infoPostSwap.availableNotional < notionalAmount) {
+          state.availableNotionals.value[state.prospectiveSwap.mode] =
+            infoPostSwap.availableNotional;
+        }
+
+        validateUserInput(state);
+        updateCashflowCalculator(state);
       });
   },
 });
@@ -250,7 +398,8 @@ export const {
   setModeAction,
   setSwapFormAMMAction,
   setNotionalAmountAction,
+  setMarginAmountAction,
   setPredictedApyAction,
-  updateCashflowCalculatorAction,
+  setSignerForAMMAction,
 } = slice.actions;
 export const swapFormReducer = slice.reducer;
