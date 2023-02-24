@@ -3,6 +3,11 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { selectSwapFormAMM, setSwapFormAMMAction } from '../../app/features/swap-form';
+import {
+  getAvailableNotionalsThunk,
+  getFixedRateThunk,
+  getVariableRateThunk,
+} from '../../app/features/swap-form/thunks';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { generateAmmIdForRoute, generatePoolId } from '../../utilities/amm';
 import { useAMMs } from '../useAMMs';
@@ -41,6 +46,16 @@ export const useSwapFormAMM = (): UseAMMsResult => {
       );
     }
   }, [dispatch, ammId, poolId, aMMs, loading, error]);
+
+  useEffect(() => {
+    if (!aMM) {
+      return;
+    }
+
+    void dispatch(getFixedRateThunk());
+    void dispatch(getVariableRateThunk());
+    void dispatch(getAvailableNotionalsThunk());
+  }, [dispatch, aMM]);
 
   return {
     aMM,

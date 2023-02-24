@@ -49,8 +49,6 @@ type SliceState = {
     additionalCashflow: number;
     // Total cashflow resulted from past and prospective swaps, from termStart to termEnd
     totalCashflow: number;
-    // Validation of user input
-    valid: boolean;
   };
 };
 
@@ -87,7 +85,6 @@ const initialState: SliceState = {
     },
     additionalCashflow: 0,
     totalCashflow: 0,
-    valid: true,
   },
 };
 
@@ -129,20 +126,12 @@ export const slice = createSlice({
       }>,
     ) => {
       state.cashflowCalculator.predictedApy = value;
-      if (stringToBigFloat(state.cashflowCalculator.predictedApy) < 0) {
-        state.cashflowCalculator.valid = false;
-      } else {
-        state.cashflowCalculator.valid = true;
-      }
     },
     updateCashflowCalculatorAction: (state) => {
       if (!state.amm) {
         return;
       }
-      if (
-        !state.cashflowCalculator.valid ||
-        state.cashflowCalculator.variableFactorStartNow.status !== 'success'
-      ) {
+      if (state.cashflowCalculator.variableFactorStartNow.status !== 'success') {
         return;
       }
 
@@ -223,7 +212,7 @@ export const slice = createSlice({
       })
       .addCase(getVariableRateThunk.fulfilled, (state, { payload }) => {
         state.variableRate = {
-          value: (payload as number) * 100,
+          value: payload as number,
           status: 'success',
         };
       })
