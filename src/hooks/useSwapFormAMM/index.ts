@@ -2,15 +2,18 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { selectSwapFormAMM, setSwapFormAMMAction } from '../../app/features/swap-form';
 import {
   getAvailableNotionalsThunk,
   getFixedRateThunk,
   getVariableRateThunk,
-} from '../../app/features/swap-form/thunks';
+  selectSwapFormAMM,
+  setSignerForAMMAction,
+  setSwapFormAMMAction,
+} from '../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { generateAmmIdForRoute, generatePoolId } from '../../utilities/amm';
 import { useAMMs } from '../useAMMs';
+import { useWallet } from '../useWallet';
 
 export type UseAMMsResult = {
   aMM: AMM | null;
@@ -20,10 +23,13 @@ export type UseAMMsResult = {
 };
 
 export const useSwapFormAMM = (): UseAMMsResult => {
+  const dispatch = useAppDispatch();
+
   const { ammId, poolId } = useParams();
   const { aMMs, loading, error, idle } = useAMMs();
   const aMM = useAppSelector(selectSwapFormAMM);
-  const dispatch = useAppDispatch();
+
+  const { signer } = useWallet();
 
   useEffect(() => {
     if (!ammId || !poolId) {
@@ -54,6 +60,14 @@ export const useSwapFormAMM = (): UseAMMsResult => {
     void dispatch(getVariableRateThunk());
     void dispatch(getAvailableNotionalsThunk());
   }, [dispatch, aMM]);
+
+  useEffect(() => {
+    void dispatch(
+      setSignerForAMMAction({
+        signer,
+      }),
+    );
+  }, [dispatch, signer]);
 
   return {
     aMM,

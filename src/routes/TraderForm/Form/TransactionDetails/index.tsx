@@ -1,6 +1,10 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { selectInfoPostSwap } from '../../../../app/features/swap-form';
+import { useAppSelector } from '../../../../app/hooks';
+import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
+import { formatNumber } from '../../../../utilities/number';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import {
   IconTextWrapper,
@@ -12,6 +16,9 @@ type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
   // todo: Alex handle fill in proper values
+  const infoPostSwap = useAppSelector(selectInfoPostSwap);
+  const { aMM } = useSwapFormAMM();
+
   return (
     <TransactionDetailsBox>
       <TransactionDetailBox>
@@ -20,9 +27,9 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token=" USDC"
+          token={aMM ? ` ${aMM.underlyingToken.name.toUpperCase()}` : ''}
           typographyToken="secondaryBodySmallRegular"
-          value={100}
+          value={infoPostSwap.status === 'success' ? formatNumber(infoPostSwap.value.fee) : '--'}
         ></TokenTypography>
       </TransactionDetailBox>
       <TransactionDetailBox>
@@ -33,7 +40,9 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
           colorToken="lavenderWeb"
           token="%"
           typographyToken="secondaryBodySmallRegular"
-          value={0.3}
+          value={
+            infoPostSwap.status === 'success' ? formatNumber(infoPostSwap.value.slippage) : '--'
+          }
         ></TokenTypography>
       </TransactionDetailBox>
       <TransactionDetailBox>
@@ -47,7 +56,11 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
           colorToken="lavenderWeb"
           token=" ETH"
           typographyToken="secondaryBodySmallRegular"
-          value={0.003}
+          value={
+            infoPostSwap.status === 'success'
+              ? formatNumber(infoPostSwap.value.gasFeeETH, 2, 4)
+              : '--'
+          }
         ></TokenTypography>
       </TransactionDetailBox>
     </TransactionDetailsBox>

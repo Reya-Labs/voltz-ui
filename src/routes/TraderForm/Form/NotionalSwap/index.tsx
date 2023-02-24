@@ -28,8 +28,9 @@ export const NotionalSwap: React.FunctionComponent<{}> = () => {
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const mode = useAppSelector(selectMode);
 
-  const fixedRate = formatNumber(fixedRateInfo.value);
-  const variableRate = formatNumber(variableRateInfo.value);
+  const fixedRate = fixedRateInfo.status === 'success' ? formatNumber(fixedRateInfo.value) : '--';
+  const variableRate =
+    variableRateInfo.status === 'success' ? formatNumber(variableRateInfo.value) : '--';
   const isFixedMode = mode === 'fixed';
 
   const onSwap = useCallback(

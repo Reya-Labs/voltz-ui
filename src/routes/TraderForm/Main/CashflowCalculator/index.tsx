@@ -2,14 +2,13 @@ import { CurrencyField, LabelTokenTypography, Typography } from 'brokoli-ui';
 import React, { useCallback, useEffect } from 'react';
 
 import {
+  initialiseCashflowCalculatorThunk,
   selectAdditionalCashflow,
   selectCashflowCalculatorStatus,
   selectPredictedApy,
   selectTotalCashflow,
   setPredictedApyAction,
-  updateCashflowCalculatorAction,
 } from '../../../../app/features/swap-form';
-import { initialiseCashflowCalculatorThunk } from '../../../../app/features/swap-form/thunks';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { formatCurrency } from '../../../../utilities/number';
@@ -52,7 +51,6 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
           value,
         }),
       );
-      dispatch(updateCashflowCalculatorAction());
     },
     [dispatch, aMM],
   );
@@ -83,7 +81,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             label="Additional Cashflow"
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"
-            token=" USDC"
+            token={aMM ? ` ${aMM.underlyingToken.name.toUpperCase()}` : ''}
             typographyToken="secondaryBodySmallRegular"
             value={formatCurrency(additonalCashflow, true, true, 2, 4)}
           />
@@ -94,7 +92,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             label="Total Cashflow"
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"
-            token=" USDC"
+            token={aMM ? ` ${aMM.underlyingToken.name.toUpperCase()}` : ''}
             typographyToken="secondaryBodySmallRegular"
             value={formatCurrency(totalCashflow, true, true, 2, 4)}
           />

@@ -29,10 +29,16 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
     return null;
   }
 
+  // TODO Alex
   return (
     <PoolHeaderBox>
       <MarketTokenBox>
-        <MarketToken market="Aave" token="usdc" />
+        <MarketToken
+          market="Aave"
+          token={
+            aMM ? (aMM.underlyingToken.name.toLowerCase() as 'eth' | 'usdc' | 'usdt' | 'dai') : 'usdc'
+          }
+        />
         {isBorrowing(aMM?.rateOracle?.protocolId) ? (
           <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
             Borrow
