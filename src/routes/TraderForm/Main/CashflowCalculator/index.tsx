@@ -52,9 +52,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
           value,
         }),
       );
-      if (aMM) {
-        dispatch(updateCashflowCalculatorAction());
-      }
+      dispatch(updateCashflowCalculatorAction());
     },
     [dispatch, aMM],
   );

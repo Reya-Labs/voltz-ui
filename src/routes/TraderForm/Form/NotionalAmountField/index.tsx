@@ -33,9 +33,8 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
           value,
         }),
       );
-      if (aMM) {
-        dispatch(updateCashflowCalculatorAction());
-      }
+
+      dispatch(updateCashflowCalculatorAction());
     },
     [dispatch, aMM],
   );

@@ -38,13 +38,11 @@ export const useSwapFormAMM = (): UseAMMsResult => {
     const foundAMM = aMMs.find(
       (a) => ammId === generateAmmIdForRoute(a) && poolId === generatePoolId(a),
     );
-    if (foundAMM) {
-      dispatch(
-        setSwapFormAMMAction({
-          amm: foundAMM,
-        }),
-      );
-    }
+    dispatch(
+      setSwapFormAMMAction({
+        amm: foundAMM ? foundAMM : null,
+      }),
+    );
   }, [dispatch, ammId, poolId, aMMs, loading, error]);
 
   useEffect(() => {

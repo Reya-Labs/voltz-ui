@@ -151,12 +151,9 @@ export const slice = createSlice({
       {
         payload: { amm },
       }: PayloadAction<{
-        amm: AMM;
+        amm: AMM | null;
       }>,
     ) => {
-      if (!amm) {
-        return;
-      }
       state.amm = amm;
     },
   },
