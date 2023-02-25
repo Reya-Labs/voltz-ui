@@ -40,7 +40,7 @@ export const TraderFormRoute: React.FunctionComponent = () => {
   if (loading || idle) {
     pageContent = (
       <LoadingBox>
-        <RainbowLoader height={7} text="Fetching best rates..." width={520} />
+        <RainbowLoader height={3} text="Fetching best rates..." width={520} />
       </LoadingBox>
     );
   }
