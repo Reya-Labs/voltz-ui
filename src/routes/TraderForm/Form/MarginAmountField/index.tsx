@@ -4,11 +4,12 @@ import React, { useCallback } from 'react';
 import {
   selectInfoPostSwap,
   selectMarginAmount,
+  selectWalletBalanceInfo,
   setMarginAmountAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
-import { formatNumber } from '../../../../utilities/number';
+import { compactFormat, formatNumber } from '../../../../utilities/number';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 type NotionalAmountProps = {};
 
@@ -18,6 +19,12 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
 
   const { aMM } = useSwapFormAMM();
+
+  const walletBalance = useAppSelector(selectWalletBalanceInfo);
+  let walletValue = walletBalance.status === 'success' ? compactFormat(walletBalance.value) : '--';
+  if (aMM) {
+    walletValue = walletValue.concat(` ${aMM.underlyingToken.name.toUpperCase()}`);
+  }
 
   const handleOnChange = useCallback(
     (value?: string) => {
@@ -53,7 +60,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
           aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']) : undefined
         }
         tooltip="TODO: Tooltip message here!"
-        topRightText="Wallet: --" // TODO Alex
+        topRightText={`Wallet: ${walletValue}`}
         topRightTextColorToken="lavenderWeb2"
         topRightTextTypographyToken="secondaryBodySmallRegular"
         value={marginAmount.value}

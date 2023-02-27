@@ -16,6 +16,24 @@ const rejectThunkWithError = (
   return thunkAPI.rejectWithValue((err as Error)?.message);
 };
 
+export const getWalletBalanceThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/getWalletBalance', async (_, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().swapForm.amm;
+    if (!amm) {
+      return;
+    }
+
+    const walletBalance = await amm.underlyingTokens();
+    return walletBalance;
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
 export const getFixedRateThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,

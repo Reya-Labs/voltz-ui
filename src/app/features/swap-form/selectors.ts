@@ -1,6 +1,7 @@
 import { RootState } from '../../store';
 
 export const selectSwapFormAMM = (state: RootState) => state.swapForm.amm;
+export const selectWalletBalanceInfo = (state: RootState) => state.swapForm.walletBalance;
 export const selectFixedRateInfo = (state: RootState) => state.swapForm.fixedRate;
 export const selectVariableRateInfo = (state: RootState) => state.swapForm.variableRate;
 export const selectAvailableNotionals = (state: RootState) => state.swapForm.availableNotionals;
