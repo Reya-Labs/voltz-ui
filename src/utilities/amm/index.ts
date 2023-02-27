@@ -54,26 +54,7 @@ export const findCurrentAmm = (
  * @param amm - the amm
  */
 export const getAmmProtocol = (amm: AMM) => {
-  return amm.protocol + (isBorrowing(amm.rateOracle.protocolId) ? '_borrow' : '');
-};
-
-/**
- * It returns true if the rateOracleProtocolId is 5 or 6, and false otherwise
- * @param {number} rateOracleProtocolId - The ID of the rate oracle protocol.
- * @returns A boolean value.
- */
-export const isBorrowing = (rateOracleProtocolId: number): boolean => {
-  return rateOracleProtocolId === 5 || rateOracleProtocolId === 6;
-};
-
-/**
- * Given an AMM ID, return whether it's an Aave V3 AMM
- * @param pools - The pools object from the network configuration.
- * @param {string} ammId - The ID of the AMM.
- * @returns A boolean value.
- */
-export const isAaveV3 = (pools: NetworkConfiguration['pools'], ammId: string): boolean => {
-  return pools.find((pool) => pool.id.toLowerCase() === ammId.toLowerCase())?.isAaveV3 ?? false;
+  return amm.protocol + (amm.market.tags.isBorrowing ? '_borrow' : '');
 };
 
 const getProtocolName = (protocolId: number): string => {

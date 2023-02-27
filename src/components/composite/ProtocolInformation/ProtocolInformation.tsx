@@ -2,12 +2,8 @@ import Box from '@mui/material/Box';
 import { DateTime } from 'luxon';
 import React, { useMemo } from 'react';
 
-import { selectChainId } from '../../../app/features/network';
-import { useAppSelector } from '../../../app/hooks';
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useAMMContext } from '../../../contexts/AMMContext/AMMContext';
-import { getConfig } from '../../../hooks/voltz-config/config';
-import { isAaveV3, isBorrowing } from '../../../utilities/amm';
 import { Typography } from '../../atomic/Typography/Typography';
 import { IconLabel } from '../IconLabel/IconLabel';
 import { ReactComponent as Aave } from '../PoolField/aave-icon.svg';
@@ -41,21 +37,18 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
   isSettle,
 }) => {
   const { amm } = useAMMContext();
-  const chainId = useAppSelector(selectChainId);
-  const config = getConfig(chainId);
-  const pools = config ? config.pools : [];
   const getPoolLabel = () => (
     <>
       <Box component="span" sx={{ color: '#9B97AD' }}>
         POOL
       </Box>
-      {amm && isAaveV3(pools, amm.id) && (
+      {amm && amm.market.tags.isAaveV3 && (
         <Box component="span" sx={{ color: '#FF4AA9' }}>
           {'  '}
           <strong>AAVE V3</strong>
         </Box>
       )}
-      {amm && isBorrowing(amm.rateOracle.protocolId) && (
+      {amm && amm.market.tags.isBorrowing && (
         <Box component="span" sx={{ color: '#FF4AA9' }}>
           {'  '}
           <strong>BORROWING</strong>

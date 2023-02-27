@@ -7,7 +7,6 @@ import { MaturityInformation } from '../../../../../../components/composite/Matu
 import { PoolField } from '../../../../../../components/composite/PoolField/PoolField';
 import { Agents } from '../../../../../../contexts/AgentContext/types';
 import { SystemStyleObject, Theme } from '../../../../../../theme';
-import { isBorrowing } from '../../../../../../utilities/amm';
 import { traderLabels } from '../../constants';
 import { AccruedRates, CurrentMargin, Notional } from './components';
 
@@ -69,7 +68,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
         <PoolField
           agent={Agents.FIXED_TRADER}
           isAaveV3={isAaveV3}
-          isBorrowing={isBorrowing(position.amm.rateOracle.protocolId)}
+          isBorrowing={position.amm.market.tags.isBorrowing}
           protocol={position.amm.protocol}
         />
       );

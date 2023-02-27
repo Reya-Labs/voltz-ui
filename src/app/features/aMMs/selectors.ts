@@ -1,7 +1,6 @@
 import { AMM, BorrowAMM } from '@voltz-protocol/v1-sdk';
 
 import { getConfig } from '../../../hooks/voltz-config/config';
-import { isBorrowing } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import { selectChainId } from '../network';
 
@@ -47,7 +46,7 @@ export const selectBorrowAMMs = (state: RootState): BorrowAMM[] => {
     return [];
   }
   const aMMs = state.aMMs.aMMs[chainId];
-  const borrowMarkets = aMMs.filter((amm) => isBorrowing(amm.rateOracle.protocolId));
+  const borrowMarkets = aMMs.filter((amm) => amm.market.tags.isBorrowing);
   const liveBorrowMarkets = borrowMarkets.filter(
     (amm) => Date.now().valueOf() < amm.endDateTime.toMillis(),
   );

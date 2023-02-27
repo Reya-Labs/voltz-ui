@@ -1,13 +1,7 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 
-import {
-  findCurrentAmm,
-  findCurrentPosition,
-  getAmmProtocol,
-  isAaveV3,
-  isBorrowing,
-} from './index';
+import { findCurrentAmm, findCurrentPosition, getAmmProtocol } from './index';
 
 jest.mock('../../hooks/voltz-config/config', () => ({
   getConfig: function () {
@@ -177,40 +171,6 @@ describe('utilities/amm', () => {
           },
         } as AMM),
       ).toBe('balancer_borrow');
-    });
-  });
-
-  describe('isBorrowing', () => {
-    it('returns true for rateOracleProtocolId 5 or 6', () => {
-      expect(isBorrowing(5)).toBe(true);
-      expect(isBorrowing(6)).toBe(true);
-    });
-
-    it('returns false when rateOracleProtocolId 5 or 6', () => {
-      expect(isBorrowing(7)).toBe(false);
-      expect(isBorrowing(8)).toBe(false);
-      expect(isBorrowing(4)).toBe(false);
-    });
-  });
-
-  describe('isAaveV3', () => {
-    const mockedPools = [
-      { id: 'pool1', isAaveV3: false },
-      { id: 'pool2', isAaveV3: true },
-      { id: 'pool3' },
-    ] as never;
-
-    it('should return true if the given AMM ID is an Aave V3 AMM', () => {
-      expect(isAaveV3(mockedPools, 'pool2')).toBe(true);
-    });
-
-    it('should return false if the given AMM ID is not an Aave V3 AMM', () => {
-      expect(isAaveV3(mockedPools, 'pool1')).toBe(false);
-      expect(isAaveV3(mockedPools, 'pool3')).toBe(false);
-    });
-
-    it('should return false if the given AMM ID is not found in the config', () => {
-      expect(isAaveV3(mockedPools, 'pool4')).toBe(false);
     });
   });
 });

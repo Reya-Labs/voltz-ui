@@ -1,12 +1,9 @@
-import { LabelTokenTypography, MarketToken, Pill } from 'brokoli-ui';
+import { LabelTokenTypography, MarketToken, MarketTokenProps, Pill } from 'brokoli-ui';
 import React from 'react';
 
-import { selectChainId } from '../../../../app/features/network';
 import { selectFixedRateInfo, selectVariableRateInfo } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
-import { getConfig } from '../../../../hooks/voltz-config/config';
-import { isAaveV3, isBorrowing } from '../../../../utilities/amm';
 import { formatTimestamp } from '../../../../utilities/date';
 import { formatNumber } from '../../../../utilities/number';
 import {
@@ -24,7 +21,6 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const { aMM } = useSwapFormAMM();
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
-  const chainId = useAppSelector(selectChainId);
   if (!aMM) {
     return null;
   }
@@ -33,18 +29,18 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   return (
     <PoolHeaderBox>
       <MarketTokenBox>
-        <MarketToken
-          market="Aave"
-          token={
-            aMM ? (aMM.underlyingToken.name.toLowerCase() as 'eth' | 'usdc' | 'usdt' | 'dai') : 'usdc'
-          }
-        />
-        {isBorrowing(aMM?.rateOracle?.protocolId) ? (
+        {aMM ? (
+          <MarketToken
+            market={aMM.market.name as MarketTokenProps['market']}
+            token={aMM.underlyingToken.name.toLowerCase() as MarketTokenProps['token']}
+          />
+        ) : null}
+        {aMM.market.tags.isBorrowing ? (
           <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
             Borrow
           </Pill>
         ) : null}
-        {isAaveV3(getConfig(chainId)?.pools || [], aMM?.id) ? (
+        {aMM.market.tags.isAaveV3 ? (
           <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
             v3
           </Pill>
