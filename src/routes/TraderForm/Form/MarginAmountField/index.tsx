@@ -36,6 +36,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
   return (
     <MarginAmountFieldBox>
       <TokenField
+        allowNegativeValue={false}
         bottomLeftText={marginAmount.error ? marginAmount.error : 'Additional Margin Required'}
         bottomLeftTextColorToken={marginAmount.error ? 'wildStrawberry3' : 'lavenderWeb3'}
         bottomLeftTextTypographyToken="primaryBodyXSmallRegular"
