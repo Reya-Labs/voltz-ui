@@ -23,6 +23,13 @@ describe('aMMs.selectors', () => {
             endDateTime: DateTime.local().plus({
               millisecond: 1000,
             }),
+            market: {
+              name: 'Aave',
+              tags: {
+                isBorrowing: false,
+                isAaveV3: false,
+              },
+            },
           },
           {
             id: 'pool2',
@@ -30,6 +37,13 @@ describe('aMMs.selectors', () => {
             endDateTime: DateTime.local().plus({
               millisecond: 1000,
             }),
+            market: {
+              name: 'Aave',
+              tags: {
+                isBorrowing: true,
+                isAaveV3: false,
+              },
+            },
           },
           {
             id: 'pool3',
@@ -37,6 +51,13 @@ describe('aMMs.selectors', () => {
             endDateTime: DateTime.local().plus({
               millisecond: -1000,
             }),
+            market: {
+              name: 'Compound',
+              tags: {
+                isBorrowing: true,
+                isAaveV3: false,
+              },
+            },
           },
         ],
       },
