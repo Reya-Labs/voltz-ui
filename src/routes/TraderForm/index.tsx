@@ -2,6 +2,8 @@ import { Page as BrokoliPage, RainbowLoader } from 'brokoli-ui';
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { resetStateAction } from '../../app/features/swap-form';
+import { useAppDispatch } from '../../app/hooks';
 import { useSwapFormAMM } from '../../hooks/useSwapFormAMM';
 import { NoVaultFound } from '../LPOptimisers/VaultFormRoute/NoVaultFound/NoVaultFound';
 import { Form } from './Form';
@@ -19,8 +21,14 @@ import {
 } from './TraderForm.styled';
 
 export const TraderFormRoute: React.FunctionComponent = () => {
+  const dispatch = useAppDispatch();
+
   const { form } = useParams();
   const { aMM, loading, error, idle } = useSwapFormAMM();
+
+  React.useEffect(() => {
+    void dispatch(resetStateAction());
+  }, [dispatch]);
 
   let pageContent = (
     <MainAndFormSectionBox data-testid="BrokoliPage-MainAndFormSectionBox">

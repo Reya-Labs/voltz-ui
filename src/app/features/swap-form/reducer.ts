@@ -181,6 +181,9 @@ export const slice = createSlice({
   name: 'swapForm',
   initialState,
   reducers: {
+    resetStateAction: (state) => {
+      // TODO: Alex
+    },
     setModeAction: (
       state,
       {
@@ -395,6 +398,7 @@ export const slice = createSlice({
   },
 });
 export const {
+  resetStateAction,
   setModeAction,
   setSwapFormAMMAction,
   setNotionalAmountAction,
