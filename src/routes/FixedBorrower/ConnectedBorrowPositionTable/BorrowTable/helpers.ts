@@ -1,7 +1,5 @@
 import { BorrowAMM, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { getConfig } from '../../../../hooks/voltz-config/config';
-import { isAaveV3 } from '../../../../utilities/amm';
 import { BorrowAMMTableDatum } from './types';
 
 export const mapAmmToAmmTableDatum = (
@@ -13,5 +11,5 @@ export const mapAmmToAmmTableDatum = (
   underlyingTokenName: amm.underlyingToken.name,
   startDate: amm.startDateTime,
   endDate: amm.endDateTime,
-  isAaveV3: isAaveV3(getConfig(chainId)?.pools || [], id),
+  isAaveV3: amm.market.tags.isAaveV3,
 });

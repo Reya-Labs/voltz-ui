@@ -14,7 +14,6 @@ import { useSwapFormContext } from '../../../contexts/SwapFormContext/SwapFormCo
 import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
 import { routes } from '../../../routes/paths';
-import { isBorrowing } from '../../../utilities/amm';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
@@ -170,7 +169,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
     '',
     getNotionalActionFromHintState(form.hintState),
     agent,
-    isBorrowing(targetAmm.rateOracle.protocolId),
+    targetAmm.market.tags.isBorrowing,
     targetAmm.protocol,
   );
 

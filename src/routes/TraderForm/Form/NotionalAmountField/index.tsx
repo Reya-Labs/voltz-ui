@@ -1,6 +1,4 @@
-import { TokenField } from 'brokoli-ui';
-// eslint-disable-next-line no-restricted-imports
-import { TokenIconProps } from 'brokoli-ui/dist/esm/types/components/TokenField/TokenIcon';
+import { TokenField, TokenFieldProps } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback } from 'react';
 
@@ -60,7 +58,9 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
         bottomRightTextValue={formatNumber(availableNotionals.value[mode])}
         error={notionalAmount.error !== null}
         label="Notional amount"
-        token={aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenIconProps['token']) : 'usdc'} // TODO Alex
+        token={
+          aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']) : undefined
+        }
         tooltip="TODO: Tooltip message here!"
         value={notionalAmount.value}
         onChange={handleOnChange}

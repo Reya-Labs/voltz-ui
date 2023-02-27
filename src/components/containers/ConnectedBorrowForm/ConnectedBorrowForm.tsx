@@ -10,7 +10,6 @@ import { useBorrowAMMContext } from '../../../contexts/BorrowAMMContext/BorrowAM
 import { useBorrowFormContext } from '../../../contexts/BorrowFormContext/BorrowFormContext';
 import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { routes } from '../../../routes/paths';
-import { isBorrowing } from '../../../utilities/amm';
 import { BorrowForm } from '../../interface/BorrowForm/BorrowForm';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
 import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
@@ -47,7 +46,7 @@ export const ConnectedBorrowForm: React.FunctionComponent<ConnectedBorrowFormPro
   }, [callVariableApy]);
 
   const protocol = () => {
-    if (isBorrowing(amm.rateOracle.protocolId)) {
+    if (amm.market.tags.isBorrowing) {
       return `borrow_${amm.protocol}`;
     }
     return amm.protocol;

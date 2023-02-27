@@ -1,6 +1,4 @@
-import { TokenField } from 'brokoli-ui';
-// eslint-disable-next-line no-restricted-imports
-import { TokenIconProps } from 'brokoli-ui/dist/esm/types/components/TokenField/TokenIcon';
+import { TokenField, TokenFieldProps } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
@@ -50,9 +48,11 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         }
         error={marginAmount.error !== null}
         label="Chosen Margin"
-        token={aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenIconProps['token']) : 'usdc'} // TODO Alex
+        token={
+          aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']) : undefined
+        }
         tooltip="TODO: Tooltip message here!"
-        topRightText="Wallet: --"
+        topRightText="Wallet: --" // TODO Alex
         topRightTextColorToken="lavenderWeb2"
         topRightTextTypographyToken="secondaryBodySmallRegular"
         value={marginAmount.value}
