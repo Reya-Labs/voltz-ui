@@ -9,6 +9,7 @@ import {
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
+import { isASCIILeter } from '../../../../utilities/character';
 import { compactFormat, formatNumber, stringToBigFloat } from '../../../../utilities/number';
 import {
   CashFlowBox,
@@ -38,10 +39,10 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
 
   const compactNotional = compactFormat(stringToBigFloat(notional.value));
-  let notionalBoxToken = (compactNotional.at(-1) || '').match(/[a-z]/i)
+  let notionalBoxToken = isASCIILeter(compactNotional.at(-1) || '')
     ? compactNotional.at(-1) || ''
     : '';
-  let notionalBoxValue = (compactNotional.at(-1) || '').match(/[a-z]/i)
+  let notionalBoxValue = isASCIILeter(compactNotional.at(-1) || '')
     ? compactNotional.slice(0, -1)
     : compactNotional;
   if (notional.error) {

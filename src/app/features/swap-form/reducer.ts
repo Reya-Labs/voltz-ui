@@ -1,8 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 import { Signer } from 'ethers';
-// eslint-disable-next-line no-restricted-imports
-import { WritableDraft } from 'immer/dist/internal';
 
 import { stringToBigFloat } from '../../../utilities/number';
 import {
@@ -133,7 +131,7 @@ const initialState: SliceState = {
   },
 };
 
-const updateCashflowCalculator = (state: WritableDraft<SliceState>): void => {
+const updateCashflowCalculator = (state: Draft<SliceState>): void => {
   if (!state.amm) {
     return;
   }
@@ -153,7 +151,7 @@ const updateCashflowCalculator = (state: WritableDraft<SliceState>): void => {
   state.cashflowCalculator.totalCashflow = totalCashflow;
 };
 
-const validateUserInput = (state: WritableDraft<SliceState>): void => {
+const validateUserInput = (state: Draft<SliceState>): void => {
   {
     let error = null;
     if (
