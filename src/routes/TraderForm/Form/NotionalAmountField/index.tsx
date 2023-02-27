@@ -51,6 +51,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   return (
     <NotionalAmountFieldBox>
       <TokenField
+        allowNegativeValue={false}
         bottomLeftText={notionalAmount.error ? notionalAmount.error : 'Liquidity Available'}
         bottomLeftTextColorToken={notionalAmount.error ? 'wildStrawberry3' : 'lavenderWeb3'}
         bottomRightTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
