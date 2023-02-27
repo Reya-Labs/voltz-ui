@@ -6,6 +6,7 @@ import {
   getAvailableNotionalsThunk,
   getFixedRateThunk,
   getVariableRateThunk,
+  getWalletBalanceThunk,
   selectSwapFormAMM,
   setSignerForAMMAction,
   setSwapFormAMMAction,
@@ -56,6 +57,7 @@ export const useSwapFormAMM = (): UseAMMsResult => {
       return;
     }
 
+    void dispatch(getWalletBalanceThunk());
     void dispatch(getFixedRateThunk());
     void dispatch(getVariableRateThunk());
     void dispatch(getAvailableNotionalsThunk());

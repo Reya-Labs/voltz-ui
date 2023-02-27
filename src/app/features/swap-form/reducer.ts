@@ -8,6 +8,7 @@ import {
   getFixedRateThunk,
   getInfoPostSwapThunk,
   getVariableRateThunk,
+  getWalletBalanceThunk,
   initialiseCashflowCalculatorThunk,
 } from './thunks';
 
@@ -16,6 +17,10 @@ type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 type SliceState = {
   amm: AMM | null;
   position: Position | null;
+  walletBalance: {
+    value: number;
+    status: ThunkStatus;
+  };
   fixedRate: {
     value: number;
     status: ThunkStatus;
@@ -71,7 +76,7 @@ type SliceState = {
       value: number;
       status: ThunkStatus;
     };
-    // Additional cashflow resulted from prospective swap, form now to termEnd
+    // Additional cashflow resulted from prospective swap, from now to termEnd
     additionalCashflow: number;
     // Total cashflow resulted from past and prospective swaps, from termStart to termEnd
     totalCashflow: number;
@@ -81,6 +86,10 @@ type SliceState = {
 const initialState: SliceState = {
   amm: null,
   position: null,
+  walletBalance: {
+    value: 0,
+    status: 'idle',
+  },
   fixedRate: {
     value: 0,
     status: 'idle',
@@ -266,6 +275,24 @@ export const slice = createSlice({
       })
       .addCase(initialiseCashflowCalculatorThunk.fulfilled, (state, { payload }) => {
         state.cashflowCalculator.variableFactorStartNow = {
+          value: payload as number,
+          status: 'success',
+        };
+      })
+      .addCase(getWalletBalanceThunk.pending, (state) => {
+        state.walletBalance = {
+          value: 0,
+          status: 'pending',
+        };
+      })
+      .addCase(getWalletBalanceThunk.rejected, (state) => {
+        state.walletBalance = {
+          value: 0,
+          status: 'error',
+        };
+      })
+      .addCase(getWalletBalanceThunk.fulfilled, (state, { payload }) => {
+        state.walletBalance = {
           value: payload as number,
           status: 'success',
         };
