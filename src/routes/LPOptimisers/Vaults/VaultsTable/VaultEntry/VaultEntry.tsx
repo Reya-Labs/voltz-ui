@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
-import { isCostReductionFlowEnabled } from '../../../../../utilities/is-cost-reduction-flow-enabled';
 import { VaultField } from '../../../VaultField/VaultField';
 import { BatchBudgetTrigger } from '../../../VaultFormRoute/Form/BatchBudgetTrigger/BatchBudgetTrigger';
 import { MellowPosition } from '../MellowPosition/MellowPosition';
@@ -58,9 +57,7 @@ export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
             ))}
           </PoolFieldsBox>
         </PoolOutlineBox>
-        {isCostReductionFlowEnabled() && !dataLoading ? (
-          <BatchBudgetTrigger lpVault={lpVault} />
-        ) : null}
+        {!dataLoading ? <BatchBudgetTrigger lpVault={lpVault} /> : null}
       </VaultEntryInfoBox>
 
       <PositionBox>
