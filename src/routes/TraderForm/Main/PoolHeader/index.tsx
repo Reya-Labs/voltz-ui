@@ -1,13 +1,17 @@
-import { LabelTokenTypography, MarketToken } from 'brokoli-ui';
+import { LabelTokenTypography, MarketToken, Pill } from 'brokoli-ui';
 import React from 'react';
 
+import { selectChainId } from '../../../../app/features/network';
 import { selectFixedRateInfo, selectVariableRateInfo } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
+import { getConfig } from '../../../../hooks/voltz-config/config';
+import { isAaveV3, isBorrowing } from '../../../../utilities/amm';
 import { formatTimestamp } from '../../../../utilities/date';
 import { formatNumber } from '../../../../utilities/number';
 import {
   FixedBox,
+  MarketTokenBox,
   MaturityBox,
   PoolHeaderBox,
   PoolHeaderDetailsBox,
@@ -20,10 +24,26 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const { aMM } = useSwapFormAMM();
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
+  const chainId = useAppSelector(selectChainId);
+  if (!aMM) {
+    return null;
+  }
 
   return (
     <PoolHeaderBox>
-      <MarketToken market="Aave" token="usdc" />
+      <MarketTokenBox>
+        <MarketToken market="Aave" token="usdc" />
+        {isBorrowing(aMM?.rateOracle?.protocolId) ? (
+          <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
+            Borrow
+          </Pill>
+        ) : null}
+        {isAaveV3(getConfig(chainId)?.pools || [], aMM?.id) ? (
+          <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
+            v3
+          </Pill>
+        ) : null}
+      </MarketTokenBox>
       <PoolHeaderDetailsBox>
         <FixedBox>
           <LabelTokenTypography

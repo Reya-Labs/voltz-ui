@@ -43,3 +43,11 @@ export const MaturityBox = styled('div')`
   flex-direction: row;
   align-items: center;
 `;
+
+export const MarketTokenBox = styled('div')`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 16px;
+`;
