@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getHistoricalRates, Granularity, SupportedChainId } from '@voltz-protocol/v1-sdk';
-import { HistoricalRates } from '@voltz-protocol/v1-sdk/src/entities/amm/getters/historicalRates/getHistoricalRate';
+import { RatesData } from '@voltz-protocol/v1-sdk/src/entities/amm/getters/historicalRates/getHistoricalRate';
 
 import { RootState } from '../../store';
 
@@ -34,7 +34,7 @@ const getCacheId = ({
   granularity,
 }: FetchHistoricalRatesThunk) =>
   `${chainId}-${isFixed.toString()}-${aMMRateOracleId}-${aMMId}-${timeframeMs}-${granularity.toString()}`;
-const CACHE: Record<string, HistoricalRates[]> = {};
+const CACHE: Record<string, RatesData> = {};
 
 export const fetchHistoricalRatesThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
@@ -49,24 +49,27 @@ export const fetchHistoricalRatesThunk = createAsyncThunk<
   { state: RootState }
 >('historicalRates/fetch', async (payload, thunkAPI) => {
   const cacheId = getCacheId(payload);
-  if (CACHE[cacheId] && CACHE[cacheId].length !== 0) {
+  if (CACHE[cacheId] && CACHE[cacheId].historicalRates.length !== 0) {
     return CACHE[cacheId];
   }
   const { timeframeMs, granularity, chainId, aMMId, aMMRateOracleId, isFixed } = payload;
   try {
-    const historicalRates = await getHistoricalRates(
+    const { oppositeSideCurrentRate, historicalRates } = await getHistoricalRates({
       chainId,
       isFixed,
-      {
+      filters: {
         granularity,
         timeframeMs,
       },
-      aMMId,
-      aMMRateOracleId,
-    );
+      ammId: aMMId,
+      rateOracleId: aMMRateOracleId,
+    });
 
-    CACHE[cacheId] = historicalRates;
-    return historicalRates;
+    CACHE[cacheId] = {
+      historicalRates,
+      oppositeSideCurrentRate,
+    };
+    return CACHE[cacheId];
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

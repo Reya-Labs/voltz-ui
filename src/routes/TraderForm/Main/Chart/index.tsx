@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import {
   selectHistoricalRates,
   selectHistoricalRatesStatus,
+  selectOppositeSideCurrentRate,
 } from '../../../../app/features/historical-rates';
 import { fetchHistoricalRatesThunk } from '../../../../app/features/historical-rates/thunks';
 import { selectChainId } from '../../../../app/features/network';
@@ -52,6 +53,7 @@ const filterOptions: ChartFiltersProps['filterOptions'] = [
 
 export const Chart: React.FunctionComponent<ChartProps> = () => {
   const data = useAppSelector(selectHistoricalRates);
+  const yMarker = useAppSelector(selectOppositeSideCurrentRate);
   const loading = useAppSelector(selectHistoricalRatesStatus) === 'pending';
   const dispatch = useAppDispatch();
   const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1w');
@@ -102,7 +104,7 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
               data: data,
             },
           ]}
-          yMarker={1.82}
+          yMarker={yMarker}
           yMarkerColorToken={isFixed ? 'ultramarineBlue3' : 'skyBlueCrayola3'}
           yMarkerText={isFixed ? 'Variable rate' : 'Fixed rate'}
         />
