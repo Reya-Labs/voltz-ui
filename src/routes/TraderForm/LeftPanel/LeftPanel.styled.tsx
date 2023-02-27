@@ -5,6 +5,12 @@ import { ReactComponent as VoltzLogoSvg } from './voltz-logo.svg';
 
 export const VoltzLogo = styled(VoltzLogoSvg)`
   cursor: pointer;
+  transition: filter 300ms ease-in;
+  filter: drop-shadow(0px 0px 20px ${colors.wildStrawberry});
+
+  &:hover {
+    filter: drop-shadow(0px 0px 10px ${colors.wildStrawberry});
+  }
 `;
 
 export const PanelBox = styled('div')`

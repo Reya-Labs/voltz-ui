@@ -12,13 +12,10 @@ export const LeftPanel: React.FunctionComponent = React.memo(() => (
       }}
     />
     <CraftedByBox data-testid="LeftPanel-CraftedByBox">
-      <Typography colorToken="lavenderWeb4" typographyToken="primaryBodyXSmallRegular">
-        crafted by
-      </Typography>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodyXSmallRegular">
-        Voltz Labs
+        Voltz
       </Typography>
-      <Typography colorToken="lavenderWeb4" typographyToken="primaryBodyXSmallRegular">
+      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
         {process.env.APP_VERSION}
       </Typography>
     </CraftedByBox>
