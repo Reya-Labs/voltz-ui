@@ -115,6 +115,34 @@ export const compactFormat = (value: number): string => {
 };
 
 /**
+ * It takes a number and returns a string using Intl.NumberFormat formatter
+ * it creates compact number format
+ * @param {number} value - number - The number to format.
+ * @returns A string
+ */
+export const compactFormatToParts = (
+  value: number,
+): {
+  compactNumber: string;
+  compactSuffix: string;
+} => {
+  const formatter = Intl.NumberFormat(navigator.language, {
+    notation: 'compact',
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+  });
+  const parts = formatter.formatToParts(value);
+  return {
+    compactNumber: parts
+      .filter((part) => part.type !== 'compact')
+      .reduce((compactNumber, part) => compactNumber.concat(part.value), ''),
+    compactSuffix: parts
+      .filter((part) => part.type === 'compact')
+      .reduce((compactSuffix, part) => compactSuffix.concat(part.value), ''),
+  };
+};
+
+/**
  * It takes a floating point leverage and formats it to an rounded integer
  * @param leverage The leverage number to format (can be float)
  * @returns The formatted leverage (only integer)

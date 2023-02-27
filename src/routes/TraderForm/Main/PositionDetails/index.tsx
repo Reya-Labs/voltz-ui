@@ -9,8 +9,7 @@ import {
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
-import { isASCIILeter } from '../../../../utilities/character';
-import { compactFormat, formatNumber, stringToBigFloat } from '../../../../utilities/number';
+import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../../utilities/number';
 import {
   CashFlowBox,
   NotionalBox,
@@ -38,16 +37,11 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
 
-  const compactNotional = compactFormat(stringToBigFloat(notional.value));
-  let notionalBoxToken = isASCIILeter(compactNotional.at(-1) || '')
-    ? compactNotional.at(-1) || ''
-    : '';
-  let notionalBoxValue = isASCIILeter(compactNotional.at(-1) || '')
-    ? compactNotional.slice(0, -1)
-    : compactNotional;
+  let { compactNumber: compactNotionalNumber, compactSuffix: compactNotionalSuffix } =
+    compactFormatToParts(stringToBigFloat(notional.value));
   if (notional.error) {
-    notionalBoxToken = '';
-    notionalBoxValue = '--';
+    compactNotionalSuffix = '';
+    compactNotionalNumber = '--';
   }
 
   return (
@@ -70,9 +64,9 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
             label="Notional"
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"
-            token={notionalBoxToken}
+            token={compactNotionalSuffix}
             typographyToken="secondaryBodySmallRegular"
-            value={notionalBoxValue}
+            value={compactNotionalNumber}
           />
         </NotionalBox>
         <ReceivingBox>
