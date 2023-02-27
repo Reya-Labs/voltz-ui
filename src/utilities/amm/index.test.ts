@@ -18,20 +18,43 @@ describe('utilities/amm', () => {
   describe('findCurrentPosition', () => {
     it('returns the correct position when it exists in the list', () => {
       const positions = [
-        { amm: { id: '1' } },
-        { amm: { id: '2' } },
-        { amm: { id: '3' } },
+        {
+          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
+        },
+        {
+          amm: {
+            id: '2',
+            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
+          },
+        },
+        {
+          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
+        },
       ] as Position[];
       const selectedAmmId = '2';
       const result = findCurrentPosition(positions, selectedAmmId);
-      expect(result).toEqual({ amm: { id: '2' } });
+      expect(result).toEqual({
+        amm: {
+          id: '2',
+          market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
+        },
+      });
     });
 
     it('returns undefined when the position does not exist in the list', () => {
       const positions = [
-        { amm: { id: '1' } },
-        { amm: { id: '2' } },
-        { amm: { id: '3' } },
+        {
+          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
+        },
+        {
+          amm: {
+            id: '2',
+            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
+          },
+        },
+        {
+          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
+        },
       ] as Position[];
       const selectedAmmId = '4';
       const result = findCurrentPosition(positions, selectedAmmId);
@@ -53,22 +76,30 @@ describe('utilities/amm', () => {
           rateOracle: { id: '1' },
           underlyingToken: { id: '1' },
           endDateTime: DateTime.fromMillis(Date.now() + 100000),
+          market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } },
         },
         {
           id: 'customRollover2',
           rateOracle: { id: '2' },
           underlyingToken: { id: '2' },
           endDateTime: DateTime.fromMillis(Date.now() + 200000),
+          market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
         },
         {
           id: 'other',
           rateOracle: { id: '3' },
           underlyingToken: { id: '3' },
           endDateTime: DateTime.fromMillis(Date.now() + 300000),
+          market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } },
         },
       ] as AMM[];
       const selectedPosition = {
-        amm: { id: '1', rateOracle: { id: '1' }, underlyingToken: { id: '1' } },
+        amm: {
+          id: '1',
+          rateOracle: { id: '1' },
+          underlyingToken: { id: '1' },
+          market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } },
+        },
       } as Position;
       const pools = [
         { id: '1', rollover: 'customRollover1' },
@@ -85,22 +116,30 @@ describe('utilities/amm', () => {
           rateOracle: { id: '11' },
           underlyingToken: { id: '11' },
           endDateTime: DateTime.fromMillis(Date.now() + 24 * (1000 * 60 * 60) + 100000),
+          market: { name: 'test', tags: { isBorrowing: false, isAaveV3: false } },
         },
         {
           id: '2',
           rateOracle: { id: '11' },
           underlyingToken: { id: '11' },
           endDateTime: DateTime.fromMillis(Date.now() + 24 * (1000 * 60 * 60) + 200000),
+          market: { name: 'test', tags: { isBorrowing: false, isAaveV3: false } },
         },
         {
           id: '3',
           rateOracle: { id: '11' },
           underlyingToken: { id: '11' },
           endDateTime: DateTime.fromMillis(Date.now() + 24 * (1000 * 60 * 60) + 300000),
+          market: { name: 'test', tags: { isBorrowing: false, isAaveV3: false } },
         },
       ] as AMM[];
       const selectedPosition = {
-        amm: { id: '11', rateOracle: { id: '11' }, underlyingToken: { id: '11' } },
+        amm: {
+          id: '11',
+          rateOracle: { id: '11' },
+          underlyingToken: { id: '11' },
+          market: { name: 'test', tags: { isBorrowing: false, isAaveV3: false } },
+        },
       } as Position;
       const pools = [
         { id: '1', rollover: 'customRollover1' },
@@ -132,7 +171,12 @@ describe('utilities/amm', () => {
         },
       ] as AMM[];
       const selectedPosition = {
-        amm: { id: '11', rateOracle: { id: '11' }, underlyingToken: { id: '11' } },
+        amm: {
+          id: '11',
+          rateOracle: { id: '11' },
+          underlyingToken: { id: '11' },
+          market: { name: 'test', tags: { isBorrowing: false, isAaveV3: false } },
+        },
       } as Position;
       const pools = [
         { id: '1', rollover: 'customRollover1' },
@@ -150,6 +194,13 @@ describe('utilities/amm', () => {
         rateOracle: {
           protocolId: 1,
         },
+        market: {
+          name: 'Aave',
+          tags: {
+            isBorrowing: false,
+            isAaveV3: false,
+          },
+        },
       } as AMM;
       expect(getAmmProtocol(amm)).toBe('uniswap');
     });
@@ -161,6 +212,13 @@ describe('utilities/amm', () => {
           rateOracle: {
             protocolId: 5,
           },
+          market: {
+            name: 'Aave',
+            tags: {
+              isBorrowing: true,
+              isAaveV3: false,
+            },
+          },
         } as AMM),
       ).toBe('balancer_borrow');
       expect(
@@ -168,6 +226,13 @@ describe('utilities/amm', () => {
           protocol: 'balancer',
           rateOracle: {
             protocolId: 6,
+          },
+          market: {
+            name: 'Compound',
+            tags: {
+              isBorrowing: true,
+              isAaveV3: false,
+            },
           },
         } as AMM),
       ).toBe('balancer_borrow');
