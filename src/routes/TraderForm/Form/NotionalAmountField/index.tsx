@@ -7,23 +7,21 @@ import {
   selectAvailableNotionals,
   selectMode,
   selectNotionalAmount,
+  selectSwapFormAMM,
   setNotionalAmountAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { formatNumber } from '../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 type NotionalAmountProps = {};
 
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
-  const notionalAmount = useAppSelector(selectNotionalAmount);
-
-  const mode = useAppSelector(selectMode);
-  const availableNotionals = useAppSelector(selectAvailableNotionals);
-
   const dispatch = useAppDispatch();
 
-  const { aMM } = useSwapFormAMM();
+  const notionalAmount = useAppSelector(selectNotionalAmount);
+  const mode = useAppSelector(selectMode);
+  const availableNotionals = useAppSelector(selectAvailableNotionals);
+  const aMM = useAppSelector(selectSwapFormAMM);
 
   const getInfoPostSwap = useCallback(
     debounce(() => {

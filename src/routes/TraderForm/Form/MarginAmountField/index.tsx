@@ -4,11 +4,11 @@ import React, { useCallback } from 'react';
 import {
   selectInfoPostSwap,
   selectMarginAmount,
+  selectSwapFormAMM,
   selectWalletBalanceInfo,
   setMarginAmountAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { compactFormat, formatNumber } from '../../../../utilities/number';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 type NotionalAmountProps = {};
@@ -17,8 +17,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
   const dispatch = useAppDispatch();
   const marginAmount = useAppSelector(selectMarginAmount);
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
-
-  const { aMM } = useSwapFormAMM();
+  const aMM = useAppSelector(selectSwapFormAMM);
 
   const walletBalance = useAppSelector(selectWalletBalanceInfo);
   let walletValue = walletBalance.status === 'success' ? compactFormat(walletBalance.value) : '--';

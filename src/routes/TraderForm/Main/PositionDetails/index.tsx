@@ -5,10 +5,10 @@ import {
   selectInfoPostSwap,
   selectMode,
   selectNotionalAmount,
+  selectSwapFormAMM,
   selectVariableRateInfo,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../../utilities/number';
 import {
   CashFlowBox,
@@ -23,7 +23,7 @@ import {
 type PositionDetailsProps = {};
 
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
-  const { aMM } = useSwapFormAMM();
+  const aMM = useAppSelector(selectSwapFormAMM);
   const notional = useAppSelector(selectNotionalAmount);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const infoPostSwap = useAppSelector(selectInfoPostSwap);

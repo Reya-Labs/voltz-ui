@@ -9,8 +9,8 @@ import {
 } from '../../../../app/features/historical-rates';
 import { fetchHistoricalRatesThunk } from '../../../../app/features/historical-rates/thunks';
 import { selectChainId } from '../../../../app/features/network';
+import { selectSwapFormAMM } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { ChartBox, LineChartBox, LoadingBox } from './Chart.styled';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
 
@@ -59,7 +59,7 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
   const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1w');
   const [activeModeId, setActiveModeId] = useState<string>('fixed');
   const chainId = useAppSelector(selectChainId);
-  const { aMM } = useSwapFormAMM();
+  const aMM = useAppSelector(selectSwapFormAMM);
   const granularity =
     activeTimeRangeId === '1d' || activeModeId === '1w'
       ? Granularity.ONE_HOUR
