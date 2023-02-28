@@ -118,10 +118,14 @@ export const compactFormat = (value: number): string => {
  * It takes a number and returns a string using Intl.NumberFormat formatter
  * it creates compact number format
  * @param {number} value - number - The number to format.
- * @returns A string
+ * @returns {Object} compactFormatToParts containing the compacted number and suffix.
+ * @returns {string} compactFormatToParts.compactNumber, representing a 
+ * language-sensitive representation of the compacted number.
+ * @returns {string} compactFormatToParts.compactSuffix, representing the compact 
+ * suffix (e.g., K, M, etc).
  */
 export const compactFormatToParts = (
-  value: number,
+  number: number,
 ): {
   compactNumber: string;
   compactSuffix: string;
@@ -131,14 +135,14 @@ export const compactFormatToParts = (
     maximumFractionDigits: 2,
     minimumFractionDigits: 0,
   });
-  const parts = formatter.formatToParts(value);
+  const parts = formatter.formatToParts(number);
   return {
     compactNumber: parts
       .filter((part) => part.type !== 'compact')
-      map(({ value }) => value).join(''),
+      .map(({ value }) => value).join(''),
     compactSuffix: parts
       .filter((part) => part.type === 'compact')
-      map(({ value }) => value).join(''),
+      .map(({ value }) => value).join(''),
   };
 };
 
