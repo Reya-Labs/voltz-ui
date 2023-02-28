@@ -1,9 +1,12 @@
 import { LabelTokenTypography, MarketToken, MarketTokenProps, Pill } from 'brokoli-ui';
 import React from 'react';
 
-import { selectFixedRateInfo, selectVariableRateInfo } from '../../../../app/features/swap-form';
+import {
+  selectFixedRateInfo,
+  selectSwapFormAMM,
+  selectVariableRateInfo,
+} from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { formatTimestamp } from '../../../../utilities/date';
 import { formatNumber } from '../../../../utilities/number';
 import {
@@ -18,7 +21,7 @@ import {
 type PoolHeaderProps = {};
 
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
-  const { aMM } = useSwapFormAMM();
+  const aMM = useAppSelector(selectSwapFormAMM);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   if (!aMM) {

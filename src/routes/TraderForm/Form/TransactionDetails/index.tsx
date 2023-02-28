@@ -1,9 +1,8 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectInfoPostSwap } from '../../../../app/features/swap-form';
+import { selectInfoPostSwap, selectSwapFormAMM } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { formatNumber } from '../../../../utilities/number';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import {
@@ -17,7 +16,7 @@ type TransactionDetailsProps = {};
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
   // todo: Alex handle fill in proper values
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
-  const { aMM } = useSwapFormAMM();
+  const aMM = useAppSelector(selectSwapFormAMM);
 
   return (
     <TransactionDetailsBox>
