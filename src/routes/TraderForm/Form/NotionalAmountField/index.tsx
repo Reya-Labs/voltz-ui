@@ -60,7 +60,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
         token={
           aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']) : undefined
         }
-        tooltip="TODO: Tooltip message here!"
+        tooltip="When you swap rates, the amount you receive and pay is calculated as a percentage or the notional value you choose."
         value={notionalAmount.value}
         onChange={handleOnChange}
       />

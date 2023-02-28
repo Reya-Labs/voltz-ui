@@ -69,7 +69,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"
             token="%"
-            tooltip="TODO: Missing tooltip"
+            tooltip="Variable rate and the change during the last 24hs in absolute value."
             typographyToken="secondaryBodyMediumBold"
             value={
               variableRateInfo.status !== 'success' ? '--' : formatNumber(variableRateInfo.value)

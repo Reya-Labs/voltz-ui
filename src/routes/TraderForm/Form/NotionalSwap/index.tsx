@@ -58,7 +58,7 @@ export const NotionalSwap: React.FunctionComponent<{}> = () => {
     <NotionalSwapWrapperBox>
       <TypographyWithTooltip
         colorToken="lavenderWeb2"
-        tooltip="TODO: Tooltip is needed!"
+        tooltip="When you swap rates, you will be receiving at one rate and paying at another. Choose the rate you want to receive at."
         typographyToken="primaryBodySmallRegular"
       >
         Select Notional Swap Direction

@@ -58,7 +58,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         token={
           aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']) : undefined
         }
-        tooltip="TODO: Tooltip message here!"
+        tooltip="The protocol requires every position to have enough collateral to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."
         topRightText={`Wallet: ${walletValue}`}
         topRightTextColorToken="lavenderWeb2"
         topRightTextTypographyToken="secondaryBodySmallRegular"
