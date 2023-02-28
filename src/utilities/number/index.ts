@@ -138,7 +138,7 @@ export const compactFormatToParts = (
       map(({ value }) => value).join(''),
     compactSuffix: parts
       .filter((part) => part.type === 'compact')
-      .reduce((compactSuffix, part) => compactSuffix.concat(part.value), ''),
+      map(({ value }) => value).join(''),
   };
 };
 
