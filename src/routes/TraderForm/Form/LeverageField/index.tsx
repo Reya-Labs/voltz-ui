@@ -18,7 +18,7 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
         maxLeverageColorToken="lavenderWeb3"
         maxLeverageText="Max 8,000x Leverage"
         maxLeverageTypographyToken="primaryBodySmallRegular"
-        tooltip="Input leverage!"
+        tooltip="Leverage is notional amount divided by margin amount, and represents the maximum delta between the rates your position is collateralized to withstand."
         tooltipColorToken="lavenderWeb2"
         value={leverage}
         onLeverageChange={setLeverage}
