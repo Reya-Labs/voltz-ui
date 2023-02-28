@@ -119,9 +119,9 @@ export const compactFormat = (value: number): string => {
  * it creates compact number format
  * @param {number} value - number - The number to format.
  * @returns {Object} compactFormatToParts containing the compacted number and suffix.
- * @returns {string} compactFormatToParts.compactNumber, representing a 
+ * @returns {string} compactFormatToParts.compactNumber, representing a
  * language-sensitive representation of the compacted number.
- * @returns {string} compactFormatToParts.compactSuffix, representing the compact 
+ * @returns {string} compactFormatToParts.compactSuffix, representing the compact
  * suffix (e.g., K, M, etc).
  */
 export const compactFormatToParts = (
@@ -139,10 +139,12 @@ export const compactFormatToParts = (
   return {
     compactNumber: parts
       .filter((part) => part.type !== 'compact')
-      .map(({ value }) => value).join(''),
+      .map(({ value }) => value)
+      .join(''),
     compactSuffix: parts
       .filter((part) => part.type === 'compact')
-      .map(({ value }) => value).join(''),
+      .map(({ value }) => value)
+      .join(''),
   };
 };
 
