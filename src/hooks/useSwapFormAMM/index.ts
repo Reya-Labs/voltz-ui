@@ -2,13 +2,15 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { selectChainId } from '../../app/features/network';
 import {
   getAvailableNotionalsThunk,
   getFixedRateThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
   selectSwapFormAMM,
-  setSignerForAMMAction,
+  selectSwapFormPositionFetchingStatus,
+  setSignerAndPositionForAMMThunk,
   setSwapFormAMMAction,
 } from '../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -25,10 +27,11 @@ export type UseAMMsResult = {
 
 export const useSwapFormAMM = (): UseAMMsResult => {
   const dispatch = useAppDispatch();
-
   const { ammId, poolId } = useParams();
   const { aMMs, loading, error, idle } = useAMMs();
   const aMM = useAppSelector(selectSwapFormAMM);
+  const positionFetchingStatus = useAppSelector(selectSwapFormPositionFetchingStatus);
+  const chainId = useAppSelector(selectChainId);
 
   const { signer } = useWallet();
 
@@ -45,6 +48,7 @@ export const useSwapFormAMM = (): UseAMMsResult => {
     const foundAMM = aMMs.find(
       (a) => ammId === generateAmmIdForRoute(a) && poolId === generatePoolId(a),
     );
+
     dispatch(
       setSwapFormAMMAction({
         amm: foundAMM ? foundAMM : null,
@@ -64,17 +68,21 @@ export const useSwapFormAMM = (): UseAMMsResult => {
   }, [dispatch, aMM]);
 
   useEffect(() => {
+    if (!chainId) {
+      return;
+    }
     void dispatch(
-      setSignerForAMMAction({
+      setSignerAndPositionForAMMThunk({
         signer,
+        chainId,
       }),
     );
-  }, [dispatch, signer]);
+  }, [dispatch, chainId, signer]);
 
   return {
     aMM,
-    loading,
+    loading: loading || positionFetchingStatus === 'pending',
     idle,
-    error,
+    error: error || positionFetchingStatus === 'error',
   };
 };
