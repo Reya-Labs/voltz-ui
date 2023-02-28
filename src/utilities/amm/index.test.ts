@@ -1,13 +1,7 @@
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 
-import {
-  findCurrentAmm,
-  findCurrentPosition,
-  getAmmProtocol,
-  isAaveV3,
-  isBorrowing,
-} from './index';
+import { findCurrentAmm, findCurrentPosition, getAmmProtocol } from './index';
 
 jest.mock('../../hooks/voltz-config/config', () => ({
   getConfig: function () {
@@ -24,20 +18,43 @@ describe('utilities/amm', () => {
   describe('findCurrentPosition', () => {
     it('returns the correct position when it exists in the list', () => {
       const positions = [
-        { amm: { id: '1' } },
-        { amm: { id: '2' } },
-        { amm: { id: '3' } },
+        {
+          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
+        },
+        {
+          amm: {
+            id: '2',
+            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
+          },
+        },
+        {
+          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
+        },
       ] as Position[];
       const selectedAmmId = '2';
       const result = findCurrentPosition(positions, selectedAmmId);
-      expect(result).toEqual({ amm: { id: '2' } });
+      expect(result).toEqual({
+        amm: {
+          id: '2',
+          market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
+        },
+      });
     });
 
     it('returns undefined when the position does not exist in the list', () => {
       const positions = [
-        { amm: { id: '1' } },
-        { amm: { id: '2' } },
-        { amm: { id: '3' } },
+        {
+          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
+        },
+        {
+          amm: {
+            id: '2',
+            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
+          },
+        },
+        {
+          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
+        },
       ] as Position[];
       const selectedAmmId = '4';
       const result = findCurrentPosition(positions, selectedAmmId);
@@ -59,22 +76,30 @@ describe('utilities/amm', () => {
           rateOracle: { id: '1' },
           underlyingToken: { id: '1' },
           endDateTime: DateTime.fromMillis(Date.now() + 100000),
+          market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } },
         },
         {
           id: 'customRollover2',
           rateOracle: { id: '2' },
           underlyingToken: { id: '2' },
           endDateTime: DateTime.fromMillis(Date.now() + 200000),
+          market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
         },
         {
           id: 'other',
           rateOracle: { id: '3' },
           underlyingToken: { id: '3' },
           endDateTime: DateTime.fromMillis(Date.now() + 300000),
+          market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } },
         },
       ] as AMM[];
       const selectedPosition = {
-        amm: { id: '1', rateOracle: { id: '1' }, underlyingToken: { id: '1' } },
+        amm: {
+          id: '1',
+          rateOracle: { id: '1' },
+          underlyingToken: { id: '1' },
+          market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } },
+        },
       } as Position;
       const pools = [
         { id: '1', rollover: 'customRollover1' },
@@ -91,22 +116,30 @@ describe('utilities/amm', () => {
           rateOracle: { id: '11' },
           underlyingToken: { id: '11' },
           endDateTime: DateTime.fromMillis(Date.now() + 24 * (1000 * 60 * 60) + 100000),
+          market: { name: 'test', tags: { isBorrowing: false, isAaveV3: false } },
         },
         {
           id: '2',
           rateOracle: { id: '11' },
           underlyingToken: { id: '11' },
           endDateTime: DateTime.fromMillis(Date.now() + 24 * (1000 * 60 * 60) + 200000),
+          market: { name: 'test', tags: { isBorrowing: false, isAaveV3: false } },
         },
         {
           id: '3',
           rateOracle: { id: '11' },
           underlyingToken: { id: '11' },
           endDateTime: DateTime.fromMillis(Date.now() + 24 * (1000 * 60 * 60) + 300000),
+          market: { name: 'test', tags: { isBorrowing: false, isAaveV3: false } },
         },
       ] as AMM[];
       const selectedPosition = {
-        amm: { id: '11', rateOracle: { id: '11' }, underlyingToken: { id: '11' } },
+        amm: {
+          id: '11',
+          rateOracle: { id: '11' },
+          underlyingToken: { id: '11' },
+          market: { name: 'test', tags: { isBorrowing: false, isAaveV3: false } },
+        },
       } as Position;
       const pools = [
         { id: '1', rollover: 'customRollover1' },
@@ -138,7 +171,12 @@ describe('utilities/amm', () => {
         },
       ] as AMM[];
       const selectedPosition = {
-        amm: { id: '11', rateOracle: { id: '11' }, underlyingToken: { id: '11' } },
+        amm: {
+          id: '11',
+          rateOracle: { id: '11' },
+          underlyingToken: { id: '11' },
+          market: { name: 'test', tags: { isBorrowing: false, isAaveV3: false } },
+        },
       } as Position;
       const pools = [
         { id: '1', rollover: 'customRollover1' },
@@ -156,6 +194,13 @@ describe('utilities/amm', () => {
         rateOracle: {
           protocolId: 1,
         },
+        market: {
+          name: 'Aave',
+          tags: {
+            isBorrowing: false,
+            isAaveV3: false,
+          },
+        },
       } as AMM;
       expect(getAmmProtocol(amm)).toBe('uniswap');
     });
@@ -167,6 +212,13 @@ describe('utilities/amm', () => {
           rateOracle: {
             protocolId: 5,
           },
+          market: {
+            name: 'Aave',
+            tags: {
+              isBorrowing: true,
+              isAaveV3: false,
+            },
+          },
         } as AMM),
       ).toBe('balancer_borrow');
       expect(
@@ -175,42 +227,15 @@ describe('utilities/amm', () => {
           rateOracle: {
             protocolId: 6,
           },
+          market: {
+            name: 'Compound',
+            tags: {
+              isBorrowing: true,
+              isAaveV3: false,
+            },
+          },
         } as AMM),
       ).toBe('balancer_borrow');
-    });
-  });
-
-  describe('isBorrowing', () => {
-    it('returns true for rateOracleProtocolId 5 or 6', () => {
-      expect(isBorrowing(5)).toBe(true);
-      expect(isBorrowing(6)).toBe(true);
-    });
-
-    it('returns false when rateOracleProtocolId 5 or 6', () => {
-      expect(isBorrowing(7)).toBe(false);
-      expect(isBorrowing(8)).toBe(false);
-      expect(isBorrowing(4)).toBe(false);
-    });
-  });
-
-  describe('isAaveV3', () => {
-    const mockedPools = [
-      { id: 'pool1', isAaveV3: false },
-      { id: 'pool2', isAaveV3: true },
-      { id: 'pool3' },
-    ] as never;
-
-    it('should return true if the given AMM ID is an Aave V3 AMM', () => {
-      expect(isAaveV3(mockedPools, 'pool2')).toBe(true);
-    });
-
-    it('should return false if the given AMM ID is not an Aave V3 AMM', () => {
-      expect(isAaveV3(mockedPools, 'pool1')).toBe(false);
-      expect(isAaveV3(mockedPools, 'pool3')).toBe(false);
-    });
-
-    it('should return false if the given AMM ID is not found in the config', () => {
-      expect(isAaveV3(mockedPools, 'pool4')).toBe(false);
     });
   });
 });

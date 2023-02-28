@@ -1,5 +1,6 @@
 import {
   compactFormat,
+  compactFormatToParts,
   formatCurrency,
   formatLeverage,
   formatNumber,
@@ -107,9 +108,15 @@ describe('number', () => {
       ['1,00', 'en-US', '1,00'],
       ['100', 'en-US', '100'],
       ['100,23', 'en-US', '100,23'],
+      ['-1,00', 'en-US', '-1,00'],
+      ['-100', 'en-US', '-100'],
+      ['-100,23', 'en-US', '-100,23'],
       ['1,00', 'en-DE', '1.00'],
       ['100', 'en-DE', '100'],
       ['100,23', 'en-DE', '100.23'],
+      ['-1,00', 'en-DE', '-1.00'],
+      ['-100', 'en-DE', '-100'],
+      ['-100,23', 'en-DE', '-100.23'],
     ])(
       'given value=%p, navigator.language=%p - toUSFormat should return expected output',
       (value, mockedNavigatorLanguage, expected) => {
@@ -122,13 +129,37 @@ describe('number', () => {
   });
 
   describe('stringToBigFloat', () => {
+    let languageGetter: ReturnType<typeof jest.spyOn>;
+
+    beforeEach(() => {
+      languageGetter = jest.spyOn(window.navigator, 'language', 'get');
+    });
+
     test.each([
-      ['1,00', 100],
-      ['100', 100],
-      ['1,2345', 12345],
+      ['1,00', 'en-US', 100],
+      ['100', 'en-US', 100],
+      ['1,2345', 'en-US', 12345],
+      ['1.0', 'en-US', 1],
+      ['-1.0', 'en-US', -1],
+      ['1.2', 'en-US', 1.2],
+      ['-1.2', 'en-US', -1.2],
+      ['1,123.0', 'en-US', 1123],
+      ['-1,123.0', 'en-US', -1123],
+      ['1,123.5', 'en-US', 1123.5],
+      ['-1,123.5', 'en-US', -1123.5],
+      ['1,0', 'en-DE', 1],
+      ['-1,0', 'en-DE', -1],
+      ['1,2', 'en-DE', 1.2],
+      ['-1,2', 'en-DE', -1.2],
+      ['1.123,0', 'en-DE', 1123],
+      ['-1.123,0', 'en-DE', -1123],
+      ['1.123,5', 'en-DE', 1123.5],
+      ['-1.123,5', 'en-DE', -1123.5],
     ])(
       'given stringValue=%p - stringToBigFloat should return expected output',
-      (stringValue, expected) => {
+      (stringValue, mockedNavigatorLanguage, expected) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+        languageGetter.mockReturnValue(mockedNavigatorLanguage);
         const retValue = stringToBigFloat(stringValue);
         expect(retValue).toEqual(expected);
       },
@@ -170,6 +201,46 @@ describe('number', () => {
         languageGetter.mockReturnValue(mockedNavigatorLanguage);
         const retValue = compactFormat(value);
         expect(retValue).toEqual(expected);
+      },
+    );
+  });
+
+  describe('compactFormatToParts', () => {
+    let languageGetter: ReturnType<typeof jest.spyOn>;
+
+    beforeEach(() => {
+      languageGetter = jest.spyOn(window.navigator, 'language', 'get');
+    });
+
+    test.each([
+      [1.0, 'en-US', '1', ''],
+      [123, 'en-US', '123', ''],
+      [1233, 'en-US', '1.23', 'K'],
+      [1233222, 'en-US', '1.23', 'M'],
+      [1233222111, 'en-US', '1.23', 'B'],
+      [-1.0, 'en-US', '-1', ''],
+      [-123, 'en-US', '-123', ''],
+      [-1233, 'en-US', '-1.23', 'K'],
+      [-1233222, 'en-US', '-1.23', 'M'],
+      [-1233222111, 'en-US', '-1.23', 'B'],
+      [1.0, 'en-DE', '1', ''],
+      [123, 'en-DE', '123', ''],
+      [1233, 'en-DE', '1,23', 'K'],
+      [1233222, 'en-DE', '1,23', 'M'],
+      [1233222111, 'en-DE', '1,23', 'B'],
+      [-1.0, 'en-DE', '-1', ''],
+      [-123, 'en-DE', '-123', ''],
+      [-1233, 'en-DE', '-1,23', 'K'],
+      [-1233222, 'en-DE', '-1,23', 'M'],
+      [-1233222111, 'en-DE', '-1,23', 'B'],
+    ])(
+      'given value=%p, navigator.language=%p - compactFormat should return expected output',
+      (value, mockedNavigatorLanguage, expectedCompactNumber, expectedCompactSuffix) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+        languageGetter.mockReturnValue(mockedNavigatorLanguage);
+        const retValue = compactFormatToParts(value);
+        expect(retValue.compactNumber).toEqual(expectedCompactNumber);
+        expect(retValue.compactSuffix).toEqual(expectedCompactSuffix);
       },
     );
   });

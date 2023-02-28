@@ -16,7 +16,6 @@ import {
 import { usePositionContext } from '../../../contexts/PositionContext/PositionContext';
 import { useAgent } from '../../../hooks/useAgent';
 import { routes } from '../../../routes/paths';
-import { isBorrowing } from '../../../utilities/amm';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
@@ -191,7 +190,7 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
           form.state.liquidityAction.toString(),
           '',
           agent,
-          isBorrowing(targetAmm.rateOracle.protocolId),
+          targetAmm.market.tags.isBorrowing,
           targetAmm.protocol,
         )}
         hintState={form.hintState}

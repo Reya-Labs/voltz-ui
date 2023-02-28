@@ -13,7 +13,7 @@ import { AMMProvider } from '../../../../contexts/AMMContext/AMMContext';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { getConfig } from '../../../../hooks/voltz-config/config';
 import { colors, SystemStyleObject, Theme } from '../../../../theme';
-import { findCurrentAmm, isAaveV3, isBorrowing } from '../../../../utilities/amm';
+import { findCurrentAmm } from '../../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../../utilities/constants';
 import { getRowButtonId } from '../../../../utilities/googleAnalytics/helpers';
 import { PositionTableHead, PositionTableRow } from './components';
@@ -117,7 +117,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 gaButtonId={getRowButtonId(
                   false,
                   pos.amm.protocol,
-                  isBorrowing(pos.amm.rateOracle.protocolId),
+                  pos.amm.market.tags.isBorrowing,
                 )}
                 healthFactor={pos.healthFactor}
                 isBothTraderAndLP={pos.isBothTraderAndLP ?? false}
@@ -149,7 +149,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                       <PositionTableRow
                         key={pos.id}
                         index={index}
-                        isAaveV3={isAaveV3(pools, pos.amm.id)}
+                        isAaveV3={pos.amm.market.tags.isAaveV3}
                         position={pos}
                       />
                     </AMMProvider>

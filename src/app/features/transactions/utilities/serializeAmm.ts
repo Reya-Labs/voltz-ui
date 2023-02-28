@@ -4,6 +4,7 @@ import { SerializedAMM } from '../../../types';
 
 const serializeAmm = (amm: AMM): SerializedAMM => ({
   id: amm.id,
+  peripheryAddress: amm.peripheryAddress,
   factoryAddress: amm.factoryAddress,
   marginEngineAddress: amm.marginEngineAddress,
   termStartTimestampInMS: amm.termStartTimestampInMS.toString(),

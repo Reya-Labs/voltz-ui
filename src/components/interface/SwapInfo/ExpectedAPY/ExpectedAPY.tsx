@@ -8,12 +8,7 @@ import { useWallet } from '../../../../hooks/useWallet';
 import { colors } from '../../../../theme';
 import { getAmmProtocol } from '../../../../utilities/amm';
 import { DataLayerEventPayload, pushEvent } from '../../../../utilities/googleAnalytics';
-import {
-  formatNumber,
-  removeFormat,
-  stringToBigFloat,
-  toUSFormat,
-} from '../../../../utilities/number';
+import { formatNumber, removeFormat, stringToBigFloat } from '../../../../utilities/number';
 import { Typography } from '../../../atomic/Typography/Typography';
 import { IconLabel } from '../../../composite/IconLabel/IconLabel';
 import { MaskedIntegerField } from '../../../composite/MaskedIntegerField/MaskedIntegerField';
@@ -53,8 +48,7 @@ export const ExpectedAPY = ({
   }, [userSimulatedVariableApy, userSimulatedVariableApyUpdated]);
 
   useEffect(() => {
-    const usFormatted = toUSFormat(userInput);
-    const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
+    const newValue = userInput ? stringToBigFloat(userInput) : NaN;
     if (!isNaN(newValue)) {
       const payload: DataLayerEventPayload = {
         event: 'expectedApy_change',
@@ -64,12 +58,11 @@ export const ExpectedAPY = ({
       };
       pushEvent(account ?? '', payload);
     }
-  }, [stringToBigFloat(toUSFormat(userInput) ?? '0')]);
+  }, [userInput ? stringToBigFloat(userInput) : '0']);
 
   const handleChangeInput = (inputVal: string | undefined) => {
     if (inputVal) {
-      const usFormatted = toUSFormat(inputVal);
-      const newValue = usFormatted ? stringToBigFloat(usFormatted) : NaN;
+      const newValue = stringToBigFloat(inputVal);
       if (!isNaN(newValue)) {
         setUserInput(inputVal);
         window.clearInterval(timer.current);

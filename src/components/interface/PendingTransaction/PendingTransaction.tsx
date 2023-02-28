@@ -11,7 +11,7 @@ import { AMMProvider } from '../../../contexts/AMMContext/AMMContext';
 import { MintBurnFormLiquidityAction } from '../../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
-import { getAmmProtocol, isBorrowing } from '../../../utilities/amm';
+import { getAmmProtocol } from '../../../utilities/amm';
 import { DataLayerEventPayload, pushEvent } from '../../../utilities/googleAnalytics';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
 import { formatCurrency } from '../../../utilities/number';
@@ -147,7 +147,7 @@ export const PendingTransaction: React.FunctionComponent<PendingTransactionProps
     (liquidityAction ?? '').toString(),
     showNegativeNotional ? 'REMOVE' : 'ADD',
     agent,
-    isBorrowing(amm.rateOracle.protocolId),
+    amm.market.tags.isBorrowing,
     amm.protocol,
   );
 

@@ -4,7 +4,6 @@ import React from 'react';
 import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { AutomaticRolloverToggleProps } from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
-import { isCostReductionFlowEnabled } from '../../../../../utilities/is-cost-reduction-flow-enabled';
 import { formatCurrency } from '../../../../../utilities/number';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
@@ -13,7 +12,6 @@ import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
 import { DepositInfo } from '../DepositInfo/DepositInfo';
 import { DepositSuccessModalContent } from '../DepositSuccessModalContent/DepositSuccessModalContent';
 import { FormActionButton } from '../FormActionButton/FormActionButton';
-import { HintText } from '../HintText/HintText';
 import {
   MaturityDistribution,
   MaturityDistributionProps,
@@ -131,53 +129,40 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
             </FormActionButton>
             <BackButton onClick={onGoBack}>BACK</BackButton>
           </ButtonBox>
-
-          {isCostReductionFlowEnabled() ? null : (
-            <HintText
-              error={hintTextError}
-              loading={loading}
-              prefixText={hintTextPrefixText}
-              success={hintTextSuccess}
-              suffixText={hintTextSuffixText}
-              text={hintText}
-            />
-          )}
         </FullButtonBox>
 
         <AboutYourFunds depositsText="Deposits" />
       </FormBox>
-      {isCostReductionFlowEnabled() ? (
-        <>
-          <Modal open={isConfirmDepositModalOpen} onClose={onConfirmDepositModalClose}>
-            <ConfirmDepositModalContent
-              depositFeeUnderlying={depositFeeUnderlying}
-              depositFeeUSD={depositFeeUSD}
-              disabled={disabled}
-              gasCost={depositGasCost}
-              hintText={hintText}
-              hintTextError={hintTextError}
-              hintTextPrefixText={hintTextPrefixText}
-              hintTextSuccess={hintTextSuccess}
-              hintTextSuffixText={hintTextSuffixText}
-              loading={loading}
-              submitText={submitText}
-              success={success}
-              token={lpVault.tokenName}
-              onCancel={onConfirmDepositModalClose}
-              onProceed={onSubmit}
-            />
-          </Modal>
-          <Modal open={isSuccessDepositModalOpen} onClose={onSuccessDepositModalClose}>
-            <DepositSuccessModalContent
-              depositTransactionId={depositTransactionId}
-              isBatchFlowOpen={isBatchFlowOpen}
-              lpVault={lpVault}
-              onBatchBudgetModalClose={onSuccessDepositModalClose}
-              onBatchBudgetModalOpen={onBatchBudgetModalOpen}
-            />
-          </Modal>
-        </>
-      ) : null}
+      <>
+        <Modal open={isConfirmDepositModalOpen} onClose={onConfirmDepositModalClose}>
+          <ConfirmDepositModalContent
+            depositFeeUnderlying={depositFeeUnderlying}
+            depositFeeUSD={depositFeeUSD}
+            disabled={disabled}
+            gasCost={depositGasCost}
+            hintText={hintText}
+            hintTextError={hintTextError}
+            hintTextPrefixText={hintTextPrefixText}
+            hintTextSuccess={hintTextSuccess}
+            hintTextSuffixText={hintTextSuffixText}
+            loading={loading}
+            submitText={submitText}
+            success={success}
+            token={lpVault.tokenName}
+            onCancel={onConfirmDepositModalClose}
+            onProceed={onSubmit}
+          />
+        </Modal>
+        <Modal open={isSuccessDepositModalOpen} onClose={onSuccessDepositModalClose}>
+          <DepositSuccessModalContent
+            depositTransactionId={depositTransactionId}
+            isBatchFlowOpen={isBatchFlowOpen}
+            lpVault={lpVault}
+            onBatchBudgetModalClose={onSuccessDepositModalClose}
+            onBatchBudgetModalOpen={onBatchBudgetModalOpen}
+          />
+        </Modal>
+      </>
     </>
   );
 };

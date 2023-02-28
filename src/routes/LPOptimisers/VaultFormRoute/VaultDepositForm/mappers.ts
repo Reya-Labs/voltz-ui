@@ -1,5 +1,3 @@
-import { isCostReductionFlowEnabled } from '../../../../utilities/is-cost-reduction-flow-enabled';
-
 export enum DepositStates {
   INITIALISING = 'INITIALISING',
   PROVIDER_ERROR = 'PROVIDER_ERROR',
@@ -139,7 +137,7 @@ export const getSubmissionState = ({
         loading: false,
         disabled: false,
         success: false,
-        confirmDepositModalOpen: isCostReductionFlowEnabled(),
+        confirmDepositModalOpen: true,
         successDepositModalOpen: false,
         batchFlowOpen: false,
       };
@@ -181,7 +179,7 @@ export const getSubmissionState = ({
     case DepositStates.APPROVED: {
       return {
         submitText: 'Deposit',
-        action: isCostReductionFlowEnabled() ? openDepositModal : deposit,
+        action: openDepositModal,
         hintText:
           selectedDeposit > 0
             ? {
@@ -216,7 +214,7 @@ export const getSubmissionState = ({
         loading: false,
         disabled: !(selectedDeposit > 0),
         success: false,
-        confirmDepositModalOpen: isCostReductionFlowEnabled(),
+        confirmDepositModalOpen: true,
         successDepositModalOpen: false,
         batchFlowOpen: false,
       };
@@ -234,7 +232,7 @@ export const getSubmissionState = ({
         loading: true,
         disabled: true,
         success: false,
-        confirmDepositModalOpen: isCostReductionFlowEnabled(),
+        confirmDepositModalOpen: true,
         successDepositModalOpen: false,
         batchFlowOpen: false,
       };
@@ -254,7 +252,7 @@ export const getSubmissionState = ({
         disabled: false,
         success: true,
         confirmDepositModalOpen: false,
-        successDepositModalOpen: isCostReductionFlowEnabled(),
+        successDepositModalOpen: true,
         batchFlowOpen: false,
       };
     }
@@ -273,8 +271,8 @@ export const getSubmissionState = ({
         disabled: false,
         success: true,
         confirmDepositModalOpen: false,
-        successDepositModalOpen: isCostReductionFlowEnabled(),
-        batchFlowOpen: isCostReductionFlowEnabled(),
+        successDepositModalOpen: true,
+        batchFlowOpen: true,
       };
     }
   }

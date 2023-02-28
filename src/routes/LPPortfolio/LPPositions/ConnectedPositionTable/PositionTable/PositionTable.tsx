@@ -6,7 +6,7 @@ import { useAppSelector } from '../../../../../app/hooks';
 import { AMMProvider } from '../../../../../contexts/AMMContext/AMMContext';
 import { useAMMs } from '../../../../../hooks/useAMMs';
 import { getConfig } from '../../../../../hooks/voltz-config/config';
-import { findCurrentAmm, isBorrowing } from '../../../../../utilities/amm';
+import { findCurrentAmm } from '../../../../../utilities/amm';
 import { getRowButtonId } from '../../../../../utilities/googleAnalytics/helpers';
 import { PositionTableHead } from './components/PositionTableHead/PositionTableHead';
 import { PositionTableRow } from './components/PositionTableRow/PositionTableRow';
@@ -61,7 +61,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 gaButtonId={getRowButtonId(
                   true,
                   position.amm.protocol,
-                  isBorrowing(position.amm.rateOracle.protocolId),
+                  position.amm.market.tags.isBorrowing,
                 )}
                 healthFactor={position.healthFactor}
                 isBothTraderAndLP={position.isBothTraderAndLP ?? false}

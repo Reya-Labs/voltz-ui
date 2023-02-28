@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 
 import { PageTitleDesc } from '../../components/composite/PageTitleDesc/PageTitleDesc';
 import { ConnectedSwapForm } from '../../components/containers/ConnectedSwapForm/ConnectedSwapForm';
@@ -15,14 +15,17 @@ import { useAgent } from '../../hooks/useAgent';
 import { useAMMs } from '../../hooks/useAMMs';
 import { usePositions } from '../../hooks/usePositions/usePositions';
 import { useWallet } from '../../hooks/useWallet';
-import { findCurrentPosition } from '../../utilities/amm';
+import { findCurrentPosition, generateAmmIdForRoute, generatePoolId } from '../../utilities/amm';
+import { isTraderExperienceFlowEnabled } from '../../utilities/is-trader-experience-flow-enabled';
 import { setPageTitle } from '../../utilities/page';
+import { routes } from '../paths';
 
 export const TraderPools: React.FunctionComponent = () => {
   const { traderAMMs, loading, error } = useAMMs();
   const [formMode, setFormMode] = useState<SwapFormModes>();
   const [amm, setAMM] = useState<AMM>();
   const [position, setPosition] = useState<Position>();
+  const navigate = useNavigate();
 
   const { onChangeAgent } = useAgent();
   const { key } = useLocation();
@@ -55,6 +58,15 @@ export const TraderPools: React.FunctionComponent = () => {
   }, [setPageTitle, renderMode, position]);
 
   const handleSelectAmm = (selectedAMM: AMM) => {
+    if (isTraderExperienceFlowEnabled()) {
+      const path = generatePath(routes.TRADER_FORM, {
+        form: 'swap',
+        ammId: generateAmmIdForRoute(selectedAMM),
+        poolId: generatePoolId(selectedAMM),
+      });
+      navigate(`/${path}`);
+      return;
+    }
     setFormMode(SwapFormModes.NEW_POSITION);
     setAMM(selectedAMM);
     setPosition(findCurrentPosition(positionsByAgentGroup || [], selectedAMM.id));

@@ -81,7 +81,7 @@ export const removeFormat = (formattedValue: string | undefined): string | undef
  */
 export const toUSFormat = (value: string | undefined): string | undefined => {
   if (withCommaDecimalSeparator()) {
-    return value?.split('.').join('-').split(',').join('.').split('-').join(',');
+    return value?.split('.').join('#').split(',').join('.').split('#').join(',');
   }
   return value;
 };
@@ -92,9 +92,9 @@ export const toUSFormat = (value: string | undefined): string | undefined => {
  * @returns A function that takes a string and returns a number.
  */
 export const stringToBigFloat = (stringValue: string): number => {
-  let formattedValue = stringValue;
-  if (stringValue.includes(',')) {
-    formattedValue = stringValue.split(',').join('');
+  let formattedValue = toUSFormat(stringValue) as string;
+  if (formattedValue.includes(',')) {
+    formattedValue = formattedValue.split(',').join('');
   }
   return parseFloat(formattedValue);
 };
@@ -112,6 +112,40 @@ export const compactFormat = (value: number): string => {
     minimumFractionDigits: 0,
   });
   return formatter.format(value);
+};
+
+/**
+ * It takes a number and returns a string using Intl.NumberFormat formatter
+ * it creates compact number format
+ * @param {number} value - number - The number to format.
+ * @returns {Object} compactFormatToParts containing the compacted number and suffix.
+ * @returns {string} compactFormatToParts.compactNumber, representing a
+ * language-sensitive representation of the compacted number.
+ * @returns {string} compactFormatToParts.compactSuffix, representing the compact
+ * suffix (e.g., K, M, etc).
+ */
+export const compactFormatToParts = (
+  number: number,
+): {
+  compactNumber: string;
+  compactSuffix: string;
+} => {
+  const formatter = Intl.NumberFormat(navigator.language, {
+    notation: 'compact',
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+  });
+  const parts = formatter.formatToParts(number);
+  return {
+    compactNumber: parts
+      .filter((part) => part.type !== 'compact')
+      .map(({ value }) => value)
+      .join(''),
+    compactSuffix: parts
+      .filter((part) => part.type === 'compact')
+      .map(({ value }) => value)
+      .join(''),
+  };
 };
 
 /**

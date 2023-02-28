@@ -3,8 +3,10 @@ import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 
 import { aMMsReducer } from './features/aMMs';
+import { historicalRatesReducer } from './features/historical-rates';
 import { lpOptimisersReducer } from './features/lp-optimisers';
 import { networkReducer } from './features/network';
+import { swapFormReducer } from './features/swap-form';
 import { saga, transactionsReducer } from './features/transactions';
 
 const rootReducer = combineReducers({
@@ -12,6 +14,8 @@ const rootReducer = combineReducers({
   lpOptimisers: lpOptimisersReducer,
   aMMs: aMMsReducer,
   network: networkReducer,
+  swapForm: swapFormReducer,
+  historicalRates: historicalRatesReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
