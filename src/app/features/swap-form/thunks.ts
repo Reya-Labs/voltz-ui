@@ -1,6 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { InfoPostSwapV1 } from '@voltz-protocol/v1-sdk';
+import { getPositionsV1, InfoPostSwapV1, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { providers } from 'ethers';
 
+import { findCurrentPosition } from '../../../utilities/amm';
+import { isBorrowingPosition } from '../../../utilities/borrowAmm';
 import { stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 
@@ -27,8 +30,7 @@ export const getWalletBalanceThunk = createAsyncThunk<
       return;
     }
 
-    const walletBalance = await amm.underlyingTokens();
-    return walletBalance;
+    return await amm.underlyingTokens();
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -45,8 +47,7 @@ export const getFixedRateThunk = createAsyncThunk<
       return;
     }
 
-    const fixedRate = await amm.getFixedApr();
-    return fixedRate;
+    return await amm.getFixedApr();
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -81,8 +82,7 @@ export const getAvailableNotionalsThunk = createAsyncThunk<
       return;
     }
 
-    const availableNotionals = await amm.getAvailableNotionals();
-    return availableNotionals;
+    return await amm.getAvailableNotionals();
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -135,6 +135,54 @@ export const getInfoPostSwapThunk = createAsyncThunk<
     return {
       notionalAmount,
       infoPostSwap: infoPostSwapV1,
+    };
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export type SetSignerAndPositionForAMMThunkSuccess = {
+  position: Position | null;
+  signer: providers.JsonRpcSigner | null;
+};
+export const setSignerAndPositionForAMMThunk = createAsyncThunk<
+  Awaited<SetSignerAndPositionForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
+  { signer: providers.JsonRpcSigner | null; chainId: SupportedChainId },
+  { state: RootState }
+>('swapForm/setSignerAndPositionForAMM', async ({ signer, chainId }, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().swapForm.amm;
+    if (!amm) {
+      return {
+        signer: null,
+        position: null,
+      };
+    }
+
+    if (!signer) {
+      return {
+        signer: null,
+        position: null,
+      };
+    }
+
+    const userWalletId = (await signer.getAddress()).toLowerCase();
+
+    const { positions, error } = await getPositionsV1({
+      chainId,
+      userWalletId: userWalletId,
+      amms: [amm],
+      type: 'Trader',
+    });
+    if (error) {
+      return rejectThunkWithError(thunkAPI, error);
+    }
+    // TODO: Alex possible to move filter into subgraph level? Discuss
+    const nonBorrowPositions = positions.filter((pos) => !isBorrowingPosition(pos));
+    const position = findCurrentPosition(nonBorrowPositions || [], amm.id);
+    return {
+      position,
+      signer,
     };
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

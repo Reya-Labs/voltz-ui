@@ -1,6 +1,5 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
-import { Signer } from 'ethers';
 
 import { stringToBigFloat } from '../../../utilities/number';
 import {
@@ -10,6 +9,8 @@ import {
   getVariableRateThunk,
   getWalletBalanceThunk,
   initialiseCashflowCalculatorThunk,
+  setSignerAndPositionForAMMThunk,
+  SetSignerAndPositionForAMMThunkSuccess,
 } from './thunks';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
@@ -17,6 +18,7 @@ type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 type SliceState = {
   amm: AMM | null;
   position: Position | null;
+  positionFetchingStatus: ThunkStatus;
   walletBalance: {
     value: number;
     status: ThunkStatus;
@@ -86,6 +88,7 @@ type SliceState = {
 const initialState: SliceState = {
   amm: null,
   position: null,
+  positionFetchingStatus: 'idle',
   walletBalance: {
     value: 0,
     status: 'idle',
@@ -243,20 +246,6 @@ export const slice = createSlice({
       }>,
     ) => {
       state.amm = amm;
-    },
-    setSignerForAMMAction: (
-      state,
-      {
-        payload: { signer },
-      }: PayloadAction<{
-        signer: Signer | null;
-      }>,
-    ) => {
-      if (!state.amm) {
-        return;
-      }
-
-      state.amm.signer = signer;
     },
   },
   extraReducers: (builder) => {
@@ -419,6 +408,26 @@ export const slice = createSlice({
 
         validateUserInput(state);
         updateCashflowCalculator(state);
+      })
+      .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
+        state.position = null;
+        state.positionFetchingStatus = 'pending';
+      })
+      .addCase(setSignerAndPositionForAMMThunk.rejected, (state) => {
+        state.position = null;
+        state.positionFetchingStatus = 'error';
+        if (!state.amm) {
+          return;
+        }
+        state.amm.signer = null;
+      })
+      .addCase(setSignerAndPositionForAMMThunk.fulfilled, (state, { payload }) => {
+        state.position = (payload as SetSignerAndPositionForAMMThunkSuccess).position;
+        state.positionFetchingStatus = 'success';
+        if (!state.amm) {
+          return;
+        }
+        state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
       });
   },
 });
@@ -429,6 +438,5 @@ export const {
   setNotionalAmountAction,
   setMarginAmountAction,
   setPredictedApyAction,
-  setSignerForAMMAction,
 } = slice.actions;
 export const swapFormReducer = slice.reducer;
