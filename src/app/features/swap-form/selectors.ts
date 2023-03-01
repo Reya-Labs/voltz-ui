@@ -9,6 +9,7 @@ export const selectSwapFormPositionFetchingStatus = (state: RootState) =>
 export const selectWalletBalanceInfo = (state: RootState) => state.swapForm.walletBalance;
 export const selectFixedRateInfo = (state: RootState) => state.swapForm.fixedRate;
 export const selectVariableRateInfo = (state: RootState) => state.swapForm.variableRate;
+export const selectVariableRate24hAgoInfo = (state: RootState) => state.swapForm.variableRate24hAgo;
 export const selectPoolSwapInfo = (state: RootState) => state.swapForm.poolSwapInfo;
 
 // ------------ Prospective Swap ------------
