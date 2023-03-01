@@ -4,12 +4,12 @@ import React from 'react';
 import {
   selectFixedRateInfo,
   selectSwapFormAMM,
-  selectVariableRate24hAgoInfo,
+  selectVariableRate24hDelta,
   selectVariableRateInfo,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { formatTimestamp } from '../../../../utilities/date';
-import { formatNumber, stringToBigFloat } from '../../../../utilities/number';
+import { formatNumber } from '../../../../utilities/number';
 import { MarketTokenInformation, MarketTokenInformationProps } from '../../MarketTokenInformation';
 import {
   FixedBox,
@@ -26,7 +26,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const aMM = useAppSelector(selectSwapFormAMM);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
-  const variableRateInfo24hAgo = useAppSelector(selectVariableRate24hAgoInfo);
+  const variableRate24hDelta = useAppSelector(selectVariableRate24hDelta);
   if (!aMM) {
     return null;
   }
@@ -56,13 +56,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
         <VariableBox>
           <LabelTokenTypography
             colorToken="lavenderWeb"
-            differenceValue={
-              variableRateInfo24hAgo.status === 'success' && variableRateInfo.status === 'success'
-                ? stringToBigFloat(
-                    formatNumber(variableRateInfo.value - variableRateInfo24hAgo.value),
-                  )
-                : undefined
-            }
+            differenceValue={variableRate24hDelta}
             label="Variable"
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"

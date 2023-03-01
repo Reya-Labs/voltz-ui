@@ -9,7 +9,6 @@ export const selectSwapFormPositionFetchingStatus = (state: RootState) =>
 export const selectWalletBalanceInfo = (state: RootState) => state.swapForm.walletBalance;
 export const selectFixedRateInfo = (state: RootState) => state.swapForm.fixedRate;
 export const selectVariableRateInfo = (state: RootState) => state.swapForm.variableRate;
-export const selectVariableRate24hAgoInfo = (state: RootState) => state.swapForm.variableRate24hAgo;
 export const selectPoolSwapInfo = (state: RootState) => state.swapForm.poolSwapInfo;
 
 // ------------ Prospective Swap ------------
@@ -19,6 +18,15 @@ export const selectNotionalAmount = (state: RootState) =>
 export const selectMarginAmount = (state: RootState) => state.swapForm.prospectiveSwap.marginAmount;
 export const selectLeverage = (state: RootState) => state.swapForm.prospectiveSwap.leverage;
 export const selectInfoPostSwap = (state: RootState) => state.swapForm.prospectiveSwap.infoPostSwap;
+export const selectIsMarginRequiredError = (state: RootState) => {
+  return (
+    state.swapForm.prospectiveSwap.marginAmount.error !== null &&
+    state.swapForm.prospectiveSwap.marginAmount.error !== 'WLT'
+  );
+};
+export const selectIsWalletMarginError = (state: RootState) => {
+  return state.swapForm.prospectiveSwap.marginAmount.error === 'WLT';
+};
 
 // ------------ Cashflow Calculator Selectors ------------
 export const selectCashflowCalculatorStatus = (state: RootState) =>
@@ -35,6 +43,16 @@ export const selectSwapConfirmationFlowStep = (state: RootState) =>
   state.swapForm.swapConfirmationFlow.step;
 export const selectSwapConfirmationFlowError = (state: RootState) =>
   state.swapForm.swapConfirmationFlow.error;
+
+// ------------ Variable Rate Delta ------------
+export const selectVariableRate24hDelta = (state: RootState) => {
+  return state.swapForm.variableRate24hAgo.status === 'success' &&
+    state.swapForm.variableRate.status === 'success'
+    ? stringToBigFloat(
+        formatNumber(state.swapForm.variableRate.value - state.swapForm.variableRate24hAgo.value),
+      )
+    : undefined;
+};
 
 // ------------ Leverage ------------
 export const selectLeverageOptions = (state: RootState) => {
