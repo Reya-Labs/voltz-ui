@@ -1,8 +1,10 @@
 import { TokenTypography, Typography, TypographyWithTooltip } from 'brokoli-ui';
+import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import MovingComponent from 'react-moving-text';
 
 import {
+  getInfoPostSwapThunk,
   selectFixedRateInfo,
   selectMode,
   selectVariableRateInfo,
@@ -34,7 +36,7 @@ export const NotionalSwap: React.FunctionComponent<{}> = () => {
   const isFixedMode = mode === 'fixed';
 
   const onSwap = useCallback(
-    (value?: 'fixed' | 'variable') => {
+    debounce((value?: 'fixed' | 'variable') => {
       if (!value) {
         return;
       }
@@ -43,7 +45,8 @@ export const NotionalSwap: React.FunctionComponent<{}> = () => {
           value,
         }),
       );
-    },
+      void dispatch(getInfoPostSwapThunk());
+    }, 100),
     [dispatch],
   );
 

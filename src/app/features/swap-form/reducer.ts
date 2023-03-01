@@ -1,22 +1,28 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 
-import { stringToBigFloat } from '../../../utilities/number';
+import { limitAndFormatNumber, stringToBigFloat } from '../../../utilities/number';
 import {
   confirmSwapThunk,
-  getAvailableNotionalsThunk,
   getFixedRateThunk,
   getInfoPostSwapThunk,
+  getPoolSwapInfoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
   initialiseCashflowCalculatorThunk,
   setSignerAndPositionForAMMThunk,
   SetSignerAndPositionForAMMThunkSuccess,
 } from './thunks';
+import { isMarginStrictlyPositive, isNotionalStrictlyPositive } from './utils';
+
+export const SwapFormNumberLimits = {
+  digitLimit: 12,
+  decimalLimit: 6,
+};
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
-type SliceState = {
+export type SliceState = {
   amm: AMM | null;
   position: {
     value: Position | null;
@@ -34,8 +40,10 @@ type SliceState = {
     value: number;
     status: ThunkStatus;
   };
-  availableNotionals: {
-    value: Record<'fixed' | 'variable', number>;
+  // User-agnostic swap info about pool
+  poolSwapInfo: {
+    availableNotional: Record<'fixed' | 'variable', number>;
+    maxLeverage: Record<'fixed' | 'variable', number>;
     status: ThunkStatus;
   };
   // State of prospective swap
@@ -52,6 +60,7 @@ type SliceState = {
       value: string;
       error: string | null;
     };
+    leverage: number | null;
     infoPostSwap: {
       value: {
         // Margin requirement for prospective swap
@@ -110,8 +119,12 @@ const initialState: SliceState = {
     value: 0,
     status: 'idle',
   },
-  availableNotionals: {
-    value: {
+  poolSwapInfo: {
+    availableNotional: {
+      fixed: 0,
+      variable: 0,
+    },
+    maxLeverage: {
       fixed: 0,
       variable: 0,
     },
@@ -127,6 +140,7 @@ const initialState: SliceState = {
       value: '0',
       error: null,
     },
+    leverage: null,
     infoPostSwap: {
       value: {
         marginRequirement: 0,
@@ -181,7 +195,7 @@ const validateUserInput = (state: Draft<SliceState>): void => {
     let error = null;
     if (
       stringToBigFloat(state.prospectiveSwap.notionalAmount.value) >
-      state.availableNotionals.value[state.prospectiveSwap.mode]
+      state.poolSwapInfo.availableNotional[state.prospectiveSwap.mode]
     ) {
       error = 'Not enough liquidity. Available:';
     }
@@ -222,6 +236,19 @@ export const slice = createSlice({
       }>,
     ) => {
       state.prospectiveSwap.mode = value;
+      state.prospectiveSwap.infoPostSwap = {
+        value: {
+          marginRequirement: 0,
+          averageFixedRate: 0,
+          fixedTokenDeltaBalance: 0,
+          variableTokenDeltaBalance: 0,
+          fixedTokenDeltaUnbalanced: 0,
+          fee: 0,
+          slippage: 0,
+          gasFeeETH: 0,
+        },
+        status: 'idle',
+      };
     },
     setNotionalAmountAction: (
       state,
@@ -233,6 +260,11 @@ export const slice = createSlice({
     ) => {
       state.prospectiveSwap.notionalAmount.value = value;
       validateUserInput(state);
+      if (isNotionalStrictlyPositive(state) && isMarginStrictlyPositive(state)) {
+        state.prospectiveSwap.leverage =
+          stringToBigFloat(state.prospectiveSwap.notionalAmount.value) /
+          stringToBigFloat(state.prospectiveSwap.marginAmount.value);
+      }
     },
     setMarginAmountAction: (
       state,
@@ -243,6 +275,34 @@ export const slice = createSlice({
       }>,
     ) => {
       state.prospectiveSwap.marginAmount.value = value;
+      validateUserInput(state);
+      if (isNotionalStrictlyPositive(state) && isMarginStrictlyPositive(state)) {
+        state.prospectiveSwap.leverage =
+          stringToBigFloat(state.prospectiveSwap.notionalAmount.value) /
+          stringToBigFloat(state.prospectiveSwap.marginAmount.value);
+      }
+    },
+    setLeverageAction: (
+      state,
+      {
+        payload: { value },
+      }: PayloadAction<{
+        value: number;
+      }>,
+    ) => {
+      if (!isNotionalStrictlyPositive(state) || isNaN(value) || value === 0) {
+        state.prospectiveSwap.leverage = null;
+        return;
+      }
+
+      state.prospectiveSwap.leverage = value;
+      state.prospectiveSwap.marginAmount.value = limitAndFormatNumber(
+        stringToBigFloat(state.prospectiveSwap.notionalAmount.value) / value,
+        SwapFormNumberLimits.digitLimit,
+        SwapFormNumberLimits.decimalLimit,
+        'ceil',
+      );
+
       validateUserInput(state);
     },
     setPredictedApyAction: (
@@ -341,33 +401,48 @@ export const slice = createSlice({
           status: 'success',
         };
       })
-      .addCase(getAvailableNotionalsThunk.pending, (state) => {
-        state.availableNotionals = {
-          value: {
+      .addCase(getPoolSwapInfoThunk.pending, (state) => {
+        state.poolSwapInfo = {
+          availableNotional: {
+            fixed: 0,
+            variable: 0,
+          },
+          maxLeverage: {
             fixed: 0,
             variable: 0,
           },
           status: 'pending',
         };
       })
-      .addCase(getAvailableNotionalsThunk.rejected, (state) => {
-        state.availableNotionals = {
-          value: {
+      .addCase(getPoolSwapInfoThunk.rejected, (state) => {
+        state.poolSwapInfo = {
+          availableNotional: {
+            fixed: 0,
+            variable: 0,
+          },
+          maxLeverage: {
             fixed: 0,
             variable: 0,
           },
           status: 'error',
         };
       })
-      .addCase(getAvailableNotionalsThunk.fulfilled, (state, { payload }) => {
-        const { availableNotionalFT, availableNotionalVT } = payload as {
-          availableNotionalFT: number;
-          availableNotionalVT: number;
-        };
-        state.availableNotionals = {
-          value: {
+      .addCase(getPoolSwapInfoThunk.fulfilled, (state, { payload }) => {
+        const { availableNotionalFT, availableNotionalVT, maxLeverageFT, maxLeverageVT } =
+          payload as {
+            availableNotionalFT: number;
+            availableNotionalVT: number;
+            maxLeverageFT: number;
+            maxLeverageVT: number;
+          };
+        state.poolSwapInfo = {
+          availableNotional: {
             fixed: availableNotionalFT,
             variable: availableNotionalVT,
+          },
+          maxLeverage: {
+            fixed: maxLeverageFT,
+            variable: maxLeverageVT,
           },
           status: 'success',
         };
@@ -403,10 +478,29 @@ export const slice = createSlice({
         };
       })
       .addCase(getInfoPostSwapThunk.fulfilled, (state, { payload }) => {
-        const { notionalAmount, infoPostSwap } = payload as {
+        const { notionalAmount, infoPostSwap, earlyReturn } = payload as {
           notionalAmount: number;
           infoPostSwap: InfoPostSwapV1;
+          earlyReturn: boolean;
         };
+
+        if (earlyReturn) {
+          state.prospectiveSwap.infoPostSwap = {
+            value: {
+              marginRequirement: 0,
+              averageFixedRate: 0,
+              fixedTokenDeltaBalance: 0,
+              variableTokenDeltaBalance: 0,
+              fixedTokenDeltaUnbalanced: 0,
+              fee: 0,
+              slippage: 0,
+              gasFeeETH: 0,
+            },
+            status: 'idle',
+          };
+          return;
+        }
+
         state.prospectiveSwap.infoPostSwap = {
           value: {
             marginRequirement: infoPostSwap.marginRequirement,
@@ -421,7 +515,7 @@ export const slice = createSlice({
           status: 'success',
         };
         if (infoPostSwap.availableNotional < notionalAmount) {
-          state.availableNotionals.value[state.prospectiveSwap.mode] =
+          state.poolSwapInfo.availableNotional[state.prospectiveSwap.mode] =
             infoPostSwap.availableNotional;
         }
 
@@ -472,6 +566,7 @@ export const {
   setSwapFormAMMAction,
   setNotionalAmountAction,
   setMarginAmountAction,
+  setLeverageAction,
   setPredictedApyAction,
   openSwapConfirmationFlowAction,
   closeSwapConfirmationFlowAction,
