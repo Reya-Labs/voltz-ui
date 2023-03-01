@@ -40,6 +40,10 @@ export type SliceState = {
     value: number;
     status: ThunkStatus;
   };
+  variableRate24hAgo: {
+    value: number;
+    status: ThunkStatus;
+  };
   // User-agnostic swap info about pool
   poolSwapInfo: {
     availableNotional: Record<'fixed' | 'variable', number>;
@@ -116,6 +120,10 @@ const initialState: SliceState = {
     status: 'idle',
   },
   variableRate: {
+    value: 0,
+    status: 'idle',
+  },
+  variableRate24hAgo: {
     value: 0,
     status: 'idle',
   },
@@ -390,23 +398,44 @@ export const slice = createSlice({
           status: 'success',
         };
       })
-      .addCase(getVariableRateThunk.pending, (state) => {
-        state.variableRate = {
-          value: 0,
-          status: 'pending',
-        };
+      .addCase(getVariableRateThunk.pending, (state, { meta }) => {
+        if (meta.arg.timestampInMS) {
+          state.variableRate24hAgo = {
+            value: 0,
+            status: 'pending',
+          };
+        } else {
+          state.variableRate = {
+            value: 0,
+            status: 'pending',
+          };
+        }
       })
-      .addCase(getVariableRateThunk.rejected, (state) => {
-        state.variableRate = {
-          value: 0,
-          status: 'error',
-        };
+      .addCase(getVariableRateThunk.rejected, (state, { meta }) => {
+        if (meta.arg.timestampInMS) {
+          state.variableRate24hAgo = {
+            value: 0,
+            status: 'error',
+          };
+        } else {
+          state.variableRate = {
+            value: 0,
+            status: 'error',
+          };
+        }
       })
-      .addCase(getVariableRateThunk.fulfilled, (state, { payload }) => {
-        state.variableRate = {
-          value: payload as number,
-          status: 'success',
-        };
+      .addCase(getVariableRateThunk.fulfilled, (state, { payload, meta }) => {
+        if (meta.arg.timestampInMS) {
+          state.variableRate24hAgo = {
+            value: payload as number,
+            status: 'success',
+          };
+        } else {
+          state.variableRate = {
+            value: payload as number,
+            status: 'success',
+          };
+        }
       })
       .addCase(getPoolSwapInfoThunk.pending, (state) => {
         state.poolSwapInfo = {
