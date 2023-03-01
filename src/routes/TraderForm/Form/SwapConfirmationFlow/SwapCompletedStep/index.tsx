@@ -19,7 +19,7 @@ export const SwapCompletedStep: React.FunctionComponent = () => {
   return (
     <SwapCompletedStepBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-        Confirm Swap
+        Swap Completed
       </Typography>
       <SwapDetails />
       <ExternalLink
