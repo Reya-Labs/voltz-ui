@@ -1,4 +1,4 @@
-import { LabelTokenTypography, MarketToken, MarketTokenProps, Pill } from 'brokoli-ui';
+import { LabelTokenTypography } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -9,9 +9,9 @@ import {
 import { useAppSelector } from '../../../../app/hooks';
 import { formatTimestamp } from '../../../../utilities/date';
 import { formatNumber } from '../../../../utilities/number';
+import { MarketTokenInformation, MarketTokenInformationProps } from '../../MarketTokenInformation';
 import {
   FixedBox,
-  MarketTokenBox,
   MaturityBox,
   PoolHeaderBox,
   PoolHeaderDetailsBox,
@@ -31,24 +31,12 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   // TODO Alex
   return (
     <PoolHeaderBox>
-      <MarketTokenBox>
-        {aMM ? (
-          <MarketToken
-            market={aMM.market.name as MarketTokenProps['market']}
-            token={aMM.underlyingToken.name.toLowerCase() as MarketTokenProps['token']}
-          />
-        ) : null}
-        {aMM.market.tags.isBorrowing ? (
-          <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
-            Borrow
-          </Pill>
-        ) : null}
-        {aMM.market.tags.isAaveV3 ? (
-          <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
-            v3
-          </Pill>
-        ) : null}
-      </MarketTokenBox>
+      <MarketTokenInformation
+        isAaveV3={aMM.market.tags.isAaveV3}
+        isBorrowing={aMM.market.tags.isBorrowing}
+        market={aMM.market.name as MarketTokenInformationProps['market']}
+        token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
+      />
       <PoolHeaderDetailsBox>
         <FixedBox>
           <LabelTokenTypography
