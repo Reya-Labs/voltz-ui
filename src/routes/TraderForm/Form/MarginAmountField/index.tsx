@@ -20,6 +20,9 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const aMM = useAppSelector(selectSwapFormAMM);
 
+  const marginRequiredError = marginAmount.error !== null && marginAmount.error !== 'WLT';
+  const walletError = marginAmount.error === 'WLT';
+
   const walletBalance = useAppSelector(selectWalletBalanceInfo);
   let walletValue = walletBalance.status === 'success' ? compactFormat(walletBalance.value) : '--';
   if (aMM) {
@@ -44,10 +47,12 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
     <MarginAmountFieldBox>
       <TokenField
         allowNegativeValue={false}
-        bottomLeftText={marginAmount.error ? marginAmount.error : 'Additional Margin Required'}
-        bottomLeftTextColorToken={marginAmount.error ? 'wildStrawberry3' : 'lavenderWeb3'}
+        bottomLeftText={
+          marginRequiredError ? (marginAmount.error as string) : 'Additional Margin Required'
+        }
+        bottomLeftTextColorToken={marginRequiredError ? 'wildStrawberry3' : 'lavenderWeb3'}
         bottomLeftTextTypographyToken="primaryBodyXSmallRegular"
-        bottomRightTextColorToken={marginAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
+        bottomRightTextColorToken={marginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
         bottomRightTextValue={
           infoPostSwap.status === 'success'
@@ -55,7 +60,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
             : '--'
         }
         decimalsLimit={SwapFormNumberLimits.decimalLimit}
-        error={marginAmount.error !== null}
+        error={marginRequiredError || walletError}
         label="Chosen Margin"
         maxLength={SwapFormNumberLimits.digitLimit}
         token={
@@ -63,7 +68,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         }
         tooltip="The protocol requires every position to have enough collateral to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."
         topRightText={`Wallet: ${walletValue}`}
-        topRightTextColorToken="lavenderWeb2"
+        topRightTextColorToken={walletError ? 'wildStrawberry2' : 'lavenderWeb2'}
         topRightTextTypographyToken="secondaryBodySmallRegular"
         value={marginAmount.value}
         onChange={handleOnChange}

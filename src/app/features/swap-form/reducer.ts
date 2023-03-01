@@ -205,6 +205,13 @@ const validateUserInput = (state: Draft<SliceState>): void => {
   {
     let error = null;
     if (
+      state.walletBalance.status === 'success' &&
+      stringToBigFloat(state.prospectiveSwap.marginAmount.value) > state.walletBalance.value
+    ) {
+      error = 'WLT';
+    }
+
+    if (
       stringToBigFloat(state.prospectiveSwap.marginAmount.value) <
       state.prospectiveSwap.infoPostSwap.value.marginRequirement
     ) {

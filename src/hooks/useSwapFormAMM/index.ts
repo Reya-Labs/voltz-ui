@@ -61,7 +61,6 @@ export const useSwapFormAMM = (): UseAMMsResult => {
       return;
     }
 
-    void dispatch(getWalletBalanceThunk());
     void dispatch(getFixedRateThunk());
     void dispatch(getVariableRateThunk());
     void dispatch(getPoolSwapInfoThunk());
@@ -78,6 +77,14 @@ export const useSwapFormAMM = (): UseAMMsResult => {
       }),
     );
   }, [dispatch, chainId, signer]);
+
+  useEffect(() => {
+    if (!aMM || !aMM.signer) {
+      return;
+    }
+
+    void dispatch(getWalletBalanceThunk());
+  }, [dispatch, aMM, aMM?.signer]);
 
   return {
     aMM,
