@@ -3,6 +3,7 @@ import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 
 import { stringToBigFloat } from '../../../utilities/number';
 import {
+  confirmSwapThunk,
   getAvailableNotionalsThunk,
   getFixedRateThunk,
   getInfoPostSwapThunk,
@@ -85,6 +86,10 @@ type SliceState = {
     // Total cashflow resulted from past and prospective swaps, from termStart to termEnd
     totalCashflow: number;
   };
+  swapConfirmationFlow: {
+    step: 'swapConfirmation' | 'waitingForSwapConfirmation' | 'swapCompleted' | null;
+    error: string | null;
+  };
 };
 
 const initialState: SliceState = {
@@ -145,6 +150,10 @@ const initialState: SliceState = {
     additionalCashflow: 0,
     totalCashflow: 0,
   },
+  swapConfirmationFlow: {
+    step: null,
+    error: null,
+  },
 };
 
 const updateCashflowCalculator = (state: Draft<SliceState>): void => {
@@ -197,6 +206,12 @@ export const slice = createSlice({
   reducers: {
     resetStateAction: (state) => {
       // TODO: Alex
+    },
+    openSwapConfirmationFlowAction: (state) => {
+      state.swapConfirmationFlow.step = 'swapConfirmation';
+    },
+    closeSwapConfirmationFlowAction: (state) => {
+      state.swapConfirmationFlow.step = null;
     },
     setModeAction: (
       state,
@@ -436,6 +451,18 @@ export const slice = createSlice({
           return;
         }
         state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
+      })
+      .addCase(confirmSwapThunk.pending, (state) => {
+        state.swapConfirmationFlow.step = 'waitingForSwapConfirmation';
+        state.swapConfirmationFlow.error = null;
+      })
+      .addCase(confirmSwapThunk.rejected, (state, { payload }) => {
+        state.swapConfirmationFlow.step = 'swapConfirmation';
+        state.swapConfirmationFlow.error = payload as string;
+      })
+      .addCase(confirmSwapThunk.fulfilled, (state) => {
+        state.swapConfirmationFlow.step = 'swapCompleted';
+        state.swapConfirmationFlow.error = null;
       });
   },
 });
@@ -446,5 +473,7 @@ export const {
   setNotionalAmountAction,
   setMarginAmountAction,
   setPredictedApyAction,
+  openSwapConfirmationFlowAction,
+  closeSwapConfirmationFlowAction,
 } = slice.actions;
 export const swapFormReducer = slice.reducer;

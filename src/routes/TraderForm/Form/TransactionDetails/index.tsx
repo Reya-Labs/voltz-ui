@@ -5,11 +5,7 @@ import { selectInfoPostSwap, selectSwapFormAMM } from '../../../../app/features/
 import { useAppSelector } from '../../../../app/hooks';
 import { formatNumber } from '../../../../utilities/number';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
-import {
-  IconTextWrapper,
-  TransactionDetailBox,
-  TransactionDetailsBox,
-} from './TransactionDetails.styled';
+import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 
 type TransactionDetailsProps = {};
 
@@ -19,7 +15,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
   const aMM = useAppSelector(selectSwapFormAMM);
 
   return (
-    <TransactionDetailsBox>
+    <React.Fragment>
       <TransactionDetailBox>
         <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
           Fees
@@ -62,6 +58,6 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
           }
         ></TokenTypography>
       </TransactionDetailBox>
-    </TransactionDetailsBox>
+    </React.Fragment>
   );
 };

@@ -40,3 +40,17 @@ export const FormOuterBox = styled('div')`
   overflow-x: hidden;
   overflow-y: scroll;
 `;
+
+export const TransactionDetailsBox = styled('div')`
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  align-items: flex-start;
+  padding: 16px 40px 132px 40px;
+  width: 100%;
+
+  border-bottom: 1px solid ${colors.lavenderWeb8};
+`;

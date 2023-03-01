@@ -188,3 +188,29 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
     return rejectThunkWithError(thunkAPI, err);
   }
 });
+
+export const confirmSwapThunk = createAsyncThunk<
+  Awaited<void | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/confirmSwap', async (_, thunkAPI) => {
+  try {
+    const swapFormState = thunkAPI.getState().swapForm;
+    const amm = swapFormState.amm;
+    if (!amm) {
+      return;
+    }
+    const fakeError = Math.random() * 100 < 25;
+    // todo: Alex integrate proper SDK here and remove the timeout mocking
+    if (fakeError) {
+      await new Promise((resolve, reject) =>
+        setTimeout(() => reject('Error happened during the swap!'), 5000),
+      );
+    } else {
+      await new Promise((resolve) => setTimeout(() => resolve(undefined), 5000));
+    }
+    return undefined;
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});

@@ -22,6 +22,12 @@ export const PoolHeaderDetailsBox = styled('div')`
   height: 54px;
 `;
 
+export const MarketTokenInformationBox = styled('div')`
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px 16px;
+`;
+
 export const FixedBox = styled('div')`
   display: flex;
   flex-direction: row;

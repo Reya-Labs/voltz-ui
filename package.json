@@ -144,7 +144,7 @@
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.44",
     "axios": "0.27.2",
-    "brokoli-ui": "1.27.1",
+    "brokoli-ui": "1.31.3",
     "chroma-js": "2.1.2",
     "copy-to-clipboard": "3.3.3",
     "ethereumjs-abi": "0.6.8",

@@ -25,3 +25,9 @@ export const selectAdditionalCashflow = (state: RootState) =>
   state.swapForm.cashflowCalculator.additionalCashflow;
 export const selectTotalCashflow = (state: RootState) =>
   state.swapForm.cashflowCalculator.totalCashflow;
+
+// ------------ Swap Confirmation Flow Selectors ------------
+export const selectSwapConfirmationFlowStep = (state: RootState) =>
+  state.swapForm.swapConfirmationFlow.step;
+export const selectSwapConfirmationFlowError = (state: RootState) =>
+  state.swapForm.swapConfirmationFlow.error;

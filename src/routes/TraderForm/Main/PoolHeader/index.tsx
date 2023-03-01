@@ -12,6 +12,7 @@ import { formatNumber } from '../../../../utilities/number';
 import { MarketTokenInformation, MarketTokenInformationProps } from '../../MarketTokenInformation';
 import {
   FixedBox,
+  MarketTokenInformationBox,
   MaturityBox,
   PoolHeaderBox,
   PoolHeaderDetailsBox,
@@ -31,12 +32,14 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   // TODO Alex
   return (
     <PoolHeaderBox>
-      <MarketTokenInformation
-        isAaveV3={aMM.market.tags.isAaveV3}
-        isBorrowing={aMM.market.tags.isBorrowing}
-        market={aMM.market.name as MarketTokenInformationProps['market']}
-        token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
-      />
+      <MarketTokenInformationBox>
+        <MarketTokenInformation
+          isAaveV3={aMM.market.tags.isAaveV3}
+          isBorrowing={aMM.market.tags.isBorrowing}
+          market={aMM.market.name as MarketTokenInformationProps['market']}
+          token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
+        />
+      </MarketTokenInformationBox>
       <PoolHeaderDetailsBox>
         <FixedBox>
           <LabelTokenTypography

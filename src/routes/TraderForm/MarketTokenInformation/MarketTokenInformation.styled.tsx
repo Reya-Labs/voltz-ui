@@ -5,5 +5,4 @@ export const MarketTokenBox = styled('div')`
   flex-direction: row;
   gap: 8px;
   align-items: center;
-  padding: 8px 16px;
 `;
