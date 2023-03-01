@@ -60,7 +60,7 @@ export const SwapConfirmationStep: React.FunctionComponent = () => {
       </SwapFeeDetailsBox>
       <Button
         bottomLeftText={error ? error : ''}
-        bottomLeftTextColorToken={error ? 'wildStrawberry3' : undefined}
+        bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
         variant="primary"
         onClick={handleConfirmSwap}
