@@ -17,8 +17,10 @@ type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
 type SliceState = {
   amm: AMM | null;
-  position: Position | null;
-  positionFetchingStatus: ThunkStatus;
+  position: {
+    value: Position | null;
+    status: ThunkStatus;
+  };
   walletBalance: {
     value: number;
     status: ThunkStatus;
@@ -87,8 +89,10 @@ type SliceState = {
 
 const initialState: SliceState = {
   amm: null,
-  position: null,
-  positionFetchingStatus: 'idle',
+  position: {
+    value: null,
+    status: 'idle',
+  },
   walletBalance: {
     value: 0,
     status: 'idle',
@@ -152,7 +156,7 @@ const updateCashflowCalculator = (state: Draft<SliceState>): void => {
   }
 
   const { additionalCashflow, totalCashflow } = state.amm.getExpectedCashflowInfo({
-    position: state.position as Position,
+    position: state.position.value as Position,
     fixedTokenDeltaBalance: state.prospectiveSwap.infoPostSwap.value.fixedTokenDeltaBalance,
     variableTokenDeltaBalance: state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance,
     variableFactorStartNow: state.cashflowCalculator.variableFactorStartNow.value,
@@ -410,20 +414,24 @@ export const slice = createSlice({
         updateCashflowCalculator(state);
       })
       .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
-        state.position = null;
-        state.positionFetchingStatus = 'pending';
+        state.position.value = null;
+        state.position.status = 'pending';
+        if (!state.amm) {
+          return;
+        }
+        state.amm.signer = null;
       })
       .addCase(setSignerAndPositionForAMMThunk.rejected, (state) => {
-        state.position = null;
-        state.positionFetchingStatus = 'error';
+        state.position.value = null;
+        state.position.status = 'error';
         if (!state.amm) {
           return;
         }
         state.amm.signer = null;
       })
       .addCase(setSignerAndPositionForAMMThunk.fulfilled, (state, { payload }) => {
-        state.position = (payload as SetSignerAndPositionForAMMThunkSuccess).position;
-        state.positionFetchingStatus = 'success';
+        state.position.value = (payload as SetSignerAndPositionForAMMThunkSuccess).position;
+        state.position.status = 'success';
         if (!state.amm) {
           return;
         }
