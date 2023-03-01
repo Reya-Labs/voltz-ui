@@ -6,6 +6,7 @@ import { findCurrentPosition } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
 import { stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
+import { isNotionalStrictlyPositive } from './utils';
 
 const rejectThunkWithError = (
   thunkAPI: {
@@ -71,18 +72,18 @@ export const getVariableRateThunk = createAsyncThunk<
   }
 });
 
-export const getAvailableNotionalsThunk = createAsyncThunk<
+export const getPoolSwapInfoThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/getAvailableNotionals', async (_, thunkAPI) => {
+>('swapForm/getPoolSwapInfo', async (_, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().swapForm.amm;
     if (!amm) {
       return;
     }
 
-    return await amm.getAvailableNotionals();
+    return await amm.getPoolSwapInfo();
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -111,7 +112,7 @@ export const initialiseCashflowCalculatorThunk = createAsyncThunk<
 
 export const getInfoPostSwapThunk = createAsyncThunk<
   Awaited<
-    | { notionalAmount: number; infoPostSwapV1: InfoPostSwapV1 }
+    | { notionalAmount: number; infoPostSwapV1: InfoPostSwapV1; earlyReturn: boolean }
     | ReturnType<typeof rejectThunkWithError>
   >,
   void,
@@ -120,8 +121,12 @@ export const getInfoPostSwapThunk = createAsyncThunk<
   try {
     const swapFormState = thunkAPI.getState().swapForm;
     const amm = swapFormState.amm;
-    if (!amm) {
-      return;
+    if (!amm || !isNotionalStrictlyPositive(swapFormState)) {
+      return {
+        notionalAmount: NaN,
+        infoPostSwap: {},
+        earlyReturn: true,
+      };
     }
 
     const notionalAmount = stringToBigFloat(swapFormState.prospectiveSwap.notionalAmount.value);
@@ -135,6 +140,7 @@ export const getInfoPostSwapThunk = createAsyncThunk<
     return {
       notionalAmount,
       infoPostSwap: infoPostSwapV1,
+      earlyReturn: false,
     };
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

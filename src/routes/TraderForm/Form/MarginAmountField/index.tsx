@@ -7,6 +7,7 @@ import {
   selectSwapFormAMM,
   selectWalletBalanceInfo,
   setMarginAmountAction,
+  SwapFormNumberLimits,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { compactFormat, formatNumber } from '../../../../utilities/number';
@@ -53,8 +54,10 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
             ? formatNumber(infoPostSwap.value.marginRequirement)
             : '--'
         }
+        decimalsLimit={SwapFormNumberLimits.decimalLimit}
         error={marginAmount.error !== null}
         label="Chosen Margin"
+        maxLength={SwapFormNumberLimits.digitLimit}
         token={
           aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']) : undefined
         }

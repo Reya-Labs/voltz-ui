@@ -4,7 +4,9 @@ import {
   formatCurrency,
   formatLeverage,
   formatNumber,
+  limitAndFormatNumber,
   removeFormat,
+  roundIntegerNumber,
   roundUpDecimal,
   stringToBigFloat,
   toUSFormat,
@@ -262,5 +264,64 @@ describe('number', () => {
       const retValue = formatLeverage(number);
       expect(retValue).toEqual(expected);
     });
+  });
+
+  describe('roundIntegerNumber', () => {
+    test.each([
+      [9876, 0, 9876],
+      [9876, 1, 9870],
+      [9876, 2, 9800],
+      [9876, 3, 9000],
+    ])(
+      'given number=%p - formatLeverage should return expected output',
+      (number, precision, expected) => {
+        const retValue = roundIntegerNumber(number, precision);
+        expect(retValue).toEqual(expected);
+      },
+    );
+  });
+  describe('limitAndFormatNumber', () => {
+    let languageGetter: ReturnType<typeof jest.spyOn>;
+
+    beforeEach(() => {
+      languageGetter = jest.spyOn(window.navigator, 'language', 'get');
+    });
+
+    test.each([
+      [12345.6789, 9, 5, 'floor', '12,345.6789'],
+      [12345.6789, 9, 5, 'ceil', '12,345.6789'],
+      [12345.6789, 9, 4, 'floor', '12,345.6789'],
+      [12345.6789, 9, 4, 'ceil', '12,345.6789'],
+      [12345.6789, 9, 3, 'floor', '12,345.678'],
+      [12345.6789, 9, 3, 'ceil', '12,345.679'],
+      [12345.6789, 9, 2, 'floor', '12,345.67'],
+      [12345.6789, 9, 2, 'ceil', '12,345.68'],
+      [12345.6789, 9, 1, 'floor', '12,345.6'],
+      [12345.6789, 9, 1, 'ceil', '12,345.7'],
+      [12345.6789, 9, 0, 'floor', '12,345'],
+      [12345.6789, 9, 0, 'ceil', '12,346'],
+      [12345.6789, 8, 4, 'floor', '12,345.678'],
+      [12345.6789, 8, 4, 'ceil', '12,345.679'],
+      [12345.6789, 7, 4, 'floor', '12,345.67'],
+      [12345.6789, 7, 4, 'ceil', '12,345.68'],
+      [12345.6789, 6, 4, 'floor', '12,345.6'],
+      [12345.6789, 6, 4, 'ceil', '12,345.7'],
+      [12345.6789, 5, 4, 'floor', '12,345'],
+      [12345.6789, 5, 4, 'ceil', '12,346'],
+      [12345.6789, 4, 4, 'ceil', '1,234'],
+    ])(
+      'given number=%p - formatLeverage should return expected output',
+      (number, digitLimit, decimalLimit, mode, expected) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+        languageGetter.mockReturnValue('en-US');
+        const retValue = limitAndFormatNumber(
+          number,
+          digitLimit,
+          decimalLimit,
+          mode as 'floor' | 'ceil',
+        );
+        expect(retValue).toEqual(expected);
+      },
+    );
   });
 });
