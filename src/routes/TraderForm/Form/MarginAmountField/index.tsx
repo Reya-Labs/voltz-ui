@@ -3,6 +3,8 @@ import React, { useCallback } from 'react';
 
 import {
   selectInfoPostSwap,
+  selectIsMarginRequiredError,
+  selectIsWalletMarginError,
   selectMarginAmount,
   selectSwapFormAMM,
   selectWalletBalanceInfo,
@@ -20,8 +22,8 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const aMM = useAppSelector(selectSwapFormAMM);
 
-  const marginRequiredError = marginAmount.error !== null && marginAmount.error !== 'WLT';
-  const walletError = marginAmount.error === 'WLT';
+  const isMarginRequiredError = useAppSelector(selectIsMarginRequiredError);
+  const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
 
   const walletBalance = useAppSelector(selectWalletBalanceInfo);
   let walletValue = walletBalance.status === 'success' ? compactFormat(walletBalance.value) : '--';
@@ -48,11 +50,11 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
       <TokenField
         allowNegativeValue={false}
         bottomLeftText={
-          marginRequiredError ? (marginAmount.error as string) : 'Additional Margin Required'
+          isMarginRequiredError ? (marginAmount.error as string) : 'Additional Margin Required'
         }
-        bottomLeftTextColorToken={marginRequiredError ? 'wildStrawberry3' : 'lavenderWeb3'}
+        bottomLeftTextColorToken={isMarginRequiredError ? 'wildStrawberry3' : 'lavenderWeb3'}
         bottomLeftTextTypographyToken="primaryBodyXSmallRegular"
-        bottomRightTextColorToken={marginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
+        bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
         bottomRightTextValue={
           infoPostSwap.status === 'success'
@@ -60,7 +62,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
             : '--'
         }
         decimalsLimit={SwapFormNumberLimits.decimalLimit}
-        error={marginRequiredError || walletError}
+        error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"
         maxLength={SwapFormNumberLimits.digitLimit}
         token={
@@ -68,7 +70,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         }
         tooltip="The protocol requires every position to have enough collateral to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."
         topRightText={`Wallet: ${walletValue}`}
-        topRightTextColorToken={walletError ? 'wildStrawberry2' : 'lavenderWeb2'}
+        topRightTextColorToken={isWalletMarginError ? 'wildStrawberry2' : 'lavenderWeb2'}
         topRightTextTypographyToken="secondaryBodySmallRegular"
         value={marginAmount.value}
         onChange={handleOnChange}
