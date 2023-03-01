@@ -16,6 +16,7 @@ import {
   MainAndFormSectionBox,
   MainSectionBox,
   PageSectionBox,
+  RainbowLoadingBox,
   RightPageSectionBox,
   RightSectionBox,
 } from './TraderForm.styled';
@@ -48,7 +49,9 @@ export const TraderFormRoute: React.FunctionComponent = () => {
   if (loading || idle) {
     pageContent = (
       <LoadingBox>
-        <RainbowLoader height={3} text="Fetching best rates..." width={520} />
+        <RainbowLoadingBox>
+          <RainbowLoader height={3} text="Fetching best rates..." />
+        </RainbowLoadingBox>
       </LoadingBox>
     );
   }

@@ -11,7 +11,7 @@ import { fetchHistoricalRatesThunk } from '../../../../app/features/historical-r
 import { selectChainId } from '../../../../app/features/network';
 import { selectSwapFormAMM } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { ChartBox, LineChartBox, LoadingBox } from './Chart.styled';
+import { ChartBox, LineChartBox, LoadingBox, RainbowLoaderBox } from './Chart.styled';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
 
 type ChartProps = {};
@@ -93,7 +93,9 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
       <LineChartBox>
         {loading ? (
           <LoadingBox>
-            <RainbowLoader height={3} text="Printing historical rates..." width={335} />
+            <RainbowLoaderBox>
+              <RainbowLoader height={3} text="Printing historical rates..." />
+            </RainbowLoaderBox>
           </LoadingBox>
         ) : null}
         <LineChart

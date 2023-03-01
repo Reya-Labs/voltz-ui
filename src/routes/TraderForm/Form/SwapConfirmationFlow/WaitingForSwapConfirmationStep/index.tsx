@@ -1,7 +1,10 @@
 import { RainbowLoader, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { WaitingForSwapConfirmationStepBox } from './WaitingForSwapConfirmationStep.styled';
+import {
+  RainbowLoaderBox,
+  WaitingForSwapConfirmationStepBox,
+} from './WaitingForSwapConfirmationStep.styled';
 
 export const WaitingForSwapConfirmationStep: React.FunctionComponent = () => {
   return (
@@ -9,7 +12,9 @@ export const WaitingForSwapConfirmationStep: React.FunctionComponent = () => {
       <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
         Waiting for confirmation
       </Typography>
-      <RainbowLoader height={3} text="Swapping Rates..." width={335} />
+      <RainbowLoaderBox>
+        <RainbowLoader height={3} text="Swapping Rates..." />
+      </RainbowLoaderBox>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
         Confirm this transaction in your wallet
       </Typography>

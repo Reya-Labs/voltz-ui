@@ -7,3 +7,7 @@ export const WaitingForSwapConfirmationStepBox = styled('div')`
   padding: 0px;
   gap: 64px;
 `;
+
+export const RainbowLoaderBox = styled('div')`
+  width: 335px;
+`;
