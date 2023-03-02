@@ -1,4 +1,4 @@
-import { Button, Typography } from 'brokoli-ui';
+import { Button, CloseButton, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
@@ -15,7 +15,6 @@ import {
 import { TransactionDetails } from '../../TransactionDetails';
 import { SwapDetails } from '../SwapDetails';
 import {
-  CloseButton,
   HorizontalLine,
   SwapConfirmationStepBox,
   SwapDetailsBox,
@@ -43,7 +42,7 @@ export const SwapConfirmationStep: React.FunctionComponent = () => {
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
           Confirm Swap
         </Typography>
-        <CloseButton onClick={handleCloseButtonClick}>✕</CloseButton>
+        <CloseButton onClick={handleCloseButtonClick} />
       </TitleBox>
       <SwapDetailsBox>
         <MarketTokenInformation
