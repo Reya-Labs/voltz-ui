@@ -47,9 +47,10 @@ export const selectSwapConfirmationFlowStep = (state: RootState) =>
 export const selectSwapConfirmationFlowError = (state: RootState) =>
   state.swapForm.swapConfirmationFlow.error;
 export const selectSwapConfirmationFlowEtherscanLink = (state: RootState) => {
-  return state.swapForm.swapConfirmationFlow.txHash
-    ? getViewOnEtherScanLink(state.network.chainId, state.swapForm.swapConfirmationFlow.txHash)
-    : 'https://voltz.xyz';
+  return getViewOnEtherScanLink(
+    state.network.chainId,
+    state.swapForm.swapConfirmationFlow.txHash || '',
+  );
 };
 
 // ------------ Variable Rate Delta ------------
