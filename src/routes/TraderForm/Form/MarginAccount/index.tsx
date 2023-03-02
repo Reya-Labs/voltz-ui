@@ -6,7 +6,6 @@ import { AccountBox, BalanceBox, MarginAccountBox } from './MarginAccount.styled
 type MarginAccountProps = {};
 
 export const MarginAccount: React.FunctionComponent<MarginAccountProps> = () => {
-  // todo: Alex populate the variables with proper values
   const balanceValue = '12k';
   const token = ' USDC';
   // The name of the pool is “{pool_token} {maturity}” (e.g. aUSDT_bor Dec22, aETH_len Mar23, stETH Jan23);

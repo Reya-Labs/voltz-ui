@@ -10,7 +10,6 @@ import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styl
 type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
-  // todo: Alex handle fill in proper values
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const aMM = useAppSelector(selectSwapFormAMM);
 

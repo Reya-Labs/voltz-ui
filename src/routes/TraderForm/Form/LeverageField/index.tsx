@@ -12,8 +12,6 @@ import { LeverageFieldBox } from './LeverageField.styled';
 type NotionalAmountProps = {};
 
 export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () => {
-  // todo: Alex
-
   const dispatch = useAppDispatch();
 
   const notionalInfo = useAppSelector(selectNotionalAmount);

@@ -1,7 +1,10 @@
+import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
+
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 
 // ------------ General Swap Form State Info ------------
+export const selectSubmitButtonInfo = (state: RootState) => state.swapForm.submitButton;
 export const selectSwapFormAMM = (state: RootState) => state.swapForm.amm;
 export const selectSwapFormPosition = (state: RootState) => state.swapForm.position.value;
 export const selectSwapFormPositionFetchingStatus = (state: RootState) =>
@@ -43,6 +46,11 @@ export const selectSwapConfirmationFlowStep = (state: RootState) =>
   state.swapForm.swapConfirmationFlow.step;
 export const selectSwapConfirmationFlowError = (state: RootState) =>
   state.swapForm.swapConfirmationFlow.error;
+export const selectSwapConfirmationFlowEtherscanLink = (state: RootState) => {
+  return state.swapForm.swapConfirmationFlow.txHash
+    ? getViewOnEtherScanLink(state.network.chainId, state.swapForm.swapConfirmationFlow.txHash)
+    : 'https://voltz.xyz';
+};
 
 // ------------ Variable Rate Delta ------------
 export const selectVariableRate24hDelta = (state: RootState) => {
@@ -52,6 +60,24 @@ export const selectVariableRate24hDelta = (state: RootState) => {
         formatNumber(state.swapForm.variableRate.value - state.swapForm.variableRate24hAgo.value),
       )
     : undefined;
+};
+
+// ------------ Submit button text ------------
+export const selectSubmitButtonText = (state: RootState) => {
+  switch (state.swapForm.submitButton.state) {
+    case 'swap':
+      return 'Swap';
+    case 'not-enough-balance':
+      return 'Not enough balance';
+    case 'approve':
+      return `Approve ${
+        state.swapForm.amm ? state.swapForm.amm.underlyingToken.name.toUpperCase() : ''
+      }`;
+    case 'approving':
+      return `Approving...`;
+    case 'connect-wallet':
+      return 'Connect Your Wallet to Start Trading';
+  }
 };
 
 // ------------ Leverage ------------
