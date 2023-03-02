@@ -1,12 +1,15 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
+import { ContractReceipt } from 'ethers';
 
 import { limitAndFormatNumber, stringToBigFloat } from '../../../utilities/number';
 import {
+  approveUnderlyingTokenThunk,
   confirmSwapThunk,
   getFixedRateThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
+  getUnderlyingTokenAllowanceThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
   initialiseCashflowCalculatorThunk,
@@ -23,12 +26,24 @@ export const SwapFormNumberLimits = {
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
 export type SliceState = {
+  submitButton: {
+    state: 'swap' | 'not-enough-balance' | 'connect-wallet' | 'approve' | 'approving';
+    disabled: boolean;
+    message: {
+      text: string | null;
+      isError: boolean;
+    };
+  };
   amm: AMM | null;
   position: {
     value: Position | null;
     status: ThunkStatus;
   };
   walletBalance: {
+    value: number;
+    status: ThunkStatus;
+  };
+  walletTokenAllowance: {
     value: number;
     status: ThunkStatus;
   };
@@ -102,16 +117,29 @@ export type SliceState = {
   swapConfirmationFlow: {
     step: 'swapConfirmation' | 'waitingForSwapConfirmation' | 'swapCompleted' | null;
     error: string | null;
+    txHash: string | null;
   };
 };
 
 const initialState: SliceState = {
+  submitButton: {
+    state: 'connect-wallet',
+    disabled: true,
+    message: {
+      text: null,
+      isError: false,
+    },
+  },
   amm: null,
   position: {
     value: null,
     status: 'idle',
   },
   walletBalance: {
+    value: 0,
+    status: 'idle',
+  },
+  walletTokenAllowance: {
     value: 0,
     status: 'idle',
   },
@@ -175,6 +203,7 @@ const initialState: SliceState = {
   swapConfirmationFlow: {
     step: null,
     error: null,
+    txHash: null,
   },
 };
 
@@ -229,18 +258,109 @@ const validateUserInput = (state: Draft<SliceState>): void => {
   }
 };
 
+const updateSubmitButtonState = (state: Draft<SliceState>): void => {
+  if (!state.amm || !state.amm.signer) {
+    state.submitButton = {
+      state: 'connect-wallet',
+      disabled: true,
+      message: {
+        text: 'Almost ready',
+        isError: false,
+      },
+    };
+    return;
+  }
+
+  if (
+    !state.prospectiveSwap.marginAmount.error &&
+    state.walletTokenAllowance.status !== 'success'
+  ) {
+    state.submitButton = {
+      state: 'swap',
+      disabled: true,
+      message: {
+        text: 'Almost ready',
+        isError: false,
+      },
+    };
+    return;
+  }
+
+  if (
+    !state.prospectiveSwap.marginAmount.error &&
+    state.walletTokenAllowance.status === 'success' &&
+    state.walletTokenAllowance.value < stringToBigFloat(state.prospectiveSwap.marginAmount.value)
+  ) {
+    state.submitButton = {
+      state: 'approve',
+      disabled: false,
+      message: {
+        text: `Please approve ${state.amm.underlyingToken.name.toUpperCase()}`,
+        isError: false,
+      },
+    };
+    return;
+  }
+
+  if (
+    state.walletBalance.status === 'success' &&
+    stringToBigFloat(state.prospectiveSwap.marginAmount.value) > state.walletBalance.value
+  ) {
+    state.submitButton = {
+      state: 'not-enough-balance',
+      disabled: true,
+      message: {
+        text: `You have got not enough ${state.amm.underlyingToken.name.toUpperCase()}`,
+        isError: false,
+      },
+    };
+    return;
+  }
+
+  if (
+    !state.prospectiveSwap.notionalAmount.error &&
+    state.prospectiveSwap.notionalAmount.value !== '0' &&
+    !state.prospectiveSwap.marginAmount.error &&
+    state.prospectiveSwap.infoPostSwap.status === 'success' &&
+    state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance *
+      (state.prospectiveSwap.mode === 'fixed' ? -1 : 1) ===
+      stringToBigFloat(state.prospectiveSwap.notionalAmount.value)
+  ) {
+    state.submitButton = {
+      state: 'swap',
+      disabled: false,
+      message: {
+        text: "Token approved, let's trade",
+        isError: false,
+      },
+    };
+    return;
+  }
+
+  state.submitButton = {
+    state: 'swap',
+    disabled: true,
+    message: {
+      text: 'Almost ready',
+      isError: false,
+    },
+  };
+};
+
 export const slice = createSlice({
   name: 'swapForm',
   initialState,
   reducers: {
-    resetStateAction: (state) => {
-      // TODO: Alex
-    },
+    resetStateAction: () => initialState,
     openSwapConfirmationFlowAction: (state) => {
       state.swapConfirmationFlow.step = 'swapConfirmation';
     },
     closeSwapConfirmationFlowAction: (state) => {
-      state.swapConfirmationFlow.step = null;
+      state.swapConfirmationFlow = {
+        step: null,
+        error: null,
+        txHash: null,
+      };
     },
     setModeAction: (
       state,
@@ -280,6 +400,7 @@ export const slice = createSlice({
           stringToBigFloat(state.prospectiveSwap.notionalAmount.value) /
           stringToBigFloat(state.prospectiveSwap.marginAmount.value);
       }
+      updateSubmitButtonState(state);
     },
     setMarginAmountAction: (
       state,
@@ -296,6 +417,7 @@ export const slice = createSlice({
           stringToBigFloat(state.prospectiveSwap.notionalAmount.value) /
           stringToBigFloat(state.prospectiveSwap.marginAmount.value);
       }
+      updateSubmitButtonState(state);
     },
     setLeverageAction: (
       state,
@@ -319,6 +441,7 @@ export const slice = createSlice({
       );
 
       validateUserInput(state);
+      updateSubmitButtonState(state);
     },
     setPredictedApyAction: (
       state,
@@ -379,6 +502,52 @@ export const slice = createSlice({
           value: payload as number,
           status: 'success',
         };
+      })
+      .addCase(getUnderlyingTokenAllowanceThunk.pending, (state) => {
+        state.walletTokenAllowance = {
+          value: 0,
+          status: 'pending',
+        };
+      })
+      .addCase(getUnderlyingTokenAllowanceThunk.rejected, (state) => {
+        state.walletTokenAllowance = {
+          value: 0,
+          status: 'error',
+        };
+      })
+      .addCase(getUnderlyingTokenAllowanceThunk.fulfilled, (state, { payload }) => {
+        state.walletTokenAllowance = {
+          value: payload as number,
+          status: 'success',
+        };
+        updateSubmitButtonState(state);
+      })
+      .addCase(approveUnderlyingTokenThunk.pending, (state) => {
+        state.submitButton = {
+          state: 'approving',
+          disabled: true,
+          message: {
+            text: 'Waiting for confirmation...',
+            isError: false,
+          },
+        };
+      })
+      .addCase(approveUnderlyingTokenThunk.rejected, (state) => {
+        state.submitButton = {
+          state: 'approve',
+          disabled: false,
+          message: {
+            text: 'Signature declined by user',
+            isError: true,
+          },
+        };
+      })
+      .addCase(approveUnderlyingTokenThunk.fulfilled, (state, { payload }) => {
+        state.walletTokenAllowance = {
+          value: payload as number,
+          status: 'success',
+        };
+        updateSubmitButtonState(state);
       })
       .addCase(getFixedRateThunk.pending, (state) => {
         state.fixedRate = {
@@ -557,6 +726,7 @@ export const slice = createSlice({
 
         validateUserInput(state);
         updateCashflowCalculator(state);
+        updateSubmitButtonState(state);
       })
       .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
         state.position.value = null;
@@ -581,18 +751,28 @@ export const slice = createSlice({
           return;
         }
         state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
+        updateSubmitButtonState(state);
       })
       .addCase(confirmSwapThunk.pending, (state) => {
-        state.swapConfirmationFlow.step = 'waitingForSwapConfirmation';
-        state.swapConfirmationFlow.error = null;
+        state.swapConfirmationFlow = {
+          step: 'waitingForSwapConfirmation',
+          error: null,
+          txHash: null,
+        };
       })
       .addCase(confirmSwapThunk.rejected, (state, { payload }) => {
-        state.swapConfirmationFlow.step = 'swapConfirmation';
-        state.swapConfirmationFlow.error = payload as string;
+        state.swapConfirmationFlow = {
+          step: 'swapConfirmation',
+          error: payload as string,
+          txHash: null,
+        };
       })
-      .addCase(confirmSwapThunk.fulfilled, (state) => {
-        state.swapConfirmationFlow.step = 'swapCompleted';
-        state.swapConfirmationFlow.error = null;
+      .addCase(confirmSwapThunk.fulfilled, (state, { payload }) => {
+        state.swapConfirmationFlow = {
+          step: 'swapCompleted',
+          error: null,
+          txHash: (payload as ContractReceipt).transactionHash,
+        };
       });
   },
 });

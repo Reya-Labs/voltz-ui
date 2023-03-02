@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getPositionsV1, InfoPostSwapV1, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
-import { providers } from 'ethers';
+import { ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPosition } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
@@ -27,11 +27,45 @@ export const getWalletBalanceThunk = createAsyncThunk<
 >('swapForm/getWalletBalance', async (_, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().swapForm.amm;
-    if (!amm) {
+    if (!amm || !amm.signer) {
       return;
     }
 
     return await amm.underlyingTokens();
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/getUnderlyingTokenAllowance', async (_, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().swapForm.amm;
+    if (!amm || !amm.signer) {
+      return;
+    }
+
+    return await amm.getUnderlyingTokenAllowance({ forceErc20Check: false }); //TODO Alex (for future forms)
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const approveUnderlyingTokenThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/approveUnderlyingToken', async (_, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().swapForm.amm;
+    if (!amm || !amm.signer) {
+      return;
+    }
+
+    return await amm.approveUnderlyingTokenForPeripheryV1({ forceErc20Check: false }); //TODO Alex (for future forms)
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -137,6 +171,9 @@ export const getInfoPostSwapThunk = createAsyncThunk<
       fixedHigh: 999,
     });
 
+    // margin requirement is collateral only now
+    infoPostSwapV1.marginRequirement -= infoPostSwapV1.fee;
+
     return {
       notionalAmount,
       infoPostSwap: infoPostSwapV1,
@@ -196,7 +233,7 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
 });
 
 export const confirmSwapThunk = createAsyncThunk<
-  Awaited<void | ReturnType<typeof rejectThunkWithError>>,
+  Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
 >('swapForm/confirmSwap', async (_, thunkAPI) => {
@@ -206,16 +243,16 @@ export const confirmSwapThunk = createAsyncThunk<
     if (!amm) {
       return;
     }
-    const fakeError = Math.random() * 100 < 25;
-    // todo: Alex integrate proper SDK here and remove the timeout mocking
-    if (fakeError) {
-      await new Promise((resolve, reject) =>
-        setTimeout(() => reject('Error happened during the swap!'), 5000),
-      );
-    } else {
-      await new Promise((resolve) => setTimeout(() => resolve(undefined), 5000));
-    }
-    return undefined;
+
+    return await amm.swap({
+      isFT: swapFormState.prospectiveSwap.mode === 'fixed',
+      notional: stringToBigFloat(swapFormState.prospectiveSwap.notionalAmount.value),
+      margin:
+        stringToBigFloat(swapFormState.prospectiveSwap.marginAmount.value) +
+        swapFormState.prospectiveSwap.infoPostSwap.value.fee,
+      fixedLow: 1,
+      fixedHigh: 999,
+    });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

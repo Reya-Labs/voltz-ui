@@ -6,6 +6,7 @@ import { selectChainId } from '../../app/features/network';
 import {
   getFixedRateThunk,
   getPoolSwapInfoThunk,
+  getUnderlyingTokenAllowanceThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
   selectSwapFormAMM,
@@ -86,6 +87,7 @@ export const useSwapFormAMM = (): UseAMMsResult => {
     }
 
     void dispatch(getWalletBalanceThunk());
+    void dispatch(getUnderlyingTokenAllowanceThunk());
   }, [dispatch, aMM, aMM?.signer]);
 
   return {
