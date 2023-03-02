@@ -57,7 +57,7 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
   const loading = useAppSelector(selectHistoricalRatesStatus) === 'pending';
   const dispatch = useAppDispatch();
   const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1w');
-  const [activeModeId, setActiveModeId] = useState<string>('fixed');
+  const [activeModeId, setActiveModeId] = useState<string>('variable');
   const chainId = useAppSelector(selectChainId);
   const aMM = useAppSelector(selectSwapFormAMM);
   const granularity =
