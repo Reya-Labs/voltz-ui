@@ -35,12 +35,9 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const handleOnChange = useCallback(
     (value?: string) => {
-      if (!value) {
-        return;
-      }
       dispatch(
         setNotionalAmountAction({
-          value,
+          value: value || '',
         }),
       );
 

@@ -37,11 +37,12 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
 
-  let { compactNumber: compactNotionalNumber, compactSuffix: compactNotionalSuffix } =
-    compactFormatToParts(stringToBigFloat(notional.value));
-  if (notional.error) {
-    compactNotionalSuffix = '';
-    compactNotionalNumber = '--';
+  let compactNotionalSuffix = '';
+  let compactNotionalNumber = '--';
+  if (notional.value && !notional.error) {
+    const compactParts = compactFormatToParts(stringToBigFloat(notional.value));
+    compactNotionalSuffix = compactParts.compactSuffix;
+    compactNotionalNumber = compactParts.compactNumber;
   }
 
   return (
