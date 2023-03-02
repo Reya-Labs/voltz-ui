@@ -17,14 +17,13 @@ export const PoolHeaderDetailsBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 6px 24px;
+  padding: 8px 24px;
   gap: 12px;
   height: 54px;
 `;
 
 export const MarketTokenInformationBox = styled('div')`
   box-sizing: border-box;
-  width: 100%;
   padding: 8px 16px;
 `;
 
