@@ -5,10 +5,10 @@ import {
   selectInfoPostSwap,
   selectMode,
   selectNotionalAmount,
+  selectSwapFormAMM,
   selectVariableRateInfo,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../../utilities/number';
 import {
   CashFlowBox,
@@ -23,7 +23,7 @@ import {
 type PositionDetailsProps = {};
 
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
-  const { aMM } = useSwapFormAMM();
+  const aMM = useAppSelector(selectSwapFormAMM);
   const notional = useAppSelector(selectNotionalAmount);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
@@ -37,11 +37,12 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
 
-  let { compactNumber: compactNotionalNumber, compactSuffix: compactNotionalSuffix } =
-    compactFormatToParts(stringToBigFloat(notional.value));
-  if (notional.error) {
-    compactNotionalSuffix = '';
-    compactNotionalNumber = '--';
+  let compactNotionalSuffix = '';
+  let compactNotionalNumber = '--';
+  if (notional.value && !notional.error) {
+    const compactParts = compactFormatToParts(stringToBigFloat(notional.value));
+    compactNotionalSuffix = compactParts.compactSuffix;
+    compactNotionalNumber = compactParts.compactNumber;
   }
 
   return (

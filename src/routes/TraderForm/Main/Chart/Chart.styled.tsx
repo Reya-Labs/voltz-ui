@@ -34,3 +34,7 @@ export const LoadingBox = styled('div')`
   background: linear-gradient(180deg, rgba(11, 9, 17, 0.8) 41.43%, rgba(24, 21, 36, 0.8) 110.49%);
   backdrop-filter: blur(2px);
 `;
+
+export const RainbowLoaderBox = styled('div')`
+  width: 335px;
+`;

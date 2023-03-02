@@ -2,17 +2,20 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { selectChainId } from '../../app/features/network';
 import {
-  getAvailableNotionalsThunk,
   getFixedRateThunk,
+  getPoolSwapInfoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
   selectSwapFormAMM,
-  setSignerForAMMAction,
+  selectSwapFormPositionFetchingStatus,
+  setSignerAndPositionForAMMThunk,
   setSwapFormAMMAction,
 } from '../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { generateAmmIdForRoute, generatePoolId } from '../../utilities/amm';
+import { ONE_DAY_IN_MS } from '../../utilities/constants';
 import { useAMMs } from '../useAMMs';
 import { useWallet } from '../useWallet';
 
@@ -25,10 +28,11 @@ export type UseAMMsResult = {
 
 export const useSwapFormAMM = (): UseAMMsResult => {
   const dispatch = useAppDispatch();
-
   const { ammId, poolId } = useParams();
   const { aMMs, loading, error, idle } = useAMMs();
   const aMM = useAppSelector(selectSwapFormAMM);
+  const positionFetchingStatus = useAppSelector(selectSwapFormPositionFetchingStatus);
+  const chainId = useAppSelector(selectChainId);
 
   const { signer } = useWallet();
 
@@ -45,6 +49,7 @@ export const useSwapFormAMM = (): UseAMMsResult => {
     const foundAMM = aMMs.find(
       (a) => ammId === generateAmmIdForRoute(a) && poolId === generatePoolId(a),
     );
+
     dispatch(
       setSwapFormAMMAction({
         amm: foundAMM ? foundAMM : null,
@@ -57,24 +62,36 @@ export const useSwapFormAMM = (): UseAMMsResult => {
       return;
     }
 
-    void dispatch(getWalletBalanceThunk());
     void dispatch(getFixedRateThunk());
-    void dispatch(getVariableRateThunk());
-    void dispatch(getAvailableNotionalsThunk());
+    void dispatch(getVariableRateThunk({}));
+    void dispatch(getVariableRateThunk({ timestampInMS: Date.now() - ONE_DAY_IN_MS }));
+    void dispatch(getPoolSwapInfoThunk());
   }, [dispatch, aMM]);
 
   useEffect(() => {
+    if (!chainId) {
+      return;
+    }
     void dispatch(
-      setSignerForAMMAction({
+      setSignerAndPositionForAMMThunk({
         signer,
+        chainId,
       }),
     );
-  }, [dispatch, signer]);
+  }, [dispatch, chainId, signer]);
+
+  useEffect(() => {
+    if (!aMM || !aMM.signer) {
+      return;
+    }
+
+    void dispatch(getWalletBalanceThunk());
+  }, [dispatch, aMM, aMM?.signer]);
 
   return {
     aMM,
-    loading,
+    loading: loading || positionFetchingStatus === 'pending',
     idle,
-    error,
+    error: error || positionFetchingStatus === 'error',
   };
 };

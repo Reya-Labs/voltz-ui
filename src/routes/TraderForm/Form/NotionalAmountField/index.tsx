@@ -4,13 +4,14 @@ import React, { useCallback } from 'react';
 
 import {
   getInfoPostSwapThunk,
-  selectAvailableNotionals,
   selectMode,
   selectNotionalAmount,
+  selectPoolSwapInfo,
+  selectSwapFormAMM,
   setNotionalAmountAction,
+  SwapFormNumberLimits,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { formatNumber } from '../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 type NotionalAmountProps = {};
@@ -19,11 +20,11 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const notionalAmount = useAppSelector(selectNotionalAmount);
 
   const mode = useAppSelector(selectMode);
-  const availableNotionals = useAppSelector(selectAvailableNotionals);
+  const poolSwapInfo = useAppSelector(selectPoolSwapInfo);
 
   const dispatch = useAppDispatch();
 
-  const { aMM } = useSwapFormAMM();
+  const aMM = useAppSelector(selectSwapFormAMM);
 
   const getInfoPostSwap = useCallback(
     debounce(() => {
@@ -34,12 +35,9 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const handleOnChange = useCallback(
     (value?: string) => {
-      if (!value) {
-        return;
-      }
       dispatch(
         setNotionalAmountAction({
-          value,
+          value: value || '',
         }),
       );
 
@@ -56,13 +54,15 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
         bottomLeftTextColorToken={notionalAmount.error ? 'wildStrawberry3' : 'lavenderWeb3'}
         bottomRightTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
-        bottomRightTextValue={formatNumber(availableNotionals.value[mode])}
+        bottomRightTextValue={formatNumber(poolSwapInfo.availableNotional[mode])}
+        decimalsLimit={SwapFormNumberLimits.decimalLimit}
         error={notionalAmount.error !== null}
         label="Notional amount"
+        maxLength={SwapFormNumberLimits.digitLimit}
         token={
           aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']) : undefined
         }
-        tooltip="TODO: Tooltip message here!"
+        tooltip="When you swap rates, the amount you receive and pay is calculated as a percentage or the notional value you choose."
         value={notionalAmount.value}
         onChange={handleOnChange}
       />

@@ -1,27 +1,52 @@
 import { LeverageField as BrokoliLeverageField } from 'brokoli-ui';
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 
+import {
+  selectLeverage,
+  selectLeverageOptions,
+  selectNotionalAmount,
+  setLeverageAction,
+} from '../../../../app/features/swap-form';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { LeverageFieldBox } from './LeverageField.styled';
 type NotionalAmountProps = {};
 
 export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () => {
-  // todo: Alex handle error logic, and other values
-  // todo: Alex handle redux store logic transfer
-  const [leverage, setLeverage] = useState<number>(5);
+  // todo: Alex
+
+  const dispatch = useAppDispatch();
+
+  const notionalInfo = useAppSelector(selectNotionalAmount);
+  const leverage = useAppSelector(selectLeverage);
+
+  const { maxLeverage, leverageOptions } = useAppSelector(selectLeverageOptions);
+
+  const handleOnChange = useCallback(
+    (value: number) => {
+      dispatch(
+        setLeverageAction({
+          value,
+        }),
+      );
+    },
+    [dispatch],
+  );
+
   return (
     <LeverageFieldBox>
       <BrokoliLeverageField
+        disabled={notionalInfo.error !== null || notionalInfo.value === '0'}
         label="Leverage"
         labelColorToken="lavenderWeb2"
         labelTypographyToken="primaryBodySmallRegular"
-        leverageOptions={[10, 50, 100]}
+        leverageOptions={leverageOptions}
         maxLeverageColorToken="lavenderWeb3"
-        maxLeverageText="Max 8,000x Leverage"
+        maxLeverageText={`Max ${maxLeverage}x Leverage`}
         maxLeverageTypographyToken="primaryBodySmallRegular"
-        tooltip="Input leverage!"
+        tooltip="Leverage is notional amount divided by margin amount, and represents the maximum delta between the rates your position is collateralized to withstand."
         tooltipColorToken="lavenderWeb2"
-        value={leverage}
-        onLeverageChange={setLeverage}
+        value={leverage || undefined}
+        onLeverageChange={handleOnChange}
       />
     </LeverageFieldBox>
   );

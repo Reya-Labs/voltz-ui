@@ -1,26 +1,21 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectInfoPostSwap } from '../../../../app/features/swap-form';
+import { selectInfoPostSwap, selectSwapFormAMM } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { formatNumber } from '../../../../utilities/number';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
-import {
-  IconTextWrapper,
-  TransactionDetailBox,
-  TransactionDetailsBox,
-} from './TransactionDetails.styled';
+import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 
 type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
   // todo: Alex handle fill in proper values
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
-  const { aMM } = useSwapFormAMM();
+  const aMM = useAppSelector(selectSwapFormAMM);
 
   return (
-    <TransactionDetailsBox>
+    <React.Fragment>
       <TransactionDetailBox>
         <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
           Fees
@@ -63,6 +58,6 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
           }
         ></TokenTypography>
       </TransactionDetailBox>
-    </TransactionDetailsBox>
+    </React.Fragment>
   );
 };

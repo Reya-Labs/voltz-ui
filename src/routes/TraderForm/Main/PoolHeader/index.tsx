@@ -1,14 +1,19 @@
-import { LabelTokenTypography, MarketToken, MarketTokenProps, Pill } from 'brokoli-ui';
+import { LabelTokenTypography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectFixedRateInfo, selectVariableRateInfo } from '../../../../app/features/swap-form';
+import {
+  selectFixedRateInfo,
+  selectSwapFormAMM,
+  selectVariableRate24hDelta,
+  selectVariableRateInfo,
+} from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
 import { formatTimestamp } from '../../../../utilities/date';
 import { formatNumber } from '../../../../utilities/number';
+import { MarketTokenInformation, MarketTokenInformationProps } from '../../MarketTokenInformation';
 import {
   FixedBox,
-  MarketTokenBox,
+  MarketTokenInformationBox,
   MaturityBox,
   PoolHeaderBox,
   PoolHeaderDetailsBox,
@@ -18,34 +23,24 @@ import {
 type PoolHeaderProps = {};
 
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
-  const { aMM } = useSwapFormAMM();
+  const aMM = useAppSelector(selectSwapFormAMM);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
+  const variableRate24hDelta = useAppSelector(selectVariableRate24hDelta);
   if (!aMM) {
     return null;
   }
 
-  // TODO Alex
   return (
     <PoolHeaderBox>
-      <MarketTokenBox>
-        {aMM ? (
-          <MarketToken
-            market={aMM.market.name as MarketTokenProps['market']}
-            token={aMM.underlyingToken.name.toLowerCase() as MarketTokenProps['token']}
-          />
-        ) : null}
-        {aMM.market.tags.isBorrowing ? (
-          <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
-            Borrow
-          </Pill>
-        ) : null}
-        {aMM.market.tags.isAaveV3 ? (
-          <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
-            v3
-          </Pill>
-        ) : null}
-      </MarketTokenBox>
+      <MarketTokenInformationBox>
+        <MarketTokenInformation
+          isAaveV3={aMM.market.tags.isAaveV3}
+          isBorrowing={aMM.market.tags.isBorrowing}
+          market={aMM.market.name as MarketTokenInformationProps['market']}
+          token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
+        />
+      </MarketTokenInformationBox>
       <PoolHeaderDetailsBox>
         <FixedBox>
           <LabelTokenTypography
@@ -61,12 +56,12 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
         <VariableBox>
           <LabelTokenTypography
             colorToken="lavenderWeb"
-            // differenceValue={-2} //TODO Alex
+            differenceValue={variableRate24hDelta}
             label="Variable"
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"
             token="%"
-            tooltip="TODO: Missing tooltip"
+            tooltip="Variable rate and the change during the last 24hs in absolute value."
             typographyToken="secondaryBodyMediumBold"
             value={
               variableRateInfo.status !== 'success' ? '--' : formatNumber(variableRateInfo.value)

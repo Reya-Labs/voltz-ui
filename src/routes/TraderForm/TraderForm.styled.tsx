@@ -47,3 +47,7 @@ export const LoadingBox = styled('div')`
   box-sizing: border-box;
   background: transparent;
 `;
+
+export const RainbowLoadingBox = styled('div')`
+  width: 520px;
+`;

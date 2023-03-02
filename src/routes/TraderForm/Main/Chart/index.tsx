@@ -9,9 +9,9 @@ import {
 } from '../../../../app/features/historical-rates';
 import { fetchHistoricalRatesThunk } from '../../../../app/features/historical-rates/thunks';
 import { selectChainId } from '../../../../app/features/network';
+import { selectSwapFormAMM } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useSwapFormAMM } from '../../../../hooks/useSwapFormAMM';
-import { ChartBox, LineChartBox, LoadingBox } from './Chart.styled';
+import { ChartBox, LineChartBox, LoadingBox, RainbowLoaderBox } from './Chart.styled';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
 
 type ChartProps = {};
@@ -57,9 +57,9 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
   const loading = useAppSelector(selectHistoricalRatesStatus) === 'pending';
   const dispatch = useAppDispatch();
   const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1w');
-  const [activeModeId, setActiveModeId] = useState<string>('fixed');
+  const [activeModeId, setActiveModeId] = useState<string>('variable');
   const chainId = useAppSelector(selectChainId);
-  const { aMM } = useSwapFormAMM();
+  const aMM = useAppSelector(selectSwapFormAMM);
   const granularity =
     activeTimeRangeId === '1d' || activeModeId === '1w'
       ? Granularity.ONE_HOUR
@@ -93,7 +93,9 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
       <LineChartBox>
         {loading ? (
           <LoadingBox>
-            <RainbowLoader height={3} text="Printing historical rates..." width={335} />
+            <RainbowLoaderBox>
+              <RainbowLoader height={3} text="Printing historical rates..." />
+            </RainbowLoaderBox>
           </LoadingBox>
         ) : null}
         <LineChart

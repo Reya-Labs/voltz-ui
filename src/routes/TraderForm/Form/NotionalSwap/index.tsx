@@ -1,8 +1,10 @@
 import { TokenTypography, Typography, TypographyWithTooltip } from 'brokoli-ui';
+import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import MovingComponent from 'react-moving-text';
 
 import {
+  getInfoPostSwapThunk,
   selectFixedRateInfo,
   selectMode,
   selectVariableRateInfo,
@@ -34,7 +36,7 @@ export const NotionalSwap: React.FunctionComponent<{}> = () => {
   const isFixedMode = mode === 'fixed';
 
   const onSwap = useCallback(
-    (value?: 'fixed' | 'variable') => {
+    debounce((value?: 'fixed' | 'variable') => {
       if (!value) {
         return;
       }
@@ -43,7 +45,8 @@ export const NotionalSwap: React.FunctionComponent<{}> = () => {
           value,
         }),
       );
-    },
+      void dispatch(getInfoPostSwapThunk());
+    }, 100),
     [dispatch],
   );
 
@@ -58,7 +61,7 @@ export const NotionalSwap: React.FunctionComponent<{}> = () => {
     <NotionalSwapWrapperBox>
       <TypographyWithTooltip
         colorToken="lavenderWeb2"
-        tooltip="TODO: Tooltip is needed!"
+        tooltip="When you swap rates, you will be receiving at one rate and paying at another. Choose the rate you want to receive at."
         typographyToken="primaryBodySmallRegular"
       >
         Select Notional Swap Direction

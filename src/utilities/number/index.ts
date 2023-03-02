@@ -174,3 +174,62 @@ export const formatLeverage = (leverage: number): number => {
 
   return formattedLeverage - (formattedLeverage % 100);
 };
+
+/**
+ * It takes an integer number and rounds its significant digits according
+ * to the precision.
+ */
+export const roundIntegerNumber = (num: number, precision: number): number => {
+  const power = Math.pow(10, precision);
+  return Math.floor(num / power + Number.EPSILON) * power;
+};
+
+export const limitAndFormatNumber = (
+  num: number,
+  digitLimit: number,
+  decimalLimit: number,
+  mode: 'floor' | 'ceil',
+): string => {
+  const power = Math.pow(10, decimalLimit);
+  let n =
+    mode === 'floor'
+      ? Math.floor(Number((num * power).toFixed(4)))
+      : Math.ceil(Number((num * power).toFixed(4)));
+  n = n / power;
+
+  let remainingDigits = digitLimit;
+
+  let nString = '';
+
+  let epsilon = 0;
+  let dotPosition = null;
+  let actualNumberOfDecimals = 0;
+
+  for (let i = 0; i < n.toString().length; i += 1) {
+    const char = n.toString().charAt(i);
+    if ('0' <= char && char <= '9' && !remainingDigits) {
+      if (mode === 'ceil' && dotPosition) {
+        epsilon = Math.pow(10, dotPosition - i + 1);
+      }
+      break;
+    }
+
+    nString = nString.concat(char);
+    if ('0' <= char && char <= '9') {
+      remainingDigits -= 1;
+      if (dotPosition) {
+        actualNumberOfDecimals += 1;
+      }
+    }
+
+    if (char === '.') {
+      dotPosition = i;
+    }
+  }
+
+  return formatNumber(
+    stringToBigFloat(nString) + epsilon,
+    Math.min(2, Math.min(actualNumberOfDecimals + remainingDigits, decimalLimit)),
+    Math.max(2, Math.min(actualNumberOfDecimals + remainingDigits, decimalLimit)),
+  );
+};
