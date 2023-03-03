@@ -19,7 +19,6 @@ export const TitleBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
   padding: 16px 40px 8px;
-  background: linear-gradient(180deg, rgba(11, 9, 17, 0.8) 41.43%, rgba(24, 21, 36, 0.8) 110.49%);
 `;
 
 export const MarginAccountBox = styled('div')`
@@ -28,6 +27,8 @@ export const MarginAccountBox = styled('div')`
   position: sticky;
   top: 0;
   z-index: 1;
+  background: linear-gradient(90.95deg, ${colors.lavenderWeb8} 0.66%, ${colors.liberty8} 99.34%);
+  box-shadow: 0px 0px 1px ${colors.lavenderWeb3};
 `;
 
 export const FormOuterBox = styled('div')`
