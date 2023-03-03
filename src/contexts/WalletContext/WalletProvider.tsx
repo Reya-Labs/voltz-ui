@@ -85,6 +85,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
               setChainIdThunk({
                 chainId: getDefaultChainId(),
                 isSupportedChain: false,
+                triggerApprovalFlow: false,
               }),
             );
             throw new Error('Wrong network');
@@ -93,6 +94,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
               setChainIdThunk({
                 chainId: networkValidation.chainId,
                 isSupportedChain: true,
+                triggerApprovalFlow: false,
               }),
             );
           }

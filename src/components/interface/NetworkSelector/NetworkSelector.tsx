@@ -69,6 +69,7 @@ export const NetworkSelector: React.FunctionComponent = () => {
             setChainIdThunk({
               chainId: parseInt(event.target.value, 10),
               isSupportedChain: true,
+              triggerApprovalFlow: true,
             }),
           );
         }}

@@ -51,6 +51,7 @@ export const AppRoutes = () => {
         setChainIdThunk({
           chainId: defaultChainId,
           isSupportedChain: Boolean(defaultChainId),
+          triggerApprovalFlow: false,
         }),
       );
       return;
@@ -62,6 +63,7 @@ export const AppRoutes = () => {
         setChainIdThunk({
           chainId: getDefaultChainId(),
           isSupportedChain: false,
+          triggerApprovalFlow: false,
         }),
       );
     } else {
@@ -69,6 +71,7 @@ export const AppRoutes = () => {
         setChainIdThunk({
           chainId: networkValidation.chainId,
           isSupportedChain: true,
+          triggerApprovalFlow: false,
         }),
       );
     }
