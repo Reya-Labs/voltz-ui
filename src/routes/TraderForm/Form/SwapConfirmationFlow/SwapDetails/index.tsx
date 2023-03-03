@@ -24,12 +24,15 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const marginInfo = useAppSelector(selectMarginAmount);
 
   const aMM = useAppSelector(selectSwapFormAMM);
-
   const fixedRate = formatNumber(infoPostSwap.value.averageFixedRate);
   const variableRate = formatNumber(variableRateInfo.value);
 
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
+
+  if (!aMM) {
+    return null;
+  }
 
   return (
     <SwapDetailsBox>
@@ -61,7 +64,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={aMM ? ` ${aMM.underlyingToken.name.toUpperCase()}` : ''}
+          token={` ${aMM.underlyingToken.name.toUpperCase()}`}
           typographyToken="secondaryBodySmallRegular"
           value={compactFormat(stringToBigFloat(notionalInfo.value))}
         />
@@ -72,7 +75,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={aMM ? ` ${aMM.underlyingToken.name.toUpperCase()}` : ''}
+          token={` ${aMM.underlyingToken.name.toUpperCase()}`}
           typographyToken="secondaryBodySmallRegular"
           value={compactFormat(stringToBigFloat(marginInfo.value))}
         />
@@ -85,7 +88,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           colorToken="lavenderWeb"
           token=" "
           typographyToken="secondaryBodySmallRegular"
-          value={aMM ? formatTimestamp(aMM.termEndTimestampInMS) : ''}
+          value={formatTimestamp(aMM.termEndTimestampInMS)}
         />
       </SwapDetailBox>
     </SwapDetailsBox>

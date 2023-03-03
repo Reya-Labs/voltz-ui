@@ -19,6 +19,7 @@ export const ChainSelector: React.FunctionComponent = () => {
         setChainIdThunk({
           chainId: selectedChainId,
           isSupportedChain: true,
+          triggerApprovalFlow: true,
         }),
       );
     },

@@ -13,6 +13,10 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const aMM = useAppSelector(selectSwapFormAMM);
 
+  if (!aMM) {
+    return null;
+  }
+
   return (
     <React.Fragment>
       <TransactionDetailBox>
@@ -21,7 +25,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={aMM ? ` ${aMM.underlyingToken.name.toUpperCase()}` : ''}
+          token={` ${aMM.underlyingToken.name.toUpperCase()}`}
           typographyToken="secondaryBodySmallRegular"
           value={infoPostSwap.status === 'success' ? formatNumber(infoPostSwap.value.fee) : '--'}
         ></TokenTypography>

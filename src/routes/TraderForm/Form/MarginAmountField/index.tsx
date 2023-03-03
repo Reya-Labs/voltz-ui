@@ -26,11 +26,6 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
   const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
 
   const walletBalance = useAppSelector(selectWalletBalanceInfo);
-  let walletValue = walletBalance.status === 'success' ? compactFormat(walletBalance.value) : '--';
-  if (aMM) {
-    walletValue = walletValue.concat(` ${aMM.underlyingToken.name.toUpperCase()}`);
-  }
-
   const handleOnChange = useCallback(
     (value?: string) => {
       if (!value) {
@@ -44,6 +39,13 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
     },
     [dispatch],
   );
+
+  if (!aMM) {
+    return null;
+  }
+
+  const walletValue =
+    walletBalance.status === 'success' ? compactFormat(walletBalance.value) : '--';
 
   return (
     <MarginAmountFieldBox>
@@ -65,11 +67,9 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"
         maxLength={SwapFormNumberLimits.digitLimit}
-        token={
-          aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']) : undefined
-        }
+        token={aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']}
         tooltip="The protocol requires every position to have enough collateral to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."
-        topRightText={`Wallet: ${walletValue}`}
+        topRightText={`Wallet: ${`${walletValue} ${aMM.underlyingToken.name.toUpperCase()}`}`}
         topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
         topRightTextTypographyToken="secondaryBodySmallRegular"
         value={marginAmount.value}

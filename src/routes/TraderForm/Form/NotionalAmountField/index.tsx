@@ -18,12 +18,9 @@ type NotionalAmountProps = {};
 
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const notionalAmount = useAppSelector(selectNotionalAmount);
-
   const mode = useAppSelector(selectMode);
   const poolSwapInfo = useAppSelector(selectPoolSwapInfo);
-
   const dispatch = useAppDispatch();
-
   const aMM = useAppSelector(selectSwapFormAMM);
 
   const getInfoPostSwap = useCallback(
@@ -46,6 +43,10 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     [dispatch, getInfoPostSwap],
   );
 
+  if (!aMM) {
+    return null;
+  }
+
   return (
     <NotionalAmountFieldBox>
       <TokenField
@@ -59,9 +60,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
         error={notionalAmount.error !== null}
         label="Notional amount"
         maxLength={SwapFormNumberLimits.digitLimit}
-        token={
-          aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']) : undefined
-        }
+        token={aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']}
         tooltip="When you swap rates, the amount you receive and pay is calculated as a percentage or the notional value you choose."
         value={notionalAmount.value}
         onChange={handleOnChange}

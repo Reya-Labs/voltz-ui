@@ -27,6 +27,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const variableRate24hDelta = useAppSelector(selectVariableRate24hDelta);
+
   if (!aMM) {
     return null;
   }
@@ -76,7 +77,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
             labelTypographyToken="primaryBodyXSmallRegular"
             token=""
             typographyToken="secondaryBodyMediumBold"
-            value={aMM ? formatTimestamp(aMM.termEndTimestampInMS) : '--'}
+            value={formatTimestamp(aMM.termEndTimestampInMS)}
           />
         </MaturityBox>
       </PoolHeaderDetailsBox>

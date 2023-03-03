@@ -12,12 +12,14 @@ type MarginAccountProps = {};
 export const MarginAccount: React.FunctionComponent<MarginAccountProps> = () => {
   const aMM = useAppSelector(selectSwapFormAMM);
   const walletBalance = useAppSelector(selectWalletBalanceInfo);
+  if (!aMM) {
+    return null;
+  }
 
   const balanceValue =
     walletBalance.status === 'success' ? compactFormat(walletBalance.value) : '--';
-  const token = ` ${aMM ? aMM.underlyingToken.name.toUpperCase() : ''}`;
-
-  const accountName = aMM ? `${aMM.protocol} ${formatTimestamp(aMM.termEndTimestampInMS)}` : '';
+  const token = ` ${aMM.underlyingToken.name.toUpperCase()}`;
+  const accountName = `${aMM.protocol} ${formatTimestamp(aMM.termEndTimestampInMS)}`;
 
   return (
     <MarginAccountBox>

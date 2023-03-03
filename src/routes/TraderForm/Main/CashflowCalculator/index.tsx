@@ -55,6 +55,10 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
     [dispatch],
   );
 
+  if (!aMM) {
+    return null;
+  }
+
   return (
     <CashFlowCalculatorBox>
       <CashFlowCalculatorLeftBox>
@@ -81,7 +85,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             label="Additional Cashflow"
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"
-            token={aMM ? ` ${aMM.underlyingToken.name.toUpperCase()}` : ''}
+            token={` ${aMM.underlyingToken.name.toUpperCase()}`}
             tooltip="Calculated based on the notional amount and trade side specified in the form for swap."
             typographyToken="secondaryBodySmallRegular"
             value={formatCurrency(additonalCashflow, true, true, 2, 4)}
@@ -93,7 +97,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             label="Total Cashflow"
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"
-            token={aMM ? ` ${aMM.underlyingToken.name.toUpperCase()}` : ''}
+            token={` ${aMM.underlyingToken.name.toUpperCase()}`}
             tooltip="Calculated based on the current position plus the notional amount and trade side specified in the form for swap."
             typographyToken="secondaryBodySmallRegular"
             value={formatCurrency(totalCashflow, true, true, 2, 4)}
