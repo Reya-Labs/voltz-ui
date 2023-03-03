@@ -1,6 +1,6 @@
 import { TokenField, TokenFieldProps } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostSwapThunk,
@@ -22,26 +22,42 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const poolSwapInfo = useAppSelector(selectPoolSwapInfo);
   const dispatch = useAppDispatch();
   const aMM = useAppSelector(selectSwapFormAMM);
+  const [localNotionalAmount, setLocalNotionalAmount] = useState<string | undefined>(
+    notionalAmount.value,
+  );
 
-  const getInfoPostSwap = useCallback(
-    debounce(() => {
-      void dispatch(getInfoPostSwapThunk());
-    }, 1000),
+  useEffect(() => {
+    setLocalNotionalAmount(notionalAmount.value);
+  }, [notionalAmount.value]);
+
+  const changeReduxStateHandler = (value: string | undefined) => {
+    dispatch(
+      setNotionalAmountAction({
+        value: value || '',
+      }),
+    );
+    void dispatch(getInfoPostSwapThunk());
+  };
+  const debouncedGetInfoPostSwap = useMemo(
+    () => debounce(changeReduxStateHandler, 300),
     [dispatch],
   );
 
   const handleOnChange = useCallback(
     (value?: string) => {
-      dispatch(
-        setNotionalAmountAction({
-          value: value || '',
-        }),
-      );
-
-      getInfoPostSwap();
+      setLocalNotionalAmount(value);
+      debouncedGetInfoPostSwap(value);
     },
-    [dispatch, getInfoPostSwap],
+    [dispatch, debouncedGetInfoPostSwap],
   );
+
+  // Stop the invocation of the debounced function
+  // after unmounting
+  useEffect(() => {
+    return () => {
+      debouncedGetInfoPostSwap.cancel();
+    };
+  }, []);
 
   if (!aMM) {
     return null;
@@ -62,7 +78,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
         maxLength={SwapFormNumberLimits.digitLimit}
         token={aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']}
         tooltip="When you swap rates, the amount you receive and pay is calculated as a percentage or the notional value you choose."
-        value={notionalAmount.value}
+        value={localNotionalAmount}
         onChange={handleOnChange}
       />
     </NotionalAmountFieldBox>
