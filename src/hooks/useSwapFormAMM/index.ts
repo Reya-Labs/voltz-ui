@@ -73,13 +73,19 @@ export const useSwapFormAMM = (): UseAMMsResult => {
     if (!chainId) {
       return;
     }
+    if (error) {
+      return;
+    }
+    if (loading) {
+      return;
+    }
     void dispatch(
       setSignerAndPositionForAMMThunk({
         signer,
         chainId,
       }),
     );
-  }, [dispatch, chainId, signer]);
+  }, [dispatch, loading, error, chainId, signer]);
 
   useEffect(() => {
     if (!aMM || !aMM.signer) {

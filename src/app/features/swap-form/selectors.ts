@@ -1,7 +1,84 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
+import {
+  compactFormatToParts,
+  formatNumber,
+  roundIntegerNumber,
+  stringToBigFloat,
+} from '../../../utilities/number';
 import { RootState } from '../../store';
+
+const getExistingPositionFixedRate = (state: RootState) => {
+  if (state.swapForm.position.status !== 'success' || !state.swapForm.position.value) {
+    return null;
+  }
+
+  return Math.abs(
+    state.swapForm.position.value.fixedTokenBalance /
+      state.swapForm.position.value.variableTokenBalance,
+  );
+};
+
+const getExistingPositionMode = (state: RootState) => {
+  if (state.swapForm.position.status !== 'success' || !state.swapForm.position.value) {
+    return null;
+  }
+
+  return state.swapForm.position.value.variableTokenBalance < 0 ? 'fixed' : 'variable';
+};
+
+const getEditPositionTokenBalance = (state: RootState) => {
+  let fixedTokenBalance = 0;
+  let variableTokenBalance = 0;
+
+  if (state.swapForm.position.status === 'success' && state.swapForm.position.value) {
+    fixedTokenBalance += state.swapForm.position.value.fixedTokenBalance;
+    variableTokenBalance += state.swapForm.position.value.variableTokenBalance;
+  }
+
+  if (state.swapForm.prospectiveSwap.infoPostSwap.status === 'success') {
+    fixedTokenBalance += state.swapForm.prospectiveSwap.infoPostSwap.value.fixedTokenDeltaBalance;
+    variableTokenBalance +=
+      state.swapForm.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance;
+  }
+
+  return {
+    fixedTokenBalance,
+    variableTokenBalance,
+  };
+};
+
+const getEditPositionMode = (state: RootState) => {
+  return getEditPositionTokenBalance(state).variableTokenBalance < 0 ? 'fixed' : 'variable';
+};
+
+const getEditPositionFixedRate = (state: RootState) => {
+  const { fixedTokenBalance, variableTokenBalance } = getEditPositionTokenBalance(state);
+  return variableTokenBalance !== 0 ? Math.abs(fixedTokenBalance / variableTokenBalance) : 0;
+};
+
+const getEditPositionNotional = (state: RootState) => {
+  const { variableTokenBalance: notional } = getEditPositionTokenBalance(state);
+  return Math.abs(notional);
+};
+
+const getNewPositionFixedRate = (state: RootState) => {
+  if (state.swapForm.prospectiveSwap.infoPostSwap.status === 'success') {
+    return state.swapForm.prospectiveSwap.infoPostSwap.value.averageFixedRate;
+  }
+
+  if (state.swapForm.fixedRate.status === 'success') {
+    return state.swapForm.fixedRate.value;
+  }
+
+  return null;
+};
+
+const getVariableRate = (state: RootState) => {
+  return state.swapForm.variableRate.status === 'success'
+    ? state.swapForm.variableRate.value
+    : null;
+};
 
 // ------------ General Swap Form State Info ------------
 export const selectSubmitButtonInfo = (state: RootState) => state.swapForm.submitButton;
@@ -13,6 +90,13 @@ export const selectWalletBalanceInfo = (state: RootState) => state.swapForm.wall
 export const selectFixedRateInfo = (state: RootState) => state.swapForm.fixedRate;
 export const selectVariableRateInfo = (state: RootState) => state.swapForm.variableRate;
 export const selectPoolSwapInfo = (state: RootState) => state.swapForm.poolSwapInfo;
+export const selectSwapFormMode = (state: RootState): 'new' | 'edit' => {
+  if (state.swapForm.position.status === 'success' && state.swapForm.position.value) {
+    return 'edit';
+  }
+
+  return 'new';
+};
 
 // ------------ Prospective Swap ------------
 export const selectMode = (state: RootState) => state.swapForm.prospectiveSwap.mode;
@@ -29,6 +113,76 @@ export const selectIsMarginRequiredError = (state: RootState) => {
 };
 export const selectIsWalletMarginError = (state: RootState) => {
   return state.swapForm.prospectiveSwap.marginAmount.error === 'WLT';
+};
+
+export const selectNewPositionReceivingRate = (state: RootState) => {
+  return state.swapForm.prospectiveSwap.mode === 'fixed'
+    ? getNewPositionFixedRate(state)
+    : getVariableRate(state);
+};
+export const selectNewPositionPayingRate = (state: RootState) => {
+  return state.swapForm.prospectiveSwap.mode === 'fixed'
+    ? getVariableRate(state)
+    : getNewPositionFixedRate(state);
+};
+export const selectNewPositionCompactNotional = (state: RootState) => {
+  if (state.swapForm.prospectiveSwap.notionalAmount.error) return null;
+
+  const compactParts = compactFormatToParts(
+    stringToBigFloat(state.swapForm.prospectiveSwap.notionalAmount.value),
+  );
+  return {
+    compactNotionalSuffix: compactParts.compactSuffix,
+    compactNotionalNumber: compactParts.compactNumber,
+  };
+};
+
+export const selectExistingPositionMode = (state: RootState) => {
+  return getExistingPositionMode(state);
+};
+export const selectExistingPositionReceivingRate = (state: RootState) => {
+  return getExistingPositionMode(state) === 'fixed'
+    ? getExistingPositionFixedRate(state)
+    : getVariableRate(state);
+};
+export const selectExistingPositionPayingRate = (state: RootState) => {
+  return getExistingPositionMode(state) === 'fixed'
+    ? getVariableRate(state)
+    : getExistingPositionFixedRate(state);
+};
+export const selectExistingPositionCompactNotional = (state: RootState) => {
+  if (state.swapForm.position.status !== 'success' || !state.swapForm.position.value) {
+    return null;
+  }
+
+  const compactParts = compactFormatToParts(state.swapForm.position.value.notional);
+  return {
+    compactNotionalSuffix: compactParts.compactSuffix,
+    compactNotionalNumber: compactParts.compactNumber,
+  };
+};
+
+export const selectEditPositionMode = (state: RootState) => {
+  return getEditPositionMode(state);
+};
+export const selectEditPositionReceivingRate = (state: RootState) => {
+  return getEditPositionMode(state) === 'fixed'
+    ? getEditPositionFixedRate(state)
+    : getVariableRate(state);
+};
+export const selectEditPositionPayingRate = (state: RootState) => {
+  return getEditPositionMode(state) === 'fixed'
+    ? getVariableRate(state)
+    : getEditPositionFixedRate(state);
+};
+export const selectEditPositionCompactNotional = (state: RootState) => {
+  const notional = getEditPositionNotional(state);
+
+  const compactParts = compactFormatToParts(notional);
+  return {
+    compactNotionalSuffix: compactParts.compactSuffix,
+    compactNotionalNumber: compactParts.compactNumber,
+  };
 };
 
 // ------------ Cashflow Calculator Selectors ------------
