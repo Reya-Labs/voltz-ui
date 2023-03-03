@@ -52,7 +52,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         bottomLeftText={
           isMarginRequiredError ? (marginAmount.error as string) : 'Additional Margin Required'
         }
-        bottomLeftTextColorToken={isMarginRequiredError ? 'wildStrawberry3' : 'lavenderWeb3'}
+        bottomLeftTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb3'}
         bottomLeftTextTypographyToken="primaryBodyXSmallRegular"
         bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
@@ -70,7 +70,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         }
         tooltip="The protocol requires every position to have enough collateral to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."
         topRightText={`Wallet: ${walletValue}`}
-        topRightTextColorToken={isWalletMarginError ? 'wildStrawberry2' : 'lavenderWeb2'}
+        topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
         topRightTextTypographyToken="secondaryBodySmallRegular"
         value={marginAmount.value}
         onChange={handleOnChange}
