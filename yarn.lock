@@ -20309,11 +20309,6 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-moving-text@0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/react-moving-text/-/react-moving-text-0.0.7.tgz#afa2e3d6a52cc6707bf869ce4d37d7df04993e75"
-  integrity sha512-WA72if8QS2/QVOmZ2mDnWu1UFkMqt7Y1TFLfKT3MDRwPbcpz2F7WAyGi349anuKth0bQKg0CQddlQLQQiII8zQ==
-
 react-native-get-random-values@^1.4.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.8.0.tgz#1cb4bd4bd3966a356e59697b8f372999fe97cb16"

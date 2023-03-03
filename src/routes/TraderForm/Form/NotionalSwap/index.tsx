@@ -1,7 +1,6 @@
 import { TokenTypography, Typography, TypographyWithTooltip } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useState } from 'react';
-import MovingComponent from 'react-moving-text';
 
 import {
   getInfoPostSwapThunk,
@@ -23,7 +22,7 @@ import {
   TopTextContent,
 } from './NotionalSwap.styled';
 
-export const NotionalSwap: React.FunctionComponent<{}> = () => {
+export const NotionalSwap: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
@@ -69,18 +68,9 @@ export const NotionalSwap: React.FunctionComponent<{}> = () => {
       <NotionalSwapBox>
         <NotionalSwapFixedBox>
           <TopTextContent>
-            <MovingComponent
-              key={mode}
-              duration="1000ms"
-              fillMode="forwards"
-              iteration={1}
-              timing="linear"
-              type="shakeMix"
-            >
-              <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
-                {isFixedMode ? 'Receive Fixed' : 'Receive Variable'}
-              </Typography>
-            </MovingComponent>
+            <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
+              {isFixedMode ? 'Receive Fixed' : 'Receive Variable'}
+            </Typography>
             <TokenTypography
               colorToken={isFixedMode ? 'skyBlueCrayola' : 'ultramarineBlue'}
               token="%"
