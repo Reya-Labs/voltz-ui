@@ -24,7 +24,7 @@ export const ChartFilterButtonBox = styled('div', {
   background: ${({ active }) => (active ? colors.lavenderWeb7 : 'transparent')};
 
   border-radius: 4px;
-  transition: background 300ms ease-in;
+  transition: background 200ms ease-in;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   &:hover {
