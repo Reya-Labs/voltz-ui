@@ -1,5 +1,5 @@
 import { AMM } from '@voltz-protocol/v1-sdk';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { selectChainId } from '../../app/features/network';
@@ -30,10 +30,11 @@ export type UseAMMsResult = {
 export const useSwapFormAMM = (): UseAMMsResult => {
   const dispatch = useAppDispatch();
   const { ammId, poolId } = useParams();
-  const { aMMs, loading, error, idle } = useAMMs();
+  const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
   const aMM = useAppSelector(selectSwapFormAMM);
   const positionFetchingStatus = useAppSelector(selectSwapFormPositionFetchingStatus);
   const chainId = useAppSelector(selectChainId);
+  const [loading, setLoading] = useState(true);
 
   const { signer } = useWallet();
 
@@ -42,21 +43,27 @@ export const useSwapFormAMM = (): UseAMMsResult => {
       return;
     }
     if (error) {
+      setLoading(false);
       return;
     }
-    if (loading) {
+    if (aMMsLoading || idle) {
       return;
     }
     const foundAMM = aMMs.find(
       (a) => ammId === generateAmmIdForRoute(a) && poolId === generatePoolId(a),
     );
+    if (aMM && foundAMM && aMM.id === foundAMM.id) {
+      setLoading(false);
+      return;
+    }
 
     dispatch(
       setSwapFormAMMAction({
         amm: foundAMM ? foundAMM : null,
       }),
     );
-  }, [dispatch, ammId, poolId, aMMs, loading, error]);
+    setLoading(false);
+  }, [aMM, dispatch, ammId, poolId, idle, aMMs, aMMsLoading, error]);
 
   useEffect(() => {
     if (!aMM) {
@@ -76,7 +83,7 @@ export const useSwapFormAMM = (): UseAMMsResult => {
     if (error) {
       return;
     }
-    if (loading) {
+    if (aMMsLoading) {
       return;
     }
     void dispatch(
@@ -85,7 +92,7 @@ export const useSwapFormAMM = (): UseAMMsResult => {
         chainId,
       }),
     );
-  }, [dispatch, loading, error, chainId, signer]);
+  }, [dispatch, aMMsLoading, error, chainId, signer]);
 
   useEffect(() => {
     if (!aMM || !aMM.signer) {
