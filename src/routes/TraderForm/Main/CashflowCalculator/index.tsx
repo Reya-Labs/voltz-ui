@@ -1,5 +1,6 @@
 import { CurrencyField, LabelTokenTypography, Typography } from 'brokoli-ui';
-import React, { useCallback, useEffect } from 'react';
+import debounce from 'lodash.debounce';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   initialiseCashflowCalculatorThunk,
@@ -31,8 +32,15 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
 
   const predictedApy = useAppSelector(selectPredictedApy);
 
-  const additonalCashflow = useAppSelector(selectAdditionalCashflow);
+  const additionalCashflow = useAppSelector(selectAdditionalCashflow);
   const totalCashflow = useAppSelector(selectTotalCashflow);
+  const [localPredictedApyLocal, setLocalPredictedApyLocal] = useState<string | undefined>(
+    predictedApy,
+  );
+
+  useEffect(() => {
+    setLocalPredictedApyLocal(predictedApy);
+  }, [predictedApy]);
 
   useEffect(() => {
     if (!aMM) {
@@ -41,19 +49,33 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
     void dispatch(initialiseCashflowCalculatorThunk());
   }, [dispatch, aMM]);
 
-  const handleOnChange = useCallback(
-    (value?: string) => {
-      if (!value) {
-        return;
-      }
-      dispatch(
-        setPredictedApyAction({
-          value,
-        }),
-      );
-    },
+  const debouncedChangePredictedApy = useMemo(
+    () =>
+      debounce((value?: string) => {
+        dispatch(
+          setPredictedApyAction({
+            value: value || '',
+          }),
+        );
+      }, 300),
     [dispatch],
   );
+
+  const handleOnChange = useCallback(
+    (value?: string) => {
+      setLocalPredictedApyLocal(value);
+      debouncedChangePredictedApy(value);
+    },
+    [dispatch, debouncedChangePredictedApy],
+  );
+
+  // Stop the invocation of the debounced function
+  // after unmounting
+  useEffect(() => {
+    return () => {
+      debouncedChangePredictedApy.cancel();
+    };
+  }, []);
 
   if (!aMM) {
     return null;
@@ -75,7 +97,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             allowNegativeValue={false}
             disabled={status !== 'success'}
             suffix="%"
-            value={predictedApy}
+            value={localPredictedApyLocal}
             onChange={handleOnChange}
           />
         </ExpectedApyBox>
@@ -88,7 +110,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             token={` ${aMM.underlyingToken.name.toUpperCase()}`}
             tooltip="Calculated based on the notional amount and trade side specified in the form for swap."
             typographyToken="secondaryBodySmallRegular"
-            value={formatCurrency(additonalCashflow, true, true, 2, 4)}
+            value={formatCurrency(additionalCashflow, true, true, 2, 4)}
           />
         </AdditionalCashFlowBox>
         <TotalCashFlowBox>

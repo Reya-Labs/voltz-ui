@@ -214,6 +214,11 @@ const updateCashflowCalculator = (state: Draft<SliceState>): void => {
   if (state.cashflowCalculator.variableFactorStartNow.status !== 'success') {
     return;
   }
+  if (!state.cashflowCalculator.predictedApy) {
+    state.cashflowCalculator.additionalCashflow = 0;
+    state.cashflowCalculator.totalCashflow = 0;
+    return;
+  }
 
   const { additionalCashflow, totalCashflow } = state.amm.getExpectedCashflowInfo({
     position: state.position.value as Position,

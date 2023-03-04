@@ -30,16 +30,16 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     setLocalNotionalAmount(notionalAmount.value);
   }, [notionalAmount.value]);
 
-  const changeReduxStateHandler = (value: string | undefined) => {
-    dispatch(
-      setNotionalAmountAction({
-        value: value || '',
-      }),
-    );
-    void dispatch(getInfoPostSwapThunk());
-  };
   const debouncedGetInfoPostSwap = useMemo(
-    () => debounce(changeReduxStateHandler, 300),
+    () =>
+      debounce((value: string | undefined) => {
+        dispatch(
+          setNotionalAmountAction({
+            value: value || '',
+          }),
+        );
+        void dispatch(getInfoPostSwapThunk());
+      }, 300),
     [dispatch],
   );
 
