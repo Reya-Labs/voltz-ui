@@ -2,10 +2,10 @@ import { LabelTokenTypography } from 'brokoli-ui';
 import React from 'react';
 
 import {
-  selectMode,
   selectNewPositionCompactNotional,
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
+  selectProspectiveSwapMode,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { formatNumber } from '../../../../utilities/number';
@@ -30,7 +30,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
   const receivingRate = useAppSelector(selectNewPositionReceivingRate);
   const payingRate = useAppSelector(selectNewPositionPayingRate);
   const compactNotional = useAppSelector(selectNewPositionCompactNotional);
-  const mode = useAppSelector(selectMode);
+  const mode = useAppSelector(selectProspectiveSwapMode);
 
   return (
     <PositionDetailsBox>

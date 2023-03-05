@@ -1,41 +1,39 @@
-import { TokenField, TokenFieldProps } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostSwapThunk,
-  selectMode,
-  selectNotionalAmount,
-  selectPoolSwapInfo,
   selectSwapFormAMM,
+  selectSwapFormPosition,
+  selectUserInputNotionalInfo,
   setNotionalAmountAction,
-  SwapFormNumberLimits,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { formatNumber } from '../../../../utilities/number';
-import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
-type NotionalAmountProps = {};
+import { stringToBigFloat } from '../../../../utilities/number';
+import { EditNotionalAmountFieldUI } from './EditNotionalAmountFieldUI';
+import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 
+type NotionalAmountProps = {};
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
-  const notionalAmount = useAppSelector(selectNotionalAmount);
-  const mode = useAppSelector(selectMode);
-  const poolSwapInfo = useAppSelector(selectPoolSwapInfo);
+  const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
+  const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
+  const [localNotional, setLocalNotional] = useState<number | null>(notionalAmount.value);
+
   const dispatch = useAppDispatch();
   const aMM = useAppSelector(selectSwapFormAMM);
-  const [localNotionalAmount, setLocalNotionalAmount] = useState<string | undefined>(
-    notionalAmount.value,
-  );
+  const position = useAppSelector(selectSwapFormPosition);
 
   useEffect(() => {
-    setLocalNotionalAmount(notionalAmount.value);
+    setLocalNotional(notionalAmount.value);
   }, [notionalAmount.value]);
 
   const debouncedGetInfoPostSwap = useMemo(
     () =>
-      debounce((value: string | undefined) => {
+      debounce((value: number | null, editMode: 'add' | 'remove') => {
         dispatch(
           setNotionalAmountAction({
-            value: value || '',
+            value: value,
+            editMode: editMode,
           }),
         );
         void dispatch(getInfoPostSwapThunk());
@@ -43,12 +41,25 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     [dispatch],
   );
 
-  const handleOnChange = useCallback(
+  const handleOnNotionalChange = useCallback(
     (value?: string) => {
-      setLocalNotionalAmount(value);
-      debouncedGetInfoPostSwap(value);
+      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
+      setLocalNotional(valueAsNumber);
+      debouncedGetInfoPostSwap(valueAsNumber, localEditMode);
     },
-    [dispatch, debouncedGetInfoPostSwap],
+    [debouncedGetInfoPostSwap, localEditMode],
+  );
+
+  const handleOnSwitchChange = useCallback(
+    (value: string) => {
+      if (value !== 'add' && value !== 'remove') {
+        return;
+      }
+
+      setLocalEditMode(value);
+      debouncedGetInfoPostSwap(localNotional, value);
+    },
+    [debouncedGetInfoPostSwap, localNotional],
   );
 
   // Stop the invocation of the debounced function
@@ -63,24 +74,20 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     return null;
   }
 
-  return (
-    <NotionalAmountFieldBox>
-      <TokenField
-        allowNegativeValue={false}
-        bottomLeftText={notionalAmount.error ? notionalAmount.error : 'Liquidity Available'}
-        bottomLeftTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb3'}
-        bottomRightTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
-        bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
-        bottomRightTextValue={formatNumber(poolSwapInfo.availableNotional[mode])}
-        decimalsLimit={SwapFormNumberLimits.decimalLimit}
-        error={notionalAmount.error !== null}
-        label="Notional amount"
-        maxLength={SwapFormNumberLimits.digitLimit}
-        token={aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']}
-        tooltip="When you swap rates, the amount you receive and pay is calculated as a percentage or the notional value you choose."
-        value={localNotionalAmount}
-        onChange={handleOnChange}
-      />
-    </NotionalAmountFieldBox>
+  return !position ? (
+    <NewNotionalAmountFieldUI
+      handleOnNotionalChange={handleOnNotionalChange}
+      localNotional={localNotional}
+      underlyingTokenName={aMM.underlyingToken.name}
+    />
+  ) : (
+    <EditNotionalAmountFieldUI
+      handleOnNotionalChange={handleOnNotionalChange}
+      handleOnSwitchChange={handleOnSwitchChange}
+      localEditMode={localEditMode}
+      localNotional={localNotional}
+      position={position}
+      underlyingTokenName={aMM.underlyingToken.name}
+    />
   );
 };
