@@ -158,7 +158,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               fromValue={
                 existingPositionPayingRate ? formatNumber(existingPositionPayingRate) : '--'
               }
-              label="Receiving"
+              label="Paying"
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
               toColorToken="lavenderWeb"

@@ -5,9 +5,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   getInfoPostSwapThunk,
   selectFixedRateInfo,
-  selectMode,
+  selectUserInputMode,
   selectVariableRateInfo,
-  setModeAction,
+  setUserInputModeAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { formatNumber } from '../../../../utilities/number';
@@ -27,7 +27,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
 
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
-  const mode = useAppSelector(selectMode);
+  const mode = useAppSelector(selectUserInputMode);
 
   const fixedRate = fixedRateInfo.status === 'success' ? formatNumber(fixedRateInfo.value) : '--';
   const variableRate =
@@ -40,7 +40,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
         return;
       }
       dispatch(
-        setModeAction({
+        setUserInputModeAction({
           value,
         }),
       );

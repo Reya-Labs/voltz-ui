@@ -5,20 +5,20 @@ import {
   selectInfoPostSwap,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
-  selectMarginAmount,
   selectSwapFormAMM,
+  selectUserInputMarginInfo,
   selectWalletBalanceInfo,
   setMarginAmountAction,
   SwapFormNumberLimits,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { compactFormat, formatNumber } from '../../../../utilities/number';
+import { compactFormat, formatNumber, stringToBigFloat } from '../../../../utilities/number';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 type NotionalAmountProps = {};
 
 export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const dispatch = useAppDispatch();
-  const marginAmount = useAppSelector(selectMarginAmount);
+  const marginAmount = useAppSelector(selectUserInputMarginInfo);
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const aMM = useAppSelector(selectSwapFormAMM);
 
@@ -28,12 +28,9 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
   const walletBalance = useAppSelector(selectWalletBalanceInfo);
   const handleOnChange = useCallback(
     (value?: string) => {
-      if (!value) {
-        return;
-      }
       dispatch(
         setMarginAmountAction({
-          value,
+          value: value !== undefined ? stringToBigFloat(value) : null,
         }),
       );
     },
@@ -72,7 +69,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         topRightText={`Wallet: ${`${walletValue} ${aMM.underlyingToken.name.toUpperCase()}`}`}
         topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
         topRightTextTypographyToken="secondaryBodySmallRegular"
-        value={marginAmount.value}
+        value={marginAmount.value !== null ? marginAmount.value.toString() : undefined}
         onChange={handleOnChange}
       />
     </MarginAmountFieldBox>

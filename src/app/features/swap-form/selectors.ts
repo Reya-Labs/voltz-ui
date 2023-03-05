@@ -7,78 +7,16 @@ import {
   stringToBigFloat,
 } from '../../../utilities/number';
 import { RootState } from '../../store';
-
-const getExistingPositionFixedRate = (state: RootState) => {
-  if (state.swapForm.position.status !== 'success' || !state.swapForm.position.value) {
-    return null;
-  }
-
-  return Math.abs(
-    state.swapForm.position.value.fixedTokenBalance /
-      state.swapForm.position.value.variableTokenBalance,
-  );
-};
-
-const getExistingPositionMode = (state: RootState) => {
-  if (state.swapForm.position.status !== 'success' || !state.swapForm.position.value) {
-    return null;
-  }
-
-  return state.swapForm.position.value.variableTokenBalance < 0 ? 'fixed' : 'variable';
-};
-
-const getEditPositionTokenBalance = (state: RootState) => {
-  let fixedTokenBalance = 0;
-  let variableTokenBalance = 0;
-
-  if (state.swapForm.position.status === 'success' && state.swapForm.position.value) {
-    fixedTokenBalance += state.swapForm.position.value.fixedTokenBalance;
-    variableTokenBalance += state.swapForm.position.value.variableTokenBalance;
-  }
-
-  if (state.swapForm.prospectiveSwap.infoPostSwap.status === 'success') {
-    fixedTokenBalance += state.swapForm.prospectiveSwap.infoPostSwap.value.fixedTokenDeltaBalance;
-    variableTokenBalance +=
-      state.swapForm.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance;
-  }
-
-  return {
-    fixedTokenBalance,
-    variableTokenBalance,
-  };
-};
-
-const getEditPositionMode = (state: RootState) => {
-  return getEditPositionTokenBalance(state).variableTokenBalance < 0 ? 'fixed' : 'variable';
-};
-
-const getEditPositionFixedRate = (state: RootState) => {
-  const { fixedTokenBalance, variableTokenBalance } = getEditPositionTokenBalance(state);
-  return variableTokenBalance !== 0 ? Math.abs(fixedTokenBalance / variableTokenBalance) : 0;
-};
-
-const getEditPositionNotional = (state: RootState) => {
-  const { variableTokenBalance: notional } = getEditPositionTokenBalance(state);
-  return Math.abs(notional);
-};
-
-const getNewPositionFixedRate = (state: RootState) => {
-  if (state.swapForm.prospectiveSwap.infoPostSwap.status === 'success') {
-    return state.swapForm.prospectiveSwap.infoPostSwap.value.averageFixedRate;
-  }
-
-  if (state.swapForm.fixedRate.status === 'success') {
-    return state.swapForm.fixedRate.value;
-  }
-
-  return null;
-};
-
-const getVariableRate = (state: RootState) => {
-  return state.swapForm.variableRate.status === 'success'
-    ? state.swapForm.variableRate.value
-    : null;
-};
+import {
+  getEditPositionFixedRate,
+  getEditPositionMode,
+  getEditPositionNotional,
+  getExistingPositionFixedRate,
+  getExistingPositionMode,
+  getNewPositionFixedRate,
+  getVariableRate,
+  hasExistingPosition,
+} from './utils';
 
 // ------------ General Swap Form State Info ------------
 export const selectSubmitButtonInfo = (state: RootState) => state.swapForm.submitButton;
@@ -91,46 +29,46 @@ export const selectFixedRateInfo = (state: RootState) => state.swapForm.fixedRat
 export const selectVariableRateInfo = (state: RootState) => state.swapForm.variableRate;
 export const selectPoolSwapInfo = (state: RootState) => state.swapForm.poolSwapInfo;
 export const selectSwapFormMode = (state: RootState): 'new' | 'edit' => {
-  if (state.swapForm.position.status === 'success' && state.swapForm.position.value) {
-    return 'edit';
-  }
-
-  return 'new';
+  return hasExistingPosition(state.swapForm) ? 'edit' : 'new';
 };
 
+// User Input
+export const selectUserInputMode = (state: RootState) => state.swapForm.userInput.mode;
+export const selectUserInputNotionalInfo = (state: RootState) =>
+  state.swapForm.userInput.notionalAmount;
+export const selectUserInputMarginInfo = (state: RootState) =>
+  state.swapForm.userInput.marginAmount;
+
 // ------------ Prospective Swap ------------
-export const selectMode = (state: RootState) => state.swapForm.prospectiveSwap.mode;
-export const selectNotionalAmount = (state: RootState) =>
+export const selectProspectiveSwapMode = (state: RootState) => state.swapForm.prospectiveSwap.mode;
+export const selectProspectiveSwapNotional = (state: RootState) =>
   state.swapForm.prospectiveSwap.notionalAmount;
-export const selectMarginAmount = (state: RootState) => state.swapForm.prospectiveSwap.marginAmount;
-export const selectLeverage = (state: RootState) => state.swapForm.prospectiveSwap.leverage;
+export const selectLeverage = (state: RootState) => state.swapForm.userInput.leverage;
 export const selectInfoPostSwap = (state: RootState) => state.swapForm.prospectiveSwap.infoPostSwap;
 export const selectIsMarginRequiredError = (state: RootState) => {
   return (
-    state.swapForm.prospectiveSwap.marginAmount.error !== null &&
-    state.swapForm.prospectiveSwap.marginAmount.error !== 'WLT'
+    state.swapForm.userInput.marginAmount.error !== null &&
+    state.swapForm.userInput.marginAmount.error !== 'WLT'
   );
 };
 export const selectIsWalletMarginError = (state: RootState) => {
-  return state.swapForm.prospectiveSwap.marginAmount.error === 'WLT';
+  return state.swapForm.userInput.marginAmount.error === 'WLT';
 };
 
 export const selectNewPositionReceivingRate = (state: RootState) => {
   return state.swapForm.prospectiveSwap.mode === 'fixed'
-    ? getNewPositionFixedRate(state)
-    : getVariableRate(state);
+    ? getNewPositionFixedRate(state.swapForm)
+    : getVariableRate(state.swapForm);
 };
 export const selectNewPositionPayingRate = (state: RootState) => {
   return state.swapForm.prospectiveSwap.mode === 'fixed'
-    ? getVariableRate(state)
-    : getNewPositionFixedRate(state);
+    ? getVariableRate(state.swapForm)
+    : getNewPositionFixedRate(state.swapForm);
 };
 export const selectNewPositionCompactNotional = (state: RootState) => {
-  if (state.swapForm.prospectiveSwap.notionalAmount.error) return null;
+  if (state.swapForm.userInput.notionalAmount.error) return null;
 
-  const compactParts = compactFormatToParts(
-    stringToBigFloat(state.swapForm.prospectiveSwap.notionalAmount.value),
-  );
+  const compactParts = compactFormatToParts(state.swapForm.prospectiveSwap.notionalAmount);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -138,17 +76,17 @@ export const selectNewPositionCompactNotional = (state: RootState) => {
 };
 
 export const selectExistingPositionMode = (state: RootState) => {
-  return getExistingPositionMode(state);
+  return getExistingPositionMode(state.swapForm);
 };
 export const selectExistingPositionReceivingRate = (state: RootState) => {
-  return getExistingPositionMode(state) === 'fixed'
-    ? getExistingPositionFixedRate(state)
-    : getVariableRate(state);
+  return getExistingPositionMode(state.swapForm) === 'fixed'
+    ? getExistingPositionFixedRate(state.swapForm)
+    : getVariableRate(state.swapForm);
 };
 export const selectExistingPositionPayingRate = (state: RootState) => {
-  return getExistingPositionMode(state) === 'fixed'
-    ? getVariableRate(state)
-    : getExistingPositionFixedRate(state);
+  return getExistingPositionMode(state.swapForm) === 'fixed'
+    ? getVariableRate(state.swapForm)
+    : getExistingPositionFixedRate(state.swapForm);
 };
 export const selectExistingPositionCompactNotional = (state: RootState) => {
   if (state.swapForm.position.status !== 'success' || !state.swapForm.position.value) {
@@ -163,20 +101,20 @@ export const selectExistingPositionCompactNotional = (state: RootState) => {
 };
 
 export const selectEditPositionMode = (state: RootState) => {
-  return getEditPositionMode(state);
+  return getEditPositionMode(state.swapForm);
 };
 export const selectEditPositionReceivingRate = (state: RootState) => {
-  return getEditPositionMode(state) === 'fixed'
-    ? getEditPositionFixedRate(state)
-    : getVariableRate(state);
+  return getEditPositionMode(state.swapForm) === 'fixed'
+    ? getEditPositionFixedRate(state.swapForm)
+    : getVariableRate(state.swapForm);
 };
 export const selectEditPositionPayingRate = (state: RootState) => {
-  return getEditPositionMode(state) === 'fixed'
-    ? getVariableRate(state)
-    : getEditPositionFixedRate(state);
+  return getEditPositionMode(state.swapForm) === 'fixed'
+    ? getVariableRate(state.swapForm)
+    : getEditPositionFixedRate(state.swapForm);
 };
 export const selectEditPositionCompactNotional = (state: RootState) => {
-  const notional = getEditPositionNotional(state);
+  const notional = getEditPositionNotional(state.swapForm);
 
   const compactParts = compactFormatToParts(notional);
   return {
@@ -236,6 +174,10 @@ export const selectSubmitButtonText = (state: RootState) => {
 };
 
 // ------------ Leverage ------------
+export const selectIsLeverageDisabled = (state: RootState) => {
+  return state.swapForm.prospectiveSwap.notionalAmount === 0;
+};
+
 export const selectLeverageOptions = (state: RootState) => {
   const swapFormState = state.swapForm;
 
@@ -248,13 +190,13 @@ export const selectLeverageOptions = (state: RootState) => {
     );
   }
   if (
-    !swapFormState.prospectiveSwap.notionalAmount.error &&
+    !swapFormState.userInput.notionalAmount.error &&
     swapFormState.prospectiveSwap.infoPostSwap.status === 'success'
   ) {
     if (swapFormState.prospectiveSwap.infoPostSwap.value.marginRequirement > 0) {
       maxLeverage = formatNumber(
         Math.floor(
-          stringToBigFloat(swapFormState.prospectiveSwap.notionalAmount.value) /
+          swapFormState.prospectiveSwap.notionalAmount /
             swapFormState.prospectiveSwap.infoPostSwap.value.marginRequirement,
         ),
         0,
