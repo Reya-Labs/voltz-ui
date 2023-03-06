@@ -17,22 +17,24 @@ type NotionalAmountProps = {};
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
   const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
-  const [localNotional, setLocalNotional] = useState<number | null>(notionalAmount.value);
+  const [localNotional, setLocalNotional] = useState<string | null>(
+    notionalAmount.value.toString(),
+  );
 
   const dispatch = useAppDispatch();
   const aMM = useAppSelector(selectSwapFormAMM);
   const position = useAppSelector(selectSwapFormPosition);
 
   useEffect(() => {
-    setLocalNotional(notionalAmount.value);
+    setLocalNotional(notionalAmount.value.toString());
   }, [notionalAmount.value]);
 
   const debouncedGetInfoPostSwap = useMemo(
     () =>
-      debounce((value: number | null, editMode: 'add' | 'remove') => {
+      debounce((value: number | null | undefined, editMode: 'add' | 'remove' | undefined) => {
         dispatch(
           setNotionalAmountAction({
-            value: value,
+            value: value === undefined ? undefined : value ?? 0,
             editMode: editMode,
           }),
         );
@@ -43,11 +45,12 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const handleOnNotionalChange = useCallback(
     (value?: string) => {
+      setLocalNotional(value ?? null);
+
       const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
-      setLocalNotional(valueAsNumber);
-      debouncedGetInfoPostSwap(valueAsNumber, localEditMode);
+      debouncedGetInfoPostSwap(valueAsNumber, undefined);
     },
-    [debouncedGetInfoPostSwap, localEditMode],
+    [debouncedGetInfoPostSwap],
   );
 
   const handleOnSwitchChange = useCallback(
@@ -57,9 +60,9 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       }
 
       setLocalEditMode(value);
-      debouncedGetInfoPostSwap(localNotional, value);
+      debouncedGetInfoPostSwap(undefined, value);
     },
-    [debouncedGetInfoPostSwap, localNotional],
+    [debouncedGetInfoPostSwap],
   );
 
   // Stop the invocation of the debounced function

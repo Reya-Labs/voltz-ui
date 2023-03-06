@@ -1,5 +1,5 @@
 import { TokenField, TokenFieldProps } from 'brokoli-ui';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   selectInfoPostSwap,
@@ -25,12 +25,22 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
   const isMarginRequiredError = useAppSelector(selectIsMarginRequiredError);
   const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
 
+  const [localMargin, setLocalMargin] = useState<string | null>(marginAmount.value.toString());
+
   const walletBalance = useAppSelector(selectWalletBalanceInfo);
+
+  useEffect(() => {
+    setLocalMargin(marginAmount.value.toString());
+  }, [marginAmount.value]);
+
   const handleOnChange = useCallback(
     (value?: string) => {
+      setLocalMargin(value ?? null);
+
+      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
       dispatch(
         setMarginAmountAction({
-          value: value !== undefined ? stringToBigFloat(value) : null,
+          value: valueAsNumber ?? 0,
         }),
       );
     },
@@ -69,7 +79,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         topRightText={`Wallet: ${`${walletValue} ${aMM.underlyingToken.name.toUpperCase()}`}`}
         topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
         topRightTextTypographyToken="secondaryBodySmallRegular"
-        value={marginAmount.value !== null ? marginAmount.value.toString() : undefined}
+        value={localMargin !== null ? localMargin : undefined}
         onChange={handleOnChange}
       />
     </MarginAmountFieldBox>

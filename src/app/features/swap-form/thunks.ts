@@ -5,6 +5,7 @@ import { ContractReceipt, providers } from 'ethers';
 import { findCurrentPosition } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
 import { RootState } from '../../store';
+import { isUserInputNotionalError } from './utils';
 
 const rejectThunkWithError = (
   thunkAPI: {
@@ -158,7 +159,11 @@ export const getInfoPostSwapThunk = createAsyncThunk<
   try {
     const swapFormState = thunkAPI.getState().swapForm;
     const amm = swapFormState.amm;
-    if (!amm || swapFormState.prospectiveSwap.notionalAmount === 0) {
+    if (
+      !amm ||
+      swapFormState.prospectiveSwap.notionalAmount === 0 ||
+      isUserInputNotionalError(swapFormState)
+    ) {
       return {
         notionalAmount: NaN,
         swapMode: 'fixed',
