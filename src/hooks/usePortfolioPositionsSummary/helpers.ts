@@ -70,7 +70,7 @@ export const getNetReceivingRate = (
   if (agent === Agents.LIQUIDITY_PROVIDER) {
     return 0;
   }
-  
+
   let netReceivingRate = 0;
   let totalNotional = 0;
 
