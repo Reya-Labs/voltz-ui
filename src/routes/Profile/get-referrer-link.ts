@@ -1,4 +1,4 @@
-import axios from 'axios';
+import fetch from 'isomorphic-fetch';
 
 import { routes } from '../../routes/paths';
 import { REFERRER_QUERY_PARAM_KEY } from '../../utilities/referrer-store/constants';
@@ -15,15 +15,17 @@ export const getReferrerLink = async (account: string) => {
   }
 
   try {
-    const data = (
-      await axios.get<{
-        status?: string;
-        description?: string;
-        refers_with_code?: string;
-        wallet_address?: string;
-      }>(`${baseUrl}/get-refers-with/${account}`)
-    )?.data;
+    const response = await fetch(`${baseUrl}/get-refers-with/${account}`);
 
+    if (!response.ok) {
+      throw response;
+    }
+    const data = (await response.json()) as {
+      status?: string;
+      description?: string;
+      refers_with_code?: string;
+      wallet_address?: string;
+    };
     if (!data?.refers_with_code) {
       return undefined;
     }
