@@ -144,7 +144,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           {samePayingRate ? (
             <LabelTokenTypography
               colorToken="lavenderWeb"
-              label="Receiving"
+              label="Paying"
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
               token="%"
@@ -158,7 +158,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               fromValue={
                 existingPositionPayingRate ? formatNumber(existingPositionPayingRate) : '--'
               }
-              label="Receiving"
+              label="Paying"
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
               toColorToken="lavenderWeb"

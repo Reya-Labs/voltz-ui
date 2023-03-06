@@ -3,15 +3,15 @@ import React from 'react';
 
 import {
   selectInfoPostSwap,
-  selectMarginAmount,
-  selectMode,
-  selectNotionalAmount,
+  selectProspectiveSwapMode,
+  selectProspectiveSwapNotional,
   selectSwapFormAMM,
+  selectUserInputMarginInfo,
   selectVariableRateInfo,
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatTimestamp } from '../../../../../utilities/date';
-import { compactFormat, formatNumber, stringToBigFloat } from '../../../../../utilities/number';
+import { compactFormat, formatNumber } from '../../../../../utilities/number';
 import { SwapDetailBox, SwapDetailsBox } from './SwapDetails.styled';
 
 type SwapDetailsProps = {};
@@ -19,9 +19,9 @@ type SwapDetailsProps = {};
 export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
-  const mode = useAppSelector(selectMode);
-  const notionalInfo = useAppSelector(selectNotionalAmount);
-  const marginInfo = useAppSelector(selectMarginAmount);
+  const mode = useAppSelector(selectProspectiveSwapMode);
+  const prospectiveSwapNotional = useAppSelector(selectProspectiveSwapNotional);
+  const marginInfo = useAppSelector(selectUserInputMarginInfo);
 
   const aMM = useAppSelector(selectSwapFormAMM);
   const fixedRate = formatNumber(infoPostSwap.value.averageFixedRate);
@@ -30,7 +30,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
 
-  if (!aMM) {
+  if (!aMM || marginInfo.value === null) {
     return null;
   }
 
@@ -66,7 +66,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           colorToken="lavenderWeb"
           token={` ${aMM.underlyingToken.name.toUpperCase()}`}
           typographyToken="secondaryBodySmallRegular"
-          value={compactFormat(stringToBigFloat(notionalInfo.value))}
+          value={compactFormat(prospectiveSwapNotional)}
         />
       </SwapDetailBox>
       <SwapDetailBox>
@@ -77,7 +77,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           colorToken="lavenderWeb"
           token={` ${aMM.underlyingToken.name.toUpperCase()}`}
           typographyToken="secondaryBodySmallRegular"
-          value={compactFormat(stringToBigFloat(marginInfo.value))}
+          value={compactFormat(marginInfo.value)}
         />
       </SwapDetailBox>
       <SwapDetailBox>

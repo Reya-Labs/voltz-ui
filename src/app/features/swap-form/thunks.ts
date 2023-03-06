@@ -4,9 +4,8 @@ import { ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPosition } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
-import { stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
-import { isNotionalStrictlyPositive } from './utils';
+import { isUserInputNotionalError } from './utils';
 
 const rejectThunkWithError = (
   thunkAPI: {
@@ -146,7 +145,12 @@ export const initialiseCashflowCalculatorThunk = createAsyncThunk<
 
 export const getInfoPostSwapThunk = createAsyncThunk<
   Awaited<
-    | { notionalAmount: number; infoPostSwapV1: InfoPostSwapV1; earlyReturn: boolean }
+    | {
+        notionalAmount: number;
+        swapMode: 'fixed' | 'variable';
+        infoPostSwapV1: InfoPostSwapV1;
+        earlyReturn: boolean;
+      }
     | ReturnType<typeof rejectThunkWithError>
   >,
   void,
@@ -155,15 +159,20 @@ export const getInfoPostSwapThunk = createAsyncThunk<
   try {
     const swapFormState = thunkAPI.getState().swapForm;
     const amm = swapFormState.amm;
-    if (!amm || !isNotionalStrictlyPositive(swapFormState)) {
+    if (
+      !amm ||
+      swapFormState.prospectiveSwap.notionalAmount === 0 ||
+      isUserInputNotionalError(swapFormState)
+    ) {
       return {
         notionalAmount: NaN,
+        swapMode: 'fixed',
         infoPostSwap: {},
         earlyReturn: true,
       };
     }
 
-    const notionalAmount = stringToBigFloat(swapFormState.prospectiveSwap.notionalAmount.value);
+    const notionalAmount = swapFormState.prospectiveSwap.notionalAmount;
     const infoPostSwapV1 = await amm.getInfoPostSwapV1({
       isFT: swapFormState.prospectiveSwap.mode === 'fixed',
       notional: notionalAmount,
@@ -172,10 +181,15 @@ export const getInfoPostSwapThunk = createAsyncThunk<
     });
 
     // margin requirement is collateral only now
-    infoPostSwapV1.marginRequirement -= infoPostSwapV1.fee;
+    if (infoPostSwapV1.marginRequirement > infoPostSwapV1.fee) {
+      infoPostSwapV1.marginRequirement -= infoPostSwapV1.fee;
+    } else {
+      infoPostSwapV1.marginRequirement = 0;
+    }
 
     return {
       notionalAmount,
+      swapMode: swapFormState.prospectiveSwap.mode,
       infoPostSwap: infoPostSwapV1,
       earlyReturn: false,
     };
@@ -222,7 +236,7 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
     }
     // TODO: Alex possible to move filter into subgraph level? Discuss
     const nonBorrowPositions = positions.filter((pos) => !isBorrowingPosition(pos));
-    const position = findCurrentPosition(nonBorrowPositions || [], amm.id);
+    const position = findCurrentPosition(nonBorrowPositions || [], amm.id) || null;
     return {
       position,
       signer,
@@ -240,15 +254,15 @@ export const confirmSwapThunk = createAsyncThunk<
   try {
     const swapFormState = thunkAPI.getState().swapForm;
     const amm = swapFormState.amm;
-    if (!amm) {
+    if (!amm || swapFormState.userInput.marginAmount.value === null) {
       return;
     }
 
     return await amm.swap({
       isFT: swapFormState.prospectiveSwap.mode === 'fixed',
-      notional: stringToBigFloat(swapFormState.prospectiveSwap.notionalAmount.value),
+      notional: swapFormState.prospectiveSwap.notionalAmount,
       margin:
-        stringToBigFloat(swapFormState.prospectiveSwap.marginAmount.value) +
+        swapFormState.userInput.marginAmount.value +
         swapFormState.prospectiveSwap.infoPostSwap.value.fee,
       fixedLow: 1,
       fixedHigh: 999,

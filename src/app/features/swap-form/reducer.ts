@@ -16,7 +16,15 @@ import {
   setSignerAndPositionForAMMThunk,
   SetSignerAndPositionForAMMThunkSuccess,
 } from './thunks';
-import { isMarginStrictlyPositive, isNotionalStrictlyPositive } from './utils';
+import {
+  getExistingPositionMode,
+  getProspectiveSwapMode,
+  getProspectiveSwapNotional,
+  hasExistingPosition,
+  isUserInputMarginError,
+  updateLeverage,
+  validateUserInput,
+} from './utils';
 
 export const SwapFormNumberLimits = {
   digitLimit: 12,
@@ -65,21 +73,28 @@ export type SliceState = {
     maxLeverage: Record<'fixed' | 'variable', number>;
     status: ThunkStatus;
   };
-  // State of prospective swap
-  prospectiveSwap: {
-    // Direction of trade: FT or VT
+  userInput: {
+    // Side chosen by user in the UI
     mode: 'fixed' | 'variable';
     // User-inputted notional amount
     notionalAmount: {
-      value: string;
+      value: number;
+      editMode: 'add' | 'remove';
       error: string | null;
     };
     // User-inputted margin amount
     marginAmount: {
-      value: string;
+      value: number;
       error: string | null;
     };
     leverage: number | null;
+  };
+  // State of prospective swap
+  prospectiveSwap: {
+    // Direction of trade: FT or VT
+    mode: 'fixed' | 'variable';
+    // Notional amount for prospective swap
+    notionalAmount: number;
     infoPostSwap: {
       value: {
         // Margin requirement for prospective swap
@@ -166,17 +181,22 @@ const initialState: SliceState = {
     },
     status: 'idle',
   },
-  prospectiveSwap: {
+  userInput: {
     mode: 'fixed',
     notionalAmount: {
-      value: '0',
+      value: 0,
+      editMode: 'add',
       error: null,
     },
     marginAmount: {
-      value: '0',
+      value: 0,
       error: null,
     },
     leverage: null,
+  },
+  prospectiveSwap: {
+    mode: 'fixed',
+    notionalAmount: 0,
     infoPostSwap: {
       value: {
         marginRequirement: 0,
@@ -192,7 +212,7 @@ const initialState: SliceState = {
     },
   },
   cashflowCalculator: {
-    predictedApy: '0',
+    predictedApy: '0', // TODO Alex: should maybe change to number
     variableFactorStartNow: {
       value: 0,
       status: 'idle',
@@ -219,51 +239,39 @@ const updateCashflowCalculator = (state: Draft<SliceState>): void => {
     state.cashflowCalculator.totalCashflow = 0;
     return;
   }
+  if (state.prospectiveSwap.infoPostSwap.status !== 'success') {
+    return;
+  }
 
   const { additionalCashflow, totalCashflow } = state.amm.getExpectedCashflowInfo({
     position: state.position.value as Position,
     fixedTokenDeltaBalance: state.prospectiveSwap.infoPostSwap.value.fixedTokenDeltaBalance,
     variableTokenDeltaBalance: state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance,
     variableFactorStartNow: state.cashflowCalculator.variableFactorStartNow.value,
-    predictedVariableApy: stringToBigFloat(state.cashflowCalculator.predictedApy),
+    predictedVariableApy: stringToBigFloat(state.cashflowCalculator.predictedApy) / 100,
   });
 
   state.cashflowCalculator.additionalCashflow = additionalCashflow;
   state.cashflowCalculator.totalCashflow = totalCashflow;
 };
 
-const validateUserInput = (state: Draft<SliceState>): void => {
-  {
-    let error = null;
-    if (
-      stringToBigFloat(state.prospectiveSwap.notionalAmount.value) >
-      state.poolSwapInfo.availableNotional[state.prospectiveSwap.mode]
-    ) {
-      error = 'Not enough liquidity. Available:';
-    }
-    state.prospectiveSwap.notionalAmount.error = error;
-  }
+const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void => {
+  validateUserInput(state);
 
-  {
-    let error = null;
-    if (
-      state.walletBalance.status === 'success' &&
-      stringToBigFloat(state.prospectiveSwap.marginAmount.value) > state.walletBalance.value
-    ) {
-      error = 'WLT';
-    }
+  const isProspectiveSwapNotionalValid =
+    hasExistingPosition(state) || state.prospectiveSwap.notionalAmount > 0;
+  const isProspectiveSwapMarginValid =
+    hasExistingPosition(state) || state.userInput.marginAmount.value > 0; // TODO Alex margin field
+  const isProspectiveSwapNotionalMarginValid =
+    state.prospectiveSwap.notionalAmount !== 0 || state.userInput.marginAmount.value !== 0; // TODO Alex margin field
+  const isInfoPostSwapLoaded =
+    state.prospectiveSwap.infoPostSwap.status === 'success' &&
+    state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance *
+      (state.prospectiveSwap.mode === 'fixed' ? -1 : 1) ===
+      state.prospectiveSwap.notionalAmount;
+  const isWalletBalanceLoaded = state.walletBalance.status === 'success';
+  const isWalletTokenAllowanceLoaded = state.walletTokenAllowance.status === 'success';
 
-    if (
-      stringToBigFloat(state.prospectiveSwap.marginAmount.value) <
-      state.prospectiveSwap.infoPostSwap.value.marginRequirement
-    ) {
-      error = 'Margin too low. Additional margin required:';
-    }
-    state.prospectiveSwap.marginAmount.error = error;
-  }
-};
-
-const updateSubmitButtonState = (state: Draft<SliceState>): void => {
   if (!state.amm || !state.amm.signer) {
     state.submitButton = {
       state: 'connect-wallet',
@@ -277,24 +285,9 @@ const updateSubmitButtonState = (state: Draft<SliceState>): void => {
   }
 
   if (
-    !state.prospectiveSwap.marginAmount.error &&
-    state.walletTokenAllowance.status !== 'success'
-  ) {
-    state.submitButton = {
-      state: 'swap',
-      disabled: true,
-      message: {
-        text: 'Almost ready',
-        isError: false,
-      },
-    };
-    return;
-  }
-
-  if (
-    !state.prospectiveSwap.marginAmount.error &&
-    state.walletTokenAllowance.status === 'success' &&
-    state.walletTokenAllowance.value < stringToBigFloat(state.prospectiveSwap.marginAmount.value)
+    !isUserInputMarginError(state) &&
+    isWalletTokenAllowanceLoaded &&
+    state.walletTokenAllowance.value < state.userInput.marginAmount.value
   ) {
     state.submitButton = {
       state: 'approve',
@@ -307,10 +300,7 @@ const updateSubmitButtonState = (state: Draft<SliceState>): void => {
     return;
   }
 
-  if (
-    state.walletBalance.status === 'success' &&
-    stringToBigFloat(state.prospectiveSwap.marginAmount.value) > state.walletBalance.value
-  ) {
+  if (isWalletBalanceLoaded && state.userInput.marginAmount.value > state.walletBalance.value) {
     state.submitButton = {
       state: 'not-enough-balance',
       disabled: true,
@@ -323,13 +313,14 @@ const updateSubmitButtonState = (state: Draft<SliceState>): void => {
   }
 
   if (
-    !state.prospectiveSwap.notionalAmount.error &&
-    state.prospectiveSwap.notionalAmount.value !== '0' &&
-    !state.prospectiveSwap.marginAmount.error &&
-    state.prospectiveSwap.infoPostSwap.status === 'success' &&
-    state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance *
-      (state.prospectiveSwap.mode === 'fixed' ? -1 : 1) ===
-      stringToBigFloat(state.prospectiveSwap.notionalAmount.value)
+    !isUserInputMarginError(state) &&
+    !isUserInputMarginError(state) &&
+    isProspectiveSwapNotionalValid &&
+    isProspectiveSwapMarginValid &&
+    isProspectiveSwapNotionalMarginValid &&
+    isInfoPostSwapLoaded &&
+    isWalletBalanceLoaded &&
+    isWalletTokenAllowanceLoaded
   ) {
     state.submitButton = {
       state: 'swap',
@@ -352,6 +343,11 @@ const updateSubmitButtonState = (state: Draft<SliceState>): void => {
   };
 };
 
+const updateProspectiveSwapParams = (state: Draft<SliceState>): void => {
+  state.prospectiveSwap.mode = getProspectiveSwapMode(state);
+  state.prospectiveSwap.notionalAmount = getProspectiveSwapNotional(state);
+};
+
 export const slice = createSlice({
   name: 'swapForm',
   initialState,
@@ -367,7 +363,7 @@ export const slice = createSlice({
         txHash: null,
       };
     },
-    setModeAction: (
+    setUserInputModeAction: (
       state,
       {
         payload: { value },
@@ -375,7 +371,7 @@ export const slice = createSlice({
         value: 'fixed' | 'variable';
       }>,
     ) => {
-      state.prospectiveSwap.mode = value;
+      state.userInput.mode = value;
       state.prospectiveSwap.infoPostSwap = {
         value: {
           marginRequirement: 0,
@@ -389,40 +385,42 @@ export const slice = createSlice({
         },
         status: 'idle',
       };
+
+      updateProspectiveSwapParams(state);
+      validateUserInputAndUpdateSubmitButton(state);
     },
     setNotionalAmountAction: (
       state,
       {
-        payload: { value },
+        payload: { value, editMode },
       }: PayloadAction<{
-        value: string;
+        value?: number;
+        editMode?: 'add' | 'remove';
       }>,
     ) => {
-      state.prospectiveSwap.notionalAmount.value = value;
-      validateUserInput(state);
-      if (isNotionalStrictlyPositive(state) && isMarginStrictlyPositive(state)) {
-        state.prospectiveSwap.leverage =
-          stringToBigFloat(state.prospectiveSwap.notionalAmount.value) /
-          stringToBigFloat(state.prospectiveSwap.marginAmount.value);
+      if (value !== undefined) {
+        state.userInput.notionalAmount.value = value;
       }
-      updateSubmitButtonState(state);
+
+      if (editMode !== undefined) {
+        state.userInput.notionalAmount.editMode = editMode;
+      }
+
+      updateProspectiveSwapParams(state);
+      updateLeverage(state);
+      validateUserInputAndUpdateSubmitButton(state);
     },
     setMarginAmountAction: (
       state,
       {
         payload: { value },
       }: PayloadAction<{
-        value: string;
+        value: number;
       }>,
     ) => {
-      state.prospectiveSwap.marginAmount.value = value;
-      validateUserInput(state);
-      if (isNotionalStrictlyPositive(state) && isMarginStrictlyPositive(state)) {
-        state.prospectiveSwap.leverage =
-          stringToBigFloat(state.prospectiveSwap.notionalAmount.value) /
-          stringToBigFloat(state.prospectiveSwap.marginAmount.value);
-      }
-      updateSubmitButtonState(state);
+      state.userInput.marginAmount.value = value;
+      updateLeverage(state);
+      validateUserInputAndUpdateSubmitButton(state);
     },
     setLeverageAction: (
       state,
@@ -432,21 +430,22 @@ export const slice = createSlice({
         value: number;
       }>,
     ) => {
-      if (!isNotionalStrictlyPositive(state) || isNaN(value) || value === 0) {
-        state.prospectiveSwap.leverage = null;
+      if (state.prospectiveSwap.notionalAmount === 0 || isNaN(value) || value === 0) {
+        state.userInput.leverage = null;
         return;
       }
 
-      state.prospectiveSwap.leverage = value;
-      state.prospectiveSwap.marginAmount.value = limitAndFormatNumber(
-        stringToBigFloat(state.prospectiveSwap.notionalAmount.value) / value,
-        SwapFormNumberLimits.digitLimit,
-        SwapFormNumberLimits.decimalLimit,
-        'ceil',
+      state.userInput.leverage = value;
+      state.userInput.marginAmount.value = stringToBigFloat(
+        limitAndFormatNumber(
+          state.prospectiveSwap.notionalAmount / value,
+          SwapFormNumberLimits.digitLimit,
+          SwapFormNumberLimits.decimalLimit,
+          'ceil',
+        ),
       );
 
-      validateUserInput(state);
-      updateSubmitButtonState(state);
+      validateUserInputAndUpdateSubmitButton(state);
     },
     setPredictedApyAction: (
       state,
@@ -525,7 +524,7 @@ export const slice = createSlice({
           value: payload as number,
           status: 'success',
         };
-        updateSubmitButtonState(state);
+        validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(approveUnderlyingTokenThunk.pending, (state) => {
         state.submitButton = {
@@ -552,7 +551,7 @@ export const slice = createSlice({
           value: payload as number,
           status: 'success',
         };
-        updateSubmitButtonState(state);
+        validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(getFixedRateThunk.pending, (state) => {
         state.fixedRate = {
@@ -688,8 +687,9 @@ export const slice = createSlice({
         };
       })
       .addCase(getInfoPostSwapThunk.fulfilled, (state, { payload }) => {
-        const { notionalAmount, infoPostSwap, earlyReturn } = payload as {
+        const { notionalAmount, swapMode, infoPostSwap, earlyReturn } = payload as {
           notionalAmount: number;
+          swapMode: 'fixed' | 'variable';
           infoPostSwap: InfoPostSwapV1;
           earlyReturn: boolean;
         };
@@ -725,13 +725,11 @@ export const slice = createSlice({
           status: 'success',
         };
         if (infoPostSwap.availableNotional < notionalAmount) {
-          state.poolSwapInfo.availableNotional[state.prospectiveSwap.mode] =
-            infoPostSwap.availableNotional;
+          state.poolSwapInfo.availableNotional[swapMode] = infoPostSwap.availableNotional;
         }
 
-        validateUserInput(state);
         updateCashflowCalculator(state);
-        updateSubmitButtonState(state);
+        validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
         state.position.value = null;
@@ -756,7 +754,10 @@ export const slice = createSlice({
           return;
         }
         state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
-        updateSubmitButtonState(state);
+        if (state.position.value) {
+          state.userInput.mode = getExistingPositionMode(state) as 'fixed' | 'variable';
+        }
+        validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(confirmSwapThunk.pending, (state) => {
         state.swapConfirmationFlow = {
@@ -783,7 +784,7 @@ export const slice = createSlice({
 });
 export const {
   resetStateAction,
-  setModeAction,
+  setUserInputModeAction,
   setSwapFormAMMAction,
   setNotionalAmountAction,
   setMarginAmountAction,
