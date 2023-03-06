@@ -1,5 +1,6 @@
 import { TokenField, TokenFieldProps } from 'brokoli-ui';
-import React, { useCallback, useEffect, useState } from 'react';
+import debounce from 'lodash.debounce';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   selectInfoPostSwap,
@@ -33,19 +34,35 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
     setLocalMargin(marginAmount.value.toString());
   }, [marginAmount.value]);
 
+  const debouncedSetMarginAmount = useMemo(
+    () =>
+      debounce((value: number) => {
+        dispatch(
+          setMarginAmountAction({
+            value,
+          }),
+        );
+      }, 300),
+    [dispatch],
+  );
+
   const handleOnChange = useCallback(
     (value?: string) => {
       setLocalMargin(value ?? null);
 
-      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
-      dispatch(
-        setMarginAmountAction({
-          value: valueAsNumber ?? 0,
-        }),
-      );
+      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : 0;
+      debouncedSetMarginAmount(valueAsNumber);
     },
-    [dispatch],
+    [debouncedSetMarginAmount],
   );
+
+  // Stop the invocation of the debounced function
+  // after unmounting
+  useEffect(() => {
+    return () => {
+      debouncedSetMarginAmount.cancel();
+    };
+  }, []);
 
   if (!aMM) {
     return null;
