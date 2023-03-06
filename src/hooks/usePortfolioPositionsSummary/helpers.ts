@@ -32,7 +32,7 @@ export const getHealthCounters = (
 export const getNetPayingRate = (
   positions: {
     payingRate: number;
-    variableTokenBalance: number;
+    notionalInUSD: number;
   }[],
   agent: Agents,
 ) => {
@@ -40,8 +40,8 @@ export const getNetPayingRate = (
   let totalNotional = 0;
 
   positions.forEach((position) => {
-    netPayingRate += position.payingRate * Math.abs(position.variableTokenBalance);
-    totalNotional += Math.abs(position.variableTokenBalance);
+    netPayingRate += position.payingRate * position.notionalInUSD;
+    totalNotional += position.notionalInUSD;
   });
 
   if (agent !== Agents.LIQUIDITY_PROVIDER) {
@@ -61,7 +61,7 @@ export const getNetPayingRate = (
 export const getNetReceivingRate = (
   positions: {
     receivingRate: number;
-    variableTokenBalance: number;
+    notionalInUSD: number;
   }[],
   agent: Agents,
 ) => {
@@ -69,8 +69,8 @@ export const getNetReceivingRate = (
   let totalNotional = 0;
 
   positions.forEach((position) => {
-    netReceivingRate += position.receivingRate * Math.abs(position.variableTokenBalance);
-    totalNotional += Math.abs(position.variableTokenBalance);
+    netReceivingRate += position.receivingRate * position.notionalInUSD;
+    totalNotional += position.notionalInUSD;
   });
 
   if (agent !== Agents.LIQUIDITY_PROVIDER) {
