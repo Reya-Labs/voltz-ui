@@ -35,7 +35,11 @@ export const getNetPayingRate = (
     notionalInUSD: number;
   }[],
   agent: Agents,
-) => {
+): number => {
+  if (agent === Agents.LIQUIDITY_PROVIDER) {
+    return 0;
+  }
+
   let netPayingRate = 0;
   let totalNotional = 0;
 
@@ -44,13 +48,11 @@ export const getNetPayingRate = (
     totalNotional += position.notionalInUSD;
   });
 
-  if (agent !== Agents.LIQUIDITY_PROVIDER) {
-    if (totalNotional > 0) {
-      netPayingRate /= totalNotional;
-    }
+  if (totalNotional > 0) {
+    return netPayingRate / totalNotional;
   }
 
-  return netPayingRate;
+  return 0;
 };
 
 /**
@@ -64,7 +66,11 @@ export const getNetReceivingRate = (
     notionalInUSD: number;
   }[],
   agent: Agents,
-) => {
+): number => {
+  if (agent === Agents.LIQUIDITY_PROVIDER) {
+    return 0;
+  }
+  
   let netReceivingRate = 0;
   let totalNotional = 0;
 
@@ -73,13 +79,11 @@ export const getNetReceivingRate = (
     totalNotional += position.notionalInUSD;
   });
 
-  if (agent !== Agents.LIQUIDITY_PROVIDER) {
-    if (totalNotional > 0) {
-      netReceivingRate /= totalNotional;
-    }
+  if (totalNotional > 0) {
+    return netReceivingRate / totalNotional;
   }
 
-  return netReceivingRate;
+  return 0;
 };
 
 /**

@@ -19,9 +19,9 @@ describe('usePortfolioPositionsSummary.helpers', () => {
 
   describe('getNetPayingRate', () => {
     test.each([
-      [Agents.LIQUIDITY_PROVIDER, 5.130086649572149],
-      [Agents.FIXED_TRADER, 0.3728180041060878],
-      [Agents.VARIABLE_TRADER, 0.3728180041060878],
+      [Agents.LIQUIDITY_PROVIDER, 0],
+      [Agents.FIXED_TRADER, 1.3607542104729577],
+      [Agents.VARIABLE_TRADER, 1.3607542104729577],
     ])('given agent=%p - getNetPayingRate should return expected output', (agent, expected) => {
       const retValue = getNetPayingRate(positionsMock, agent);
       expect(retValue).toBe(expected);
@@ -30,9 +30,9 @@ describe('usePortfolioPositionsSummary.helpers', () => {
 
   describe('getNetReceivingRate', () => {
     test.each([
-      [Agents.LIQUIDITY_PROVIDER, 93.89919414352443],
-      [Agents.FIXED_TRADER, 6.823921804649917],
-      [Agents.VARIABLE_TRADER, 6.823921804649917],
+      [Agents.LIQUIDITY_PROVIDER, 0],
+      [Agents.FIXED_TRADER, 21.48510295343685],
+      [Agents.VARIABLE_TRADER, 21.48510295343685],
     ])('given agent=%p - getNetReceivingRate should return expected output', (agent, expected) => {
       const retValue = getNetReceivingRate(positionsMock, agent);
       expect(retValue).toBe(expected);
