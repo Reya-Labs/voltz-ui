@@ -1,6 +1,69 @@
 import { Draft } from '@reduxjs/toolkit';
+import { Position } from '@voltz-protocol/v1-sdk';
 
 import { SliceState } from '../reducer';
+
+export const isUserInputNotionalError = (state: Draft<SliceState>): boolean => {
+  return state.userInput.notionalAmount.error !== null;
+};
+
+export const isUserInputMarginError = (state: Draft<SliceState>): boolean => {
+  return state.userInput.marginAmount.error !== null;
+};
+
+export const validateUserInput = (state: Draft<SliceState>): void => {
+  // Notional Validation
+  {
+    let error = null;
+    if (
+      state.prospectiveSwap.notionalAmount >
+      state.poolSwapInfo.availableNotional[state.prospectiveSwap.mode]
+    ) {
+      error = 'Not enough liquidity. Available:';
+    }
+
+    if (
+      hasExistingPosition(state) &&
+      state.userInput.notionalAmount.editMode === 'remove' &&
+      state.userInput.notionalAmount.value >
+        Math.min(
+          (state.position.value as Position).notional,
+          state.poolSwapInfo.availableNotional[state.prospectiveSwap.mode],
+        )
+    ) {
+      error = 'Not enough notional. Available:';
+    }
+
+    state.userInput.notionalAmount.error = error;
+  }
+
+  // Margin Validation
+  {
+    let error = null;
+    if (
+      state.walletBalance.status === 'success' &&
+      state.userInput.marginAmount.value > state.walletBalance.value
+    ) {
+      error = 'WLT';
+    }
+
+    if (
+      state.prospectiveSwap.infoPostSwap.status === 'success' &&
+      state.userInput.marginAmount.value <
+        state.prospectiveSwap.infoPostSwap.value.marginRequirement
+    ) {
+      error = 'Margin too low. Additional margin required:';
+    }
+    state.userInput.marginAmount.error = error;
+  }
+};
+
+export const updateLeverage = (state: Draft<SliceState>): void => {
+  if (state.prospectiveSwap.notionalAmount > 0 && state.userInput.marginAmount.value > 0) {
+    state.userInput.leverage =
+      state.prospectiveSwap.notionalAmount / state.userInput.marginAmount.value;
+  }
+};
 
 export const hasExistingPosition = (state: Draft<SliceState>): boolean => {
   return state.position.status === 'success' && state.position.value !== null;
@@ -33,10 +96,6 @@ export const getProspectiveSwapMode = (state: Draft<SliceState>): 'fixed' | 'var
 };
 
 export const getProspectiveSwapNotional = (state: Draft<SliceState>): number => {
-  if (state.userInput.notionalAmount.error || state.userInput.notionalAmount.value === null) {
-    return 0;
-  }
-
   let value = state.userInput.notionalAmount.value;
 
   const existingPositionNotional = getExistingPositionNotional(state);
@@ -52,14 +111,6 @@ export const getProspectiveSwapNotional = (state: Draft<SliceState>): number => 
   }
 
   return value;
-};
-
-export const isMarginValidAndStrictlyPositive = (state: Draft<SliceState>): boolean => {
-  return (
-    !state.userInput.marginAmount.error &&
-    state.userInput.marginAmount.value !== null &&
-    state.userInput.marginAmount.value > 0
-  );
 };
 
 export const getExistingPositionFixedRate = (state: Draft<SliceState>) => {

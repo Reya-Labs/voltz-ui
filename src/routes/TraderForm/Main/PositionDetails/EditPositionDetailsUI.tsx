@@ -144,7 +144,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           {samePayingRate ? (
             <LabelTokenTypography
               colorToken="lavenderWeb"
-              label="Receiving"
+              label="Paying"
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
               token="%"

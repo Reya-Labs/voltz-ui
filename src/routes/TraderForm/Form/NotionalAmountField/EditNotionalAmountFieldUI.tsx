@@ -16,7 +16,7 @@ type EditNotionalAmountFieldUIProps = {
   handleOnNotionalChange: (value?: string) => void;
   handleOnSwitchChange: (value: string) => void;
   localEditMode: 'add' | 'remove';
-  localNotional: number | null;
+  localNotional: string | null;
   position: Position;
   underlyingTokenName: string;
 };
@@ -42,7 +42,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
   const bottomRightTextValue =
     localEditMode === 'add'
       ? formatNumber(poolSwapInfo.availableNotional[mode])
-      : formatNumber(position.notional);
+      : formatNumber(Math.min(position.notional, poolSwapInfo.availableNotional[mode]));
 
   return (
     <NotionalAmountFieldBox>
@@ -64,7 +64,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         switchValue={localEditMode}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When you swap rates, the amount you receive and pay is calculated as a percentage or the notional value you choose."
-        value={localNotional !== null ? localNotional.toString() : undefined}
+        value={localNotional !== null ? localNotional : undefined}
         onChange={handleOnNotionalChange}
         onSwitchChange={handleOnSwitchChange}
       />

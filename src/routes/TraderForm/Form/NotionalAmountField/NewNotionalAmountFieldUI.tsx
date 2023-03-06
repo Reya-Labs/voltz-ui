@@ -13,7 +13,7 @@ import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 
 type NewNotionalAmountFieldUIProps = {
   handleOnNotionalChange: (value?: string) => void;
-  localNotional: number | null;
+  localNotional: string | null;
   underlyingTokenName: string;
 };
 
@@ -42,7 +42,7 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
         maxLength={SwapFormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When you swap rates, the amount you receive and pay is calculated as a percentage or the notional value you choose."
-        value={localNotional !== null ? localNotional.toString() : undefined}
+        value={localNotional !== null ? localNotional : undefined}
         onChange={handleOnNotionalChange}
       />
     </NotionalAmountFieldBox>
