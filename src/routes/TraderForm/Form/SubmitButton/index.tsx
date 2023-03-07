@@ -7,6 +7,7 @@ import {
   closeSwapConfirmationFlowAction,
   openMarginUpdateConfirmationFlowAction,
   openSwapConfirmationFlowAction,
+  selectInfoPostSwap,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
 } from '../../../../app/features/swap-form';
@@ -19,6 +20,7 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
   const dispatch = useAppDispatch();
   const submitButtonInfo = useAppSelector(selectSubmitButtonInfo);
   const submitButtonText = useAppSelector(selectSubmitButtonText);
+  const infoPostSwap = useAppSelector(selectInfoPostSwap);
 
   const handleButtonClick = useCallback(() => {
     switch (submitButtonInfo.state) {
@@ -46,6 +48,7 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
           submitButtonInfo.message.isError ? 'wildStrawberry' : 'lavenderWeb2'
         }
         disabled={submitButtonInfo.disabled}
+        loading={infoPostSwap.status === 'pending'}
         variant="primary"
         onClick={handleButtonClick}
       >
