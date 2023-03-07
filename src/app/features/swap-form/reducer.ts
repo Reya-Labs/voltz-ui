@@ -5,6 +5,7 @@ import { ContractReceipt } from 'ethers';
 import { limitAndFormatNumber, stringToBigFloat } from '../../../utilities/number';
 import {
   approveUnderlyingTokenThunk,
+  confirmMarginUpdateThunk,
   confirmSwapThunk,
   getFixedRateThunk,
   getInfoPostSwapThunk,
@@ -18,6 +19,7 @@ import {
 } from './thunks';
 import {
   getExistingPositionMode,
+  getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
   hasExistingPosition,
@@ -35,7 +37,13 @@ type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
 export type SliceState = {
   submitButton: {
-    state: 'swap' | 'not-enough-balance' | 'connect-wallet' | 'approve' | 'approving';
+    state:
+      | 'swap'
+      | 'margin-update'
+      | 'not-enough-balance'
+      | 'connect-wallet'
+      | 'approve'
+      | 'approving';
     disabled: boolean;
     message: {
       text: string | null;
@@ -85,6 +93,7 @@ export type SliceState = {
     // User-inputted margin amount
     marginAmount: {
       value: number;
+      editMode: 'add' | 'remove';
       error: string | null;
     };
     leverage: number | null;
@@ -95,6 +104,8 @@ export type SliceState = {
     mode: 'fixed' | 'variable';
     // Notional amount for prospective swap
     notionalAmount: number;
+    // Notional amount for prospective swap
+    marginAmount: number;
     infoPostSwap: {
       value: {
         // Margin requirement for prospective swap
@@ -131,6 +142,15 @@ export type SliceState = {
   };
   swapConfirmationFlow: {
     step: 'swapConfirmation' | 'waitingForSwapConfirmation' | 'swapCompleted' | null;
+    error: string | null;
+    txHash: string | null;
+  };
+  marginUpdateConfirmationFlow: {
+    step:
+      | 'marginUpdateConfirmation'
+      | 'waitingForMarginUpdateConfirmation'
+      | 'marginUpdateCompleted'
+      | null;
     error: string | null;
     txHash: string | null;
   };
@@ -190,6 +210,7 @@ const initialState: SliceState = {
     },
     marginAmount: {
       value: 0,
+      editMode: 'add',
       error: null,
     },
     leverage: null,
@@ -197,6 +218,7 @@ const initialState: SliceState = {
   prospectiveSwap: {
     mode: 'fixed',
     notionalAmount: 0,
+    marginAmount: 0,
     infoPostSwap: {
       value: {
         marginRequirement: 0,
@@ -208,7 +230,7 @@ const initialState: SliceState = {
         slippage: 0,
         gasFeeETH: 0,
       },
-      status: 'idle',
+      status: 'success',
     },
   },
   cashflowCalculator: {
@@ -221,6 +243,11 @@ const initialState: SliceState = {
     totalCashflow: 0,
   },
   swapConfirmationFlow: {
+    step: null,
+    error: null,
+    txHash: null,
+  },
+  marginUpdateConfirmationFlow: {
     step: null,
     error: null,
     txHash: null,
@@ -261,9 +288,9 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   const isProspectiveSwapNotionalValid =
     hasExistingPosition(state) || state.prospectiveSwap.notionalAmount > 0;
   const isProspectiveSwapMarginValid =
-    hasExistingPosition(state) || state.userInput.marginAmount.value > 0; // TODO Alex margin field
+    hasExistingPosition(state) || state.prospectiveSwap.marginAmount > 0;
   const isProspectiveSwapNotionalMarginValid =
-    state.prospectiveSwap.notionalAmount !== 0 || state.userInput.marginAmount.value !== 0; // TODO Alex margin field
+    state.prospectiveSwap.notionalAmount !== 0 || state.prospectiveSwap.marginAmount !== 0;
   const isInfoPostSwapLoaded =
     state.prospectiveSwap.infoPostSwap.status === 'success' &&
     state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance *
@@ -300,7 +327,11 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
     return;
   }
 
-  if (isWalletBalanceLoaded && state.userInput.marginAmount.value > state.walletBalance.value) {
+  if (
+    isWalletBalanceLoaded &&
+    state.userInput.marginAmount.editMode === 'add' &&
+    state.userInput.marginAmount.value > state.walletBalance.value
+  ) {
     state.submitButton = {
       state: 'not-enough-balance',
       disabled: true,
@@ -323,7 +354,7 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
     isWalletTokenAllowanceLoaded
   ) {
     state.submitButton = {
-      state: 'swap',
+      state: state.prospectiveSwap.notionalAmount !== 0 ? 'swap' : 'margin-update',
       disabled: false,
       message: {
         text: "Token approved, let's trade",
@@ -346,6 +377,7 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
 const updateProspectiveSwapParams = (state: Draft<SliceState>): void => {
   state.prospectiveSwap.mode = getProspectiveSwapMode(state);
   state.prospectiveSwap.notionalAmount = getProspectiveSwapNotional(state);
+  state.prospectiveSwap.marginAmount = getProspectiveSwapMargin(state);
 };
 
 export const slice = createSlice({
@@ -358,6 +390,16 @@ export const slice = createSlice({
     },
     closeSwapConfirmationFlowAction: (state) => {
       state.swapConfirmationFlow = {
+        step: null,
+        error: null,
+        txHash: null,
+      };
+    },
+    openMarginUpdateConfirmationFlowAction: (state) => {
+      state.marginUpdateConfirmationFlow.step = 'marginUpdateConfirmation';
+    },
+    closeMarginUpdateConfirmationFlowAction: (state) => {
+      state.marginUpdateConfirmationFlow = {
         step: null,
         error: null,
         txHash: null,
@@ -413,12 +455,21 @@ export const slice = createSlice({
     setMarginAmountAction: (
       state,
       {
-        payload: { value },
+        payload: { value, editMode },
       }: PayloadAction<{
-        value: number;
+        value?: number;
+        editMode?: 'add' | 'remove';
       }>,
     ) => {
-      state.userInput.marginAmount.value = value;
+      if (value !== undefined) {
+        state.userInput.marginAmount.value = value;
+      }
+
+      if (editMode !== undefined) {
+        state.userInput.marginAmount.editMode = editMode;
+      }
+
+      updateProspectiveSwapParams(state);
       updateLeverage(state);
       validateUserInputAndUpdateSubmitButton(state);
     },
@@ -691,7 +742,7 @@ export const slice = createSlice({
           notionalAmount: number;
           swapMode: 'fixed' | 'variable';
           infoPostSwap: InfoPostSwapV1;
-          earlyReturn: boolean;
+          earlyReturn: boolean; //TODO Alex: maybe refactor this
         };
 
         if (earlyReturn) {
@@ -756,6 +807,7 @@ export const slice = createSlice({
         state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
         if (state.position.value) {
           state.userInput.mode = getExistingPositionMode(state) as 'fixed' | 'variable';
+          updateProspectiveSwapParams(state);
         }
         validateUserInputAndUpdateSubmitButton(state);
       })
@@ -779,6 +831,27 @@ export const slice = createSlice({
           error: null,
           txHash: (payload as ContractReceipt).transactionHash,
         };
+      })
+      .addCase(confirmMarginUpdateThunk.pending, (state) => {
+        state.marginUpdateConfirmationFlow = {
+          step: 'waitingForMarginUpdateConfirmation',
+          error: null,
+          txHash: null,
+        };
+      })
+      .addCase(confirmMarginUpdateThunk.rejected, (state, { payload }) => {
+        state.marginUpdateConfirmationFlow = {
+          step: 'marginUpdateConfirmation',
+          error: payload as string,
+          txHash: null,
+        };
+      })
+      .addCase(confirmMarginUpdateThunk.fulfilled, (state, { payload }) => {
+        state.marginUpdateConfirmationFlow = {
+          step: 'marginUpdateCompleted',
+          error: null,
+          txHash: (payload as ContractReceipt).transactionHash,
+        };
       });
   },
 });
@@ -792,5 +865,7 @@ export const {
   setPredictedApyAction,
   openSwapConfirmationFlowAction,
   closeSwapConfirmationFlowAction,
+  openMarginUpdateConfirmationFlowAction,
+  closeMarginUpdateConfirmationFlowAction,
 } = slice.actions;
 export const swapFormReducer = slice.reducer;

@@ -2,8 +2,7 @@ import { TokenField, TokenFieldProps } from 'brokoli-ui';
 import React from 'react';
 
 import {
-  selectPoolSwapInfo,
-  selectProspectiveSwapMode,
+  selectAvailableNotional,
   selectUserInputNotionalInfo,
   SwapFormNumberLimits,
 } from '../../../../app/features/swap-form';
@@ -23,9 +22,7 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
   underlyingTokenName,
 }) => {
   const notionalInfo = useAppSelector(selectUserInputNotionalInfo);
-
-  const mode = useAppSelector(selectProspectiveSwapMode);
-  const poolSwapInfo = useAppSelector(selectPoolSwapInfo);
+  const notionalAvailable = useAppSelector(selectAvailableNotional);
 
   return (
     <NotionalAmountFieldBox>
@@ -35,7 +32,7 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
         bottomLeftTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb3'}
         bottomRightTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
-        bottomRightTextValue={formatNumber(poolSwapInfo.availableNotional[mode])}
+        bottomRightTextValue={formatNumber(notionalAvailable)}
         decimalsLimit={SwapFormNumberLimits.decimalLimit}
         error={notionalInfo.error !== null}
         label="Notional amount"

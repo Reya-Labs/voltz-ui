@@ -20,30 +20,6 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
   return (
     <React.Fragment>
       <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-          Fees
-        </Typography>
-        <TokenTypography
-          colorToken="lavenderWeb"
-          token={` ${aMM.underlyingToken.name.toUpperCase()}`}
-          typographyToken="secondaryBodySmallRegular"
-          value={infoPostSwap.status === 'success' ? formatNumber(infoPostSwap.value.fee) : '--'}
-        ></TokenTypography>
-      </TransactionDetailBox>
-      <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-          Estimated Slippage
-        </Typography>
-        <TokenTypography
-          colorToken="lavenderWeb"
-          token="%"
-          typographyToken="secondaryBodySmallRegular"
-          value={
-            infoPostSwap.status === 'success' ? formatNumber(infoPostSwap.value.slippage) : '--'
-          }
-        ></TokenTypography>
-      </TransactionDetailBox>
-      <TransactionDetailBox>
         <IconTextWrapper>
           <GasIcon />
           <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">

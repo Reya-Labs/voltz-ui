@@ -87,7 +87,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             labelTypographyToken="primaryBodyXSmallRegular"
             token={` ${underlyingTokenName.toUpperCase()}`}
             typographyToken="secondaryBodySmallRegular"
-            value="0.00" //TODO: Alex maybe it might stay hard-coded (depends on how we implement edit position)
+            value="0.00"
           />
         </CashFlowBox>
       </PositionDetailsRightBox>

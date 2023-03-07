@@ -3,11 +3,15 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 import {
   compactFormatToParts,
   formatNumber,
+  limitAndFormatNumber,
   roundIntegerNumber,
   stringToBigFloat,
 } from '../../../utilities/number';
 import { RootState } from '../../store';
+import { SwapFormNumberLimits } from './reducer';
 import {
+  getAvailableMargin,
+  getAvailableNotional,
   getEditPositionFixedRate,
   getEditPositionMode,
   getEditPositionNotional,
@@ -43,6 +47,9 @@ export const selectUserInputMarginInfo = (state: RootState) =>
 export const selectProspectiveSwapMode = (state: RootState) => state.swapForm.prospectiveSwap.mode;
 export const selectProspectiveSwapNotional = (state: RootState) =>
   state.swapForm.prospectiveSwap.notionalAmount;
+export const selectProspectiveSwapMargin = (state: RootState) =>
+  state.swapForm.prospectiveSwap.marginAmount;
+
 export const selectLeverage = (state: RootState) => state.swapForm.userInput.leverage;
 export const selectInfoPostSwap = (state: RootState) => state.swapForm.prospectiveSwap.infoPostSwap;
 export const selectIsMarginRequiredError = (state: RootState) => {
@@ -53,6 +60,36 @@ export const selectIsMarginRequiredError = (state: RootState) => {
 };
 export const selectIsWalletMarginError = (state: RootState) => {
   return state.swapForm.userInput.marginAmount.error === 'WLT';
+};
+export const selectBottomRightMarginNumber = (state: RootState) => {
+  const swapFormState = state.swapForm;
+  if (
+    hasExistingPosition(swapFormState) &&
+    swapFormState.userInput.marginAmount.editMode === 'remove' &&
+    swapFormState.prospectiveSwap.infoPostSwap.status === 'success'
+  ) {
+    return limitAndFormatNumber(
+      getAvailableMargin(swapFormState),
+      SwapFormNumberLimits.digitLimit,
+      SwapFormNumberLimits.decimalLimit,
+      'floor',
+    );
+  }
+
+  if (swapFormState.prospectiveSwap.infoPostSwap.status === 'success') {
+    return limitAndFormatNumber(
+      swapFormState.prospectiveSwap.infoPostSwap.value.marginRequirement,
+      SwapFormNumberLimits.digitLimit,
+      SwapFormNumberLimits.decimalLimit,
+      'ceil',
+    );
+  }
+
+  return null;
+};
+
+export const selectAvailableNotional = (state: RootState) => {
+  return getAvailableNotional(state.swapForm);
 };
 
 export const selectNewPositionReceivingRate = (state: RootState) => {
@@ -145,6 +182,18 @@ export const selectSwapConfirmationFlowEtherscanLink = (state: RootState) => {
   );
 };
 
+// ------------ Margin Update Confirmation Flow Selectors ------------
+export const selectMarginUpdateConfirmationFlowStep = (state: RootState) =>
+  state.swapForm.marginUpdateConfirmationFlow.step;
+export const selectMarginUpdateConfirmationFlowError = (state: RootState) =>
+  state.swapForm.marginUpdateConfirmationFlow.error;
+export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState) => {
+  return getViewOnEtherScanLink(
+    state.network.chainId,
+    state.swapForm.marginUpdateConfirmationFlow.txHash || '',
+  );
+};
+
 // ------------ Variable Rate Delta ------------
 export const selectVariableRate24hDelta = (state: RootState) => {
   return state.swapForm.variableRate24hAgo.status === 'success' &&
@@ -160,6 +209,8 @@ export const selectSubmitButtonText = (state: RootState) => {
   switch (state.swapForm.submitButton.state) {
     case 'swap':
       return 'Swap';
+    case 'margin-update':
+      return 'Update margin';
     case 'not-enough-balance':
       return 'Not enough balance';
     case 'approve':
