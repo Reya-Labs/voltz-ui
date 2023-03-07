@@ -97,6 +97,8 @@ export const updateLeverage = (state: Draft<SliceState>): void => {
     state.userInput.leverage =
       state.prospectiveSwap.notionalAmount / state.userInput.marginAmount.value;
   }
+
+  checkLowLeverageNotification(state);
 };
 
 export const hasExistingPosition = (state: Draft<SliceState>): boolean => {
@@ -229,4 +231,15 @@ export const getNewPositionFixedRate = (state: Draft<SliceState>) => {
 
 export const getVariableRate = (state: Draft<SliceState>) => {
   return state.variableRate.status === 'success' ? state.variableRate.value : null;
+};
+
+export const checkLowLeverageNotification = (state: Draft<SliceState>) => {
+  if (
+    state.amm &&
+    state.userInput.leverage !== null &&
+    state.userInput.leverage < state.amm.minLeverageAllowed &&
+    !state.showLowLeverageNotification
+  ) {
+    state.showLowLeverageNotification = true;
+  }
 };
