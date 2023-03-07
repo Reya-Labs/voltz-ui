@@ -1,4 +1,4 @@
-import { LeverageField as BrokoliLeverageField } from 'brokoli-ui';
+import { LeverageField as BrokoliLeverageField, showNotification } from 'brokoli-ui';
 import React, { useCallback, useEffect } from 'react';
 
 import {
@@ -23,14 +23,14 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
   const showLowLeverageNotification = useAppSelector(selectShowLeverageNotification);
 
   useEffect(() => {
-    // TODO Filip: fix and uncomment below
     if (showLowLeverageNotification) {
-      // showNotification({
-      //   title: 'Reminder',
-      //   content:
-      //     'If you take small amounts of leverage when trading rates , whilst your risk is lower, your payoff is likely to be low.',
-      //   colorToken: 'orangeYellow',
-      // });
+      showNotification({
+        title: 'Reminder',
+        content:
+          'If you take small amounts of leverage when trading rates , whilst your risk is lower, your payoff is likely to be low.',
+        colorToken: 'orangeYellow',
+        autoClose: 5000,
+      });
     }
   }, [showLowLeverageNotification]);
 
@@ -48,7 +48,7 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
   return (
     <LeverageFieldBox>
       <BrokoliLeverageField
-        disabled={isLeverageDisabled}
+        disabled={isLeverageDisabled || maxLeverage === '--'}
         label="Leverage"
         labelColorToken="lavenderWeb2"
         labelTypographyToken="primaryBodySmallRegular"

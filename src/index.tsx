@@ -9,6 +9,8 @@ import './fonts/DM_Sans/DMSans-Medium.woff';
 import './fonts/DM_Sans/DMSans-MediumItalic.woff';
 import './fonts/DM_Sans/DMSans-Regular.woff';
 import './index.css';
+// eslint-disable-next-line no-restricted-imports
+import 'brokoli-ui/dist/esm/index.css';
 
 import { ThemeProvider } from '@mui/material/styles';
 import { initV1 } from '@voltz-protocol/v1-sdk';

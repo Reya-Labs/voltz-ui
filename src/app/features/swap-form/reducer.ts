@@ -505,7 +505,7 @@ export const slice = createSlice({
 
       updateProspectiveSwapParams(state);
       validateUserInputAndUpdateSubmitButton(state);
-      checkLowLeverageNotification(state);
+      state.showLowLeverageNotification = checkLowLeverageNotification(state);
     },
     setPredictedApyAction: (
       state,
