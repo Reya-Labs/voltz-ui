@@ -229,6 +229,9 @@ export const selectIsLeverageDisabled = (state: RootState) => {
   return state.swapForm.prospectiveSwap.notionalAmount === 0;
 };
 
+export const selectShowLeverageNotification = (state: RootState) =>
+  state.swapForm.showLowLeverageNotification;
+
 export const selectLeverageOptions = (state: RootState) => {
   const swapFormState = state.swapForm;
 

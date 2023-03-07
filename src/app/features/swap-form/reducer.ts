@@ -18,6 +18,7 @@ import {
   SetSignerAndPositionForAMMThunkSuccess,
 } from './thunks';
 import {
+  checkLowLeverageNotification,
   getExistingPositionMode,
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
@@ -154,6 +155,7 @@ export type SliceState = {
     error: string | null;
     txHash: string | null;
   };
+  showLowLeverageNotification: boolean;
 };
 
 const initialState: SliceState = {
@@ -252,6 +254,7 @@ const initialState: SliceState = {
     error: null,
     txHash: null,
   },
+  showLowLeverageNotification: false,
 };
 
 const updateCashflowCalculator = (state: Draft<SliceState>): void => {
@@ -497,6 +500,7 @@ export const slice = createSlice({
       );
 
       validateUserInputAndUpdateSubmitButton(state);
+      checkLowLeverageNotification(state);
     },
     setPredictedApyAction: (
       state,
