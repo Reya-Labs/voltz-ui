@@ -42,27 +42,36 @@ const validateUserInputNotional = (state: Draft<SliceState>): void => {
   state.userInput.notionalAmount.error = error;
 };
 
-export const getAvailableMargin = (state: Draft<SliceState>): number => {
-  if (
-    hasExistingPosition(state) &&
-    state.userInput.marginAmount.editMode === 'remove' &&
-    state.prospectiveSwap.infoPostSwap.status === 'success'
-  ) {
-    return (state.position.value as Position).maxMarginWithdrawable;
+export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
+  if (state.userInput.marginAmount.editMode === 'remove') {
+    if (state.prospectiveSwap.notionalAmount === 0 && hasExistingPosition(state)) {
+      return (state.position.value as Position).maxMarginWithdrawable;
+    }
+
+    if (
+      state.prospectiveSwap.notionalAmount > 0 &&
+      state.prospectiveSwap.infoPostSwap.status === 'success'
+    ) {
+      return state.prospectiveSwap.infoPostSwap.value.maxMarginWithdrawable;
+    }
+
+    return null;
   }
 
-  if (state.userInput.marginAmount.editMode === 'add' && state.walletBalance.status === 'success') {
+  if (state.walletBalance.status === 'success') {
     return state.walletBalance.value;
   }
 
-  return Number.MAX_SAFE_INTEGER;
+  return null;
 };
 
 const validateUserInputMargin = (state: Draft<SliceState>): void => {
+  const availableMargin = getAvailableMargin(state);
   let error = null;
   if (
     state.userInput.marginAmount.editMode === 'add' &&
-    state.userInput.marginAmount.value > getAvailableMargin(state)
+    availableMargin !== null &&
+    state.userInput.marginAmount.value > availableMargin
   ) {
     error = 'WLT';
   }
@@ -77,9 +86,9 @@ const validateUserInputMargin = (state: Draft<SliceState>): void => {
 
   if (
     hasExistingPosition(state) &&
-    state.userInput.notionalAmount.editMode === 'remove' &&
-    state.prospectiveSwap.infoPostSwap.status === 'success' &&
-    state.userInput.marginAmount.value > getAvailableMargin(state)
+    state.userInput.marginAmount.editMode === 'remove' &&
+    availableMargin !== null &&
+    state.userInput.marginAmount.value > availableMargin
   ) {
     error = 'Not enough margin. Available margin:';
   }

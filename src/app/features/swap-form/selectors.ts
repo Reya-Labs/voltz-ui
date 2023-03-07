@@ -63,17 +63,16 @@ export const selectIsWalletMarginError = (state: RootState) => {
 };
 export const selectBottomRightMarginNumber = (state: RootState) => {
   const swapFormState = state.swapForm;
-  if (
-    hasExistingPosition(swapFormState) &&
-    swapFormState.userInput.marginAmount.editMode === 'remove' &&
-    swapFormState.prospectiveSwap.infoPostSwap.status === 'success'
-  ) {
-    return limitAndFormatNumber(
-      getAvailableMargin(swapFormState),
-      SwapFormNumberLimits.digitLimit,
-      SwapFormNumberLimits.decimalLimit,
-      'floor',
-    );
+
+  if (swapFormState.userInput.marginAmount.editMode === 'remove') {
+    return getAvailableMargin(swapFormState) !== null
+      ? limitAndFormatNumber(
+          getAvailableMargin(swapFormState) as number,
+          SwapFormNumberLimits.digitLimit,
+          SwapFormNumberLimits.decimalLimit,
+          'floor',
+        )
+      : null;
   }
 
   if (swapFormState.prospectiveSwap.infoPostSwap.status === 'success') {

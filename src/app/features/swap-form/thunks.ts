@@ -174,6 +174,7 @@ export const getInfoPostSwapThunk = createAsyncThunk<
         swapMode: swapFormState.prospectiveSwap.mode,
         infoPostSwap: {
           marginRequirement: 0,
+          maxMarginWithdrawable: 0,
           averageFixedRate: 0,
           fixedTokenDeltaBalance: 0,
           variableTokenDeltaBalance: 0,

@@ -111,6 +111,8 @@ export type SliceState = {
       value: {
         // Margin requirement for prospective swap
         marginRequirement: number;
+        // Max margin that can be withdrawn after prospective swap
+        maxMarginWithdrawable: number;
         // Average fixed rate obtained by the prospective swap
         averageFixedRate: number;
 
@@ -224,6 +226,7 @@ const initialState: SliceState = {
     infoPostSwap: {
       value: {
         marginRequirement: 0,
+        maxMarginWithdrawable: 0,
         averageFixedRate: 0,
         fixedTokenDeltaBalance: 0,
         variableTokenDeltaBalance: 0,
@@ -420,6 +423,7 @@ export const slice = createSlice({
       state.prospectiveSwap.infoPostSwap = {
         value: {
           marginRequirement: 0,
+          maxMarginWithdrawable: 0,
           averageFixedRate: 0,
           fixedTokenDeltaBalance: 0,
           variableTokenDeltaBalance: 0,
@@ -499,6 +503,7 @@ export const slice = createSlice({
         ),
       );
 
+      updateProspectiveSwapParams(state);
       validateUserInputAndUpdateSubmitButton(state);
       checkLowLeverageNotification(state);
     },
@@ -715,6 +720,7 @@ export const slice = createSlice({
         state.prospectiveSwap.infoPostSwap = {
           value: {
             marginRequirement: 0,
+            maxMarginWithdrawable: 0,
             averageFixedRate: 0,
             fixedTokenDeltaBalance: 0,
             variableTokenDeltaBalance: 0,
@@ -730,6 +736,7 @@ export const slice = createSlice({
         state.prospectiveSwap.infoPostSwap = {
           value: {
             marginRequirement: 0,
+            maxMarginWithdrawable: 0,
             averageFixedRate: 0,
             fixedTokenDeltaBalance: 0,
             variableTokenDeltaBalance: 0,
@@ -753,6 +760,7 @@ export const slice = createSlice({
           state.prospectiveSwap.infoPostSwap = {
             value: {
               marginRequirement: 0,
+              maxMarginWithdrawable: 0,
               averageFixedRate: 0,
               fixedTokenDeltaBalance: 0,
               variableTokenDeltaBalance: 0,
@@ -769,6 +777,7 @@ export const slice = createSlice({
         state.prospectiveSwap.infoPostSwap = {
           value: {
             marginRequirement: infoPostSwap.marginRequirement,
+            maxMarginWithdrawable: infoPostSwap.maxMarginWithdrawable,
             averageFixedRate: infoPostSwap.averageFixedRate,
             fixedTokenDeltaBalance: infoPostSwap.fixedTokenDeltaBalance,
             variableTokenDeltaBalance: infoPostSwap.variableTokenDeltaBalance,
