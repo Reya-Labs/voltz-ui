@@ -566,6 +566,7 @@ export const slice = createSlice({
           value: payload as number,
           status: 'success',
         };
+        validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(getUnderlyingTokenAllowanceThunk.pending, (state) => {
         state.walletTokenAllowance = {
