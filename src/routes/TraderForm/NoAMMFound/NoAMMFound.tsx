@@ -1,21 +1,25 @@
-import { Typography } from 'brokoli-ui';
+import { AppLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { ContainerBox, NoAMMFoundBox, PillBox, Subheading } from './NoAMMFound.styled';
+import { routes } from '../../paths';
+import { ContainerBox } from './NoAMMFound.styled';
 
 export const NoAMMFound: React.FunctionComponent = React.memo(() => (
   <ContainerBox>
-    <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Bold">
-      🧐 OOPS!
+    <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Black">
+      Gas is cheap but... Pool not found
     </Typography>
-    <Subheading colorToken="lavenderWeb2" typographyToken="primaryBodyMediumRegular">
-      It seems we cannot find the pool you are after!
-    </Subheading>
-    <NoAMMFoundBox>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodyMediumRegular">
-        <PillBox text="¯\_(ツ)_/¯" variant="wildStrawberry" />
-        Double check the page link. Perhaps there is a typo or the vault is not longer supported.
-      </Typography>
-    </NoAMMFoundBox>
+    <Typography colorToken="lavenderWeb2" typographyToken="primaryBodyMediumRegular">
+      Unfortunately we couldn't fetch any existing pool matching this criteria. However we have
+      several other markets currently operating,{' '}
+      <AppLink
+        colorToken="skyBlueCrayola"
+        to={`/${routes.TRADER_POOLS}`}
+        typographyToken="primaryBodyMediumRegular"
+      >
+        visit our pool page
+      </AppLink>{' '}
+      to discover those.
+    </Typography>
   </ContainerBox>
 ));
