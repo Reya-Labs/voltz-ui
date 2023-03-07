@@ -77,8 +77,8 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             fromColorToken={MODE_COLOR_TOKEN_MAP[existingPositionMode]}
             fromValue={MODE_TEXT_MAP[existingPositionMode]}
             label="Editing Position"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelColorToken="lavenderWeb"
+            labelTypographyToken="primaryBodyMediumBold"
             toColorToken={MODE_COLOR_TOKEN_MAP[editPositionMode]}
             toValue={MODE_TEXT_MAP[editPositionMode]}
             typographyToken="secondaryBodySmallRegular"
