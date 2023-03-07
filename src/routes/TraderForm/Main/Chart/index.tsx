@@ -108,7 +108,7 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
           ]}
           yMarker={yMarker}
           yMarkerColorToken={isFixed ? 'ultramarineBlue3' : 'skyBlueCrayola3'}
-          yMarkerText={isFixed ? 'Variable rate' : 'Fixed rate'}
+          yMarkerText={isFixed ? 'Current Variable Rate' : 'Current Fixed Rate'}
         />
       </LineChartBox>
       <ChartFilters
