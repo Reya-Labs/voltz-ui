@@ -3,8 +3,7 @@ import { TokenFieldProps, TokenSwitchField } from 'brokoli-ui';
 import React from 'react';
 
 import {
-  selectPoolSwapInfo,
-  selectProspectiveSwapMode,
+  selectAvailableNotional,
   selectUserInputNotionalInfo,
   SwapFormNumberLimits,
 } from '../../../../app/features/swap-form';
@@ -26,23 +25,16 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
   handleOnSwitchChange,
   localEditMode,
   localNotional,
-  position,
   underlyingTokenName,
 }) => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
-
-  const mode = useAppSelector(selectProspectiveSwapMode);
-  const poolSwapInfo = useAppSelector(selectPoolSwapInfo);
+  const notionalAvailable = useAppSelector(selectAvailableNotional);
 
   const bottomLeftText = notionalAmount.error
     ? notionalAmount.error
     : localEditMode === 'add'
     ? 'Liquidity Available'
     : 'Notional Available';
-  const bottomRightTextValue =
-    localEditMode === 'add'
-      ? formatNumber(poolSwapInfo.availableNotional[mode])
-      : formatNumber(Math.min(position.notional, poolSwapInfo.availableNotional[mode]));
 
   return (
     <NotionalAmountFieldBox>
@@ -52,7 +44,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         bottomLeftTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb3'}
         bottomRightTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
-        bottomRightTextValue={bottomRightTextValue}
+        bottomRightTextValue={formatNumber(notionalAvailable)}
         decimalsLimit={SwapFormNumberLimits.decimalLimit}
         error={notionalAmount.error !== null}
         label="Notional amount"

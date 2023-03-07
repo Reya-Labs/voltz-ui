@@ -3,10 +3,10 @@ import React from 'react';
 
 import {
   selectInfoPostSwap,
+  selectProspectiveSwapMargin,
   selectProspectiveSwapMode,
   selectProspectiveSwapNotional,
   selectSwapFormAMM,
-  selectUserInputMarginInfo,
   selectVariableRateInfo,
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -21,7 +21,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const mode = useAppSelector(selectProspectiveSwapMode);
   const prospectiveSwapNotional = useAppSelector(selectProspectiveSwapNotional);
-  const marginInfo = useAppSelector(selectUserInputMarginInfo);
+  const prospectiveSwapMargin = useAppSelector(selectProspectiveSwapMargin);
 
   const aMM = useAppSelector(selectSwapFormAMM);
   const fixedRate = formatNumber(infoPostSwap.value.averageFixedRate);
@@ -30,7 +30,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
 
-  if (!aMM || marginInfo.value === null) {
+  if (!aMM) {
     return null;
   }
 
@@ -77,7 +77,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           colorToken="lavenderWeb"
           token={` ${aMM.underlyingToken.name.toUpperCase()}`}
           typographyToken="secondaryBodySmallRegular"
-          value={compactFormat(marginInfo.value)}
+          value={compactFormat(prospectiveSwapMargin)}
         />
       </SwapDetailBox>
       <SwapDetailBox>

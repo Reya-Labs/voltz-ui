@@ -159,16 +159,30 @@ export const getInfoPostSwapThunk = createAsyncThunk<
   try {
     const swapFormState = thunkAPI.getState().swapForm;
     const amm = swapFormState.amm;
-    if (
-      !amm ||
-      swapFormState.prospectiveSwap.notionalAmount === 0 ||
-      isUserInputNotionalError(swapFormState)
-    ) {
+    if (!amm || isUserInputNotionalError(swapFormState)) {
       return {
         notionalAmount: NaN,
-        swapMode: 'fixed',
+        swapMode: swapFormState.prospectiveSwap.mode,
         infoPostSwap: {},
         earlyReturn: true,
+      };
+    }
+
+    if (swapFormState.prospectiveSwap.notionalAmount === 0) {
+      return {
+        notionalAmount: 0,
+        swapMode: swapFormState.prospectiveSwap.mode,
+        infoPostSwap: {
+          marginRequirement: 0,
+          averageFixedRate: 0,
+          fixedTokenDeltaBalance: 0,
+          variableTokenDeltaBalance: 0,
+          fixedTokenDeltaUnbalanced: 0,
+          fee: 0,
+          slippage: 0,
+          gasFeeETH: 0,
+        },
+        earlyReturn: false,
       };
     }
 
@@ -254,7 +268,7 @@ export const confirmSwapThunk = createAsyncThunk<
   try {
     const swapFormState = thunkAPI.getState().swapForm;
     const amm = swapFormState.amm;
-    if (!amm || swapFormState.userInput.marginAmount.value === null) {
+    if (!amm) {
       return;
     }
 
@@ -262,10 +276,32 @@ export const confirmSwapThunk = createAsyncThunk<
       isFT: swapFormState.prospectiveSwap.mode === 'fixed',
       notional: swapFormState.prospectiveSwap.notionalAmount,
       margin:
-        swapFormState.userInput.marginAmount.value +
+        swapFormState.prospectiveSwap.marginAmount +
         swapFormState.prospectiveSwap.infoPostSwap.value.fee,
       fixedLow: 1,
       fixedHigh: 999,
+    });
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const confirmMarginUpdateThunk = createAsyncThunk<
+  Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/confirmMarginUpdate', async (_, thunkAPI) => {
+  try {
+    const swapFormState = thunkAPI.getState().swapForm;
+    const amm = swapFormState.amm;
+    if (!amm) {
+      return;
+    }
+
+    return await amm.updatePositionMargin({
+      fixedLow: 1,
+      fixedHigh: 999,
+      marginDelta: swapFormState.prospectiveSwap.marginAmount,
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
