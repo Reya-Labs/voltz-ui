@@ -1,4 +1,4 @@
-import { TokenTypography, Typography, TypographyWithTooltip } from 'brokoli-ui';
+import { TokenTypography, Typography, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -11,6 +11,7 @@ import {
   setUserInputModeAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { formatNumber } from '../../../../utilities/number';
 import { ReactComponent as ArrowsSvg } from './arrows.svg';
 import {
@@ -35,6 +36,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
   const variableRate =
     variableRateInfo.status === 'success' ? formatNumber(variableRateInfo.value) : '--';
   const isFixedMode = localMode === 'fixed';
+  const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const debouncedSetMode = useMemo(
     () =>
@@ -78,19 +80,28 @@ export const NotionalSwap: React.FunctionComponent = () => {
     };
   }, []);
 
+  const receiveTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodyExtraLargeBold'
+    : 'primaryBodyMediumBold';
+  const payTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodyMediumRegular'
+    : 'primaryBodyXSmallRegular';
+  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodyMediumRegular'
+    : 'primaryBodySmallRegular';
   return (
     <NotionalSwapWrapperBox>
       <TypographyWithTooltip
         colorToken="lavenderWeb2"
         tooltip="When you swap rates, you will be receiving at one rate and paying at another. Choose the rate you want to receive at."
-        typographyToken="primaryBodySmallRegular"
+        typographyToken={labelTypographyToken}
       >
         Select Notional Swap Direction
       </TypographyWithTooltip>
       <NotionalSwapBox>
         <NotionalSwapFixedBox>
           <TopTextContent>
-            <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
+            <Typography colorToken="lavenderWeb" typographyToken={receiveTypographyToken}>
               {isFixedMode ? 'Receive Fixed' : 'Receive Variable'}
             </Typography>
             <TokenTypography
@@ -101,7 +112,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
             />
           </TopTextContent>
           <BottomTextContent>
-            <Typography colorToken="lavenderWeb2" typographyToken="primaryBodyMediumRegular">
+            <Typography colorToken="lavenderWeb2" typographyToken={payTypographyToken}>
               {isFixedMode ? `Pay Variable ${variableRate}%` : `Pay Fixed ${fixedRate}%`}
             </Typography>
           </BottomTextContent>
@@ -111,7 +122,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
         </NotionalSwapSwapper>
         <NotionalSwapVariableBox>
           <TopTextContent>
-            <Typography colorToken="lavenderWeb2" typographyToken="primaryBodyMediumBold">
+            <Typography colorToken="lavenderWeb2" typographyToken={receiveTypographyToken}>
               {isFixedMode ? 'Receive Variable' : 'Receive Fixed'}
             </Typography>
             <TokenTypography
@@ -122,7 +133,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
             />
           </TopTextContent>
           <BottomTextContent>
-            <Typography colorToken="lavenderWeb4" typographyToken="primaryBodyMediumRegular">
+            <Typography colorToken="lavenderWeb4" typographyToken={payTypographyToken}>
               {isFixedMode ? `Pay Fixed ${fixedRate}%` : `Pay Variable ${variableRate}%`}
             </Typography>
           </BottomTextContent>

@@ -1,4 +1,4 @@
-import { LabelTokenTypography } from 'brokoli-ui';
+import { LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -22,10 +22,18 @@ import {
 
 type NewPositionDetailsUIProps = {
   underlyingTokenName: string;
+  actionLabelTypographyToken: TypographyToken;
+  actionTypographyToken: TypographyToken;
+  labelTypographyToken: TypographyToken;
+  typographyToken: TypographyToken;
 };
 
 export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIProps> = ({
   underlyingTokenName,
+  actionLabelTypographyToken,
+  actionTypographyToken,
+  labelTypographyToken,
+  typographyToken,
 }) => {
   const receivingRate = useAppSelector(selectNewPositionReceivingRate);
   const payingRate = useAppSelector(selectNewPositionPayingRate);
@@ -39,9 +47,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
           colorToken={MODE_COLOR_TOKEN_MAP[mode]}
           label="New position"
           labelColorToken="lavenderWeb"
-          labelTypographyToken="primaryBodyMediumBold"
+          labelTypographyToken={actionLabelTypographyToken}
           token=""
-          typographyToken="secondaryBodySmallRegular"
+          typographyToken={actionTypographyToken}
           value={mode === 'fixed' ? 'Fixed Taker' : 'Variable Taker'}
         />
       </PositionDetailsLeftBox>
@@ -51,9 +59,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             colorToken="lavenderWeb"
             label="Notional"
             labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelTypographyToken={labelTypographyToken}
             token={compactNotional ? compactNotional.compactNotionalSuffix : ''}
-            typographyToken="secondaryBodySmallRegular"
+            typographyToken={typographyToken}
             value={compactNotional ? compactNotional.compactNotionalNumber : '--'}
           />
         </NotionalBox>
@@ -62,9 +70,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             colorToken="lavenderWeb"
             label="Receiving"
             labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelTypographyToken={labelTypographyToken}
             token="%"
-            typographyToken="secondaryBodySmallRegular"
+            typographyToken={typographyToken}
             value={receivingRate ? formatNumber(receivingRate) : '--'}
           />
         </ReceivingBox>
@@ -73,9 +81,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             colorToken="lavenderWeb"
             label="Paying"
             labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelTypographyToken={labelTypographyToken}
             token="%"
-            typographyToken="secondaryBodySmallRegular"
+            typographyToken={typographyToken}
             value={payingRate ? formatNumber(payingRate) : '--'}
           />
         </PayingBox>
@@ -84,9 +92,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             colorToken="lavenderWeb"
             label="Cash Flow"
             labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
-            typographyToken="secondaryBodySmallRegular"
+            typographyToken={typographyToken}
             value="0.00"
           />
         </CashFlowBox>

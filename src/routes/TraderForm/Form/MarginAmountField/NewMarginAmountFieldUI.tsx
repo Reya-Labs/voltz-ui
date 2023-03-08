@@ -1,4 +1,4 @@
-import { TokenField, TokenFieldProps } from 'brokoli-ui';
+import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -17,12 +17,20 @@ type NewMarginAmountFieldUIProps = {
   handleOnMarginChange: (value?: string) => void;
   localMargin: string | null;
   underlyingTokenName: string;
+  labelTypographyToken: TypographyToken;
+  bottomLeftTextTypographyToken: TypographyToken;
+  bottomRightTextTypographyToken: TypographyToken;
+  topRightTextTypographyToken: TypographyToken;
 };
 
 export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFieldUIProps> = ({
   handleOnMarginChange,
   localMargin,
   underlyingTokenName,
+  labelTypographyToken,
+  bottomRightTextTypographyToken,
+  bottomLeftTextTypographyToken,
+  topRightTextTypographyToken,
 }) => {
   const isMarginRequiredError = useAppSelector(selectIsMarginRequiredError);
   const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
@@ -51,6 +59,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
         decimalsLimit={SwapFormNumberLimits.decimalLimit}
         error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"
+        labelTypographyToken={labelTypographyToken}
         maxLength={SwapFormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="The protocol requires every position to have enough collateral to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."

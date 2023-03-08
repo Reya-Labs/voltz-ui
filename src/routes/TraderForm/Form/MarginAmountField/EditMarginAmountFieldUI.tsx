@@ -1,4 +1,4 @@
-import { TokenFieldProps, TokenSwitchField } from 'brokoli-ui';
+import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -19,6 +19,10 @@ type EditMarginAmountFieldUIProps = {
   localEditMode: 'add' | 'remove';
   localMargin: string | null;
   underlyingTokenName: string;
+  labelTypographyToken: TypographyToken;
+  bottomLeftTextTypographyToken: TypographyToken;
+  bottomRightTextTypographyToken: TypographyToken;
+  topRightTextTypographyToken: TypographyToken;
 };
 
 export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFieldUIProps> = ({
@@ -27,6 +31,10 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
   localEditMode,
   localMargin,
   underlyingTokenName,
+  labelTypographyToken,
+  bottomRightTextTypographyToken,
+  bottomLeftTextTypographyToken,
+  topRightTextTypographyToken,
 }) => {
   const isMarginRequiredError = useAppSelector(selectIsMarginRequiredError);
   const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
@@ -56,6 +64,7 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
         decimalsLimit={SwapFormNumberLimits.decimalLimit}
         error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"
+        labelTypographyToken={labelTypographyToken}
         maxLength={SwapFormNumberLimits.digitLimit}
         switchOffText={'Remove'}
         switchOffValue={'remove'}
@@ -64,7 +73,7 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
         switchValue={localEditMode}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="The protocol requires every position to have enough collateral to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."
-        topRightText={`Wallet: ${`${walletValue} ${underlyingTokenName.toUpperCase()}`}`}
+        topRightText={`Wallet: ${walletValue} ${underlyingTokenName.toUpperCase()}`}
         topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
         topRightTextTypographyToken="secondaryBodySmallRegular"
         value={localMargin !== null ? localMargin : undefined}

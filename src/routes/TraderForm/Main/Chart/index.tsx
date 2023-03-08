@@ -11,6 +11,7 @@ import { fetchHistoricalRatesThunk } from '../../../../app/features/historical-r
 import { selectChainId } from '../../../../app/features/network';
 import { selectFixedRateInfo, selectSwapFormAMM } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { ChartBox, LineChartBox, LoadingBox, RainbowLoaderBox } from './Chart.styled';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
 
@@ -62,6 +63,7 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
   const [activeModeId, setActiveModeId] = useState<string>('variable');
   const chainId = useAppSelector(selectChainId);
   const aMM = useAppSelector(selectSwapFormAMM);
+  const { isLargeDesktopDevice } = useResponsiveQuery();
   const granularity =
     activeTimeRangeId === '1d' || activeModeId === '1w'
       ? Granularity.ONE_HOUR
@@ -107,6 +109,9 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
           </LoadingBox>
         ) : null}
         <LineChart
+          axisTypographyToken={
+            isLargeDesktopDevice ? 'secondaryBodySmallRegular' : 'primaryBodyXSmallRegular'
+          }
           colorToken={isFixed ? 'skyBlueCrayola' : 'ultramarineBlue'}
           data={[
             {
@@ -121,6 +126,7 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
               ? `Current Variable Rate: ${yMarker.toFixed(2)}%`
               : `Current Fixed Rate: ${yMarker.toFixed(2)}%`
           }
+          yMarkerTypographyToken="secondaryBodyXSmallRegular"
         />
       </LineChartBox>
       <ChartFilters

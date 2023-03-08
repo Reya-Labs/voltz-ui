@@ -1,4 +1,4 @@
-import { TokenField, TokenFieldProps } from 'brokoli-ui';
+import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -14,12 +14,18 @@ type NewNotionalAmountFieldUIProps = {
   handleOnNotionalChange: (value?: string) => void;
   localNotional: string | null;
   underlyingTokenName: string;
+  labelTypographyToken: TypographyToken;
+  bottomRightTextTypographyToken: TypographyToken;
+  bottomLeftTextTypographyToken: TypographyToken;
 };
 
 export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmountFieldUIProps> = ({
   handleOnNotionalChange,
   localNotional,
   underlyingTokenName,
+  labelTypographyToken,
+  bottomRightTextTypographyToken,
+  bottomLeftTextTypographyToken,
 }) => {
   const notionalInfo = useAppSelector(selectUserInputNotionalInfo);
   const notionalAvailable = useAppSelector(selectAvailableNotional);
@@ -30,12 +36,14 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
         allowNegativeValue={false}
         bottomLeftText={notionalInfo.error ? notionalInfo.error : 'Liquidity Available'}
         bottomLeftTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb3'}
+        bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb'}
-        bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
+        bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={formatNumber(notionalAvailable)}
         decimalsLimit={SwapFormNumberLimits.decimalLimit}
         error={notionalInfo.error !== null}
         label="Notional amount"
+        labelTypographyToken={labelTypographyToken}
         maxLength={SwapFormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When you swap rates, the amount you receive and pay is calculated as a percentage or the notional value you choose."

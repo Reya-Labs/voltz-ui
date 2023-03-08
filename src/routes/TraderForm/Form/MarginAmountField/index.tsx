@@ -1,3 +1,4 @@
+import { TypographyToken } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -8,6 +9,7 @@ import {
   setMarginAmountAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../utilities/number';
 import { EditMarginAmountFieldUI } from './EditMarginAmountFieldUI';
 import { NewMarginAmountFieldUI } from './NewMarginAmountFieldUI';
@@ -21,6 +23,23 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
 
   const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
   const [localMargin, setLocalMargin] = useState<string | null>(marginAmount.value.toString());
+  const { isLargeDesktopDevice } = useResponsiveQuery();
+
+  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodyMediumRegular'
+    : 'primaryBodySmallRegular';
+
+  const bottomRightTextTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'secondaryBodySmallRegular'
+    : 'secondaryBodyXSmallRegular';
+
+  const bottomLeftTextTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodySmallRegular'
+    : 'primaryBodyXSmallRegular';
+
+  const topRightTextTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'secondaryBodySmallRegular'
+    : 'secondaryBodyXSmallRegular';
 
   useEffect(() => {
     setLocalMargin(marginAmount.value.toString());
@@ -75,16 +94,24 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
 
   return !position ? (
     <NewMarginAmountFieldUI
+      bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
+      bottomRightTextTypographyToken={bottomRightTextTypographyToken}
       handleOnMarginChange={handleOnMarginChange}
+      labelTypographyToken={labelTypographyToken}
       localMargin={localMargin}
+      topRightTextTypographyToken={topRightTextTypographyToken}
       underlyingTokenName={aMM.underlyingToken.name}
     />
   ) : (
     <EditMarginAmountFieldUI
+      bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
+      bottomRightTextTypographyToken={bottomRightTextTypographyToken}
       handleOnMarginChange={handleOnMarginChange}
       handleOnSwitchChange={handleOnSwitchChange}
+      labelTypographyToken={labelTypographyToken}
       localEditMode={localEditMode}
       localMargin={localMargin}
+      topRightTextTypographyToken={topRightTextTypographyToken}
       underlyingTokenName={aMM.underlyingToken.name}
     />
   );

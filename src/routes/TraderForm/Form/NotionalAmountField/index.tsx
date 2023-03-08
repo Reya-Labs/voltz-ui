@@ -1,3 +1,4 @@
+import { TypographyToken } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -9,6 +10,7 @@ import {
   setNotionalAmountAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../utilities/number';
 import { EditNotionalAmountFieldUI } from './EditNotionalAmountFieldUI';
 import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
@@ -20,6 +22,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const [localNotional, setLocalNotional] = useState<string | null>(
     notionalAmount.value.toString(),
   );
+  const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const dispatch = useAppDispatch();
   const aMM = useAppSelector(selectSwapFormAMM);
@@ -77,16 +80,34 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     return null;
   }
 
+  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodyMediumRegular'
+    : 'primaryBodySmallRegular';
+
+  const bottomRightTextTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodySmallRegular'
+    : 'primaryBodyXSmallRegular';
+
+  const bottomLeftTextTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodySmallRegular'
+    : 'primaryBodyXSmallRegular';
+
   return !position ? (
     <NewNotionalAmountFieldUI
+      bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
+      bottomRightTextTypographyToken={bottomRightTextTypographyToken}
       handleOnNotionalChange={handleOnNotionalChange}
+      labelTypographyToken={labelTypographyToken}
       localNotional={localNotional}
       underlyingTokenName={aMM.underlyingToken.name}
     />
   ) : (
     <EditNotionalAmountFieldUI
+      bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
+      bottomRightTextTypographyToken={bottomRightTextTypographyToken}
       handleOnNotionalChange={handleOnNotionalChange}
       handleOnSwitchChange={handleOnSwitchChange}
+      labelTypographyToken={labelTypographyToken}
       localEditMode={localEditMode}
       localNotional={localNotional}
       position={position}

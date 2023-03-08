@@ -1,4 +1,4 @@
-import { FromToTokenTypography, LabelTokenTypography } from 'brokoli-ui';
+import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -27,10 +27,18 @@ import {
 
 type EditPositionDetailsUIProps = {
   underlyingTokenName: string;
+  actionLabelTypographyToken: TypographyToken;
+  actionTypographyToken: TypographyToken;
+  labelTypographyToken: TypographyToken;
+  typographyToken: TypographyToken;
 };
 
 export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsUIProps> = ({
   underlyingTokenName,
+  actionTypographyToken,
+  actionLabelTypographyToken,
+  labelTypographyToken,
+  typographyToken,
 }) => {
   const existingPositionMode = useAppSelector(selectExistingPositionMode);
   const existingPositionReceivingRate = useAppSelector(selectExistingPositionReceivingRate);
@@ -67,9 +75,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             colorToken={MODE_COLOR_TOKEN_MAP[editPositionMode]}
             label="Editing Position"
             labelColorToken="lavenderWeb"
-            labelTypographyToken="primaryBodyMediumBold"
+            labelTypographyToken={actionLabelTypographyToken}
             token=""
-            typographyToken="secondaryBodySmallRegular"
+            typographyToken={actionTypographyToken}
             value={MODE_TEXT_MAP[editPositionMode]}
           />
         ) : (
@@ -78,10 +86,10 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             fromValue={MODE_TEXT_MAP[existingPositionMode]}
             label="Editing Position"
             labelColorToken="lavenderWeb"
-            labelTypographyToken="primaryBodyMediumBold"
+            labelTypographyToken={labelTypographyToken}
             toColorToken={MODE_COLOR_TOKEN_MAP[editPositionMode]}
             toValue={MODE_TEXT_MAP[editPositionMode]}
-            typographyToken="secondaryBodySmallRegular"
+            typographyToken={typographyToken}
           />
         )}
       </PositionDetailsLeftBox>
@@ -92,9 +100,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               colorToken="lavenderWeb"
               label="Notional"
               labelColorToken="lavenderWeb3"
-              labelTypographyToken="primaryBodyXSmallRegular"
+              labelTypographyToken={labelTypographyToken}
               token={editPositionCompactNotional.compactNotionalSuffix}
-              typographyToken="secondaryBodySmallRegular"
+              typographyToken={typographyToken}
               value={editPositionCompactNotional.compactNotionalNumber}
             />
           ) : (
@@ -104,11 +112,11 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               fromValue={existingPositionCompactNotional.compactNotionalNumber}
               label="Notional"
               labelColorToken="lavenderWeb3"
-              labelTypographyToken="primaryBodyXSmallRegular"
+              labelTypographyToken={labelTypographyToken}
               toColorToken="lavenderWeb"
               toToken={editPositionCompactNotional.compactNotionalSuffix}
               toValue={editPositionCompactNotional.compactNotionalNumber}
-              typographyToken="secondaryBodySmallRegular"
+              typographyToken={typographyToken}
             />
           )}
         </NotionalBox>
@@ -118,9 +126,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               colorToken="lavenderWeb"
               label="Receiving"
               labelColorToken="lavenderWeb3"
-              labelTypographyToken="primaryBodyXSmallRegular"
+              labelTypographyToken={labelTypographyToken}
               token="%"
-              typographyToken="secondaryBodySmallRegular"
+              typographyToken={typographyToken}
               value={editPositionReceivingRate ? formatNumber(editPositionReceivingRate) : '--'}
             />
           ) : (
@@ -132,11 +140,11 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               }
               label="Receiving"
               labelColorToken="lavenderWeb3"
-              labelTypographyToken="primaryBodyXSmallRegular"
+              labelTypographyToken={labelTypographyToken}
               toColorToken="lavenderWeb"
               toToken="%"
               toValue={editPositionReceivingRate ? formatNumber(editPositionReceivingRate) : '--'}
-              typographyToken="secondaryBodySmallRegular"
+              typographyToken={typographyToken}
             />
           )}
         </ReceivingBox>
@@ -146,9 +154,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               colorToken="lavenderWeb"
               label="Paying"
               labelColorToken="lavenderWeb3"
-              labelTypographyToken="primaryBodyXSmallRegular"
+              labelTypographyToken={labelTypographyToken}
               token="%"
-              typographyToken="secondaryBodySmallRegular"
+              typographyToken={typographyToken}
               value={editPositionPayingRate ? formatNumber(editPositionPayingRate) : '--'}
             />
           ) : (
@@ -160,11 +168,11 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               }
               label="Paying"
               labelColorToken="lavenderWeb3"
-              labelTypographyToken="primaryBodyXSmallRegular"
+              labelTypographyToken={labelTypographyToken}
               toColorToken="lavenderWeb"
               toToken="%"
               toValue={editPositionPayingRate ? formatNumber(editPositionPayingRate) : '--'}
-              typographyToken="secondaryBodySmallRegular"
+              typographyToken={typographyToken}
             />
           )}
         </PayingBox>
@@ -173,9 +181,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             colorToken="lavenderWeb"
             label="Cash Flow"
             labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
-            typographyToken="secondaryBodySmallRegular"
+            typographyToken={typographyToken}
             value={formatNumber(existingPosition.accruedCashflow)}
           />
         </CashFlowBox>

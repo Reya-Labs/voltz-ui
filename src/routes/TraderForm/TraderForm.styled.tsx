@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 
+import { mediaQuery } from '../../hooks/useResponsiveQuery/mediaQuery';
+
 export const PageSectionBox = styled('div')`
   box-sizing: border-box;
   display: flex;
@@ -31,10 +33,15 @@ export const MainSectionBox = styled('div')`
 export const RightSectionBox = styled('div')`
   box-sizing: border-box;
   width: 416px;
+
   height: calc(100vh - 55px);
 
   background: linear-gradient(180deg, rgba(11, 9, 17, 0.8) 41.43%, rgba(24, 21, 36, 0.8) 110.49%);
   backdrop-filter: blur(2px);
+
+  @media ${mediaQuery.largeDesktopDevice} {
+    width: 544px;
+  }
 `;
 
 export const LoadingBox = styled('div')`

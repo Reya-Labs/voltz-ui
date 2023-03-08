@@ -1,4 +1,4 @@
-import { CurrencyField, LabelTokenTypography, Typography } from 'brokoli-ui';
+import { CurrencyField, LabelTokenTypography, Typography, TypographyToken } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -13,6 +13,7 @@ import {
   setPredictedApyAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { formatCurrency } from '../../../../utilities/number';
 import {
   AdditionalCashFlowBox,
@@ -29,6 +30,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
   const dispatch = useAppDispatch();
   const aMM = useAppSelector(selectSwapFormAMM);
   const token = useAppSelector(selectAMMTokenFormatted);
+  const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const status = useAppSelector(selectCashflowCalculatorStatus);
 
@@ -83,16 +85,35 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
     return null;
   }
 
+  const titleTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodyLargeBold'
+    : 'primaryBodyMediumBold';
+
+  const expectedVariableApyTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodySmallRegular'
+    : 'primaryBodyXSmallRegular';
+
+  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodySmallRegular'
+    : 'primaryBodyXSmallRegular';
+
+  const typographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'secondaryBodySmallRegular'
+    : 'secondaryBodyMediumRegular';
+
   return (
     <CashFlowCalculatorBox>
       <CashFlowCalculatorLeftBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
+        <Typography colorToken="lavenderWeb" typographyToken={titleTypographyToken}>
           Cashflow Simulator
         </Typography>
       </CashFlowCalculatorLeftBox>
       <CashFlowCalculatorRightBox>
         <ExpectedApyBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+          <Typography
+            colorToken="lavenderWeb3"
+            typographyToken={expectedVariableApyTypographyToken}
+          >
             Expected Variable APY
           </Typography>
           <CurrencyField
@@ -108,10 +129,10 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             colorToken="lavenderWeb"
             label="Additional Cashflow"
             labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelTypographyToken={labelTypographyToken}
             token={token}
             tooltip="Calculated based on the notional amount and trade side specified in the form for swap."
-            typographyToken="secondaryBodySmallRegular"
+            typographyToken={typographyToken}
             value={formatCurrency(additionalCashflow, true, true, 2, 4)}
           />
         </AdditionalCashFlowBox>
@@ -120,10 +141,10 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             colorToken="lavenderWeb"
             label="Total Cashflow"
             labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelTypographyToken={labelTypographyToken}
             token={token}
             tooltip="Calculated based on the current position plus the notional amount and trade side specified in the form for swap."
-            typographyToken="secondaryBodySmallRegular"
+            typographyToken={typographyToken}
             value={formatCurrency(totalCashflow, true, true, 2, 4)}
           />
         </TotalCashFlowBox>

@@ -1,5 +1,5 @@
 import { Position } from '@voltz-protocol/v1-sdk';
-import { TokenFieldProps, TokenSwitchField } from 'brokoli-ui';
+import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -18,6 +18,9 @@ type EditNotionalAmountFieldUIProps = {
   localNotional: string | null;
   position: Position;
   underlyingTokenName: string;
+  labelTypographyToken: TypographyToken;
+  bottomRightTextTypographyToken: TypographyToken;
+  bottomLeftTextTypographyToken: TypographyToken;
 };
 
 export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmountFieldUIProps> = ({
@@ -26,6 +29,9 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
   localEditMode,
   localNotional,
   underlyingTokenName,
+  labelTypographyToken,
+  bottomRightTextTypographyToken,
+  bottomLeftTextTypographyToken,
 }) => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
   const notionalAvailable = useAppSelector(selectAvailableNotional);
@@ -42,12 +48,14 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         allowNegativeValue={false}
         bottomLeftText={bottomLeftText}
         bottomLeftTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb3'}
+        bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
-        bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
+        bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={formatNumber(notionalAvailable)}
         decimalsLimit={SwapFormNumberLimits.decimalLimit}
         error={notionalAmount.error !== null}
         label="Notional amount"
+        labelTypographyToken={labelTypographyToken}
         maxLength={SwapFormNumberLimits.digitLimit}
         switchOffText={'Remove'}
         switchOffValue={'remove'}

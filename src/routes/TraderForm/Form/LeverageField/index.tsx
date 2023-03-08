@@ -1,4 +1,8 @@
-import { LeverageField as BrokoliLeverageField, showNotification } from 'brokoli-ui';
+import {
+  LeverageField as BrokoliLeverageField,
+  showNotification,
+  TypographyToken,
+} from 'brokoli-ui';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import {
@@ -9,12 +13,13 @@ import {
   setLeverageAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { LeverageFieldBox } from './LeverageField.styled';
 type NotionalAmountProps = {};
 
 export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () => {
   const dispatch = useAppDispatch();
-
+  const { isLargeDesktopDevice } = useResponsiveQuery();
   const leverage = useAppSelector(selectLeverage);
   const isLeverageDisabled = useAppSelector(selectIsLeverageDisabled);
   const [notificationRead, setNotificationRead] = useState(false);
@@ -46,17 +51,25 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
     [dispatch],
   );
 
+  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodyMediumRegular'
+    : 'primaryBodySmallRegular';
+
+  const maxLeverageTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodySmallRegular'
+    : 'primaryBodyXSmallRegular';
+
   return (
     <LeverageFieldBox>
       <BrokoliLeverageField
         disabled={isLeverageDisabled || maxLeverage === '--'}
         label="Leverage"
         labelColorToken="lavenderWeb2"
-        labelTypographyToken="primaryBodySmallRegular"
+        labelTypographyToken={labelTypographyToken}
         leverageOptions={leverageOptions}
         maxLeverageColorToken="lavenderWeb3"
         maxLeverageText={`Max ${maxLeverage}x Leverage`}
-        maxLeverageTypographyToken="primaryBodySmallRegular"
+        maxLeverageTypographyToken={maxLeverageTypographyToken}
         tooltip="Leverage is notional amount divided by margin amount, and represents the maximum delta between the rates your position is collateralized to withstand."
         tooltipColorToken="lavenderWeb2"
         value={leverage || undefined}
