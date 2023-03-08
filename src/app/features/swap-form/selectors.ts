@@ -313,3 +313,7 @@ export const selectLeverageOptions = (state: RootState) => {
     leverageOptions,
   };
 };
+
+export const selectIsGetInfoPostSwapLoading = (state: RootState) => {
+  return state.swapForm.prospectiveSwap.infoPostSwap.status === 'pending';
+};

@@ -1,10 +1,11 @@
 import { TokenTypography, Typography, TypographyWithTooltip } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostSwapThunk,
   selectFixedRateInfo,
+  selectIsGetInfoPostSwapLoading,
   selectUserInputMode,
   selectVariableRateInfo,
   setUserInputModeAction,
@@ -24,28 +25,28 @@ import {
 
 export const NotionalSwap: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
+  const isGetInfoPostSwapLoading = useAppSelector(selectIsGetInfoPostSwapLoading);
 
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const mode = useAppSelector(selectUserInputMode);
-
+  const [localMode, setLocalMode] = useState<'fixed' | 'variable'>('fixed');
   const fixedRate = fixedRateInfo.status === 'success' ? formatNumber(fixedRateInfo.value) : '--';
   const variableRate =
     variableRateInfo.status === 'success' ? formatNumber(variableRateInfo.value) : '--';
-  const isFixedMode = mode === 'fixed';
+  const isFixedMode = localMode === 'fixed';
 
-  const onSwap = useCallback(
-    debounce((value?: 'fixed' | 'variable') => {
-      if (!value) {
-        return;
-      }
-      dispatch(
-        setUserInputModeAction({
-          value,
-        }),
-      );
-      void dispatch(getInfoPostSwapThunk());
-    }, 100),
+  const debouncedSetMode = useMemo(
+    () =>
+      debounce((value: 'fixed' | 'variable') => {
+        setAnimate(true);
+        dispatch(
+          setUserInputModeAction({
+            value,
+          }),
+        );
+        void dispatch(getInfoPostSwapThunk());
+      }, 300),
     [dispatch],
   );
 
@@ -55,6 +56,27 @@ export const NotionalSwap: React.FunctionComponent = () => {
       setTimeout(() => setAnimate(false), 500);
     }
   }, [animate]);
+
+  const handleOnModeChange = useCallback(() => {
+    if (isGetInfoPostSwapLoading) {
+      return;
+    }
+    const nextMode = localMode === 'fixed' ? 'variable' : 'fixed';
+    setLocalMode(nextMode);
+    debouncedSetMode(nextMode);
+  }, [isGetInfoPostSwapLoading, localMode, debouncedSetMode]);
+
+  useEffect(() => {
+    setLocalMode(mode);
+  }, [mode]);
+
+  // Stop the invocation of the debounced function
+  // after unmounting
+  useEffect(() => {
+    return () => {
+      debouncedSetMode.cancel();
+    };
+  }, []);
 
   return (
     <NotionalSwapWrapperBox>
@@ -84,13 +106,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
             </Typography>
           </BottomTextContent>
         </NotionalSwapFixedBox>
-        <NotionalSwapSwapper
-          animate={animate}
-          onClick={() => {
-            onSwap(mode === 'fixed' ? 'variable' : 'fixed');
-            setAnimate(true);
-          }}
-        >
+        <NotionalSwapSwapper animate={animate} onClick={handleOnModeChange}>
           <ArrowsSvg />
         </NotionalSwapSwapper>
         <NotionalSwapVariableBox>
