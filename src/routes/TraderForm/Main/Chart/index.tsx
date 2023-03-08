@@ -9,7 +9,7 @@ import {
 } from '../../../../app/features/historical-rates';
 import { fetchHistoricalRatesThunk } from '../../../../app/features/historical-rates/thunks';
 import { selectChainId } from '../../../../app/features/network';
-import { selectSwapFormAMM } from '../../../../app/features/swap-form';
+import { selectFixedRateInfo, selectSwapFormAMM } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ChartBox, LineChartBox, LoadingBox, RainbowLoaderBox } from './Chart.styled';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
@@ -53,7 +53,9 @@ const filterOptions: ChartFiltersProps['filterOptions'] = [
 
 export const Chart: React.FunctionComponent<ChartProps> = () => {
   const data = useAppSelector(selectHistoricalRates);
-  const yMarker = useAppSelector(selectOppositeSideCurrentRate);
+  const oppositeSideCurrentRate = useAppSelector(selectOppositeSideCurrentRate);
+  const fixedRateInfo = useAppSelector(selectFixedRateInfo);
+
   const loading = useAppSelector(selectHistoricalRatesStatus) === 'pending';
   const dispatch = useAppDispatch();
   const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1w');
@@ -88,6 +90,12 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
       }),
     );
   }, [dispatch, timeframe, isFixed, granularity, chainId, aMM]);
+
+  let yMarker = oppositeSideCurrentRate;
+  if (fixedRateInfo.status === 'success' && !isFixed) {
+    yMarker = fixedRateInfo.value;
+  }
+
   return (
     <ChartBox>
       <LineChartBox>
