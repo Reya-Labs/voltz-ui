@@ -5,6 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import { Position } from '@voltz-protocol/v1-sdk';
 import React from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { selectChainId } from '../../../../app/features/network';
 import { useAppSelector } from '../../../../app/hooks';
@@ -13,9 +14,11 @@ import { AMMProvider } from '../../../../contexts/AMMContext/AMMContext';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { getConfig } from '../../../../hooks/voltz-config/config';
 import { colors, SystemStyleObject, Theme } from '../../../../theme';
-import { findCurrentAmm } from '../../../../utilities/amm';
+import { findCurrentAmm, generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../../utilities/constants';
 import { getRowButtonId } from '../../../../utilities/googleAnalytics/helpers';
+import { isTraderExperienceFlowEnabled } from '../../../../utilities/is-trader-experience-flow-enabled';
+import { routes } from '../../../paths';
 import { PositionTableHead, PositionTableRow } from './components';
 import { TransactionList } from './TransactionList/TransactionList';
 
@@ -30,6 +33,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSelectItem,
   onSettle,
 }) => {
+  const navigate = useNavigate();
   const chainId = useAppSelector(selectChainId);
   const { aMMs } = useAMMs();
 
@@ -131,7 +135,18 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 onSelect={
                   closeToMaturity
                     ? undefined
-                    : (mode: 'margin' | 'liquidity' | 'notional') => handleSelectRow(index, mode)
+                    : (mode: 'margin' | 'liquidity' | 'notional') => {
+                        if (isTraderExperienceFlowEnabled()) {
+                          const path = generatePath(routes.TRADER_FORM, {
+                            form: 'swap',
+                            ammId: generateAmmIdForRoute(pos.amm),
+                            poolId: generatePoolId(pos.amm),
+                          });
+                          navigate(`/${path}`);
+                          return;
+                        }
+                        handleSelectRow(index, mode);
+                      }
                 }
                 onSettle={() => onSettle(pos)}
               />
