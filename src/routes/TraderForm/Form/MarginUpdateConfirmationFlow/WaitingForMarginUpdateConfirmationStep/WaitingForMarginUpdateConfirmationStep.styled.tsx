@@ -6,8 +6,10 @@ export const WaitingForMarginUpdateConfirmationStepBox = styled('div')`
   align-items: flex-start;
   padding: 0px;
   gap: 64px;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 export const RainbowLoaderBox = styled('div')`
-  width: 335px;
+  width: 100%;
 `;
