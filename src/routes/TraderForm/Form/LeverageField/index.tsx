@@ -1,5 +1,5 @@
 import { LeverageField as BrokoliLeverageField, showNotification } from 'brokoli-ui';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   selectIsLeverageDisabled,
@@ -17,22 +17,23 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
 
   const leverage = useAppSelector(selectLeverage);
   const isLeverageDisabled = useAppSelector(selectIsLeverageDisabled);
-
+  const [notificationRead, setNotificationRead] = useState(false);
   const { maxLeverage, leverageOptions } = useAppSelector(selectLeverageOptions);
 
   const showLowLeverageNotification = useAppSelector(selectShowLeverageNotification);
 
   useEffect(() => {
-    if (showLowLeverageNotification) {
+    if (!notificationRead && showLowLeverageNotification) {
       showNotification({
         title: 'Reminder',
         content:
           'If you take small amounts of leverage when trading rates , whilst your risk is lower, your payoff is likely to be low.',
         colorToken: 'orangeYellow',
         autoClose: 5000,
+        onCloseNotification: () => setNotificationRead(true),
       });
     }
-  }, [showLowLeverageNotification]);
+  }, [notificationRead, showLowLeverageNotification]);
 
   const handleOnChange = useCallback(
     (value: number) => {
