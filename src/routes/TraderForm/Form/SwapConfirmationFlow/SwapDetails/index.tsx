@@ -2,15 +2,15 @@ import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import {
+  selectAMMMaturityFormatted,
+  selectAMMTokenFormatted,
   selectInfoPostSwap,
   selectProspectiveSwapMargin,
   selectProspectiveSwapMode,
   selectProspectiveSwapNotional,
-  selectSwapFormAMM,
   selectVariableRateInfo,
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatTimestamp } from '../../../../../utilities/date';
 import { compactFormat, formatNumber } from '../../../../../utilities/number';
 import { SwapDetailBox, SwapDetailsBox } from './SwapDetails.styled';
 
@@ -22,17 +22,13 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const mode = useAppSelector(selectProspectiveSwapMode);
   const prospectiveSwapNotional = useAppSelector(selectProspectiveSwapNotional);
   const prospectiveSwapMargin = useAppSelector(selectProspectiveSwapMargin);
-
-  const aMM = useAppSelector(selectSwapFormAMM);
   const fixedRate = formatNumber(infoPostSwap.value.averageFixedRate);
   const variableRate = formatNumber(variableRateInfo.value);
 
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
-
-  if (!aMM) {
-    return null;
-  }
+  const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
+  const token = useAppSelector(selectAMMTokenFormatted);
 
   return (
     <SwapDetailsBox>
@@ -64,7 +60,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={` ${aMM.underlyingToken.name.toUpperCase()}`}
+          token={token}
           typographyToken="secondaryBodySmallRegular"
           value={compactFormat(prospectiveSwapNotional)}
         />
@@ -75,7 +71,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={` ${aMM.underlyingToken.name.toUpperCase()}`}
+          token={token}
           typographyToken="secondaryBodySmallRegular"
           value={compactFormat(prospectiveSwapMargin)}
         />
@@ -88,7 +84,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           colorToken="lavenderWeb"
           token=" "
           typographyToken="secondaryBodySmallRegular"
-          value={formatTimestamp(aMM.termEndTimestampInMS)}
+          value={aMMMaturity}
         />
       </SwapDetailBox>
     </SwapDetailsBox>

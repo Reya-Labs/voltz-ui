@@ -2,13 +2,13 @@ import { LabelTokenTypography } from 'brokoli-ui';
 import React from 'react';
 
 import {
+  selectAMMMaturityFormatted,
   selectFixedRateInfo,
   selectSwapFormAMM,
   selectVariableRate24hDelta,
   selectVariableRateInfo,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { formatTimestamp } from '../../../../utilities/date';
 import { formatNumber } from '../../../../utilities/number';
 import { MarketTokenInformation, MarketTokenInformationProps } from '../../MarketTokenInformation';
 import {
@@ -27,6 +27,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const variableRate24hDelta = useAppSelector(selectVariableRate24hDelta);
+  const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
 
   if (!aMM) {
     return null;
@@ -77,7 +78,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
             labelTypographyToken="primaryBodyXSmallRegular"
             token=""
             typographyToken="secondaryBodyMediumBold"
-            value={formatTimestamp(aMM.termEndTimestampInMS)}
+            value={aMMMaturity}
           />
         </MaturityBox>
       </PoolHeaderDetailsBox>

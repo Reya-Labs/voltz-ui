@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   initialiseCashflowCalculatorThunk,
   selectAdditionalCashflow,
+  selectAMMTokenFormatted,
   selectCashflowCalculatorStatus,
   selectPredictedApy,
   selectSwapFormAMM,
@@ -27,6 +28,7 @@ type CashFlowCalculatorProps = {};
 export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps> = () => {
   const dispatch = useAppDispatch();
   const aMM = useAppSelector(selectSwapFormAMM);
+  const token = useAppSelector(selectAMMTokenFormatted);
 
   const status = useAppSelector(selectCashflowCalculatorStatus);
 
@@ -107,7 +109,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             label="Additional Cashflow"
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"
-            token={` ${aMM.underlyingToken.name.toUpperCase()}`}
+            token={token}
             tooltip="Calculated based on the notional amount and trade side specified in the form for swap."
             typographyToken="secondaryBodySmallRegular"
             value={formatCurrency(additionalCashflow, true, true, 2, 4)}
@@ -119,7 +121,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             label="Total Cashflow"
             labelColorToken="lavenderWeb3"
             labelTypographyToken="primaryBodyXSmallRegular"
-            token={` ${aMM.underlyingToken.name.toUpperCase()}`}
+            token={token}
             tooltip="Calculated based on the current position plus the notional amount and trade side specified in the form for swap."
             typographyToken="secondaryBodySmallRegular"
             value={formatCurrency(totalCashflow, true, true, 2, 4)}

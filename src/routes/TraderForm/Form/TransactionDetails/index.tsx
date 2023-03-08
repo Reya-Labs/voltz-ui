@@ -2,9 +2,9 @@ import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import {
+  selectAMMTokenFormatted,
   selectInfoPostSwap,
   selectSubmitButtonInfo,
-  selectSwapFormAMM,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { formatNumber } from '../../../../utilities/number';
@@ -15,12 +15,8 @@ type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const token = useAppSelector(selectAMMTokenFormatted);
   const submitButtonInfo = useAppSelector(selectSubmitButtonInfo);
-
-  if (!aMM) {
-    return null;
-  }
 
   const hideFees = submitButtonInfo.state === 'margin-update';
   const hideSlippage = submitButtonInfo.state === 'margin-update';
@@ -35,7 +31,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            token={` ${aMM.underlyingToken.name.toUpperCase()}`}
+            token={token}
             typographyToken="secondaryBodySmallRegular"
             value={infoPostSwap.status === 'success' ? formatNumber(infoPostSwap.value.fee) : '--'}
           ></TokenTypography>

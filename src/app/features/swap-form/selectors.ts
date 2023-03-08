@@ -1,5 +1,6 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
+import { formatTimestamp } from '../../../utilities/date';
 import {
   compactFormatToParts,
   formatNumber,
@@ -34,6 +35,30 @@ export const selectVariableRateInfo = (state: RootState) => state.swapForm.varia
 export const selectPoolSwapInfo = (state: RootState) => state.swapForm.poolSwapInfo;
 export const selectSwapFormMode = (state: RootState): 'new' | 'edit' => {
   return hasExistingPosition(state.swapForm) ? 'edit' : 'new';
+};
+
+export const selectAMMTokenFormatted = (state: RootState) => {
+  const aMM = selectSwapFormAMM(state);
+  if (!aMM) {
+    return '';
+  }
+  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+};
+
+export const selectAMMMaturityFormatted = (state: RootState) => {
+  const aMM = selectSwapFormAMM(state);
+  if (!aMM) {
+    return '';
+  }
+  return formatTimestamp(aMM.termEndTimestampInMS);
+};
+
+export const selectMarginAccountName = (state: RootState) => {
+  const aMM = selectSwapFormAMM(state);
+  if (!aMM) {
+    return '';
+  }
+  return `${aMM.protocol} ${selectAMMMaturityFormatted(state)}`;
 };
 
 // User Input

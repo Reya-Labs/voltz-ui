@@ -2,11 +2,11 @@ import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import {
+  selectAMMMaturityFormatted,
+  selectAMMTokenFormatted,
   selectProspectiveSwapMargin,
-  selectSwapFormAMM,
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatTimestamp } from '../../../../../utilities/date';
 import { compactFormat } from '../../../../../utilities/number';
 import { MarginUpdateDetailBox, MarginUpdateDetailsBox } from './MarginUpdateDetails.styled';
 
@@ -14,11 +14,8 @@ type MarginUpdateDetailsProps = {};
 
 export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsProps> = () => {
   const prospectiveSwapMargin = useAppSelector(selectProspectiveSwapMargin);
-  const aMM = useAppSelector(selectSwapFormAMM);
-
-  if (!aMM) {
-    return null;
-  }
+  const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
+  const token = useAppSelector(selectAMMTokenFormatted);
 
   return (
     <MarginUpdateDetailsBox>
@@ -28,7 +25,7 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={` ${aMM.underlyingToken.name.toUpperCase()}`}
+          token={token}
           typographyToken="secondaryBodySmallRegular"
           value={compactFormat(prospectiveSwapMargin)}
         />
@@ -41,7 +38,7 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
           colorToken="lavenderWeb"
           token=" "
           typographyToken="secondaryBodySmallRegular"
-          value={formatTimestamp(aMM.termEndTimestampInMS)}
+          value={aMMMaturity}
         />
       </MarginUpdateDetailBox>
     </MarginUpdateDetailsBox>
