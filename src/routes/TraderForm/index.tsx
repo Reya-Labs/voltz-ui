@@ -28,8 +28,10 @@ export const TraderFormRoute: React.FunctionComponent = () => {
   const { aMM, loading, error, idle } = useSwapFormAMM();
 
   React.useEffect(() => {
-    void dispatch(resetStateAction());
-  }, [dispatch]);
+    return () => {
+      dispatch(resetStateAction());
+    };
+  }, []);
 
   let pageContent = (
     <MainAndFormSectionBox data-testid="BrokoliPage-MainAndFormSectionBox">
