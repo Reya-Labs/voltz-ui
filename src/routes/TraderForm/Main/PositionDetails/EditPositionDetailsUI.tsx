@@ -86,10 +86,10 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             fromValue={MODE_TEXT_MAP[existingPositionMode]}
             label="Editing Position"
             labelColorToken="lavenderWeb"
-            labelTypographyToken={labelTypographyToken}
+            labelTypographyToken={actionLabelTypographyToken}
             toColorToken={MODE_COLOR_TOKEN_MAP[editPositionMode]}
             toValue={MODE_TEXT_MAP[editPositionMode]}
-            typographyToken={typographyToken}
+            typographyToken={actionTypographyToken}
           />
         )}
       </PositionDetailsLeftBox>
