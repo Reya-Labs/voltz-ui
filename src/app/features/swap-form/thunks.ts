@@ -261,9 +261,7 @@ export const confirmSwapThunk = createAsyncThunk<
     return await amm.swap({
       isFT: swapFormState.prospectiveSwap.mode === 'fixed',
       notional: swapFormState.prospectiveSwap.notionalAmount,
-      margin:
-        swapFormState.prospectiveSwap.marginAmount +
-        swapFormState.prospectiveSwap.infoPostSwap.value.fee,
+      margin: swapFormState.prospectiveSwap.marginAmount,
       fixedLow: 1,
       fixedHigh: 999,
     });
