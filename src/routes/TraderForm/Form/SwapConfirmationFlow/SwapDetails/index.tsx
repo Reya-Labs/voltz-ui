@@ -5,14 +5,13 @@ import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
   selectInfoPostSwap,
-  selectProspectiveSwapMargin,
+  selectProspectiveSwapMarginFormatted,
   selectProspectiveSwapMode,
-  selectProspectiveSwapNotional,
+  selectProspectiveSwapNotionalFormatted,
   selectVariableRateInfo,
-  SwapFormNumberLimits,
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { compactFormat, formatNumber } from '../../../../../utilities/number';
+import { formatNumber } from '../../../../../utilities/number';
 import { SwapDetailBox, SwapDetailsBox } from './SwapDetails.styled';
 
 type SwapDetailsProps = {};
@@ -21,19 +20,11 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const mode = useAppSelector(selectProspectiveSwapMode);
-  const prospectiveSwapNotional = useAppSelector(selectProspectiveSwapNotional);
-  const prospectiveSwapMargin = useAppSelector(selectProspectiveSwapMargin);
+  const prospectiveSwapNotionalFormatted = useAppSelector(selectProspectiveSwapNotionalFormatted);
+  const prospectiveSwapMarginFormatted = useAppSelector(selectProspectiveSwapMarginFormatted);
   const fixedRate = formatNumber(infoPostSwap.value.averageFixedRate);
   const variableRate = formatNumber(variableRateInfo.value);
 
-  const notional =
-    prospectiveSwapNotional < 1
-      ? compactFormat(prospectiveSwapNotional, 0, SwapFormNumberLimits.decimalLimit)
-      : compactFormat(prospectiveSwapNotional);
-  const margin =
-    prospectiveSwapMargin < 1
-      ? compactFormat(prospectiveSwapMargin, 0, SwapFormNumberLimits.decimalLimit)
-      : compactFormat(prospectiveSwapMargin);
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
@@ -71,7 +62,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           colorToken="lavenderWeb"
           token={token}
           typographyToken="secondaryBodySmallRegular"
-          value={notional}
+          value={prospectiveSwapNotionalFormatted}
         />
       </SwapDetailBox>
       <SwapDetailBox>
@@ -82,7 +73,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           colorToken="lavenderWeb"
           token={token}
           typographyToken="secondaryBodySmallRegular"
-          value={margin}
+          value={prospectiveSwapMarginFormatted}
         />
       </SwapDetailBox>
       <SwapDetailBox>
