@@ -35,8 +35,8 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
           'If you take small amounts of leverage when trading rates , whilst your risk is lower, your payoff is likely to be low.',
         colorToken: 'orangeYellow',
         autoClose: 5000,
-        onCloseNotification: () => setNotificationRead(true),
       });
+      setNotificationRead(true);
     }
   }, [notificationRead, showLowLeverageNotification]);
 
