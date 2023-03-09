@@ -1,5 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getPositionsV1, InfoPostSwapV1, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import {
+  ExpectedCashflowInfo,
+  getPositionsV1,
+  InfoPostSwapV1,
+  Position,
+  SupportedChainId,
+} from '@voltz-protocol/v1-sdk';
 import { ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPosition } from '../../../utilities/amm';
@@ -117,27 +123,6 @@ export const getPoolSwapInfoThunk = createAsyncThunk<
     }
 
     return await amm.getPoolSwapInfo();
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
-export const initialiseCashflowCalculatorThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('swapForm/initialiseCashFlowCalculator', async (_, thunkAPI) => {
-  try {
-    const amm = thunkAPI.getState().swapForm.amm;
-    if (!amm) {
-      return;
-    }
-    const { scaled: variableFactor } = await amm.variableFactor(
-      amm.termStartTimestampInMS,
-      Date.now(),
-    );
-
-    return variableFactor;
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -303,6 +288,30 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
       fixedLow: 1,
       fixedHigh: 999,
       marginDelta: swapFormState.prospectiveSwap.marginAmount,
+    });
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const getExpectedCashflowInfoThunk = createAsyncThunk<
+  Awaited<ExpectedCashflowInfo | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/getExpectedCashflowInfo', async (_, thunkAPI) => {
+  try {
+    const swapFormState = thunkAPI.getState().swapForm;
+    const amm = swapFormState.amm;
+    if (!amm) {
+      return;
+    }
+
+    return await amm.getExpectedCashflowInfo({
+      position: swapFormState.position.value ?? undefined,
+      prospectiveSwapAvgFixedRate:
+        swapFormState.prospectiveSwap.infoPostSwap.value.averageFixedRate / 100,
+      prospectiveSwapNotional:
+        swapFormState.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance,
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

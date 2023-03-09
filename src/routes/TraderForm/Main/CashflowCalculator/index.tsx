@@ -3,18 +3,19 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  initialiseCashflowCalculatorThunk,
+  getExpectedCashflowInfoThunk,
   selectAdditionalCashflow,
   selectAMMTokenFormatted,
-  selectCashflowCalculatorStatus,
-  selectPredictedApy,
+  selectCashflowInfoStatus,
+  selectEstimatedApy,
+  selectInfoPostSwap,
   selectSwapFormAMM,
   selectTotalCashflow,
-  setPredictedApyAction,
+  setEstimatedApyAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
-import { formatCurrency } from '../../../../utilities/number';
+import { formatCurrency, stringToBigFloat } from '../../../../utilities/number';
 import {
   AdditionalCashFlowBox,
   CashFlowCalculatorBox,
@@ -31,34 +32,35 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
   const aMM = useAppSelector(selectSwapFormAMM);
   const token = useAppSelector(selectAMMTokenFormatted);
   const { isLargeDesktopDevice } = useResponsiveQuery();
+  const infoPostSwap = useAppSelector(selectInfoPostSwap);
 
-  const status = useAppSelector(selectCashflowCalculatorStatus);
-
-  const predictedApy = useAppSelector(selectPredictedApy);
+  const estimatedApy = useAppSelector(selectEstimatedApy);
 
   const additionalCashflow = useAppSelector(selectAdditionalCashflow);
   const totalCashflow = useAppSelector(selectTotalCashflow);
-  const [localPredictedApyLocal, setLocalPredictedApyLocal] = useState<string | undefined>(
-    predictedApy,
+  const [localEstimatedApy, setLocalEstimatedApy] = useState<string | undefined>(
+    estimatedApy.toString(),
   );
 
-  useEffect(() => {
-    setLocalPredictedApyLocal(predictedApy);
-  }, [predictedApy]);
+  const cashflowInfoStatus = useAppSelector(selectCashflowInfoStatus);
 
   useEffect(() => {
-    if (!aMM) {
+    setLocalEstimatedApy(estimatedApy.toString());
+  }, [estimatedApy]);
+
+  useEffect(() => {
+    if (!aMM || infoPostSwap.status !== 'success') {
       return;
     }
-    void dispatch(initialiseCashflowCalculatorThunk());
-  }, [dispatch, aMM]);
+    void dispatch(getExpectedCashflowInfoThunk());
+  }, [dispatch, aMM, infoPostSwap.status, infoPostSwap.value.variableTokenDeltaBalance]);
 
   const debouncedChangePredictedApy = useMemo(
     () =>
-      debounce((value?: string) => {
+      debounce((value: number) => {
         dispatch(
-          setPredictedApyAction({
-            value: value || '',
+          setEstimatedApyAction({
+            value,
           }),
         );
       }, 300),
@@ -67,10 +69,12 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
 
   const handleOnChange = useCallback(
     (value?: string) => {
-      setLocalPredictedApyLocal(value);
-      debouncedChangePredictedApy(value);
+      setLocalEstimatedApy(value);
+
+      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : 0;
+      debouncedChangePredictedApy(valueAsNumber);
     },
-    [dispatch, debouncedChangePredictedApy],
+    [debouncedChangePredictedApy],
   );
 
   // Stop the invocation of the debounced function
@@ -118,9 +122,9 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
           </Typography>
           <CurrencyField
             allowNegativeValue={false}
-            disabled={status !== 'success'}
+            disabled={cashflowInfoStatus !== 'success'}
             suffix="%"
-            value={localPredictedApyLocal}
+            value={localEstimatedApy}
             onChange={handleOnChange}
           />
         </ExpectedApyBox>
@@ -133,7 +137,11 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             token={token}
             tooltip="Calculated based on the notional amount and trade side specified in the form for swap."
             typographyToken={typographyToken}
-            value={formatCurrency(additionalCashflow, true, true, 2, 4)}
+            value={
+              additionalCashflow !== null
+                ? formatCurrency(additionalCashflow, true, true, 2, 4)
+                : '--'
+            }
           />
         </AdditionalCashFlowBox>
         <TotalCashFlowBox>
@@ -145,7 +153,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             token={token}
             tooltip="Calculated based on the current position plus the notional amount and trade side specified in the form for swap."
             typographyToken={typographyToken}
-            value={formatCurrency(totalCashflow, true, true, 2, 4)}
+            value={totalCashflow !== null ? formatCurrency(totalCashflow, true, true, 2, 4) : '--'}
           />
         </TotalCashFlowBox>
       </CashFlowCalculatorRightBox>

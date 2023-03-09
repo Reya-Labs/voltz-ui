@@ -2,6 +2,8 @@ import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'br
 import React from 'react';
 
 import {
+  selectAccruedCashflowEditPosition,
+  selectAccruedCashflowExistingPosition,
   selectEditPositionCompactNotional,
   selectEditPositionMode,
   selectEditPositionPayingRate,
@@ -50,6 +52,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   const editPositionPayingRate = useAppSelector(selectEditPositionPayingRate);
   const editPositionCompactNotional = useAppSelector(selectEditPositionCompactNotional);
 
+  const existingPositionAccruedCashflow = useAppSelector(selectAccruedCashflowExistingPosition);
+  const editPositionAccruedCashflow = useAppSelector(selectAccruedCashflowEditPosition);
+
   const existingPosition = useAppSelector(selectSwapFormPosition);
   if (!existingPosition) {
     return null;
@@ -62,10 +67,21 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
       editPositionCompactNotional.compactNotionalNumber &&
       existingPositionCompactNotional.compactNotionalSuffix ===
         editPositionCompactNotional.compactNotionalSuffix);
-  const sameReceivingRate =
-    !existingPositionReceivingRate || existingPositionReceivingRate === editPositionReceivingRate;
-  const samePayingRate =
-    !existingPositionPayingRate || existingPositionPayingRate === editPositionPayingRate;
+
+  const receivingRateFrom =
+    existingPositionReceivingRate !== null ? formatNumber(existingPositionReceivingRate) : '--';
+  const receivingRateTo =
+    editPositionReceivingRate !== null ? formatNumber(editPositionReceivingRate) : '--';
+
+  const payingRateFrom =
+    existingPositionPayingRate !== null ? formatNumber(existingPositionPayingRate) : '--';
+  const payingRateTo =
+    editPositionPayingRate !== null ? formatNumber(editPositionPayingRate) : '--';
+
+  const accruedCashflowFrom =
+    existingPositionAccruedCashflow !== null ? formatNumber(existingPositionAccruedCashflow) : '--';
+  const accruedCashflowTo =
+    editPositionAccruedCashflow !== null ? formatNumber(editPositionAccruedCashflow) : '--';
 
   return (
     <PositionDetailsBox>
@@ -121,7 +137,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           )}
         </NotionalBox>
         <ReceivingBox>
-          {sameReceivingRate ? (
+          {receivingRateFrom === receivingRateTo ? (
             <LabelTokenTypography
               colorToken="lavenderWeb"
               label="Receiving"
@@ -129,27 +145,25 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               labelTypographyToken={labelTypographyToken}
               token="%"
               typographyToken={typographyToken}
-              value={editPositionReceivingRate ? formatNumber(editPositionReceivingRate) : '--'}
+              value={receivingRateTo}
             />
           ) : (
             <FromToTokenTypography
               fromColorToken="lavenderWeb"
               fromToken="%"
-              fromValue={
-                existingPositionReceivingRate ? formatNumber(existingPositionReceivingRate) : '--'
-              }
+              fromValue={receivingRateFrom}
               label="Receiving"
               labelColorToken="lavenderWeb3"
               labelTypographyToken={labelTypographyToken}
               toColorToken="lavenderWeb"
               toToken="%"
-              toValue={editPositionReceivingRate ? formatNumber(editPositionReceivingRate) : '--'}
+              toValue={receivingRateTo}
               typographyToken={typographyToken}
             />
           )}
         </ReceivingBox>
         <PayingBox>
-          {samePayingRate ? (
+          {payingRateFrom === payingRateTo ? (
             <LabelTokenTypography
               colorToken="lavenderWeb"
               label="Paying"
@@ -157,35 +171,48 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               labelTypographyToken={labelTypographyToken}
               token="%"
               typographyToken={typographyToken}
-              value={editPositionPayingRate ? formatNumber(editPositionPayingRate) : '--'}
+              value={payingRateTo}
             />
           ) : (
             <FromToTokenTypography
               fromColorToken="lavenderWeb"
               fromToken="%"
-              fromValue={
-                existingPositionPayingRate ? formatNumber(existingPositionPayingRate) : '--'
-              }
+              fromValue={payingRateFrom}
               label="Paying"
               labelColorToken="lavenderWeb3"
               labelTypographyToken={labelTypographyToken}
               toColorToken="lavenderWeb"
               toToken="%"
-              toValue={editPositionPayingRate ? formatNumber(editPositionPayingRate) : '--'}
+              toValue={payingRateTo}
               typographyToken={typographyToken}
             />
           )}
         </PayingBox>
         <CashFlowBox>
-          <LabelTokenTypography
-            colorToken="lavenderWeb"
-            label="Cash Flow"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken={labelTypographyToken}
-            token={` ${underlyingTokenName.toUpperCase()}`}
-            typographyToken={typographyToken}
-            value={formatNumber(existingPosition.accruedCashflow)}
-          />
+          {accruedCashflowFrom === accruedCashflowTo ? (
+            <LabelTokenTypography
+              colorToken="lavenderWeb"
+              label="Cash Flow"
+              labelColorToken="lavenderWeb3"
+              labelTypographyToken={labelTypographyToken}
+              token={` ${underlyingTokenName.toUpperCase()}`}
+              typographyToken={typographyToken}
+              value={accruedCashflowTo}
+            />
+          ) : (
+            <FromToTokenTypography
+              fromColorToken="lavenderWeb"
+              fromToken=""
+              fromValue={accruedCashflowFrom}
+              label="Cash Flow"
+              labelColorToken="lavenderWeb3"
+              labelTypographyToken={labelTypographyToken}
+              toColorToken="lavenderWeb"
+              toToken={` ${underlyingTokenName.toUpperCase()}`}
+              toValue={accruedCashflowTo}
+              typographyToken={typographyToken}
+            />
+          )}
         </CashFlowBox>
       </PositionDetailsRightBox>
     </PositionDetailsBox>

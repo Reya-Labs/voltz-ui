@@ -15,6 +15,7 @@ import {
   getEditPositionFixedRate,
   getEditPositionMode,
   getEditPositionNotional,
+  getEditPositionVariableRate,
   getExistingPositionFixedRate,
   getExistingPositionMode,
   getNewPositionFixedRate,
@@ -166,11 +167,11 @@ export const selectEditPositionMode = (state: RootState) => {
 export const selectEditPositionReceivingRate = (state: RootState) => {
   return getEditPositionMode(state.swapForm) === 'fixed'
     ? getEditPositionFixedRate(state.swapForm)
-    : getVariableRate(state.swapForm);
+    : getEditPositionVariableRate(state.swapForm);
 };
 export const selectEditPositionPayingRate = (state: RootState) => {
   return getEditPositionMode(state.swapForm) === 'fixed'
-    ? getVariableRate(state.swapForm)
+    ? getEditPositionVariableRate(state.swapForm)
     : getEditPositionFixedRate(state.swapForm);
 };
 export const selectEditPositionCompactNotional = (state: RootState) => {
@@ -183,15 +184,55 @@ export const selectEditPositionCompactNotional = (state: RootState) => {
   };
 };
 
-// ------------ Cashflow Calculator Selectors ------------
-export const selectCashflowCalculatorStatus = (state: RootState) =>
-  state.swapForm.cashflowCalculator.variableFactorStartNow.status;
-export const selectPredictedApy = (state: RootState) =>
-  state.swapForm.cashflowCalculator.predictedApy;
-export const selectAdditionalCashflow = (state: RootState) =>
-  state.swapForm.cashflowCalculator.additionalCashflow;
-export const selectTotalCashflow = (state: RootState) =>
-  state.swapForm.cashflowCalculator.totalCashflow;
+// ------------ Cashflow Info Selectors ------------
+export const selectEstimatedApy = (state: RootState) => state.swapForm.userInput.estimatedApy;
+export const selectCashflowInfoStatus = (state: RootState) =>
+  state.swapForm.prospectiveSwap.cashflowInfo.status;
+export const selectAccruedCashflowExistingPosition = (state: RootState) => {
+  if (state.swapForm.prospectiveSwap.cashflowInfo.status === 'pending') {
+    return null;
+  }
+  return state.swapForm.prospectiveSwap.cashflowInfo.accruedCashflowExistingPosition;
+};
+export const selectAccruedCashflowEditPosition = (state: RootState) => {
+  if (state.swapForm.prospectiveSwap.cashflowInfo.status === 'pending') {
+    return null;
+  }
+  return state.swapForm.prospectiveSwap.cashflowInfo.accruedCashflowEditPosition;
+};
+export const selectAdditionalCashflow = (state: RootState) => {
+  if (state.swapForm.prospectiveSwap.cashflowInfo.status !== 'success') {
+    return null;
+  }
+
+  return state.swapForm.prospectiveSwap.cashflowInfo.estimatedAdditionalCashflow(
+    state.swapForm.userInput.estimatedApy,
+  );
+};
+
+export const selectTotalCashflow = (state: RootState) => {
+  if (state.swapForm.prospectiveSwap.cashflowInfo.status !== 'success') {
+    return null;
+  }
+
+  return state.swapForm.prospectiveSwap.cashflowInfo.estimatedTotalCashflow(
+    state.swapForm.userInput.estimatedApy,
+  );
+};
+
+export const selectSlippage = (state: RootState) => {
+  if (
+    state.swapForm.fixedRate.status !== 'success' ||
+    state.swapForm.prospectiveSwap.infoPostSwap.status !== 'success'
+  ) {
+    return null;
+  }
+
+  return Math.abs(
+    state.swapForm.prospectiveSwap.infoPostSwap.value.averageFixedRate -
+      state.swapForm.fixedRate.value,
+  );
+};
 
 // ------------ Swap Confirmation Flow Selectors ------------
 export const selectSwapConfirmationFlowStep = (state: RootState) =>

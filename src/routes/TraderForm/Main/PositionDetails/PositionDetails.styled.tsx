@@ -45,6 +45,7 @@ export const PayingBox = styled('div')`
   width: 100px;
 `;
 
+// TODO Filip: adjust width here
 export const CashFlowBox = styled('div')`
   border-left: 1px solid ${colors.liberty5};
   padding: 0px 16px;

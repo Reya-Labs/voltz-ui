@@ -5,11 +5,13 @@ import { useParams } from 'react-router-dom';
 import { selectChainId } from '../../app/features/network';
 import {
   getFixedRateThunk,
+  getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
   selectSwapFormAMM,
+  selectSwapFormPosition,
   selectSwapFormPositionFetchingStatus,
   setSignerAndPositionForAMMThunk,
   setSwapFormAMMAction,
@@ -32,6 +34,7 @@ export const useSwapFormAMM = (): UseAMMsResult => {
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
   const aMM = useAppSelector(selectSwapFormAMM);
+  const position = useAppSelector(selectSwapFormPosition);
   const positionFetchingStatus = useAppSelector(selectSwapFormPositionFetchingStatus);
   const chainId = useAppSelector(selectChainId);
   const [loading, setLoading] = useState(true);
@@ -102,6 +105,14 @@ export const useSwapFormAMM = (): UseAMMsResult => {
     void dispatch(getWalletBalanceThunk());
     void dispatch(getUnderlyingTokenAllowanceThunk());
   }, [dispatch, aMM, aMM?.signer]);
+
+  useEffect(() => {
+    if (!position) {
+      return;
+    }
+
+    void dispatch(getInfoPostSwapThunk());
+  }, [dispatch, position]);
 
   return {
     aMM,

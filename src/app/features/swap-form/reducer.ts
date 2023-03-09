@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
+import { AMM, ExpectedCashflowInfo, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import {
@@ -12,13 +12,13 @@ import {
   approveUnderlyingTokenThunk,
   confirmMarginUpdateThunk,
   confirmSwapThunk,
+  getExpectedCashflowInfoThunk,
   getFixedRateThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
-  initialiseCashflowCalculatorThunk,
   setSignerAndPositionForAMMThunk,
   SetSignerAndPositionForAMMThunkSuccess,
 } from './thunks';
@@ -103,6 +103,7 @@ export type SliceState = {
       error: string | null;
     };
     leverage: number | null;
+    estimatedApy: number;
   };
   // State of prospective swap
   prospectiveSwap: {
@@ -138,20 +139,14 @@ export type SliceState = {
       };
       status: ThunkStatus;
     };
-  };
-  // State of cashflow calculator
-  cashflowCalculator: {
-    // User-inputted predicted variable apy
-    predictedApy: string;
-    // Cached variable factor from termStart to now
-    variableFactorStartNow: {
-      value: number;
+    cashflowInfo: {
+      averageFixedRate: number;
+      accruedCashflowExistingPosition: number;
+      accruedCashflowEditPosition: number;
+      estimatedAdditionalCashflow: (estimatedApy: number) => number;
+      estimatedTotalCashflow: (estimatedApy: number) => number;
       status: ThunkStatus;
     };
-    // Additional cashflow resulted from prospective swap, from now to termEnd
-    additionalCashflow: number;
-    // Total cashflow resulted from past and prospective swaps, from termStart to termEnd
-    totalCashflow: number;
   };
   swapConfirmationFlow: {
     step: 'swapConfirmation' | 'waitingForSwapConfirmation' | 'swapCompleted' | null;
@@ -228,6 +223,7 @@ const initialState: SliceState = {
       error: null,
     },
     leverage: null,
+    estimatedApy: 0,
   },
   prospectiveSwap: {
     mode: 'fixed',
@@ -249,17 +245,16 @@ const initialState: SliceState = {
         slippage: 0,
         gasFeeETH: 0,
       },
-      status: 'success',
-    },
-  },
-  cashflowCalculator: {
-    predictedApy: '0', // TODO Alex: should maybe change to number
-    variableFactorStartNow: {
-      value: 0,
       status: 'idle',
     },
-    additionalCashflow: 0,
-    totalCashflow: 0,
+    cashflowInfo: {
+      averageFixedRate: 0,
+      accruedCashflowExistingPosition: 0,
+      accruedCashflowEditPosition: 0,
+      estimatedAdditionalCashflow: () => 0,
+      estimatedTotalCashflow: () => 0,
+      status: 'idle',
+    },
   },
   swapConfirmationFlow: {
     step: null,
@@ -293,34 +288,6 @@ const calculateLeverageOptions = (maxLeverage: string) => {
     Math.floor(maxLeverageOption / 2),
     Math.floor(maxLeverageOption),
   ];
-};
-
-const updateCashflowCalculator = (state: Draft<SliceState>): void => {
-  if (!state.amm) {
-    return;
-  }
-  if (state.cashflowCalculator.variableFactorStartNow.status !== 'success') {
-    return;
-  }
-  if (!state.cashflowCalculator.predictedApy) {
-    state.cashflowCalculator.additionalCashflow = 0;
-    state.cashflowCalculator.totalCashflow = 0;
-    return;
-  }
-  if (state.prospectiveSwap.infoPostSwap.status !== 'success') {
-    return;
-  }
-
-  const { additionalCashflow, totalCashflow } = state.amm.getExpectedCashflowInfo({
-    position: state.position.value as Position,
-    fixedTokenDeltaBalance: state.prospectiveSwap.infoPostSwap.value.fixedTokenDeltaBalance,
-    variableTokenDeltaBalance: state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance,
-    variableFactorStartNow: state.cashflowCalculator.variableFactorStartNow.value,
-    predictedVariableApy: stringToBigFloat(state.cashflowCalculator.predictedApy) / 100,
-  });
-
-  state.cashflowCalculator.additionalCashflow = additionalCashflow;
-  state.cashflowCalculator.totalCashflow = totalCashflow;
 };
 
 const updateLeverageOptionsAfterGetPoolSwapInfo = (state: Draft<SliceState>): void => {
@@ -580,16 +547,15 @@ export const slice = createSlice({
       validateUserInputAndUpdateSubmitButton(state);
       state.showLowLeverageNotification = checkLowLeverageNotification(state);
     },
-    setPredictedApyAction: (
+    setEstimatedApyAction: (
       state,
       {
         payload: { value },
       }: PayloadAction<{
-        value: string;
+        value: number;
       }>,
     ) => {
-      state.cashflowCalculator.predictedApy = value;
-      updateCashflowCalculator(state);
+      state.userInput.estimatedApy = value;
     },
     setSwapFormAMMAction: (
       state,
@@ -604,24 +570,6 @@ export const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(initialiseCashflowCalculatorThunk.pending, (state) => {
-        state.cashflowCalculator.variableFactorStartNow = {
-          value: 0,
-          status: 'pending',
-        };
-      })
-      .addCase(initialiseCashflowCalculatorThunk.rejected, (state) => {
-        state.cashflowCalculator.variableFactorStartNow = {
-          value: 0,
-          status: 'error',
-        };
-      })
-      .addCase(initialiseCashflowCalculatorThunk.fulfilled, (state, { payload }) => {
-        state.cashflowCalculator.variableFactorStartNow = {
-          value: payload as number,
-          status: 'success',
-        };
-      })
       .addCase(getWalletBalanceThunk.pending, (state) => {
         state.walletBalance = {
           value: 0,
@@ -867,7 +815,6 @@ export const slice = createSlice({
           state.poolSwapInfo.availableNotional[swapMode] = infoPostSwap.availableNotional;
         }
 
-        updateCashflowCalculator(state);
         updateLeverageOptionsAfterGetInfoPostSwap(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
@@ -941,6 +888,23 @@ export const slice = createSlice({
           error: null,
           txHash: (payload as ContractReceipt).transactionHash,
         };
+      })
+      .addCase(getExpectedCashflowInfoThunk.pending, (state) => {
+        state.prospectiveSwap.cashflowInfo.status = 'pending';
+      })
+      .addCase(getExpectedCashflowInfoThunk.rejected, (state, {}) => {
+        state.prospectiveSwap.cashflowInfo.status = 'error';
+      })
+      .addCase(getExpectedCashflowInfoThunk.fulfilled, (state, { payload }) => {
+        const expectedCashflowInfo = payload as ExpectedCashflowInfo;
+        state.prospectiveSwap.cashflowInfo = {
+          averageFixedRate: expectedCashflowInfo.averageFixedRate,
+          accruedCashflowExistingPosition: expectedCashflowInfo.accruedCashflowExistingPosition,
+          accruedCashflowEditPosition: expectedCashflowInfo.accruedCashflowEditPosition,
+          estimatedAdditionalCashflow: expectedCashflowInfo.estimatedAdditionalCashflow,
+          estimatedTotalCashflow: expectedCashflowInfo.estimatedTotalCashflow,
+          status: 'success',
+        };
       });
   },
 });
@@ -951,7 +915,7 @@ export const {
   setNotionalAmountAction,
   setMarginAmountAction,
   setLeverageAction,
-  setPredictedApyAction,
+  setEstimatedApyAction,
   openSwapConfirmationFlowAction,
   closeSwapConfirmationFlowAction,
   openMarginUpdateConfirmationFlowAction,

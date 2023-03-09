@@ -217,8 +217,23 @@ export const getEditPositionMode = (state: Draft<SliceState>) => {
 };
 
 export const getEditPositionFixedRate = (state: Draft<SliceState>) => {
-  const { fixedTokenBalance, variableTokenBalance } = getEditPositionTokenBalance(state);
-  return variableTokenBalance !== 0 ? Math.abs(fixedTokenBalance / variableTokenBalance) : 0;
+  if (state.prospectiveSwap.cashflowInfo.status === 'success') {
+    if (getEditPositionNotional(state) === 0) {
+      return null;
+    }
+
+    return state.prospectiveSwap.cashflowInfo.averageFixedRate;
+  }
+
+  return null;
+};
+
+export const getEditPositionVariableRate = (state: Draft<SliceState>) => {
+  if (getEditPositionNotional(state) === 0) {
+    return null;
+  }
+
+  return getVariableRate(state);
 };
 
 export const getEditPositionNotional = (state: Draft<SliceState>) => {

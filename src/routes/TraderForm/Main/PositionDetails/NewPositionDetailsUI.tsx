@@ -73,7 +73,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
-            value={receivingRate ? formatNumber(receivingRate) : '--'}
+            value={receivingRate !== null ? formatNumber(receivingRate) : '--'}
           />
         </ReceivingBox>
         <PayingBox>
@@ -84,7 +84,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
-            value={payingRate ? formatNumber(payingRate) : '--'}
+            value={payingRate !== null ? formatNumber(payingRate) : '--'}
           />
         </PayingBox>
         <CashFlowBox>
