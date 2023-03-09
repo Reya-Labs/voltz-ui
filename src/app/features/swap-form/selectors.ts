@@ -5,7 +5,6 @@ import {
   compactFormatToParts,
   formatNumber,
   limitAndFormatNumber,
-  roundIntegerNumber,
   stringToBigFloat,
 } from '../../../utilities/number';
 import { RootState } from '../../store';
@@ -259,58 +258,9 @@ export const selectShowLeverageNotification = (state: RootState) =>
 export const selectLeverageOptions = (state: RootState) => {
   const swapFormState = state.swapForm;
 
-  let maxLeverage = '--';
-  if (swapFormState.prospectiveSwap.infoPostSwap.status === 'idle') {
-    maxLeverage = formatNumber(
-      Math.floor(swapFormState.poolSwapInfo.maxLeverage[swapFormState.prospectiveSwap.mode]),
-      0,
-      0,
-    );
-  }
-  if (
-    !swapFormState.userInput.notionalAmount.error &&
-    swapFormState.prospectiveSwap.infoPostSwap.status === 'success'
-  ) {
-    if (swapFormState.prospectiveSwap.infoPostSwap.value.marginRequirement > 0) {
-      maxLeverage = formatNumber(
-        Math.floor(
-          swapFormState.prospectiveSwap.notionalAmount /
-            swapFormState.prospectiveSwap.infoPostSwap.value.marginRequirement,
-        ),
-        0,
-        0,
-      );
-    } else {
-      maxLeverage = formatNumber(
-        Math.floor(swapFormState.poolSwapInfo.maxLeverage[swapFormState.prospectiveSwap.mode]),
-        0,
-        0,
-      );
-    }
-  }
-
-  let leverageOptions = [0, 0, 0];
-  if (maxLeverage !== '--') {
-    let maxLeverageOption = stringToBigFloat(maxLeverage);
-    maxLeverageOption = roundIntegerNumber(
-      maxLeverageOption,
-      Math.max(
-        0,
-        Math.floor(maxLeverageOption.toString().length / 2) -
-          1 +
-          (maxLeverageOption.toString().length % 2),
-      ),
-    );
-    leverageOptions = [
-      Math.floor(maxLeverageOption / 4),
-      Math.floor(maxLeverageOption / 2),
-      Math.floor(maxLeverageOption),
-    ];
-  }
-
   return {
-    maxLeverage,
-    leverageOptions,
+    maxLeverage: swapFormState.prospectiveSwap.leverage.maxLeverage,
+    leverageOptions: swapFormState.prospectiveSwap.leverage.options,
   };
 };
 
