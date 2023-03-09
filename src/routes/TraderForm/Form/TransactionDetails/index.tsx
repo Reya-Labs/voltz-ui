@@ -6,6 +6,7 @@ import {
   selectInfoPostSwap,
   selectSlippage,
   selectSubmitButtonInfo,
+  SwapFormNumberLimits,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { formatNumber } from '../../../../utilities/number';
@@ -19,6 +20,15 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
   const token = useAppSelector(selectAMMTokenFormatted);
   const submitButtonInfo = useAppSelector(selectSubmitButtonInfo);
   const slippage = useAppSelector(selectSlippage);
+
+  let fee = '--';
+  if (infoPostSwap.status === 'success') {
+    if (infoPostSwap.value.fee < 1) {
+      fee = formatNumber(infoPostSwap.value.fee, 0, SwapFormNumberLimits.decimalLimit);
+    } else {
+      fee = formatNumber(infoPostSwap.value.fee);
+    }
+  }
 
   const hideFees = submitButtonInfo.state === 'margin-update';
   const hideSlippage = submitButtonInfo.state === 'margin-update';
@@ -35,7 +45,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
             colorToken="lavenderWeb"
             token={token}
             typographyToken="secondaryBodySmallRegular"
-            value={infoPostSwap.status === 'success' ? formatNumber(infoPostSwap.value.fee) : '--'}
+            value={fee}
           ></TokenTypography>
         </TransactionDetailBox>
       )}
@@ -48,7 +58,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
             colorToken="lavenderWeb"
             token="%"
             typographyToken="secondaryBodySmallRegular"
-            value={slippage !== null ? formatNumber(slippage) : '--'}
+            value={slippage !== null ? formatNumber(slippage, 0, 2) : '--'}
           ></TokenTypography>
         </TransactionDetailBox>
       )}

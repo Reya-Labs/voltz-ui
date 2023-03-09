@@ -129,7 +129,13 @@ export const selectNewPositionPayingRate = (state: RootState) => {
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.swapForm.userInput.notionalAmount.error) return null;
 
-  const compactParts = compactFormatToParts(state.swapForm.prospectiveSwap.notionalAmount);
+  let compactParts;
+  if (state.swapForm.prospectiveSwap.notionalAmount < 1) {
+    compactParts = compactFormatToParts(state.swapForm.prospectiveSwap.notionalAmount, 0, 6);
+  } else {
+    compactParts = compactFormatToParts(state.swapForm.prospectiveSwap.notionalAmount);
+  }
+
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -263,7 +269,11 @@ export const selectVariableRate24hDelta = (state: RootState) => {
   return state.swapForm.variableRate24hAgo.status === 'success' &&
     state.swapForm.variableRate.status === 'success'
     ? stringToBigFloat(
-        formatNumber(state.swapForm.variableRate.value - state.swapForm.variableRate24hAgo.value),
+        formatNumber(
+          state.swapForm.variableRate.value - state.swapForm.variableRate24hAgo.value,
+          0,
+          3,
+        ),
       )
     : undefined;
 };

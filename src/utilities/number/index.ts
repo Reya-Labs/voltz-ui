@@ -105,11 +105,15 @@ export const stringToBigFloat = (stringValue: string): number => {
  * @param {number} value - number - The number to format.
  * @returns A string
  */
-export const compactFormat = (value: number): string => {
+export const compactFormat = (
+  value: number,
+  minimumFractionDigits: number = 0,
+  maximumFractionDigits: number = 2,
+): string => {
   const formatter = Intl.NumberFormat(navigator.language, {
     notation: 'compact',
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 0,
+    maximumFractionDigits,
+    minimumFractionDigits,
   });
   return formatter.format(value);
 };
@@ -126,14 +130,16 @@ export const compactFormat = (value: number): string => {
  */
 export const compactFormatToParts = (
   number: number,
+  minimumFractionDigits: number = 0,
+  maximumFractionDigits: number = 2,
 ): {
   compactNumber: string;
   compactSuffix: string;
 } => {
   const formatter = Intl.NumberFormat(navigator.language, {
     notation: 'compact',
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 0,
+    maximumFractionDigits,
+    minimumFractionDigits,
   });
   const parts = formatter.formatToParts(number);
   return {
