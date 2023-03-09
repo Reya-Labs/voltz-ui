@@ -54,7 +54,7 @@ export const fetchHistoricalRatesThunk = createAsyncThunk<
   }
   const { timeframeMs, granularity, chainId, aMMId, aMMRateOracleId, isFixed } = payload;
   try {
-    const { oppositeSideCurrentRate, historicalRates } = await getHistoricalRates({
+    const { historicalRates } = await getHistoricalRates({
       chainId,
       isFixed,
       filters: {
@@ -67,7 +67,6 @@ export const fetchHistoricalRatesThunk = createAsyncThunk<
 
     CACHE[cacheId] = {
       historicalRates,
-      oppositeSideCurrentRate,
     };
     return CACHE[cacheId];
   } catch (err) {

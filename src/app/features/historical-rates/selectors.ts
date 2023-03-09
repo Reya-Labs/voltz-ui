@@ -11,5 +11,3 @@ export const selectHistoricalRates = (
     y: d.value * 100,
   }));
 export const selectHistoricalRatesStatus = (state: RootState) => state.historicalRates.status;
-export const selectOppositeSideCurrentRate = (state: RootState) =>
-  state.historicalRates.oppositeSideCurrentRate * 100;

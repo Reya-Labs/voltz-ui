@@ -5,11 +5,14 @@ import React, { useEffect, useState } from 'react';
 import {
   selectHistoricalRates,
   selectHistoricalRatesStatus,
-  selectOppositeSideCurrentRate,
 } from '../../../../app/features/historical-rates';
 import { fetchHistoricalRatesThunk } from '../../../../app/features/historical-rates/thunks';
 import { selectChainId } from '../../../../app/features/network';
-import { selectFixedRateInfo, selectSwapFormAMM } from '../../../../app/features/swap-form';
+import {
+  selectFixedRateInfo,
+  selectSwapFormAMM,
+  selectVariableRateInfo,
+} from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { ChartBox, LineChartBox, LoadingBox, RainbowLoaderBox } from './Chart.styled';
@@ -54,8 +57,8 @@ const filterOptions: ChartFiltersProps['filterOptions'] = [
 
 export const Chart: React.FunctionComponent<ChartProps> = () => {
   const data = useAppSelector(selectHistoricalRates);
-  const oppositeSideCurrentRate = useAppSelector(selectOppositeSideCurrentRate);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
+  const variableRateInfo = useAppSelector(selectVariableRateInfo);
 
   const loading = useAppSelector(selectHistoricalRatesStatus) === 'pending';
   const dispatch = useAppDispatch();
@@ -93,9 +96,12 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
     );
   }, [dispatch, timeframe, isFixed, granularity, chainId, aMM]);
 
-  let yMarker = oppositeSideCurrentRate;
+  let yMarker = -100;
   if (fixedRateInfo.status === 'success' && !isFixed) {
     yMarker = fixedRateInfo.value;
+  }
+  if (variableRateInfo.status === 'success' && isFixed) {
+    yMarker = variableRateInfo.value;
   }
 
   return (
@@ -109,6 +115,7 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
           </LoadingBox>
         ) : null}
         <LineChart
+          axisBottomFormat={activeTimeRangeId === '1d' ? 'hours' : 'days'}
           axisTypographyToken={
             isLargeDesktopDevice ? 'secondaryBodySmallRegular' : 'primaryBodyXSmallRegular'
           }
