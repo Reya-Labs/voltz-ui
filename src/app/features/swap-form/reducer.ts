@@ -2,12 +2,7 @@ import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, ExpectedCashflowInfo, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
-import {
-  formatNumber,
-  limitAndFormatNumber,
-  roundIntegerNumber,
-  stringToBigFloat,
-} from '../../../utilities/number';
+import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
 import {
   approveUnderlyingTokenThunk,
   confirmMarginUpdateThunk,
@@ -30,14 +25,10 @@ import {
   getProspectiveSwapNotional,
   hasExistingPosition,
   isUserInputMarginError,
+  swapFormLimitAndFormatNumber,
   updateLeverage,
   validateUserInput,
 } from './utils';
-
-export const SwapFormNumberLimits = {
-  digitLimit: 12,
-  decimalLimit: 6,
-};
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
@@ -535,12 +526,7 @@ export const slice = createSlice({
 
       state.userInput.leverage = value;
       state.userInput.marginAmount.value = stringToBigFloat(
-        limitAndFormatNumber(
-          state.prospectiveSwap.notionalAmount / value,
-          SwapFormNumberLimits.digitLimit,
-          SwapFormNumberLimits.decimalLimit,
-          'ceil',
-        ),
+        swapFormLimitAndFormatNumber(state.prospectiveSwap.notionalAmount / value, 'ceil'),
       );
 
       updateProspectiveSwapParams(state);

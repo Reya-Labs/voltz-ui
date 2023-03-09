@@ -1,7 +1,47 @@
 import { Draft } from '@reduxjs/toolkit';
 import { Position } from '@voltz-protocol/v1-sdk';
 
+import {
+  compactFormat,
+  compactFormatToParts,
+  formatNumber,
+  limitAndFormatNumber,
+} from '../../../../utilities/number';
+import { SwapFormNumberLimits } from '../constants';
 import { SliceState } from '../reducer';
+
+export const swapFormFormatNumber = (value: number) => {
+  if (value < 1) {
+    return formatNumber(value, 0, SwapFormNumberLimits.decimalLimit);
+  }
+
+  return formatNumber(value, 0, 2);
+};
+
+export const swapFormCompactFormat = (value: number) => {
+  if (value < 1) {
+    return compactFormat(value, 0, SwapFormNumberLimits.decimalLimit);
+  }
+
+  return compactFormat(value, 0, 2);
+};
+
+export const swapFormCompactFormatToParts = (value: number) => {
+  if (value < 1) {
+    return compactFormatToParts(value, 0, SwapFormNumberLimits.decimalLimit);
+  }
+
+  return compactFormatToParts(value, 0, 2);
+};
+
+export const swapFormLimitAndFormatNumber = (value: number, mode: 'floor' | 'ceil') => {
+  return limitAndFormatNumber(
+    value,
+    SwapFormNumberLimits.digitLimit,
+    SwapFormNumberLimits.decimalLimit,
+    mode,
+  );
+};
 
 export const isUserInputNotionalError = (state: Draft<SliceState>): boolean => {
   return state.userInput.notionalAmount.error !== null;

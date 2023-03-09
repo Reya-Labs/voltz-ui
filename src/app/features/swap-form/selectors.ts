@@ -1,14 +1,8 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatTimestamp } from '../../../utilities/date';
-import {
-  compactFormatToParts,
-  formatNumber,
-  limitAndFormatNumber,
-  stringToBigFloat,
-} from '../../../utilities/number';
+import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
-import { SwapFormNumberLimits } from './reducer';
 import {
   getAvailableMargin,
   getAvailableNotional,
@@ -21,6 +15,9 @@ import {
   getNewPositionFixedRate,
   getVariableRate,
   hasExistingPosition,
+  swapFormCompactFormatToParts,
+  swapFormFormatNumber,
+  swapFormLimitAndFormatNumber,
 } from './utils';
 
 // ------------ General Swap Form State Info ------------
@@ -74,6 +71,19 @@ export const selectProspectiveSwapNotional = (state: RootState) =>
   state.swapForm.prospectiveSwap.notionalAmount;
 export const selectProspectiveSwapMargin = (state: RootState) =>
   state.swapForm.prospectiveSwap.marginAmount;
+export const selectProspectiveSwapNotionalFormatted = (state: RootState) => {
+  return swapFormFormatNumber(state.swapForm.prospectiveSwap.notionalAmount);
+};
+export const selectProspectiveSwapMarginFormatted = (state: RootState) => {
+  return swapFormFormatNumber(state.swapForm.prospectiveSwap.marginAmount);
+};
+export const selectProspectiveSwapFeeFormatted = (state: RootState) => {
+  if (state.swapForm.prospectiveSwap.infoPostSwap.status === 'success') {
+    return swapFormFormatNumber(state.swapForm.prospectiveSwap.infoPostSwap.value.fee);
+  }
+
+  return '--';
+};
 
 export const selectLeverage = (state: RootState) => state.swapForm.userInput.leverage;
 export const selectInfoPostSwap = (state: RootState) => state.swapForm.prospectiveSwap.infoPostSwap;
@@ -91,20 +101,13 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
 
   if (swapFormState.userInput.marginAmount.editMode === 'remove') {
     return getAvailableMargin(swapFormState) !== null
-      ? limitAndFormatNumber(
-          getAvailableMargin(swapFormState) as number,
-          SwapFormNumberLimits.digitLimit,
-          SwapFormNumberLimits.decimalLimit,
-          'floor',
-        )
+      ? swapFormLimitAndFormatNumber(getAvailableMargin(swapFormState) as number, 'floor')
       : null;
   }
 
   if (swapFormState.prospectiveSwap.infoPostSwap.status === 'success') {
-    return limitAndFormatNumber(
+    return swapFormLimitAndFormatNumber(
       swapFormState.prospectiveSwap.infoPostSwap.value.marginRequirement,
-      SwapFormNumberLimits.digitLimit,
-      SwapFormNumberLimits.decimalLimit,
       'ceil',
     );
   }
@@ -129,12 +132,7 @@ export const selectNewPositionPayingRate = (state: RootState) => {
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.swapForm.userInput.notionalAmount.error) return null;
 
-  let compactParts;
-  if (state.swapForm.prospectiveSwap.notionalAmount < 1) {
-    compactParts = compactFormatToParts(state.swapForm.prospectiveSwap.notionalAmount, 0, 6);
-  } else {
-    compactParts = compactFormatToParts(state.swapForm.prospectiveSwap.notionalAmount);
-  }
+  const compactParts = swapFormCompactFormatToParts(state.swapForm.prospectiveSwap.notionalAmount);
 
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
@@ -226,18 +224,20 @@ export const selectTotalCashflow = (state: RootState) => {
   );
 };
 
-export const selectSlippage = (state: RootState) => {
+export const selectSlippageFormatted = (state: RootState) => {
   if (
     state.swapForm.fixedRate.status !== 'success' ||
     state.swapForm.prospectiveSwap.infoPostSwap.status !== 'success'
   ) {
-    return null;
+    return '--';
   }
 
-  return Math.abs(
+  const slippage = Math.abs(
     state.swapForm.prospectiveSwap.infoPostSwap.value.averageFixedRate -
       state.swapForm.fixedRate.value,
   );
+
+  return slippage !== null ? formatNumber(slippage) : '--';
 };
 
 // ------------ Swap Confirmation Flow Selectors ------------
