@@ -4,7 +4,7 @@ import React from 'react';
 import {
   selectAMMTokenFormatted,
   selectMarginAccountName,
-  selectWalletBalanceInfo,
+  selectSwapFormPosition,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { compactFormat } from '../../../../utilities/number';
@@ -13,11 +13,10 @@ import { AccountBox, BalanceBox, MarginAccountBox } from './MarginAccount.styled
 type MarginAccountProps = {};
 
 export const MarginAccount: React.FunctionComponent<MarginAccountProps> = () => {
-  const walletBalance = useAppSelector(selectWalletBalanceInfo);
+  const position = useAppSelector(selectSwapFormPosition);
   const token = useAppSelector(selectAMMTokenFormatted);
   const accountName = useAppSelector(selectMarginAccountName);
-  const balanceValue =
-    walletBalance.status === 'success' ? compactFormat(walletBalance.value) : '--';
+  const balanceValue = position ? compactFormat(position.margin) : '--';
 
   return (
     <MarginAccountBox>
@@ -35,7 +34,7 @@ export const MarginAccount: React.FunctionComponent<MarginAccountProps> = () => 
       <BalanceBox>
         <LabelTokenTypography
           colorToken="lavenderWeb"
-          label="Balance"
+          label="Margin"
           labelColorToken="lavenderWeb2"
           labelTypographyToken="primaryBodyXSmallRegular"
           token={token}
