@@ -6,6 +6,7 @@ import {
   compactFormatToParts,
   formatNumber,
   limitAndFormatNumber,
+  stringToBigFloat,
 } from '../../../../utilities/number';
 import { SwapFormNumberLimits } from '../constants';
 import { SliceState } from '../reducer';
@@ -84,18 +85,29 @@ const validateUserInputNotional = (state: Draft<SliceState>): void => {
 
 export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
   if (state.userInput.marginAmount.editMode === 'remove') {
+    if (state.prospectiveSwap.infoPostSwap.status !== 'success') {
+      return null;
+    }
+
+    let maxMarginWithdrawable = null;
     if (state.prospectiveSwap.notionalAmount === 0 && hasExistingPosition(state)) {
-      return (state.position.value as Position).maxMarginWithdrawable;
+      maxMarginWithdrawable = (state.position.value as Position).maxMarginWithdrawable;
     }
 
-    if (
-      state.prospectiveSwap.notionalAmount > 0 &&
-      state.prospectiveSwap.infoPostSwap.status === 'success'
-    ) {
-      return state.prospectiveSwap.infoPostSwap.value.maxMarginWithdrawable;
+    if (state.prospectiveSwap.notionalAmount > 0) {
+      maxMarginWithdrawable = state.prospectiveSwap.infoPostSwap.value.maxMarginWithdrawable;
     }
 
-    return null;
+    if (maxMarginWithdrawable !== null) {
+      maxMarginWithdrawable = stringToBigFloat(
+        swapFormLimitAndFormatNumber(
+          maxMarginWithdrawable - state.prospectiveSwap.infoPostSwap.value.fee,
+          'floor',
+        ),
+      );
+    }
+
+    return maxMarginWithdrawable;
   }
 
   if (state.walletBalance.status === 'success') {
@@ -131,6 +143,15 @@ const validateUserInputMargin = (state: Draft<SliceState>): void => {
     state.userInput.marginAmount.value > availableMargin
   ) {
     error = 'Not enough margin. Available margin:';
+  }
+
+  if (
+    hasExistingPosition(state) &&
+    state.userInput.marginAmount.editMode === 'remove' &&
+    state.prospectiveSwap.infoPostSwap.status === 'success' &&
+    state.prospectiveSwap.infoPostSwap.value.marginRequirement > 0
+  ) {
+    error = 'You must add margin. Available margin:';
   }
 
   state.userInput.marginAmount.error = error;
@@ -200,7 +221,7 @@ export const getProspectiveSwapNotional = (state: Draft<SliceState>): number => 
 
 export const getProspectiveSwapMargin = (state: Draft<SliceState>): number => {
   if (state.userInput.marginAmount.editMode === 'add') {
-    return state.userInput.marginAmount.value;
+    return state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee;
   }
 
   return -state.userInput.marginAmount.value;

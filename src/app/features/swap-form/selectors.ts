@@ -69,12 +69,26 @@ export const selectUserInputMarginInfo = (state: RootState) =>
 export const selectProspectiveSwapMode = (state: RootState) => state.swapForm.prospectiveSwap.mode;
 export const selectProspectiveSwapNotional = (state: RootState) =>
   state.swapForm.prospectiveSwap.notionalAmount;
-export const selectProspectiveSwapMargin = (state: RootState) =>
-  state.swapForm.prospectiveSwap.marginAmount;
+export const selectProspectiveSwapMargin = (state: RootState) => {
+  if (state.swapForm.userInput.marginAmount.editMode === 'add') {
+    return (
+      state.swapForm.prospectiveSwap.marginAmount -
+      state.swapForm.prospectiveSwap.infoPostSwap.value.fee
+    );
+  }
+
+  return state.swapForm.prospectiveSwap.marginAmount;
+};
 export const selectProspectiveSwapNotionalFormatted = (state: RootState) => {
   return swapFormFormatNumber(state.swapForm.prospectiveSwap.notionalAmount);
 };
 export const selectProspectiveSwapMarginFormatted = (state: RootState) => {
+  if (state.swapForm.userInput.marginAmount.editMode === 'add') {
+    return swapFormFormatNumber(
+      state.swapForm.prospectiveSwap.marginAmount -
+        state.swapForm.prospectiveSwap.infoPostSwap.value.fee,
+    );
+  }
   return swapFormFormatNumber(state.swapForm.prospectiveSwap.marginAmount);
 };
 export const selectProspectiveSwapFeeFormatted = (state: RootState) => {

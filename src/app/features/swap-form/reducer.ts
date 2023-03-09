@@ -802,6 +802,7 @@ export const slice = createSlice({
         }
 
         updateLeverageOptionsAfterGetInfoPostSwap(state);
+        updateProspectiveSwapParams(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
