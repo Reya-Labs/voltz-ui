@@ -2,7 +2,12 @@ import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
-import { limitAndFormatNumber, stringToBigFloat } from '../../../utilities/number';
+import {
+  formatNumber,
+  limitAndFormatNumber,
+  roundIntegerNumber,
+  stringToBigFloat,
+} from '../../../utilities/number';
 import {
   approveUnderlyingTokenThunk,
   confirmMarginUpdateThunk,
@@ -107,6 +112,11 @@ export type SliceState = {
     notionalAmount: number;
     // Notional amount for prospective swap
     marginAmount: number;
+    // Leverage options
+    leverage: {
+      options: number[];
+      maxLeverage: string;
+    };
     infoPostSwap: {
       value: {
         // Margin requirement for prospective swap
@@ -223,6 +233,10 @@ const initialState: SliceState = {
     mode: 'fixed',
     notionalAmount: 0,
     marginAmount: 0,
+    leverage: {
+      options: [0, 0, 0],
+      maxLeverage: '--',
+    },
     infoPostSwap: {
       value: {
         marginRequirement: 0,
@@ -260,6 +274,27 @@ const initialState: SliceState = {
   showLowLeverageNotification: false,
 };
 
+const calculateLeverageOptions = (maxLeverage: string) => {
+  if (maxLeverage === '--') {
+    return [0, 0, 0];
+  }
+  let maxLeverageOption = stringToBigFloat(maxLeverage);
+  maxLeverageOption = roundIntegerNumber(
+    maxLeverageOption,
+    Math.max(
+      0,
+      Math.floor(maxLeverageOption.toString().length / 2) -
+        1 +
+        (maxLeverageOption.toString().length % 2),
+    ),
+  );
+  return [
+    Math.floor(maxLeverageOption / 4),
+    Math.floor(maxLeverageOption / 2),
+    Math.floor(maxLeverageOption),
+  ];
+};
+
 const updateCashflowCalculator = (state: Draft<SliceState>): void => {
   if (!state.amm) {
     return;
@@ -286,6 +321,44 @@ const updateCashflowCalculator = (state: Draft<SliceState>): void => {
 
   state.cashflowCalculator.additionalCashflow = additionalCashflow;
   state.cashflowCalculator.totalCashflow = totalCashflow;
+};
+
+const updateLeverageOptionsAfterGetPoolSwapInfo = (state: Draft<SliceState>): void => {
+  const maxLeverage = formatNumber(
+    Math.floor(state.poolSwapInfo.maxLeverage[state.prospectiveSwap.mode]),
+    0,
+    0,
+  );
+  state.prospectiveSwap.leverage.maxLeverage = maxLeverage;
+  state.prospectiveSwap.leverage.options = calculateLeverageOptions(maxLeverage);
+};
+
+const updateLeverageOptionsAfterGetInfoPostSwap = (state: Draft<SliceState>): void => {
+  let maxLeverage = '--';
+  if (
+    !state.userInput.notionalAmount.error &&
+    state.prospectiveSwap.infoPostSwap.status === 'success'
+  ) {
+    if (state.prospectiveSwap.infoPostSwap.value.marginRequirement > 0) {
+      maxLeverage = formatNumber(
+        Math.floor(
+          state.prospectiveSwap.notionalAmount /
+            state.prospectiveSwap.infoPostSwap.value.marginRequirement,
+        ),
+        0,
+        0,
+      );
+    } else {
+      maxLeverage = formatNumber(
+        Math.floor(state.poolSwapInfo.maxLeverage[state.prospectiveSwap.mode]),
+        0,
+        0,
+      );
+    }
+  }
+
+  state.prospectiveSwap.leverage.maxLeverage = maxLeverage;
+  state.prospectiveSwap.leverage.options = calculateLeverageOptions(maxLeverage);
 };
 
 const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void => {
@@ -716,6 +789,7 @@ export const slice = createSlice({
           },
           status: 'success',
         };
+        updateLeverageOptionsAfterGetPoolSwapInfo(state);
       })
       .addCase(getInfoPostSwapThunk.pending, (state) => {
         state.prospectiveSwap.infoPostSwap = {
@@ -794,6 +868,7 @@ export const slice = createSlice({
         }
 
         updateCashflowCalculator(state);
+        updateLeverageOptionsAfterGetInfoPostSwap(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
