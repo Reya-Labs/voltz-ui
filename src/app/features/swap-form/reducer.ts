@@ -98,12 +98,6 @@ export type SliceState = {
   };
   // State of prospective swap
   prospectiveSwap: {
-    // Direction of trade: FT or VT
-    mode: 'fixed' | 'variable';
-    // Notional amount for prospective swap
-    notionalAmount: number;
-    // Notional amount for prospective swap
-    marginAmount: number;
     // Leverage options
     leverage: {
       options: number[];
@@ -217,9 +211,6 @@ const initialState: SliceState = {
     estimatedApy: 0,
   },
   prospectiveSwap: {
-    mode: 'fixed',
-    notionalAmount: 0,
-    marginAmount: 0,
     leverage: {
       options: [0, 0, 0],
       maxLeverage: '--',
@@ -283,7 +274,7 @@ const calculateLeverageOptions = (maxLeverage: string) => {
 
 const updateLeverageOptionsAfterGetPoolSwapInfo = (state: Draft<SliceState>): void => {
   const maxLeverage = formatNumber(
-    Math.floor(state.poolSwapInfo.maxLeverage[state.prospectiveSwap.mode]),
+    Math.floor(state.poolSwapInfo.maxLeverage[getProspectiveSwapMode(state)]),
     0,
     0,
   );
@@ -300,7 +291,7 @@ const updateLeverageOptionsAfterGetInfoPostSwap = (state: Draft<SliceState>): vo
     if (state.prospectiveSwap.infoPostSwap.value.marginRequirement > 0) {
       maxLeverage = formatNumber(
         Math.floor(
-          state.prospectiveSwap.notionalAmount /
+          getProspectiveSwapNotional(state) /
             state.prospectiveSwap.infoPostSwap.value.marginRequirement,
         ),
         0,
@@ -308,7 +299,7 @@ const updateLeverageOptionsAfterGetInfoPostSwap = (state: Draft<SliceState>): vo
       );
     } else {
       maxLeverage = formatNumber(
-        Math.floor(state.poolSwapInfo.maxLeverage[state.prospectiveSwap.mode]),
+        Math.floor(state.poolSwapInfo.maxLeverage[getProspectiveSwapMode(state)]),
         0,
         0,
       );
@@ -323,16 +314,16 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   validateUserInput(state);
 
   const isProspectiveSwapNotionalValid =
-    hasExistingPosition(state) || state.prospectiveSwap.notionalAmount > 0;
+    hasExistingPosition(state) || getProspectiveSwapNotional(state) > 0;
   const isProspectiveSwapMarginValid =
-    hasExistingPosition(state) || state.prospectiveSwap.marginAmount > 0;
+    hasExistingPosition(state) || getProspectiveSwapMargin(state) > 0;
   const isProspectiveSwapNotionalMarginValid =
-    state.prospectiveSwap.notionalAmount !== 0 || state.prospectiveSwap.marginAmount !== 0;
+    getProspectiveSwapNotional(state) !== 0 || getProspectiveSwapMargin(state) !== 0;
   const isInfoPostSwapLoaded =
     state.prospectiveSwap.infoPostSwap.status === 'success' &&
     state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance *
-      (state.prospectiveSwap.mode === 'fixed' ? -1 : 1) ===
-      state.prospectiveSwap.notionalAmount;
+      (getProspectiveSwapMode(state) === 'fixed' ? -1 : 1) ===
+      getProspectiveSwapNotional(state);
   const isWalletBalanceLoaded = state.walletBalance.status === 'success';
   const isWalletTokenAllowanceLoaded = state.walletTokenAllowance.status === 'success';
 
@@ -391,7 +382,7 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
     isWalletTokenAllowanceLoaded
   ) {
     state.submitButton = {
-      state: state.prospectiveSwap.notionalAmount !== 0 ? 'swap' : 'margin-update',
+      state: getProspectiveSwapNotional(state) !== 0 ? 'swap' : 'margin-update',
       disabled: false,
       message: {
         text: "Token approved, let's trade",
@@ -409,12 +400,6 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
       isError: false,
     },
   };
-};
-
-const updateProspectiveSwapParams = (state: Draft<SliceState>): void => {
-  state.prospectiveSwap.mode = getProspectiveSwapMode(state);
-  state.prospectiveSwap.notionalAmount = getProspectiveSwapNotional(state);
-  state.prospectiveSwap.marginAmount = getProspectiveSwapMargin(state);
 };
 
 export const slice = createSlice({
@@ -466,7 +451,6 @@ export const slice = createSlice({
         status: 'idle',
       };
 
-      updateProspectiveSwapParams(state);
       validateUserInputAndUpdateSubmitButton(state);
     },
     setNotionalAmountAction: (
@@ -486,7 +470,6 @@ export const slice = createSlice({
         state.userInput.notionalAmount.editMode = editMode;
       }
 
-      updateProspectiveSwapParams(state);
       updateLeverage(state);
       validateUserInputAndUpdateSubmitButton(state);
     },
@@ -507,7 +490,6 @@ export const slice = createSlice({
         state.userInput.marginAmount.editMode = editMode;
       }
 
-      updateProspectiveSwapParams(state);
       updateLeverage(state);
       validateUserInputAndUpdateSubmitButton(state);
     },
@@ -519,17 +501,16 @@ export const slice = createSlice({
         value: number;
       }>,
     ) => {
-      if (state.prospectiveSwap.notionalAmount === 0 || isNaN(value) || value === 0) {
+      if (getProspectiveSwapNotional(state) === 0 || isNaN(value) || value === 0) {
         state.userInput.leverage = null;
         return;
       }
 
       state.userInput.leverage = value;
       state.userInput.marginAmount.value = stringToBigFloat(
-        swapFormLimitAndFormatNumber(state.prospectiveSwap.notionalAmount / value, 'ceil'),
+        swapFormLimitAndFormatNumber(getProspectiveSwapNotional(state) / value, 'ceil'),
       );
 
-      updateProspectiveSwapParams(state);
       validateUserInputAndUpdateSubmitButton(state);
       state.showLowLeverageNotification = checkLowLeverageNotification(state);
     },
@@ -724,6 +705,7 @@ export const slice = createSlice({
           status: 'success',
         };
         updateLeverageOptionsAfterGetPoolSwapInfo(state);
+        validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(getInfoPostSwapThunk.pending, (state) => {
         state.prospectiveSwap.infoPostSwap = {
@@ -802,7 +784,6 @@ export const slice = createSlice({
         }
 
         updateLeverageOptionsAfterGetInfoPostSwap(state);
-        updateProspectiveSwapParams(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
@@ -830,7 +811,6 @@ export const slice = createSlice({
         state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
         if (state.position.value) {
           state.userInput.mode = getExistingPositionMode(state) as 'fixed' | 'variable';
-          updateProspectiveSwapParams(state);
         }
         validateUserInputAndUpdateSubmitButton(state);
       })

@@ -13,8 +13,12 @@ import {
   getExistingPositionFixedRate,
   getExistingPositionMode,
   getNewPositionFixedRate,
+  getProspectiveSwapMargin,
+  getProspectiveSwapMode,
+  getProspectiveSwapNotional,
   getVariableRate,
   hasExistingPosition,
+  swapFormCompactFormat,
   swapFormCompactFormatToParts,
   swapFormFormatNumber,
   swapFormLimitAndFormatNumber,
@@ -30,6 +34,7 @@ export const selectWalletBalanceInfo = (state: RootState) => state.swapForm.wall
 export const selectFixedRateInfo = (state: RootState) => state.swapForm.fixedRate;
 export const selectVariableRateInfo = (state: RootState) => state.swapForm.variableRate;
 export const selectPoolSwapInfo = (state: RootState) => state.swapForm.poolSwapInfo;
+export const selectPoolSwapInfoStatus = (state: RootState) => state.swapForm.poolSwapInfo.status;
 export const selectSwapFormMode = (state: RootState): 'new' | 'edit' => {
   return hasExistingPosition(state.swapForm) ? 'edit' : 'new';
 };
@@ -66,30 +71,31 @@ export const selectUserInputMarginInfo = (state: RootState) =>
   state.swapForm.userInput.marginAmount;
 
 // ------------ Prospective Swap ------------
-export const selectProspectiveSwapMode = (state: RootState) => state.swapForm.prospectiveSwap.mode;
+export const selectProspectiveSwapMode = (state: RootState) =>
+  getProspectiveSwapMode(state.swapForm);
 export const selectProspectiveSwapNotional = (state: RootState) =>
-  state.swapForm.prospectiveSwap.notionalAmount;
+  getProspectiveSwapNotional(state.swapForm);
 export const selectProspectiveSwapMargin = (state: RootState) => {
   if (state.swapForm.userInput.marginAmount.editMode === 'add') {
     return (
-      state.swapForm.prospectiveSwap.marginAmount -
+      getProspectiveSwapMargin(state.swapForm) -
       state.swapForm.prospectiveSwap.infoPostSwap.value.fee
     );
   }
 
-  return state.swapForm.prospectiveSwap.marginAmount;
+  return getProspectiveSwapMargin(state.swapForm);
 };
 export const selectProspectiveSwapNotionalFormatted = (state: RootState) => {
-  return swapFormFormatNumber(state.swapForm.prospectiveSwap.notionalAmount);
+  return swapFormCompactFormat(getProspectiveSwapNotional(state.swapForm));
 };
 export const selectProspectiveSwapMarginFormatted = (state: RootState) => {
   if (state.swapForm.userInput.marginAmount.editMode === 'add') {
-    return swapFormFormatNumber(
-      state.swapForm.prospectiveSwap.marginAmount -
+    return swapFormCompactFormat(
+      getProspectiveSwapMargin(state.swapForm) -
         state.swapForm.prospectiveSwap.infoPostSwap.value.fee,
     );
   }
-  return swapFormFormatNumber(state.swapForm.prospectiveSwap.marginAmount);
+  return swapFormCompactFormat(getProspectiveSwapMargin(state.swapForm));
 };
 export const selectProspectiveSwapFeeFormatted = (state: RootState) => {
   if (state.swapForm.prospectiveSwap.infoPostSwap.status === 'success') {
@@ -134,19 +140,19 @@ export const selectAvailableNotional = (state: RootState) => {
 };
 
 export const selectNewPositionReceivingRate = (state: RootState) => {
-  return state.swapForm.prospectiveSwap.mode === 'fixed'
+  return getProspectiveSwapMode(state.swapForm) === 'fixed'
     ? getNewPositionFixedRate(state.swapForm)
     : getVariableRate(state.swapForm);
 };
 export const selectNewPositionPayingRate = (state: RootState) => {
-  return state.swapForm.prospectiveSwap.mode === 'fixed'
+  return getProspectiveSwapMode(state.swapForm) === 'fixed'
     ? getVariableRate(state.swapForm)
     : getNewPositionFixedRate(state.swapForm);
 };
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.swapForm.userInput.notionalAmount.error) return null;
 
-  const compactParts = swapFormCompactFormatToParts(state.swapForm.prospectiveSwap.notionalAmount);
+  const compactParts = swapFormCompactFormatToParts(getProspectiveSwapNotional(state.swapForm));
 
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
@@ -318,7 +324,7 @@ export const selectSubmitButtonText = (state: RootState) => {
 
 // ------------ Leverage ------------
 export const selectIsLeverageDisabled = (state: RootState) => {
-  return state.swapForm.prospectiveSwap.notionalAmount === 0;
+  return getProspectiveSwapNotional(state.swapForm) === 0;
 };
 
 export const selectShowLeverageNotification = (state: RootState) =>

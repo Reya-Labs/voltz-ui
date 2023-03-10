@@ -11,7 +11,12 @@ import { ContractReceipt, providers } from 'ethers';
 import { findCurrentPosition } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
 import { RootState } from '../../store';
-import { isUserInputNotionalError } from './utils';
+import {
+  getProspectiveSwapMargin,
+  getProspectiveSwapMode,
+  getProspectiveSwapNotional,
+  isUserInputNotionalError,
+} from './utils';
 
 const rejectThunkWithError = (
   thunkAPI: {
@@ -147,16 +152,16 @@ export const getInfoPostSwapThunk = createAsyncThunk<
     if (!amm || isUserInputNotionalError(swapFormState)) {
       return {
         notionalAmount: NaN,
-        swapMode: swapFormState.prospectiveSwap.mode,
+        swapMode: getProspectiveSwapMode(swapFormState),
         infoPostSwap: {},
         earlyReturn: true,
       };
     }
 
-    if (swapFormState.prospectiveSwap.notionalAmount === 0) {
+    if (getProspectiveSwapNotional(swapFormState) === 0) {
       return {
         notionalAmount: 0,
-        swapMode: swapFormState.prospectiveSwap.mode,
+        swapMode: getProspectiveSwapMode(swapFormState),
         infoPostSwap: {
           marginRequirement: 0,
           maxMarginWithdrawable: 0,
@@ -172,9 +177,9 @@ export const getInfoPostSwapThunk = createAsyncThunk<
       };
     }
 
-    const notionalAmount = swapFormState.prospectiveSwap.notionalAmount;
+    const notionalAmount = getProspectiveSwapNotional(swapFormState);
     const infoPostSwapV1 = await amm.getInfoPostSwapV1({
-      isFT: swapFormState.prospectiveSwap.mode === 'fixed',
+      isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
       notional: notionalAmount,
       fixedLow: 1,
       fixedHigh: 999,
@@ -189,7 +194,7 @@ export const getInfoPostSwapThunk = createAsyncThunk<
 
     return {
       notionalAmount,
-      swapMode: swapFormState.prospectiveSwap.mode,
+      swapMode: getProspectiveSwapMode(swapFormState),
       infoPostSwap: infoPostSwapV1,
       earlyReturn: false,
     };
@@ -259,9 +264,9 @@ export const confirmSwapThunk = createAsyncThunk<
     }
 
     return await amm.swap({
-      isFT: swapFormState.prospectiveSwap.mode === 'fixed',
-      notional: swapFormState.prospectiveSwap.notionalAmount,
-      margin: swapFormState.prospectiveSwap.marginAmount,
+      isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
+      notional: getProspectiveSwapNotional(swapFormState),
+      margin: getProspectiveSwapMargin(swapFormState),
       fixedLow: 1,
       fixedHigh: 999,
     });
@@ -285,7 +290,7 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
     return await amm.updatePositionMargin({
       fixedLow: 1,
       fixedHigh: 999,
-      marginDelta: swapFormState.prospectiveSwap.marginAmount,
+      marginDelta: getProspectiveSwapMargin(swapFormState),
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

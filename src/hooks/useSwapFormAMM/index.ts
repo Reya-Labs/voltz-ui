@@ -10,6 +10,7 @@ import {
   getUnderlyingTokenAllowanceThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
+  selectPoolSwapInfoStatus,
   selectSwapFormAMM,
   selectSwapFormPosition,
   selectSwapFormPositionFetchingStatus,
@@ -26,7 +27,6 @@ export type UseAMMsResult = {
   aMM: AMM | null;
   loading: boolean;
   error: boolean;
-  idle: boolean;
 };
 
 export const useSwapFormAMM = (): UseAMMsResult => {
@@ -36,6 +36,7 @@ export const useSwapFormAMM = (): UseAMMsResult => {
   const aMM = useAppSelector(selectSwapFormAMM);
   const position = useAppSelector(selectSwapFormPosition);
   const positionFetchingStatus = useAppSelector(selectSwapFormPositionFetchingStatus);
+  const poolSwapInfoStatus = useAppSelector(selectPoolSwapInfoStatus);
   const chainId = useAppSelector(selectChainId);
   const [loading, setLoading] = useState(true);
 
@@ -116,8 +117,13 @@ export const useSwapFormAMM = (): UseAMMsResult => {
 
   return {
     aMM,
-    loading: loading || positionFetchingStatus === 'pending',
-    idle,
-    error: error || positionFetchingStatus === 'error',
+    loading:
+      idle ||
+      positionFetchingStatus === 'idle' ||
+      poolSwapInfoStatus === 'idle' ||
+      loading ||
+      positionFetchingStatus === 'pending' ||
+      poolSwapInfoStatus === 'pending',
+    error: error || positionFetchingStatus === 'error' || poolSwapInfoStatus === 'error',
   };
 };
