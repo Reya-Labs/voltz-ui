@@ -135,7 +135,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={token}
-            tooltip="Calculated based on the notional amount and trade side specified in the form for swap."
+            tooltip="This shows the cashflow you could generate from your new position."
             typographyToken={typographyToken}
             value={
               additionalCashflow !== null
@@ -151,7 +151,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={token}
-            tooltip="Calculated based on the current position plus the notional amount and trade side specified in the form for swap."
+            tooltip="This shows the combined cashflow you could generate from your new position and your existing."
             typographyToken={typographyToken}
             value={totalCashflow !== null ? formatCurrency(totalCashflow, true, true, 2, 4) : '--'}
           />
