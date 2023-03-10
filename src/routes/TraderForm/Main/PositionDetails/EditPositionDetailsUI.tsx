@@ -6,16 +6,15 @@ import {
   selectAccruedCashflowExistingPositionFormatted,
   selectEditPositionCompactNotional,
   selectEditPositionMode,
-  selectEditPositionPayingRate,
-  selectEditPositionReceivingRate,
+  selectEditPositionPayingRateFormatted,
+  selectEditPositionReceivingRateFormatted,
   selectExistingPositionCompactNotional,
   selectExistingPositionMode,
-  selectExistingPositionPayingRate,
-  selectExistingPositionReceivingRate,
+  selectExistingPositionPayingRateFormatted,
+  selectExistingPositionReceivingRateFormatted,
   selectSwapFormPosition,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { formatNumber } from '../../../../utilities/number';
 import { MODE_COLOR_TOKEN_MAP, MODE_TEXT_MAP } from '../../helpers';
 import {
   CashFlowBox,
@@ -43,13 +42,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   typographyToken,
 }) => {
   const existingPositionMode = useAppSelector(selectExistingPositionMode);
-  const existingPositionReceivingRate = useAppSelector(selectExistingPositionReceivingRate);
-  const existingPositionPayingRate = useAppSelector(selectExistingPositionPayingRate);
+  const receivingRateFrom = useAppSelector(selectExistingPositionReceivingRateFormatted);
+  const payingRateFrom = useAppSelector(selectExistingPositionPayingRateFormatted);
   const existingPositionCompactNotional = useAppSelector(selectExistingPositionCompactNotional);
 
   const editPositionMode = useAppSelector(selectEditPositionMode);
-  const editPositionReceivingRate = useAppSelector(selectEditPositionReceivingRate);
-  const editPositionPayingRate = useAppSelector(selectEditPositionPayingRate);
+  const receivingRateTo = useAppSelector(selectEditPositionReceivingRateFormatted);
+  const payingRateTo = useAppSelector(selectEditPositionPayingRateFormatted);
   const editPositionCompactNotional = useAppSelector(selectEditPositionCompactNotional);
 
   const accruedCashflowFrom = useAppSelector(selectAccruedCashflowExistingPositionFormatted);
@@ -67,16 +66,6 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
       editPositionCompactNotional.compactNotionalNumber &&
       existingPositionCompactNotional.compactNotionalSuffix ===
         editPositionCompactNotional.compactNotionalSuffix);
-
-  const receivingRateFrom =
-    existingPositionReceivingRate !== null ? formatNumber(existingPositionReceivingRate) : '--';
-  const receivingRateTo =
-    editPositionReceivingRate !== null ? formatNumber(editPositionReceivingRate) : '--';
-
-  const payingRateFrom =
-    existingPositionPayingRate !== null ? formatNumber(existingPositionPayingRate) : '--';
-  const payingRateTo =
-    editPositionPayingRate !== null ? formatNumber(editPositionPayingRate) : '--';
 
   return (
     <PositionDetailsBox>
