@@ -56,18 +56,18 @@ export const getAvailableNotional = (state: Draft<SliceState>): number => {
   if (hasExistingPosition(state) && state.userInput.notionalAmount.editMode === 'remove') {
     return Math.min(
       (state.position.value as Position).notional,
-      state.poolSwapInfo.availableNotional[state.prospectiveSwap.mode],
+      state.poolSwapInfo.availableNotional[getProspectiveSwapMode(state)],
     );
   }
 
-  return state.poolSwapInfo.availableNotional[state.prospectiveSwap.mode];
+  return state.poolSwapInfo.availableNotional[getProspectiveSwapMode(state)];
 };
 
 const validateUserInputNotional = (state: Draft<SliceState>): void => {
   let error = null;
   if (
     state.userInput.notionalAmount.editMode === 'add' &&
-    state.prospectiveSwap.notionalAmount > getAvailableNotional(state)
+    getProspectiveSwapNotional(state) > getAvailableNotional(state)
   ) {
     error = 'Not enough liquidity. Available:';
   }
@@ -90,21 +90,25 @@ export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
     }
 
     let maxMarginWithdrawable = null;
-    if (state.prospectiveSwap.notionalAmount === 0 && hasExistingPosition(state)) {
+    if (getProspectiveSwapNotional(state) === 0 && hasExistingPosition(state)) {
       maxMarginWithdrawable = (state.position.value as Position).maxMarginWithdrawable;
     }
 
-    if (state.prospectiveSwap.notionalAmount > 0) {
+    if (getProspectiveSwapNotional(state) > 0) {
       maxMarginWithdrawable = state.prospectiveSwap.infoPostSwap.value.maxMarginWithdrawable;
     }
 
     if (maxMarginWithdrawable !== null) {
-      maxMarginWithdrawable = stringToBigFloat(
-        swapFormLimitAndFormatNumber(
-          maxMarginWithdrawable - state.prospectiveSwap.infoPostSwap.value.fee,
-          'floor',
-        ),
-      );
+      if (maxMarginWithdrawable > state.prospectiveSwap.infoPostSwap.value.fee) {
+        maxMarginWithdrawable = stringToBigFloat(
+          swapFormLimitAndFormatNumber(
+            maxMarginWithdrawable - state.prospectiveSwap.infoPostSwap.value.fee,
+            'floor',
+          ),
+        );
+      } else {
+        maxMarginWithdrawable = 0;
+      }
     }
 
     return maxMarginWithdrawable;
@@ -163,9 +167,9 @@ export const validateUserInput = (state: Draft<SliceState>): void => {
 };
 
 export const updateLeverage = (state: Draft<SliceState>): void => {
-  if (state.prospectiveSwap.notionalAmount > 0 && state.userInput.marginAmount.value > 0) {
+  if (getProspectiveSwapNotional(state) > 0 && state.userInput.marginAmount.value > 0) {
     state.userInput.leverage =
-      state.prospectiveSwap.notionalAmount / state.userInput.marginAmount.value;
+      getProspectiveSwapNotional(state) / state.userInput.marginAmount.value;
   }
 
   state.showLowLeverageNotification = checkLowLeverageNotification(state);
@@ -202,6 +206,10 @@ export const getProspectiveSwapMode = (state: Draft<SliceState>): 'fixed' | 'var
 };
 
 export const getProspectiveSwapNotional = (state: Draft<SliceState>): number => {
+  if (isUserInputNotionalError(state)) {
+    return 0;
+  }
+
   let value = state.userInput.notionalAmount.value;
 
   const existingPositionNotional = getExistingPositionNotional(state);
