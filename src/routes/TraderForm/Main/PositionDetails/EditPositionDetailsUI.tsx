@@ -2,8 +2,8 @@ import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'br
 import React from 'react';
 
 import {
-  selectAccruedCashflowEditPosition,
-  selectAccruedCashflowExistingPosition,
+  selectAccruedCashflowEditPositionFormatted,
+  selectAccruedCashflowExistingPositionFormatted,
   selectEditPositionCompactNotional,
   selectEditPositionMode,
   selectEditPositionPayingRate,
@@ -52,8 +52,8 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   const editPositionPayingRate = useAppSelector(selectEditPositionPayingRate);
   const editPositionCompactNotional = useAppSelector(selectEditPositionCompactNotional);
 
-  const existingPositionAccruedCashflow = useAppSelector(selectAccruedCashflowExistingPosition);
-  const editPositionAccruedCashflow = useAppSelector(selectAccruedCashflowEditPosition);
+  const accruedCashflowFrom = useAppSelector(selectAccruedCashflowExistingPositionFormatted);
+  const accruedCashflowTo = useAppSelector(selectAccruedCashflowEditPositionFormatted);
 
   const existingPosition = useAppSelector(selectSwapFormPosition);
   if (!existingPosition) {
@@ -77,11 +77,6 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
     existingPositionPayingRate !== null ? formatNumber(existingPositionPayingRate) : '--';
   const payingRateTo =
     editPositionPayingRate !== null ? formatNumber(editPositionPayingRate) : '--';
-
-  const accruedCashflowFrom =
-    existingPositionAccruedCashflow !== null ? formatNumber(existingPositionAccruedCashflow) : '--';
-  const accruedCashflowTo =
-    editPositionAccruedCashflow !== null ? formatNumber(editPositionAccruedCashflow) : '--';
 
   return (
     <PositionDetailsBox>

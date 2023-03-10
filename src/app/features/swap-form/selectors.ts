@@ -206,17 +206,21 @@ export const selectEditPositionCompactNotional = (state: RootState) => {
 export const selectEstimatedApy = (state: RootState) => state.swapForm.userInput.estimatedApy;
 export const selectCashflowInfoStatus = (state: RootState) =>
   state.swapForm.prospectiveSwap.cashflowInfo.status;
-export const selectAccruedCashflowExistingPosition = (state: RootState) => {
+export const selectAccruedCashflowExistingPositionFormatted = (state: RootState) => {
   if (state.swapForm.prospectiveSwap.cashflowInfo.status === 'pending') {
-    return null;
+    return '--';
   }
-  return state.swapForm.prospectiveSwap.cashflowInfo.accruedCashflowExistingPosition;
+  return swapFormFormatNumber(
+    state.swapForm.prospectiveSwap.cashflowInfo.accruedCashflowExistingPosition,
+  );
 };
-export const selectAccruedCashflowEditPosition = (state: RootState) => {
+export const selectAccruedCashflowEditPositionFormatted = (state: RootState) => {
   if (state.swapForm.prospectiveSwap.cashflowInfo.status === 'pending') {
-    return null;
+    return '--';
   }
-  return state.swapForm.prospectiveSwap.cashflowInfo.accruedCashflowEditPosition;
+  return swapFormFormatNumber(
+    state.swapForm.prospectiveSwap.cashflowInfo.accruedCashflowEditPosition,
+  );
 };
 export const selectAdditionalCashflow = (state: RootState) => {
   if (state.swapForm.prospectiveSwap.cashflowInfo.status !== 'success') {

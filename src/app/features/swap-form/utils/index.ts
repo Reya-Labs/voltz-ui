@@ -232,9 +232,9 @@ export const getExistingPositionFixedRate = (state: Draft<SliceState>) => {
     return null;
   }
 
-  return Math.abs(
-    state.position.value.fixedTokenBalance / state.position.value.variableTokenBalance,
-  );
+  return getExistingPositionMode(state) === 'fixed'
+    ? state.position.value.receivingRate
+    : state.position.value.payingRate;
 };
 
 export const getExistingPositionMode = (state: Draft<SliceState>) => {
@@ -242,7 +242,7 @@ export const getExistingPositionMode = (state: Draft<SliceState>) => {
     return null;
   }
 
-  return state.position.value.variableTokenBalance < 0 ? 'fixed' : 'variable';
+  return state.position.value.positionType === 1 ? 'fixed' : 'variable';
 };
 
 export const getExistingPositionNotional = (state: Draft<SliceState>) => {
