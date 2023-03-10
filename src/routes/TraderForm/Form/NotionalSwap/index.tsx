@@ -83,12 +83,19 @@ export const NotionalSwap: React.FunctionComponent = () => {
   const receiveTypographyToken: TypographyToken = isLargeDesktopDevice
     ? 'primaryBodyExtraLargeBold'
     : 'primaryBodyMediumBold';
+
   const payTypographyToken: TypographyToken = isLargeDesktopDevice
     ? 'primaryBodyMediumRegular'
     : 'primaryBodyXSmallRegular';
+
   const labelTypographyToken: TypographyToken = isLargeDesktopDevice
     ? 'primaryBodyMediumRegular'
     : 'primaryBodySmallRegular';
+
+  const percentageTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'secondaryBodyLargeRegular'
+    : 'secondaryBodyMediumRegular';
+
   return (
     <NotionalSwapWrapperBox>
       <TypographyWithTooltip
@@ -107,7 +114,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
             <TokenTypography
               colorToken={isFixedMode ? 'skyBlueCrayola' : 'ultramarineBlue'}
               token="%"
-              typographyToken="primaryBodyMediumBold"
+              typographyToken={percentageTypographyToken}
               value={isFixedMode ? fixedRate : variableRate}
             />
           </TopTextContent>
@@ -128,7 +135,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
             <TokenTypography
               colorToken={isFixedMode ? 'ultramarineBlue' : 'skyBlueCrayola'}
               token="%"
-              typographyToken="primaryBodyMediumBold"
+              typographyToken={percentageTypographyToken}
               value={isFixedMode ? variableRate : fixedRate}
             />
           </TopTextContent>
