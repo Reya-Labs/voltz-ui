@@ -240,9 +240,21 @@ export const getExistingPositionFixedRate = (state: Draft<SliceState>) => {
     return null;
   }
 
+  if (getExistingPositionNotional(state) === 0) {
+    return null;
+  }
+
   return getExistingPositionMode(state) === 'fixed'
     ? state.position.value.receivingRate
     : state.position.value.payingRate;
+};
+
+export const getExistingPositionVariableRate = (state: Draft<SliceState>) => {
+  if (getExistingPositionNotional(state) === 0) {
+    return null;
+  }
+
+  return getVariableRate(state);
 };
 
 export const getExistingPositionMode = (state: Draft<SliceState>) => {

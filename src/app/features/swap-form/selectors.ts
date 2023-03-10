@@ -12,6 +12,7 @@ import {
   getEditPositionVariableRate,
   getExistingPositionFixedRate,
   getExistingPositionMode,
+  getExistingPositionVariableRate,
   getNewPositionFixedRate,
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
@@ -151,15 +152,21 @@ export const selectNewPositionCompactNotional = (state: RootState) => {
 export const selectExistingPositionMode = (state: RootState) => {
   return getExistingPositionMode(state.swapForm);
 };
-export const selectExistingPositionReceivingRate = (state: RootState) => {
-  return getExistingPositionMode(state.swapForm) === 'fixed'
-    ? getExistingPositionFixedRate(state.swapForm)
-    : getVariableRate(state.swapForm);
+export const selectExistingPositionReceivingRateFormatted = (state: RootState) => {
+  const receivingRate =
+    getExistingPositionMode(state.swapForm) === 'fixed'
+      ? getExistingPositionFixedRate(state.swapForm)
+      : getExistingPositionVariableRate(state.swapForm);
+
+  return receivingRate === null ? '--' : swapFormFormatNumber(receivingRate);
 };
-export const selectExistingPositionPayingRate = (state: RootState) => {
-  return getExistingPositionMode(state.swapForm) === 'fixed'
-    ? getVariableRate(state.swapForm)
-    : getExistingPositionFixedRate(state.swapForm);
+export const selectExistingPositionPayingRateFormatted = (state: RootState) => {
+  const payingRate =
+    getExistingPositionMode(state.swapForm) === 'fixed'
+      ? getExistingPositionVariableRate(state.swapForm)
+      : getExistingPositionFixedRate(state.swapForm);
+
+  return payingRate === null ? '--' : swapFormFormatNumber(payingRate);
 };
 export const selectExistingPositionCompactNotional = (state: RootState) => {
   if (state.swapForm.position.status !== 'success' || !state.swapForm.position.value) {
@@ -176,15 +183,21 @@ export const selectExistingPositionCompactNotional = (state: RootState) => {
 export const selectEditPositionMode = (state: RootState) => {
   return getEditPositionMode(state.swapForm);
 };
-export const selectEditPositionReceivingRate = (state: RootState) => {
-  return getEditPositionMode(state.swapForm) === 'fixed'
-    ? getEditPositionFixedRate(state.swapForm)
-    : getEditPositionVariableRate(state.swapForm);
+export const selectEditPositionReceivingRateFormatted = (state: RootState) => {
+  const receivingRate =
+    getEditPositionMode(state.swapForm) === 'fixed'
+      ? getEditPositionFixedRate(state.swapForm)
+      : getEditPositionVariableRate(state.swapForm);
+
+  return receivingRate === null ? '--' : swapFormFormatNumber(receivingRate);
 };
-export const selectEditPositionPayingRate = (state: RootState) => {
-  return getEditPositionMode(state.swapForm) === 'fixed'
-    ? getEditPositionVariableRate(state.swapForm)
-    : getEditPositionFixedRate(state.swapForm);
+export const selectEditPositionPayingRateFormatted = (state: RootState) => {
+  const payingRate =
+    getEditPositionMode(state.swapForm) === 'fixed'
+      ? getEditPositionVariableRate(state.swapForm)
+      : getEditPositionFixedRate(state.swapForm);
+
+  return payingRate === null ? '--' : swapFormFormatNumber(payingRate);
 };
 export const selectEditPositionCompactNotional = (state: RootState) => {
   const notional = getEditPositionNotional(state.swapForm);
