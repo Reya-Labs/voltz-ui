@@ -72,7 +72,7 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
         switchOnValue={'add'}
         switchValue={localEditMode}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
-        tooltip="The protocol requires every position to have enough collateral to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."
+        tooltip="The protocol requires every position to have enough margin to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."
         topRightText={`Wallet: ${walletValue} ${underlyingTokenName.toUpperCase()}`}
         topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
         topRightTextTypographyToken="secondaryBodySmallRegular"
