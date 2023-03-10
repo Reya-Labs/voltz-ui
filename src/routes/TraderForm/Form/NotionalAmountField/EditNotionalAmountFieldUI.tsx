@@ -54,7 +54,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         bottomRightTextValue={formatNumber(notionalAvailable)}
         decimalsLimit={SwapFormNumberLimits.decimalLimit}
         error={notionalAmount.error !== null}
-        label="Notional amount"
+        label="Notional Amount"
         labelTypographyToken={labelTypographyToken}
         maxLength={SwapFormNumberLimits.digitLimit}
         switchOffText={'Remove'}
@@ -63,7 +63,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         switchOnValue={'add'}
         switchValue={localEditMode}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
-        tooltip="When you swap rates, the amount you receive and pay is calculated as a percentage or the notional value you choose."
+        tooltip="When trading rates, the amount you receive and pay is calculated as a percentage of the notional value you choose."
         value={localNotional !== null ? localNotional : undefined}
         onChange={handleOnNotionalChange}
         onSwitchChange={handleOnSwitchChange}

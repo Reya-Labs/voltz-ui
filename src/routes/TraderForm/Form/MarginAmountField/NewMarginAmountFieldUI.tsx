@@ -45,7 +45,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
       <TokenField
         allowNegativeValue={false}
         bottomLeftText={
-          isMarginRequiredError ? (marginAmount.error as string) : 'Additional Margin Required'
+          isMarginRequiredError ? (marginAmount.error as string) : 'Minimum Margin Required'
         }
         bottomLeftTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb3'}
         bottomLeftTextTypographyToken="primaryBodyXSmallRegular"
@@ -62,7 +62,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
         labelTypographyToken={labelTypographyToken}
         maxLength={SwapFormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
-        tooltip="The protocol requires every position to have enough margin to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."
+        tooltip="The protocol requires every position to have enough margin to support trades. Adding more than the minimum reduces liquidation risk."
         topRightText={`Wallet: ${`${walletValue} ${underlyingTokenName.toUpperCase()}`}`}
         topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
         topRightTextTypographyToken="secondaryBodySmallRegular"
