@@ -105,9 +105,23 @@ Branch names can start with the prefixes found in the regex under '.husky/pre-co
   * merge to `develop` using **Rebase and merge**
 
 **RELEASING**
+
+This section explains the process of creating a release candidate branch out of current `develop` and `main`.
+
+**Important**: Make sure you have no changes on `develop` or `main`!
+
+Short version:
+
+At the root of repository, execute:
+```shell
+    FEATURE='my-release-feature' yarn git:create-release-branch
+```
+
+Long version:
  * create a branch from `develop`
-   * name it `release/YYYYMMDD` (**important** since this branch will create AWS Amplify env. where you can test your build before you merge/release it!)
+   * name it `release/my-release-feature` (**important** since this branch will create AWS Amplify env. where you can test your build before you merge/release it!)
    * add proper description! Important since this will be automatically included in the merge commit message
+   * good practice is to include the release date into branch name for visibility, in the format `YYYYMMDD` 
  * git merge `main` to that branch
    * if any conflicts, resolve them by accepting all changes from `release/YYYYMMDD`
  * create a PR against `main`

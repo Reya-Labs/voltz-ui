@@ -23,7 +23,8 @@
     "test:watch": "jest --watch",
     "generate:coverage-badges": "npx istanbul-badges-readme --silent",
     "chromatic": "npx chromatic --project-token=e40b8c3e3eea",
-    "code-quality:check": "npx concurrently 'yarn ts:check' 'yarn prettier:check' 'yarn lint:check --quiet'"
+    "code-quality:check": "npx concurrently 'yarn ts:check' 'yarn prettier:check' 'yarn lint:check --quiet'",
+    "git:create-release-branch": "git checkout main && git pull && git checkout develop && git pull && git checkout -b release/$FEATURE && git checkout release/$FEATURE && git merge main --no-edit"
   },
   "babel": {
     "presets": [
