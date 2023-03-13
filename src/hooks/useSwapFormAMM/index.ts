@@ -8,6 +8,7 @@ import {
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
+  getVariableRate24hAgoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
   selectPoolSwapInfoStatus,
@@ -19,7 +20,6 @@ import {
 } from '../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { generateAmmIdForRoute, generatePoolId } from '../../utilities/amm';
-import { ONE_DAY_IN_MS } from '../../utilities/constants';
 import { useAMMs } from '../useAMMs';
 import { useWallet } from '../useWallet';
 
@@ -75,8 +75,8 @@ export const useSwapFormAMM = (): UseAMMsResult => {
     }
 
     void dispatch(getFixedRateThunk());
-    void dispatch(getVariableRateThunk({}));
-    void dispatch(getVariableRateThunk({ timestampInMS: Date.now() - ONE_DAY_IN_MS }));
+    void dispatch(getVariableRateThunk());
+    void dispatch(getVariableRate24hAgoThunk());
     void dispatch(getPoolSwapInfoThunk());
   }, [dispatch, aMM]);
 

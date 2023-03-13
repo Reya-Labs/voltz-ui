@@ -12,6 +12,7 @@ import {
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
+  getVariableRate24hAgoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
   setSignerAndPositionForAMMThunk,
@@ -620,44 +621,41 @@ export const slice = createSlice({
           status: 'success',
         };
       })
-      .addCase(getVariableRateThunk.pending, (state, { meta }) => {
-        if (meta.arg.timestampInMS) {
-          state.variableRate24hAgo = {
-            value: 0,
-            status: 'pending',
-          };
-        } else {
-          state.variableRate = {
-            value: 0,
-            status: 'pending',
-          };
-        }
+      .addCase(getVariableRateThunk.pending, (state) => {
+        state.variableRate = {
+          value: 0,
+          status: 'pending',
+        };
       })
-      .addCase(getVariableRateThunk.rejected, (state, { meta }) => {
-        if (meta.arg.timestampInMS) {
-          state.variableRate24hAgo = {
-            value: 0,
-            status: 'error',
-          };
-        } else {
-          state.variableRate = {
-            value: 0,
-            status: 'error',
-          };
-        }
+      .addCase(getVariableRateThunk.rejected, (state) => {
+        state.variableRate = {
+          value: 0,
+          status: 'error',
+        };
       })
-      .addCase(getVariableRateThunk.fulfilled, (state, { payload, meta }) => {
-        if (meta.arg.timestampInMS) {
-          state.variableRate24hAgo = {
-            value: payload as number,
-            status: 'success',
-          };
-        } else {
-          state.variableRate = {
-            value: payload as number,
-            status: 'success',
-          };
-        }
+      .addCase(getVariableRateThunk.fulfilled, (state, { payload }) => {
+        state.variableRate = {
+          value: payload as number,
+          status: 'success',
+        };
+      })
+      .addCase(getVariableRate24hAgoThunk.pending, (state) => {
+        state.variableRate24hAgo = {
+          value: 0,
+          status: 'pending',
+        };
+      })
+      .addCase(getVariableRate24hAgoThunk.rejected, (state) => {
+        state.variableRate24hAgo = {
+          value: 0,
+          status: 'error',
+        };
+      })
+      .addCase(getVariableRate24hAgoThunk.fulfilled, (state, { payload }) => {
+        state.variableRate24hAgo = {
+          value: payload as number,
+          status: 'success',
+        };
       })
       .addCase(getPoolSwapInfoThunk.pending, (state) => {
         state.poolSwapInfo = {

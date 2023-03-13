@@ -100,16 +100,34 @@ export const getFixedRateThunk = createAsyncThunk<
 
 export const getVariableRateThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  { timestampInMS?: number },
+  void,
   { state: RootState }
->('swapForm/getVariableRate', async ({ timestampInMS }, thunkAPI) => {
+>('swapForm/getVariableRate', async (_, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().swapForm.amm;
     if (!amm) {
       return;
     }
 
-    const variableRate = await amm.getInstantApy(timestampInMS);
+    const variableRate = await amm.getInstantApy();
+    return variableRate * 100;
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const getVariableRate24hAgoThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/getVariableRate24hAgo', async (_, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().swapForm.amm;
+    if (!amm) {
+      return;
+    }
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+    const variableRate = await amm.getInstantApy(Date.now() - oneDayInMilliseconds);
     return variableRate * 100;
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
