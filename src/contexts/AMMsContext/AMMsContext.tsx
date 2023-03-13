@@ -1,5 +1,5 @@
 import { AMM } from '@voltz-protocol/v1-sdk';
-import React, { createContext, useCallback, useContext, useMemo, useRef } from 'react';
+import React, { createContext, useContext, useMemo, useRef } from 'react';
 
 import { useAsyncFunction, UseAsyncFunctionResult } from '../../hooks/useAsyncFunction';
 
@@ -8,7 +8,6 @@ export type AMMsProviderProps = {};
 export type AMMsContext = {
   variableApy: (amm: AMM) => UseAsyncFunctionResult<AMM, number | void>;
   fixedApr: (amm: AMM) => UseAsyncFunctionResult<AMM, number | void>;
-  removeFixedApr: (amm: AMM) => void;
 };
 
 const AMMsCtx = createContext<AMMsContext>({} as unknown as AMMsContext);
@@ -17,10 +16,6 @@ AMMsCtx.displayName = 'AMMContext';
 export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ children }) => {
   const variableApys = useRef<Record<string, number>>({});
   const fixedAprs = useRef<Record<string, number | undefined>>({});
-
-  const removeFixedApr = useCallback((amm: AMM) => {
-    fixedAprs.current[amm.id] = undefined;
-  }, []);
 
   const useVariableApy = (amm: AMM) =>
     useAsyncFunction(
@@ -57,7 +52,6 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
   const value = {
     variableApy: useVariableApy,
     fixedApr: useFixedApr,
-    removeFixedApr: removeFixedApr,
   };
 
   return <AMMsCtx.Provider value={value}>{children}</AMMsCtx.Provider>;
