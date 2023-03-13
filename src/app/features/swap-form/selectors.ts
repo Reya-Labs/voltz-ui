@@ -1,7 +1,7 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatTimestamp } from '../../../utilities/date';
-import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../utilities/number';
+import { formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 import {
   getAvailableMargin,
@@ -173,7 +173,7 @@ export const selectExistingPositionCompactNotional = (state: RootState) => {
     return null;
   }
 
-  const compactParts = compactFormatToParts(state.swapForm.position.value.notional);
+  const compactParts = swapFormCompactFormatToParts(state.swapForm.position.value.notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -202,7 +202,7 @@ export const selectEditPositionPayingRateFormatted = (state: RootState) => {
 export const selectEditPositionCompactNotional = (state: RootState) => {
   const notional = getEditPositionNotional(state.swapForm);
 
-  const compactParts = compactFormatToParts(notional);
+  const compactParts = swapFormCompactFormatToParts(notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -342,4 +342,11 @@ export const selectLeverageOptions = (state: RootState) => {
 
 export const selectIsGetInfoPostSwapLoading = (state: RootState) => {
   return state.swapForm.prospectiveSwap.infoPostSwap.status === 'pending';
+};
+
+export const selectPositionMarginFormatted = (state: RootState) => {
+  if (!state.swapForm.position.value) {
+    return '--';
+  }
+  return swapFormCompactFormat(state.swapForm.position.value.margin);
 };

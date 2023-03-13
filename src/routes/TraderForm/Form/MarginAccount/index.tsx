@@ -4,19 +4,17 @@ import React from 'react';
 import {
   selectAMMTokenFormatted,
   selectMarginAccountName,
-  selectSwapFormPosition,
+  selectPositionMarginFormatted,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { compactFormat } from '../../../../utilities/number';
 import { AccountBox, BalanceBox, MarginAccountBox } from './MarginAccount.styled';
 
 type MarginAccountProps = {};
 
 export const MarginAccount: React.FunctionComponent<MarginAccountProps> = () => {
-  const position = useAppSelector(selectSwapFormPosition);
   const token = useAppSelector(selectAMMTokenFormatted);
   const accountName = useAppSelector(selectMarginAccountName);
-  const balanceValue = position ? compactFormat(position.margin) : '--';
+  const balanceValue = useAppSelector(selectPositionMarginFormatted);
 
   return (
     <MarginAccountBox>
