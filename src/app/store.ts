@@ -7,6 +7,7 @@ import { historicalRatesReducer } from './features/historical-rates';
 import { lpOptimisersReducer } from './features/lp-optimisers';
 import { networkReducer } from './features/network';
 import { swapFormReducer } from './features/swap-form';
+import { tradingLeagueReducer } from './features/trading-league';
 import { saga, transactionsReducer } from './features/transactions';
 
 const rootReducer = combineReducers({
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   network: networkReducer,
   swapForm: swapFormReducer,
   historicalRates: historicalRatesReducer,
+  tradingLeague: tradingLeagueReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
