@@ -1,4 +1,4 @@
-import { Button, ExternalLink, Typography } from 'brokoli-ui';
+import { Button, Confetti, ExternalLink, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,19 +26,23 @@ export const MarginUpdateCompletedStep: React.FunctionComponent = () => {
         Margin Update Completed
       </Typography>
       <MarginUpdateDetails />
-      <ExternalLink
-        colorToken="lavenderWeb"
-        href={etherscanLink}
-        typographyToken="primaryBodyXSmallRegular"
-      >
-        Open transaction on Etherscan
-      </ExternalLink>
+      <Confetti>
+        <ExternalLink
+          colorToken="lavenderWeb"
+          href={etherscanLink}
+          typographyToken="primaryBodyXSmallRegular"
+        >
+          Open transaction on Etherscan
+        </ExternalLink>
+      </Confetti>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
         Your position will be updated in few minutes. You can track it from your your portfolio.
       </Typography>
-      <Button variant="primary" onClick={handleVisitPortfolio}>
-        Visit Your Portfolio
-      </Button>
+      <Confetti>
+        <Button variant="primary" onClick={handleVisitPortfolio}>
+          Visit Your Portfolio
+        </Button>
+      </Confetti>
     </MarginUpdateCompletedStepBox>
   );
 };
