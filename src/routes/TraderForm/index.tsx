@@ -52,7 +52,7 @@ export const TraderFormRoute: React.FunctionComponent = () => {
     pageContent = (
       <LoadingBox>
         <RainbowLoadingBox>
-          <RainbowLoader height={3} text="Fetching best rates..." />
+          <RainbowLoader height={1} text="Fetching best rates..." />
         </RainbowLoadingBox>
       </LoadingBox>
     );
