@@ -13,7 +13,7 @@ export const WaitingForSwapConfirmationStep: React.FunctionComponent = () => {
         Waiting for confirmation
       </Typography>
       <RainbowLoaderBox>
-        <RainbowLoader height={3} text="Swapping Rates..." />
+        <RainbowLoader height={2} text="Swapping Rates..." />
       </RainbowLoaderBox>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
         Confirm this transaction in your wallet

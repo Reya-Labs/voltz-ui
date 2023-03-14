@@ -13,7 +13,7 @@ export const WaitingForMarginUpdateConfirmationStep: React.FunctionComponent = (
         Waiting for confirmation
       </Typography>
       <RainbowLoaderBox>
-        <RainbowLoader height={3} text="Updating margin..." />
+        <RainbowLoader height={2} text="Updating margin..." />
       </RainbowLoaderBox>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
         Confirm this transaction in your wallet

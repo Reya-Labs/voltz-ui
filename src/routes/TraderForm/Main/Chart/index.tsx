@@ -110,7 +110,7 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
         {loading ? (
           <LoadingBox>
             <RainbowLoaderBox>
-              <RainbowLoader height={3} text="Printing historical rates..." />
+              <RainbowLoader height={2} text="Printing historical rates..." />
             </RainbowLoaderBox>
           </LoadingBox>
         ) : null}
