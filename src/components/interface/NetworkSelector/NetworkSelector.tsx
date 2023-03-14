@@ -8,6 +8,7 @@ import {
 } from '../../../app/features/network';
 import { setChainIdThunk } from '../../../app/features/network/thunks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useWallet } from '../../../hooks/useWallet';
 import { setChainId } from '../../../utilities/network/chain-store';
 import { Ellipsis } from '../../atomic/Ellipsis/Ellipsis';
 import { getNetworkOptions } from './get-network-options';
@@ -25,6 +26,8 @@ export const NetworkSelector: React.FunctionComponent = () => {
   const chainChangeState = useAppSelector(selectChainChangeState);
   const dispatch = useAppDispatch();
   const networkOptions = getNetworkOptions();
+  const { signer } = useWallet();
+  const isSignedIn = Boolean(signer);
   useEffect(() => {
     if (!chainId) {
       return;
@@ -69,7 +72,7 @@ export const NetworkSelector: React.FunctionComponent = () => {
             setChainIdThunk({
               chainId: parseInt(event.target.value, 10),
               isSupportedChain: true,
-              triggerApprovalFlow: true,
+              triggerApprovalFlow: isSignedIn,
             }),
           );
         }}
