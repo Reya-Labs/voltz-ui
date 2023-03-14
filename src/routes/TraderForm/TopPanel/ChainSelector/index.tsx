@@ -46,6 +46,6 @@ export const ChainSelector: React.FunctionComponent = () => {
       chainOptions={chainOptions}
       selectedChainId={chainId!}
       onChainChange={handleOnChainChange}
-    ></BrokoliChainSelector>
+    />
   );
 };

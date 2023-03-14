@@ -48,9 +48,9 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
           isMarginRequiredError ? (marginAmount.error as string) : 'Minimum Margin Required'
         }
         bottomLeftTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb3'}
-        bottomLeftTextTypographyToken="primaryBodyXSmallRegular"
+        bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
-        bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
+        bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={
           infoPostSwap.status === 'success'
             ? formatNumber(infoPostSwap.value.marginRequirement)
@@ -65,7 +65,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
         tooltip="The protocol requires every position to have enough margin to support trades. Adding more than the minimum reduces liquidation risk."
         topRightText={`Wallet: ${`${walletValue} ${underlyingTokenName.toUpperCase()}`}`}
         topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
-        topRightTextTypographyToken="secondaryBodySmallRegular"
+        topRightTextTypographyToken={topRightTextTypographyToken}
         value={localMargin !== null ? localMargin : undefined}
         onChange={handleOnMarginChange}
       />

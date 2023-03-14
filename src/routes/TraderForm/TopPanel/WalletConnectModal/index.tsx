@@ -65,7 +65,7 @@ export const WalletConnectModal: React.FunctionComponent = () => {
     }
   }, [wallet.required]);
   return (
-    <>
+    <React.Fragment>
       <WalletConnectButton
         account={wallet?.account}
         error={wallet?.walletError}
@@ -73,6 +73,6 @@ export const WalletConnectModal: React.FunctionComponent = () => {
         onClick={handleOpen}
       />
       <Dialog open={open}>{renderContent()}</Dialog>
-    </>
+    </React.Fragment>
   );
 };
