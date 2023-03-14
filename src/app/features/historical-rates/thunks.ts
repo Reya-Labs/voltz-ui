@@ -63,6 +63,7 @@ export const fetchHistoricalRatesThunk = createAsyncThunk<
       },
       ammId: aMMId,
       rateOracleId: aMMRateOracleId,
+      historicalRatesApiKey: process.env.REACT_APP_RATES_API_KEY ?? '',
     });
 
     CACHE[cacheId] = {
