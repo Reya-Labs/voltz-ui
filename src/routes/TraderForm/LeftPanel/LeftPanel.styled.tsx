@@ -5,7 +5,7 @@ import { ReactComponent as VoltzLogoSvg } from './voltz-logo.svg';
 
 export const VoltzLogo = styled(VoltzLogoSvg)`
   cursor: pointer;
-  transition: filter 300ms ease-in;
+  transition: filter 200ms ease-in;
   filter: drop-shadow(0px 0px 20px ${colors.wildStrawberry});
 
   &:hover {

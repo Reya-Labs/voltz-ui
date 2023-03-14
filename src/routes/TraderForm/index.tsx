@@ -25,11 +25,13 @@ export const TraderFormRoute: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
   const { form } = useParams();
-  const { aMM, loading, error, idle } = useSwapFormAMM();
+  const { noAMMFound, loading, error } = useSwapFormAMM();
 
   React.useEffect(() => {
-    void dispatch(resetStateAction());
-  }, [dispatch]);
+    return () => {
+      dispatch(resetStateAction());
+    };
+  }, []);
 
   let pageContent = (
     <MainAndFormSectionBox data-testid="BrokoliPage-MainAndFormSectionBox">
@@ -42,15 +44,13 @@ export const TraderFormRoute: React.FunctionComponent = () => {
     </MainAndFormSectionBox>
   );
 
-  if (!aMM || error) {
+  if (noAMMFound || error) {
     pageContent = <NoAMMFound />;
-  }
-
-  if (loading || idle) {
+  } else if (loading) {
     pageContent = (
       <LoadingBox>
         <RainbowLoadingBox>
-          <RainbowLoader height={3} text="Fetching best rates..." />
+          <RainbowLoader height={2} text="Fetching best rates..." />
         </RainbowLoadingBox>
       </LoadingBox>
     );

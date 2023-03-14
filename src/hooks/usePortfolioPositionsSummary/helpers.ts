@@ -32,25 +32,27 @@ export const getHealthCounters = (
 export const getNetPayingRate = (
   positions: {
     payingRate: number;
-    variableTokenBalance: number;
+    notionalInUSD: number;
   }[],
   agent: Agents,
-) => {
+): number => {
+  if (agent === Agents.LIQUIDITY_PROVIDER) {
+    return 0;
+  }
+
   let netPayingRate = 0;
   let totalNotional = 0;
 
   positions.forEach((position) => {
-    netPayingRate += position.payingRate * Math.abs(position.variableTokenBalance);
-    totalNotional += Math.abs(position.variableTokenBalance);
+    netPayingRate += position.payingRate * position.notionalInUSD;
+    totalNotional += position.notionalInUSD;
   });
 
-  if (agent !== Agents.LIQUIDITY_PROVIDER) {
-    if (totalNotional > 0) {
-      netPayingRate /= totalNotional;
-    }
+  if (totalNotional > 0) {
+    return netPayingRate / totalNotional;
   }
 
-  return netPayingRate;
+  return 0;
 };
 
 /**
@@ -61,25 +63,27 @@ export const getNetPayingRate = (
 export const getNetReceivingRate = (
   positions: {
     receivingRate: number;
-    variableTokenBalance: number;
+    notionalInUSD: number;
   }[],
   agent: Agents,
-) => {
+): number => {
+  if (agent === Agents.LIQUIDITY_PROVIDER) {
+    return 0;
+  }
+
   let netReceivingRate = 0;
   let totalNotional = 0;
 
   positions.forEach((position) => {
-    netReceivingRate += position.receivingRate * Math.abs(position.variableTokenBalance);
-    totalNotional += Math.abs(position.variableTokenBalance);
+    netReceivingRate += position.receivingRate * position.notionalInUSD;
+    totalNotional += position.notionalInUSD;
   });
 
-  if (agent !== Agents.LIQUIDITY_PROVIDER) {
-    if (totalNotional > 0) {
-      netReceivingRate /= totalNotional;
-    }
+  if (totalNotional > 0) {
+    return netReceivingRate / totalNotional;
   }
 
-  return netReceivingRate;
+  return 0;
 };
 
 /**

@@ -1,16 +1,21 @@
 import { LabelTokenTypography } from 'brokoli-ui';
 import React from 'react';
 
+import {
+  selectAMMTokenFormatted,
+  selectMarginAccountName,
+  selectPositionMarginFormatted,
+} from '../../../../app/features/swap-form';
+import { useAppSelector } from '../../../../app/hooks';
 import { AccountBox, BalanceBox, MarginAccountBox } from './MarginAccount.styled';
 
 type MarginAccountProps = {};
 
 export const MarginAccount: React.FunctionComponent<MarginAccountProps> = () => {
-  // todo: Alex populate the variables with proper values
-  const balanceValue = '12k';
-  const token = ' USDC';
-  // The name of the pool is “{pool_token} {maturity}” (e.g. aUSDT_bor Dec22, aETH_len Mar23, stETH Jan23);
-  const accountName = 'aUSDT_bor Dec22';
+  const token = useAppSelector(selectAMMTokenFormatted);
+  const accountName = useAppSelector(selectMarginAccountName);
+  const balanceValue = useAppSelector(selectPositionMarginFormatted);
+
   return (
     <MarginAccountBox>
       <AccountBox>
@@ -27,7 +32,7 @@ export const MarginAccount: React.FunctionComponent<MarginAccountProps> = () => 
       <BalanceBox>
         <LabelTokenTypography
           colorToken="lavenderWeb"
-          label="Balance"
+          label="Margin"
           labelColorToken="lavenderWeb2"
           labelTypographyToken="primaryBodyXSmallRegular"
           token={token}

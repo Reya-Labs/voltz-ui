@@ -5,12 +5,16 @@ import React, { useEffect, useState } from 'react';
 import {
   selectHistoricalRates,
   selectHistoricalRatesStatus,
-  selectOppositeSideCurrentRate,
 } from '../../../../app/features/historical-rates';
 import { fetchHistoricalRatesThunk } from '../../../../app/features/historical-rates/thunks';
 import { selectChainId } from '../../../../app/features/network';
-import { selectSwapFormAMM } from '../../../../app/features/swap-form';
+import {
+  selectFixedRateInfo,
+  selectSwapFormAMM,
+  selectVariableRateInfo,
+} from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { ChartBox, LineChartBox, LoadingBox, RainbowLoaderBox } from './Chart.styled';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
 
@@ -53,13 +57,16 @@ const filterOptions: ChartFiltersProps['filterOptions'] = [
 
 export const Chart: React.FunctionComponent<ChartProps> = () => {
   const data = useAppSelector(selectHistoricalRates);
-  const yMarker = useAppSelector(selectOppositeSideCurrentRate);
+  const fixedRateInfo = useAppSelector(selectFixedRateInfo);
+  const variableRateInfo = useAppSelector(selectVariableRateInfo);
+
   const loading = useAppSelector(selectHistoricalRatesStatus) === 'pending';
   const dispatch = useAppDispatch();
   const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1w');
   const [activeModeId, setActiveModeId] = useState<string>('variable');
   const chainId = useAppSelector(selectChainId);
   const aMM = useAppSelector(selectSwapFormAMM);
+  const { isLargeDesktopDevice } = useResponsiveQuery();
   const granularity =
     activeTimeRangeId === '1d' || activeModeId === '1w'
       ? Granularity.ONE_HOUR
@@ -88,17 +95,30 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
       }),
     );
   }, [dispatch, timeframe, isFixed, granularity, chainId, aMM]);
+
+  let yMarker = -100;
+  if (fixedRateInfo.status === 'success' && !isFixed) {
+    yMarker = fixedRateInfo.value;
+  }
+  if (variableRateInfo.status === 'success' && isFixed) {
+    yMarker = variableRateInfo.value;
+  }
+
   return (
     <ChartBox>
       <LineChartBox>
         {loading ? (
           <LoadingBox>
             <RainbowLoaderBox>
-              <RainbowLoader height={3} text="Printing historical rates..." />
+              <RainbowLoader height={2} text="Printing historical rates..." />
             </RainbowLoaderBox>
           </LoadingBox>
         ) : null}
         <LineChart
+          axisBottomFormat={activeTimeRangeId === '1d' ? 'hours' : 'days'}
+          axisTypographyToken={
+            isLargeDesktopDevice ? 'secondaryBodySmallRegular' : 'primaryBodyXSmallRegular'
+          }
           colorToken={isFixed ? 'skyBlueCrayola' : 'ultramarineBlue'}
           data={[
             {
@@ -108,7 +128,12 @@ export const Chart: React.FunctionComponent<ChartProps> = () => {
           ]}
           yMarker={yMarker}
           yMarkerColorToken={isFixed ? 'ultramarineBlue3' : 'skyBlueCrayola3'}
-          yMarkerText={isFixed ? 'Variable rate' : 'Fixed rate'}
+          yMarkerText={
+            isFixed
+              ? `Current Variable Rate: ${yMarker.toFixed(2)}%`
+              : `Current Fixed Rate: ${yMarker.toFixed(2)}%`
+          }
+          yMarkerTypographyToken="secondaryBodyXSmallRegular"
         />
       </LineChartBox>
       <ChartFilters

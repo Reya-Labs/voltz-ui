@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const MarginAccountBox = styled('div')`
   box-sizing: border-box;
@@ -7,12 +6,10 @@ export const MarginAccountBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 8px 40px;
+  padding: 9.5px 40px;
   gap: 16px;
 
   width: 100%;
-  background: ${colors.lavenderWeb8};
-  border: 1px solid ${colors.lavenderWeb8};
 `;
 
 export const AccountBox = styled('div')``;

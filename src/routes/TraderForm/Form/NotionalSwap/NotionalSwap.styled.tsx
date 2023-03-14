@@ -65,7 +65,7 @@ export const NotionalSwapSwapper = styled('div', {
   top: calc(50% - 14px);
   left: calc(50% - 14px);
   border-radius: 50%;
-  transition: box-shadow 300ms ease-in;
+  transition: box-shadow 200ms ease-in;
   cursor: pointer;
   ${({ animate }) =>
     animate

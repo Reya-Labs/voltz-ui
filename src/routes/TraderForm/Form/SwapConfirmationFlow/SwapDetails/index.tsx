@@ -1,35 +1,57 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import {
+  selectAMMMaturityFormatted,
+  selectAMMTokenFormatted,
+  selectInfoPostSwap,
+  selectProspectiveSwapMarginFormatted,
+  selectProspectiveSwapMode,
+  selectProspectiveSwapNotionalFormatted,
+  selectVariableRateInfo,
+} from '../../../../../app/features/swap-form';
+import { useAppSelector } from '../../../../../app/hooks';
+import { formatNumber } from '../../../../../utilities/number';
 import { SwapDetailBox, SwapDetailsBox } from './SwapDetails.styled';
 
 type SwapDetailsProps = {};
 
 export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
-  // todo: Alex handle fill in proper values
+  const infoPostSwap = useAppSelector(selectInfoPostSwap);
+  const variableRateInfo = useAppSelector(selectVariableRateInfo);
+  const mode = useAppSelector(selectProspectiveSwapMode);
+  const prospectiveSwapNotionalFormatted = useAppSelector(selectProspectiveSwapNotionalFormatted);
+  const prospectiveSwapMarginFormatted = useAppSelector(selectProspectiveSwapMarginFormatted);
+  const fixedRate = formatNumber(infoPostSwap.value.averageFixedRate);
+  const variableRate = formatNumber(variableRateInfo.value);
+
+  const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
+  const payingRate = mode === 'fixed' ? variableRate : fixedRate;
+  const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
+  const token = useAppSelector(selectAMMTokenFormatted);
 
   return (
     <SwapDetailsBox>
       <SwapDetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          Fixed Rate Receiving
+          {mode === 'fixed' ? 'Fixed' : 'Variable'} Rate Receiving
         </Typography>
         <TokenTypography
-          colorToken="skyBlueCrayola"
+          colorToken={mode === 'fixed' ? 'skyBlueCrayola' : 'ultramarineBlue'}
           token="%"
           typographyToken="secondaryBodySmallRegular"
-          value={5.49}
+          value={receivingRate}
         />
       </SwapDetailBox>
       <SwapDetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          Variable Rate Paying
+          {mode === 'fixed' ? 'Variable' : 'Fixed'} Rate Paying
         </Typography>
         <TokenTypography
-          colorToken="ultramarineBlue"
+          colorToken={mode === 'fixed' ? 'ultramarineBlue' : 'skyBlueCrayola'}
           token="%"
           typographyToken="secondaryBodySmallRegular"
-          value={2.49}
+          value={payingRate}
         />
       </SwapDetailBox>
       <SwapDetailBox>
@@ -38,9 +60,9 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token=" USDC"
+          token={token}
           typographyToken="secondaryBodySmallRegular"
-          value="100k"
+          value={prospectiveSwapNotionalFormatted}
         />
       </SwapDetailBox>
       <SwapDetailBox>
@@ -49,9 +71,9 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token=" USDC"
+          token={token}
           typographyToken="secondaryBodySmallRegular"
-          value="1k"
+          value={prospectiveSwapMarginFormatted}
         />
       </SwapDetailBox>
       <SwapDetailBox>
@@ -60,9 +82,9 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token=" USDC"
+          token=" "
           typographyToken="secondaryBodySmallRegular"
-          value="03 May 2023"
+          value={aMMMaturity}
         />
       </SwapDetailBox>
     </SwapDetailsBox>

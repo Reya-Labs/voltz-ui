@@ -1,14 +1,15 @@
-import { LabelTokenTypography } from 'brokoli-ui';
+import { LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
+  selectAMMMaturityFormatted,
   selectFixedRateInfo,
   selectSwapFormAMM,
   selectVariableRate24hDelta,
   selectVariableRateInfo,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { formatTimestamp } from '../../../../utilities/date';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { formatNumber } from '../../../../utilities/number';
 import { MarketTokenInformation, MarketTokenInformationProps } from '../../MarketTokenInformation';
 import {
@@ -27,6 +28,17 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const variableRate24hDelta = useAppSelector(selectVariableRate24hDelta);
+  const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
+  const { isLargeDesktopDevice } = useResponsiveQuery();
+
+  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodySmallRegular'
+    : 'primaryBodyXSmallRegular';
+
+  const typographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'secondaryBodyLargeBold'
+    : 'secondaryBodyMediumBold';
+
   if (!aMM) {
     return null;
   }
@@ -47,9 +59,9 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
             colorToken="lavenderWeb"
             label="Fixed"
             labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelTypographyToken={labelTypographyToken}
             token="%"
-            typographyToken="secondaryBodyMediumBold"
+            typographyToken={typographyToken}
             value={fixedRateInfo.status !== 'success' ? '--' : formatNumber(fixedRateInfo.value)}
           />
         </FixedBox>
@@ -59,10 +71,10 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
             differenceValue={variableRate24hDelta}
             label="Variable"
             labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelTypographyToken={labelTypographyToken}
             token="%"
-            tooltip="Variable rate and the change during the last 24hs in absolute value."
-            typographyToken="secondaryBodyMediumBold"
+            tooltip="Variable rate and the absolute change in the past 24 hours."
+            typographyToken={typographyToken}
             value={
               variableRateInfo.status !== 'success' ? '--' : formatNumber(variableRateInfo.value)
             }
@@ -73,10 +85,10 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
             colorToken="lavenderWeb"
             label="Maturity"
             labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
+            labelTypographyToken={labelTypographyToken}
             token=""
-            typographyToken="secondaryBodyMediumBold"
-            value={aMM ? formatTimestamp(aMM.termEndTimestampInMS) : '--'}
+            typographyToken={typographyToken}
+            value={aMMMaturity}
           />
         </MaturityBox>
       </PoolHeaderDetailsBox>

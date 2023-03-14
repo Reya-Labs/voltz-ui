@@ -1,80 +1,118 @@
-import { TokenField, TokenFieldProps } from 'brokoli-ui';
-import React, { useCallback } from 'react';
+import { TypographyToken } from 'brokoli-ui';
+import debounce from 'lodash.debounce';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  selectInfoPostSwap,
-  selectIsMarginRequiredError,
-  selectIsWalletMarginError,
-  selectMarginAmount,
   selectSwapFormAMM,
-  selectWalletBalanceInfo,
+  selectSwapFormPosition,
+  selectUserInputMarginInfo,
   setMarginAmountAction,
-  SwapFormNumberLimits,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { compactFormat, formatNumber } from '../../../../utilities/number';
-import { MarginAmountFieldBox } from './MarginAmountField.styled';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
+import { stringToBigFloat } from '../../../../utilities/number';
+import { EditMarginAmountFieldUI } from './EditMarginAmountFieldUI';
+import { NewMarginAmountFieldUI } from './NewMarginAmountFieldUI';
 type NotionalAmountProps = {};
 
 export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const dispatch = useAppDispatch();
-  const marginAmount = useAppSelector(selectMarginAmount);
-  const infoPostSwap = useAppSelector(selectInfoPostSwap);
+  const marginAmount = useAppSelector(selectUserInputMarginInfo);
+  const position = useAppSelector(selectSwapFormPosition);
   const aMM = useAppSelector(selectSwapFormAMM);
 
-  const isMarginRequiredError = useAppSelector(selectIsMarginRequiredError);
-  const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
+  const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
+  const [localMargin, setLocalMargin] = useState<string | null>(marginAmount.value.toString());
+  const { isLargeDesktopDevice } = useResponsiveQuery();
 
-  const walletBalance = useAppSelector(selectWalletBalanceInfo);
-  let walletValue = walletBalance.status === 'success' ? compactFormat(walletBalance.value) : '--';
-  if (aMM) {
-    walletValue = walletValue.concat(` ${aMM.underlyingToken.name.toUpperCase()}`);
-  }
+  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodyMediumRegular'
+    : 'primaryBodySmallRegular';
 
-  const handleOnChange = useCallback(
-    (value?: string) => {
-      if (!value) {
-        return;
-      }
-      dispatch(
-        setMarginAmountAction({
-          value,
-        }),
-      );
-    },
+  const bottomRightTextTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'secondaryBodySmallRegular'
+    : 'secondaryBodyXSmallRegular';
+
+  const bottomLeftTextTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodySmallRegular'
+    : 'primaryBodyXSmallRegular';
+
+  const topRightTextTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'secondaryBodySmallRegular'
+    : 'secondaryBodyXSmallRegular';
+
+  useEffect(() => {
+    setLocalMargin(marginAmount.value.toString());
+  }, [marginAmount.value]);
+
+  const debouncedSetMarginAmount = useMemo(
+    () =>
+      debounce((value?: number, editMode?: 'add' | 'remove') => {
+        dispatch(
+          setMarginAmountAction({
+            value,
+            editMode,
+          }),
+        );
+      }, 300),
     [dispatch],
   );
 
-  return (
-    <MarginAmountFieldBox>
-      <TokenField
-        allowNegativeValue={false}
-        bottomLeftText={
-          isMarginRequiredError ? (marginAmount.error as string) : 'Additional Margin Required'
-        }
-        bottomLeftTextColorToken={isMarginRequiredError ? 'wildStrawberry3' : 'lavenderWeb3'}
-        bottomLeftTextTypographyToken="primaryBodyXSmallRegular"
-        bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
-        bottomRightTextTypographyToken="secondaryBodyXSmallRegular"
-        bottomRightTextValue={
-          infoPostSwap.status === 'success'
-            ? formatNumber(infoPostSwap.value.marginRequirement)
-            : '--'
-        }
-        decimalsLimit={SwapFormNumberLimits.decimalLimit}
-        error={isMarginRequiredError || isWalletMarginError}
-        label="Chosen Margin"
-        maxLength={SwapFormNumberLimits.digitLimit}
-        token={
-          aMM ? (aMM.underlyingToken.name.toLowerCase() as TokenFieldProps['token']) : undefined
-        }
-        tooltip="The protocol requires every position to have enough collateral to support the swap. You can add more than the minimum, but positions with lower leverage tend to be less capital efficient, albeit more secure."
-        topRightText={`Wallet: ${walletValue}`}
-        topRightTextColorToken={isWalletMarginError ? 'wildStrawberry2' : 'lavenderWeb2'}
-        topRightTextTypographyToken="secondaryBodySmallRegular"
-        value={marginAmount.value}
-        onChange={handleOnChange}
-      />
-    </MarginAmountFieldBox>
+  const handleOnMarginChange = useCallback(
+    (value?: string) => {
+      setLocalMargin(value ?? null);
+
+      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : 0;
+      debouncedSetMarginAmount(valueAsNumber, undefined);
+    },
+    [debouncedSetMarginAmount],
+  );
+
+  const handleOnSwitchChange = useCallback(
+    (value: string) => {
+      if (value !== 'add' && value !== 'remove') {
+        return;
+      }
+
+      setLocalEditMode(value);
+      debouncedSetMarginAmount(undefined, value);
+    },
+    [debouncedSetMarginAmount],
+  );
+
+  // Stop the invocation of the debounced function
+  // after unmounting
+  useEffect(() => {
+    return () => {
+      debouncedSetMarginAmount.cancel();
+    };
+  }, []);
+
+  if (!aMM) {
+    return null;
+  }
+
+  return !position ? (
+    <NewMarginAmountFieldUI
+      bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
+      bottomRightTextTypographyToken={bottomRightTextTypographyToken}
+      handleOnMarginChange={handleOnMarginChange}
+      labelTypographyToken={labelTypographyToken}
+      localMargin={localMargin}
+      topRightTextTypographyToken={topRightTextTypographyToken}
+      underlyingTokenName={aMM.underlyingToken.name}
+    />
+  ) : (
+    <EditMarginAmountFieldUI
+      bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
+      bottomRightTextTypographyToken={bottomRightTextTypographyToken}
+      handleOnMarginChange={handleOnMarginChange}
+      handleOnSwitchChange={handleOnSwitchChange}
+      labelTypographyToken={labelTypographyToken}
+      localEditMode={localEditMode}
+      localMargin={localMargin}
+      topRightTextTypographyToken={topRightTextTypographyToken}
+      underlyingTokenName={aMM.underlyingToken.name}
+    />
   );
 };

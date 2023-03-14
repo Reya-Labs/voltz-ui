@@ -1,109 +1,53 @@
-import { LabelTokenTypography } from 'brokoli-ui';
+import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import {
-  selectInfoPostSwap,
-  selectMode,
-  selectNotionalAmount,
-  selectSwapFormAMM,
-  selectVariableRateInfo,
-} from '../../../../app/features/swap-form';
+import { selectSwapFormAMM, selectSwapFormMode } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../../utilities/number';
-import {
-  CashFlowBox,
-  NotionalBox,
-  PayingBox,
-  PositionDetailsBox,
-  PositionDetailsLeftBox,
-  PositionDetailsRightBox,
-  ReceivingBox,
-} from './PositionDetails.styled';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
+import { EditPositionDetailsUI } from './EditPositionDetailsUI';
+import { NewPositionDetailsUI } from './NewPositionDetailsUI';
 
 type PositionDetailsProps = {};
-
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
+  const swapForMode = useAppSelector(selectSwapFormMode);
   const aMM = useAppSelector(selectSwapFormAMM);
-  const notional = useAppSelector(selectNotionalAmount);
-  const variableRateInfo = useAppSelector(selectVariableRateInfo);
-  const infoPostSwap = useAppSelector(selectInfoPostSwap);
-  const mode = useAppSelector(selectMode);
+  const { isLargeDesktopDevice } = useResponsiveQuery();
 
-  const fixedRate =
-    infoPostSwap.status === 'success' ? formatNumber(infoPostSwap.value.averageFixedRate) : '--';
-  const variableRate =
-    variableRateInfo.status === 'success' ? formatNumber(variableRateInfo.value) : '--';
+  const actionLabelTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodyLargeBold'
+    : 'primaryBodyMediumBold';
 
-  const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
-  const payingRate = mode === 'fixed' ? variableRate : fixedRate;
+  const actionTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'secondaryBodyMediumRegular'
+    : 'secondaryBodySmallRegular';
 
-  let compactNotionalSuffix = '';
-  let compactNotionalNumber = '--';
-  if (notional.value && !notional.error) {
-    const compactParts = compactFormatToParts(stringToBigFloat(notional.value));
-    compactNotionalSuffix = compactParts.compactSuffix;
-    compactNotionalNumber = compactParts.compactNumber;
+  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodySmallRegular'
+    : 'primaryBodyXSmallRegular';
+
+  const typographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'secondaryBodySmallRegular'
+    : 'secondaryBodyMediumRegular';
+
+  if (!aMM) {
+    return null;
   }
 
-  return (
-    <PositionDetailsBox>
-      <PositionDetailsLeftBox>
-        <LabelTokenTypography
-          colorToken={mode === 'fixed' ? 'skyBlueCrayola' : 'ultramarineBlue'}
-          label="New position"
-          labelColorToken="lavenderWeb"
-          labelTypographyToken="primaryBodyMediumBold"
-          token=""
-          typographyToken="secondaryBodySmallRegular"
-          value={mode === 'fixed' ? 'Fixed Taker' : 'Variable Taker'}
-        />
-      </PositionDetailsLeftBox>
-      <PositionDetailsRightBox>
-        <NotionalBox>
-          <LabelTokenTypography
-            colorToken="lavenderWeb"
-            label="Notional"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
-            token={compactNotionalSuffix}
-            typographyToken="secondaryBodySmallRegular"
-            value={compactNotionalNumber}
-          />
-        </NotionalBox>
-        <ReceivingBox>
-          <LabelTokenTypography
-            colorToken="lavenderWeb"
-            label="Receiving"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
-            token="%"
-            typographyToken="secondaryBodySmallRegular"
-            value={receivingRate}
-          />
-        </ReceivingBox>
-        <PayingBox>
-          <LabelTokenTypography
-            colorToken="lavenderWeb"
-            label="Paying"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
-            token="%"
-            typographyToken="secondaryBodySmallRegular"
-            value={payingRate}
-          />
-        </PayingBox>
-        <CashFlowBox>
-          <LabelTokenTypography
-            colorToken="lavenderWeb"
-            label="Cash Flow"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken="primaryBodyXSmallRegular"
-            token={aMM ? ` ${aMM.underlyingToken.name.toUpperCase()}` : ''}
-            typographyToken="secondaryBodySmallRegular"
-            value="0.00" //TODO: Alex maybe it might stay hard-coded (depends on how we implement edit position)
-          />
-        </CashFlowBox>
-      </PositionDetailsRightBox>
-    </PositionDetailsBox>
+  return swapForMode === 'new' ? (
+    <NewPositionDetailsUI
+      actionLabelTypographyToken={actionLabelTypographyToken}
+      actionTypographyToken={actionTypographyToken}
+      labelTypographyToken={labelTypographyToken}
+      typographyToken={typographyToken}
+      underlyingTokenName={aMM.underlyingToken.name}
+    />
+  ) : (
+    <EditPositionDetailsUI
+      actionLabelTypographyToken={actionLabelTypographyToken}
+      actionTypographyToken={actionTypographyToken}
+      labelTypographyToken={labelTypographyToken}
+      typographyToken={typographyToken}
+      underlyingTokenName={aMM.underlyingToken.name}
+    />
   );
 };

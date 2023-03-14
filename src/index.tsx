@@ -9,10 +9,13 @@ import './fonts/DM_Sans/DMSans-Medium.woff';
 import './fonts/DM_Sans/DMSans-MediumItalic.woff';
 import './fonts/DM_Sans/DMSans-Regular.woff';
 import './index.css';
+// eslint-disable-next-line no-restricted-imports
+import 'brokoli-ui/dist/esm/index.css';
 
 import { ThemeProvider } from '@mui/material/styles';
 import { initV1 } from '@voltz-protocol/v1-sdk';
 import { Amplify } from 'aws-amplify';
+import { Notifications } from 'brokoli-ui';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';
@@ -38,6 +41,7 @@ initSentryTracker();
 
 ReactDOM.render(
   <React.StrictMode>
+    <Notifications />
     <ThemeProvider theme={themes.dark}>
       <ReduxProvider store={store}>
         <WalletProvider>

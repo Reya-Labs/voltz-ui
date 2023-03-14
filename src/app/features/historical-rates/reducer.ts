@@ -8,13 +8,11 @@ import { fetchHistoricalRatesThunk } from './thunks';
 
 type SliceState = {
   historicalRates: HistoricalRates[];
-  oppositeSideCurrentRate: number;
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
 };
 
 const initialState: SliceState = {
   historicalRates: [],
-  oppositeSideCurrentRate: -1,
   status: 'idle',
 };
 
@@ -30,11 +28,9 @@ export const slice = createSlice({
       .addCase(fetchHistoricalRatesThunk.rejected, (state, {}) => {
         state.status = 'failed';
         state.historicalRates = [];
-        state.oppositeSideCurrentRate = -1;
       })
       .addCase(fetchHistoricalRatesThunk.fulfilled, (state, { payload }) => {
         state.historicalRates = (payload as RatesData).historicalRates;
-        state.oppositeSideCurrentRate = (payload as RatesData).oppositeSideCurrentRate;
         state.status = 'succeeded';
       });
   },

@@ -54,7 +54,7 @@ export const fetchHistoricalRatesThunk = createAsyncThunk<
   }
   const { timeframeMs, granularity, chainId, aMMId, aMMRateOracleId, isFixed } = payload;
   try {
-    const { oppositeSideCurrentRate, historicalRates } = await getHistoricalRates({
+    const { historicalRates } = await getHistoricalRates({
       chainId,
       isFixed,
       filters: {
@@ -63,11 +63,11 @@ export const fetchHistoricalRatesThunk = createAsyncThunk<
       },
       ammId: aMMId,
       rateOracleId: aMMRateOracleId,
+      historicalRatesApiKey: process.env.REACT_APP_RATES_API_KEY ?? '',
     });
 
     CACHE[cacheId] = {
       historicalRates,
-      oppositeSideCurrentRate,
     };
     return CACHE[cacheId];
   } catch (err) {

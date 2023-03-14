@@ -1,6 +1,6 @@
 {
   "name": "voltz-ui",
-  "version": "1.100.3",
+  "version": "1.113.7",
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
@@ -23,7 +23,8 @@
     "test:watch": "jest --watch",
     "generate:coverage-badges": "npx istanbul-badges-readme --silent",
     "chromatic": "npx chromatic --project-token=e40b8c3e3eea",
-    "code-quality:check": "npx concurrently 'yarn ts:check' 'yarn prettier:check' 'yarn lint:check --quiet'"
+    "code-quality:check": "npx concurrently 'yarn ts:check' 'yarn prettier:check' 'yarn lint:check --quiet'",
+    "git:create-release-branch": "git checkout main && git pull && git checkout develop && git pull && git checkout -b release/$FEATURE && git checkout release/$FEATURE && git merge main --no-edit"
   },
   "babel": {
     "presets": [
@@ -139,12 +140,11 @@
     "@reduxjs/toolkit": "1.9.0",
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0",
-    "@voltz-protocol/v1-sdk": "1.80.1",
+    "@voltz-protocol/v1-sdk": "1.87.1",
     "@walletconnect/ethereum-provider": "1.8.0",
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.44",
-    "axios": "0.27.2",
-    "brokoli-ui": "1.31.4",
+    "brokoli-ui": "1.39.2",
     "chroma-js": "2.1.2",
     "copy-to-clipboard": "3.3.3",
     "ethereumjs-abi": "0.6.8",
@@ -162,8 +162,8 @@
     "react-currency-input-field": "3.6.4",
     "react-dom": "17.0.2",
     "react-gtm-module": "2.0.11",
-    "react-moving-text": "0.0.7",
     "react-redux": "8.0.5",
+    "react-responsive": "9.0.2",
     "react-router-dom": "6.2.1",
     "redux": "4.2.0",
     "redux-logger": "3.0.6",

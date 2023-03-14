@@ -46,19 +46,3 @@ export const SwapFeeDetailsBox = styled('div')`
   padding: 0px;
   gap: 4px;
 `;
-
-export const CloseButton = styled('button')`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 4px 8px;
-  gap: 4px;
-  background: ${colors.lavenderWeb8};
-  border-radius: 4px;
-  color: ${colors.lavenderWeb};
-  cursor: pointer;
-  border: none;
-  &:hover {
-    background: ${colors.lavenderWeb7};
-  }
-`;

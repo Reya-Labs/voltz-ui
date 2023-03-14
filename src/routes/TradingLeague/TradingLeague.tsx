@@ -1,27 +1,32 @@
 import { RankType } from '@voltz-protocol/v1-sdk';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { selectChainId } from '../../app/features/network';
-import { useAppSelector } from '../../app/hooks';
+import {
+  fetchRankingsThunk,
+  selectTradingLeagueRankings,
+  selectTradingLeagueStatus,
+} from '../../app/features/trading-league';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
 import { useWallet } from '../../hooks/useWallet';
 import { setPageTitle } from '../../utilities/page';
-import { getCommunitySbt } from '../Profile/helpers';
 import { Leaderboard } from './Leaderboard/Leaderboard';
 import { TradingLeagueBox } from './TradingLeague.styled';
+
 const PER_PAGE = 10;
 
 export const TradingLeague: React.FunctionComponent = () => {
   const { account, signer } = useWallet();
-  const [loading, setLoading] = useState(true);
+  const tradingLeagueStatus = useAppSelector(selectTradingLeagueStatus);
+  const loading = tradingLeagueStatus === 'pending' || tradingLeagueStatus === 'idle';
   const season = useCurrentSeason();
-  const [rankings, setRankings] = useState<RankType[]>([]);
+  const rankings = useAppSelector(selectTradingLeagueRankings);
   const wallet = useWallet();
-  const [userRank, setUserRank] = useState<number>(-1);
-  const [userPoints, setUserPoints] = useState<number>(-1);
   const [page, setPage] = useState<number>(0);
   const maxPages = Math.floor(rankings.length / PER_PAGE) + 1;
   const chainId = useAppSelector(selectChainId);
+  const dispatch = useAppDispatch();
 
   const handleOnNextPage = () => {
     if (page + 1 < maxPages) {
@@ -35,31 +40,35 @@ export const TradingLeague: React.FunctionComponent = () => {
     }
   };
 
-  const fetchRankings = async () => {
-    setLoading(true);
-    const SBT = getCommunitySbt(signer, chainId);
-    const { traderRankResults: result } = await SBT.getRanking(season.id);
-    setUserRanking(result, wallet.account);
-    setRankings(result);
-    setLoading(false);
-  };
-
-  const setUserRanking = (rankingResults: RankType[], walletAddress?: string | null) => {
-    const userEntry: RankType | undefined = rankingResults.find(
-      (r) => r.address.toLowerCase() === walletAddress?.toLowerCase(),
+  const { userPoints, userRank } = useMemo(() => {
+    const userEntry: RankType | undefined = rankings.find(
+      (r) => r.address.toLowerCase() === wallet.account?.toLowerCase(),
     );
-    setUserPoints(userEntry?.points || -1);
-    setUserRank(userEntry?.rank ?? -1);
-  };
-
-  useEffect(() => {
-    setUserRanking(rankings, wallet.account);
-  }, [wallet.account]);
+    return {
+      userPoints: userEntry?.points || -1,
+      userRank: userEntry?.rank ?? -1,
+    };
+  }, [rankings, wallet.account]);
 
   useEffect(() => {
     setPageTitle('Trading League', account);
-    void fetchRankings();
   }, []);
+
+  useEffect(() => {
+    if (!chainId) {
+      return;
+    }
+    if (tradingLeagueStatus === 'succeeded' && rankings.length !== 0) {
+      return;
+    }
+    void dispatch(
+      fetchRankingsThunk({
+        chainId,
+        seasonId: season.id,
+        signer,
+      }),
+    );
+  }, [rankings, tradingLeagueStatus, season.id, chainId]);
 
   return (
     <TradingLeagueBox>

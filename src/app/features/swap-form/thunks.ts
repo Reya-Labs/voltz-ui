@@ -1,12 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getPositionsV1, InfoPostSwapV1, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
-import { providers } from 'ethers';
+import {
+  ExpectedCashflowInfo,
+  getPositionsV1,
+  InfoPostSwapV1,
+  Position,
+  SupportedChainId,
+} from '@voltz-protocol/v1-sdk';
+import { ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPosition } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
-import { stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
-import { isNotionalStrictlyPositive } from './utils';
+import {
+  getProspectiveSwapMargin,
+  getProspectiveSwapMode,
+  getProspectiveSwapNotional,
+  isUserInputNotionalError,
+} from './utils';
 
 const rejectThunkWithError = (
   thunkAPI: {
@@ -27,11 +37,45 @@ export const getWalletBalanceThunk = createAsyncThunk<
 >('swapForm/getWalletBalance', async (_, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().swapForm.amm;
-    if (!amm) {
+    if (!amm || !amm.signer) {
       return;
     }
 
     return await amm.underlyingTokens();
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/getUnderlyingTokenAllowance', async (_, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().swapForm.amm;
+    if (!amm || !amm.signer) {
+      return;
+    }
+
+    return await amm.getUnderlyingTokenAllowance({ forceErc20Check: false }); //TODO Alex (for future forms)
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const approveUnderlyingTokenThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/approveUnderlyingToken', async (_, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().swapForm.amm;
+    if (!amm || !amm.signer) {
+      return;
+    }
+
+    return await amm.approveUnderlyingTokenForPeripheryV1({ forceErc20Check: false }); //TODO Alex (for future forms)
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -56,16 +100,34 @@ export const getFixedRateThunk = createAsyncThunk<
 
 export const getVariableRateThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  { timestampInMS?: number },
+  void,
   { state: RootState }
->('swapForm/getVariableRate', async ({ timestampInMS }, thunkAPI) => {
+>('swapForm/getVariableRate', async (_, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().swapForm.amm;
     if (!amm) {
       return;
     }
 
-    const variableRate = await amm.getInstantApy(timestampInMS);
+    const variableRate = await amm.getInstantApy();
+    return variableRate * 100;
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const getVariableRate24hAgoThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/getVariableRate24hAgo', async (_, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().swapForm.amm;
+    if (!amm) {
+      return;
+    }
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+    const variableRate = await amm.getInstantApy(Date.now() - oneDayInMilliseconds);
     return variableRate * 100;
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
@@ -89,30 +151,14 @@ export const getPoolSwapInfoThunk = createAsyncThunk<
   }
 });
 
-export const initialiseCashflowCalculatorThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('swapForm/initialiseCashFlowCalculator', async (_, thunkAPI) => {
-  try {
-    const amm = thunkAPI.getState().swapForm.amm;
-    if (!amm) {
-      return;
-    }
-    const { scaled: variableFactor } = await amm.variableFactor(
-      amm.termStartTimestampInMS,
-      Date.now(),
-    );
-
-    return variableFactor;
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
 export const getInfoPostSwapThunk = createAsyncThunk<
   Awaited<
-    | { notionalAmount: number; infoPostSwapV1: InfoPostSwapV1; earlyReturn: boolean }
+    | {
+        notionalAmount: number;
+        swapMode: 'fixed' | 'variable';
+        infoPostSwapV1: InfoPostSwapV1;
+        earlyReturn: boolean;
+      }
     | ReturnType<typeof rejectThunkWithError>
   >,
   void,
@@ -121,24 +167,52 @@ export const getInfoPostSwapThunk = createAsyncThunk<
   try {
     const swapFormState = thunkAPI.getState().swapForm;
     const amm = swapFormState.amm;
-    if (!amm || !isNotionalStrictlyPositive(swapFormState)) {
+    if (!amm || isUserInputNotionalError(swapFormState)) {
       return {
         notionalAmount: NaN,
+        swapMode: getProspectiveSwapMode(swapFormState),
         infoPostSwap: {},
         earlyReturn: true,
       };
     }
 
-    const notionalAmount = stringToBigFloat(swapFormState.prospectiveSwap.notionalAmount.value);
+    if (getProspectiveSwapNotional(swapFormState) === 0) {
+      return {
+        notionalAmount: 0,
+        swapMode: getProspectiveSwapMode(swapFormState),
+        infoPostSwap: {
+          marginRequirement: 0,
+          maxMarginWithdrawable: 0,
+          averageFixedRate: 0,
+          fixedTokenDeltaBalance: 0,
+          variableTokenDeltaBalance: 0,
+          fixedTokenDeltaUnbalanced: 0,
+          fee: 0,
+          slippage: 0,
+          gasFeeETH: 0,
+        },
+        earlyReturn: false,
+      };
+    }
+
+    const notionalAmount = getProspectiveSwapNotional(swapFormState);
     const infoPostSwapV1 = await amm.getInfoPostSwapV1({
-      isFT: swapFormState.prospectiveSwap.mode === 'fixed',
+      isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
       notional: notionalAmount,
       fixedLow: 1,
       fixedHigh: 999,
     });
 
+    // margin requirement is collateral only now
+    if (infoPostSwapV1.marginRequirement > infoPostSwapV1.fee) {
+      infoPostSwapV1.marginRequirement -= infoPostSwapV1.fee;
+    } else {
+      infoPostSwapV1.marginRequirement = 0;
+    }
+
     return {
       notionalAmount,
+      swapMode: getProspectiveSwapMode(swapFormState),
       infoPostSwap: infoPostSwapV1,
       earlyReturn: false,
     };
@@ -185,7 +259,7 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
     }
     // TODO: Alex possible to move filter into subgraph level? Discuss
     const nonBorrowPositions = positions.filter((pos) => !isBorrowingPosition(pos));
-    const position = findCurrentPosition(nonBorrowPositions || [], amm.id);
+    const position = findCurrentPosition(nonBorrowPositions || [], amm.id) || null;
     return {
       position,
       signer,
@@ -196,7 +270,7 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
 });
 
 export const confirmSwapThunk = createAsyncThunk<
-  Awaited<void | ReturnType<typeof rejectThunkWithError>>,
+  Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
 >('swapForm/confirmSwap', async (_, thunkAPI) => {
@@ -206,16 +280,60 @@ export const confirmSwapThunk = createAsyncThunk<
     if (!amm) {
       return;
     }
-    const fakeError = Math.random() * 100 < 25;
-    // todo: Alex integrate proper SDK here and remove the timeout mocking
-    if (fakeError) {
-      await new Promise((resolve, reject) =>
-        setTimeout(() => reject('Error happened during the swap!'), 5000),
-      );
-    } else {
-      await new Promise((resolve) => setTimeout(() => resolve(undefined), 5000));
+
+    return await amm.swap({
+      isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
+      notional: getProspectiveSwapNotional(swapFormState),
+      margin: getProspectiveSwapMargin(swapFormState),
+      fixedLow: 1,
+      fixedHigh: 999,
+    });
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const confirmMarginUpdateThunk = createAsyncThunk<
+  Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/confirmMarginUpdate', async (_, thunkAPI) => {
+  try {
+    const swapFormState = thunkAPI.getState().swapForm;
+    const amm = swapFormState.amm;
+    if (!amm) {
+      return;
     }
-    return undefined;
+
+    return await amm.updatePositionMargin({
+      fixedLow: 1,
+      fixedHigh: 999,
+      marginDelta: getProspectiveSwapMargin(swapFormState),
+    });
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
+export const getExpectedCashflowInfoThunk = createAsyncThunk<
+  Awaited<ExpectedCashflowInfo | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/getExpectedCashflowInfo', async (_, thunkAPI) => {
+  try {
+    const swapFormState = thunkAPI.getState().swapForm;
+    const amm = swapFormState.amm;
+    if (!amm) {
+      return;
+    }
+
+    return await amm.getExpectedCashflowInfo({
+      position: swapFormState.position.value ?? undefined,
+      prospectiveSwapAvgFixedRate:
+        swapFormState.prospectiveSwap.infoPostSwap.value.averageFixedRate / 100,
+      prospectiveSwapNotional:
+        swapFormState.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance,
+    });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
