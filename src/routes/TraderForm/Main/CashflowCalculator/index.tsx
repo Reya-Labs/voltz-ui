@@ -11,6 +11,7 @@ import {
   selectInfoPostSwap,
   selectSwapFormAMM,
   selectTotalCashflow,
+  selectVariableRateInfo,
   setEstimatedApyAction,
 } from '../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -33,7 +34,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
   const token = useAppSelector(selectAMMTokenFormatted);
   const { isLargeDesktopDevice } = useResponsiveQuery();
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
-
+  const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const estimatedApy = useAppSelector(selectEstimatedApy);
 
   const additionalCashflow = useAppSelector(selectAdditionalCashflow);
@@ -43,18 +44,6 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
   );
 
   const cashflowInfoStatus = useAppSelector(selectCashflowInfoStatus);
-
-  useEffect(() => {
-    setLocalEstimatedApy(estimatedApy.toString());
-  }, [estimatedApy]);
-
-  useEffect(() => {
-    if (!aMM || infoPostSwap.status !== 'success') {
-      return;
-    }
-    void dispatch(getExpectedCashflowInfoThunk());
-  }, [dispatch, aMM, infoPostSwap.status, infoPostSwap.value.variableTokenDeltaBalance]);
-
   const debouncedChangePredictedApy = useMemo(
     () =>
       debounce((value: number) => {
@@ -66,6 +55,24 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
       }, 300),
     [dispatch],
   );
+
+  useEffect(() => {
+    setLocalEstimatedApy(estimatedApy.toString());
+  }, [estimatedApy]);
+
+  useEffect(() => {
+    if (variableRateInfo.status !== 'success') {
+      return;
+    }
+    debouncedChangePredictedApy(parseFloat(variableRateInfo.value.toFixed(2)));
+  }, [variableRateInfo.status]);
+
+  useEffect(() => {
+    if (!aMM || infoPostSwap.status !== 'success') {
+      return;
+    }
+    void dispatch(getExpectedCashflowInfoThunk());
+  }, [dispatch, aMM, infoPostSwap.status, infoPostSwap.value.variableTokenDeltaBalance]);
 
   const handleOnChange = useCallback(
     (value?: string) => {
