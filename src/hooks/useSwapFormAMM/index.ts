@@ -27,6 +27,7 @@ export type UseAMMsResult = {
   aMM: AMM | null;
   loading: boolean;
   error: boolean;
+  noAMMFound: boolean;
 };
 
 export const useSwapFormAMM = (): UseAMMsResult => {
@@ -124,6 +125,7 @@ export const useSwapFormAMM = (): UseAMMsResult => {
       loading ||
       positionFetchingStatus === 'pending' ||
       poolSwapInfoStatus === 'pending',
+    noAMMFound: !aMM && !loading,
     error: error || positionFetchingStatus === 'error' || poolSwapInfoStatus === 'error',
   };
 };

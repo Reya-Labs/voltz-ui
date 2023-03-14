@@ -25,7 +25,7 @@ export const TraderFormRoute: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
   const { form } = useParams();
-  const { aMM, loading, error } = useSwapFormAMM();
+  const { noAMMFound, loading, error } = useSwapFormAMM();
 
   React.useEffect(() => {
     return () => {
@@ -44,11 +44,9 @@ export const TraderFormRoute: React.FunctionComponent = () => {
     </MainAndFormSectionBox>
   );
 
-  if (!aMM || error) {
+  if (noAMMFound || error) {
     pageContent = <NoAMMFound />;
-  }
-
-  if (loading) {
+  } else if (loading) {
     pageContent = (
       <LoadingBox>
         <RainbowLoadingBox>
