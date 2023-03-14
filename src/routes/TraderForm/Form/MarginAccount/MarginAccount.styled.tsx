@@ -6,7 +6,7 @@ export const MarginAccountBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 8px 40px;
+  padding: 9.5px 40px;
   gap: 16px;
 
   width: 100%;
