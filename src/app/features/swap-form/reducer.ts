@@ -365,8 +365,26 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
       state: 'not-enough-balance',
       disabled: true,
       message: {
-        text: `You have got not enough ${state.amm.underlyingToken.name.toUpperCase()}`,
+        text: '',
         isError: false,
+      },
+    };
+    return;
+  }
+
+  if (
+    isWalletBalanceLoaded &&
+    isInfoPostSwapLoaded &&
+    state.userInput.marginAmount.editMode === 'add' &&
+    state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee >
+      state.walletBalance.value
+  ) {
+    state.submitButton = {
+      state: 'not-enough-balance',
+      disabled: true,
+      message: {
+        text: `Insufficient ${state.amm.underlyingToken.name.toUpperCase()} balance to cover for both the margin and the fees.`,
+        isError: true,
       },
     };
     return;
