@@ -6,11 +6,11 @@ import {
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
   selectUserInputMarginInfo,
-  selectWalletBalanceInfo,
+  selectWalletBalance,
   SwapFormNumberLimits,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
-import { compactFormat, formatNumber } from '../../../../utilities/number';
+import { formatNumber } from '../../../../utilities/number';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 
 type NewMarginAmountFieldUIProps = {
@@ -36,9 +36,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
   const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
   const marginAmount = useAppSelector(selectUserInputMarginInfo);
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
-  const walletBalance = useAppSelector(selectWalletBalanceInfo);
-  const walletValue =
-    walletBalance.status === 'success' ? compactFormat(walletBalance.value) : '--';
+  const walletBalance = useAppSelector(selectWalletBalance);
 
   return (
     <MarginAmountFieldBox>
@@ -63,7 +61,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
         maxLength={SwapFormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="The protocol requires every position to have enough margin to support trades. Adding more than the minimum reduces liquidation risk."
-        topRightText={`Wallet: ${`${walletValue} ${underlyingTokenName.toUpperCase()}`}`}
+        topRightText={`Wallet: ${`${walletBalance} ${underlyingTokenName.toUpperCase()}`}`}
         topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
         topRightTextTypographyToken={topRightTextTypographyToken}
         value={localMargin !== null ? localMargin : undefined}
