@@ -15,6 +15,7 @@ export const WalletConnectModal: React.FunctionComponent = () => {
   const handleModalClose = () => {
     setOpen(!!wallet.account);
     setSelecting(false);
+    wallet.setRequired(false);
   };
   const handleClose = () => {
     setSelecting(false);
