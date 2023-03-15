@@ -30,7 +30,7 @@ export const NotionalBox = styled('div')`
   flex-direction: row;
   align-items: center;
   padding: 0px 16px 0px;
-  width: 100px;
+  min-width: 100px;
 `;
 
 const BorderedBox = styled('div')`
