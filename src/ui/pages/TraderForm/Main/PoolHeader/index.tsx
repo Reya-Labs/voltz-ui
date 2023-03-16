@@ -11,7 +11,10 @@ import {
 import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { formatNumber } from '../../../../../utilities/number';
-import { MarketTokenInformation, MarketTokenInformationProps } from '../../MarketTokenInformation';
+import {
+  MarketTokenInformation,
+  MarketTokenInformationProps,
+} from '../../../../components/MarketTokenInformation';
 import {
   FixedBox,
   MarketTokenInformationBox,

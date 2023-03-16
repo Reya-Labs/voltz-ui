@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
   MarketTokenInformation,
   MarketTokenInformationProps,
-} from '../../../MarketTokenInformation';
+} from '../../../../../components/MarketTokenInformation';
 import { TransactionDetails } from '../../TransactionDetails';
 import { SwapDetails } from '../SwapDetails';
 import {

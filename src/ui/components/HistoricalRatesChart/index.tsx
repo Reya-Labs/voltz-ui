@@ -5,18 +5,23 @@ import React, { useEffect, useState } from 'react';
 import {
   selectHistoricalRates,
   selectHistoricalRatesStatus,
-} from '../../../../../app/features/historical-rates';
-import { fetchHistoricalRatesThunk } from '../../../../../app/features/historical-rates/thunks';
-import { selectChainId } from '../../../../../app/features/network';
+} from '../../../app/features/historical-rates';
+import { fetchHistoricalRatesThunk } from '../../../app/features/historical-rates/thunks';
+import { selectChainId } from '../../../app/features/network';
 import {
   selectFixedRateInfo,
   selectSwapFormAMM,
   selectVariableRateInfo,
-} from '../../../../../app/features/swap-form';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
-import { ChartBox, LineChartBox, LoadingBox, RainbowLoaderBox } from './Chart.styled';
+} from '../../../app/features/swap-form';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
+import {
+  ChartBox,
+  LineChartBox,
+  LoadingBox,
+  RainbowLoaderBox,
+} from './HistoricalRatesChart.styled';
 
 type ChartProps = {};
 
@@ -55,7 +60,7 @@ const filterOptions: ChartFiltersProps['filterOptions'] = [
   },
 ];
 
-export const Chart: React.FunctionComponent<ChartProps> = () => {
+export const HistoricalRatesChart: React.FunctionComponent<ChartProps> = () => {
   const data = useAppSelector(selectHistoricalRates);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
