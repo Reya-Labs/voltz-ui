@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const LeverageFieldBox = styled('div')`
+export const FormSubmitButtonBox = styled('div')`
   display: flex;
   width: 100%;
 `;

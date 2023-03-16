@@ -356,3 +356,15 @@ export const selectPositionMarginFormatted = (state: RootState) => {
   }
   return swapFormCompactFormat(state.swapForm.position.value.margin);
 };
+
+export const selectFixedRateValueFormatted = (state: RootState) => {
+  return state.swapForm.fixedRate.status !== 'success'
+    ? '--'
+    : formatNumber(state.swapForm.fixedRate.value);
+};
+
+export const selectVariableRateValueFormatted = (state: RootState) => {
+  return state.swapForm.variableRate.status !== 'success'
+    ? '--'
+    : formatNumber(state.swapForm.variableRate.value);
+};

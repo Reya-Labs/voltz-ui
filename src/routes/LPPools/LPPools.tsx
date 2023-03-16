@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { generatePath, Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { PageTitleDesc } from '../../components/composite/PageTitleDesc/PageTitleDesc';
 import { ConnectedMintBurnForm } from '../../components/containers/ConnectedMintBurnForm/ConnectedMintBurnForm';
@@ -18,7 +18,8 @@ import { useAgent } from '../../hooks/useAgent';
 import { useAMMs } from '../../hooks/useAMMs';
 import { usePositions } from '../../hooks/usePositions/usePositions';
 import { useWallet } from '../../hooks/useWallet';
-import { findCurrentPosition } from '../../utilities/amm';
+import { findCurrentPosition, generateAmmIdForRoute, generatePoolId } from '../../utilities/amm';
+import { isLPExperienceFlowEnabled } from '../../utilities/is-lp-experience-flow-enabled';
 import { setPageTitle } from '../../utilities/page';
 import { routes } from '../paths';
 
@@ -33,6 +34,7 @@ export const LPPools: React.FunctionComponent = () => {
   const { key } = useLocation();
   const { positionsByAgentGroup } = usePositions(Agents.LIQUIDITY_PROVIDER);
   const { account } = useWallet();
+  const navigate = useNavigate();
 
   const renderMode = formMode ? 'form' : 'pools';
 
@@ -61,6 +63,15 @@ export const LPPools: React.FunctionComponent = () => {
   }, [setPageTitle, renderMode, position]);
 
   const handleSelectAmm = (selectedAMM: AMM) => {
+    if (isLPExperienceFlowEnabled()) {
+      const path = generatePath(routes.LP_FORM, {
+        form: 'liquidity',
+        ammId: generateAmmIdForRoute(selectedAMM),
+        poolId: generatePoolId(selectedAMM),
+      });
+      navigate(`/${path}`);
+      return;
+    }
     setFormMode(MintBurnFormModes.NEW_POSITION);
     setAMM(selectedAMM);
     setPosition(findCurrentPosition(positionsByAgentGroup || [], selectedAMM.id));
