@@ -1,7 +1,7 @@
 import { AppLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { routes } from '../../../../routes/paths';
+import { routes } from '../../../routes/paths';
 import { ContainerBox } from './NoAMMFound.styled';
 
 export const NoAMMFound: React.FunctionComponent = React.memo(() => (
