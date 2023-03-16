@@ -18,7 +18,7 @@ import { Profile } from './routes/Profile/Profile';
 import { TraderPools } from './routes/TraderPools/TraderPools';
 import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { TradingLeague } from './routes/TradingLeague/TradingLeague';
-import { TraderFormRoute } from './ui/routes/TraderForm';
+import { TraderFormPage } from './ui/pages/TraderForm';
 import { deleteChainId, getChainId, setChainId } from './utilities/network/chain-store';
 import { detectIfNetworkSupported } from './utilities/network/detect-if-network-supported';
 import { isArbitrumChain } from './utilities/network/is-arbitrum-chain';
@@ -169,7 +169,7 @@ export const AppRoutes = () => {
           }
           path={routes.LP_OPTIMISERS_DEPOSIT_FORM}
         />
-        <Route element={<TraderFormRoute />} path={routes.TRADER_FORM} />
+        <Route element={<TraderFormPage />} path={routes.TRADER_FORM} />
         <Route
           element={
             <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>

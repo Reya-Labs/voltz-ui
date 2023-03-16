@@ -21,7 +21,7 @@ import {
   RightSectionBox,
 } from './TraderForm.styled';
 
-export const TraderFormRoute: React.FunctionComponent = () => {
+export const TraderFormPage: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
   const { form } = useParams();
