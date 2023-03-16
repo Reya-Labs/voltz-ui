@@ -234,7 +234,7 @@ export const limitAndFormatNumber = (
   }
 
   return formatNumber(
-    stringToBigFloat(nString) + epsilon,
+    parseFloat(nString) + epsilon,
     Math.min(2, Math.min(actualNumberOfDecimals + remainingDigits, decimalLimit)),
     Math.max(2, Math.min(actualNumberOfDecimals + remainingDigits, decimalLimit)),
   );

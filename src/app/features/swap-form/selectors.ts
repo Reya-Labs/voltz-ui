@@ -31,7 +31,13 @@ export const selectSwapFormAMM = (state: RootState) => state.swapForm.amm;
 export const selectSwapFormPosition = (state: RootState) => state.swapForm.position.value;
 export const selectSwapFormPositionFetchingStatus = (state: RootState) =>
   state.swapForm.position.status;
-export const selectWalletBalanceInfo = (state: RootState) => state.swapForm.walletBalance;
+export const selectWalletBalance = (state: RootState) => {
+  if (state.swapForm.walletBalance.status !== 'success') {
+    return '--';
+  }
+
+  return swapFormCompactFormat(state.swapForm.walletBalance.value);
+};
 export const selectFixedRateInfo = (state: RootState) => state.swapForm.fixedRate;
 export const selectVariableRateInfo = (state: RootState) => state.swapForm.variableRate;
 export const selectPoolSwapInfo = (state: RootState) => state.swapForm.poolSwapInfo;
