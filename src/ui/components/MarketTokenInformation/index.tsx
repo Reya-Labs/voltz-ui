@@ -17,15 +17,23 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
   isAaveV3,
 }) => {
   return (
-    <MarketTokenBox>
-      <MarketToken market={market} token={token} />
+    <MarketTokenBox data-testid="MarketTokenInformation-MarketTokenBox">
+      <MarketToken data-testid="MarketTokenInformation-MarketToken" market={market} token={token} />
       {isBorrowing ? (
-        <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
+        <Pill
+          colorToken="wildStrawberry"
+          data-testid="MarketTokenInformation-PillBorrowing"
+          typographyToken="primaryBodySmallRegular"
+        >
           Borrow
         </Pill>
       ) : null}
       {isAaveV3 ? (
-        <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
+        <Pill
+          colorToken="wildStrawberry"
+          data-testid="MarketTokenInformation-PillAaveV3"
+          typographyToken="primaryBodySmallRegular"
+        >
           v3
         </Pill>
       ) : null}
