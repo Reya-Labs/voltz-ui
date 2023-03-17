@@ -6,7 +6,7 @@ import {
   selectAvailableNotional,
   selectUserInputNotionalInfo,
   SwapFormNumberLimits,
-} from '../../../../../app/features/swap-form';
+} from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';

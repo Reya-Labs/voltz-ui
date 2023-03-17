@@ -7,7 +7,7 @@ import {
   selectLeverageOptions,
   selectShowLeverageNotification,
   setLeverageAction,
-} from '../../../../../app/features/swap-form';
+} from '../../../../../app/features/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { LeverageField as LeverageFieldComponent } from '../../../../components/LeverageField';
 type NotionalAmountProps = {};

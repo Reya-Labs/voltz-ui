@@ -1,7 +1,7 @@
 import { CurrencyField, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { selectSwapFormAMM } from '../../../../../app/features/swap-form';
+import { selectSwapFormAMM } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { FixedRangeFieldsBox } from './FixedRangeFields.styled';

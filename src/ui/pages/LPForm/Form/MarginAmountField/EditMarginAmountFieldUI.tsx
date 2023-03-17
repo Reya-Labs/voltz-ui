@@ -8,7 +8,7 @@ import {
   selectUserInputMarginInfo,
   selectWalletBalance,
   SwapFormNumberLimits,
-} from '../../../../../app/features/swap-form';
+} from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 

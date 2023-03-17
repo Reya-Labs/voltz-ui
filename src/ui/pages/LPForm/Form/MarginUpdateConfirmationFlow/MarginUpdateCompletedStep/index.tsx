@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   closeMarginUpdateConfirmationFlowAction,
   selectMarginUpdateConfirmationFlowEtherscanLink,
-} from '../../../../../../app/features/swap-form';
+} from '../../../../../../app/features/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
 import { MarginUpdateDetails } from '../MarginUpdateDetails';

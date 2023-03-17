@@ -6,7 +6,7 @@ import {
   confirmSwapThunk,
   selectSwapConfirmationFlowError,
   selectSwapFormAMM,
-} from '../../../../../../app/features/swap-form';
+} from '../../../../../../app/features/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
   MarketTokenInformation,

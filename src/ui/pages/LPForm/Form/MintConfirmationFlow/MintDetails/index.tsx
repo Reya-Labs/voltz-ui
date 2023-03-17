@@ -9,7 +9,7 @@ import {
   selectProspectiveSwapMode,
   selectProspectiveSwapNotionalFormatted,
   selectVariableRateInfo,
-} from '../../../../../../app/features/swap-form';
+} from '../../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { formatNumber } from '../../../../../../utilities/number';
 import { MintDetailBox, MintDetailsBox } from './MintDetails.styled';

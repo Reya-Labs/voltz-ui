@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom';
 
 import { resetStateAction } from '../../../app/features/swap-form';
 import { useAppDispatch } from '../../../app/hooks';
-import { useSwapFormAMM } from '../../../hooks/useSwapFormAMM';
 import { NoAMMFound } from '../../components/NoAMMFound';
 import { PageLoading } from '../../components/PageLoading';
 import { VoltzPage } from '../../components/VoltzPage';
 import { Form } from './Form';
+import { useSwapFormAMM } from './hooks/useSwapFormAMM';
 import { Main } from './Main';
 
 export const TraderFormPage: React.FunctionComponent = () => {

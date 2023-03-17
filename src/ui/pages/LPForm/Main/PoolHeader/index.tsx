@@ -6,7 +6,7 @@ import {
   selectSwapFormAMM,
   selectVariableRate24hDelta,
   selectVariableRateValueFormatted,
-} from '../../../../../app/features/swap-form';
+} from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarketTokenInformationProps } from '../../../../components/MarketTokenInformation';
 import { PoolHeader as PoolHeaderComponent } from '../../../../components/PoolHeader';

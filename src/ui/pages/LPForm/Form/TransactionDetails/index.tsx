@@ -1,7 +1,7 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectInfoPostSwap } from '../../../../../app/features/swap-form';
+import { selectInfoPostSwap } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
