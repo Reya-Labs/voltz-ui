@@ -18,7 +18,7 @@ export const MarginUpdateCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeMarginUpdateConfirmationFlowAction());
-    navigate(`/${routes.TRADER_PORTFOLIO}`);
+    navigate(`/${routes.LP_PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
     <MarginUpdateCompletedStepBox>

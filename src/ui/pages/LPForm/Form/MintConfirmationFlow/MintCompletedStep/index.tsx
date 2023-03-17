@@ -18,7 +18,7 @@ export const MintCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeSwapConfirmationFlowAction());
-    navigate(`/${routes.TRADER_PORTFOLIO}`);
+    navigate(`/${routes.LP_PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
     <MintCompletedStepBox>
