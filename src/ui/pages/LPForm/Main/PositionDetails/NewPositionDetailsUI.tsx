@@ -7,6 +7,7 @@ import {
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
+import { PnLDetails } from './PnLDetails';
 import {
   BorderedBox,
   NotionalBox,
@@ -72,26 +73,26 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
         </BorderedBox>
         <BorderedBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="skyBlueCrayola"
             label="Unrealised PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token=" USDC"
-            tooltip="TODO: MISSING"
+            tooltip={<PnLDetails />}
             typographyToken={typographyToken}
             value="+40.00"
           />
         </BorderedBox>
         <BorderedBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="wildStrawberry"
             label="Realised PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token=" USDC"
-            tooltip="TODO: MISSING"
+            tooltip={<PnLDetails />}
             typographyToken={typographyToken}
-            value="+40.00"
+            value="-40.00"
           />
         </BorderedBox>
       </PositionDetailsRightBox>
