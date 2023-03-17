@@ -13,7 +13,7 @@ import './index.css';
 import 'brokoli-ui/dist/esm/index.css';
 
 import { ThemeProvider } from '@mui/material/styles';
-import { initV1 } from '@voltz-protocol/v1-sdk';
+import { init } from '@voltz-protocol/v1-sdk';
 import { Amplify } from 'aws-amplify';
 import { Notifications } from 'brokoli-ui';
 import React from 'react';
@@ -35,7 +35,7 @@ try {
   }
 } catch (_) {}
 
-initV1();
+init();
 
 initSentryTracker();
 

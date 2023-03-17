@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllMellowProductsV1, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { getAllMellowProducts, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 
 import { getAlchemyKeyForChain } from '../../../utilities/network/get-alchemy-key-for-chain';
@@ -26,7 +26,7 @@ export const initialiseOptimisersThunk = createAsyncThunk<
   }
 >('lp-optimisers/getProducts', async ({ chainId, signer, type }, thunkAPI) => {
   try {
-    const mappedRouters: OptimiserInfo[] = await getAllMellowProductsV1({
+    const mappedRouters: OptimiserInfo[] = await getAllMellowProducts({
       signer,
       type,
       chainId,

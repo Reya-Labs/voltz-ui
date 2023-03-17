@@ -1,6 +1,6 @@
-import { getVoltzPoolConfigV1, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { getVoltzPoolConfig, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-type Config = ReturnType<typeof getVoltzPoolConfigV1> | null;
+type Config = ReturnType<typeof getVoltzPoolConfig> | null;
 const cachedConfig: Record<SupportedChainId, Config> = {
   [SupportedChainId.mainnet]: null,
   [SupportedChainId.goerli]: null,
@@ -15,6 +15,6 @@ export const getConfig = (chainId: SupportedChainId | null): Config => {
   if (cachedConfig[chainId]) {
     return cachedConfig[chainId];
   }
-  cachedConfig[chainId] = getVoltzPoolConfigV1(chainId);
+  cachedConfig[chainId] = getVoltzPoolConfig(chainId);
   return cachedConfig[chainId];
 };

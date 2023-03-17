@@ -1,4 +1,4 @@
-import { registerForAutoRolloverV1 } from '@voltz-protocol/v1-sdk';
+import { registerForAutoRollover } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
 import { updateOptimiserState } from '../../../app/features/lp-optimisers';
@@ -59,7 +59,7 @@ export const Optimisers: React.FunctionComponent = () => {
         return;
       }
       const registration = value === 'active';
-      await registerForAutoRolloverV1({
+      await registerForAutoRollover({
         optimiserId: vault.optimiserId,
         registration,
         signer,

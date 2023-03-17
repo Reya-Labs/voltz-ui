@@ -1,4 +1,4 @@
-import { getPositionsV1, Position } from '@voltz-protocol/v1-sdk';
+import { getPositions, Position } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 
@@ -41,7 +41,7 @@ export const usePositions = (agent: Agents): UsePositionsResult => {
       setFetchLoading(true);
       setFetchError(false);
 
-      void getPositionsV1({
+      void getPositions({
         chainId,
         userWalletId: userAddress,
         amms: aMMs,
