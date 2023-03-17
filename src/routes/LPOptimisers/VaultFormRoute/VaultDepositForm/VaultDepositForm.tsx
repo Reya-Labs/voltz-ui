@@ -1,4 +1,4 @@
-import { approveToken, depositAndRegisterV1, isTokenApprovedV1 } from '@voltz-protocol/v1-sdk';
+import { approveToken, depositAndRegister, isTokenApproved } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
@@ -70,7 +70,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         },
       });
       setDepositState(DepositStates.DEPOSITING);
-      void depositAndRegisterV1({
+      void depositAndRegister({
         optimiserId: vault.optimiserId,
         amount: selectedDeposit + vault.feePerDeposit,
         spareWeights,
@@ -153,7 +153,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       return;
     }
 
-    void isTokenApprovedV1({
+    void isTokenApproved({
       tokenId: vault.tokenId,
       to: vault.optimiserId,
       threshold: selectedDeposit + vault.feePerDeposit,
@@ -181,7 +181,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
     }
 
     setDepositState(DepositStates.DEPOSIT_MODAL);
-    void depositAndRegisterV1({
+    void depositAndRegister({
       onlyGasEstimate: true,
       optimiserId: vault.optimiserId,
       amount: selectedDeposit + vault.feePerDeposit,

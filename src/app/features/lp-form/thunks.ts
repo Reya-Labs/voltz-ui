@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   ExpectedCashflowInfo,
-  getPositionsV1,
+  getPositions,
   InfoPostSwapV1,
   Position,
   SupportedChainId,
 } from '@voltz-protocol/v1-sdk';
-import { ContractReceipt, providers } from 'ethers';
+import { BigNumber, ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPosition } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
@@ -49,16 +49,26 @@ export const getWalletBalanceThunk = createAsyncThunk<
 
 export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
+  { chainId: SupportedChainId; alchemyApiKey: string },
   { state: RootState }
->('swapForm/getUnderlyingTokenAllowance', async (_, thunkAPI) => {
+>('swapForm/getUnderlyingTokenAllowance', async ({ chainId, alchemyApiKey }, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().swapForm.amm;
     if (!amm || !amm.signer) {
       return;
     }
 
-    return await amm.getUnderlyingTokenAllowance({ forceErc20Check: false }); //TODO Alex (for future forms)
+    const allowance = await amm.getUnderlyingTokenAllowance({
+      forceErc20Check: false,
+      chainId,
+      alchemyApiKey,
+    });
+
+    if (allowance.gt(BigNumber.from(Number.MAX_SAFE_INTEGER.toString()))) {
+      return Number.MAX_SAFE_INTEGER;
+    }
+
+    return Number(allowance.toString());
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -75,7 +85,7 @@ export const approveUnderlyingTokenThunk = createAsyncThunk<
       return;
     }
 
-    return await amm.approveUnderlyingTokenForPeripheryV1({ forceErc20Check: false }); //TODO Alex (for future forms)
+    return await amm.approveUnderlyingTokenForPeriphery();
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -248,7 +258,7 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
 
     const userWalletId = (await signer.getAddress()).toLowerCase();
 
-    const { positions, error } = await getPositionsV1({
+    const { positions, error } = await getPositions({
       chainId,
       userWalletId: userWalletId,
       amms: [amm],

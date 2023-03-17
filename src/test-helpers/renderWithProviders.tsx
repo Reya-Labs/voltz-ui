@@ -1,7 +1,7 @@
 import type { PreloadedState } from '@reduxjs/toolkit';
 import type { RenderOptions } from '@testing-library/react';
 import { render } from '@testing-library/react';
-import { initV1 } from '@voltz-protocol/v1-sdk';
+import { init } from '@voltz-protocol/v1-sdk';
 import React, { PropsWithChildren } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 
@@ -22,7 +22,7 @@ export function renderWithProviders(
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ) {
-  initV1();
+  init();
   const Wrapper = ({ children }: PropsWithChildren<{}>): JSX.Element => {
     return <ReduxProvider store={store}>{children}</ReduxProvider>;
   };

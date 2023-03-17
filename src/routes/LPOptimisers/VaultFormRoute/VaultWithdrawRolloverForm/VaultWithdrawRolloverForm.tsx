@@ -1,7 +1,4 @@
-import {
-  rolloverV1 as executeRollover,
-  withdrawV1 as executeWithdraw,
-} from '@voltz-protocol/v1-sdk';
+import { rollover as executeRollover, withdraw as executeWithdraw } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
 import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/lp-optimisers';

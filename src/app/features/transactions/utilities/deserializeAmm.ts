@@ -1,4 +1,4 @@
-import { AMM, getProviderV1, RateOracle, SupportedChainId, Token } from '@voltz-protocol/v1-sdk';
+import { AMM, getProvider, RateOracle, SupportedChainId, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
@@ -29,7 +29,7 @@ const deserializeAmm = (
   return new AMM({
     id,
     signer,
-    provider: getProviderV1(chainId, getAlchemyKeyForChain(chainId)),
+    provider: getProvider(chainId, getAlchemyKeyForChain(chainId)),
     termStartTimestampInMS: parseInt(termStartTimestampInMS, 10),
     termEndTimestampInMS: parseInt(termEndTimestampInMS, 10),
     tickSpacing: parseInt(tickSpacing, 10),

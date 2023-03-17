@@ -1,4 +1,4 @@
-import { submitAllBatchesForFeeV1 } from '@voltz-protocol/v1-sdk';
+import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useReducer, useState } from 'react';
 
 import { OptimiserInfo, updateOptimiserState } from '../../../../../app/features/lp-optimisers';
@@ -62,7 +62,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       type: 'batch_pending',
     });
 
-    submitAllBatchesForFeeV1({
+    submitAllBatchesForFee({
       optimiserId: lpVault.optimiserId,
       signer,
       chainId,
@@ -96,7 +96,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       return;
     }
 
-    submitAllBatchesForFeeV1({
+    submitAllBatchesForFee({
       onlyGasEstimate: true,
       optimiserId: lpVault.optimiserId,
       signer,
