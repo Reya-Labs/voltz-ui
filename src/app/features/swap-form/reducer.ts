@@ -357,6 +357,24 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   }
 
   if (
+    !isUserInputMarginError(state) &&
+    isWalletTokenAllowanceLoaded &&
+    isInfoPostSwapLoaded &&
+    state.walletTokenAllowance.value <
+      state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee
+  ) {
+    state.submitButton = {
+      state: 'approve',
+      disabled: false,
+      message: {
+        text: `Please approve ${state.amm.underlyingToken.name.toUpperCase()}. Approval amount must cover for both the margin and the fees.`,
+        isError: false,
+      },
+    };
+    return;
+  }
+
+  if (
     isWalletBalanceLoaded &&
     state.userInput.marginAmount.editMode === 'add' &&
     state.userInput.marginAmount.value > state.walletBalance.value
