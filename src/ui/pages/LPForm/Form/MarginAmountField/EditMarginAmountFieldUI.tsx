@@ -63,9 +63,9 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
         label="Chosen Margin"
         labelTypographyToken={labelTypographyToken}
         maxLength={SwapFormNumberLimits.digitLimit}
-        switchOffText={'Remove'}
+        switchOffText={'Withdraw'}
         switchOffValue={'remove'}
-        switchOnText={'Add'}
+        switchOnText={'Deposit'}
         switchOnValue={'add'}
         switchValue={localEditMode}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}

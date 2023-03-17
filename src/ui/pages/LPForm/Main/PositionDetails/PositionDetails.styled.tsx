@@ -33,12 +33,8 @@ export const NotionalBox = styled('div')`
   min-width: 100px;
 `;
 
-const BorderedBox = styled('div')`
+export const BorderedBox = styled('div')`
   border-left: 1px solid ${colors.liberty5};
   padding: 0px 16px;
   min-width: 100px;
 `;
-
-export const ReceivingBox = styled(BorderedBox)``;
-export const PayingBox = styled(BorderedBox)``;
-export const CashFlowBox = styled(BorderedBox)``;

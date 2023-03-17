@@ -3,21 +3,16 @@ import React from 'react';
 
 import {
   selectNewPositionCompactNotional,
-  selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
-  selectProspectiveSwapMode,
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
-import { MODE_COLOR_TOKEN_MAP } from '../../helpers';
 import {
-  CashFlowBox,
+  BorderedBox,
   NotionalBox,
-  PayingBox,
   PositionDetailsBox,
   PositionDetailsLeftBox,
   PositionDetailsRightBox,
-  ReceivingBox,
 } from './PositionDetails.styled';
 
 type NewPositionDetailsUIProps = {
@@ -36,21 +31,19 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
   typographyToken,
 }) => {
   const receivingRate = useAppSelector(selectNewPositionReceivingRate);
-  const payingRate = useAppSelector(selectNewPositionPayingRate);
   const compactNotional = useAppSelector(selectNewPositionCompactNotional);
-  const mode = useAppSelector(selectProspectiveSwapMode);
 
   return (
     <PositionDetailsBox>
       <PositionDetailsLeftBox>
         <LabelTokenTypography
-          colorToken={MODE_COLOR_TOKEN_MAP[mode]}
-          label="New Position"
+          colorToken="wildStrawberry"
+          label="Your Position"
           labelColorToken="lavenderWeb"
           labelTypographyToken={actionLabelTypographyToken}
           token=""
           typographyToken={actionTypographyToken}
-          value={mode === 'fixed' ? 'Fixed Taker' : 'Variable Taker'}
+          value="Liquidity provider"
         />
       </PositionDetailsLeftBox>
       <PositionDetailsRightBox>
@@ -65,39 +58,42 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             value={compactNotional ? compactNotional.compactNotionalNumber : '--'}
           />
         </NotionalBox>
-        <ReceivingBox>
+        <BorderedBox>
           <LabelTokenTypography
             colorToken="lavenderWeb"
-            label="Receiving"
+            label="Range"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
             value={receivingRate !== null ? formatNumber(receivingRate) : '--'}
+            value2={receivingRate !== null ? formatNumber(receivingRate) : '--'}
           />
-        </ReceivingBox>
-        <PayingBox>
+        </BorderedBox>
+        <BorderedBox>
           <LabelTokenTypography
             colorToken="lavenderWeb"
-            label="Paying"
+            label="Unrealised PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
-            token="%"
+            token=" USDC"
+            tooltip="TODO: MISSING"
             typographyToken={typographyToken}
-            value={payingRate !== null ? formatNumber(payingRate) : '--'}
+            value="+40.00"
           />
-        </PayingBox>
-        <CashFlowBox>
+        </BorderedBox>
+        <BorderedBox>
           <LabelTokenTypography
             colorToken="lavenderWeb"
-            label="Cash Flow"
+            label="Realised PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
-            token={` ${underlyingTokenName.toUpperCase()}`}
+            token=" USDC"
+            tooltip="TODO: MISSING"
             typographyToken={typographyToken}
-            value="0.00"
+            value="+40.00"
           />
-        </CashFlowBox>
+        </BorderedBox>
       </PositionDetailsRightBox>
     </PositionDetailsBox>
   );
