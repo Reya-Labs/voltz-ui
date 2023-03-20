@@ -80,10 +80,12 @@ export const removeFormat = (formattedValue: string | undefined): string | undef
  * @returns A function that takes a string or undefined and returns a string or undefined.
  */
 export const toUSFormat = (value: string | undefined): string | undefined => {
-  if (withCommaDecimalSeparator()) {
-    return value?.split('.').join('#').split(',').join('.').split('#').join(',');
-  }
-  return value;
+  const thousandSeparator = Intl.NumberFormat(navigator.language).formatToParts(11111)[1].value;
+  const decimalSeparator = Intl.NumberFormat(navigator.language).formatToParts(1.1)[1].value;
+  return value
+    ?.replace(new RegExp(`\\${thousandSeparator}`, 'g'), '#')
+    .replace(new RegExp(`\\${decimalSeparator}`), '.')
+    .replace('#', ',');
 };
 
 /**
