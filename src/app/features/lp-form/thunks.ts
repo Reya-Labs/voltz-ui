@@ -17,7 +17,7 @@ import {
   getProspectiveSwapNotional,
   isUserInputNotionalError,
 } from './utils';
-
+// TODO: any reference of swap should be changed
 const rejectThunkWithError = (
   thunkAPI: {
     rejectWithValue: (value: string | undefined) => unknown;
@@ -262,12 +262,13 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
       chainId,
       userWalletId: userWalletId,
       amms: [amm],
+      // TODO: Artur is this still valid enough to get position details for LPs
       type: 'Trader',
     });
     if (error) {
       return rejectThunkWithError(thunkAPI, error);
     }
-    // TODO: Alex possible to move filter into subgraph level? Discuss
+    // TODO: Artur is this still valid enough to get position details for LPs
     const nonBorrowPositions = positions.filter((pos) => !isBorrowingPosition(pos));
     const position = findCurrentPosition(nonBorrowPositions || [], amm.id) || null;
     return {

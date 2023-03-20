@@ -35,6 +35,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
   const dispatch = useAppDispatch();
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
+  // TODO: Artur Rename any reference of SwapForm with LPForm
   const aMM = useAppSelector(selectSwapFormAMM);
   const position = useAppSelector(selectSwapFormPosition);
   const positionFetchingStatus = useAppSelector(selectSwapFormPositionFetchingStatus);
@@ -63,6 +64,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
       return;
     }
 
+    // TODO: Artur change name to LP FORM, this part of codes update the lp-form/reducer to have a reference of AMM
     dispatch(
       setSwapFormAMMAction({
         amm: foundAMM ? foundAMM : null,
@@ -79,6 +81,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
     void dispatch(getFixedRateThunk());
     void dispatch(getVariableRateThunk());
     void dispatch(getVariableRate24hAgoThunk());
+    // TODO: Artur + Filip, check if this is really needed
     void dispatch(getPoolSwapInfoThunk());
   }, [dispatch, aMM]);
 
