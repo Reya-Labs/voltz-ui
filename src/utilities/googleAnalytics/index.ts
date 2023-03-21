@@ -1,7 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { Agents } from '../../contexts/AgentContext/types';
-
 const SESSION_ID = uuidv4();
 
 export type TxEventPayload = {
@@ -21,7 +19,7 @@ export type DataLayerEventPayload = {
   event: DataLayerEventName;
   eventValue: string | number | TxEventPayload | DepositFormEventPayload;
   pool?: string;
-  agent?: Agents;
+  agent?: 'Fixed Trader' | 'Variable Trader' | 'Liquidity Provider';
 };
 
 type DataLayerEventName =
