@@ -8,15 +8,29 @@ import {
 } from '@voltz-protocol/v1-sdk';
 import { BigNumber, ContractReceipt, providers } from 'ethers';
 
-import { findCurrentPosition } from '../../../utilities/amm';
+import { findCurrentPosition, getAmmProtocol } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
 import { RootState } from '../../store';
+import {
+  pushPageViewEvent,
+  pushSwapTransactionFailedEvent,
+  pushSwapTransactionSubmittedEvent,
+  pushSwapTransactionSuccessEvent,
+} from './analytics';
 import {
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
+  hasExistingPosition,
   isUserInputNotionalError,
 } from './utils';
+
+const extractError = (err: unknown): string => {
+  if (typeof err === 'string') {
+    return err;
+  }
+  return (err as Error)?.message;
+};
 
 const rejectThunkWithError = (
   thunkAPI: {
@@ -24,10 +38,7 @@ const rejectThunkWithError = (
   },
   err: unknown,
 ) => {
-  if (typeof err === 'string') {
-    return thunkAPI.rejectWithValue(err);
-  }
-  return thunkAPI.rejectWithValue((err as Error)?.message);
+  return thunkAPI.rejectWithValue(extractError(err));
 };
 
 export const getWalletBalanceThunk = createAsyncThunk<
@@ -250,17 +261,21 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
     }
 
     if (!signer) {
+      pushPageViewEvent({
+        account: '',
+        isEdit: false,
+      });
       return {
         signer: null,
         position: null,
       };
     }
 
-    const userWalletId = (await signer.getAddress()).toLowerCase();
+    const account = await signer.getAddress();
 
     const { positions, error } = await getPositions({
       chainId,
-      userWalletId: userWalletId,
+      userWalletId: account.toLowerCase(),
       amms: [amm],
       type: 'Trader',
     });
@@ -270,6 +285,10 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
     // TODO: Alex possible to move filter into subgraph level? Discuss
     const nonBorrowPositions = positions.filter((pos) => !isBorrowingPosition(pos));
     const position = findCurrentPosition(nonBorrowPositions || [], amm.id) || null;
+    pushPageViewEvent({
+      account,
+      isEdit: Boolean(position),
+    });
     return {
       position,
       signer,
@@ -284,21 +303,38 @@ export const confirmSwapThunk = createAsyncThunk<
   void,
   { state: RootState }
 >('swapForm/confirmSwap', async (_, thunkAPI) => {
-  try {
-    const swapFormState = thunkAPI.getState().swapForm;
-    const amm = swapFormState.amm;
-    if (!amm) {
-      return;
-    }
+  const swapFormState = thunkAPI.getState().swapForm;
+  const amm = swapFormState.amm;
+  if (!amm || !amm.signer) {
+    return;
+  }
 
-    return await amm.swap({
+  const account = await amm.signer.getAddress();
+  const eventParams = {
+    account,
+    notional: getProspectiveSwapNotional(swapFormState),
+    margin: getProspectiveSwapMargin(swapFormState),
+    isEdit: hasExistingPosition(swapFormState),
+    pool: getAmmProtocol(amm),
+    isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
+  };
+
+  try {
+    pushSwapTransactionSubmittedEvent(eventParams);
+    const result = await amm.swap({
       isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
       notional: getProspectiveSwapNotional(swapFormState),
       margin: getProspectiveSwapMargin(swapFormState),
       fixedLow: 1,
       fixedHigh: 999,
     });
+    pushSwapTransactionSuccessEvent(eventParams);
+    return result;
   } catch (err) {
+    pushSwapTransactionFailedEvent({
+      ...eventParams,
+      errorMessage: extractError(err),
+    });
     return rejectThunkWithError(thunkAPI, err);
   }
 });
