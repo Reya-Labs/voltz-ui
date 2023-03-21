@@ -1,17 +1,21 @@
 import { CurrencyField, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
+import { stringToBigFloat } from '../../../../../utilities/number';
 
-import { selectSwapFormAMM } from '../../../../../app/features/lp-form';
-import { useAppSelector } from '../../../../../app/hooks';
+import { selectSwapFormAMM, selectUserInputFixedLower, selectUserInputFixedUpper, setUserInputFixedLowerAction, setUserInputFixedUpperAction } from '../../../../../app/features/lp-form';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { FixedRangeFieldsBox } from './FixedRangeFields.styled';
 type NotionalAmountProps = {};
 
 export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = () => {
   const aMM = useAppSelector(selectSwapFormAMM);
+  const dispatch = useAppDispatch();
 
-  const [localFixedLow, setLocalFixedLow] = useState<string | undefined>('');
-  const [localFixedHigh, setLocalFixedHigh] = useState<string | undefined>('');
+  // define state for the inputs -> the below inputs should live in redux
+  // because we want to be able to use them in other parts of the ui that depend on this data
+  const fixedLower = useAppSelector(selectUserInputFixedLower);
+  const fixedUpper = useAppSelector(selectUserInputFixedUpper);
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const labelTypographyToken: TypographyToken = isLargeDesktopDevice
@@ -20,6 +24,23 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
 
   if (!aMM) {
     return null;
+  }
+
+  // two fields in a box with a separator in between 
+
+  const handleFixedLowerOnChange = (value: string | undefined) => { 
+    // tell redux -> we have some value for you
+  
+    dispatch(setUserInputFixedLowerAction({
+      value: value !== undefined ? stringToBigFloat(value) : null
+    }));
+  }
+
+  const handleFixedUpperOnChange = (value: string | undefined) => { 
+    // tell redux -> we have some value for you
+    dispatch(setUserInputFixedUpperAction({
+      value: value !== undefined ? stringToBigFloat(value) : null
+    }));
   }
 
   return (
@@ -33,8 +54,8 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
         suffix="%"
         tooltip="TODO: MISSING TOOLTIP"
         tooltipColorToken="lavenderWeb3"
-        value={localFixedLow}
-        onChange={setLocalFixedLow}
+        value={fixedLower}
+        onChange={handleFixedLowerOnChange}
       />
       <CurrencyField
         allowNegativeValue={false}
@@ -45,8 +66,8 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
         suffix="%"
         tooltip="TODO: MISSING TOOLTIP"
         tooltipColorToken="lavenderWeb3"
-        value={localFixedHigh}
-        onChange={setLocalFixedHigh}
+        value={fixedUpper}
+        onChange={handleFixedUpperOnChange}
       />
     </FixedRangeFieldsBox>
   );
