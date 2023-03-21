@@ -6,11 +6,10 @@ import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../uti
 import {
   approveUnderlyingTokenThunk,
   confirmMarginUpdateThunk,
-  confirmSwapThunk,
-  getExpectedCashflowInfoThunk,
+  confirmLpThunk,
   getFixedRateThunk,
-  getInfoPostSwapThunk,
-  getPoolSwapInfoThunk,
+  getInfoPostLpThunk,
+  getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
@@ -19,14 +18,15 @@ import {
   SetSignerAndPositionForAMMThunkSuccess,
 } from './thunks';
 import {
-  checkLowLeverageNotification,
-  getExistingPositionMode,
-  getProspectiveSwapMargin,
-  getProspectiveSwapMode,
-  getProspectiveSwapNotional,
+  checkLowLeverageNotification, // todo: to we intend to use this component for the lp form as well, is it in designs?
+  getProspectiveLpMargin, // todo: check if need to make any changes to the logic
+  getProspectiveLpMode, // todo: in context of trading/swapping we have fixed/variable modes, in context of lping we can consider having provide/remove (liquidity) modes
+  // todo: in contexto of trading/swapping notional represents the net notional filled of the position
+  // in context of lp is the notional liquidity provided -> can change as lps mint and burn liquidity
+  getProspectiveLpNotional,
   hasExistingPosition,
   isUserInputMarginError,
-  swapFormLimitAndFormatNumber,
+  lpFormLimitAndFormatNumber,
   updateLeverage,
   validateUserInput,
 } from './utils';
@@ -428,7 +428,7 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
 };
 
 export const slice = createSlice({
-  name: 'swapForm',
+  name: 'lpForm',
   initialState,
   reducers: {
     resetStateAction: () => initialState,
@@ -559,7 +559,7 @@ export const slice = createSlice({
 
       state.userInput.leverage = value;
       state.userInput.marginAmount.value = stringToBigFloat(
-        swapFormLimitAndFormatNumber(getProspectiveSwapNotional(state) / value, 'ceil'),
+        lpFormLimitAndFormatNumber(getProspectiveSwapNotional(state) / value, 'ceil'),
       );
 
       validateUserInputAndUpdateSubmitButton(state);
@@ -575,7 +575,7 @@ export const slice = createSlice({
     ) => {
       state.userInput.estimatedApy = value;
     },
-    setSwapFormAMMAction: (
+    setLPFormAMMAction: (
       state,
       {
         payload: { amm },
@@ -707,7 +707,8 @@ export const slice = createSlice({
           status: 'success',
         };
       })
-      .addCase(getPoolSwapInfoThunk.pending, (state) => {
+      .addCase(getPoolLpInfoThunk.pending, (state) => {
+        // todo: get rid of available notional but consider keeping max leverage
         state.poolSwapInfo = {
           availableNotional: {
             fixed: 0,
@@ -720,7 +721,7 @@ export const slice = createSlice({
           status: 'pending',
         };
       })
-      .addCase(getPoolSwapInfoThunk.rejected, (state) => {
+      .addCase(getPoolLpInfoThunk.rejected, (state) => {
         state.poolSwapInfo = {
           availableNotional: {
             fixed: 0,
@@ -733,7 +734,7 @@ export const slice = createSlice({
           status: 'error',
         };
       })
-      .addCase(getPoolSwapInfoThunk.fulfilled, (state, { payload }) => {
+      .addCase(getPoolLpInfoThunk.fulfilled, (state, { payload }) => {
         const { availableNotionalFT, availableNotionalVT, maxLeverageFT, maxLeverageVT } =
           payload as {
             availableNotionalFT: number;
@@ -755,7 +756,8 @@ export const slice = createSlice({
         updateLeverageOptionsAfterGetPoolSwapInfo(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(getInfoPostSwapThunk.pending, (state) => {
+      .addCase(getInfoPostLpThunk.pending, (state) => {
+        // todo: needs to be updated
         state.prospectiveSwap.infoPostSwap = {
           value: {
             marginRequirement: 0,
@@ -771,7 +773,7 @@ export const slice = createSlice({
           status: 'pending',
         };
       })
-      .addCase(getInfoPostSwapThunk.rejected, (state) => {
+      .addCase(getInfoPostLpThunk.rejected, (state) => {
         state.prospectiveSwap.infoPostSwap = {
           value: {
             marginRequirement: 0,
@@ -787,7 +789,7 @@ export const slice = createSlice({
           status: 'error',
         };
       })
-      .addCase(getInfoPostSwapThunk.fulfilled, (state, { payload }) => {
+      .addCase(getInfoPostLpThunk.fulfilled, (state, { payload }) => {
         const { notionalAmount, swapMode, infoPostSwap, earlyReturn } = payload as {
           notionalAmount: number;
           swapMode: 'fixed' | 'variable';
@@ -862,21 +864,21 @@ export const slice = createSlice({
         }
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(confirmSwapThunk.pending, (state) => {
+      .addCase(confirmLpThunk.pending, (state) => {
         state.swapConfirmationFlow = {
           step: 'waitingForSwapConfirmation',
           error: null,
           txHash: null,
         };
       })
-      .addCase(confirmSwapThunk.rejected, (state, { payload }) => {
+      .addCase(confirmLpThunk.rejected, (state, { payload }) => {
         state.swapConfirmationFlow = {
           step: 'swapConfirmation',
           error: payload as string,
           txHash: null,
         };
       })
-      .addCase(confirmSwapThunk.fulfilled, (state, { payload }) => {
+      .addCase(confirmLpThunk.fulfilled, (state, { payload }) => {
         state.swapConfirmationFlow = {
           step: 'swapCompleted',
           error: null,
@@ -904,29 +906,12 @@ export const slice = createSlice({
           txHash: (payload as ContractReceipt).transactionHash,
         };
       })
-      .addCase(getExpectedCashflowInfoThunk.pending, (state) => {
-        state.prospectiveSwap.cashflowInfo.status = 'pending';
-      })
-      .addCase(getExpectedCashflowInfoThunk.rejected, (state, {}) => {
-        state.prospectiveSwap.cashflowInfo.status = 'error';
-      })
-      .addCase(getExpectedCashflowInfoThunk.fulfilled, (state, { payload }) => {
-        const expectedCashflowInfo = payload as ExpectedCashflowInfo;
-        state.prospectiveSwap.cashflowInfo = {
-          averageFixedRate: expectedCashflowInfo.averageFixedRate,
-          accruedCashflowExistingPosition: expectedCashflowInfo.accruedCashflowExistingPosition,
-          accruedCashflowEditPosition: expectedCashflowInfo.accruedCashflowEditPosition,
-          estimatedAdditionalCashflow: expectedCashflowInfo.estimatedAdditionalCashflow,
-          estimatedTotalCashflow: expectedCashflowInfo.estimatedTotalCashflow,
-          status: 'success',
-        };
-      });
   },
 });
 export const {
   resetStateAction,
   setUserInputModeAction,
-  setSwapFormAMMAction,
+  setLPFormAMMAction,
   setNotionalAmountAction,
   setMarginAmountAction,
   setLeverageAction,
