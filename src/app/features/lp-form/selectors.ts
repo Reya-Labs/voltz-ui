@@ -368,3 +368,24 @@ export const selectVariableRateValueFormatted = (state: RootState) => {
     ? '--'
     : formatNumber(state.swapForm.variableRate.value);
 };
+
+export const selectUserInputFixedLower = (state: RootState) => {
+  const fixedLower = state.lpForm.userInput.fixedLower;
+
+  if (fixedLower === null) {
+    return "";
+  }
+
+  return fixedLower.toString();
+};
+
+export const selectUserInputFixedUpper = (state: RootState) => {
+
+  const fixedUpper = state.lpForm.userInput.fixedUpper;
+
+  if (fixedUpper === null) {
+    return "";
+  }
+
+  return fixedUpper.toString();
+};
