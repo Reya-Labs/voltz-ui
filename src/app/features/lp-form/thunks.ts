@@ -177,7 +177,6 @@ export const getInfoPostLpThunk = createAsyncThunk<
     if (!amm || isUserInputNotionalError(lpFormState)) {
       return {
         notionalAmount: NaN,
-        lpMode: getProspectiveLpMode(lpFormState),
         infoPostLp: {},
         earlyReturn: true,
       };
@@ -186,7 +185,6 @@ export const getInfoPostLpThunk = createAsyncThunk<
     if (getProspectiveLpNotional(lpFormState) === 0) {
       return {
         notionalAmount: 0,
-        lpMode: getProspectiveLpMode(lpFormState),
         infoPostLp: {
           marginRequirement: 0,
           maxMarginWithdrawable: 0,
@@ -198,8 +196,9 @@ export const getInfoPostLpThunk = createAsyncThunk<
 
     const notionalAmount = getProspectiveLpNotional(lpFormState);
     // todo: fixedLow and fixedHigh needs to be fixed for lps to not be hardcoded
+    // todo: make isAdd dynamic
     const infoPostLpV1 = await amm.getInfoPostLpV1({
-      isAdd: getProspectiveLpMode(lpFormState) === 'add',
+      isAdd: true,
       notional: notionalAmount,
       fixedLow: 1,
       fixedHigh: 999,
@@ -216,7 +215,6 @@ export const getInfoPostLpThunk = createAsyncThunk<
 
     return {
       notionalAmount,
-      lpMode: getProspectiveLpMode(lpFormState),
       infoPostLp: infoPostLpV1,
       earlyReturn: false,
     };
@@ -286,7 +284,8 @@ export const confirmLpThunk = createAsyncThunk<
 
     return await amm.mintOrBurn({
       // todo: mint and add are the same thing -> consider using unified terminology
-      isMint: getProspectiveLpMode(lpFormState) === 'add',
+      // todo: enable custom inputs to isMint
+      isMint: true,
       notional: getProspectiveLpNotional(lpFormState),
       margin: getProspectiveLpMargin(lpFormState),
       // todo: layer in fixed low and fixed high of the lp in here

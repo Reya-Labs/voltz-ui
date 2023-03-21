@@ -20,7 +20,6 @@ import {
 import {
   checkLowLeverageNotification, // todo: to we intend to use this component for the lp form as well, is it in designs?
   getProspectiveLpMargin, // todo: check if need to make any changes to the logic
-  getProspectiveLpMode, // todo: in context of trading/swapping we have fixed/variable modes, in context of lping we can consider having provide/remove (liquidity) modes
   // todo: in contexto of trading/swapping notional represents the net notional filled of the position
   // in context of lp is the notional liquidity provided -> can change as lps mint and burn liquidity
   getProspectiveLpNotional,
