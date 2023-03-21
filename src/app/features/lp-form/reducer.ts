@@ -79,6 +79,7 @@ export type SliceState = {
     maxLeverage: Record<'fixed' | 'variable', number>;
     status: ThunkStatus;
   };
+  // the lp form is a slice of the redux store and userInput is a "slice of a slice", doesn't have actions
   userInput: {
     // Side chosen by user in the UI
     mode: 'fixed' | 'variable';
@@ -95,7 +96,10 @@ export type SliceState = {
       error: string | null;
     };
     leverage: number | null;
-    estimatedApy: number;
+    estimatedApy: number; // todo: remove this
+    // user-inputted fixed rate range along which liquidity is provided
+    fixedLower: number | null;
+    fixedUpper: number | null;
   };
   // State of prospective swap
   prospectiveSwap: {
@@ -210,6 +214,8 @@ const initialState: SliceState = {
     },
     leverage: null,
     estimatedApy: 0,
+    fixedLower: null,
+    fixedUpper: null
   },
   prospectiveSwap: {
     leverage: {
@@ -445,6 +451,32 @@ export const slice = createSlice({
         error: null,
         txHash: null,
       };
+    },
+    setUserInputFixedLowerAction: (
+      // the current state of the lp-form slice of the redux store (defined in this file) -> we extended the type
+      state,
+      {
+        // what you send from the frontend world with type PayloadAction and the value can be a number
+        payload: { value },
+      }: PayloadAction<{
+        value: number | null
+      }>,
+    ) => {
+      state.userInput.fixedLower = value;
+      // todo: validation -> e.g. cannot be higher than the fixedLower, etc
+    },
+    setUserInputFixedUpperAction: (
+      // the current state of the lp-form slice of the redux store (defined in this file) -> we extended the type
+      state,
+      {
+        // what you send from the frontend world with type PayloadAction and the value can be a number
+        payload: { value },
+      }: PayloadAction<{
+        value: number | null
+      }>,
+    ) => {
+      state.userInput.fixedUpper = value;
+      // todo: validation
     },
     setUserInputModeAction: (
       state,
@@ -898,6 +930,8 @@ export const {
   setNotionalAmountAction,
   setMarginAmountAction,
   setLeverageAction,
+  setUserInputFixedLowerAction,
+  setUserInputFixedUpperAction,
   setEstimatedApyAction,
   openSwapConfirmationFlowAction,
   closeSwapConfirmationFlowAction,
