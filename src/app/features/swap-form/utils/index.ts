@@ -4,20 +4,13 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import {
   compactFormat,
   compactFormatToParts,
-  formatNumber,
   limitAndFormatNumber,
   stringToBigFloat,
 } from '../../../../utilities/number';
 import { SwapFormNumberLimits } from '../constants';
 import { SliceState } from '../reducer';
 
-export const swapFormFormatNumber = (value: number) => {
-  if (value < 1) {
-    return formatNumber(value, 0, SwapFormNumberLimits.decimalLimit);
-  }
-
-  return formatNumber(value, 0, 2);
-};
+export * from './swapFormFormatNumber';
 
 export const swapFormCompactFormat = (value: number) => {
   if (value < 1) {
