@@ -16,6 +16,7 @@ import {
 } from '../../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
+import { useWallet } from '../../../../../hooks/useWallet';
 import { formatCurrency, stringToBigFloat } from '../../../../../utilities/number';
 import {
   AdditionalCashFlowBox,
@@ -36,6 +37,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const estimatedApy = useAppSelector(selectEstimatedApy);
+  const { account } = useWallet();
 
   const additionalCashflow = useAppSelector(selectAdditionalCashflow);
   const totalCashflow = useAppSelector(selectTotalCashflow);
@@ -50,10 +52,11 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
         dispatch(
           setEstimatedApyAction({
             value,
+            account: account || '',
           }),
         );
       }, 300),
-    [dispatch],
+    [dispatch, account],
   );
 
   useEffect(() => {
