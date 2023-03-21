@@ -9,6 +9,7 @@ import {
   setLeverageAction,
 } from '../../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { useWallet } from '../../../../../hooks/useWallet';
 import { LeverageField as LeverageFieldComponent } from '../../../../components/LeverageField';
 type NotionalAmountProps = {};
 
@@ -18,6 +19,7 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
   const isLeverageDisabled = useAppSelector(selectIsLeverageDisabled);
   const [notificationRead, setNotificationRead] = useState(false);
   const { maxLeverage, leverageOptions } = useAppSelector(selectLeverageOptions);
+  const { account } = useWallet();
 
   const showLowLeverageNotification = useAppSelector(selectShowLeverageNotification);
 
@@ -35,14 +37,16 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
   }, [notificationRead, showLowLeverageNotification]);
 
   const handleOnChange = useCallback(
-    (value: number) => {
+    (value: number, changeType: 'button' | 'input') => {
       dispatch(
         setLeverageAction({
           value,
+          account: account || '',
+          changeType,
         }),
       );
     },
-    [dispatch],
+    [account, dispatch],
   );
 
   return (

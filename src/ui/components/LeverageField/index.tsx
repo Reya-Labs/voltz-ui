@@ -9,7 +9,7 @@ type LeverageFieldProps = {
   leverageOptions: number[];
   maxLeverage: string;
   leverage: number | undefined;
-  onLeverageChange: (leverage: number) => void;
+  onLeverageChange: (leverage: number, changeType: 'button' | 'input') => void;
 };
 export const LeverageField: React.FunctionComponent<LeverageFieldProps> = ({
   leverageOptions,

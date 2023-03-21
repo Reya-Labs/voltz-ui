@@ -26,7 +26,10 @@ type DataLayerEventName =
   | 'expectedApy_change'
   | 'notional_change'
   | 'margin_change'
+  // TODO: Soon deprecated
   | 'leverage_change'
+  | 'leverage_change_button'
+  | 'leverage_change_input'
   | 'title_change'
   | 'tx_submitted'
   | 'failed_tx'
