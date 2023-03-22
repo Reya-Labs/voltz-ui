@@ -4,7 +4,6 @@ import React from 'react';
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
-  selectInfoPostLp,
   selectProspectiveLpMarginFormatted,
   selectProspectiveLpNotionalFormatted,
 } from '../../../../../../app/features/lp-form';
@@ -14,8 +13,6 @@ import { MintDetailBox, MintDetailsBox } from './MintDetails.styled';
 type MintDetailsProps = {};
 
 export const MintDetails: React.FunctionComponent<MintDetailsProps> = () => {
-  // todo: check if need this
-  const infoPostLp = useAppSelector(selectInfoPostLp);
   const prospectiveLpNotionalFormatted = useAppSelector(selectProspectiveLpNotionalFormatted);
   const prospectiveLpMarginFormatted = useAppSelector(selectProspectiveLpMarginFormatted);
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);

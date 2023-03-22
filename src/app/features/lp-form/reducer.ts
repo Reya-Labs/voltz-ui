@@ -663,8 +663,7 @@ export const slice = createSlice({
         };
       })
       .addCase(getInfoPostLpThunk.fulfilled, (state, { payload }) => {
-        const { notionalAmount, infoPostLp, earlyReturn } = payload as {
-          notionalAmount: number;
+        const { infoPostLp, earlyReturn } = payload as {
           infoPostLp: InfoPostLpV1;
           earlyReturn: boolean; //TODO Alex: maybe refactor this
         };
@@ -689,11 +688,6 @@ export const slice = createSlice({
           },
           status: 'success',
         };
-
-        // todo: check wether we need smth similar in here
-        // if (infoPostLp.availableNotional < notionalAmount) {
-        //   state.poolLpInfo.availableNotional[swapMode] = infoPostLp.availableNotional;
-        // }
 
         updateLeverageOptionsAfterGetInfoPostLp(state);
         validateUserInputAndUpdateSubmitButton(state);
