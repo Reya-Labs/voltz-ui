@@ -29,8 +29,8 @@ export const selectWalletBalance = (state: RootState) => {
 };
 export const selectFixedRateInfo = (state: RootState) => state.lpForm.fixedRate;
 export const selectVariableRateInfo = (state: RootState) => state.lpForm.variableRate;
-export const selectpoolLpInfo = (state: RootState) => state.lpForm.poolLpInfo;
-export const selectpoolLpInfoStatus = (state: RootState) => state.lpForm.poolLpInfo.status;
+export const selectPoolLpInfo = (state: RootState) => state.lpForm.poolLpInfo;
+export const selectPoolLpInfoStatus = (state: RootState) => state.lpForm.poolLpInfo.status;
 export const selectLpFormMode = (state: RootState): 'new' | 'edit' => {
   return hasExistingPosition(state.lpForm) ? 'edit' : 'new';
 };
