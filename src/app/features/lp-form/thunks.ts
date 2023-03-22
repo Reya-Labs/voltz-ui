@@ -9,6 +9,14 @@ import {
   getProspectiveLpNotional,
   isUserInputNotionalError,
 } from './utils';
+
+
+// SDK TODOs
+// amm.getInfoPostLp
+// amm.getPoolLpInfo
+// amm.mintOrBurn
+
+
 const rejectThunkWithError = (
   thunkAPI: {
     rejectWithValue: (value: string | undefined) => unknown;
@@ -189,7 +197,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
       };
     }
 
-    const notionalAmount = getProspectiveLpNotional(lpFormState);
+    const notionalAmount: number = getProspectiveLpNotional(lpFormState);
     // todo: fixedLow and fixedHigh needs to be fixed for lps to not be hardcoded
     // todo: make isAdd dynamic
     const infoPostLpV1 = await amm.getInfoPostLpV1({
@@ -252,10 +260,11 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
       // todo: check if need to replace type with "LP"
       type: 'Trader',
     });
+
     if (error) {
       return rejectThunkWithError(thunkAPI, error);
     }
-    const position = findCurrentPosition([], amm.id) || null;
+    const position = findCurrentPosition(positions || [], amm.id) || null;
     return {
       position,
       signer,
