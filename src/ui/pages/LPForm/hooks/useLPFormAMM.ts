@@ -10,12 +10,12 @@ import {
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
-  selectPoolLpInfoStatus,
   selectLpFormAMM,
   selectLpFormPosition,
   selectLpFormPositionFetchingStatus,
-  setSignerAndPositionForAMMThunk,
+  selectPoolLpInfoStatus,
   setLpFormAMMAction,
+  setSignerAndPositionForAMMThunk,
 } from '../../../../app/features/lp-form';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';

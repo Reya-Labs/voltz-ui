@@ -9,7 +9,6 @@ import {
   selectProspectiveLpNotionalFormatted,
 } from '../../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../../app/hooks';
-import { formatNumber } from '../../../../../../utilities/number';
 import { MintDetailBox, MintDetailsBox } from './MintDetails.styled';
 
 type MintDetailsProps = {};

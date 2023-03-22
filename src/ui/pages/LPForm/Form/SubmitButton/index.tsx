@@ -2,10 +2,10 @@ import React, { useCallback } from 'react';
 
 import {
   approveUnderlyingTokenThunk,
-  closeMarginUpdateConfirmationFlowAction,
   closeLpConfirmationFlowAction,
-  openMarginUpdateConfirmationFlowAction,
+  closeMarginUpdateConfirmationFlowAction,
   openLpConfirmationFlowAction,
+  openMarginUpdateConfirmationFlowAction,
   selectInfoPostLp,
   selectSubmitButtonInfo,
   selectSubmitButtonText,

@@ -5,8 +5,8 @@ import { ContractReceipt } from 'ethers';
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
 import {
   approveUnderlyingTokenThunk,
-  confirmMarginUpdateThunk,
   confirmLpThunk,
+  confirmMarginUpdateThunk,
   getFixedRateThunk,
   getInfoPostLpThunk,
   getPoolLpInfoThunk,
@@ -74,7 +74,7 @@ export type SliceState = {
   };
   // User-agnostic swap info about pool
   poolLpInfo: {
-    maxLeverage: number; 
+    maxLeverage: number;
     status: ThunkStatus;
   };
   // the lp form is a slice of the redux store and userInput is a "slice of a slice", doesn't have actions
@@ -134,7 +134,6 @@ export type SliceState = {
   // todo: assuming we want to also show low leverage notification for lps?
   // intuitively makes sense but worth confirming
   showLowLeverageNotification: boolean;
-
 };
 
 const initialState: SliceState = {
@@ -188,7 +187,7 @@ const initialState: SliceState = {
     },
     leverage: null,
     fixedLower: null,
-    fixedUpper: null
+    fixedUpper: null,
   },
   prospectiveLp: {
     leverage: {
@@ -240,11 +239,7 @@ const calculateLeverageOptions = (maxLeverage: string) => {
 };
 
 const updateLeverageOptionsAfterGetPoolLpInfo = (state: Draft<SliceState>): void => {
-  const maxLeverage = formatNumber(
-    Math.floor(state.poolLpInfo.maxLeverage),
-    0,
-    0,
-  );
+  const maxLeverage = formatNumber(Math.floor(state.poolLpInfo.maxLeverage), 0, 0);
   state.prospectiveLp.leverage.maxLeverage = maxLeverage;
   state.prospectiveLp.leverage.options = calculateLeverageOptions(maxLeverage);
 };
@@ -258,18 +253,13 @@ const updateLeverageOptionsAfterGetInfoPostLp = (state: Draft<SliceState>): void
     if (state.prospectiveLp.infoPostLp.value.marginRequirement > 0) {
       maxLeverage = formatNumber(
         Math.floor(
-          getProspectiveLpNotional(state) /
-            state.prospectiveLp.infoPostLp.value.marginRequirement,
+          getProspectiveLpNotional(state) / state.prospectiveLp.infoPostLp.value.marginRequirement,
         ),
         0,
         0,
       );
     } else {
-      maxLeverage = formatNumber(
-        Math.floor(state.poolLpInfo.maxLeverage),
-        0,
-        0,
-      );
+      maxLeverage = formatNumber(Math.floor(state.poolLpInfo.maxLeverage), 0, 0);
     }
   }
 
@@ -287,8 +277,7 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   const isProspectiveLpNotionalMarginValid =
     getProspectiveLpNotional(state) !== 0 || getProspectiveLpMargin(state) !== 0;
   // todo: in the swap implementation there are more checks worth revisiting
-  const isInfoPostLpLoaded =
-    state.prospectiveLp.infoPostLp.status === 'success';
+  const isInfoPostLpLoaded = state.prospectiveLp.infoPostLp.status === 'success';
   const isWalletBalanceLoaded = state.walletBalance.status === 'success';
   const isWalletTokenAllowanceLoaded = state.walletTokenAllowance.status === 'success';
 
@@ -415,7 +404,7 @@ export const slice = createSlice({
         // what you send from the frontend world with type PayloadAction and the value can be a number
         payload: { value },
       }: PayloadAction<{
-        value: number | null
+        value: number | null;
       }>,
     ) => {
       state.userInput.fixedLower = value;
@@ -428,7 +417,7 @@ export const slice = createSlice({
         // what you send from the frontend world with type PayloadAction and the value can be a number
         payload: { value },
       }: PayloadAction<{
-        value: number | null
+        value: number | null;
       }>,
     ) => {
       state.userInput.fixedUpper = value;
@@ -641,11 +630,10 @@ export const slice = createSlice({
         };
       })
       .addCase(getPoolLpInfoThunk.fulfilled, (state, { payload }) => {
-        // todo: consider having max leverage add and max leverage remove -> more aligned with how we do things in the swap form 
-        const {maxLeverage} =
-          payload as {
-            maxLeverage: number;
-          };
+        // todo: consider having max leverage add and max leverage remove -> more aligned with how we do things in the swap form
+        const { maxLeverage } = payload as {
+          maxLeverage: number;
+        };
         state.poolLpInfo = {
           maxLeverage: maxLeverage,
           status: 'success',
@@ -780,7 +768,7 @@ export const slice = createSlice({
           error: null,
           txHash: (payload as ContractReceipt).transactionHash,
         };
-      })
+      });
   },
 });
 export const {
