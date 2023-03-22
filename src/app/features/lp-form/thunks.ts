@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   getPositions,
-  infoPostLpV1,
+  InfoPostLpV1,
   Position,
   SupportedChainId,
 } from '@voltz-protocol/v1-sdk';
