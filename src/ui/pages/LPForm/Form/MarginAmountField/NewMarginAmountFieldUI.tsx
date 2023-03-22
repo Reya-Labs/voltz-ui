@@ -2,12 +2,12 @@ import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
-  selectInfoPostSwap,
+  selectInfoPostLp,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
   selectUserInputMarginInfo,
   selectWalletBalance,
-  SwapFormNumberLimits,
+  LpFormNumberLimits,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
@@ -35,7 +35,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
   const isMarginRequiredError = useAppSelector(selectIsMarginRequiredError);
   const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
   const marginAmount = useAppSelector(selectUserInputMarginInfo);
-  const infoPostSwap = useAppSelector(selectInfoPostSwap);
+  const infoPostLp = useAppSelector(selectInfoPostLp);
   const walletBalance = useAppSelector(selectWalletBalance);
 
   return (
@@ -50,15 +50,15 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
         bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={
-          infoPostSwap.status === 'success'
-            ? formatNumber(infoPostSwap.value.marginRequirement)
+          infoPostLp.status === 'success'
+            ? formatNumber(infoPostLp.value.marginRequirement)
             : '--'
         }
-        decimalsLimit={SwapFormNumberLimits.decimalLimit}
+        decimalsLimit={LpFormNumberLimits.decimalLimit}
         error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"
         labelTypographyToken={labelTypographyToken}
-        maxLength={SwapFormNumberLimits.digitLimit}
+        maxLength={LpFormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="The protocol requires every position to have enough margin to support trades. Adding more than the minimum reduces liquidation risk."
         topRightText={`Wallet: ${`${walletBalance} ${underlyingTokenName.toUpperCase()}`}`}

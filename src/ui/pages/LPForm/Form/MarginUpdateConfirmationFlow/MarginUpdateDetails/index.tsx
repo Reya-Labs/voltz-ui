@@ -4,7 +4,7 @@ import React from 'react';
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
-  selectProspectiveSwapMarginFormatted,
+  selectProspectiveLpMarginFormatted,
 } from '../../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { MarginUpdateDetailBox, MarginUpdateDetailsBox } from './MarginUpdateDetails.styled';
@@ -12,7 +12,7 @@ import { MarginUpdateDetailBox, MarginUpdateDetailsBox } from './MarginUpdateDet
 type MarginUpdateDetailsProps = {};
 
 export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsProps> = () => {
-  const prospectiveSwapMarginFormFormatted = useAppSelector(selectProspectiveSwapMarginFormatted);
+  const prospectiveLpMarginFormFormatted = useAppSelector(selectProspectiveLpMarginFormatted);
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
   const token = useAppSelector(selectAMMTokenFormatted);
 
@@ -26,7 +26,7 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
           colorToken="lavenderWeb"
           token={token}
           typographyToken="secondaryBodySmallRegular"
-          value={prospectiveSwapMarginFormFormatted}
+          value={prospectiveLpMarginFormFormatted}
         />
       </MarginUpdateDetailBox>
       <MarginUpdateDetailBox>

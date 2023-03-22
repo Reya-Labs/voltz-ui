@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { colors } from 'brokoli-ui';
 
-export const SwapConfirmationStepBox = styled('div')`
+export const LpConfirmationStepBox = styled('div')`
   display: flex;
   box-sizing: border-box;
   width: 100%;
@@ -21,7 +21,7 @@ export const TitleBox = styled('div')`
   padding: 0px;
 `;
 
-export const SwapDetailsBox = styled('div')`
+export const LpDetailsBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
   display: flex;
@@ -37,7 +37,7 @@ export const HorizontalLine = styled('div')`
   border: 1px solid ${colors.lavenderWeb5};
 `;
 
-export const SwapFeeDetailsBox = styled('div')`
+export const LpFeeDetailsBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
   display: flex;

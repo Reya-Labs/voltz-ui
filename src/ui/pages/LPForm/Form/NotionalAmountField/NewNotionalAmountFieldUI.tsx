@@ -6,7 +6,6 @@ import {
   LpFormNumberLimits,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 
 type NewNotionalAmountFieldUIProps = {

@@ -2,10 +2,10 @@ import { Button, CloseButton, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
-  closeSwapConfirmationFlowAction,
-  confirmSwapThunk,
-  selectSwapConfirmationFlowError,
-  selectSwapFormAMM,
+  closeLpConfirmationFlowAction,
+  confirmLpThunk,
+  selectLpConfirmationFlowError,
+  selectLpFormAMM,
 } from '../../../../../../app/features/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
@@ -16,35 +16,35 @@ import { TransactionDetails } from '../../TransactionDetails';
 import { MintDetails } from '../MintDetails';
 import {
   HorizontalLine,
-  SwapConfirmationStepBox,
-  SwapDetailsBox,
-  SwapFeeDetailsBox,
+  LpConfirmationStepBox,
+  LpDetailsBox,
+  LpFeeDetailsBox,
   TitleBox,
 } from './MintConfirmationStep.styled';
 
 export const MintConfirmationStep: React.FunctionComponent = () => {
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const aMM = useAppSelector(selectLpFormAMM);
   const dispatch = useAppDispatch();
-  const handleConfirmSwap = useCallback(() => {
-    void dispatch(confirmSwapThunk());
+  const handleConfirmLp = useCallback(() => {
+    void dispatch(confirmLpThunk());
   }, [dispatch]);
-  const error = useAppSelector(selectSwapConfirmationFlowError);
+  const error = useAppSelector(selectLpConfirmationFlowError);
   const handleCloseButtonClick = useCallback(() => {
-    dispatch(closeSwapConfirmationFlowAction());
+    dispatch(closeLpConfirmationFlowAction());
   }, [dispatch]);
   if (!aMM) {
     return null;
   }
 
   return (
-    <SwapConfirmationStepBox>
+    <LpConfirmationStepBox>
       <TitleBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          Confirm Swap
+          Confirm Lp
         </Typography>
         <CloseButton onClick={handleCloseButtonClick} />
       </TitleBox>
-      <SwapDetailsBox>
+      <LpDetailsBox>
         <MarketTokenInformation
           isAaveV3={aMM.market.tags.isAaveV3}
           isBorrowing={aMM.market.tags.isBorrowing}
@@ -52,20 +52,20 @@ export const MintConfirmationStep: React.FunctionComponent = () => {
           token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
         />
         <MintDetails />
-      </SwapDetailsBox>
+      </LpDetailsBox>
       <HorizontalLine />
-      <SwapFeeDetailsBox>
+      <LpFeeDetailsBox>
         <TransactionDetails />
-      </SwapFeeDetailsBox>
+      </LpFeeDetailsBox>
       <Button
         bottomLeftText={error ? error : ''}
         bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
         variant="primary"
-        onClick={handleConfirmSwap}
+        onClick={handleConfirmLp}
       >
-        Confirm Swap
+        Confirm Lp
       </Button>
-    </SwapConfirmationStepBox>
+    </LpConfirmationStepBox>
   );
 };

@@ -3,8 +3,8 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  selectSwapFormAMM,
-  selectSwapFormPosition,
+  selectLpFormAMM,
+  selectLpFormPosition,
   selectUserInputMarginInfo,
   setMarginAmountAction,
 } from '../../../../../app/features/lp-form';
@@ -18,8 +18,8 @@ type NotionalAmountProps = {};
 export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const dispatch = useAppDispatch();
   const marginAmount = useAppSelector(selectUserInputMarginInfo);
-  const position = useAppSelector(selectSwapFormPosition);
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const position = useAppSelector(selectLpFormPosition);
+  const aMM = useAppSelector(selectLpFormAMM);
 
   const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
   const [localMargin, setLocalMargin] = useState<string | null>(marginAmount.value.toString());
