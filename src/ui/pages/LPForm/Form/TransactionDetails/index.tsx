@@ -1,7 +1,7 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectInfoPostSwap } from '../../../../../app/features/lp-form';
+import { selectInfoPostLp } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
@@ -10,7 +10,7 @@ import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styl
 type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
-  const infoPostSwap = useAppSelector(selectInfoPostSwap);
+  const infoPostSwap = useAppSelector(selectInfoPostLp);
   const hideGasFees = false;
 
   return (
