@@ -6,7 +6,6 @@ import {
   compactFormatToParts,
   formatNumber,
   limitAndFormatNumber,
-  stringToBigFloat,
 } from '../../../../utilities/number';
 import { LpFormNumberLimits } from '../constants';
 import { SliceState } from '../reducer';
@@ -65,8 +64,6 @@ const validateUserInputNotional = (state: Draft<SliceState>): void => {
 
   state.userInput.notionalAmount.error = error;
 };
-
-
 
 export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
   if (state.userInput.marginAmount.editMode === 'remove') {
@@ -154,8 +151,7 @@ export const validateUserInput = (state: Draft<SliceState>): void => {
 
 export const updateLeverage = (state: Draft<SliceState>): void => {
   if (getProspectiveLpNotional(state) > 0 && state.userInput.marginAmount.value > 0) {
-    state.userInput.leverage =
-      getProspectiveLpNotional(state) / state.userInput.marginAmount.value;
+    state.userInput.leverage = getProspectiveLpNotional(state) / state.userInput.marginAmount.value;
   }
 
   state.showLowLeverageNotification = checkLowLeverageNotification(state);
@@ -173,10 +169,7 @@ export const getProspectiveLpNotional = (state: Draft<SliceState>): number => {
   let value = state.userInput.notionalAmount.value;
 
   const existingPositionNotional = getExistingPositionNotional(state);
-  if (
-    state.position.value !== null &&
-    existingPositionNotional !== null
-  ) {
+  if (state.position.value !== null && existingPositionNotional !== null) {
     value =
       state.userInput.notionalAmount.editMode === 'add'
         ? existingPositionNotional + value
@@ -206,7 +199,6 @@ export const getEditPositionNotional = (state: Draft<SliceState>) => {
   // todo: implement
   return 0;
 };
-
 
 export const getVariableRate = (state: Draft<SliceState>) => {
   return state.variableRate.status === 'success' ? state.variableRate.value : null;

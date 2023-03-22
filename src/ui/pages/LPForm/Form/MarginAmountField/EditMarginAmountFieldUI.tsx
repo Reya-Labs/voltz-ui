@@ -2,12 +2,12 @@ import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
+  LpFormNumberLimits,
   selectBottomRightMarginNumber,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
   selectUserInputMarginInfo,
   selectWalletBalance,
-  LpFormNumberLimits,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';

@@ -62,8 +62,7 @@ export const selectMarginAccountName = (state: RootState) => {
 // User Input
 export const selectUserInputNotionalInfo = (state: RootState) =>
   state.lpForm.userInput.notionalAmount;
-export const selectUserInputMarginInfo = (state: RootState) =>
-  state.lpForm.userInput.marginAmount;
+export const selectUserInputMarginInfo = (state: RootState) => state.lpForm.userInput.marginAmount;
 
 // ------------ Prospective Lp ------------
 export const selectProspectiveLpNotionalFormatted = (state: RootState) => {
@@ -71,9 +70,7 @@ export const selectProspectiveLpNotionalFormatted = (state: RootState) => {
 };
 export const selectProspectiveLpMarginFormatted = (state: RootState) => {
   if (state.lpForm.userInput.marginAmount.editMode === 'add') {
-    return lpFormCompactFormat(
-      getProspectiveLpMargin(state.lpForm)
-    );
+    return lpFormCompactFormat(getProspectiveLpMargin(state.lpForm));
   }
   return lpFormCompactFormat(getProspectiveLpMargin(state.lpForm));
 };
@@ -141,7 +138,6 @@ export const selectEditPositionCompactNotional = (state: RootState) => {
   };
 };
 
-
 // ------------ Realized & Unrealized PnL Selectors ------------
 // todo: populate based on realized and unrealized pnl spec
 
@@ -174,11 +170,7 @@ export const selectVariableRate24hDelta = (state: RootState) => {
   return state.lpForm.variableRate24hAgo.status === 'success' &&
     state.lpForm.variableRate.status === 'success'
     ? stringToBigFloat(
-        formatNumber(
-          state.lpForm.variableRate.value - state.lpForm.variableRate24hAgo.value,
-          0,
-          3,
-        ),
+        formatNumber(state.lpForm.variableRate.value - state.lpForm.variableRate24hAgo.value, 0, 3),
       )
     : undefined;
 };
@@ -248,18 +240,17 @@ export const selectUserInputFixedLower = (state: RootState) => {
   const fixedLower = state.lpForm.userInput.fixedLower;
 
   if (fixedLower === null) {
-    return "";
+    return '';
   }
 
   return fixedLower.toString();
 };
 
 export const selectUserInputFixedUpper = (state: RootState) => {
-
   const fixedUpper = state.lpForm.userInput.fixedUpper;
 
   if (fixedUpper === null) {
-    return "";
+    return '';
   }
 
   return fixedUpper.toString();

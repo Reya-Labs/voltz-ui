@@ -2,12 +2,12 @@ import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
+  LpFormNumberLimits,
   selectInfoPostLp,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
   selectUserInputMarginInfo,
   selectWalletBalance,
-  LpFormNumberLimits,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
@@ -50,9 +50,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
         bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={
-          infoPostLp.status === 'success'
-            ? formatNumber(infoPostLp.value.marginRequirement)
-            : '--'
+          infoPostLp.status === 'success' ? formatNumber(infoPostLp.value.marginRequirement) : '--'
         }
         decimalsLimit={LpFormNumberLimits.decimalLimit}
         error={isMarginRequiredError || isWalletMarginError}

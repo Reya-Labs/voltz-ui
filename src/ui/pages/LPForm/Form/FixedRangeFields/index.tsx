@@ -1,10 +1,16 @@
 import { CurrencyField, TypographyToken } from 'brokoli-ui';
-import React, { useState } from 'react';
-import { stringToBigFloat } from '../../../../../utilities/number';
+import React from 'react';
 
-import { selectLpFormAMM, selectUserInputFixedLower, selectUserInputFixedUpper, setUserInputFixedLowerAction, setUserInputFixedUpperAction } from '../../../../../app/features/lp-form';
+import {
+  selectLpFormAMM,
+  selectUserInputFixedLower,
+  selectUserInputFixedUpper,
+  setUserInputFixedLowerAction,
+  setUserInputFixedUpperAction,
+} from '../../../../../app/features/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
+import { stringToBigFloat } from '../../../../../utilities/number';
 import { FixedRangeFieldsBox } from './FixedRangeFields.styled';
 type NotionalAmountProps = {};
 
@@ -26,22 +32,26 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
     return null;
   }
 
-  // two fields in a box with a separator in between 
+  // two fields in a box with a separator in between
 
-  const handleFixedLowerOnChange = (value: string | undefined) => { 
+  const handleFixedLowerOnChange = (value: string | undefined) => {
     // tell redux -> we have some value for you
-  
-    dispatch(setUserInputFixedLowerAction({
-      value: value !== undefined ? stringToBigFloat(value) : null
-    }));
-  }
 
-  const handleFixedUpperOnChange = (value: string | undefined) => { 
+    dispatch(
+      setUserInputFixedLowerAction({
+        value: value !== undefined ? stringToBigFloat(value) : null,
+      }),
+    );
+  };
+
+  const handleFixedUpperOnChange = (value: string | undefined) => {
     // tell redux -> we have some value for you
-    dispatch(setUserInputFixedUpperAction({
-      value: value !== undefined ? stringToBigFloat(value) : null
-    }));
-  }
+    dispatch(
+      setUserInputFixedUpperAction({
+        value: value !== undefined ? stringToBigFloat(value) : null,
+      }),
+    );
+  };
 
   return (
     <FixedRangeFieldsBox>

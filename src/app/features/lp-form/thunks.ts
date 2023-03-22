@@ -1,10 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  getPositions,
-  InfoPostLpV1,
-  Position,
-  SupportedChainId,
-} from '@voltz-protocol/v1-sdk';
+import { getPositions, InfoPostLpV1, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { BigNumber, ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPosition } from '../../../utilities/amm';
@@ -161,7 +156,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<
     | {
         notionalAmount: number;
-        // todo: not sure if we need 
+        // todo: not sure if we need
         lpMode: 'add' | 'remove';
         infoPostLpV1: InfoPostLpV1;
         earlyReturn: boolean;
@@ -205,7 +200,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
     });
 
     // margin requirement is collateral only now
-  
+
     // todo: not sure what the commented logic below is trying to achieve
     // if (infoPostLpV1.marginRequirement > infoPostLpV1.fee) {
     //   infoPostLpV1.marginRequirement -= infoPostLpV1.fee;

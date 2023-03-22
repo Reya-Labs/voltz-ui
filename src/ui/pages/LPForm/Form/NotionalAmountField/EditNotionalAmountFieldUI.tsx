@@ -3,8 +3,8 @@ import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
-  selectUserInputNotionalInfo,
   LpFormNumberLimits,
+  selectUserInputNotionalInfo,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
