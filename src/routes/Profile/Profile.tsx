@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import copy from 'copy-to-clipboard';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
@@ -17,9 +18,9 @@ import { CopyLinkButtonProps } from './components/CopyLinkButton/CopyLinkButton'
 import { ProfilePageWalletConnected } from './components/ProfilePageWalletConnected/ProfilePageWalletConnected';
 import {
   BadgeVariant,
+  CHAIN_SEASON_BADGE_VARIANTS,
   GetProfileBadgesResponse,
   getSeasonBadges,
-  SEASON_BADGE_VARIANTS,
 } from './data/getSeasonBadges';
 import { getCacheValue, invalidateCache, setCacheValue } from './data/getSeasonBadges/cache';
 import { getReferrerLink } from './get-referrer-link';
@@ -28,24 +29,24 @@ import { getClaimButtonModesForVariants, getCommunitySbt, getSeasonUserId } from
 export const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
   const [collectionBadges, setCollectionBadges] = React.useState<GetProfileBadgesResponse>([]);
-  const pastSeasons = usePastSeasons();
+  const chainId = useAppSelector(selectChainId) || SupportedChainId.mainnet;
   const [loading, setLoading] = React.useState(true);
   const [name, setName] = React.useState('');
-  const currentActiveSeason = useCurrentSeason();
+  const currentActiveSeason = useCurrentSeason(chainId);
+  const pastSeasons = usePastSeasons(chainId);
   const [season, setSeason] = React.useState<Season>(currentActiveSeason);
-
-  const chainId = useAppSelector(selectChainId);
-
+  const seasonBadgeVariants = CHAIN_SEASON_BADGE_VARIANTS[chainId][season.id];
   const [claimButtonBulkMode, setClaimButtonBulkMode] = useState<ClaimButtonProps['mode']>('claim');
   const [claimButtonModes, setClaimButtonModes] = useState<
     Record<BadgeVariant, ClaimButtonProps['mode']>
-  >(getClaimButtonModesForVariants(SEASON_BADGE_VARIANTS[season.id] as BadgeVariant[], 'claim'));
+  >(getClaimButtonModesForVariants(seasonBadgeVariants as BadgeVariant[], 'claim'));
 
   const [copyLinkButtonMode, setCopyLinkButtonMode] = useState<CopyLinkButtonProps['mode']>('copy');
 
   const fetchBadges = async (account: string) => {
     const sbt = getCommunitySbt(wallet.signer, chainId);
     return await getSeasonBadges({
+      chainId,
       userId: account,
       season: season,
       sbt: sbt,
@@ -64,7 +65,7 @@ export const Profile: React.FunctionComponent = () => {
     }
     setCollectionBadges(result);
     setClaimButtonBulkMode('claim');
-    const claimedTodayVariants = SEASON_BADGE_VARIANTS[season.id].filter((badgeVariant) =>
+    const claimedTodayVariants = seasonBadgeVariants.filter((badgeVariant) =>
       result!.find(
         ({ claimedAt, variant }) =>
           variant === badgeVariant &&
@@ -73,7 +74,7 @@ export const Profile: React.FunctionComponent = () => {
           claimedAt <= DateTime.now().endOf('day').valueOf(),
       ),
     );
-    const claimedInThePastVariants = SEASON_BADGE_VARIANTS[season.id].filter((badgeVariant) =>
+    const claimedInThePastVariants = seasonBadgeVariants.filter((badgeVariant) =>
       result!.find(
         ({ claimedAt, variant }) =>
           variant === badgeVariant &&
@@ -81,7 +82,7 @@ export const Profile: React.FunctionComponent = () => {
           claimedAt < DateTime.now().startOf('day').valueOf(),
       ),
     );
-    const notClaimedVariants = SEASON_BADGE_VARIANTS[season.id].filter((badgeVariant) =>
+    const notClaimedVariants = seasonBadgeVariants.filter((badgeVariant) =>
       result!.find(({ claimedAt, variant }) => variant === badgeVariant && !claimedAt),
     );
     setClaimButtonModes((p) => ({
@@ -241,6 +242,10 @@ export const Profile: React.FunctionComponent = () => {
     invalidateCache();
   }, []);
 
+  if (!chainId) {
+    return null;
+  }
+
   if (!wallet.account) {
     return (
       <ConnectWallet
@@ -255,13 +260,14 @@ export const Profile: React.FunctionComponent = () => {
     <ProfilePageWalletConnected
       account={name}
       badges={collectionBadges}
+      chainId={chainId}
       claimButtonBulkMode={claimButtonBulkMode}
       claimButtonModes={claimButtonModes}
       copyLinkButtonMode={copyLinkButtonMode}
       isOnGoingSeason={season.id === currentActiveSeason.id}
       loading={loading}
       season={season}
-      seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
+      seasonBadgeVariants={seasonBadgeVariants}
       seasonOptions={[...pastSeasons, currentActiveSeason]}
       onClaimBulkClick={handleOnClaimBulkClick}
       onClaimButtonClick={handleOnClaimButtonClick}

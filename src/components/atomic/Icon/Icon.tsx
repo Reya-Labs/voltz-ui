@@ -72,6 +72,12 @@ export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props })
       case 's2MellowLpVaultTier1':
       case 's2MellowLpVaultTier2':
       case 's2MellowLpVaultTier3':
+      case 's3MellowLpVaultTier1':
+      case 's3MellowLpVaultTier2':
+      case 's3MellowLpVaultTier3':
+      case 's3MellowLpVaultTier1Arbitrum':
+      case 's3MellowLpVaultTier2Arbitrum':
+      case 's3MellowLpVaultTier3Arbitrum':
       case 'diplomatz':
       case 'governorz':
       case 'senatorz':

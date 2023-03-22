@@ -1,8 +1,17 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
+
 import { SEASONS } from '../constants';
 import { Season } from '../types';
 
-export const useCurrentSeason = (now: number = Date.now().valueOf()): Season => {
-  for (const season of SEASONS) {
+export const useCurrentSeason = (
+  chainId: SupportedChainId | null,
+  now: number = Date.now().valueOf(),
+): Season => {
+  if (!chainId) {
+    return SEASONS[SupportedChainId.mainnet][0];
+  }
+  const seasons = SEASONS[chainId];
+  for (const season of seasons) {
     const seasonStartDate = season.startDate.toMillis();
     const seasonEndDate = season.endDate.toMillis();
     if (seasonStartDate <= now && now <= seasonEndDate) {
@@ -10,5 +19,5 @@ export const useCurrentSeason = (now: number = Date.now().valueOf()): Season => 
     }
   }
 
-  return SEASONS[0];
+  return seasons[0];
 };

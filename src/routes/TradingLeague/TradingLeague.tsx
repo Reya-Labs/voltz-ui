@@ -18,14 +18,14 @@ const PER_PAGE = 10;
 
 export const TradingLeague: React.FunctionComponent = () => {
   const { account, signer } = useWallet();
+  const chainId = useAppSelector(selectChainId);
   const tradingLeagueStatus = useAppSelector(selectTradingLeagueStatus);
   const loading = tradingLeagueStatus === 'pending' || tradingLeagueStatus === 'idle';
-  const season = useCurrentSeason();
+  const season = useCurrentSeason(chainId);
   const rankings = useAppSelector(selectTradingLeagueRankings);
   const wallet = useWallet();
   const [page, setPage] = useState<number>(0);
   const maxPages = Math.floor(rankings.length / PER_PAGE) + 1;
-  const chainId = useAppSelector(selectChainId);
   const dispatch = useAppDispatch();
 
   const handleOnNextPage = () => {

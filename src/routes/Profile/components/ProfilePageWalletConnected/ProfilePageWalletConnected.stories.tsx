@@ -1,16 +1,17 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
 import { SEASONS } from '../../../../hooks/season/constants';
 import { Season } from '../../../../hooks/season/types';
-import { BadgeVariant, SEASON_BADGE_VARIANTS } from '../../data/getSeasonBadges';
+import { BadgeVariant, CHAIN_SEASON_BADGE_VARIANTS } from '../../data/getSeasonBadges';
 import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
 import {
   ProfilePageWalletConnected,
   ProfilePageWalletConnectedProps,
 } from './ProfilePageWalletConnected';
-import { mockBadges } from './ProfilePageWalletConnected.mocks';
+import { mockBadges, mockBadgesArbitrum } from './ProfilePageWalletConnected.mocks';
 
 export default {
   title: 'Interface/ProfilePageWalletConnected',
@@ -28,7 +29,7 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
   const [claimButtonModes, setClaimButtonModes] = useState<
     Record<BadgeVariant, ClaimButtonProps['mode']>
   >(
-    SEASON_BADGE_VARIANTS[season.id].reduce(
+    CHAIN_SEASON_BADGE_VARIANTS[args.chainId][season.id].reduce(
       (pV, cI) => ({
         ...pV,
         [cI as BadgeVariant]: 'claim',
@@ -38,7 +39,11 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
   );
 
   useEffect(() => {
-    setAchievedBadges(mockBadges[season.id]);
+    setAchievedBadges(
+      args.chainId === SupportedChainId.mainnet
+        ? mockBadges[season.id]
+        : mockBadgesArbitrum[season.id],
+    );
     setClaimButtonBulkMode('claim');
   }, []);
 
@@ -90,13 +95,17 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
       copyLinkButtonMode={copyLinkButtonMode}
       isOnGoingSeason={season.id === 1}
       season={season}
-      seasonBadgeVariants={SEASON_BADGE_VARIANTS[season.id]}
+      seasonBadgeVariants={CHAIN_SEASON_BADGE_VARIANTS[args.chainId][season.id]}
       onClaimBulkClick={handleOnClaimBulkClick}
       onClaimButtonClick={handleOnClaimButtonClick}
       onCopyLinkButtonClick={handleOnCopyLinkButtonClick}
       onSeasonChange={(newSeason) => {
         setSeason(newSeason);
-        setAchievedBadges(mockBadges[newSeason.id]);
+        setAchievedBadges(
+          args.chainId === SupportedChainId.mainnet
+            ? mockBadges[newSeason.id]
+            : mockBadgesArbitrum[newSeason.id],
+        );
         setClaimButtonBulkMode('claim');
       }}
     />
@@ -107,17 +116,33 @@ export const Default = Template.bind({});
 Default.args = {
   account: '0xb01F14d1C9000D453241221EB54648F1C378c970',
   badges: mockBadges[1],
-  season: SEASONS[1],
-  seasonOptions: [SEASONS[0], SEASONS[1], SEASONS[2]],
+  season: SEASONS[SupportedChainId.mainnet][1],
+  seasonOptions: [
+    SEASONS[SupportedChainId.mainnet][0],
+    SEASONS[SupportedChainId.mainnet][1],
+    SEASONS[SupportedChainId.mainnet][2],
+    SEASONS[SupportedChainId.mainnet][3],
+  ],
+  chainId: SupportedChainId.mainnet,
+};
+
+export const ArbitrumSeason = Template.bind({});
+ArbitrumSeason.args = {
+  account: '0xb01F14d1C9000D453241221EB54648F1C378c970',
+  badges: mockBadgesArbitrum[3],
+  season: SEASONS[SupportedChainId.arbitrum][0],
+  seasonOptions: [SEASONS[SupportedChainId.arbitrum][0]],
+  chainId: SupportedChainId.arbitrum,
 };
 
 export const Loading = Template.bind({});
 Loading.args = {
   account: '0xb01F14d1C9000D453241221EB54648F1C378c970',
   badges: mockBadges[1],
-  season: SEASONS[1],
+  season: SEASONS[SupportedChainId.mainnet][1],
   loading: true,
   isOnGoingSeason: true,
-  seasonBadgeVariants: SEASON_BADGE_VARIANTS[1],
-  seasonOptions: [SEASONS[0], SEASONS[1]],
+  chainId: SupportedChainId.mainnet,
+  seasonBadgeVariants: CHAIN_SEASON_BADGE_VARIANTS[SupportedChainId.mainnet][1],
+  seasonOptions: [SEASONS[SupportedChainId.mainnet][0], SEASONS[SupportedChainId.mainnet][1]],
 };

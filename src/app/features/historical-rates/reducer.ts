@@ -1,8 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  HistoricalRates,
-  RatesData,
-} from '@voltz-protocol/v1-sdk/src/entities/amm/getters/historicalRates/getHistoricalRate';
+import { HistoricalRates, RatesData } from '@voltz-protocol/v1-sdk';
 
 import { fetchHistoricalRatesThunk } from './thunks';
 

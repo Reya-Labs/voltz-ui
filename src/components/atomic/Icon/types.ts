@@ -65,6 +65,40 @@ import {
   S2TopTrader,
   S2WaterHose,
   S2Yikes,
+  S3BeWaterMyFriend,
+  S3BeWaterMyFriendArbitrum,
+  S3DegenStuff,
+  S3DegenStuffArbitrum,
+  S3DeltaDegen,
+  S3DeltaDegenArbitrum,
+  S3FixedTrader,
+  S3FixedTraderArbitrum,
+  S3IrsConnoisseur,
+  S3IrsConnoisseurArbitrum,
+  S3LeverageCrowbar,
+  S3LeverageCrowbarArbitrum,
+  S3Lpoor,
+  S3LpoorArbitrum,
+  S3MaxBidding,
+  S3MaxBiddingArbitrum,
+  S3MellowLpVaultTier1,
+  S3MellowLpVaultTier1Arbitrum,
+  S3MellowLpVaultTier2,
+  S3MellowLpVaultTier2Arbitrum,
+  S3MellowLpVaultTier3,
+  S3MellowLpVaultTier3Arbitrum,
+  S3MoneyMoneyMoney,
+  S3MoneyMoneyMoneyArbitrum,
+  S3Rainmaker,
+  S3RainmakerArbitrum,
+  S3SushiRoll,
+  S3SushiRollArbitrum,
+  S3TopTrader,
+  S3TopTraderArbitrum,
+  S3WaterHose,
+  S3WaterHoseArbitrum,
+  S3Yikes,
+  S3YikesArbitrum,
   Senatorz,
   Settle,
   SushiRoll,
@@ -144,7 +178,7 @@ export type SupportedIcons =
   | 'ogMaxBidding'
   | 'ogDryIce'
   | 'ogOkBoomer'
-  // season1, season2 & og non-programmatic badges
+  // season1, season2, season3 & og non-programmatic badges
   | 'senatorz'
   | 'governorz'
   | 'diplomatz'
@@ -168,7 +202,43 @@ export type SupportedIcons =
   | 's2MaxBidding'
   | 's2MellowLpVaultTier1'
   | 's2MellowLpVaultTier2'
-  | 's2MellowLpVaultTier3';
+  | 's2MellowLpVaultTier3'
+  // season 3 badges
+  | 's3DegenStuff'
+  | 's3DeltaDegen'
+  | 's3IrsConnoisseur'
+  | 's3LeverageCrowbar'
+  | 's3FixedTrader'
+  | 's3SushiRoll'
+  | 's3TopTrader'
+  | 's3BeWaterMyFriend'
+  | 's3RainMaker'
+  | 's3WaterHose'
+  | 's3MoneyMoneyMoney'
+  | 's3Lpoor'
+  | 's3Yikes'
+  | 's3MaxBidding'
+  | 's3MellowLpVaultTier1'
+  | 's3MellowLpVaultTier2'
+  | 's3MellowLpVaultTier3'
+  // season 3 badges - arbitrum
+  | 's3DegenStuffArbitrum'
+  | 's3DeltaDegenArbitrum'
+  | 's3IrsConnoisseurArbitrum'
+  | 's3LeverageCrowbarArbitrum'
+  | 's3FixedTraderArbitrum'
+  | 's3SushiRollArbitrum'
+  | 's3TopTraderArbitrum'
+  | 's3BeWaterMyFriendArbitrum'
+  | 's3RainMakerArbitrum'
+  | 's3WaterHoseArbitrum'
+  | 's3MoneyMoneyMoneyArbitrum'
+  | 's3LpoorArbitrum'
+  | 's3YikesArbitrum'
+  | 's3MaxBiddingArbitrum'
+  | 's3MellowLpVaultTier1Arbitrum'
+  | 's3MellowLpVaultTier2Arbitrum'
+  | 's3MellowLpVaultTier3Arbitrum';
 
 export const iconMap: Record<SupportedIcons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
@@ -232,7 +302,7 @@ export const iconMap: Record<SupportedIcons, ElementType> = {
   ogMaxBidding: OGMaxBidding as ElementType,
   ogOkBoomer: OGOkBoomer as ElementType,
   ogDryIce: OGDryIce as ElementType,
-  // season1, season2 & og non-programmatic badges
+  // season1, season2, season3 & og non-programmatic badges
   senatorz: Senatorz as ElementType,
   diplomatz: Diplomatz as ElementType,
   governorz: Governorz as ElementType,
@@ -257,4 +327,40 @@ export const iconMap: Record<SupportedIcons, ElementType> = {
   s2MellowLpVaultTier1: S2MellowLpVaultTier1 as ElementType,
   s2MellowLpVaultTier2: S2MellowLpVaultTier2 as ElementType,
   s2MellowLpVaultTier3: S2MellowLpVaultTier3 as ElementType,
+  // season3 badges
+  s3DegenStuff: S3DegenStuff as ElementType,
+  s3DeltaDegen: S3DeltaDegen as ElementType,
+  s3IrsConnoisseur: S3IrsConnoisseur as ElementType,
+  s3LeverageCrowbar: S3LeverageCrowbar as ElementType,
+  s3FixedTrader: S3FixedTrader as ElementType,
+  s3SushiRoll: S3SushiRoll as ElementType,
+  s3TopTrader: S3TopTrader as ElementType,
+  s3BeWaterMyFriend: S3BeWaterMyFriend as ElementType,
+  s3RainMaker: S3Rainmaker as ElementType,
+  s3WaterHose: S3WaterHose as ElementType,
+  s3MoneyMoneyMoney: S3MoneyMoneyMoney as ElementType,
+  s3Lpoor: S3Lpoor as ElementType,
+  s3Yikes: S3Yikes as ElementType,
+  s3MaxBidding: S3MaxBidding as ElementType,
+  s3MellowLpVaultTier1: S3MellowLpVaultTier1 as ElementType,
+  s3MellowLpVaultTier2: S3MellowLpVaultTier2 as ElementType,
+  s3MellowLpVaultTier3: S3MellowLpVaultTier3 as ElementType,
+  // season 3 badges - arbitrum
+  s3DegenStuffArbitrum: S3DegenStuffArbitrum as ElementType,
+  s3DeltaDegenArbitrum: S3DeltaDegenArbitrum as ElementType,
+  s3IrsConnoisseurArbitrum: S3IrsConnoisseurArbitrum as ElementType,
+  s3LeverageCrowbarArbitrum: S3LeverageCrowbarArbitrum as ElementType,
+  s3FixedTraderArbitrum: S3FixedTraderArbitrum as ElementType,
+  s3SushiRollArbitrum: S3SushiRollArbitrum as ElementType,
+  s3TopTraderArbitrum: S3TopTraderArbitrum as ElementType,
+  s3BeWaterMyFriendArbitrum: S3BeWaterMyFriendArbitrum as ElementType,
+  s3RainMakerArbitrum: S3RainmakerArbitrum as ElementType,
+  s3WaterHoseArbitrum: S3WaterHoseArbitrum as ElementType,
+  s3MoneyMoneyMoneyArbitrum: S3MoneyMoneyMoneyArbitrum as ElementType,
+  s3LpoorArbitrum: S3LpoorArbitrum as ElementType,
+  s3YikesArbitrum: S3YikesArbitrum as ElementType,
+  s3MaxBiddingArbitrum: S3MaxBiddingArbitrum as ElementType,
+  s3MellowLpVaultTier1Arbitrum: S3MellowLpVaultTier1Arbitrum as ElementType,
+  s3MellowLpVaultTier2Arbitrum: S3MellowLpVaultTier2Arbitrum as ElementType,
+  s3MellowLpVaultTier3Arbitrum: S3MellowLpVaultTier3Arbitrum as ElementType,
 };

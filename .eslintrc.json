@@ -105,6 +105,12 @@
               "src/**"
             ],
             "message": "Don't import from 'src' directory! Use relative paths instead!"
+          },
+          {
+            "group": [
+              "@voltz-protocol/v1-sdk/**"
+            ],
+            "message": "Fix the imports in v1-sdk!"
           }
         ]
       }
