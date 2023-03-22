@@ -2,14 +2,14 @@ import { CurrencyField, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 import { stringToBigFloat } from '../../../../../utilities/number';
 
-import { selectSwapFormAMM, selectUserInputFixedLower, selectUserInputFixedUpper, setUserInputFixedLowerAction, setUserInputFixedUpperAction } from '../../../../../app/features/lp-form';
+import { selectLpFormAMM, selectUserInputFixedLower, selectUserInputFixedUpper, setUserInputFixedLowerAction, setUserInputFixedUpperAction } from '../../../../../app/features/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { FixedRangeFieldsBox } from './FixedRangeFields.styled';
 type NotionalAmountProps = {};
 
 export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = () => {
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const aMM = useAppSelector(selectLpFormAMM);
   const dispatch = useAppDispatch();
 
   // define state for the inputs -> the below inputs should live in redux

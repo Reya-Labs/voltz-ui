@@ -3,8 +3,8 @@ import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  closeSwapConfirmationFlowAction,
-  selectSwapConfirmationFlowEtherscanLink,
+  closeLpConfirmationFlowAction,
+  selectLpConfirmationFlowEtherscanLink,
 } from '../../../../../../app/features/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
@@ -14,17 +14,17 @@ import { MintCompletedStepBox } from './MintCompletedStep.styled';
 export const MintCompletedStep: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const etherscanLink = useAppSelector(selectSwapConfirmationFlowEtherscanLink);
+  const etherscanLink = useAppSelector(selectLpConfirmationFlowEtherscanLink);
 
   const handleVisitPortfolio = useCallback(() => {
-    dispatch(closeSwapConfirmationFlowAction());
+    dispatch(closeLpConfirmationFlowAction());
     navigate(`/${routes.LP_PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
     <MintCompletedStepBox>
       <Confetti>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          Swap Completed
+          Lp Completed
         </Typography>
       </Confetti>
       <MintDetails />

@@ -5,7 +5,7 @@ import {
   closeMarginUpdateConfirmationFlowAction,
   confirmMarginUpdateThunk,
   selectMarginUpdateConfirmationFlowError,
-  selectSwapFormAMM,
+  selectLpFormAMM,
 } from '../../../../../../app/features/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
@@ -23,7 +23,7 @@ import {
 } from './MarginUpdateConfirmationStep.styled';
 
 export const MarginUpdateConfirmationStep: React.FunctionComponent = () => {
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const aMM = useAppSelector(selectLpFormAMM);
   const dispatch = useAppDispatch();
   const handleConfirmMarginUpdate = useCallback(() => {
     void dispatch(confirmMarginUpdateThunk());

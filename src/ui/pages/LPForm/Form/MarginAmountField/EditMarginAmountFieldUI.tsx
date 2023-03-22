@@ -7,7 +7,7 @@ import {
   selectIsWalletMarginError,
   selectUserInputMarginInfo,
   selectWalletBalance,
-  SwapFormNumberLimits,
+  LpFormNumberLimits,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
@@ -58,11 +58,11 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
         bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={bottomRightNumber !== null ? bottomRightNumber : '--'}
-        decimalsLimit={SwapFormNumberLimits.decimalLimit}
+        decimalsLimit={LpFormNumberLimits.decimalLimit}
         error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"
         labelTypographyToken={labelTypographyToken}
-        maxLength={SwapFormNumberLimits.digitLimit}
+        maxLength={LpFormNumberLimits.digitLimit}
         switchOffText={'Withdraw'}
         switchOffValue={'remove'}
         switchOnText={'Deposit'}

@@ -3,12 +3,10 @@ import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
-  selectAvailableNotional,
   selectUserInputNotionalInfo,
-  SwapFormNumberLimits,
+  LpFormNumberLimits,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 
 type EditNotionalAmountFieldUIProps = {
@@ -34,7 +32,6 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
   bottomLeftTextTypographyToken,
 }) => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
-  const notionalAvailable = useAppSelector(selectAvailableNotional);
 
   const bottomLeftText = notionalAmount.error
     ? notionalAmount.error
@@ -51,12 +48,12 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-        bottomRightTextValue={formatNumber(notionalAvailable)}
-        decimalsLimit={SwapFormNumberLimits.decimalLimit}
+        // bottomRightTextValue={formatNumber(notionalAvailable)}
+        decimalsLimit={LpFormNumberLimits.decimalLimit}
         error={notionalAmount.error !== null}
         label="Notional Amount"
         labelTypographyToken={labelTypographyToken}
-        maxLength={SwapFormNumberLimits.digitLimit}
+        maxLength={LpFormNumberLimits.digitLimit}
         switchOffText={'Remove'}
         switchOffValue={'remove'}
         switchOnText={'Add'}
