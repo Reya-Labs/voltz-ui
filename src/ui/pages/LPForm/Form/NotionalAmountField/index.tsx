@@ -3,9 +3,9 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  getInfoPostSwapThunk,
-  selectSwapFormAMM,
-  selectSwapFormPosition,
+  getInfoPostLpThunk,
+  selectLpFormAMM,
+  selectLpFormPosition,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
 } from '../../../../../app/features/lp-form';
@@ -25,14 +25,14 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const dispatch = useAppDispatch();
-  const aMM = useAppSelector(selectSwapFormAMM);
-  const position = useAppSelector(selectSwapFormPosition);
+  const aMM = useAppSelector(selectLpFormAMM);
+  const position = useAppSelector(selectLpFormPosition);
 
   useEffect(() => {
     setLocalNotional(notionalAmount.value.toString());
   }, [notionalAmount.value]);
 
-  const debouncedGetInfoPostSwap = useMemo(
+  const debouncedGetInfoPostLp = useMemo(
     () =>
       debounce((value: number | null | undefined, editMode: 'add' | 'remove' | undefined) => {
         dispatch(
@@ -41,7 +41,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
             editMode: editMode,
           }),
         );
-        void dispatch(getInfoPostSwapThunk());
+        void dispatch(getInfoPostLpThunk());
       }, 300),
     [dispatch],
   );
@@ -51,9 +51,9 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       setLocalNotional(value ?? null);
 
       const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
-      debouncedGetInfoPostSwap(valueAsNumber, undefined);
+      debouncedGetInfoPostLp(valueAsNumber, undefined);
     },
-    [debouncedGetInfoPostSwap],
+    [debouncedGetInfoPostLp],
   );
 
   const handleOnSwitchChange = useCallback(
@@ -63,16 +63,16 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       }
 
       setLocalEditMode(value);
-      debouncedGetInfoPostSwap(undefined, value);
+      debouncedGetInfoPostLp(undefined, value);
     },
-    [debouncedGetInfoPostSwap],
+    [debouncedGetInfoPostLp],
   );
 
   // Stop the invocation of the debounced function
   // after unmounting
   useEffect(() => {
     return () => {
-      debouncedGetInfoPostSwap.cancel();
+      debouncedGetInfoPostLp.cancel();
     };
   }, []);
 
