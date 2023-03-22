@@ -1,5 +1,4 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-// todo: tidy up InfoPostLpV1 in sdk
 import { AMM, InfoPostLpV1, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
