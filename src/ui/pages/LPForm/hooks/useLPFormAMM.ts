@@ -4,18 +4,18 @@ import { useParams } from 'react-router-dom';
 
 import {
   getFixedRateThunk,
-  getInfoPostSwapThunk,
-  getPoolSwapInfoThunk,
+  getInfoPostLpThunk,
+  getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
-  selectPoolSwapInfoStatus,
-  selectSwapFormAMM,
-  selectSwapFormPosition,
-  selectSwapFormPositionFetchingStatus,
+  selectPoolLpInfoStatus,
+  selectLpFormAMM,
+  selectLpFormPosition,
+  selectLpFormPositionFetchingStatus,
   setSignerAndPositionForAMMThunk,
-  setSwapFormAMMAction,
+  setLpFormAMMAction,
 } from '../../../../app/features/lp-form';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -36,10 +36,10 @@ export const useLPFormAMM = (): UseAMMsResult => {
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
   // TODO: Artur Rename any reference of SwapForm with LPForm
-  const aMM = useAppSelector(selectSwapFormAMM);
-  const position = useAppSelector(selectSwapFormPosition);
-  const positionFetchingStatus = useAppSelector(selectSwapFormPositionFetchingStatus);
-  const poolSwapInfoStatus = useAppSelector(selectPoolSwapInfoStatus);
+  const aMM = useAppSelector(selectLpFormAMM);
+  const position = useAppSelector(selectLpFormPosition);
+  const positionFetchingStatus = useAppSelector(selectLpFormPositionFetchingStatus);
+  const poolLpInfoStatus = useAppSelector(selectPoolLpInfoStatus);
   const chainId = useAppSelector(selectChainId);
   const [loading, setLoading] = useState(true);
 
@@ -66,7 +66,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
 
     // TODO: Artur change name to LP FORM, this part of codes update the lp-form/reducer to have a reference of AMM
     dispatch(
-      setSwapFormAMMAction({
+      setLpFormAMMAction({
         amm: foundAMM ? foundAMM : null,
       }),
     );
@@ -82,7 +82,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
     void dispatch(getVariableRateThunk());
     void dispatch(getVariableRate24hAgoThunk());
     // TODO: Artur + Filip, check if this is really needed
-    void dispatch(getPoolSwapInfoThunk());
+    void dispatch(getPoolLpInfoThunk());
   }, [dispatch, aMM]);
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
       return;
     }
 
-    void dispatch(getInfoPostSwapThunk());
+    void dispatch(getInfoPostLpThunk());
   }, [dispatch, position]);
 
   return {
@@ -127,11 +127,11 @@ export const useLPFormAMM = (): UseAMMsResult => {
     loading:
       idle ||
       positionFetchingStatus === 'idle' ||
-      poolSwapInfoStatus === 'idle' ||
+      poolLpInfoStatus === 'idle' ||
       loading ||
       positionFetchingStatus === 'pending' ||
-      poolSwapInfoStatus === 'pending',
+      poolLpInfoStatus === 'pending',
     noAMMFound: !aMM && !loading,
-    error: error || positionFetchingStatus === 'error' || poolSwapInfoStatus === 'error',
+    error: error || positionFetchingStatus === 'error' || poolLpInfoStatus === 'error',
   };
 };

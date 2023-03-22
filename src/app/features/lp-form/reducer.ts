@@ -496,7 +496,7 @@ export const slice = createSlice({
       validateUserInputAndUpdateSubmitButton(state);
       state.showLowLeverageNotification = checkLowLeverageNotification(state);
     },
-    setLPFormAMMAction: (
+    setLpFormAMMAction: (
       state,
       {
         payload: { amm },
@@ -785,7 +785,7 @@ export const slice = createSlice({
 });
 export const {
   resetStateAction,
-  setLPFormAMMAction,
+  setLpFormAMMAction,
   setNotionalAmountAction,
   setMarginAmountAction,
   setLeverageAction,
