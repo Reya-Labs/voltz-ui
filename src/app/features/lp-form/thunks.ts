@@ -4,6 +4,7 @@ import { BigNumber, ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPosition } from '../../../utilities/amm';
 import { RootState } from '../../store';
+import { selectExistingPositionFixedLower, selectExistingPositionFixedUpper } from './selectors';
 import {
   getProspectiveLpMargin,
   getProspectiveLpNotional,
@@ -140,7 +141,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<
     | {
         notionalAmount: number;
-        // todo: not sure if we need
+        // todo: Artur not sure if we need
         lpMode: 'add' | 'remove';
         infoPostLpV1: InfoPostLp;
         earlyReturn: boolean;
@@ -185,7 +186,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
 
     // margin requirement is collateral only now
 
-    // todo: not sure what the commented logic below is trying to achieve
+    // todo: Artur not sure what the commented logic below is trying to achieve
     // if (infoPostLpV1.marginRequirement > infoPostLpV1.fee) {
     //   infoPostLpV1.marginRequirement -= infoPostLpV1.fee;
     // } else {
@@ -233,8 +234,7 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
       chainId,
       userWalletId: userWalletId,
       amms: [amm],
-      // todo: check if need to replace type with "LP"
-      type: 'Trader',
+      type: 'LP',
     });
 
     if (error) {
@@ -263,12 +263,12 @@ export const confirmLpThunk = createAsyncThunk<
     }
 
     return await amm.lp({
-      // todo: mint and add are the same thing -> consider using unified terminology
-      // todo: enable custom inputs to isMint
+      // todo: Artur mint and add are the same thing -> consider using unified terminology
+      // todo: Artur enable custom inputs to isMint
       addLiquidity: true,
       notional: getProspectiveLpNotional(lpFormState),
       margin: getProspectiveLpMargin(lpFormState),
-      // todo: layer in fixed low and fixed high of the lp in here
+      // todo: Artur layer in fixed low and fixed high of the lp in here
       fixedLow: 1,
       fixedHigh: 999,
     });
@@ -285,14 +285,14 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
   try {
     const lpFormState = thunkAPI.getState().lpForm;
     const amm = lpFormState.amm;
-    if (!amm) {
+    if (!amm || !lpFormState.position.value) {
       return;
     }
-
+    const fixedLow = selectExistingPositionFixedLower(thunkAPI.getState())!;
+    const fixedHigh = selectExistingPositionFixedUpper(thunkAPI.getState())!;
     return await amm.updatePositionMargin({
-      // todo: update fixed low and fixed high in here
-      fixedLow: 1,
-      fixedHigh: 999,
+      fixedLow,
+      fixedHigh,
       marginDelta: getProspectiveLpMargin(lpFormState),
     });
   } catch (err) {

@@ -27,9 +27,6 @@ export const selectWalletBalance = (state: RootState) => {
 
   return lpFormCompactFormat(state.lpForm.walletBalance.value);
 };
-export const selectFixedRateInfo = (state: RootState) => state.lpForm.fixedRate;
-export const selectVariableRateInfo = (state: RootState) => state.lpForm.variableRate;
-export const selectPoolLpInfo = (state: RootState) => state.lpForm.poolLpInfo;
 export const selectPoolLpInfoStatus = (state: RootState) => state.lpForm.poolLpInfo.status;
 export const selectLpFormMode = (state: RootState): 'new' | 'edit' => {
   return hasExistingPosition(state.lpForm) ? 'edit' : 'new';
@@ -229,10 +226,6 @@ export const selectLeverageOptions = (state: RootState) => {
     maxLeverage: lpFormState.prospectiveLp.leverage.maxLeverage,
     leverageOptions: lpFormState.prospectiveLp.leverage.options,
   };
-};
-
-export const selectIsGetInfoPostLpLoading = (state: RootState) => {
-  return state.lpForm.prospectiveLp.infoPostLp.status === 'pending';
 };
 
 export const selectPositionMarginFormatted = (state: RootState) => {

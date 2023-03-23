@@ -34,7 +34,6 @@ export const useLPFormAMM = (): UseAMMsResult => {
   const dispatch = useAppDispatch();
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
-  // TODO: Artur Rename any reference of SwapForm with LPForm
   const aMM = useAppSelector(selectLpFormAMM);
   const position = useAppSelector(selectLpFormPosition);
   const positionFetchingStatus = useAppSelector(selectLpFormPositionFetchingStatus);
@@ -63,7 +62,6 @@ export const useLPFormAMM = (): UseAMMsResult => {
       return;
     }
 
-    // TODO: Artur change name to LP FORM, this part of codes update the lp-form/reducer to have a reference of AMM
     dispatch(
       setLpFormAMMAction({
         amm: foundAMM ? foundAMM : null,
@@ -120,15 +118,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
 
     void dispatch(getInfoPostLpThunk());
   }, [dispatch, position]);
-  console.log(
-    '### loading',
-    idle,
-    positionFetchingStatus === 'idle',
-    poolLpInfoStatus === 'idle',
-    loading,
-    positionFetchingStatus === 'pending',
-    poolLpInfoStatus === 'pending',
-  );
+
   return {
     aMM,
     loading:

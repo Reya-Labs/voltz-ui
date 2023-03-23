@@ -92,7 +92,7 @@ export type SliceState = {
       editMode: 'add' | 'remove';
       error: string | null;
     };
-    leverage: number | null; // todo: check if the current desing for lps has leverage
+    leverage: number | null;
     // user-inputted fixed rate range along which liquidity is provided
     fixedLower: number | null;
     fixedUpper: number | null;
@@ -191,6 +191,7 @@ const initialState: SliceState = {
     leverage: null,
     fixedLower: null,
     fixedUpper: null,
+    fixedError: '',
   },
   prospectiveLp: {
     leverage: {
@@ -445,7 +446,6 @@ export const slice = createSlice({
         state.userInput.notionalAmount.value = value;
       }
 
-      // todo: not sure if edit mode is relevant for lps -> removing and adding notional is already an edit flow
       if (editMode !== undefined) {
         state.userInput.notionalAmount.editMode = editMode;
       }
@@ -627,7 +627,6 @@ export const slice = createSlice({
         };
       })
       .addCase(getInfoPostLpThunk.pending, (state) => {
-        // todo: needs to be updated
         state.prospectiveLp.infoPostLp = {
           value: {
             marginRequirement: 0,
@@ -700,7 +699,7 @@ export const slice = createSlice({
           return;
         }
         state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
-        // todo: not sure if we need a version of the below logic
+        // todo: Artur not sure if we need a version of the below logic
         // if (state.position.value) {
         //   state.userInput.mode = getExistingPositionMode(state) as 'fixed' | 'variable';
         // }
