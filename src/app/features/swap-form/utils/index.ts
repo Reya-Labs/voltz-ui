@@ -1,50 +1,20 @@
 import { Draft } from '@reduxjs/toolkit';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import {
-  compactFormat,
-  compactFormatToParts,
-  limitAndFormatNumber,
-  stringToBigFloat,
-} from '../../../../utilities/number';
-import { SwapFormNumberLimits } from '../constants';
+import { stringToBigFloat } from '../../../../utilities/number';
 import { SliceState } from '../reducer';
 import { getExistingPositionNotional } from './getExistingPositionNotional';
+import { hasExistingPosition } from './hasExistingPosition';
+import { isUserInputNotionalError } from './isUserInputNotionalError';
+import { swapFormLimitAndFormatNumber } from './swapFormLimitAndFormatNumber';
 
+export * from './hasExistingPosition';
+export * from './isUserInputMarginError';
+export * from './isUserInputNotionalError';
+export * from './swapFormCompactFormat';
+export * from './swapFormCompactFormatToParts';
 export * from './swapFormFormatNumber';
-
-export const swapFormCompactFormat = (value: number) => {
-  if (value < 1) {
-    return compactFormat(value, 0, SwapFormNumberLimits.decimalLimit);
-  }
-
-  return compactFormat(value, 0, 2);
-};
-
-export const swapFormCompactFormatToParts = (value: number) => {
-  if (value < 1) {
-    return compactFormatToParts(value, 0, SwapFormNumberLimits.decimalLimit);
-  }
-
-  return compactFormatToParts(value, 0, 2);
-};
-
-export const swapFormLimitAndFormatNumber = (value: number, mode: 'floor' | 'ceil') => {
-  return limitAndFormatNumber(
-    value,
-    SwapFormNumberLimits.digitLimit,
-    SwapFormNumberLimits.decimalLimit,
-    mode,
-  );
-};
-
-export const isUserInputNotionalError = (state: Draft<SliceState>): boolean => {
-  return state.userInput.notionalAmount.error !== null;
-};
-
-export const isUserInputMarginError = (state: Draft<SliceState>): boolean => {
-  return state.userInput.marginAmount.error !== null;
-};
+export * from './swapFormLimitAndFormatNumber';
 
 export const getAvailableNotional = (state: Draft<SliceState>): number => {
   if (hasExistingPosition(state) && state.userInput.notionalAmount.editMode === 'remove') {
@@ -167,10 +137,6 @@ export const updateLeverage = (state: Draft<SliceState>): void => {
   }
 
   state.showLowLeverageNotification = checkLowLeverageNotification(state);
-};
-
-export const hasExistingPosition = (state: Draft<SliceState>): boolean => {
-  return state.position.status === 'success' && state.position.value !== null;
 };
 
 export const getProspectiveSwapMode = (state: Draft<SliceState>): 'fixed' | 'variable' => {

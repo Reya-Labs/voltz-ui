@@ -1,4 +1,5 @@
 import { formatNumber } from '../../../../../utilities/number';
+import { SwapFormNumberLimits } from '../../constants';
 import { swapFormFormatNumber } from './index';
 
 jest.mock('../../../../../utilities/number', () => {
@@ -10,9 +11,9 @@ jest.mock('../../../../../utilities/number', () => {
 describe('swapFormFormatNumber', () => {
   it('should call formatNumber with proper params when value < 1', () => {
     swapFormFormatNumber(0.1234);
-    expect(formatNumber).toHaveBeenCalledWith(0.1234, 0, 6);
+    expect(formatNumber).toHaveBeenCalledWith(0.1234, 0, SwapFormNumberLimits.decimalLimit);
     swapFormFormatNumber(0.9);
-    expect(formatNumber).toHaveBeenCalledWith(0.9, 0, 6);
+    expect(formatNumber).toHaveBeenCalledWith(0.9, 0, SwapFormNumberLimits.decimalLimit);
   });
 
   it('should call formatNumber with proper params when value >= 1', () => {
