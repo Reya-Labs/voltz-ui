@@ -9,7 +9,7 @@ import { NewPositionDetailsUI } from './NewPositionDetailsUI';
 
 type PositionDetailsProps = {};
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
-  const swapForMode = useAppSelector(selectLpFormMode);
+  const lpFormMode = useAppSelector(selectLpFormMode);
   const aMM = useAppSelector(selectLpFormAMM);
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
@@ -33,7 +33,7 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
     return null;
   }
 
-  return swapForMode === 'new' ? (
+  return lpFormMode === 'new' ? (
     <NewPositionDetailsUI
       actionLabelTypographyToken={actionLabelTypographyToken}
       actionTypographyToken={actionTypographyToken}

@@ -128,6 +128,22 @@ export const selectExistingPositionCompactNotional = (state: RootState) => {
   };
 };
 
+export const selectExistingPositionFixedLower = (state: RootState) => {
+  if (state.lpForm.position.status !== 'success' || !state.lpForm.position.value) {
+    return null;
+  }
+
+  return state.lpForm.position.value.fixedRateLower.toNumber();
+};
+
+export const selectExistingPositionFixedUpper = (state: RootState) => {
+  if (state.lpForm.position.status !== 'success' || !state.lpForm.position.value) {
+    return null;
+  }
+
+  return state.lpForm.position.value.fixedRateUpper.toNumber();
+};
+
 export const selectEditPositionCompactNotional = (state: RootState) => {
   const notional = getEditPositionNotional(state.lpForm);
 
@@ -238,6 +254,10 @@ export const selectVariableRateValueFormatted = (state: RootState) => {
     : formatNumber(state.lpForm.variableRate.value);
 };
 
+export const selectUserInputFixedLowerRaw = (state: RootState) => {
+  return state.lpForm.userInput.fixedLower;
+};
+
 export const selectUserInputFixedLower = (state: RootState) => {
   const fixedLower = state.lpForm.userInput.fixedLower;
 
@@ -246,6 +266,10 @@ export const selectUserInputFixedLower = (state: RootState) => {
   }
 
   return fixedLower.toString();
+};
+
+export const selectUserInputFixedUpperRaw = (state: RootState) => {
+  return state.lpForm.userInput.fixedUpper;
 };
 
 export const selectUserInputFixedUpper = (state: RootState) => {
