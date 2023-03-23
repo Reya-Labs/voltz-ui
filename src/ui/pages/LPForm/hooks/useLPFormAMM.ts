@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import {
   getFixedRateThunk,
   getInfoPostLpThunk,
-  getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
@@ -82,7 +81,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
     void dispatch(getVariableRateThunk());
     void dispatch(getVariableRate24hAgoThunk());
     // TODO: Artur + Filip, check if this is really needed
-    void dispatch(getPoolLpInfoThunk());
+    // void dispatch(getPoolLpInfoThunk());
   }, [dispatch, aMM]);
 
   useEffect(() => {
