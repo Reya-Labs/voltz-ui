@@ -345,69 +345,65 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   if (
     !isUserInputMarginError(state) &&
     isWalletTokenAllowanceLoaded &&
-    state.walletTokenAllowance.value < state.userInput.marginAmount.value
+    state.userInput.marginAmount.editMode === 'add'
   ) {
-    state.submitButton = {
-      state: 'approve',
-      disabled: false,
-      message: {
-        text: `Please approve ${state.amm.underlyingToken.name.toUpperCase()}`,
-        isError: false,
-      },
-    };
-    return;
+    if (state.walletTokenAllowance.value < state.userInput.marginAmount.value) {
+      state.submitButton = {
+        state: 'approve',
+        disabled: false,
+        message: {
+          text: `Please approve ${state.amm.underlyingToken.name.toUpperCase()}`,
+          isError: false,
+        },
+      };
+      return;
+    }
+
+    if (
+      isInfoPostSwapLoaded &&
+      state.walletTokenAllowance.value <
+        state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee
+    ) {
+      state.submitButton = {
+        state: 'approve',
+        disabled: false,
+        message: {
+          text: `Please approve ${state.amm.underlyingToken.name.toUpperCase()}. Approval amount must cover for both the margin and the fees.`,
+          isError: false,
+        },
+      };
+      return;
+    }
   }
 
-  if (
-    !isUserInputMarginError(state) &&
-    isWalletTokenAllowanceLoaded &&
-    isInfoPostSwapLoaded &&
-    state.walletTokenAllowance.value <
-      state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee
-  ) {
-    state.submitButton = {
-      state: 'approve',
-      disabled: false,
-      message: {
-        text: `Please approve ${state.amm.underlyingToken.name.toUpperCase()}. Approval amount must cover for both the margin and the fees.`,
-        isError: false,
-      },
-    };
-    return;
-  }
+  if (isWalletBalanceLoaded && state.userInput.marginAmount.editMode === 'add') {
+    if (state.userInput.marginAmount.value > state.walletBalance.value) {
+      state.submitButton = {
+        state: 'not-enough-balance',
+        disabled: true,
+        message: {
+          text: '',
+          isError: false,
+        },
+      };
+      return;
+    }
 
-  if (
-    isWalletBalanceLoaded &&
-    state.userInput.marginAmount.editMode === 'add' &&
-    state.userInput.marginAmount.value > state.walletBalance.value
-  ) {
-    state.submitButton = {
-      state: 'not-enough-balance',
-      disabled: true,
-      message: {
-        text: '',
-        isError: false,
-      },
-    };
-    return;
-  }
-
-  if (
-    isWalletBalanceLoaded &&
-    isInfoPostSwapLoaded &&
-    state.userInput.marginAmount.editMode === 'add' &&
-    state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee >
-      state.walletBalance.value
-  ) {
-    state.submitButton = {
-      state: 'not-enough-balance',
-      disabled: true,
-      message: {
-        text: `Insufficient ${state.amm.underlyingToken.name.toUpperCase()} balance to cover for both the margin and the fees.`,
-        isError: true,
-      },
-    };
-    return;
+    if (
+      isInfoPostSwapLoaded &&
+      state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee >
+        state.walletBalance.value
+    ) {
+      state.submitButton = {
+        state: 'not-enough-balance',
+        disabled: true,
+        message: {
+          text: `Insufficient ${state.amm.underlyingToken.name.toUpperCase()} balance to cover for both the margin and the fees.`,
+          isError: true,
+        },
+      };
+      return;
+    }
   }
 
   if (
