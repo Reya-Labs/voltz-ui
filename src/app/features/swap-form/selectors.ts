@@ -40,7 +40,6 @@ export const selectWalletBalance = (state: RootState) => {
 };
 export const selectFixedRateInfo = (state: RootState) => state.swapForm.fixedRate;
 export const selectVariableRateInfo = (state: RootState) => state.swapForm.variableRate;
-export const selectPoolSwapInfo = (state: RootState) => state.swapForm.poolSwapInfo;
 export const selectPoolSwapInfoStatus = (state: RootState) => state.swapForm.poolSwapInfo.status;
 export const selectSwapFormMode = (state: RootState): 'new' | 'edit' => {
   return hasExistingPosition(state.swapForm) ? 'edit' : 'new';

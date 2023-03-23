@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import React, { useRef } from 'react';
 
 import { Typography } from '../../../../components/atomic/Typography/Typography';
@@ -54,10 +55,12 @@ export type ProfilePageWalletConnectedProps = {
   claimButtonModes?: Record<BadgeVariant, ClaimButtonProps['mode']>;
   onCopyLinkButtonClick?: () => void;
   copyLinkButtonMode: CopyLinkButtonProps['mode'];
+  chainId: SupportedChainId;
 };
 
 export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWalletConnectedProps> =
   ({
+    chainId,
     account,
     season,
     badges,

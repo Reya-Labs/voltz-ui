@@ -1,3 +1,5 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
+
 import { usePastSeasons } from './index';
 
 describe('usePastSeasons', () => {
@@ -8,7 +10,7 @@ describe('usePastSeasons', () => {
     [new Date('2023-05-05').valueOf(), [0, 1, 2]],
     [new Date('2024-05-05').valueOf(), [0, 1, 2, 3, 4, 5]],
   ])('given now=%p - usePastSeasons should return expected output', (now, expectedSeasonIds) => {
-    const retValue = usePastSeasons(now).map((s) => s.id);
+    const retValue = usePastSeasons(SupportedChainId.mainnet, now).map((s) => s.id);
     expect(retValue).toEqual(expectedSeasonIds);
   });
 });

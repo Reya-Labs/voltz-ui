@@ -13,7 +13,7 @@ describe('<Icon />', () => {
     for (const iconName of Object.keys(iconMap)) {
       const icon = screen.getByTestId(`Icon-${iconName}`);
       expect(icon).not.toBeNull();
-      expect(icon.tagName).toEqual('svg');
+      expect(['svg', 'IMG']).toContain(icon.tagName);
     }
   });
 });

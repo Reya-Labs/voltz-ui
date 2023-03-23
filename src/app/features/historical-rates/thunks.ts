@@ -1,6 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getHistoricalRates, Granularity, SupportedChainId } from '@voltz-protocol/v1-sdk';
-import { RatesData } from '@voltz-protocol/v1-sdk/src/entities/amm/getters/historicalRates/getHistoricalRate';
+import {
+  getHistoricalRates,
+  Granularity,
+  RatesData,
+  SupportedChainId,
+} from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../store';
 

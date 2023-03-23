@@ -1,3 +1,5 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
+
 import { useCurrentSeason } from './index';
 
 describe('useCurrentSeason', () => {
@@ -8,6 +10,6 @@ describe('useCurrentSeason', () => {
     [new Date('2023-05-05').valueOf(), 3],
     [new Date('2024-05-05').valueOf(), 0],
   ])('given now=%p - useCurrentSeason should return expected output', (now, expectedSeasonId) => {
-    expect(useCurrentSeason(now).id).toEqual(expectedSeasonId);
+    expect(useCurrentSeason(SupportedChainId.mainnet, now).id).toEqual(expectedSeasonId);
   });
 });
