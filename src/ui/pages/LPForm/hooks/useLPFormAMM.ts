@@ -120,7 +120,15 @@ export const useLPFormAMM = (): UseAMMsResult => {
 
     void dispatch(getInfoPostLpThunk());
   }, [dispatch, position]);
-
+  console.log(
+    '### loading',
+    idle,
+    positionFetchingStatus === 'idle',
+    poolLpInfoStatus === 'idle',
+    loading,
+    positionFetchingStatus === 'pending',
+    poolLpInfoStatus === 'pending',
+  );
   return {
     aMM,
     loading:
