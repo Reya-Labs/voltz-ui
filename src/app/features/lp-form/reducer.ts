@@ -169,9 +169,11 @@ const initialState: SliceState = {
     value: 0,
     status: 'idle',
   },
+  // TODO: Artur investigate if we can get rid of this entirely
+  // make sure you check: const updateLeverageOptionsAfterGetInfoPostLp
   poolLpInfo: {
-    maxLeverage: 0,
-    status: 'idle',
+    maxLeverage: 1,
+    status: 'success',
   },
   userInput: {
     notionalAmount: {

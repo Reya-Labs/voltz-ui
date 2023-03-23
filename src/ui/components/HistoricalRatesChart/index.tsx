@@ -8,11 +8,7 @@ import {
 } from '../../../app/features/historical-rates';
 import { fetchHistoricalRatesThunk } from '../../../app/features/historical-rates/thunks';
 import { selectChainId } from '../../../app/features/network';
-import {
-  selectFixedRateInfo,
-  selectSwapFormAMM,
-  selectVariableRateInfo,
-} from '../../../app/features/swap-form';
+import { selectFixedRateInfo, selectVariableRateInfo } from '../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
@@ -23,7 +19,10 @@ import {
   RainbowLoaderBox,
 } from './HistoricalRatesChart.styled';
 
-type ChartProps = {};
+type HistoricalRatesChartProps = {
+  aMMId: string;
+  aMMRateOracleId: string;
+};
 
 const filterOptions: ChartFiltersProps['filterOptions'] = [
   {
@@ -60,7 +59,10 @@ const filterOptions: ChartFiltersProps['filterOptions'] = [
   },
 ];
 
-export const HistoricalRatesChart: React.FunctionComponent<ChartProps> = () => {
+export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartProps> = ({
+  aMMId,
+  aMMRateOracleId,
+}) => {
   const data = useAppSelector(selectHistoricalRates);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
@@ -70,7 +72,6 @@ export const HistoricalRatesChart: React.FunctionComponent<ChartProps> = () => {
   const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1w');
   const [activeModeId, setActiveModeId] = useState<string>('variable');
   const chainId = useAppSelector(selectChainId);
-  const aMM = useAppSelector(selectSwapFormAMM);
   const { isLargeDesktopDevice } = useResponsiveQuery();
   const granularity =
     activeTimeRangeId === '1d' || activeModeId === '1w'
@@ -86,7 +87,7 @@ export const HistoricalRatesChart: React.FunctionComponent<ChartProps> = () => {
       : 365;
   const isFixed = activeModeId === 'fixed';
   useEffect(() => {
-    if (!aMM || !chainId) {
+    if (!aMMId || !aMMRateOracleId || !chainId) {
       return;
     }
     void dispatch(
@@ -95,11 +96,11 @@ export const HistoricalRatesChart: React.FunctionComponent<ChartProps> = () => {
         isFixed,
         granularity,
         timeframeMs: timeframe * 24 * 60 * 60 * 1000,
-        aMMId: aMM.id,
-        aMMRateOracleId: aMM.rateOracle.id,
+        aMMId: aMMId,
+        aMMRateOracleId: aMMRateOracleId,
       }),
     );
-  }, [dispatch, timeframe, isFixed, granularity, chainId, aMM]);
+  }, [dispatch, timeframe, isFixed, granularity, chainId, aMMId, aMMRateOracleId]);
 
   let yMarker = -100;
   if (fixedRateInfo.status === 'success' && !isFixed) {
