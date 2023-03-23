@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, InfoPostLpV1, Position } from '@voltz-protocol/v1-sdk';
+import { AMM, InfoPostLp, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
@@ -9,7 +9,6 @@ import {
   confirmMarginUpdateThunk,
   getFixedRateThunk,
   getInfoPostLpThunk,
-  getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
@@ -617,30 +616,6 @@ export const slice = createSlice({
           status: 'success',
         };
       })
-      .addCase(getPoolLpInfoThunk.pending, (state) => {
-        state.poolLpInfo = {
-          maxLeverage: 0,
-          status: 'pending',
-        };
-      })
-      .addCase(getPoolLpInfoThunk.rejected, (state) => {
-        state.poolLpInfo = {
-          maxLeverage: 0,
-          status: 'error',
-        };
-      })
-      .addCase(getPoolLpInfoThunk.fulfilled, (state, { payload }) => {
-        // todo: consider having max leverage add and max leverage remove -> more aligned with how we do things in the swap form
-        const { maxLeverage } = payload as {
-          maxLeverage: number;
-        };
-        state.poolLpInfo = {
-          maxLeverage: maxLeverage,
-          status: 'success',
-        };
-        updateLeverageOptionsAfterGetPoolLpInfo(state);
-        validateUserInputAndUpdateSubmitButton(state);
-      })
       .addCase(getInfoPostLpThunk.pending, (state) => {
         // todo: needs to be updated
         state.prospectiveLp.infoPostLp = {
@@ -664,7 +639,7 @@ export const slice = createSlice({
       })
       .addCase(getInfoPostLpThunk.fulfilled, (state, { payload }) => {
         const { infoPostLp, earlyReturn } = payload as {
-          infoPostLp: InfoPostLpV1;
+          infoPostLp: InfoPostLp;
           earlyReturn: boolean; //TODO Alex: maybe refactor this
         };
 
