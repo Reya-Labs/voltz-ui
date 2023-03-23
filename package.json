@@ -1,6 +1,6 @@
 {
   "name": "voltz-ui",
-  "version": "1.114.1",
+  "version": "1.120.0",
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
@@ -140,11 +140,11 @@
     "@reduxjs/toolkit": "1.9.0",
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0",
-    "@voltz-protocol/v1-sdk": "1.88.0",
+    "@voltz-protocol/v1-sdk": "1.89.0",
     "@walletconnect/ethereum-provider": "1.8.0",
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.44",
-    "brokoli-ui": "1.39.2",
+    "brokoli-ui": "1.44.0",
     "chroma-js": "2.1.2",
     "copy-to-clipboard": "3.3.3",
     "ethereumjs-abi": "0.6.8",

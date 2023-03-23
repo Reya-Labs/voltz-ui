@@ -119,6 +119,7 @@ describe('number', () => {
       ['-1,00', 'en-DE', '-1.00'],
       ['-100', 'en-DE', '-100'],
       ['-100,23', 'en-DE', '-100.23'],
+      ['10 339,23', 'ru', '10,339.23'],
     ])(
       'given value=%p, navigator.language=%p - toUSFormat should return expected output',
       (value, mockedNavigatorLanguage, expected) => {

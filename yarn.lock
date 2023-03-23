@@ -7207,10 +7207,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.88.0":
-  version "1.88.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.88.0.tgz#3e6333585a065fe27d562add267738f54b3f3ecb"
-  integrity sha512-RQFr5HU8ywHXoA2VC9Xzyc5TRDPjmmVxu03NcllevhMjXc6cLf+ihyV+PMFJ+pNFuA+s4bCAu7M/vnUqWd/toQ==
+"@voltz-protocol/v1-sdk@1.89.0":
+  version "1.89.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.89.0.tgz#4da263a413fb143c7c3277b132c46e47e215ef82"
+  integrity sha512-yKDHTOMI4Y6kXo0JzhTyZE6WCScrB9I9xMv/JIIAoz1PpXnZ3S6aZJUjnQorgfkbAQw1raVb169h6nLeqhmNKA==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
@@ -9536,16 +9536,17 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.39.2:
-  version "1.39.2"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.39.2.tgz#883b7fc5d5d6378528a893bae3ce09058594c3b0"
-  integrity sha512-5A/YgUT2FnrNPfB5D9Xz0SXxIuBRCM5T9qvQ5QTRiBg1NENxEeP9WQadmdYnh/+zKcy7LVwts7DCJ/8SPOeF8A==
+brokoli-ui@1.44.0:
+  version "1.44.0"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.44.0.tgz#b6e3fcfd0085b1f72f05d249aa3abe1d814876b6"
+  integrity sha512-/7KPLWtb+ZwVaZBJO5ECfDzqWv0+lMxU0qyHf5isUgSldtG54bqsLpM85ntDnBEFeNeQWHwpWMLGYeoIT9aF2A==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"
     "@nivo/line" "0.80.0"
     react-animate-height "3.1.0"
     react-currency-input-field "3.6.4"
+    react-metamask-avatar "1.2.0"
     react-tiny-popover "7.2.0"
     react-toastify "8.2.0"
 
@@ -20326,6 +20327,11 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-metamask-avatar@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-metamask-avatar/-/react-metamask-avatar-1.2.0.tgz#8a4756db96fc8cd10b98b49a1f01001ba6c5bc22"
+  integrity sha512-cY8iTCGQ9z72+IMB7zdKyFXpBi0hfOvkFxU1IE8M+jZtpV7Jh8rPlUW0NjFjE/uryzrGoAZ6hm726VFmLVhgSw==
 
 react-native-get-random-values@^1.4.0:
   version "1.8.0"

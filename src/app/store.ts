@@ -4,6 +4,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import { aMMsReducer } from './features/aMMs';
 import { historicalRatesReducer } from './features/historical-rates';
+import { lpFormReducer } from './features/lp-form';
 import { lpOptimisersReducer } from './features/lp-optimisers';
 import { networkReducer } from './features/network';
 import { swapFormReducer } from './features/swap-form';
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   swapForm: swapFormReducer,
   historicalRates: historicalRatesReducer,
   tradingLeague: tradingLeagueReducer,
+  lpForm: lpFormReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

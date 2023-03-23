@@ -2,7 +2,9 @@ import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, ExpectedCashflowInfo, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
+import { getAmmProtocol } from '../../../utilities/amm';
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
+import { pushEstimatedApyChangeEvent, pushLeverageChangeEvent } from './analytics';
 import {
   approveUnderlyingTokenThunk,
   confirmMarginUpdateThunk,
@@ -357,6 +359,24 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   }
 
   if (
+    !isUserInputMarginError(state) &&
+    isWalletTokenAllowanceLoaded &&
+    isInfoPostSwapLoaded &&
+    state.walletTokenAllowance.value <
+      state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee
+  ) {
+    state.submitButton = {
+      state: 'approve',
+      disabled: false,
+      message: {
+        text: `Please approve ${state.amm.underlyingToken.name.toUpperCase()}. Approval amount must cover for both the margin and the fees.`,
+        isError: false,
+      },
+    };
+    return;
+  }
+
+  if (
     isWalletBalanceLoaded &&
     state.userInput.marginAmount.editMode === 'add' &&
     state.userInput.marginAmount.value > state.walletBalance.value
@@ -515,9 +535,11 @@ export const slice = createSlice({
     setLeverageAction: (
       state,
       {
-        payload: { value },
+        payload: { value, account, changeType },
       }: PayloadAction<{
         value: number;
+        account: string;
+        changeType: 'button' | 'input';
       }>,
     ) => {
       if (getProspectiveSwapNotional(state) === 0 || isNaN(value) || value === 0) {
@@ -526,6 +548,15 @@ export const slice = createSlice({
       }
 
       state.userInput.leverage = value;
+      if (!isNaN(value)) {
+        pushLeverageChangeEvent({
+          leverage: value,
+          account,
+          pool: getAmmProtocol(state.amm as AMM),
+          isFT: getProspectiveSwapMode(state) === 'fixed',
+          changeType,
+        });
+      }
       state.userInput.marginAmount.value = stringToBigFloat(
         swapFormLimitAndFormatNumber(getProspectiveSwapNotional(state) / value, 'ceil'),
       );
@@ -536,11 +567,20 @@ export const slice = createSlice({
     setEstimatedApyAction: (
       state,
       {
-        payload: { value },
+        payload: { value, account },
       }: PayloadAction<{
         value: number;
+        account: string;
       }>,
     ) => {
+      if (!isNaN(value)) {
+        pushEstimatedApyChangeEvent({
+          estimatedApy: value,
+          account,
+          pool: getAmmProtocol(state.amm as AMM),
+          isFT: getProspectiveSwapMode(state) === 'fixed',
+        });
+      }
       state.userInput.estimatedApy = value;
     },
     setSwapFormAMMAction: (
