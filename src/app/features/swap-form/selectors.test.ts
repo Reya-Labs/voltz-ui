@@ -1,17 +1,20 @@
 import {
   selectFixedRateInfo,
+  selectPoolSwapInfoStatus,
   selectSubmitButtonInfo,
   selectSwapFormAMM,
+  selectSwapFormMode,
   selectSwapFormPosition,
   selectSwapFormPositionFetchingStatus,
   selectVariableRateInfo,
   selectWalletBalance,
 } from './selectors';
-import { swapFormCompactFormat } from './utils';
+import { hasExistingPosition, swapFormCompactFormat } from './utils';
 
 // Mock swapFormCompactFormat
 jest.mock('./utils', () => ({
   swapFormCompactFormat: jest.fn(),
+  hasExistingPosition: jest.fn(),
 }));
 
 describe('swap-form.selectors', () => {
@@ -181,6 +184,59 @@ describe('swap-form.selectors', () => {
         value: 0.5,
         status: 'success',
       });
+    });
+  });
+  describe('selectPoolSwapInfoStatus', () => {
+    const mockRootState = {
+      swapForm: {
+        poolSwapInfo: {
+          availableNotional: {
+            fixed: 10,
+            variable: 15,
+          },
+          maxLeverage: {
+            fixed: 10,
+            variable: 15,
+          },
+          status: 'success',
+        },
+      },
+    } as never;
+
+    it('should select the correct pool swap info status', () => {
+      const result = selectPoolSwapInfoStatus(mockRootState);
+      expect(result).toEqual('success');
+    });
+  });
+  describe('selectSwapFormMode', () => {
+    const mockState = {
+      swapForm: {
+        position: {
+          value: {},
+        },
+      },
+    };
+
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('returns "edit" when hasExistingPosition returns true', () => {
+      (hasExistingPosition as jest.Mock).mockReturnValueOnce(true);
+
+      const result = selectSwapFormMode(mockState as never);
+
+      expect(hasExistingPosition).toHaveBeenCalledWith(mockState.swapForm);
+      expect(result).toBe('edit');
+    });
+
+    it('returns "new" when hasExistingPosition returns false', () => {
+      (hasExistingPosition as jest.Mock).mockReturnValueOnce(false);
+
+      const result = selectSwapFormMode(mockState as never);
+
+      expect(hasExistingPosition).toHaveBeenCalledWith(mockState.swapForm);
+      expect(result).toBe('new');
     });
   });
 });
