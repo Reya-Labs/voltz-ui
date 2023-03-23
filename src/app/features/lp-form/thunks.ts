@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getPositions, InfoPostLpV1, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { getPositions, InfoPostLp, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { BigNumber, ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPosition } from '../../../utilities/amm';
@@ -9,12 +9,6 @@ import {
   getProspectiveLpNotional,
   isUserInputNotionalError,
 } from './utils';
-
-
-// SDK TODOs
-// amm.getInfoPostLp
-// amm.getPoolLpInfo
-// amm.mintOrBurn
 
 
 const rejectThunkWithError = (
@@ -143,30 +137,13 @@ export const getVariableRate24hAgoThunk = createAsyncThunk<
   }
 });
 
-export const getPoolLpInfoThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('lpForm/getPoolLpInfo', async (_, thunkAPI) => {
-  try {
-    const amm = thunkAPI.getState().lpForm.amm;
-    if (!amm) {
-      return;
-    }
-
-    return await amm.getPoolLpInfo();
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
 export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<
     | {
         notionalAmount: number;
         // todo: not sure if we need
         lpMode: 'add' | 'remove';
-        infoPostLpV1: InfoPostLpV1;
+        infoPostLpV1: InfoPostLp;
         earlyReturn: boolean;
       }
     | ReturnType<typeof rejectThunkWithError>
@@ -200,8 +177,8 @@ export const getInfoPostLpThunk = createAsyncThunk<
     const notionalAmount: number = getProspectiveLpNotional(lpFormState);
     // todo: fixedLow and fixedHigh needs to be fixed for lps to not be hardcoded
     // todo: make isAdd dynamic
-    const infoPostLpV1 = await amm.getInfoPostLpV1({
-      isAdd: true,
+    const infoPostLpV1 = await amm.getInfoPostLp({
+      addLiquidity: true,
       notional: notionalAmount,
       fixedLow: 1,
       fixedHigh: 999,
@@ -286,10 +263,10 @@ export const confirmLpThunk = createAsyncThunk<
       return;
     }
 
-    return await amm.mintOrBurn({
+    return await amm.lp({
       // todo: mint and add are the same thing -> consider using unified terminology
       // todo: enable custom inputs to isMint
-      isMint: true,
+      addLiquidity: true,
       notional: getProspectiveLpNotional(lpFormState),
       margin: getProspectiveLpMargin(lpFormState),
       // todo: layer in fixed low and fixed high of the lp in here
