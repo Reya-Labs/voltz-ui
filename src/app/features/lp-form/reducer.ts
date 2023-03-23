@@ -38,6 +38,7 @@ export type SliceState = {
       | 'margin-update'
       | 'not-enough-balance'
       | 'connect-wallet'
+      | 'fixed-range-error'
       | 'approve'
       | 'approving';
     disabled: boolean;
@@ -95,6 +96,7 @@ export type SliceState = {
     // user-inputted fixed rate range along which liquidity is provided
     fixedLower: number | null;
     fixedUpper: number | null;
+    fixedError: string;
   };
   // State of prospective liquidity provisioning or liquidity removal operation
   prospectiveLp: {
@@ -336,6 +338,18 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
     return;
   }
 
+  if (state.userInput.fixedError) {
+    state.submitButton = {
+      state: 'fixed-range-error',
+      disabled: true,
+      message: {
+        text: state.userInput.fixedError,
+        isError: true,
+      },
+    };
+    return;
+  }
+
   if (
     !isUserInputMarginError(state) &&
     !isUserInputMarginError(state) &&
@@ -403,7 +417,7 @@ export const slice = createSlice({
       }>,
     ) => {
       state.userInput.fixedLower = value;
-      // todo: validation -> e.g. cannot be higher than the fixedLower, etc
+      validateUserInputAndUpdateSubmitButton(state);
     },
     setUserInputFixedUpperAction: (
       // the current state of the lp-form slice of the redux store (defined in this file) -> we extended the type
@@ -416,7 +430,7 @@ export const slice = createSlice({
       }>,
     ) => {
       state.userInput.fixedUpper = value;
-      // todo: validation
+      validateUserInputAndUpdateSubmitButton(state);
     },
     setNotionalAmountAction: (
       state,

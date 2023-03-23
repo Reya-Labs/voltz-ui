@@ -3,6 +3,7 @@ import React from 'react';
 
 import {
   selectLpFormAMM,
+  selectUserInputFixedError,
   selectUserInputFixedLower,
   selectUserInputFixedUpper,
   setUserInputFixedLowerAction,
@@ -22,6 +23,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
   // because we want to be able to use them in other parts of the ui that depend on this data
   const fixedLower = useAppSelector(selectUserInputFixedLower);
   const fixedUpper = useAppSelector(selectUserInputFixedUpper);
+  const fixedError = useAppSelector(selectUserInputFixedError);
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const labelTypographyToken: TypographyToken = isLargeDesktopDevice
@@ -58,6 +60,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
       <CurrencyField
         allowNegativeValue={false}
         disabled={false}
+        error={Boolean(fixedError)}
         label="Fixed Low"
         labelColorToken="lavenderWeb3"
         labelTypographyToken={labelTypographyToken}
