@@ -1,20 +1,41 @@
 import {
+  selectAMMMaturityFormatted,
+  selectAMMTokenFormatted,
   selectFixedRateInfo,
+  selectMarginAccountName,
   selectPoolSwapInfoStatus,
+  selectProspectiveSwapFeeFormatted,
+  selectProspectiveSwapMarginFormatted,
+  selectProspectiveSwapMode,
+  selectProspectiveSwapNotionalFormatted,
   selectSubmitButtonInfo,
   selectSwapFormAMM,
   selectSwapFormMode,
   selectSwapFormPosition,
   selectSwapFormPositionFetchingStatus,
+  selectUserInputMarginInfo,
+  selectUserInputMode,
+  selectUserInputNotionalInfo,
   selectVariableRateInfo,
   selectWalletBalance,
 } from './selectors';
-import { hasExistingPosition, swapFormCompactFormat } from './utils';
+import {
+  getProspectiveSwapMargin,
+  getProspectiveSwapMode,
+  getProspectiveSwapNotional,
+  hasExistingPosition,
+  swapFormCompactFormat,
+  swapFormFormatNumber,
+} from './utils';
 
 // Mock swapFormCompactFormat
 jest.mock('./utils', () => ({
   swapFormCompactFormat: jest.fn(),
   hasExistingPosition: jest.fn(),
+  getProspectiveSwapMode: jest.fn(),
+  getProspectiveSwapNotional: jest.fn(),
+  getProspectiveSwapMargin: jest.fn(),
+  swapFormFormatNumber: jest.fn(),
 }));
 
 describe('swap-form.selectors', () => {
@@ -43,6 +64,7 @@ describe('swap-form.selectors', () => {
       });
     });
   });
+
   describe('selectSwapFormAMM', () => {
     it('should return the AMM object from the state', () => {
       const mockState = {
@@ -70,6 +92,7 @@ describe('swap-form.selectors', () => {
       });
     });
   });
+
   describe('selectSwapFormPosition', () => {
     it('returns the position value from swapForm', () => {
       const state = {
@@ -85,6 +108,7 @@ describe('swap-form.selectors', () => {
       expect(position).toEqual('long');
     });
   });
+
   describe('selectSwapFormPositionFetchingStatus', () => {
     it('should return the position fetching status from the swap form state', () => {
       const positionFetchingStatus = 'pending';
@@ -100,6 +124,7 @@ describe('swap-form.selectors', () => {
       expect(selectSwapFormPositionFetchingStatus(state)).toBe(positionFetchingStatus);
     });
   });
+
   describe('selectWalletBalance', () => {
     afterEach(() => {
       // Clear mock call history after each test
@@ -152,6 +177,7 @@ describe('swap-form.selectors', () => {
       expect(selectWalletBalance(state)).toEqual('$1,000');
     });
   });
+
   describe('selectFixedRateInfo', () => {
     it('returns the fixed rate info from the swap form slice of state', () => {
       const state = {
@@ -169,6 +195,7 @@ describe('swap-form.selectors', () => {
       });
     });
   });
+
   describe('selectVariableRateInfo', () => {
     it('returns the variable rate info from the swap form slice of state', () => {
       const state = {
@@ -186,6 +213,7 @@ describe('swap-form.selectors', () => {
       });
     });
   });
+
   describe('selectPoolSwapInfoStatus', () => {
     const mockRootState = {
       swapForm: {
@@ -208,6 +236,7 @@ describe('swap-form.selectors', () => {
       expect(result).toEqual('success');
     });
   });
+
   describe('selectSwapFormMode', () => {
     const mockState = {
       swapForm: {
@@ -237,6 +266,314 @@ describe('swap-form.selectors', () => {
 
       expect(hasExistingPosition).toHaveBeenCalledWith(mockState.swapForm);
       expect(result).toBe('new');
+    });
+  });
+
+  describe('selectAMMTokenFormatted', () => {
+    const mockState = {
+      swapForm: {
+        amm: {
+          id: '1',
+          underlyingToken: {
+            name: 'usdc',
+          },
+        },
+      },
+    } as never;
+
+    it('returns the formatted AMM token name when aMM is defined', () => {
+      const result = selectAMMTokenFormatted(mockState);
+      expect(result).toBe(' USDC');
+    });
+
+    it('returns an empty string when aMM is not defined', () => {
+      const emptyState = {
+        swapForm: {
+          aMM: undefined,
+        },
+      } as never;
+
+      const result = selectAMMTokenFormatted(emptyState);
+
+      expect(result).toBe('');
+    });
+  });
+
+  describe('selectAMMMaturityFormatted', () => {
+    const mockState = {
+      swapForm: {
+        amm: {
+          id: '1',
+          termEndTimestampInMS: 1614667200000,
+        },
+      },
+    } as never;
+
+    it('returns the formatted AMM token name when aMM is defined', () => {
+      const result = selectAMMMaturityFormatted(mockState);
+      expect(result).toBe('02 Mar 2021');
+    });
+
+    it('returns an empty string when aMM is not defined', () => {
+      const emptyState = {
+        swapForm: {
+          aMM: undefined,
+        },
+      } as never;
+
+      const result = selectAMMMaturityFormatted(emptyState);
+
+      expect(result).toBe('');
+    });
+  });
+
+  describe('selectMarginAccountName', () => {
+    const mockState = {
+      swapForm: {
+        amm: {
+          id: '1',
+          termEndTimestampInMS: 1614667200000,
+          protocol: 'PROTOCOL_A',
+        },
+      },
+    } as never;
+
+    it('returns the formatted margin account name when aMM is defined', () => {
+      const result = selectMarginAccountName(mockState);
+      expect(result).toBe('PROTOCOL_A 02 Mar 2021');
+    });
+
+    it('returns an empty string when aMM is not defined', () => {
+      const emptyState = {
+        swapForm: {
+          aMM: undefined,
+        },
+      } as never;
+
+      const result = selectMarginAccountName(emptyState);
+
+      expect(result).toBe('');
+    });
+  });
+
+  describe('selectUserInputMode', () => {
+    const mockState = {
+      swapForm: {
+        userInput: {
+          mode: 'fixed',
+        },
+      },
+    } as never;
+
+    it('returns the correct user input mode', () => {
+      const result = selectUserInputMode(mockState);
+      expect(result).toBe('fixed');
+    });
+  });
+
+  describe('selectUserInputNotionalInfo', () => {
+    const mockState = {
+      swapForm: {
+        userInput: {
+          notionalAmount: {
+            value: 100,
+          },
+        },
+      },
+    } as never;
+
+    it('returns the correct user input notional amount', () => {
+      const result = selectUserInputNotionalInfo(mockState);
+
+      expect(result).toEqual({
+        value: 100,
+      });
+    });
+  });
+
+  describe('selectUserInputMarginInfo', () => {
+    const mockState = {
+      swapForm: {
+        userInput: {
+          marginAmount: {
+            value: 50,
+          },
+        },
+      },
+    } as never;
+
+    it('returns the correct user input margin amount', () => {
+      const result = selectUserInputMarginInfo(mockState);
+      expect(result).toStrictEqual({
+        value: 50,
+      });
+    });
+  });
+
+  describe('selectProspectiveSwapMode', () => {
+    const mockState = {
+      swapForm: {},
+    };
+
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('calls getProspectiveSwapMode with the correct arguments', () => {
+      selectProspectiveSwapMode(mockState as never);
+
+      expect(getProspectiveSwapMode).toHaveBeenCalledTimes(1);
+      expect(getProspectiveSwapMode).toHaveBeenCalledWith(mockState.swapForm);
+    });
+
+    it('returns the correct prospective swap mode', () => {
+      const mockProspectiveSwapMode = 'test';
+      (getProspectiveSwapMode as jest.Mock).mockReturnValue(mockProspectiveSwapMode);
+
+      const result = selectProspectiveSwapMode(mockState as never);
+      expect(result).toBe(mockProspectiveSwapMode);
+    });
+  });
+
+  describe('selectProspectiveSwapNotionalFormatted', () => {
+    const mockState = {
+      swapForm: {},
+    };
+
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('calls getProspectiveSwapNotional with the correct arguments', () => {
+      selectProspectiveSwapNotionalFormatted(mockState as never);
+
+      expect(getProspectiveSwapNotional).toHaveBeenCalledTimes(1);
+      expect(getProspectiveSwapNotional).toHaveBeenCalledWith(mockState.swapForm);
+    });
+
+    it('calls swapFormCompactFormat with the correct arguments', () => {
+      const mockNotional = 'test';
+      (getProspectiveSwapNotional as jest.Mock).mockReturnValue(mockNotional);
+
+      selectProspectiveSwapNotionalFormatted(mockState as never);
+
+      expect(swapFormCompactFormat).toHaveBeenCalledTimes(1);
+      expect(swapFormCompactFormat).toHaveBeenCalledWith(mockNotional);
+    });
+
+    it('returns the correctly formatted prospective swap notional', () => {
+      const mockFormattedNotional = 'test';
+      (swapFormCompactFormat as jest.Mock).mockReturnValue(mockFormattedNotional);
+
+      const result = selectProspectiveSwapNotionalFormatted(mockState as never);
+      expect(result).toBe(mockFormattedNotional);
+    });
+  });
+
+  describe('selectProspectiveSwapMarginFormatted', () => {
+    const mockState = {
+      swapForm: {
+        userInput: {
+          marginAmount: {
+            editMode: 'add',
+          },
+        },
+        prospectiveSwap: {
+          infoPostSwap: {
+            value: {
+              fee: 10,
+            },
+          },
+        },
+      },
+    };
+
+    it('returns formatted prospective swap margin when editMode is not "add"', () => {
+      const prospectiveMargin = 100;
+      const formattedMargin = '100.00';
+      (
+        getProspectiveSwapMargin as jest.MockedFunction<typeof getProspectiveSwapMargin>
+      ).mockReturnValue(prospectiveMargin);
+      (swapFormCompactFormat as jest.MockedFunction<typeof swapFormCompactFormat>).mockReturnValue(
+        formattedMargin,
+      );
+
+      const result = selectProspectiveSwapMarginFormatted(mockState as never);
+
+      expect(result).toEqual(formattedMargin);
+      expect(getProspectiveSwapMargin).toHaveBeenCalledWith(mockState.swapForm);
+      expect(swapFormCompactFormat).toHaveBeenCalledWith(
+        prospectiveMargin - mockState.swapForm.prospectiveSwap.infoPostSwap.value.fee,
+      );
+    });
+
+    it('returns formatted prospective swap margin minus fee when editMode is "add"', () => {
+      const prospectiveMargin = 100;
+      const formattedMargin = '90.00';
+      (
+        getProspectiveSwapMargin as jest.MockedFunction<typeof getProspectiveSwapMargin>
+      ).mockReturnValue(prospectiveMargin);
+      (swapFormCompactFormat as jest.MockedFunction<typeof swapFormCompactFormat>).mockReturnValue(
+        formattedMargin,
+      );
+
+      const result = selectProspectiveSwapMarginFormatted(mockState as never);
+
+      expect(result).toEqual(formattedMargin);
+      expect(getProspectiveSwapMargin).toHaveBeenCalledWith(mockState.swapForm);
+      expect(swapFormCompactFormat).toHaveBeenCalledWith(prospectiveMargin - 10);
+    });
+  });
+
+  describe('selectProspectiveSwapFeeFormatted', () => {
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('returns the fee formatted correctly when the infoPostSwap status is "success"', () => {
+      const mockRootState = {
+        swapForm: {
+          userInput: {
+            marginAmount: {
+              editMode: 'add',
+            },
+          },
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'success',
+              value: {
+                fee: 10,
+              },
+            },
+          },
+        },
+      };
+      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('10.00');
+
+      const result = selectProspectiveSwapFeeFormatted(mockRootState as never);
+      expect(result).toEqual('10.00');
+      expect(swapFormFormatNumber).toHaveBeenCalledWith(10);
+    });
+
+    it('returns "--" when the infoPostSwap status is not "success"', () => {
+      const mockRootState = {
+        swapForm: {
+          userInput: {
+            marginAmount: {
+              editMode: 'add',
+            },
+          },
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'failure',
+            },
+          },
+        },
+      };
+
+      const result = selectProspectiveSwapFeeFormatted(mockRootState as never);
+      expect(result).toEqual('--');
+      expect(swapFormFormatNumber).not.toHaveBeenCalled();
     });
   });
 });
