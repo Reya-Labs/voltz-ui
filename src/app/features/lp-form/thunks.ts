@@ -10,7 +10,6 @@ import {
   isUserInputNotionalError,
 } from './utils';
 
-
 const rejectThunkWithError = (
   thunkAPI: {
     rejectWithValue: (value: string | undefined) => unknown;

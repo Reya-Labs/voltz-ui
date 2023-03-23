@@ -237,12 +237,6 @@ const calculateLeverageOptions = (maxLeverage: string) => {
   ];
 };
 
-const updateLeverageOptionsAfterGetPoolLpInfo = (state: Draft<SliceState>): void => {
-  const maxLeverage = formatNumber(Math.floor(state.poolLpInfo.maxLeverage), 0, 0);
-  state.prospectiveLp.leverage.maxLeverage = maxLeverage;
-  state.prospectiveLp.leverage.options = calculateLeverageOptions(maxLeverage);
-};
-
 const updateLeverageOptionsAfterGetInfoPostLp = (state: Draft<SliceState>): void => {
   let maxLeverage = '--';
   if (
