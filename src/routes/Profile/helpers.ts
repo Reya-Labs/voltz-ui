@@ -437,7 +437,7 @@ export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {
 };
 
 export const getClaimButtonModesForVariants = (
-  variants: BadgeVariant[],
+  variants: BadgeVariant[] = [],
   mode: ClaimButtonProps['mode'],
 ): Record<BadgeVariant, ClaimButtonProps['mode']> =>
   variants.reduce(
@@ -448,8 +448,11 @@ export const getClaimButtonModesForVariants = (
     {} as Record<BadgeVariant, ClaimButtonProps['mode']>,
   );
 
-export const getSeasonUserId = (userId: string, seasonId: Season['id']) =>
-  `${userId.toLowerCase()}#${seasonId}`;
+export const getSeasonUserId = (
+  userId: string,
+  selectedChainId: SupportedChainId,
+  seasonId: Season['id'],
+) => `${userId.toLowerCase()}#${seasonId}#${selectedChainId}`;
 
 export const getCommunitySbt = (signer: Signer | null, chainId: SupportedChainId | null) => {
   const ignoredWalletIds =
