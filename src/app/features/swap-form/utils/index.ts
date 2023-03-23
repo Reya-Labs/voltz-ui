@@ -9,6 +9,7 @@ import {
 } from '../../../../utilities/number';
 import { SwapFormNumberLimits } from '../constants';
 import { SliceState } from '../reducer';
+import { getExistingPositionNotional } from './getExistingPositionNotional';
 
 export * from './swapFormFormatNumber';
 
@@ -258,13 +259,7 @@ export const getExistingPositionMode = (state: Draft<SliceState>) => {
   return state.position.value.positionType === 1 ? 'fixed' : 'variable';
 };
 
-export const getExistingPositionNotional = (state: Draft<SliceState>) => {
-  if (state.position.status !== 'success' || !state.position.value) {
-    return null;
-  }
-
-  return state.position.value.notional;
-};
+export * from './getExistingPositionNotional';
 
 export const getEditPositionTokenBalance = (state: Draft<SliceState>) => {
   let fixedTokenBalance = 0;
