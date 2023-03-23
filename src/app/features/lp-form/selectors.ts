@@ -179,8 +179,10 @@ export const selectVariableRate24hDelta = (state: RootState) => {
 export const selectSubmitButtonText = (state: RootState) => {
   switch (state.lpForm.submitButton.state) {
     case 'lp':
-      // todo: make this dynamic
-      return 'Add or Remove Liquidity';
+    case 'fixed-range-error':
+      const addRemoveString =
+        state.lpForm.userInput.notionalAmount.editMode === 'add' ? 'Add' : 'Remove';
+      return `${addRemoveString} Liquidity`;
     case 'margin-update':
       return 'Update margin';
     case 'not-enough-balance':
@@ -254,4 +256,8 @@ export const selectUserInputFixedUpper = (state: RootState) => {
   }
 
   return fixedUpper.toString();
+};
+
+export const selectUserInputFixedError = (state: RootState) => {
+  return state.lpForm.userInput.fixedError;
 };
