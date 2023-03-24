@@ -12,31 +12,31 @@ import {
 } from './VoltzPage.styled';
 
 type VoltzPageProps = {
-  MainSlotComponent: React.FunctionComponent;
-  RightSlotComponent: React.FunctionComponent;
-  NotFoundSlotComponent?: React.FunctionComponent;
-  PageLoadingSlotComponent?: React.FunctionComponent;
+  mainSlot: React.ReactNode;
+  rightSlot?: React.ReactNode;
+  notFoundSlot?: React.ReactNode;
+  pageLoadingSlot?: React.ReactNode;
 };
 export const VoltzPage: React.FunctionComponent<VoltzPageProps> = ({
-  MainSlotComponent,
-  RightSlotComponent,
-  NotFoundSlotComponent,
-  PageLoadingSlotComponent,
+  mainSlot,
+  rightSlot,
+  notFoundSlot,
+  pageLoadingSlot,
 }) => {
-  let pageContent = (
+  let pageContent: React.ReactNode = (
     <MainAndFormSectionBox data-testid="VoltzPage-MainAndFormSectionBox">
-      <MainSectionBox data-testid="VoltzPage-MainSectionBox">
-        {MainSlotComponent && <MainSlotComponent />}
-      </MainSectionBox>
-      <RightSectionBox data-testid="VoltzPage-RightSectionBox">
-        {RightSlotComponent && <RightSlotComponent />}
-      </RightSectionBox>
+      {mainSlot ? (
+        <MainSectionBox data-testid="VoltzPage-MainSectionBox">{mainSlot}</MainSectionBox>
+      ) : null}
+      {rightSlot ? (
+        <RightSectionBox data-testid="VoltzPage-RightSectionBox">{rightSlot}</RightSectionBox>
+      ) : null}
     </MainAndFormSectionBox>
   );
-  if (NotFoundSlotComponent) {
-    pageContent = <NotFoundSlotComponent />;
-  } else if (PageLoadingSlotComponent) {
-    pageContent = <PageLoadingSlotComponent />;
+  if (notFoundSlot) {
+    pageContent = notFoundSlot;
+  } else if (pageLoadingSlot) {
+    pageContent = pageLoadingSlot;
   }
   return (
     <Page data-testid="VoltzPage">

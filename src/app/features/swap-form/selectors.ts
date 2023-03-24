@@ -114,9 +114,11 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
   const swapFormState = state.swapForm;
 
   if (swapFormState.userInput.marginAmount.editMode === 'remove') {
-    return getAvailableMargin(swapFormState) !== null
-      ? swapFormLimitAndFormatNumber(getAvailableMargin(swapFormState) as number, 'floor')
-      : null;
+    const margin = getAvailableMargin(swapFormState);
+    if (margin === null) {
+      return null;
+    }
+    return swapFormLimitAndFormatNumber(margin, 'floor');
   }
 
   if (swapFormState.prospectiveSwap.infoPostSwap.status === 'success') {

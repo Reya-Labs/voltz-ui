@@ -26,10 +26,10 @@ export const TraderFormPage: React.FunctionComponent = () => {
 
   return (
     <VoltzPage
-      MainSlotComponent={Main}
-      NotFoundSlotComponent={pageNotFound ? NoAMMFound : undefined}
-      PageLoadingSlotComponent={loading ? PageLoading : undefined}
-      RightSlotComponent={Form}
+      mainSlot={<Main />}
+      notFoundSlot={pageNotFound ? <NoAMMFound /> : undefined}
+      pageLoadingSlot={loading ? <PageLoading /> : undefined}
+      rightSlot={<Form />}
     />
   );
 };

@@ -17,9 +17,10 @@ import { routes } from './routes/paths';
 import { Profile } from './routes/Profile/Profile';
 import { TraderPools } from './routes/TraderPools/TraderPools';
 import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
-import { TradingLeague } from './routes/TradingLeague/TradingLeague';
+import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
 import { LPFormPage } from './ui/pages/LPForm';
 import { TraderFormPage } from './ui/pages/TraderForm';
+import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { deleteChainId, getChainId, setChainId } from './utilities/network/chain-store';
 import { detectIfNetworkSupported } from './utilities/network/detect-if-network-supported';
 import { isArbitrumChain } from './utilities/network/is-arbitrum-chain';
@@ -170,8 +171,22 @@ export const AppRoutes = () => {
           }
           path={routes.LP_OPTIMISERS_DEPOSIT_FORM}
         />
-        <Route element={<TraderFormPage />} path={routes.TRADER_FORM} />
-        <Route element={<LPFormPage />} path={routes.LP_FORM} />
+        <Route
+          element={
+            <NetworkProtectedVoltzPage>
+              <TraderFormPage />
+            </NetworkProtectedVoltzPage>
+          }
+          path={routes.TRADER_FORM}
+        />
+        <Route
+          element={
+            <NetworkProtectedVoltzPage>
+              <LPFormPage />
+            </NetworkProtectedVoltzPage>
+          }
+          path={routes.LP_FORM}
+        />
         <Route
           element={
             <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
@@ -198,9 +213,9 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
-              <TradingLeague />
-            </NetworkProtectedPage>
+            <NetworkProtectedVoltzPage hidden={isArbitrumChain(chainId)}>
+              <TradingLeaguePage />
+            </NetworkProtectedVoltzPage>
           }
           path={routes.TRADING_LEAGUE}
         />
