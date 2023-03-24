@@ -2,6 +2,10 @@ import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
   selectFixedRateInfo,
+  selectInfoPostSwap,
+  selectIsMarginRequiredError,
+  selectIsWalletMarginError,
+  selectLeverage,
   selectMarginAccountName,
   selectPoolSwapInfoStatus,
   selectProspectiveSwapFeeFormatted,
@@ -28,7 +32,7 @@ import {
   swapFormFormatNumber,
 } from './utils';
 
-// Mock swapFormCompactFormat
+// Mock utils
 jest.mock('./utils', () => ({
   swapFormCompactFormat: jest.fn(),
   hasExistingPosition: jest.fn(),
@@ -574,6 +578,103 @@ describe('swap-form.selectors', () => {
       const result = selectProspectiveSwapFeeFormatted(mockRootState as never);
       expect(result).toEqual('--');
       expect(swapFormFormatNumber).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('selectLeverage', () => {
+    it('should select leverage from state', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            leverage: 5,
+          },
+        },
+      } as never;
+      expect(selectLeverage(state)).toEqual(5);
+    });
+  });
+
+  describe('selectInfoPostSwap', () => {
+    it('should select infoPostSwap from state', () => {
+      const state = {
+        swapForm: {
+          prospectiveSwap: {
+            infoPostSwap: { foo: 'bar' },
+          },
+        },
+      } as never;
+      expect(selectInfoPostSwap(state)).toEqual({ foo: 'bar' });
+    });
+  });
+
+  describe('selectIsMarginRequiredError', () => {
+    it('should return true if there is a margin amount error other than WLT', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            marginAmount: {
+              error: 'some error message',
+            },
+          },
+        },
+      } as never;
+      expect(selectIsMarginRequiredError(state)).toBe(true);
+    });
+
+    it('should return false if there is no margin amount error', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            marginAmount: {
+              error: null,
+            },
+          },
+        },
+      } as never;
+      expect(selectIsMarginRequiredError(state)).toBe(false);
+    });
+
+    it('should return false if the margin amount error is "WLT"', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            marginAmount: {
+              error: 'WLT',
+            },
+          },
+        },
+      } as never;
+      expect(selectIsMarginRequiredError(state)).toBe(false);
+    });
+  });
+
+  describe('selectIsWalletMarginError', () => {
+    it('should return true if the margin amount error is "WLT"', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            marginAmount: {
+              error: 'WLT',
+            },
+          },
+        },
+      } as never;
+
+      expect(selectIsWalletMarginError(state)).toBe(true);
+    });
+
+    it('should return false if the margin amount error is not "WLT"', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            marginAmount: {
+              error: 'some other error message',
+            },
+          },
+        },
+      } as never;
+
+      expect(selectIsWalletMarginError(state)).toBe(false);
     });
   });
 });
