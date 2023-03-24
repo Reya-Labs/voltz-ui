@@ -179,12 +179,12 @@ export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number => {
   // todo: do we also want to have specific errros for fixedLow and fixedHigh
 
   if (isUserInputFixedRangeError(state)) {
-    return 0;
+    return 1;
   }
 
   if (state.userInput.fixedLower === null) {
     // todo: is this a sensible return for null case?
-    return 0;
+    return 1;
   }
 
   const value = state.userInput.fixedLower;
@@ -194,11 +194,13 @@ export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number => {
 
 export const getProspectiveLpFixedHigh = (state: Draft<SliceState>): number => {
   if (isUserInputFixedRangeError(state)) {
-    return 0;
+    // todo: is this a sensible return for null case?
+    return 3;
   }
 
   if (state.userInput.fixedUpper === null) {
-    return 0;
+    // todo: is this a sensible return for null case?
+    return 3;
   }
 
   const value = state.userInput.fixedUpper;
