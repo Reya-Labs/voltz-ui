@@ -154,7 +154,7 @@ export const getPoolLpInfoThunk = createAsyncThunk<
 
     return await amm.getPoolLpInfo(
       getProspectiveLpFixedLow(lpFormState),
-      getProspectiveLpFixedHigh(lpFormState)
+      getProspectiveLpFixedHigh(lpFormState),
     );
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

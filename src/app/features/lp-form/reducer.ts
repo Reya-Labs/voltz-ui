@@ -15,7 +15,8 @@ import {
   getVariableRateThunk,
   getWalletBalanceThunk,
   setSignerAndPositionForAMMThunk,
-  SetSignerAndPositionForAMMThunkSuccess} from './thunks';
+  SetSignerAndPositionForAMMThunkSuccess,
+} from './thunks';
 import {
   checkLowLeverageNotification, // todo: to we intend to use this component for the lp form as well, is it in designs?
   getProspectiveLpMargin, // todo: check if need to make any changes to the logic
@@ -241,14 +242,10 @@ const calculateLeverageOptions = (maxLeverage: string) => {
 };
 
 const updateLeverageOptionsAfterGetPoolLpInfo = (state: Draft<SliceState>): void => {
-  const maxLeverage = formatNumber(
-    Math.floor(state.poolLpInfo.maxLeverage),
-    0,
-    0,
-  );
+  const maxLeverage = formatNumber(Math.floor(state.poolLpInfo.maxLeverage), 0, 0);
   state.prospectiveLp.leverage.maxLeverage = maxLeverage;
   state.prospectiveLp.leverage.options = calculateLeverageOptions(maxLeverage);
-}
+};
 
 const updateLeverageOptionsAfterGetInfoPostLp = (state: Draft<SliceState>): void => {
   let maxLeverage = '--';
@@ -652,10 +649,9 @@ export const slice = createSlice({
         };
       })
       .addCase(getPoolLpInfoThunk.fulfilled, (state, { payload }) => {
-        const { maxLeverage } =
-          payload as {
-            maxLeverage: number;
-          };
+        const { maxLeverage } = payload as {
+          maxLeverage: number;
+        };
         state.poolLpInfo = {
           maxLeverage: maxLeverage,
           status: 'success',
