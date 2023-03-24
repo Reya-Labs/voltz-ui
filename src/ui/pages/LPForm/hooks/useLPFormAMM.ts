@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom';
 import {
   getFixedRateThunk,
   getInfoPostLpThunk,
+  getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
-  getPoolLpInfoThunk,
   selectLpFormAMM,
   selectLpFormPosition,
   selectLpFormPositionFetchingStatus,
