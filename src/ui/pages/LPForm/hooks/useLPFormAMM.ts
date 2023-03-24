@@ -14,7 +14,10 @@ import {
   selectLpFormPosition,
   selectLpFormPositionFetchingStatus,
   selectPoolLpInfoStatus,
+  selectUserInputFixedLower,
+  selectUserInputFixedUpper,
   setLpFormAMMAction,
+  setPositionForAMMThunk,
   setSignerAndPositionForAMMThunk,
 } from '../../../../app/features/lp-form';
 import { selectChainId } from '../../../../app/features/network';
@@ -40,6 +43,10 @@ export const useLPFormAMM = (): UseAMMsResult => {
   const positionFetchingStatus = useAppSelector(selectLpFormPositionFetchingStatus);
   const poolLpInfoStatus = useAppSelector(selectPoolLpInfoStatus);
   const chainId = useAppSelector(selectChainId);
+
+  const fixedLower = useAppSelector(selectUserInputFixedLower);
+  const fixedUpper = useAppSelector(selectUserInputFixedUpper);
+
   const [loading, setLoading] = useState(true);
 
   const { signer } = useWallet();
@@ -99,6 +106,24 @@ export const useLPFormAMM = (): UseAMMsResult => {
       }),
     );
   }, [dispatch, aMMsLoading, error, chainId, signer]);
+
+  useEffect(() => {
+    if (!chainId) {
+      return;
+    }
+    if (error) {
+      return;
+    }
+    if (aMMsLoading) {
+      return;
+    }
+    void dispatch(
+      setPositionForAMMThunk({
+        signer,
+        chainId,
+      }),
+    );
+  }, [dispatch, aMMsLoading, error, chainId, signer, fixedLower, fixedUpper]);
 
   useEffect(() => {
     if (!aMM || !aMM.signer || !chainId) {

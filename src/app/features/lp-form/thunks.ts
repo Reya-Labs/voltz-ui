@@ -230,6 +230,67 @@ export type SetSignerAndPositionForAMMThunkSuccess = {
   position: Position | null;
   signer: providers.JsonRpcSigner | null;
 };
+
+export type SetPositionForAMMThunkSuccess = {
+  position: Position | null;
+};
+
+export const setPositionForAMMThunk = createAsyncThunk<
+  Awaited<SetPositionForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
+  { signer: providers.JsonRpcSigner | null; chainId: SupportedChainId },
+  { state: RootState }
+>('lpForm/setPositionForAMM', async ({ signer, chainId }, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().lpForm.amm;
+    const fixedLower = thunkAPI.getState().lpForm.userInput.fixedLower;
+    const fixedUpper = thunkAPI.getState().lpForm.userInput.fixedUpper;
+
+    if (!amm) {
+      return {
+        position: null,
+      };
+    }
+
+    if (!signer) {
+      return {
+        position: null,
+      };
+    }
+
+    if (!fixedLower) {
+      return {
+        position: null,
+      };
+    }
+
+    if (!fixedUpper) {
+      return {
+        position: null,
+      };
+    }
+
+    const userWalletId = (await signer.getAddress()).toLowerCase();
+
+    const { positions, error } = await getPositions({
+      chainId,
+      userWalletId: userWalletId,
+      amms: [amm],
+      type: 'LP',
+    });
+
+    if (error) {
+      return rejectThunkWithError(thunkAPI, error);
+    }
+    const position = findCurrentPositionLp(positions || [], amm.id, fixedLower, fixedUpper) || null;
+    return {
+      position,
+      signer,
+    };
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
 export const setSignerAndPositionForAMMThunk = createAsyncThunk<
   Awaited<SetSignerAndPositionForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
   { signer: providers.JsonRpcSigner | null; chainId: SupportedChainId },
