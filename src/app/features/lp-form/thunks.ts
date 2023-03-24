@@ -4,10 +4,12 @@ import { BigNumber, ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPositionLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
-import { selectExistingPositionFixedLower, selectExistingPositionFixedUpper } from './selectors';
 import {
   getProspectiveLpMargin,
   getProspectiveLpNotional,
+  getProspectiveLpFixedLow,
+  getProspectiveLpFixedHigh,
+  getProspectiveLpAddLiquidity,
   isUserInputNotionalError,
 } from './utils';
 
@@ -148,7 +150,12 @@ export const getPoolLpInfoThunk = createAsyncThunk<
       return;
     }
 
-    return await amm.getPoolLpInfo();
+    const lpFormState = thunkAPI.getState().lpForm;
+
+    return await amm.getPoolLpInfo(
+      getProspectiveLpFixedLow(lpFormState),
+      getProspectiveLpFixedHigh(lpFormState)
+    );
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -296,14 +303,11 @@ export const confirmLpThunk = createAsyncThunk<
     }
 
     return await amm.lp({
-      // todo: Artur mint and add are the same thing -> consider using unified terminology
-      // todo: Artur enable custom inputs to isMint
-      addLiquidity: true,
+      addLiquidity: getProspectiveLpAddLiquidity(lpFormState),
       notional: getProspectiveLpNotional(lpFormState),
       margin: getProspectiveLpMargin(lpFormState),
-      // todo: Artur layer in fixed low and fixed high of the lp in here
-      fixedLow: 1,
-      fixedHigh: 999,
+      fixedLow: getProspectiveLpFixedLow(lpFormState),
+      fixedHigh: getProspectiveLpFixedHigh(lpFormState),
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
@@ -321,8 +325,10 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
     if (!amm || !lpFormState.position.value) {
       return;
     }
-    const fixedLow = selectExistingPositionFixedLower(thunkAPI.getState())!;
-    const fixedHigh = selectExistingPositionFixedUpper(thunkAPI.getState())!;
+
+    const fixedLow: number = getProspectiveLpFixedLow(lpFormState);
+    const fixedHigh: number = getProspectiveLpFixedHigh(lpFormState);
+
     return await amm.updatePositionMargin({
       fixedLow,
       fixedHigh,
