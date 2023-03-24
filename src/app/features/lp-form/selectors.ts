@@ -192,10 +192,11 @@ export const selectVariableRate24hDelta = (state: RootState) => {
 export const selectSubmitButtonText = (state: RootState) => {
   switch (state.lpForm.submitButton.state) {
     case 'lp':
-    case 'fixed-range-error':
       const addRemoveString =
-        state.lpForm.userInput.notionalAmount.editMode === 'add' ? 'Add' : 'Remove';
-      return `${addRemoveString} Liquidity`;
+      state.lpForm.userInput.notionalAmount.editMode === 'add' ? 'Add' : 'Remove';
+    return `${addRemoveString} Liquidity`;
+    case 'fixed-range-error':
+      return 'Invalid Fixed Range'
     case 'margin-update':
       return 'Update margin';
     case 'not-enough-balance':
