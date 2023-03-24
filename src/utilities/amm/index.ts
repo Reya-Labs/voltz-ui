@@ -14,6 +14,7 @@ export const findCurrentPositionLp = (
   fixedUpper: number,
 ) => {
   return (positions || []).find((p) => {
+    debugger;
     return (
       p.amm.id === selectedAmmId &&
       p.fixedRateLower.toNumber() === fixedLower &&

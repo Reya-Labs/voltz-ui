@@ -282,9 +282,9 @@ export const setPositionForAMMThunk = createAsyncThunk<
       return rejectThunkWithError(thunkAPI, error);
     }
     const position = findCurrentPositionLp(positions || [], amm.id, fixedLower, fixedUpper) || null;
+    debugger;
     return {
-      position,
-      signer,
+      position
     };
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
