@@ -15,6 +15,7 @@ import {
   getWalletBalanceThunk,
   setSignerAndPositionForAMMThunk,
   SetSignerAndPositionForAMMThunkSuccess,
+  getPoolLpInfoThunk
 } from './thunks';
 import {
   checkLowLeverageNotification, // todo: to we intend to use this component for the lp form as well, is it in designs?
@@ -171,11 +172,9 @@ const initialState: SliceState = {
     value: 0,
     status: 'idle',
   },
-  // TODO: Artur investigate if we can get rid of this entirely
-  // make sure you check: const updateLeverageOptionsAfterGetInfoPostLp
   poolLpInfo: {
     maxLeverage: 1,
-    status: 'success',
+    status: 'idle',
   },
   userInput: {
     notionalAmount: {
@@ -241,6 +240,16 @@ const calculateLeverageOptions = (maxLeverage: string) => {
     Math.floor(maxLeverageOption),
   ];
 };
+
+const updateLeverageOptionsAfterGetPoolLpInfo = (state: Draft<SliceState>): void => {
+  const maxLeverage = formatNumber(
+    Math.floor(state.poolLpInfo.maxLeverage),
+    0,
+    0,
+  );
+  state.prospectiveLp.leverage.maxLeverage = maxLeverage;
+  state.prospectiveLp.leverage.options = calculateLeverageOptions(maxLeverage);
+}
 
 const updateLeverageOptionsAfterGetInfoPostLp = (state: Draft<SliceState>): void => {
   let maxLeverage = '--';
@@ -629,6 +638,31 @@ export const slice = createSlice({
           value: payload as number,
           status: 'success',
         };
+      })
+      .addCase(getPoolLpInfoThunk.pending, (state) => {
+        state.poolLpInfo = {
+          // note max leverage is a function of the fixed rate range selected by the lp
+          maxLeverage: 0,
+          status: 'pending',
+        };
+      })
+      .addCase(getPoolLpInfoThunk.rejected, (state) => {
+        state.poolLpInfo = {
+          maxLeverage: 0,
+          status: 'error',
+        };
+      })
+      .addCase(getPoolLpInfoThunk.fulfilled, (state, { payload }) => {
+        const { maxLeverage } =
+          payload as {
+            maxLeverage: number;
+          };
+        state.poolLpInfo = {
+          maxLeverage: maxLeverage,
+          status: 'success',
+        };
+        updateLeverageOptionsAfterGetPoolLpInfo(state);
+        validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(getInfoPostLpThunk.pending, (state) => {
         state.prospectiveLp.infoPostLp = {
