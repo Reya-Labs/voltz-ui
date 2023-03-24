@@ -96,7 +96,7 @@ export type SliceState = {
     // user-inputted fixed rate range along which liquidity is provided
     fixedLower: number | null;
     fixedUpper: number | null;
-    fixedError: string;
+    fixedError: string | null;
   };
   // State of prospective liquidity provisioning or liquidity removal operation
   prospectiveLp: {
