@@ -9,14 +9,13 @@ import {
   confirmMarginUpdateThunk,
   getFixedRateThunk,
   getInfoPostLpThunk,
+  getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
   setSignerAndPositionForAMMThunk,
-  SetSignerAndPositionForAMMThunkSuccess,
-  getPoolLpInfoThunk
-} from './thunks';
+  SetSignerAndPositionForAMMThunkSuccess} from './thunks';
 import {
   checkLowLeverageNotification, // todo: to we intend to use this component for the lp form as well, is it in designs?
   getProspectiveLpMargin, // todo: check if need to make any changes to the logic

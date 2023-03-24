@@ -10,7 +10,7 @@ import { AMM, NetworkConfiguration, Position } from '@voltz-protocol/v1-sdk';
  */
 export const findCurrentPositionLp = (positions: Position[], selectedAmmId: string, fixedLower: number, fixedUpper: number) => {
   return (positions || []).find((p) => {
-    return (p.amm.id === selectedAmmId) && (p.fixedRateLower.toNumber()===fixedLower) && (p.fixedRateUpper.toNumber()==fixedUpper);
+    return (p.amm.id === selectedAmmId) && (p.fixedRateLower.toNumber()===fixedLower) && (p.fixedRateUpper.toNumber()===fixedUpper);
   });
 };
 
