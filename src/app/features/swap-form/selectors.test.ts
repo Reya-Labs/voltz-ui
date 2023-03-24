@@ -9,6 +9,7 @@ import {
   selectIsWalletMarginError,
   selectLeverage,
   selectMarginAccountName,
+  selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
   selectPoolSwapInfoStatus,
   selectProspectiveSwapFeeFormatted,
@@ -891,6 +892,77 @@ describe('swap-form.selectors', () => {
       expect(getProspectiveSwapMode).toHaveBeenCalledWith(state.swapForm);
       expect(getNewPositionFixedRate).not.toHaveBeenCalled();
       expect(getVariableRate).toHaveBeenCalledWith(state.swapForm);
+    });
+  });
+
+  describe('selectNewPositionPayingRate', () => {
+    beforeEach(() => {
+      (getProspectiveSwapMode as jest.Mock).mockImplementationOnce(
+        (swapFormState: {
+          prospectiveSwap: {
+            mode: 'fixed' | 'variable';
+          };
+        }) => {
+          return swapFormState.prospectiveSwap.mode;
+        },
+      );
+      (getNewPositionFixedRate as jest.Mock).mockImplementationOnce(
+        (swapFormState: {
+          prospectiveSwap: {
+            fixedRate: number;
+          };
+        }) => {
+          return swapFormState.prospectiveSwap.fixedRate;
+        },
+      );
+      (getVariableRate as jest.Mock).mockImplementationOnce(
+        (swapFormState: {
+          prospectiveSwap: {
+            variableRate: number;
+          };
+        }) => {
+          return swapFormState.prospectiveSwap.variableRate;
+        },
+      );
+    });
+    afterEach(() => {
+      // Clear mock call history after each test
+      jest.clearAllMocks();
+    });
+
+    it('should call getVariableRate when prospectiveSwap mode is fixed', () => {
+      const state = {
+        swapForm: {
+          prospectiveSwap: {
+            mode: 'fixed',
+            variableRate: 1.2345,
+          },
+        },
+      };
+      const result = selectNewPositionPayingRate(state as never);
+
+      expect(result).toBe(1.2345);
+      expect(getProspectiveSwapMode).toHaveBeenCalledWith(state.swapForm);
+      expect(getNewPositionFixedRate).not.toHaveBeenCalled();
+      expect(getVariableRate).toHaveBeenCalledWith(state.swapForm);
+    });
+
+    it('should call getNewPositionFixedRate when prospectiveSwap mode is variable', () => {
+      const state = {
+        swapForm: {
+          prospectiveSwap: {
+            mode: 'variable',
+            fixedRate: 2.3456,
+          },
+        },
+      };
+
+      const result = selectNewPositionPayingRate(state as never);
+
+      expect(result).toBe(2.3456);
+      expect(getProspectiveSwapMode).toHaveBeenCalledWith(state.swapForm);
+      expect(getNewPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
+      expect(getVariableRate).not.toHaveBeenCalled();
     });
   });
 });
