@@ -291,6 +291,8 @@ export const setPositionForAMMThunk = createAsyncThunk<
   }
 });
 
+
+// todo: since we already have setPosition, why not have another one for signer?
 export const setSignerAndPositionForAMMThunk = createAsyncThunk<
   Awaited<SetSignerAndPositionForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
   { signer: providers.JsonRpcSigner | null; chainId: SupportedChainId },
