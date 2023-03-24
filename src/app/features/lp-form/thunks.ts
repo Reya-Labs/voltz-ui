@@ -240,20 +240,6 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
     const fixedLower = thunkAPI.getState().lpForm.userInput.fixedLower;
     const fixedUpper = thunkAPI.getState().lpForm.userInput.fixedUpper;
 
-    if (!fixedLower) {
-      return {
-        signer: null,
-        position: null,
-      };
-    }
-
-    if (!fixedUpper) {
-      return {
-        signer: null,
-        position: null,
-      };
-    }
-
     if (!amm) {
       return {
         signer: null,
@@ -264,6 +250,20 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
     if (!signer) {
       return {
         signer: null,
+        position: null,
+      };
+    }
+
+    if (!fixedLower) {
+      return {
+        signer: signer,
+        position: null,
+      };
+    }
+
+    if (!fixedUpper) {
+      return {
+        signer: signer,
         position: null,
       };
     }
