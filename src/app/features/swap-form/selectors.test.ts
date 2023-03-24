@@ -1,6 +1,7 @@
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
+  selectAvailableNotional,
   selectBottomRightMarginNumber,
   selectFixedRateInfo,
   selectInfoPostSwap,
@@ -26,6 +27,7 @@ import {
 } from './selectors';
 import {
   getAvailableMargin,
+  getAvailableNotional,
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
@@ -45,6 +47,7 @@ jest.mock('./utils', () => ({
   swapFormFormatNumber: jest.fn(),
   swapFormLimitAndFormatNumber: jest.fn(),
   getAvailableMargin: jest.fn(),
+  getAvailableNotional: jest.fn(),
 }));
 
 describe('swap-form.selectors', () => {
@@ -774,6 +777,40 @@ describe('swap-form.selectors', () => {
       expect(result).toBeNull();
       expect(swapFormLimitAndFormatNumber).not.toHaveBeenCalled(); // should not be called in this case
       expect(getAvailableMargin).not.toHaveBeenCalled(); // should not be called in this case
+    });
+  });
+
+  describe('selectAvailableNotional', () => {
+    beforeEach(() => {
+      (getAvailableNotional as jest.Mock).mockImplementationOnce(
+        (swapFormState: {
+          userInput: {
+            notionalAmount: {
+              value: number;
+            };
+          };
+          availableMargin: number;
+        }) => {
+          return swapFormState.userInput.notionalAmount.value + swapFormState.availableMargin;
+        },
+      );
+    });
+
+    it('should call getAvailableNotional with the swapForm state', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            notionalAmount: {
+              value: 1234.5678,
+            },
+          },
+          availableMargin: 5678.1234,
+        },
+      };
+      const result = selectAvailableNotional(state as never);
+
+      expect(result).toBe(6912.6912); // 1234.5678 + 5678.1234
+      expect(getAvailableNotional).toHaveBeenCalledWith(state.swapForm);
     });
   });
 });
