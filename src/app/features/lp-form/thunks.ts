@@ -137,11 +137,27 @@ export const getVariableRate24hAgoThunk = createAsyncThunk<
   }
 });
 
+export const getPoolLpInfoThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('lpForm/getPoolLpInfo', async (_, thunkAPI) => {
+  try {
+    const amm = thunkAPI.getState().lpForm.amm;
+    if (!amm) {
+      return;
+    }
+
+    return await amm.getPoolLpInfo();
+  } catch (err) {
+    return rejectThunkWithError(thunkAPI, err);
+  }
+});
+
 export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<
     | {
         notionalAmount: number;
-        // todo: Artur not sure if we need
         lpMode: 'add' | 'remove';
         infoPostLpV1: InfoPostLp;
         earlyReturn: boolean;
