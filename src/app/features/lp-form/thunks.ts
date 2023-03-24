@@ -5,11 +5,11 @@ import { BigNumber, ContractReceipt, providers } from 'ethers';
 import { findCurrentPositionLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import {
+  getProspectiveLpAddLiquidity,
+  getProspectiveLpFixedHigh,
+  getProspectiveLpFixedLow,
   getProspectiveLpMargin,
   getProspectiveLpNotional,
-  getProspectiveLpFixedLow,
-  getProspectiveLpFixedHigh,
-  getProspectiveLpAddLiquidity,
   isUserInputNotionalError,
 } from './utils';
 
