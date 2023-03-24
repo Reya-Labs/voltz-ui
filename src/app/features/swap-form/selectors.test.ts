@@ -1,6 +1,7 @@
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
+  selectBottomRightMarginNumber,
   selectFixedRateInfo,
   selectInfoPostSwap,
   selectIsMarginRequiredError,
@@ -24,12 +25,14 @@ import {
   selectWalletBalance,
 } from './selectors';
 import {
+  getAvailableMargin,
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
   hasExistingPosition,
   swapFormCompactFormat,
   swapFormFormatNumber,
+  swapFormLimitAndFormatNumber,
 } from './utils';
 
 // Mock utils
@@ -40,6 +43,8 @@ jest.mock('./utils', () => ({
   getProspectiveSwapNotional: jest.fn(),
   getProspectiveSwapMargin: jest.fn(),
   swapFormFormatNumber: jest.fn(),
+  swapFormLimitAndFormatNumber: jest.fn(),
+  getAvailableMargin: jest.fn(),
 }));
 
 describe('swap-form.selectors', () => {
@@ -675,6 +680,100 @@ describe('swap-form.selectors', () => {
       } as never;
 
       expect(selectIsWalletMarginError(state)).toBe(false);
+    });
+  });
+
+  describe('selectBottomRightMarginNumber', () => {
+    beforeEach(() => {
+      (swapFormLimitAndFormatNumber as jest.Mock).mockImplementationOnce(
+        (value: number, mode: string) => {
+          return mode === 'floor' ? Math.floor(value) : Math.ceil(value);
+        },
+      );
+      (getAvailableMargin as jest.Mock).mockImplementationOnce(
+        (state: { availableMargin: number }) => {
+          return state.availableMargin;
+        },
+      );
+    });
+    afterEach(() => {
+      // Clear mock call history after each test
+      jest.clearAllMocks();
+    });
+
+    it('should return a formatted available margin if margin amount edit mode is "remove"', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            marginAmount: {
+              editMode: 'remove',
+            },
+          },
+          availableMargin: 1234.5678,
+        },
+      } as never;
+
+      const result = selectBottomRightMarginNumber(state);
+
+      expect(result).toBe(1234);
+      expect(swapFormLimitAndFormatNumber).toHaveBeenCalledWith(1234.5678, 'floor');
+      expect(getAvailableMargin).toHaveBeenCalledWith({
+        userInput: {
+          marginAmount: {
+            editMode: 'remove',
+          },
+        },
+        availableMargin: 1234.5678,
+      });
+    });
+
+    it('should return a formatted margin requirement if the swap was successful', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            marginAmount: {
+              editMode: 'add',
+            },
+          },
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'success',
+              value: {
+                marginRequirement: 5678.1234,
+              },
+            },
+          },
+        },
+      } as never;
+
+      const result = selectBottomRightMarginNumber(state);
+
+      expect(result).toBe(5679); // ceil of 5678.1234
+      expect(swapFormLimitAndFormatNumber).toHaveBeenCalledWith(5678.1234, 'ceil');
+      expect(getAvailableMargin).not.toHaveBeenCalled(); // should not be called in this case
+    });
+
+    it('should return null if neither condition is met', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            marginAmount: {
+              editMode: 'add',
+            },
+          },
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'failure',
+            },
+          },
+        },
+      } as never;
+
+      const result = selectBottomRightMarginNumber(state);
+
+      expect(result).toBeNull();
+      expect(swapFormLimitAndFormatNumber).not.toHaveBeenCalled(); // should not be called in this case
+      expect(getAvailableMargin).not.toHaveBeenCalled(); // should not be called in this case
     });
   });
 });
