@@ -1,6 +1,5 @@
 import { AMM, NetworkConfiguration, Position } from '@voltz-protocol/v1-sdk';
 
-
 /**
  * Returns the current position that the user has for the given amm
  * @param positions - the array of positions the user has
@@ -8,12 +7,20 @@ import { AMM, NetworkConfiguration, Position } from '@voltz-protocol/v1-sdk';
  * @param fixedLower - the lower fixed rate selected by the lp
  * @param fixedUpper - the upper fixed rate selected by the user
  */
-export const findCurrentPositionLp = (positions: Position[], selectedAmmId: string, fixedLower: number, fixedUpper: number) => {
+export const findCurrentPositionLp = (
+  positions: Position[],
+  selectedAmmId: string,
+  fixedLower: number,
+  fixedUpper: number,
+) => {
   return (positions || []).find((p) => {
-    return (p.amm.id === selectedAmmId) && (p.fixedRateLower.toNumber()===fixedLower) && (p.fixedRateUpper.toNumber()===fixedUpper);
+    return (
+      p.amm.id === selectedAmmId &&
+      p.fixedRateLower.toNumber() === fixedLower &&
+      p.fixedRateUpper.toNumber() === fixedUpper
+    );
   });
 };
-
 
 /**
  * Returns the current position that the user has for the given amm

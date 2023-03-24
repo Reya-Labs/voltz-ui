@@ -175,50 +175,45 @@ export const hasExistingPosition = (state: Draft<SliceState>): boolean => {
   return state.position.status === 'success' && state.position.value !== null;
 };
 
-
 export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number => {
-
   // todo: do we also want to have specific errros for fixedLow and fixedHigh
 
-  if(isUserInputFixedRangeError(state)) {
+  if (isUserInputFixedRangeError(state)) {
     return 0;
   }
 
-  if(state.userInput.fixedLower === null) {
+  if (state.userInput.fixedLower === null) {
     // todo: is this a sensible return for null case?
     return 0;
   }
 
   const value = state.userInput.fixedLower;
 
-  return value
-
-}
+  return value;
+};
 
 export const getProspectiveLpFixedHigh = (state: Draft<SliceState>): number => {
+  if (isUserInputFixedRangeError(state)) {
+    return 0;
+  }
 
-    if(isUserInputFixedRangeError(state)) {
-      return 0;
-    }
-  
-    if(state.userInput.fixedUpper === null) {
-      return 0;
-    }
-  
-    const value = state.userInput.fixedUpper;
-  
-    return value
-  
-}
+  if (state.userInput.fixedUpper === null) {
+    return 0;
+  }
+
+  const value = state.userInput.fixedUpper;
+
+  return value;
+};
 
 export const getProspectiveLpAddLiquidity = (state: Draft<SliceState>): boolean => {
-    const notionalAmountEditMode = state.userInput.notionalAmount.editMode;
-    if (notionalAmountEditMode === "add") { 
-      return true;
-    } else {
-      return false;
-    }
-}
+  const notionalAmountEditMode = state.userInput.notionalAmount.editMode;
+  if (notionalAmountEditMode === 'add') {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 export const getProspectiveLpNotional = (state: Draft<SliceState>): number => {
   if (isUserInputNotionalError(state)) {
