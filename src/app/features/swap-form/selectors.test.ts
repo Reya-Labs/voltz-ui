@@ -9,6 +9,7 @@ import {
   selectIsWalletMarginError,
   selectLeverage,
   selectMarginAccountName,
+  selectNewPositionReceivingRate,
   selectPoolSwapInfoStatus,
   selectProspectiveSwapFeeFormatted,
   selectProspectiveSwapMarginFormatted,
@@ -28,9 +29,11 @@ import {
 import {
   getAvailableMargin,
   getAvailableNotional,
+  getNewPositionFixedRate,
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
+  getVariableRate,
   hasExistingPosition,
   swapFormCompactFormat,
   swapFormFormatNumber,
@@ -48,6 +51,8 @@ jest.mock('./utils', () => ({
   swapFormLimitAndFormatNumber: jest.fn(),
   getAvailableMargin: jest.fn(),
   getAvailableNotional: jest.fn(),
+  getNewPositionFixedRate: jest.fn(),
+  getVariableRate: jest.fn(),
 }));
 
 describe('swap-form.selectors', () => {
@@ -795,6 +800,10 @@ describe('swap-form.selectors', () => {
         },
       );
     });
+    afterEach(() => {
+      // Clear mock call history after each test
+      jest.clearAllMocks();
+    });
 
     it('should call getAvailableNotional with the swapForm state', () => {
       const state = {
@@ -811,6 +820,77 @@ describe('swap-form.selectors', () => {
 
       expect(result).toBe(6912.6912); // 1234.5678 + 5678.1234
       expect(getAvailableNotional).toHaveBeenCalledWith(state.swapForm);
+    });
+  });
+
+  describe('selectNewPositionReceivingRate', () => {
+    beforeEach(() => {
+      (getProspectiveSwapMode as jest.Mock).mockImplementationOnce(
+        (swapFormState: {
+          prospectiveSwap: {
+            mode: 'fixed' | 'variable';
+          };
+        }) => {
+          return swapFormState.prospectiveSwap.mode;
+        },
+      );
+      (getNewPositionFixedRate as jest.Mock).mockImplementationOnce(
+        (swapFormState: {
+          prospectiveSwap: {
+            fixedRate: number;
+          };
+        }) => {
+          return swapFormState.prospectiveSwap.fixedRate;
+        },
+      );
+      (getVariableRate as jest.Mock).mockImplementationOnce(
+        (swapFormState: {
+          prospectiveSwap: {
+            variableRate: number;
+          };
+        }) => {
+          return swapFormState.prospectiveSwap.variableRate;
+        },
+      );
+    });
+    afterEach(() => {
+      // Clear mock call history after each test
+      jest.clearAllMocks();
+    });
+
+    it('should call getNewPositionFixedRate when prospectiveSwap mode is fixed', () => {
+      const state = {
+        swapForm: {
+          prospectiveSwap: {
+            mode: 'fixed',
+            fixedRate: 1.2345,
+          },
+        },
+      };
+      const result = selectNewPositionReceivingRate(state as never);
+
+      expect(result).toBe(1.2345);
+      expect(getProspectiveSwapMode).toHaveBeenCalledWith(state.swapForm);
+      expect(getNewPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
+      expect(getVariableRate).not.toHaveBeenCalled();
+    });
+
+    it('should call getVariableRate when prospectiveSwap mode is variable', () => {
+      const state = {
+        swapForm: {
+          prospectiveSwap: {
+            mode: 'variable',
+            variableRate: 2.3456,
+          },
+        },
+      };
+
+      const result = selectNewPositionReceivingRate(state as never);
+
+      expect(result).toBe(2.3456);
+      expect(getProspectiveSwapMode).toHaveBeenCalledWith(state.swapForm);
+      expect(getNewPositionFixedRate).not.toHaveBeenCalled();
+      expect(getVariableRate).toHaveBeenCalledWith(state.swapForm);
     });
   });
 });
