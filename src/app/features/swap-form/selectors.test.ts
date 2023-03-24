@@ -3,6 +3,7 @@ import {
   selectAMMTokenFormatted,
   selectAvailableNotional,
   selectBottomRightMarginNumber,
+  selectExistingPositionMode,
   selectFixedRateInfo,
   selectInfoPostSwap,
   selectIsMarginRequiredError,
@@ -30,6 +31,7 @@ import {
 import {
   getAvailableMargin,
   getAvailableNotional,
+  getExistingPositionMode,
   getNewPositionFixedRate,
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
@@ -54,6 +56,7 @@ jest.mock('./utils', () => ({
   getAvailableNotional: jest.fn(),
   getNewPositionFixedRate: jest.fn(),
   getVariableRate: jest.fn(),
+  getExistingPositionMode: jest.fn(),
 }));
 
 describe('swap-form.selectors', () => {
@@ -963,6 +966,27 @@ describe('swap-form.selectors', () => {
       expect(getProspectiveSwapMode).toHaveBeenCalledWith(state.swapForm);
       expect(getNewPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
       expect(getVariableRate).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('selectExistingPositionMode', () => {
+    afterEach(() => {
+      // Clear mock call history after each test
+      jest.clearAllMocks();
+    });
+
+    it('returns the existing position mode from state', () => {
+      const state = {
+        swapForm: {
+          position: {
+            value: jest.fn(),
+          },
+        },
+      };
+      (getExistingPositionMode as jest.Mock).mockReturnValueOnce('variable');
+      const result = selectExistingPositionMode(state as never);
+      expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
+      expect(result).toEqual('variable');
     });
   });
 });
