@@ -418,6 +418,8 @@ export const slice = createSlice({
       }>,
     ) => {
       state.userInput.fixedLower = value;
+      // whenever fixed lower changes -> update existing position
+      // updateExistingPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
     },
     setUserInputFixedUpperAction: (
@@ -431,6 +433,8 @@ export const slice = createSlice({
       }>,
     ) => {
       state.userInput.fixedUpper = value;
+      // whenever fixed upper changes -> update existing position
+      // updateExistingPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
     },
     setNotionalAmountAction: (
@@ -699,10 +703,6 @@ export const slice = createSlice({
           return;
         }
         state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
-        // todo: Artur not sure if we need a version of the below logic
-        // if (state.position.value) {
-        //   state.userInput.mode = getExistingPositionMode(state) as 'fixed' | 'variable';
-        // }
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(confirmLpThunk.pending, (state) => {

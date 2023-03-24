@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getPositions, InfoPostLp, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { BigNumber, ContractReceipt, providers } from 'ethers';
 
-import { findCurrentPosition } from '../../../utilities/amm';
+import { findCurrentPositionLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import { selectExistingPositionFixedLower, selectExistingPositionFixedUpper } from './selectors';
 import {
@@ -214,6 +214,23 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
 >('lpForm/setSignerAndPositionForAMM', async ({ signer, chainId }, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().lpForm.amm;
+    const fixedLower = thunkAPI.getState().lpForm.userInput.fixedLower;
+    const fixedUpper = thunkAPI.getState().lpForm.userInput.fixedUpper;
+
+    if (!fixedLower) {
+      return {
+        signer: null,
+        position: null,
+      };
+    }
+
+    if (!fixedUpper) {
+      return {
+        signer: null,
+        position: null,
+      };
+    }
+
     if (!amm) {
       return {
         signer: null,
@@ -240,7 +257,7 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
     if (error) {
       return rejectThunkWithError(thunkAPI, error);
     }
-    const position = findCurrentPosition(positions || [], amm.id) || null;
+    const position = findCurrentPositionLp(positions || [], amm.id, fixedLower, fixedUpper) || null;
     return {
       position,
       signer,
