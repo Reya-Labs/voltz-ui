@@ -423,8 +423,17 @@ export const slice = createSlice({
         value: number | null;
       }>,
     ) => {
-      state.userInput.fixedLower = value;
+
+      const amm = state.amm;
+
+      let nextFixedRateLowerNumber: number | null = null;
+      if ((amm !== null) && (value !== null)) { 
+        nextFixedRateLowerNumber = amm.getNextUsableFixedRate(value, 0);
+      }
+
+      state.userInput.fixedLower = nextFixedRateLowerNumber;
       // whenever fixed lower changes -> update existing position
+      // todo: do we need the commented out line below? 
       // updateExistingPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
     },
@@ -438,7 +447,16 @@ export const slice = createSlice({
         value: number | null;
       }>,
     ) => {
-      state.userInput.fixedUpper = value;
+
+      const amm = state.amm;
+
+      let nextFixedRateUpperNumber: number | null = null;
+      if ((amm !== null) && (value !== null)) { 
+        nextFixedRateUpperNumber = amm.getNextUsableFixedRate(value, 0);
+      }
+
+      state.userInput.fixedUpper = nextFixedRateUpperNumber;
+
       // whenever fixed upper changes -> update existing position
       // updateExistingPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
