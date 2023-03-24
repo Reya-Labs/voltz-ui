@@ -15,7 +15,9 @@ import {
   getVariableRateThunk,
   getWalletBalanceThunk,
   setSignerAndPositionForAMMThunk,
+  setPositionForAMMThunk,
   SetSignerAndPositionForAMMThunkSuccess,
+  SetPositionForAMMThunkSuccess,
 } from './thunks';
 import {
   checkLowLeverageNotification, // todo: to we intend to use this component for the lp form as well, is it in designs?
@@ -726,6 +728,33 @@ export const slice = createSlice({
         };
 
         updateLeverageOptionsAfterGetInfoPostLp(state);
+        validateUserInputAndUpdateSubmitButton(state);
+      })
+      .addCase(setPositionForAMMThunk.pending, (state) => {
+        state.position.value = null;
+        state.position.status = 'pending';
+        
+        // todo: not sure if we need this
+        // if (!state.amm) {
+        //   return;
+        // }
+        
+      })
+      .addCase(setPositionForAMMThunk.rejected, (state) => {
+        state.position.value = null;
+        state.position.status = 'error';
+
+        // same as above
+        // if (!state.amm) {
+        //   return;
+        // }
+      })
+      .addCase(setPositionForAMMThunk.fulfilled, (state, { payload }) => {
+        state.position.value = (payload as SetPositionForAMMThunkSuccess).position;
+        state.position.status = 'success';
+        if (!state.amm) {
+          return;
+        }
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
