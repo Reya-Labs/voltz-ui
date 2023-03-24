@@ -9,6 +9,7 @@ import {
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
+  getPoolLpInfoThunk,
   selectLpFormAMM,
   selectLpFormPosition,
   selectLpFormPositionFetchingStatus,
@@ -78,8 +79,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
     void dispatch(getFixedRateThunk());
     void dispatch(getVariableRateThunk());
     void dispatch(getVariableRate24hAgoThunk());
-    // TODO: Artur + Filip, check if this is really needed
-    // void dispatch(getPoolLpInfoThunk());
+    void dispatch(getPoolLpInfoThunk());
   }, [dispatch, aMM]);
 
   useEffect(() => {
