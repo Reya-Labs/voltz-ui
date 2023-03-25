@@ -28,12 +28,12 @@ export const CopyLinkButton: React.FunctionComponent<CopyLinkButtonProps> = ({ o
     bottomLeftText={mode === 'copyError' ? 'Oops, try again' : ''}
     bottomLeftTextColorToken="wildStrawberry"
     bottomLeftTextTypographyToken="primaryBodySmallRegular"
-    data-testid="CopyLinkButton"
+    data-testid={`CopyLinkButton-CopyLinkButtonUI-${mode}`}
     disabled={DISABLED_MAP[mode]}
     loading={mode === 'copying'}
     typographyToken="primaryBodySmallBold"
     variant="primary"
-    onClick={onClick}
+    onClick={DISABLED_MAP[mode] ? undefined : onClick}
   >
     {MODE_COPY_MAP[mode]}
   </CopyLinkButtonUI>
