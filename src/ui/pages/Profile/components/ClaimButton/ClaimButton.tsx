@@ -56,7 +56,7 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
         }
         bottomLeftTextColorToken="wildStrawberry"
         bottomLeftTextTypographyToken="primaryBodySmallRegular"
-        data-testid="ClaimButton"
+        data-testid={`ClaimButton-ClaimButtonStyled-${mode}`}
         disabled={DISABLED_MAP[mode]}
         loading={mode === 'claiming'}
         typographyToken="primaryBodySmallBold"
@@ -65,7 +65,9 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
       >
         {copyMap[mode]}
         {mode === 'claimedDate' && claimedAt && (
-          <ClaimedAtTypography>{formatPOSIXTimestamp(claimedAt)}</ClaimedAtTypography>
+          <ClaimedAtTypography data-testid="ClaimButton-ClaimedAtTypography">
+            {formatPOSIXTimestamp(claimedAt)}
+          </ClaimedAtTypography>
         )}
       </ClaimButtonStyled>
     </Wrapper>
