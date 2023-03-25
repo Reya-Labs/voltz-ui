@@ -163,6 +163,27 @@ export const validateUserInput = (state: Draft<SliceState>): void => {
   validateUserInputFixedRange(state);
 };
 
+export const updateSelectedPosition = (state: Draft<SliceState>): void => {
+  // todo: consider creating a separate function for this -> has existing positions
+  if (state.positions.status !== 'success' || state.positions.value === null) {
+    return;
+  }
+
+  const fixedLower = state.userInput.fixedLower;
+  const fixedUpper = state.userInput.fixedUpper;
+  state.selectedPosition = state.positions.value[0];
+
+  const filteredPosition = state.positions.value.find(
+    (i) => i.fixedRateLower.toNumber() === fixedLower && i.fixedRateUpper.toNumber() === fixedUpper,
+  );
+
+  if (filteredPosition === undefined) {
+    state.selectedPosition = null;
+  } else {
+    state.selectedPosition = filteredPosition;
+  }
+};
+
 export const updateLeverage = (state: Draft<SliceState>): void => {
   if (getProspectiveLpNotional(state) > 0 && state.userInput.marginAmount.value > 0) {
     state.userInput.leverage = getProspectiveLpNotional(state) / state.userInput.marginAmount.value;

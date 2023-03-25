@@ -34,7 +34,7 @@ export const selectLpFormMode = (state: RootState): 'new' | 'edit' => {
 
 export const selectLpFormSelectedPosition = (state: RootState) => {
   return state.lpForm.selectedPosition;
-}
+};
 
 export const selectAMMTokenFormatted = (state: RootState) => {
   const aMM = selectLpFormAMM(state);
