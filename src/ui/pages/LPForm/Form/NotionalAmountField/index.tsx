@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   getInfoPostLpThunk,
   selectLpFormAMM,
-  selectLpFormPosition,
+  selectLpFormSelectedPosition,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
 } from '../../../../../app/features/lp-form';
@@ -26,7 +26,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const dispatch = useAppDispatch();
   const aMM = useAppSelector(selectLpFormAMM);
-  const position = useAppSelector(selectLpFormPosition);
+  const selectedPosition = useAppSelector(selectLpFormSelectedPosition);
 
   useEffect(() => {
     setLocalNotional(notionalAmount.value.toString());
@@ -92,7 +92,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     ? 'primaryBodySmallRegular'
     : 'primaryBodyXSmallRegular';
 
-  return !position ? (
+  return !selectedPosition ? (
     <NewNotionalAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
@@ -110,7 +110,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       labelTypographyToken={labelTypographyToken}
       localEditMode={localEditMode}
       localNotional={localNotional}
-      position={position}
+      position={selectedPosition}
       underlyingTokenName={aMM.underlyingToken.name}
     />
   );

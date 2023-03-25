@@ -17,9 +17,9 @@ import {
 // ------------ General Lp Form State Info ------------
 export const selectSubmitButtonInfo = (state: RootState) => state.lpForm.submitButton;
 export const selectLpFormAMM = (state: RootState) => state.lpForm.amm;
-export const selectLpFormPosition = (state: RootState) => state.lpForm.position.value;
-export const selectLpFormPositionFetchingStatus = (state: RootState) =>
-  state.lpForm.position.status;
+export const selectLpFormPositions = (state: RootState) => state.lpForm.positions.value;
+export const selectLpFormPositionsFetchingStatus = (state: RootState) =>
+  state.lpForm.positions.status;
 export const selectWalletBalance = (state: RootState) => {
   if (state.lpForm.walletBalance.status !== 'success') {
     return '--';
@@ -31,6 +31,10 @@ export const selectPoolLpInfoStatus = (state: RootState) => state.lpForm.poolLpI
 export const selectLpFormMode = (state: RootState): 'new' | 'edit' => {
   return hasExistingPosition(state.lpForm) ? 'edit' : 'new';
 };
+
+export const selectLpFormSelectedPosition = (state: RootState) => {
+  return state.lpForm.selectedPosition;
+}
 
 export const selectAMMTokenFormatted = (state: RootState) => {
   const aMM = selectLpFormAMM(state);
@@ -114,11 +118,11 @@ export const selectNewPositionCompactNotional = (state: RootState) => {
 };
 
 export const selectExistingPositionCompactNotional = (state: RootState) => {
-  if (state.lpForm.position.status !== 'success' || !state.lpForm.position.value) {
+  if (state.lpForm.selectedPosition === null) {
     return null;
   }
 
-  const compactParts = lpFormCompactFormatToParts(state.lpForm.position.value.notional);
+  const compactParts = lpFormCompactFormatToParts(state.lpForm.selectedPosition.notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -126,19 +130,18 @@ export const selectExistingPositionCompactNotional = (state: RootState) => {
 };
 
 export const selectExistingPositionFixedLower = (state: RootState) => {
-  if (state.lpForm.position.status !== 'success' || !state.lpForm.position.value) {
+  if (state.lpForm.selectedPosition === null) {
     return null;
   }
 
-  return state.lpForm.position.value.fixedRateLower.toNumber();
+  return state.lpForm.selectedPosition.fixedRateLower.toNumber();
 };
 
 export const selectExistingPositionFixedUpper = (state: RootState) => {
-  if (state.lpForm.position.status !== 'success' || !state.lpForm.position.value) {
+  if (state.lpForm.selectedPosition === null) {
     return null;
   }
-
-  return state.lpForm.position.value.fixedRateUpper.toNumber();
+  return state.lpForm.selectedPosition.fixedRateUpper.toNumber();
 };
 
 export const selectEditPositionCompactNotional = (state: RootState) => {
@@ -230,10 +233,10 @@ export const selectLeverageOptions = (state: RootState) => {
 };
 
 export const selectPositionMarginFormatted = (state: RootState) => {
-  if (!state.lpForm.position.value) {
+  if (!state.lpForm.selectedPosition) {
     return '--';
   }
-  return lpFormCompactFormat(state.lpForm.position.value.margin);
+  return lpFormCompactFormat(state.lpForm.selectedPosition.margin);
 };
 
 export const selectFixedRateValueFormatted = (state: RootState) => {

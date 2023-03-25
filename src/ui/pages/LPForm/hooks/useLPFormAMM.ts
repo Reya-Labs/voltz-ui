@@ -11,8 +11,8 @@ import {
   getVariableRateThunk,
   getWalletBalanceThunk,
   selectLpFormAMM,
-  selectLpFormPosition,
-  selectLpFormPositionFetchingStatus,
+  selectLpFormPositionsFetchingStatus,
+  selectLpFormSelectedPosition,
   selectPoolLpInfoStatus,
   setLpFormAMMAction,
   setSignerAndPositionsForAMMThunk,
@@ -36,8 +36,8 @@ export const useLPFormAMM = (): UseAMMsResult => {
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
   const aMM = useAppSelector(selectLpFormAMM);
-  const position = useAppSelector(selectLpFormPosition);
-  const positionFetchingStatus = useAppSelector(selectLpFormPositionFetchingStatus);
+  const selectedPosition = useAppSelector(selectLpFormSelectedPosition);
+  const positionsFetchingStatus = useAppSelector(selectLpFormPositionsFetchingStatus);
   const poolLpInfoStatus = useAppSelector(selectPoolLpInfoStatus);
   const chainId = useAppSelector(selectChainId);
 
@@ -113,23 +113,23 @@ export const useLPFormAMM = (): UseAMMsResult => {
   }, [dispatch, aMM, aMM?.signer, chainId]);
 
   useEffect(() => {
-    if (!position) {
+    if (!selectedPosition) {
       return;
     }
 
     void dispatch(getInfoPostLpThunk());
-  }, [dispatch, position]);
+  }, [dispatch, selectedPosition]);
 
   return {
     aMM,
     loading:
       idle ||
-      positionFetchingStatus === 'idle' ||
+      positionsFetchingStatus === 'idle' ||
       poolLpInfoStatus === 'idle' ||
       loading ||
-      positionFetchingStatus === 'pending' ||
+      positionsFetchingStatus === 'pending' ||
       poolLpInfoStatus === 'pending',
     noAMMFound: !aMM && !loading,
-    error: error || positionFetchingStatus === 'error' || poolLpInfoStatus === 'error',
+    error: error || positionsFetchingStatus === 'error' || poolLpInfoStatus === 'error',
   };
 };

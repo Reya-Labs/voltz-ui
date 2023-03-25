@@ -6,7 +6,7 @@ import {
   selectExistingPositionCompactNotional,
   selectExistingPositionFixedLower,
   selectExistingPositionFixedUpper,
-  selectLpFormPosition,
+  selectLpFormSelectedPosition,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
@@ -42,7 +42,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   // TODO: Artur, Filip when SDK has support for PNL show it
   const hidePNL = true;
 
-  const existingPosition = useAppSelector(selectLpFormPosition);
+  const existingPosition = useAppSelector(selectLpFormSelectedPosition);
   if (!existingPosition) {
     return null;
   }

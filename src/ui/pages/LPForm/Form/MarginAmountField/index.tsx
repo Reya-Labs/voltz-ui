@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   selectLpFormAMM,
-  selectLpFormPosition,
+  selectLpFormSelectedPosition,
   selectUserInputMarginInfo,
   setMarginAmountAction,
 } from '../../../../../app/features/lp-form';
@@ -18,7 +18,7 @@ type NotionalAmountProps = {};
 export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const dispatch = useAppDispatch();
   const marginAmount = useAppSelector(selectUserInputMarginInfo);
-  const position = useAppSelector(selectLpFormPosition);
+  const selectedPosition = useAppSelector(selectLpFormSelectedPosition);
   const aMM = useAppSelector(selectLpFormAMM);
 
   const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
@@ -92,7 +92,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
     return null;
   }
 
-  return !position ? (
+  return !selectedPosition ? (
     <NewMarginAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
