@@ -1,16 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react';
+import { Button, Confetti } from 'brokoli-ui';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { BouncedLoading } from '../../../../../components/atomic/BouncedLoading/BouncedLoading';
-import { Tick } from '../../../../../components/atomic/Tick/Tick';
 import { formatPOSIXTimestamp } from '../../../../../utilities/date';
-import {
-  ClaimButton as ClaimButtonUI,
-  ClaimedAtTypography,
-  ClaimErrorTypography,
-  StretchClaimButton,
-  TickWrapper,
-} from './ClaimButton.styled';
-import { Confetti } from './Confetti/Confetti';
+import { ClaimedAtTypography } from './ClaimButton.styled';
 
 type ClaimButtonMode = 'claim' | 'claimed' | 'claiming' | 'claimedDate' | 'claimError';
 
@@ -47,33 +39,34 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
 }) => {
   const [showConfetti, setShowConfetti] = useState(false);
   const initialModeRef = useRef<ClaimButtonMode>(mode);
-  const ButtonUI = mode === 'claimedDate' ? StretchClaimButton : ClaimButtonUI;
   const Wrapper = showConfetti ? Confetti : React.Fragment;
-  const handleTickAnimationEnd = useCallback(() => {
-    setShowConfetti(initialModeRef.current !== 'claimed');
-  }, []);
+  useEffect(() => {
+    setShowConfetti(mode === 'claimed' && initialModeRef.current !== 'claimed');
+  }, [mode]);
   const copyMap = {
     ...MODE_COPY_MAP,
     ...copies,
   };
 
   return (
-    <>
-      <ButtonUI data-testid="ClaimButton" disabled={DISABLED_MAP[mode]} onClick={onClick}>
-        <Wrapper>{copyMap[mode]}</Wrapper>
-        {mode === 'claimed' && (
-          <TickWrapper>
-            <Tick onAnimationEnd={handleTickAnimationEnd} />
-          </TickWrapper>
-        )}
-        {mode === 'claiming' && <BouncedLoading />}
+    <Wrapper>
+      <Button
+        bottomLeftText={
+          mode === 'claimError' && displayError ? 'Error when claiming, try again' : ''
+        }
+        bottomLeftTextColorToken="wildStrawberry"
+        bottomLeftTextTypographyToken="primaryBodySmallRegular"
+        data-testid="ClaimButton"
+        disabled={DISABLED_MAP[mode]}
+        loading={mode === 'claiming'}
+        variant="primary"
+        onClick={onClick}
+      >
+        {copyMap[mode]}
         {mode === 'claimedDate' && claimedAt && (
           <ClaimedAtTypography>{formatPOSIXTimestamp(claimedAt)}</ClaimedAtTypography>
         )}
-      </ButtonUI>
-      {mode === 'claimError' && displayError && (
-        <ClaimErrorTypography>Error when claiming, try again</ClaimErrorTypography>
-      )}
-    </>
+      </Button>
+    </Wrapper>
   );
 };
