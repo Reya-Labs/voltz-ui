@@ -48,11 +48,13 @@ export type SliceState = {
       isError: boolean;
     };
   };
-  amm: AMM | null;
+  amm: AMM | null; 
   positions: {
     value: Position[] | null;
     status: ThunkStatus;
   };
+  // position from the list of positions above that matches the fixed rate range selected by user
+  selectedPosition: Position | null;
   walletBalance: {
     value: number;
     status: ThunkStatus;

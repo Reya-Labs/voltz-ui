@@ -61,7 +61,7 @@ const validateUserInputNotional = (state: Draft<SliceState>): void => {
   if (
     hasExistingPosition(state) &&
     state.userInput.notionalAmount.editMode === 'remove' &&
-    state.userInput.notionalAmount.value > (state.position.value as Position).notional
+    state.userInput.notionalAmount.value > (state.selectedPosition as Position).notional
   ) {
     error = 'Not enough notional. Available:';
   }
@@ -77,7 +77,7 @@ export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
 
     let maxMarginWithdrawable = null;
     if (getProspectiveLpNotional(state) === 0 && hasExistingPosition(state)) {
-      maxMarginWithdrawable = (state.position.value as Position).maxMarginWithdrawable;
+      maxMarginWithdrawable = (state.selectedPosition as Position).maxMarginWithdrawable;
     }
 
     if (getProspectiveLpNotional(state) > 0) {
@@ -172,7 +172,7 @@ export const updateLeverage = (state: Draft<SliceState>): void => {
 };
 
 export const hasExistingPosition = (state: Draft<SliceState>): boolean => {
-  return state.position.status === 'success' && state.position.value !== null;
+  return state.selectedPosition !== null;
 };
 
 export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number => {
@@ -224,8 +224,8 @@ export const getProspectiveLpNotional = (state: Draft<SliceState>): number => {
 
   let value = state.userInput.notionalAmount.value;
 
-  const existingPositionNotional = getExistingPositionNotional(state);
-  if (state.position.value !== null && existingPositionNotional !== null) {
+  const existingPositionNotional = getExistingSelectedPositionNotional(state);
+  if (state.selectedPosition !== null && existingPositionNotional !== null) {
     value =
       state.userInput.notionalAmount.editMode === 'add'
         ? existingPositionNotional + value
@@ -243,16 +243,16 @@ export const getProspectiveLpMargin = (state: Draft<SliceState>): number => {
   return -state.userInput.marginAmount.value;
 };
 
-export const getExistingPositionNotional = (state: Draft<SliceState>) => {
-  if (state.position.status !== 'success' || !state.position.value) {
+export const getExistingSelectedPositionNotional = (state: Draft<SliceState>) => {
+  if (state.selectedPosition === null) {
     return null;
   }
 
-  return state.position.value.notional;
+  return state.selectedPosition.notional;
 };
 
 export const getEditPositionNotional = (state: Draft<SliceState>) => {
-  // todo: implement
+  // todo: Artur implement
   return 0;
 };
 
