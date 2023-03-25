@@ -1,13 +1,6 @@
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import React from 'react';
 
-import { BouncedLoading } from '../../../../../components/atomic/BouncedLoading/BouncedLoading';
-import { Tick } from '../../../../../components/atomic/Tick/Tick';
-import {
-  CopyLinkButton as CopyLinkButtonUI,
-  CopyLinkErrorTypography,
-  IconWrapper,
-} from './CopyLinkButton.styled';
+import { CopyLinkButton as CopyLinkButtonUI } from './CopyLinkButton.styled';
 
 type CopyLinkButtonMode = 'copy' | 'copying' | 'copied' | 'copyError';
 
@@ -30,28 +23,18 @@ const DISABLED_MAP: Record<CopyLinkButtonProps['mode'], boolean> = {
   copying: true,
 };
 
-export const CopyLinkButton: React.FunctionComponent<CopyLinkButtonProps> = ({ onClick, mode }) => {
-  return (
-    <>
-      <CopyLinkButtonUI
-        data-testid="CopyLinkButton"
-        disabled={DISABLED_MAP[mode]}
-        onClick={onClick}
-      >
-        {MODE_COPY_MAP[mode]}
-        {(mode === 'copy' || mode === 'copyError') && (
-          <IconWrapper>
-            <ContentCopyIcon fontSize="inherit" />
-          </IconWrapper>
-        )}
-        {mode === 'copied' && (
-          <IconWrapper>
-            <Tick />
-          </IconWrapper>
-        )}
-        {mode === 'copying' && <BouncedLoading />}
-      </CopyLinkButtonUI>
-      {mode === 'copyError' && <CopyLinkErrorTypography>Oops, try again</CopyLinkErrorTypography>}
-    </>
-  );
-};
+export const CopyLinkButton: React.FunctionComponent<CopyLinkButtonProps> = ({ onClick, mode }) => (
+  <CopyLinkButtonUI
+    bottomLeftText={mode === 'copyError' ? 'Oops, try again' : ''}
+    bottomLeftTextColorToken="wildStrawberry"
+    bottomLeftTextTypographyToken="primaryBodySmallRegular"
+    data-testid="CopyLinkButton"
+    disabled={DISABLED_MAP[mode]}
+    loading={mode === 'copying'}
+    typographyToken="primaryBodySmallBold"
+    variant="primary"
+    onClick={onClick}
+  >
+    {MODE_COPY_MAP[mode]}
+  </CopyLinkButtonUI>
+);
