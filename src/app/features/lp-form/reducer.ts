@@ -14,10 +14,8 @@ import {
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
-  setSignerAndPositionForAMMThunk,
-  setPositionForAMMThunk,
-  SetSignerAndPositionForAMMThunkSuccess,
-  SetPositionForAMMThunkSuccess,
+  setSignerAndPositionsForAMMThunk,
+  SetSignerAndPositionsForAMMThunkSuccess
 } from './thunks';
 import {
   checkLowLeverageNotification, // todo: to we intend to use this component for the lp form as well, is it in designs?
@@ -51,8 +49,8 @@ export type SliceState = {
     };
   };
   amm: AMM | null;
-  position: {
-    value: Position | null;
+  positions: {
+    value: Position[] | null;
     status: ThunkStatus;
   };
   walletBalance: {
@@ -150,7 +148,7 @@ const initialState: SliceState = {
     },
   },
   amm: null,
-  position: {
+  positions: {
     value: null,
     status: 'idle',
   },
@@ -730,56 +728,29 @@ export const slice = createSlice({
         updateLeverageOptionsAfterGetInfoPostLp(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(setPositionForAMMThunk.pending, (state) => {
-        state.position.value = null;
-        state.position.status = 'pending';
-        
-        // todo: not sure if we need this
-        // if (!state.amm) {
-        //   return;
-        // }
-        
-      })
-      .addCase(setPositionForAMMThunk.rejected, (state) => {
-        state.position.value = null;
-        state.position.status = 'error';
-
-        // same as above
-        // if (!state.amm) {
-        //   return;
-        // }
-      })
-      .addCase(setPositionForAMMThunk.fulfilled, (state, { payload }) => {
-        state.position.value = (payload as SetPositionForAMMThunkSuccess).position;
-        state.position.status = 'success';
-        if (!state.amm) {
-          return;
-        }
-        validateUserInputAndUpdateSubmitButton(state);
-      })
-      .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
-        state.position.value = null;
-        state.position.status = 'pending';
+      .addCase(setSignerAndPositionsForAMMThunk.pending, (state) => {
+        state.positions.value = null;
+        state.positions.status = 'pending';
         if (!state.amm) {
           return;
         }
         state.amm.signer = null;
       })
-      .addCase(setSignerAndPositionForAMMThunk.rejected, (state) => {
-        state.position.value = null;
-        state.position.status = 'error';
+      .addCase(setSignerAndPositionsForAMMThunk.rejected, (state) => {
+        state.positions.value = null;
+        state.positions.status = 'error';
         if (!state.amm) {
           return;
         }
         state.amm.signer = null;
       })
-      .addCase(setSignerAndPositionForAMMThunk.fulfilled, (state, { payload }) => {
-        state.position.value = (payload as SetSignerAndPositionForAMMThunkSuccess).position;
-        state.position.status = 'success';
+      .addCase(setSignerAndPositionsForAMMThunk.fulfilled, (state, { payload }) => {
+        state.positions.value = (payload as SetSignerAndPositionsForAMMThunkSuccess).position;
+        state.positions.status = 'success';
         if (!state.amm) {
           return;
         }
-        state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
+        state.amm.signer = (payload as SetSignerAndPositionsForAMMThunkSuccess).signer;
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(confirmLpThunk.pending, (state) => {

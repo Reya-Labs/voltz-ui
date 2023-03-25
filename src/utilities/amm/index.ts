@@ -7,18 +7,14 @@ import { AMM, NetworkConfiguration, Position } from '@voltz-protocol/v1-sdk';
  * @param fixedLower - the lower fixed rate selected by the lp
  * @param fixedUpper - the upper fixed rate selected by the user
  */
-export const findCurrentPositionLp = (
+export const findCurrentPositionsLp = (
   positions: Position[],
-  selectedAmmId: string,
-  fixedLower: number,
-  fixedUpper: number,
+  selectedAmmId: string
 ) => {
+  // todo: check if need to filter out the default tick range that's used to identify traders
   return (positions || []).find((p) => {
-    debugger;
     return (
-      p.amm.id === selectedAmmId &&
-      p.fixedRateLower.toNumber() === fixedLower &&
-      p.fixedRateUpper.toNumber() === fixedUpper
+      p.amm.id === selectedAmmId
     );
   });
 };

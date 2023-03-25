@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getPositions, InfoPostLp, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { BigNumber, ContractReceipt, providers } from 'ethers';
 
-import { findCurrentPositionLp } from '../../../utilities/amm';
+import { findCurrentPositionsLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import {
   getProspectiveLpAddLiquidity,
@@ -226,46 +226,37 @@ export const getInfoPostLpThunk = createAsyncThunk<
   }
 });
 
-export type SetSignerAndPositionForAMMThunkSuccess = {
-  position: Position | null;
+export type SetSignerAndPositionsForAMMThunkSuccess = {
+  position: Position[] | null;
   signer: providers.JsonRpcSigner | null;
 };
 
-export type SetPositionForAMMThunkSuccess = {
-  position: Position | null;
-};
-
-export const setPositionForAMMThunk = createAsyncThunk<
-  Awaited<SetPositionForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
+export const setSignerAndPositionsForAMMThunk = createAsyncThunk<
+  Awaited<SetSignerAndPositionsForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
   { signer: providers.JsonRpcSigner | null; chainId: SupportedChainId },
   { state: RootState }
->('lpForm/setPositionForAMM', async ({ signer, chainId }, thunkAPI) => {
+>('lpForm/setSignerAndPositionsForAMM', async ({ signer, chainId }, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().lpForm.amm;
-    const fixedLower = thunkAPI.getState().lpForm.userInput.fixedLower;
-    const fixedUpper = thunkAPI.getState().lpForm.userInput.fixedUpper;
 
     if (!amm) {
       return {
-        position: null,
+        signer: null,
+        positions: null,
       };
     }
 
     if (!signer) {
       return {
-        position: null,
+        signer: null,
+        positions: null,
       };
     }
 
-    if (!fixedLower) {
+    if (!chainId) {
       return {
-        position: null,
-      };
-    }
-
-    if (!fixedUpper) {
-      return {
-        position: null,
+        signer: null,
+        positions: null,
       };
     }
 
@@ -281,71 +272,9 @@ export const setPositionForAMMThunk = createAsyncThunk<
     if (error) {
       return rejectThunkWithError(thunkAPI, error);
     }
-    const position = findCurrentPositionLp(positions || [], amm.id, fixedLower, fixedUpper) || null;
-    debugger;
+    const filteredPositions = findCurrentPositionsLp(positions || [], amm.id) || null;
     return {
-      position
-    };
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
-
-// todo: since we already have setPosition, why not have another one for signer?
-export const setSignerAndPositionForAMMThunk = createAsyncThunk<
-  Awaited<SetSignerAndPositionForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
-  { signer: providers.JsonRpcSigner | null; chainId: SupportedChainId },
-  { state: RootState }
->('lpForm/setSignerAndPositionForAMM', async ({ signer, chainId }, thunkAPI) => {
-  try {
-    const amm = thunkAPI.getState().lpForm.amm;
-    const fixedLower = thunkAPI.getState().lpForm.userInput.fixedLower;
-    const fixedUpper = thunkAPI.getState().lpForm.userInput.fixedUpper;
-
-    if (!amm) {
-      return {
-        signer: null,
-        position: null,
-      };
-    }
-
-    if (!signer) {
-      return {
-        signer: null,
-        position: null,
-      };
-    }
-
-    if (!fixedLower) {
-      return {
-        signer: signer,
-        position: null,
-      };
-    }
-
-    if (!fixedUpper) {
-      return {
-        signer: signer,
-        position: null,
-      };
-    }
-
-    const userWalletId = (await signer.getAddress()).toLowerCase();
-
-    const { positions, error } = await getPositions({
-      chainId,
-      userWalletId: userWalletId,
-      amms: [amm],
-      type: 'LP',
-    });
-
-    if (error) {
-      return rejectThunkWithError(thunkAPI, error);
-    }
-    const position = findCurrentPositionLp(positions || [], amm.id, fixedLower, fixedUpper) || null;
-    return {
-      position,
+      filteredPositions,
       signer,
     };
   } catch (err) {
@@ -385,9 +314,15 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
   try {
     const lpFormState = thunkAPI.getState().lpForm;
     const amm = lpFormState.amm;
-    if (!amm || !lpFormState.position.value) {
+
+    if (!amm) {
       return;
     }
+
+    // todo: come and uncomment since the check below is needed
+    // if (!amm || !lpFormState.position.value) {
+    //   return;
+    // }
 
     const fixedLow: number = getProspectiveLpFixedLow(lpFormState);
     const fixedHigh: number = getProspectiveLpFixedHigh(lpFormState);

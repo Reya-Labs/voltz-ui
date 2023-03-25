@@ -14,11 +14,8 @@ import {
   selectLpFormPosition,
   selectLpFormPositionFetchingStatus,
   selectPoolLpInfoStatus,
-  selectUserInputFixedLower,
-  selectUserInputFixedUpper,
   setLpFormAMMAction,
-  setPositionForAMMThunk,
-  setSignerAndPositionForAMMThunk,
+  setSignerAndPositionsForAMMThunk,
 } from '../../../../app/features/lp-form';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -43,9 +40,6 @@ export const useLPFormAMM = (): UseAMMsResult => {
   const positionFetchingStatus = useAppSelector(selectLpFormPositionFetchingStatus);
   const poolLpInfoStatus = useAppSelector(selectPoolLpInfoStatus);
   const chainId = useAppSelector(selectChainId);
-
-  const fixedLower = useAppSelector(selectUserInputFixedLower);
-  const fixedUpper = useAppSelector(selectUserInputFixedUpper);
 
   const [loading, setLoading] = useState(true);
 
@@ -100,30 +94,12 @@ export const useLPFormAMM = (): UseAMMsResult => {
       return;
     }
     void dispatch(
-      setSignerAndPositionForAMMThunk({
+      setSignerAndPositionsForAMMThunk({
         signer,
         chainId,
       }),
     );
   }, [dispatch, aMMsLoading, error, chainId, signer]);
-
-  useEffect(() => {
-    if (!chainId) {
-      return;
-    }
-    if (error) {
-      return;
-    }
-    if (aMMsLoading) {
-      return;
-    }
-    void dispatch(
-      setPositionForAMMThunk({
-        signer,
-        chainId,
-      }),
-    );
-  }, [dispatch, aMMsLoading, error, chainId, signer, fixedLower, fixedUpper]);
 
   useEffect(() => {
     if (!aMM || !aMM.signer || !chainId) {
