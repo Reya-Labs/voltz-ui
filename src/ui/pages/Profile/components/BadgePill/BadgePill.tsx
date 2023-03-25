@@ -22,6 +22,7 @@ export const BadgePill: React.FunctionComponent<{
     return (
       <Skeleton
         colorToken="liberty2"
+        data-testid="BadgePill-Skeleton"
         typographyToken="primaryBodySmallRegular"
         variant="rectangular"
       />
@@ -36,7 +37,11 @@ export const BadgePill: React.FunctionComponent<{
     : '';
   const tierText = TIER_COPY_MAP[tier];
   return (
-    <Pill colorToken={TIER_COLOR_TOKEN_MAP[tier]} typographyToken="primaryBodySmallRegular">
+    <Pill
+      colorToken={TIER_COLOR_TOKEN_MAP[tier]}
+      data-testid={`BadgePill-Pill-${tier}-${category}-${variant}`}
+      typographyToken="primaryBodySmallRegular"
+    >
       {tier !== 'legendary' && tier !== 'easterEgg' ? categoryText + tierText : tierText}
     </Pill>
   );
