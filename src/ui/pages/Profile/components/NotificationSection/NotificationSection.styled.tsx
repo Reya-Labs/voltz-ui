@@ -1,25 +1,25 @@
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
+import styled from '@emotion/styled';
+import { colors } from 'brokoli-ui';
 
-export const NotificationBox = styled(Box)`
-  padding: ${({ theme }) => theme.spacing(2, 4)};
+export const NotificationBox = styled('div')`
+  padding: 8px 16px;
 `;
 
-export const NotificationContainer = styled(Box)`
-  background-color: #19152a;
+export const NotificationContainer = styled('div')`
+  background-color: ${colors.lavenderWeb8};
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 8px;
 `;
 
-export const NotificationsContainer = styled(Box)`
+export const NotificationsContainer = styled('div')`
   display: flex;
   flex-direction: column;
-  row-gap: ${({ theme }) => theme.spacing(2)};
-  margin-top: ${({ theme }) => theme.spacing(6)};
+  row-gap: 8px;
+  margin-top: 24px;
 `;
 
-export const ButtonBox = styled(Box)`
-  width: 150px;
+export const ButtonBox = styled('div')`
+  width: 110px;
 `;

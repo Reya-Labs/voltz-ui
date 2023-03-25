@@ -1,11 +1,9 @@
-import { SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { formatEthereumAddress, Typography } from 'brokoli-ui';
 import React, { useRef } from 'react';
 
-import { Typography } from '../../../../../components/atomic/Typography/Typography';
 import { Season } from '../../../../../hooks/season/types';
 import { formatDateTimeWithOrdinal } from '../../../../../utilities/date';
 import { doNothing } from '../../../../../utilities/doNothing';
-import { elideAddress } from '../../../../../utilities/elideAddress';
 import {
   BadgeVariant,
   NON_PROGRAMMATIC_BADGES,
@@ -15,26 +13,21 @@ import { BADGE_VARIANT_TIER_MAP } from '../../helpers';
 import { AchievedBadge, AchievedBadgeProps } from '../AchievedBadge/AchievedBadge';
 import { Badge } from '../Badge/Badge';
 import { BadgeCard, BadgeCardHandle } from '../BadgeCard/BadgeCard';
-import { BoldText } from '../BoldText.styled';
 import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
+import { HighlightedText } from '../HighlightedText.styled';
 import { NotificationSection } from '../NotificationSection/NotificationSection';
 import { SeasonToggle } from '../SeasonToggle/SeasonToggle';
 import {
-  Account,
   AchievedBadgesGrid,
   AchievedBadgesListBox,
   AchievedBadgesListGrid,
-  AchievedBadgesListHeading,
-  AchievedBadgesListSeason,
   AchievedBadgesListSubheading,
   BadgeCollectionBox,
   BadgeCollectionTypographyBox,
   CommunityEngagementBox,
   CommunityEngagementGrid,
-  CommunityEngagementTypography,
   ContainerBox,
-  Heading,
   NoAchievedBadgesBox,
   NoAchievedBadgesTypography,
   Subheading,
@@ -55,12 +48,10 @@ export type ProfilePageWalletConnectedProps = {
   claimButtonModes?: Record<BadgeVariant, ClaimButtonProps['mode']>;
   onCopyLinkButtonClick?: () => void;
   copyLinkButtonMode: CopyLinkButtonProps['mode'];
-  chainId: SupportedChainId;
 };
 
 export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWalletConnectedProps> =
   ({
-    chainId,
     account,
     season,
     badges,
@@ -114,17 +105,20 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     }, []);
     return (
       <ContainerBox>
-        <Heading variant="h1">
-          WELCOME TO YOUR PROFILE&nbsp;
-          <Account>{elideAddress(account.toUpperCase())}</Account>
-        </Heading>
-        <Subheading data-testid="Profile-BadgesExplained" variant="body2">
+        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Black">
+          {`Welcome to your profile ${formatEthereumAddress(account)}`}
+        </Typography>
+        <Subheading
+          colorToken="lavenderWeb2"
+          data-testid="Profile-BadgesExplained"
+          typographyToken="primaryBodyMediumRegular"
+        >
           Earn badges through your contribution to the community and activity on the protocol.
           Badges are earned throughout each Season, with minting available at the end of each
           Season. The more you collect the greater your contribution.{' '}
-          <BoldText>{seasonLabel}</BoldText> {isOnGoingSeason ? 'runs' : 'ran'} between{' '}
-          <BoldText>{seasonStartDateFormatted}</BoldText> and{' '}
-          <BoldText>{seasonEndDateFormatted}</BoldText>.
+          <HighlightedText>{seasonLabel}</HighlightedText> {isOnGoingSeason ? 'runs' : 'ran'}{' '}
+          between <HighlightedText>{seasonStartDateFormatted}</HighlightedText> and{' '}
+          <HighlightedText>{seasonEndDateFormatted}</HighlightedText>.
         </Subheading>
         <NotificationSection
           claimButtonBulkMode={claimButtonBulkMode}
@@ -136,7 +130,9 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
         />
         <BadgeCollectionBox>
           <BadgeCollectionTypographyBox>
-            <Typography variant="h2">YOUR BADGE COLLECTION</Typography>
+            <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+              Your Badge Collection
+            </Typography>
             <SeasonToggle season={season} seasons={seasonOptions} onChange={onSeasonChange} />
           </BadgeCollectionTypographyBox>
           <AchievedBadgesGrid itemsPerRow={!loading && achievedBadges.length === 0 ? 1 : 3}>
@@ -167,7 +163,10 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
             {!loading && achievedBadges.length === 0 && (
               <NoAchievedBadgesBox>
                 <Badge variant="noClaimedBadges" />
-                <NoAchievedBadgesTypography variant="body2">
+                <NoAchievedBadgesTypography
+                  colorToken="lavenderWeb2"
+                  typographyToken="primaryBodyMediumRegular"
+                >
                   Make contributions to the community or trade on the protocol to earn badges
                 </NoAchievedBadgesTypography>
               </NoAchievedBadgesBox>
@@ -176,11 +175,13 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
         </BadgeCollectionBox>
 
         <AchievedBadgesListBox>
-          <AchievedBadgesListHeading variant="h2">
-            THE COLLECTION -&nbsp;
-            <AchievedBadgesListSeason>{seasonLabel.toUpperCase()}</AchievedBadgesListSeason>
-          </AchievedBadgesListHeading>
-          <AchievedBadgesListSubheading variant="body2">
+          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+            The Collection -&nbsp;{seasonLabel}
+          </Typography>
+          <AchievedBadgesListSubheading
+            colorToken="lavenderWeb2"
+            typographyToken="primaryBodyMediumRegular"
+          >
             Make contributions to the community or trade on the protocol to earn badges{' '}
           </AchievedBadgesListSubheading>
           <AchievedBadgesListGrid itemsPerRow={1}>
@@ -196,9 +197,9 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
         </AchievedBadgesListBox>
 
         <CommunityEngagementBox>
-          <CommunityEngagementTypography variant="h2">
-            COMMUNITY ENGAGEMENT
-          </CommunityEngagementTypography>
+          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+            Community Engagement
+          </Typography>
           <CommunityEngagementGrid itemsPerRow={1}>
             {communityEngagementBadges.map((badge, index) => (
               <AchievedBadge

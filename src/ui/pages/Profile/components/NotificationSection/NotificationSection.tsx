@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { BoldText } from '../BoldText.styled';
 import { ClaimButton, ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import { CopyLinkButton, CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
+import { HighlightedText } from '../HighlightedText.styled';
 import { ProfileNotification } from '../ProfileNotification/ProfileNotification';
 import {
   ButtonBox,
@@ -30,7 +30,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
   const copyLinkNotification = (
     <NotificationContainer>
       <NotificationBox>
-        <ProfileNotification pillText="BONUS" text="EARN BADGES BY INVITING OTHERS" />
+        <ProfileNotification pillText="Bonus" text="Earn badges by inviting others" />
       </NotificationBox>
       <ButtonBox>
         <CopyLinkButton mode={copyLinkButtonMode} onClick={onCopyLinkButtonClick} />
@@ -44,7 +44,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
         {copyLinkNotification}
         <NotificationContainer>
           <NotificationBox>
-            <ProfileNotification pillText="CLAIM" text="UNAVAILABLE UNTIL THE END OF THE SEASON" />
+            <ProfileNotification pillText="Claim" text="Unavailable until the end of the season" />
           </NotificationBox>
         </NotificationContainer>
       </NotificationsContainer>
@@ -58,21 +58,21 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
           {notClaimedBadgesCount !== 0 ? (
             <>
               <ProfileNotification
-                pillText={claimButtonBulkMode === 'claimError' ? 'ERROR' : 'BULK CLAIM'}
+                pillText={claimButtonBulkMode === 'claimError' ? 'Error' : 'Bulk Claim'}
                 text={
                   claimButtonBulkMode === 'claimError' ? (
-                    'ERROR WHEN CLAIMING, TRY AGAIN'
+                    'Error when claiming, try again'
                   ) : (
                     <>
-                      YOU HAVE GOT <BoldText>{notClaimedBadgesCount} BADGES</BoldText> READY TO
-                      CLAIM
+                      You have got <HighlightedText>{notClaimedBadgesCount} badges</HighlightedText>{' '}
+                      ready to claim
                     </>
                   )
                 }
               />
             </>
           ) : (
-            <ProfileNotification pillText="KEEP TRADING" text="NO NEW BADGES TO CLAIM YET" />
+            <ProfileNotification pillText="Keep trading" text="No new badges to claim yet" />
           )}
         </NotificationBox>
         {notClaimedBadgesCount !== 0 ? (

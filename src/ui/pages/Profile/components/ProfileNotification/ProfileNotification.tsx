@@ -1,6 +1,7 @@
+import { Pill, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { NotificationTypography, PillBox } from './ProfileNotification.styled';
+import { ProfileNotificationBox } from './ProfileNotification.styled';
 
 type ProfileNotificationProps = {
   text: React.ReactNode;
@@ -10,8 +11,16 @@ export const ProfileNotification: React.FunctionComponent<ProfileNotificationPro
   pillText,
   text,
 }) => (
-  <NotificationTypography data-testid="ProfileNotification" variant="body2">
-    <PillBox text={pillText} variant="wildStrawberry" />
-    {text}
-  </NotificationTypography>
+  <ProfileNotificationBox>
+    <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
+      {pillText}
+    </Pill>
+    <Typography
+      colorToken="lavenderWeb"
+      data-testid="ProfileNotification"
+      typographyToken="primaryBodySmallRegular"
+    >
+      {text}
+    </Typography>
+  </ProfileNotificationBox>
 );
