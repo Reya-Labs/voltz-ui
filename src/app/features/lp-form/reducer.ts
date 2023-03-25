@@ -15,7 +15,7 @@ import {
   getVariableRateThunk,
   getWalletBalanceThunk,
   setSignerAndPositionsForAMMThunk,
-  SetSignerAndPositionsForAMMThunkSuccess
+  SetSignerAndPositionsForAMMThunkSuccess,
 } from './thunks';
 import {
   checkLowLeverageNotification, // todo: to we intend to use this component for the lp form as well, is it in designs?
@@ -27,6 +27,7 @@ import {
   isUserInputMarginError,
   lpFormLimitAndFormatNumber,
   updateLeverage,
+  updateSelectedPosition,
   validateUserInput,
 } from './utils';
 
@@ -48,7 +49,7 @@ export type SliceState = {
       isError: boolean;
     };
   };
-  amm: AMM | null; 
+  amm: AMM | null;
   positions: {
     value: Position[] | null;
     status: ThunkStatus;
@@ -150,6 +151,7 @@ const initialState: SliceState = {
     },
   },
   amm: null,
+  selectedPosition: null,
   positions: {
     value: null,
     status: 'idle',
@@ -425,18 +427,15 @@ export const slice = createSlice({
         value: number | null;
       }>,
     ) => {
-
       const amm = state.amm;
 
       let nextFixedRateLowerNumber: number | null = null;
-      if ((amm !== null) && (value !== null)) { 
+      if (amm !== null && value !== null) {
         nextFixedRateLowerNumber = amm.getNextUsableFixedRate(value, 0);
       }
 
       state.userInput.fixedLower = nextFixedRateLowerNumber;
-      // whenever fixed lower changes -> update existing position
-      // todo: do we need the commented out line below? 
-      // updateExistingPosition(state);
+      updateSelectedPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
     },
     setUserInputFixedUpperAction: (
@@ -449,18 +448,15 @@ export const slice = createSlice({
         value: number | null;
       }>,
     ) => {
-
       const amm = state.amm;
 
       let nextFixedRateUpperNumber: number | null = null;
-      if ((amm !== null) && (value !== null)) { 
+      if (amm !== null && value !== null) {
         nextFixedRateUpperNumber = amm.getNextUsableFixedRate(value, 0);
       }
 
       state.userInput.fixedUpper = nextFixedRateUpperNumber;
-
-      // whenever fixed upper changes -> update existing position
-      // updateExistingPosition(state);
+      updateSelectedPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
     },
     setNotionalAmountAction: (
@@ -747,7 +743,7 @@ export const slice = createSlice({
         state.amm.signer = null;
       })
       .addCase(setSignerAndPositionsForAMMThunk.fulfilled, (state, { payload }) => {
-        state.positions.value = (payload as SetSignerAndPositionsForAMMThunkSuccess).position;
+        state.positions.value = (payload as SetSignerAndPositionsForAMMThunkSuccess).positions;
         state.positions.status = 'success';
         if (!state.amm) {
           return;

@@ -161,6 +161,7 @@ export const getPoolLpInfoThunk = createAsyncThunk<
   }
 });
 
+// todo: this function is potentially redundunt
 export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<
     | {
@@ -200,7 +201,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
     const notionalAmount: number = getProspectiveLpNotional(lpFormState);
     // todo: fixedLow and fixedHigh needs to be fixed for lps to not be hardcoded
     // todo: make isAdd dynamic
-    const infoPostLpV1 = await amm.getInfoPostLp({
+    const infoPostLpV1: InfoPostLp = await amm.getInfoPostLp({
       addLiquidity: true,
       notional: notionalAmount,
       fixedLow: 1,
@@ -227,8 +228,8 @@ export const getInfoPostLpThunk = createAsyncThunk<
 });
 
 export type SetSignerAndPositionsForAMMThunkSuccess = {
-  position: Position[] | null;
   signer: providers.JsonRpcSigner | null;
+  positions: Position[] | null;
 };
 
 export const setSignerAndPositionsForAMMThunk = createAsyncThunk<
@@ -272,10 +273,10 @@ export const setSignerAndPositionsForAMMThunk = createAsyncThunk<
     if (error) {
       return rejectThunkWithError(thunkAPI, error);
     }
-    const filteredPositions = findCurrentPositionsLp(positions || [], amm.id) || null;
+    const filteredPositions: Position[] = findCurrentPositionsLp(positions || [], amm.id) || null;
     return {
-      filteredPositions,
-      signer,
+      signer: signer,
+      positions: filteredPositions,
     };
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
