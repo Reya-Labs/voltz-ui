@@ -69,10 +69,8 @@ describe('<ClaimButton />', () => {
 
   it('does not call onClick when button is clicked in "claimed" mode', () => {
     const onClick = jest.fn();
-    const { getByTestId } = render(
-      <ClaimButton displayError={false} mode="claimed" onClick={onClick} />,
-    );
-    const button = getByTestId('ClaimButton-ClaimButtonStyled-claimed');
+    render(<ClaimButton displayError={false} mode="claimed" onClick={onClick} />);
+    const button = screen.getByTestId('ClaimButton-ClaimButtonStyled-claimed');
     fireEvent.click(button);
     expect(onClick).not.toHaveBeenCalled();
   });
