@@ -16,7 +16,7 @@ export const ConnectSupportedNetwork: React.FunctionComponent<ConnectSupportedNe
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Bold">
           {heading}
         </Typography>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyMediumRegular">
+        <Typography colorToken="skyBlueCrayola" typographyToken="primaryBodyMediumRegular">
           {subheading}
         </Typography>
       </ContainerBox>
