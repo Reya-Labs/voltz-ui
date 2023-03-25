@@ -1,9 +1,9 @@
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { Pill } from 'brokoli-ui';
 import React from 'react';
 
 import { Season } from '../../../../../hooks/season/types';
 import { doNothing } from '../../../../../utilities/doNothing';
-import { SeasonTypography, ToggleButton } from './SeasonToggle.styled';
+import { PillBox, PillsBox } from './SeasonToggle.styled';
 
 type SeasonToggleProps = {
   seasons: Season[];
@@ -12,24 +12,27 @@ type SeasonToggleProps = {
 };
 export const SeasonToggle: React.FunctionComponent<SeasonToggleProps> = ({
   seasons,
-  season,
   onChange = doNothing,
+  season,
 }) => {
   return (
-    <ToggleButtonGroup
-      aria-label="text alignment"
-      value={season.id}
-      exclusive
-      onChange={(_, activeSeasonId) => {
-        const activeSeason = seasons.find((s) => s.id === activeSeasonId);
-        activeSeason && onChange(activeSeason);
-      }}
-    >
+    <PillsBox>
       {seasons.map((option) => (
-        <ToggleButton key={option.id} value={option.id}>
-          <SeasonTypography>{option.label}</SeasonTypography>
-        </ToggleButton>
+        <PillBox
+          key={option.id}
+          onClick={() => {
+            const activeSeason = seasons.find((s) => s.id === option.id);
+            activeSeason && onChange(activeSeason);
+          }}
+        >
+          <Pill
+            colorToken={option.id === season.id ? 'lavenderWeb' : 'liberty'}
+            typographyToken="primaryBodySmallBold"
+          >
+            {option.label}
+          </Pill>
+        </PillBox>
       ))}
-    </ToggleButtonGroup>
+    </PillsBox>
   );
 };
