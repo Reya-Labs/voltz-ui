@@ -84,20 +84,6 @@ export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
       maxMarginWithdrawable = state.prospectiveLp.infoPostLp.value.maxMarginWithdrawable;
     }
 
-    // todo: not sure if we need the commented out logic below in context of lps
-    // if (maxMarginWithdrawable !== null) {
-    //   if (maxMarginWithdrawable > state.prospectiveLp.infoPostLp.value.fee) {
-    //     maxMarginWithdrawable = stringToBigFloat(
-    //       lpFormLimitAndFormatNumber(
-    //         maxMarginWithdrawable - state.prospectiveLp.infoPostLp.value.fee,
-    //         'floor',
-    //       ),
-    //     );
-    //   } else {
-    //     maxMarginWithdrawable = 0;
-    //   }
-    // }
-
     return maxMarginWithdrawable;
   }
 
