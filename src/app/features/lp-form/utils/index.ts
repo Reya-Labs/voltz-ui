@@ -215,15 +215,6 @@ export const getProspectiveLpFixedHigh = (state: Draft<SliceState>): number => {
   return value;
 };
 
-export const getProspectiveLpAddLiquidity = (state: Draft<SliceState>): boolean => {
-  const notionalAmountEditMode = state.userInput.notionalAmount.editMode;
-  if (notionalAmountEditMode === 'add') {
-    return true;
-  } else {
-    return false;
-  }
-};
-
 export const getProspectiveLpNotional = (state: Draft<SliceState>): number => {
   if (isUserInputNotionalError(state)) {
     return 0;
