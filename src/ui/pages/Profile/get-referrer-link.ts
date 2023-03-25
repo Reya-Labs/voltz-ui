@@ -1,12 +1,13 @@
 import fetch from 'isomorphic-fetch';
 
+import { REFERRAL_AND_SIGNATURES_URL } from '../../../contexts/WalletContext/services/constants';
 import { routes } from '../../../routes/paths';
 import { REFERRER_QUERY_PARAM_KEY } from '../../../utilities/referrer-store/constants';
 import { getSentryTracker } from '../../../utilities/sentry';
 
 const cached: Record<string, string> = {};
 export const getReferrerLink = async (account: string) => {
-  const baseUrl = process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL;
+  const baseUrl = REFERRAL_AND_SIGNATURES_URL;
   if (!baseUrl || !account) {
     return undefined;
   }
