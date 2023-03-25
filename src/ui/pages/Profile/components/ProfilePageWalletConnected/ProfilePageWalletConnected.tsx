@@ -100,11 +100,19 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
           BADGE_VARIANT_TIER_MAP[b!.variant] === 'easterEgg' ? b!.achievedAt : true,
         ) as AchievedBadgeProps[];
     }, [loading, seasonBadgeVariants, badges]);
+    // TODO: remove this filter once badges are OK to go
+    const hideLeakedMellowBadges = (badge: AchievedBadgeProps) =>
+      [
+        '0BCMellowLpVault',
+        'mellowLpVaultTier1',
+        'mellowLpVaultTier2',
+        'mellowLpVaultTier3',
+      ].indexOf(badge.variant) === -1;
 
     const achievedBadges = badgesMemo.filter((aB) => aB.achievedAt);
-    const collectionBadges = badgesMemo.filter(
-      (aB) => NON_PROGRAMMATIC_BADGES.indexOf(aB.variant as NonProgrammaticBadges) === -1,
-    );
+    const collectionBadges = badgesMemo
+      .filter((aB) => NON_PROGRAMMATIC_BADGES.indexOf(aB.variant as NonProgrammaticBadges) === -1)
+      .filter(hideLeakedMellowBadges);
     const communityEngagementBadges = badgesMemo.filter(
       (aB) => NON_PROGRAMMATIC_BADGES.indexOf(aB.variant as NonProgrammaticBadges) !== -1,
     );
