@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getPositions, InfoPostLp, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { AMM, getPositions, InfoPostLp, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { BigNumber, ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPositionsLp } from '../../../utilities/amm';
@@ -126,7 +126,7 @@ export const getVariableRate24hAgoThunk = createAsyncThunk<
   { state: RootState }
 >('lpForm/getVariableRate24hAgo', async (_, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().lpForm.amm;
+    const amm: AMM | null = thunkAPI.getState().lpForm.amm;
     if (!amm) {
       return;
     }
