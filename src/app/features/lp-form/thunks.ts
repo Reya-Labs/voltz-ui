@@ -5,7 +5,6 @@ import { BigNumber, ContractReceipt, providers } from 'ethers';
 import { findCurrentPositionsLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import {
-  getProspectiveLpAddLiquidity,
   getProspectiveLpFixedHigh,
   getProspectiveLpFixedLow,
   getProspectiveLpMargin,
@@ -300,9 +299,17 @@ export const confirmLpThunk = createAsyncThunk<
       return;
     }
 
+    let prospectiveNotional: number = getProspectiveLpNotional(lpFormState);
+    let addLiquidity: boolean = true;
+
+    if (prospectiveNotional < 0) { 
+      addLiquidity = false;
+      prospectiveNotional = -prospectiveNotional; 
+    }
+
     return await amm.lp({
-      addLiquidity: getProspectiveLpAddLiquidity(lpFormState),
-      notional: getProspectiveLpNotional(lpFormState),
+      addLiquidity: addLiquidity,
+      notional: prospectiveNotional,
       margin: getProspectiveLpMargin(lpFormState),
       fixedLow: getProspectiveLpFixedLow(lpFormState),
       fixedHigh: getProspectiveLpFixedHigh(lpFormState),
