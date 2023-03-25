@@ -161,7 +161,7 @@ export const getPoolLpInfoThunk = createAsyncThunk<
   }
 });
 
-// todo: this function is potentially redundunt
+
 export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<
     | {
@@ -177,6 +177,22 @@ export const getInfoPostLpThunk = createAsyncThunk<
 >('lpForm/getInfoPostLp', async (_, thunkAPI) => {
   try {
     const lpFormState = thunkAPI.getState().lpForm;
+
+    const fixedLower = lpFormState.userInput.fixedLower;
+    const fixedUpper = lpFormState.userInput.fixedUpper;
+    let addLiquidity: boolean = true;
+    if (lpFormState.userInput.notionalAmount.editMode === "remove") { 
+      addLiquidity = false;
+    }
+
+    if (!fixedLower || !fixedUpper) {
+      return {
+        notionalAmount: NaN,
+        infoPostLp: {},
+        earlyReturn: true,
+      };
+    }
+
     const amm = lpFormState.amm;
     if (!amm || isUserInputNotionalError(lpFormState)) {
       return {
@@ -199,23 +215,12 @@ export const getInfoPostLpThunk = createAsyncThunk<
     }
 
     const notionalAmount: number = getProspectiveLpNotional(lpFormState);
-    // todo: fixedLow and fixedHigh needs to be fixed for lps to not be hardcoded
-    // todo: make isAdd dynamic
     const infoPostLpV1: InfoPostLp = await amm.getInfoPostLp({
-      addLiquidity: true,
+      addLiquidity: addLiquidity,
       notional: notionalAmount,
-      fixedLow: 1,
-      fixedHigh: 999,
+      fixedLow: fixedLower,
+      fixedHigh: fixedUpper,
     });
-
-    // margin requirement is collateral only now
-
-    // todo: Artur not sure what the commented logic below is trying to achieve
-    // if (infoPostLpV1.marginRequirement > infoPostLpV1.fee) {
-    //   infoPostLpV1.marginRequirement -= infoPostLpV1.fee;
-    // } else {
-    //   infoPostLpV1.marginRequirement = 0;
-    // }
 
     return {
       notionalAmount,
