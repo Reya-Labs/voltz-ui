@@ -179,10 +179,6 @@ export const getInfoPostLpThunk = createAsyncThunk<
 
     const fixedLower = lpFormState.userInput.fixedLower;
     const fixedUpper = lpFormState.userInput.fixedUpper;
-    let addLiquidity: boolean = true;
-    if (lpFormState.userInput.notionalAmount.editMode === "remove") { 
-      addLiquidity = false;
-    }
 
     if (!fixedLower || !fixedUpper) {
       return {
@@ -213,16 +209,24 @@ export const getInfoPostLpThunk = createAsyncThunk<
       };
     }
 
-    const notionalAmount: number = getProspectiveLpNotional(lpFormState);
+    // todo: consider baking in the below login into getProspectiveLpNotional
+    let prospectiveNotional: number = getProspectiveLpNotional(lpFormState);
+    let addLiquidity: boolean = true;
+
+    if (prospectiveNotional < 0) { 
+      addLiquidity = false;
+      prospectiveNotional = -prospectiveNotional; 
+    }
+
     const infoPostLpV1: InfoPostLp = await amm.getInfoPostLp({
       addLiquidity: addLiquidity,
-      notional: notionalAmount,
+      notional: prospectiveNotional,
       fixedLow: fixedLower,
       fixedHigh: fixedUpper,
     });
 
     return {
-      notionalAmount,
+      prospectiveNotional,
       infoPostLp: infoPostLpV1,
       earlyReturn: false,
     };
@@ -306,7 +310,7 @@ export const confirmLpThunk = createAsyncThunk<
       addLiquidity = false;
       prospectiveNotional = -prospectiveNotional; 
     }
-
+    
     return await amm.lp({
       addLiquidity: addLiquidity,
       notional: prospectiveNotional,
