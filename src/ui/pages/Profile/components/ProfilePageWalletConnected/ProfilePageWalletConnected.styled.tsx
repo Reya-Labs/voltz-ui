@@ -5,17 +5,18 @@ import { Grid } from '../../../../components/Grid';
 
 export const ContainerBox = styled('div')`
   width: 800px;
-  margin: 0 auto;
+  margin: 24px auto;
   background: transparent;
+  padding-bottom: 70px;
 `;
 
 export const Subheading = styled(Typography)`
-  margin-top: 8px;
+  margin-top: 16px;
 `;
 
 export const CommunityEngagementBox = styled('div')`
-  margin-top: 24px;
-  padding: 0 16px;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 export const CommunityEngagementGrid = styled(Grid)`
@@ -24,8 +25,8 @@ export const CommunityEngagementGrid = styled(Grid)`
 `;
 
 export const AchievedBadgesListBox = styled('div')`
-  margin-top: 24px;
-  padding: 0 16px;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 export const AchievedBadgesListSubheading = styled(Typography)`
@@ -33,7 +34,7 @@ export const AchievedBadgesListSubheading = styled(Typography)`
 `;
 
 export const AchievedBadgesListGrid = styled(Grid)`
-  margin-top: 24px;
+  margin-top: 16px;
   row-gap: 8px;
 `;
 
@@ -59,8 +60,18 @@ export const BadgeCollectionTypographyBox = styled('div')`
 `;
 
 export const BadgeCollectionBox = styled('div')`
-  background-color: #1e1932;
   border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+`;
+
+export const BadgesBox = styled('div')`
+  background: linear-gradient(180deg, rgba(11, 9, 17, 0.81) 41.43%, rgba(30, 25, 51, 0.87) 110.49%);
+  border-radius: 8px;
+  margin-top: 24px;
   padding: 16px;
-  margin-top: 12px;
+  gap: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;

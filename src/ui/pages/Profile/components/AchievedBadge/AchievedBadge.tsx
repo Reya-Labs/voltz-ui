@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import React from 'react';
 
 import { formatPOSIXTimestamp } from '../../../../../utilities/date';
@@ -32,7 +31,14 @@ export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
   onClick,
 }) => {
   if (loading) {
-    return <Skeleton data-testid="AchievedBadge-Skeleton" variant="rectangular" />;
+    return (
+      <Skeleton
+        colorToken="liberty2"
+        data-testid="AchievedBadge-Skeleton"
+        typographyToken="primaryBodyMediumRegular"
+        variant="rectangular"
+      />
+    );
   }
   const Container = Boolean(achievedAt) ? AchievedContainerBox : ContainerBox;
   const achievedText = achievedAt
@@ -45,14 +51,14 @@ export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
   return (
     <Container data-testid={`AchievedBadge-${variant}`} onClick={onClick}>
       <BadgePillBox>
-        <Box>
+        <div>
           <BadgePill variant={variant} />
-        </Box>
+        </div>
       </BadgePillBox>
-      <TitleTypography variant="body2">
+      <TitleTypography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
         {BADGE_VARIANT_TITLE_COPY_MAP[variant].toUpperCase()}
       </TitleTypography>
-      <AchievedAtTypography variant="body2">
+      <AchievedAtTypography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
         {NON_PROGRAMMATIC_BADGES_DISCORD.indexOf(variant as NonProgrammaticBadges) !== -1
           ? awardedText
           : achievedText}

@@ -1,8 +1,8 @@
-import { Button, Confetti } from 'brokoli-ui';
+import { Confetti } from 'brokoli-ui';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { formatPOSIXTimestamp } from '../../../../../utilities/date';
-import { ClaimedAtTypography } from './ClaimButton.styled';
+import { ClaimButtonStyled, ClaimedAtTypography } from './ClaimButton.styled';
 
 type ClaimButtonMode = 'claim' | 'claimed' | 'claiming' | 'claimedDate' | 'claimError';
 
@@ -50,7 +50,7 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
 
   return (
     <Wrapper>
-      <Button
+      <ClaimButtonStyled
         bottomLeftText={
           mode === 'claimError' && displayError ? 'Error when claiming, try again' : ''
         }
@@ -59,6 +59,7 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
         data-testid="ClaimButton"
         disabled={DISABLED_MAP[mode]}
         loading={mode === 'claiming'}
+        typographyToken="primaryBodySmallBold"
         variant="primary"
         onClick={onClick}
       >
@@ -66,7 +67,7 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
         {mode === 'claimedDate' && claimedAt && (
           <ClaimedAtTypography>{formatPOSIXTimestamp(claimedAt)}</ClaimedAtTypography>
         )}
-      </Button>
+      </ClaimButtonStyled>
     </Wrapper>
   );
 };

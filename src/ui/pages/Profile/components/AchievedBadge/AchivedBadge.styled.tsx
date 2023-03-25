@@ -1,24 +1,16 @@
-import Box from '@mui/material/Box';
-import SkeletonComponent from '@mui/material/Skeleton';
-import { styled } from '@mui/material/styles';
-
-import { Typography } from '../../../../../components/atomic/Typography/Typography';
-import { colors } from '../../../../../theme';
+import styled from '@emotion/styled';
+import { colors, Skeleton as SkeletonComponent, Typography } from 'brokoli-ui';
 
 export const Skeleton = styled(SkeletonComponent)`
-  padding: ${({ theme }) => theme.spacing(2, 2, 2, 4)};
+  padding: 8px 24px 8px 16px;
   border-radius: 8px;
-  font-size: 18px;
-  line-height: 24px;
-  width: 100%;
 `;
 
-export const ContainerBox = styled(Box)`
-  background-color: #2b2548;
+export const ContainerBox = styled('div')`
+  background-color: ${colors.lavenderWeb8};
   border-radius: 8px;
-  padding: ${({ theme }) => theme.spacing(2, 2, 2, 4)};
+  padding: 8px 24px 8px 16px;
   display: flex;
-  opacity: 0.7;
   flex-direction: row;
   align-items: center;
   pointer-events: none;
@@ -27,31 +19,23 @@ export const ContainerBox = styled(Box)`
 export const AchievedContainerBox = styled(ContainerBox)`
   cursor: pointer;
   pointer-events: auto;
-  opacity: 1;
+  background-color: ${colors.lavenderWeb7};
 
   &:hover {
-    box-shadow: rgb(62 115 196 / 40%) 0px 0px 10px;
+    box-shadow: ${colors.liberty} 0px 0px 10px;
   }
 `;
 
-export const BadgePillBox = styled(Box)`
+export const BadgePillBox = styled('div')`
   width: 150px;
-  margin-right: ${({ theme }) => theme.spacing(2)};
+  margin-right: 8px;
 `;
 
 export const TitleTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.base};
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 400;
   flex: 1;
 `;
 
 export const AchievedAtTypography = styled(Typography)`
-  color: ${colors.lavenderWeb.base};
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 400;
-  padding: ${({ theme }) => theme.spacing(0, 4)};
+  padding: 0 16px;
   text-align: right;
 `;

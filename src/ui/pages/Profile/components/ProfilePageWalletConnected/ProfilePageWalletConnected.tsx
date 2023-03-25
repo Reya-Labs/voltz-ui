@@ -25,6 +25,7 @@ import {
   AchievedBadgesListSubheading,
   BadgeCollectionBox,
   BadgeCollectionTypographyBox,
+  BadgesBox,
   CommunityEngagementBox,
   CommunityEngagementGrid,
   ContainerBox,
@@ -128,89 +129,97 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
           onClaimBulkClick={() => onClaimBulkClick(notClaimedBadges.map((b) => b.variant))}
           onCopyLinkButtonClick={onCopyLinkButtonClick}
         />
-        <BadgeCollectionBox>
-          <BadgeCollectionTypographyBox>
+        <BadgesBox>
+          <BadgeCollectionBox data-testid="ProfilePageWalletConnected-BadgeCollectionBox">
+            <BadgeCollectionTypographyBox>
+              <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+                Your Badge Collection
+              </Typography>
+              <SeasonToggle season={season} seasons={seasonOptions} onChange={onSeasonChange} />
+            </BadgeCollectionTypographyBox>
+            <AchievedBadgesGrid itemsPerRow={!loading && achievedBadges.length === 0 ? 1 : 3}>
+              {loading &&
+                Array.from({ length: 3 }, (index) => index).map((_, index) => (
+                  <BadgeCard
+                    key={index}
+                    claimButtonMode="claim"
+                    disableClaiming={true}
+                    loading={loading}
+                    variant="degenStuff"
+                  />
+                ))}
+              {!loading &&
+                achievedBadges.length !== 0 &&
+                achievedBadges.map((badge, index) => (
+                  <BadgeCard
+                    key={`${badge.variant}${index}`}
+                    ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
+                    claimButtonMode={claimButtonModes[badge.variant] || 'claim'}
+                    claimedAt={badge.claimedAt}
+                    disableClaiming={isOnGoingSeason}
+                    loading={loading}
+                    variant={badge.variant}
+                    onClaimButtonClick={() => onClaimButtonClick(badge.variant)}
+                  />
+                ))}
+              {!loading && achievedBadges.length === 0 && (
+                <NoAchievedBadgesBox>
+                  <Badge variant="noClaimedBadges" />
+                  <NoAchievedBadgesTypography
+                    colorToken="lavenderWeb2"
+                    typographyToken="primaryBodyMediumRegular"
+                  >
+                    Make contributions to the community or trade on the protocol to earn badges
+                  </NoAchievedBadgesTypography>
+                </NoAchievedBadgesBox>
+              )}
+            </AchievedBadgesGrid>
+          </BadgeCollectionBox>
+
+          <AchievedBadgesListBox data-testid="ProfilePageWalletConnected-AchievedBadgesListBox">
             <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
-              Your Badge Collection
+              The Collection -&nbsp;{seasonLabel}
             </Typography>
-            <SeasonToggle season={season} seasons={seasonOptions} onChange={onSeasonChange} />
-          </BadgeCollectionTypographyBox>
-          <AchievedBadgesGrid itemsPerRow={!loading && achievedBadges.length === 0 ? 1 : 3}>
-            {loading &&
-              Array.from({ length: 3 }, (index) => index).map((_, index) => (
-                <BadgeCard
-                  key={index}
-                  claimButtonMode="claim"
-                  disableClaiming={true}
-                  loading={loading}
-                  variant="degenStuff"
-                />
-              ))}
-            {!loading &&
-              achievedBadges.length !== 0 &&
-              achievedBadges.map((badge, index) => (
-                <BadgeCard
+            <AchievedBadgesListSubheading
+              colorToken="lavenderWeb2"
+              typographyToken="primaryBodyMediumRegular"
+            >
+              Make contributions to the community or trade on the protocol to earn badges{' '}
+            </AchievedBadgesListSubheading>
+            <AchievedBadgesListGrid
+              data-testid="ProfilePageWalletConnected-AchievedBadgesListGrid"
+              itemsPerRow={1}
+            >
+              {collectionBadges.map((badge, index) => (
+                <AchievedBadge
                   key={`${badge.variant}${index}`}
-                  ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
-                  claimButtonMode={claimButtonModes[badge.variant] || 'claim'}
-                  claimedAt={badge.claimedAt}
-                  disableClaiming={isOnGoingSeason}
+                  {...badge}
                   loading={loading}
-                  variant={badge.variant}
-                  onClaimButtonClick={() => onClaimButtonClick(badge.variant)}
+                  onClick={() => handleSmoothScroll(badge.variant)}
                 />
               ))}
-            {!loading && achievedBadges.length === 0 && (
-              <NoAchievedBadgesBox>
-                <Badge variant="noClaimedBadges" />
-                <NoAchievedBadgesTypography
-                  colorToken="lavenderWeb2"
-                  typographyToken="primaryBodyMediumRegular"
-                >
-                  Make contributions to the community or trade on the protocol to earn badges
-                </NoAchievedBadgesTypography>
-              </NoAchievedBadgesBox>
-            )}
-          </AchievedBadgesGrid>
-        </BadgeCollectionBox>
+            </AchievedBadgesListGrid>
+          </AchievedBadgesListBox>
 
-        <AchievedBadgesListBox>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
-            The Collection -&nbsp;{seasonLabel}
-          </Typography>
-          <AchievedBadgesListSubheading
-            colorToken="lavenderWeb2"
-            typographyToken="primaryBodyMediumRegular"
-          >
-            Make contributions to the community or trade on the protocol to earn badges{' '}
-          </AchievedBadgesListSubheading>
-          <AchievedBadgesListGrid itemsPerRow={1}>
-            {collectionBadges.map((badge, index) => (
-              <AchievedBadge
-                key={`${badge.variant}${index}`}
-                {...badge}
-                loading={loading}
-                onClick={() => handleSmoothScroll(badge.variant)}
-              />
-            ))}
-          </AchievedBadgesListGrid>
-        </AchievedBadgesListBox>
-
-        <CommunityEngagementBox>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
-            Community Engagement
-          </Typography>
-          <CommunityEngagementGrid itemsPerRow={1}>
-            {communityEngagementBadges.map((badge, index) => (
-              <AchievedBadge
-                key={`${badge.variant}${index}`}
-                {...badge}
-                loading={loading}
-                onClick={() => handleSmoothScroll(badge.variant)}
-              />
-            ))}
-          </CommunityEngagementGrid>
-        </CommunityEngagementBox>
+          <CommunityEngagementBox data-testid="ProfilePageWalletConnected-CommunityEngagementBox">
+            <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+              Community Engagement
+            </Typography>
+            <CommunityEngagementGrid
+              data-testid="ProfilePageWalletConnected-CommunityEngagementGrid"
+              itemsPerRow={1}
+            >
+              {communityEngagementBadges.map((badge, index) => (
+                <AchievedBadge
+                  key={`${badge.variant}${index}`}
+                  {...badge}
+                  loading={loading}
+                  onClick={() => handleSmoothScroll(badge.variant)}
+                />
+              ))}
+            </CommunityEngagementGrid>
+          </CommunityEngagementBox>
+        </BadgesBox>
       </ContainerBox>
     );
   };

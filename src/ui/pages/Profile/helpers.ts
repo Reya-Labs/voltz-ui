@@ -116,11 +116,11 @@ export const BADGE_VARIANT_TRADER_LP_MAP: Record<BadgeVariant, 'trader' | 'lp' |
 };
 
 export const TIER_COPY_MAP: Record<BadgeTier, string> = {
-  tier1: 'TIER 1',
-  tier2: 'TIER 2',
-  tier3: 'TIER 3',
-  legendary: 'LEGENDARY',
-  easterEgg: 'EASTER EGG',
+  tier1: 'Tier 1',
+  tier2: 'Tier 2',
+  tier3: 'Tier 3',
+  legendary: 'Legendary',
+  easterEgg: 'Easter Egg',
 };
 
 export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant, string> = {

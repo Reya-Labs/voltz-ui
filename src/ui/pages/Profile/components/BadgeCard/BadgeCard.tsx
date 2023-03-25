@@ -1,3 +1,4 @@
+import { Typography } from 'brokoli-ui';
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import { BadgeVariant } from '../../data/getSeasonBadges';
@@ -13,11 +14,9 @@ import {
   Container,
   DescriptionBox,
   DescriptionSkeleton,
-  DescriptionTypography,
   HighlightedContainer,
   TitleBox,
   TitleSkeleton,
-  TitleTypography,
 } from './BadgeCard.styled';
 
 export type BadgeCardProps = {
@@ -35,7 +34,7 @@ export type BadgeCardHandle = {
 
 export const BadgeCard = forwardRef<BadgeCardHandle, BadgeCardProps>(
   ({ onClaimButtonClick, claimButtonMode, loading, variant, claimedAt, disableClaiming }, ref) => {
-    const containerRef = useRef<HTMLElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const [highlight, setHighlight] = useState(false);
     useImperativeHandle(ref, () => ({
       scrollIntoView: () => {
@@ -63,26 +62,38 @@ export const BadgeCard = forwardRef<BadgeCardHandle, BadgeCardProps>(
         </BadgeBox>
         <TitleBox>
           {loading ? (
-            <TitleSkeleton variant="text" />
+            <TitleSkeleton
+              colorToken="liberty2"
+              typographyToken="primaryHeader3Black"
+              variant="rectangular"
+            />
           ) : (
-            <TitleTypography variant="body2">
+            <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Black">
               {BADGE_VARIANT_TITLE_COPY_MAP[variant].toUpperCase()}
-            </TitleTypography>
+            </Typography>
           )}
         </TitleBox>
         <DescriptionBox>
           {loading ? (
-            <DescriptionSkeleton variant="text" />
+            <DescriptionSkeleton
+              colorToken="liberty2"
+              typographyToken="primaryBodySmallRegular"
+              variant="rectangular"
+            />
           ) : (
-            <DescriptionTypography variant="body2">
+            <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
               {BADGE_VARIANT_DESCRIPTION_COPY_MAP[variant]}
-            </DescriptionTypography>
+            </Typography>
           )}
         </DescriptionBox>
         {disableClaiming ? null : (
           <ClaimButtonBox>
             {loading ? (
-              <ClaimButtonSkeleton variant="rectangular" />
+              <ClaimButtonSkeleton
+                colorToken="liberty2"
+                typographyToken="primaryBodyMediumBold"
+                variant="rectangular"
+              />
             ) : (
               <ClaimButton
                 claimedAt={claimedAt}
