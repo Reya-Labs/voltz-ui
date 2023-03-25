@@ -2,14 +2,14 @@ import { Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { useWallet } from '../../../hooks/useWallet';
-import { ContainerBox } from './ConnectSupportedNetwork.styled';
+import { ContainerBox } from './ConnectWallet.styled';
 
-type ConnectSupportedNetworkProps = {
+type ConnectWalletProps = {
   heading: string;
   subheading: string;
 };
-export const ConnectSupportedNetwork: React.FunctionComponent<ConnectSupportedNetworkProps> =
-  React.memo(({ heading, subheading }) => {
+export const ConnectWallet: React.FunctionComponent<ConnectWalletProps> = React.memo(
+  ({ heading, subheading }) => {
     const { setRequired } = useWallet();
     return (
       <ContainerBox onClick={() => setRequired(true)}>
@@ -21,4 +21,5 @@ export const ConnectSupportedNetwork: React.FunctionComponent<ConnectSupportedNe
         </Typography>
       </ContainerBox>
     );
-  });
+  },
+);

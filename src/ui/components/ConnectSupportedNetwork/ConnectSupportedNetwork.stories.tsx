@@ -4,7 +4,7 @@ import React from 'react';
 import { ConnectSupportedNetwork } from './ConnectSupportedNetwork';
 
 export default {
-  title: 'ui/Components/ConnectSupportedNetwork',
+  title: 'ui/components/ConnectSupportedNetwork',
   component: ConnectSupportedNetwork,
   args: {},
 } as ComponentMeta<typeof ConnectSupportedNetwork>;
