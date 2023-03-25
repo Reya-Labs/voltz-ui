@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { resetStateAction } from '../../../app/features/swap-form';
 import { useAppDispatch } from '../../../app/hooks';
+import { routes } from '../../../routes/paths';
 import { NoAMMFound } from '../../components/NoAMMFound';
 import { PageLoading } from '../../components/PageLoading';
 import { VoltzPage } from '../../components/VoltzPage';
@@ -27,7 +28,7 @@ export const TraderFormPage: React.FunctionComponent = () => {
   return (
     <VoltzPage
       mainSlot={<Main />}
-      notFoundSlot={pageNotFound ? <NoAMMFound /> : undefined}
+      notFoundSlot={pageNotFound ? <NoAMMFound to={`/${routes.TRADER_POOLS}`} /> : undefined}
       pageLoadingSlot={loading ? <PageLoading /> : undefined}
       rightSlot={<Form />}
     />
