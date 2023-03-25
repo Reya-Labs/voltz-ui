@@ -19,9 +19,7 @@ import {
 } from './thunks';
 import {
   checkLowLeverageNotification, // todo: to we intend to use this component for the lp form as well, is it in designs?
-  getProspectiveLpMargin, // todo: check if need to make any changes to the logic
-  // todo: in contexto of trading/swapping notional represents the net notional filled of the position
-  // in context of lp is the notional liquidity provided -> can change as lps mint and burn liquidity
+  getProspectiveLpMargin,
   getProspectiveLpNotional,
   hasExistingPosition,
   isUserInputMarginError,

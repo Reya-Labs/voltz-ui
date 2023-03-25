@@ -243,20 +243,20 @@ export const getProspectiveLpNotional = (state: Draft<SliceState>): number => {
     return 0;
   }
 
-  let value = state.userInput.notionalAmount.value;
-
-  const existingPositionNotional = getExistingSelectedPositionNotional(state);
-  if (state.selectedPosition !== null && existingPositionNotional !== null) {
-    value =
-      state.userInput.notionalAmount.editMode === 'add'
-        ? existingPositionNotional + value
-        : existingPositionNotional - value;
+  if (state.userInput.notionalAmount.editMode === 'add') {
+    return state.userInput.notionalAmount.value;
   }
 
-  return value;
+  return -state.userInput.notionalAmount.value;
+
 };
 
 export const getProspectiveLpMargin = (state: Draft<SliceState>): number => {
+
+  if (isUserInputMarginError(state)) {
+    return 0;
+  }
+
   if (state.userInput.marginAmount.editMode === 'add') {
     return state.userInput.marginAmount.value;
   }
