@@ -325,10 +325,9 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
       return;
     }
 
-    // todo: come and uncomment since the check below is needed
-    // if (!amm || !lpFormState.position.value) {
-    //   return;
-    // }
+    if (!amm || !lpFormState.selectedPosition) {
+      return;
+    }
 
     const fixedLow: number = getProspectiveLpFixedLow(lpFormState);
     const fixedHigh: number = getProspectiveLpFixedHigh(lpFormState);
