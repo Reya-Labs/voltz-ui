@@ -6,6 +6,7 @@ import {
   WaitingForMintConfirmationStepBox,
 } from './WaitingForMintConfirmationStep.styled';
 
+// todo: consider making Adding or Removing Liquidity dynamic similar to submit button labels? 
 export const WaitingForMintConfirmationStep: React.FunctionComponent = () => {
   return (
     <WaitingForMintConfirmationStepBox>
@@ -13,7 +14,7 @@ export const WaitingForMintConfirmationStep: React.FunctionComponent = () => {
         Waiting for confirmation
       </Typography>
       <RainbowLoaderBox>
-        <RainbowLoader height={2} text="Swapping Rates..." />
+        <RainbowLoader height={2} text="Adding or Removing Liquidity" />
       </RainbowLoaderBox>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
         Confirm this transaction in your wallet
