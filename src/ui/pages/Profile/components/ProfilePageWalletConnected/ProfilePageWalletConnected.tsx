@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { formatEthereumAddress, Typography } from 'brokoli-ui';
 import React, { useRef } from 'react';
 
@@ -49,6 +50,7 @@ export type ProfilePageWalletConnectedProps = {
   claimButtonModes?: Record<BadgeVariant, ClaimButtonProps['mode']>;
   onCopyLinkButtonClick?: () => void;
   copyLinkButtonMode: CopyLinkButtonProps['mode'];
+  chainId: SupportedChainId;
 };
 
 export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWalletConnectedProps> =

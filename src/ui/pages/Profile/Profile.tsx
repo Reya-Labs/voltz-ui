@@ -275,6 +275,7 @@ export const Profile: React.FunctionComponent = () => {
     <ProfilePageWalletConnected
       account={name}
       badges={collectionBadges}
+      chainId={chainId}
       claimButtonBulkMode={claimButtonBulkMode}
       claimButtonModes={claimButtonModes}
       copyLinkButtonMode={copyLinkButtonMode}

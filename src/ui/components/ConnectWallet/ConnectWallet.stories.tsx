@@ -13,7 +13,6 @@ const Template: ComponentStory<typeof ConnectWallet> = (args) => <ConnectWallet 
 
 export const Default = Template.bind({});
 Default.args = {
-  connectWalletText: 'CONNECT YOUR WALLET',
   heading: '🚫 RESTRICTED',
   subheading: 'Your wallet needs to be connected before proceeding.',
 };

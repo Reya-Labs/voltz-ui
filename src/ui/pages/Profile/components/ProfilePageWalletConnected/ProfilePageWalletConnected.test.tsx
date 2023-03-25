@@ -19,19 +19,18 @@ describe('<ProfilePageWalletConnected />', () => {
       </HashRouter>,
     );
 
-    expect(screen.getByText('WELCOME TO YOUR PROFILE')).not.toBeNull();
-    expect(screen.getByText('0XB01F...C970')).not.toBeNull();
+    expect(screen.getByText('Welcome to your profile 0xb01F...c970')).not.toBeNull();
     expect(screen.getByTestId('Profile-BadgesExplained').textContent).toBe(
       'Earn badges through your contribution to the community and activity on the protocol. Badges are earned throughout each Season, with minting available at the end of each Season. The more you collect the greater your contribution. Season 01 runs between October 1st 2022 and December 31st 2022.',
     );
-    expect(screen.getByText('YOUR BADGE COLLECTION')).not.toBeNull();
+    expect(screen.getByText('Your Badge Collection')).not.toBeNull();
     expect(screen.getByText('October 1st 2022')).not.toBeNull();
     expect(screen.getByText('December 31st 2022')).not.toBeNull();
     expect(screen.getAllByTestId('ProfileNotification')[0].textContent).toBe(
-      'BONUSEARN BADGES BY INVITING OTHERS',
+      'Earn badges by inviting others',
     );
     expect(screen.getAllByTestId('ProfileNotification')[1].textContent).toBe(
-      'CLAIMUNAVAILABLE UNTIL THE END OF THE SEASON',
+      'Unavailable until the end of the season',
     );
 
     expect(screen.getAllByTestId('BadgeCard')).toHaveLength(16);

@@ -17,7 +17,7 @@ describe('<BadgeCard />', () => {
 
     expect(screen.getByTestId('Badge-leverageCrowbar')).not.toBeNull();
     expect(screen.getByText('LEVERAGE CROWBAR')).not.toBeNull();
-    expect(screen.getByText('TRADER: TIER 2')).not.toBeNull();
+    expect(screen.getByText('Trader: Tier 2')).not.toBeNull();
     expect(
       screen.getByText('There is no degen without 100x leverage, and you are a degen.'),
     ).not.toBeNull();

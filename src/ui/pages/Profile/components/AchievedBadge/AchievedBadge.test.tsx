@@ -18,7 +18,7 @@ describe('<AchievedBadge />', () => {
     expect(screen.getByTestId('AchievedBadge-leverageCrowbar')).not.toBeNull();
     expect(screen.getByText('LEVERAGE CROWBAR')).not.toBeNull();
     expect(screen.getByText('Achieved: 02/02/22')).not.toBeNull();
-    expect(screen.getByText('TRADER: TIER 2')).not.toBeNull();
+    expect(screen.getByText('Trader: Tier 2')).not.toBeNull();
   });
 
   it('renders proper UI when not achieved', () => {
@@ -27,7 +27,7 @@ describe('<AchievedBadge />', () => {
     expect(screen.getByTestId('AchievedBadge-beWaterMyFriend')).not.toBeNull();
     expect(screen.getByText('BE WATER MY FRIEND')).not.toBeNull();
     expect(screen.getByText('Keep trading...')).not.toBeNull();
-    expect(screen.getByText('LP: LEGENDARY')).not.toBeNull();
+    expect(screen.getByText('Legendary')).not.toBeNull();
   });
 
   it('renders proper UI when loading', () => {
