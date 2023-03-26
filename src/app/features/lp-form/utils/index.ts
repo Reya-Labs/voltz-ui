@@ -80,6 +80,14 @@ export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
       maxMarginWithdrawable = (state.selectedPosition as Position).maxMarginWithdrawable;
     }
 
+    if (getProspectiveLpNotional(state) < 0 && hasExistingPosition(state)) {
+      maxMarginWithdrawable = (state.selectedPosition as Position).maxMarginWithdrawable;
+      // todo: once the periphery enables the flow of burning followed by withdrawal
+      // we need to make sure that available margin to withdraw goes down the the amount of
+      // notional in the perspective lp is negative i.e. burn, hence need to comment out the line below
+      // maxMarginWithdrawable = state.prospectiveLp.infoPostLp.value.maxMarginWithdrawable;
+    }
+
     if (getProspectiveLpNotional(state) > 0) {
       maxMarginWithdrawable = state.prospectiveLp.infoPostLp.value.maxMarginWithdrawable;
     }
@@ -178,6 +186,7 @@ export const updateLeverage = (state: Draft<SliceState>): void => {
   state.showLowLeverageNotification = checkLowLeverageNotification(state);
 };
 
+// todo: rename hasExistingPosition to hasExistingSelectedPosition
 export const hasExistingPosition = (state: Draft<SliceState>): boolean => {
   return state.selectedPosition !== null;
 };
