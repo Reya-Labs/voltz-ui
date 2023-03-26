@@ -40,7 +40,7 @@ export const MintConfirmationStep: React.FunctionComponent = () => {
     <LpConfirmationStepBox>
       <TitleBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          Confirm Lp
+          Confirm
         </Typography>
         <CloseButton onClick={handleCloseButtonClick} />
       </TitleBox>
@@ -64,7 +64,7 @@ export const MintConfirmationStep: React.FunctionComponent = () => {
         variant="primary"
         onClick={handleConfirmLp}
       >
-        Confirm Lp
+        Confirm
       </Button>
     </LpConfirmationStepBox>
   );

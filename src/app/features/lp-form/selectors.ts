@@ -8,6 +8,7 @@ import {
   getEditPositionNotional,
   getProspectiveLpMargin,
   getProspectiveLpNotional,
+  getSelectedPositionNotional,
   hasExistingPosition,
   lpFormCompactFormat,
   lpFormCompactFormatToParts,
@@ -144,9 +145,20 @@ export const selectExistingPositionFixedUpper = (state: RootState) => {
   return state.lpForm.selectedPosition.fixedRateUpper.toNumber();
 };
 
+export const selectSelectedPositionCompactNotional = (state: RootState) => {
+  const notional = getSelectedPositionNotional(state.lpForm);
+
+  const compactParts = lpFormCompactFormatToParts(notional);
+  return {
+    compactNotionalSuffix: compactParts.compactSuffix,
+    compactNotionalNumber: compactParts.compactNumber,
+  };
+};
+
 export const selectEditPositionCompactNotional = (state: RootState) => {
   const notional = getEditPositionNotional(state.lpForm);
 
+  // todo: repeated code
   const compactParts = lpFormCompactFormatToParts(notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
