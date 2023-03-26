@@ -225,11 +225,9 @@ export const getProspectiveLpNotional = (state: Draft<SliceState>): number => {
   }
 
   return -state.userInput.notionalAmount.value;
-
 };
 
 export const getProspectiveLpMargin = (state: Draft<SliceState>): number => {
-
   if (isUserInputMarginError(state)) {
     return 0;
   }
@@ -250,7 +248,6 @@ export const getExistingSelectedPositionNotional = (state: Draft<SliceState>) =>
 };
 
 export const getEditPositionNotional = (state: Draft<SliceState>) => {
-  
   let editPositionNotional = 0;
 
   if (state.selectedPosition !== null) {
@@ -258,7 +255,7 @@ export const getEditPositionNotional = (state: Draft<SliceState>) => {
   }
 
   if (state.userInput.notionalAmount.value > 0) {
-    if (state.userInput.notionalAmount.editMode == "add") {
+    if (state.userInput.notionalAmount.editMode === 'add') {
       editPositionNotional += state.userInput.notionalAmount.value;
     } else {
       editPositionNotional -= state.userInput.notionalAmount.value;

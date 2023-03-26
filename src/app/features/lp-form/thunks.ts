@@ -160,7 +160,6 @@ export const getPoolLpInfoThunk = createAsyncThunk<
   }
 });
 
-
 export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<
     | {
@@ -213,9 +212,9 @@ export const getInfoPostLpThunk = createAsyncThunk<
     let prospectiveNotional: number = getProspectiveLpNotional(lpFormState);
     let addLiquidity: boolean = true;
 
-    if (prospectiveNotional < 0) { 
+    if (prospectiveNotional < 0) {
       addLiquidity = false;
-      prospectiveNotional = -prospectiveNotional; 
+      prospectiveNotional = -prospectiveNotional;
     }
 
     const infoPostLpV1: InfoPostLp = await amm.getInfoPostLp({
@@ -306,11 +305,11 @@ export const confirmLpThunk = createAsyncThunk<
     let prospectiveNotional: number = getProspectiveLpNotional(lpFormState);
     let addLiquidity: boolean = true;
 
-    if (prospectiveNotional < 0) { 
+    if (prospectiveNotional < 0) {
       addLiquidity = false;
-      prospectiveNotional = -prospectiveNotional; 
+      prospectiveNotional = -prospectiveNotional;
     }
-    
+
     return await amm.lp({
       addLiquidity: addLiquidity,
       notional: prospectiveNotional,
