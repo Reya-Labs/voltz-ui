@@ -63,7 +63,7 @@ const validateUserInputNotional = (state: Draft<SliceState>): void => {
     state.userInput.notionalAmount.editMode === 'remove' &&
     state.userInput.notionalAmount.value > (state.selectedPosition as Position).notional
   ) {
-    error = 'Not enough notional. Available:';
+    error = 'Not enough notional. Available notional:';
   }
 
   state.userInput.notionalAmount.error = error;
@@ -254,6 +254,16 @@ export const getExistingSelectedPositionNotional = (state: Draft<SliceState>) =>
   }
 
   return state.selectedPosition.notional;
+};
+
+export const getSelectedPositionNotional = (state: Draft<SliceState>) => {
+  let selectedPositionNotional = 0;
+
+  if (state.selectedPosition !== null) {
+    selectedPositionNotional += state.selectedPosition.notional;
+  }
+
+  return selectedPositionNotional;
 };
 
 export const getEditPositionNotional = (state: Draft<SliceState>) => {

@@ -4,6 +4,7 @@ import React from 'react';
 
 import {
   LpFormNumberLimits,
+  selectSelectedPositionCompactNotional,
   selectUserInputNotionalInfo,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -33,11 +34,15 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
 }) => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
 
-  const bottomLeftText = notionalAmount.error
-    ? notionalAmount.error
-    : localEditMode === 'add'
-    ? 'Liquidity Available'
-    : 'Notional Available';
+  // todo: only applies in edit position mode -> consider adding that check as well
+
+  const bottomLeftText = notionalAmount.error ? notionalAmount.error : '';
+
+  const selectedPositionCompactNotional = useAppSelector(selectSelectedPositionCompactNotional);
+
+  const bottomRightText = notionalAmount.error
+    ? selectedPositionCompactNotional.compactNotionalNumber
+    : '';
 
   return (
     <NotionalAmountFieldBox>
@@ -48,7 +53,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-        // bottomRightTextValue={formatNumber(notionalAvailable)}
+        bottomRightTextValue={bottomRightText}
         decimalsLimit={LpFormNumberLimits.decimalLimit}
         error={notionalAmount.error !== null}
         label="Notional Amount"
@@ -60,7 +65,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         switchOnValue={'add'}
         switchValue={localEditMode}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
-        tooltip="When trading rates, the amount you receive and pay is calculated as a percentage of the notional value you choose."
+        tooltip="TODO: fix copy"
         value={localNotional !== null ? localNotional : undefined}
         onChange={handleOnNotionalChange}
         onSwitchChange={handleOnSwitchChange}
