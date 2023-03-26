@@ -217,7 +217,17 @@ export const selectSubmitButtonText = (state: RootState) => {
 
 // ------------ Leverage ------------
 export const selectIsLeverageDisabled = (state: RootState) => {
-  return getProspectiveLpNotional(state.lpForm) === 0;
+  // todo: simplify
+
+  let isLeverageEnabled: boolean = false;
+  const prospectiveNotional: number = getProspectiveLpNotional(state.lpForm);
+  const isMarginAddMode: boolean = state.lpForm.userInput.marginAmount.editMode === 'add';
+
+  if (prospectiveNotional > 0 && isMarginAddMode) {
+    isLeverageEnabled = true;
+  }
+
+  return !isLeverageEnabled;
 };
 
 export const selectShowLeverageNotification = (state: RootState) =>
