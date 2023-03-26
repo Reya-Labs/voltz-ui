@@ -6,7 +6,7 @@ import {
   WaitingForMintConfirmationStepBox,
 } from './WaitingForMintConfirmationStep.styled';
 
-// todo: consider making Adding or Removing Liquidity dynamic similar to submit button labels? 
+// todo: consider making Adding or Removing Liquidity dynamic similar to submit button labels?
 export const WaitingForMintConfirmationStep: React.FunctionComponent = () => {
   return (
     <WaitingForMintConfirmationStepBox>
