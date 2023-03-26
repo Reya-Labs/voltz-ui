@@ -373,7 +373,7 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
       state: getProspectiveLpNotional(state) !== 0 ? 'lp' : 'margin-update',
       disabled: false,
       message: {
-        text: "Token approved, let's trade",
+        text: "Token approved",
         isError: false,
       },
     };
