@@ -6,7 +6,6 @@ import { AMM, NetworkConfiguration, Position } from '@voltz-protocol/v1-sdk';
  * @param selectedAmmId - the selected amm id
  */
 export const findCurrentPositionsLp = (positions: Position[], selectedAmmId: string) => {
-  // todo: check if need to filter out the default tick range that's used to identify traders
   return (positions || []).filter((p) => {
     return p.amm.id === selectedAmmId;
   });
@@ -23,7 +22,6 @@ export const findCurrentPositionLp = (
   fixedLower: number,
   fixedUpper: number,
 ) => {
-  // todo: check if need to filter out the default tick range that's used to identify traders
   return (positions || []).find((p) => {
     return p.fixedRateLower.toNumber() === fixedLower && p.fixedRateUpper.toNumber() === fixedUpper;
   });
