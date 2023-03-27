@@ -158,7 +158,6 @@ export const selectSelectedPositionCompactNotional = (state: RootState) => {
 export const selectEditPositionCompactNotional = (state: RootState) => {
   const notional = getEditPositionNotional(state.lpForm);
 
-  // todo: repeated code
   const compactParts = lpFormCompactFormatToParts(notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
@@ -167,7 +166,6 @@ export const selectEditPositionCompactNotional = (state: RootState) => {
 };
 
 // ------------ Realized & Unrealized PnL Selectors ------------
-// todo: populate based on realized and unrealized pnl spec
 
 // ------------ Lp Confirmation Flow Selectors ------------
 export const selectLpConfirmationFlowStep = (state: RootState) =>
@@ -229,17 +227,14 @@ export const selectSubmitButtonText = (state: RootState) => {
 
 // ------------ Leverage ------------
 export const selectIsLeverageDisabled = (state: RootState) => {
-  // todo: simplify
-
-  let isLeverageEnabled: boolean = false;
   const prospectiveNotional: number = getProspectiveLpNotional(state.lpForm);
   const isMarginAddMode: boolean = state.lpForm.userInput.marginAmount.editMode === 'add';
 
   if (prospectiveNotional > 0 && isMarginAddMode) {
-    isLeverageEnabled = true;
+    return false;
   }
 
-  return !isLeverageEnabled;
+  return true;
 };
 
 export const selectShowLeverageNotification = (state: RootState) =>
