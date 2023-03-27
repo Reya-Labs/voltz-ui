@@ -154,7 +154,11 @@ export const validateUserInput = (state: Draft<SliceState>): void => {
 };
 
 export const updateSelectedPosition = (state: Draft<SliceState>): void => {
-  if (state.positions.status !== 'success' || state.positions.value === null || state.positions.value.length === 0) {
+  if (
+    state.positions.status !== 'success' ||
+    state.positions.value === null ||
+    state.positions.value.length === 0
+  ) {
     return;
   }
 
@@ -181,13 +185,11 @@ export const updateLeverage = (state: Draft<SliceState>): void => {
   state.showLowLeverageNotification = checkLowLeverageNotification(state);
 };
 
-
 export const hasExistingPosition = (state: Draft<SliceState>): boolean => {
   return state.selectedPosition !== null;
 };
 
 export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number => {
-  
   if (isUserInputFixedRangeError(state)) {
     return 1;
   }
