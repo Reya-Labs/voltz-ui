@@ -34,8 +34,6 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
 }) => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
 
-  // todo: only applies in edit position mode -> consider adding that check as well
-
   const bottomLeftText = notionalAmount.error ? notionalAmount.error : '';
 
   const selectedPositionCompactNotional = useAppSelector(selectSelectedPositionCompactNotional);
