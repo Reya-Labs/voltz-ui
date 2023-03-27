@@ -737,19 +737,19 @@ export const slice = createSlice({
         state.amm.signer = null;
       })
       .addCase(setSignerAndPositionsForAMMThunk.rejected, (state) => {
-        state.positions.value = null;
-        state.positions.status = 'error';
-        if (!state.amm) {
+        if (state.amm === null) {
           return;
         }
+        state.positions.value = null;
+        state.positions.status = 'error';
         state.amm.signer = null;
       })
       .addCase(setSignerAndPositionsForAMMThunk.fulfilled, (state, { payload }) => {
-        state.positions.value = (payload as SetSignerAndPositionsForAMMThunkSuccess).positions;
-        state.positions.status = 'success';
-        if (!state.amm) {
+        if (state.amm === null) {
           return;
         }
+        state.positions.value = (payload as SetSignerAndPositionsForAMMThunkSuccess).positions;
+        state.positions.status = 'success';
         state.amm.signer = (payload as SetSignerAndPositionsForAMMThunkSuccess).signer;
         validateUserInputAndUpdateSubmitButton(state);
       })
