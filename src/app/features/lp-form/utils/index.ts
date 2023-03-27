@@ -154,7 +154,7 @@ export const validateUserInput = (state: Draft<SliceState>): void => {
 };
 
 export const updateSelectedPosition = (state: Draft<SliceState>): void => {
-  if (state.positions.status !== 'success' || state.positions.value === null) {
+  if (state.positions.status !== 'success' || state.positions.value === null || state.positions.value.length === 0) {
     return;
   }
 
