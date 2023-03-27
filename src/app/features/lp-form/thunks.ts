@@ -179,7 +179,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
     const fixedLower = lpFormState.userInput.fixedLower;
     const fixedUpper = lpFormState.userInput.fixedUpper;
 
-    if (!fixedLower || !fixedUpper) {
+    if (fixedLower === null || fixedUpper === null) {
       return {
         notionalAmount: NaN,
         infoPostLp: {},
@@ -335,7 +335,7 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
       return;
     }
 
-    if (!amm || !lpFormState.selectedPosition) {
+    if (!lpFormState.selectedPosition) {
       return;
     }
 
