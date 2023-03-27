@@ -1,9 +1,13 @@
 import { Position } from '@voltz-protocol/v1-sdk';
 import React, { useEffect } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { MaturityInformation } from '../../../../../../../components/composite/MaturityInformation/MaturityInformation';
 import { useAMMContext } from '../../../../../../../contexts/AMMContext/AMMContext';
+import { generateAmmIdForRoute, generatePoolId } from '../../../../../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../../../../../utilities/constants';
+import { isLPExperienceFlowEnabled } from '../../../../../../../utilities/is-lp-experience-flow-enabled';
+import { routes } from '../../../../../../paths';
 import { AccruedRates } from './components/AccruedRates/AccruedRates';
 import { Margin } from './components/Margin/Margin';
 import { Notional } from './components/Notional/Notional';
@@ -21,16 +25,35 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
 }) => {
   const { fixedApr } = useAMMContext();
   const { call: callFixedApr } = fixedApr;
+  const navigate = useNavigate();
 
   useEffect(() => {
     callFixedApr();
   }, [callFixedApr]);
 
+  const navigateToLPForm = () => {
+    const path = generatePath(routes.LP_FORM, {
+      form: 'liquidity',
+      ammId: generateAmmIdForRoute(position.amm),
+      poolId: generatePoolId(position.amm),
+    });
+    navigate(`/${path}`);
+    return;
+  };
+
   const handleEditMargin = () => {
+    if (isLPExperienceFlowEnabled()) {
+      navigateToLPForm();
+      return;
+    }
     onSelect('margin');
   };
 
   const handleEditLPNotional = () => {
+    if (isLPExperienceFlowEnabled()) {
+      navigateToLPForm();
+      return;
+    }
     onSelect('liquidity');
   };
 
