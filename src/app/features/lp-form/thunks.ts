@@ -279,6 +279,14 @@ export const setSignerAndPositionsForAMMThunk = createAsyncThunk<
     if (error) {
       return rejectThunkWithError(thunkAPI, error);
     }
+
+    if (positions.length === 0) {
+      return {
+        signer: signer,
+        positions: positions,
+      };
+    }
+
     const filteredPositions: Position[] = findCurrentPositionsLp(positions || [], amm.id) || null;
     return {
       signer: signer,
