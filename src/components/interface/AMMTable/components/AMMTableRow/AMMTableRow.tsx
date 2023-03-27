@@ -11,6 +11,7 @@ import { useAMMsContext } from '../../../../../contexts/AMMsContext/AMMsContext'
 import { useAgent } from '../../../../../hooks/useAgent';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { getRowButtonId } from '../../../../../utilities/googleAnalytics/helpers';
+import { isLPExperienceFlowEnabled } from '../../../../../utilities/is-lp-experience-flow-enabled';
 import { isTraderExperienceFlowEnabled } from '../../../../../utilities/is-trader-experience-flow-enabled';
 import { Button } from '../../../../atomic/Button/Button';
 import { MaturityInformation } from '../../../../composite/MaturityInformation/MaturityInformation';
@@ -86,6 +87,10 @@ export const AMMTableRow: React.FunctionComponent<AMMTableRowProps> = ({
 
   const handleClick = () => {
     if (agent !== Agents.LIQUIDITY_PROVIDER && isTraderExperienceFlowEnabled()) {
+      onSelect();
+      return;
+    }
+    if (agent === Agents.LIQUIDITY_PROVIDER && isLPExperienceFlowEnabled()) {
       onSelect();
       return;
     }
