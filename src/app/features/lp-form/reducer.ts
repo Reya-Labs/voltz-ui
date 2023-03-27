@@ -729,11 +729,11 @@ export const slice = createSlice({
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(setSignerAndPositionsForAMMThunk.pending, (state) => {
-        state.positions.value = null;
-        state.positions.status = 'pending';
-        if (!state.amm) {
+        if (state.amm === null) {
           return;
         }
+        state.positions.value = null;
+        state.positions.status = 'pending';
         state.amm.signer = null;
       })
       .addCase(setSignerAndPositionsForAMMThunk.rejected, (state) => {
