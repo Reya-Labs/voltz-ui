@@ -208,7 +208,6 @@ export const getInfoPostLpThunk = createAsyncThunk<
       };
     }
 
-    // todo: consider baking in the below login into getProspectiveLpNotional
     let prospectiveNotional: number = getProspectiveLpNotional(lpFormState);
     let addLiquidity: boolean = true;
 
