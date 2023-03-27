@@ -3,11 +3,10 @@ import React from 'react';
 
 import {
   selectNewPositionCompactNotional,
-  selectUserInputFixedLowerRaw,
-  selectUserInputFixedUpperRaw,
+  selectUserInputFixedLower,
+  selectUserInputFixedUpper,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
 import { PnLDetails } from './PnLDetails';
 import {
   BorderedBox,
@@ -33,8 +32,8 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
   typographyToken,
 }) => {
   const compactNotional = useAppSelector(selectNewPositionCompactNotional);
-  const fixedLower = useAppSelector(selectUserInputFixedLowerRaw);
-  const fixedUpper = useAppSelector(selectUserInputFixedUpperRaw);
+  const fixedLower = useAppSelector(selectUserInputFixedLower);
+  const fixedUpper = useAppSelector(selectUserInputFixedUpper);
   // TODO: Artur, Filip when SDK has support for PNL show it
   const hidePNL = true;
 
@@ -71,8 +70,8 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
-            value={fixedLower !== null ? formatNumber(fixedLower) : '--'}
-            value2={fixedUpper !== null ? formatNumber(fixedUpper) : '--'}
+            value={fixedLower ? fixedLower : '--'}
+            value2={fixedUpper ? fixedUpper : '--'}
           />
         </BorderedBox>
         {!hidePNL && (

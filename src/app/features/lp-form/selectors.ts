@@ -272,10 +272,6 @@ export const selectVariableRateValueFormatted = (state: RootState) => {
     : formatNumber(state.lpForm.variableRate.value);
 };
 
-export const selectUserInputFixedLowerRaw = (state: RootState) => {
-  return state.lpForm.userInput.fixedLower;
-};
-
 export const selectUserInputFixedLower = (state: RootState) => {
   const fixedLower = state.lpForm.userInput.fixedLower;
 
@@ -284,10 +280,6 @@ export const selectUserInputFixedLower = (state: RootState) => {
   }
 
   return fixedLower.toString();
-};
-
-export const selectUserInputFixedUpperRaw = (state: RootState) => {
-  return state.lpForm.userInput.fixedUpper;
 };
 
 export const selectUserInputFixedUpper = (state: RootState) => {

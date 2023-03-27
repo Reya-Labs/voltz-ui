@@ -423,7 +423,7 @@ export const slice = createSlice({
     ) => {
       const amm = state.amm;
 
-      if (amm === null) {
+      if (!amm) {
         return;
       }
 
@@ -448,7 +448,7 @@ export const slice = createSlice({
     ) => {
       const amm = state.amm;
 
-      if (amm === null) {
+      if (!amm) {
         return;
       }
 
