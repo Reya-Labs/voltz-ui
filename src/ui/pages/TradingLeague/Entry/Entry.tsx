@@ -42,7 +42,7 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
   if (loading) {
     return (
       <EntrySkeleton
-        colorToken="lavenderWeb6"
+        colorToken="liberty2"
         data-testid="Entry-EntrySkeleton"
         variant="rectangular"
       />

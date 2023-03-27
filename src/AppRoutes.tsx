@@ -14,11 +14,11 @@ import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
 import { LPPools } from './routes/LPPools/LPPools';
 import { LPPortfolio } from './routes/LPPortfolio/LPPortfolio';
 import { routes } from './routes/paths';
-import { Profile } from './routes/Profile/Profile';
 import { TraderPools } from './routes/TraderPools/TraderPools';
 import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
 import { LPFormPage } from './ui/pages/LPForm';
+import { ProfilePage } from './ui/pages/Profile';
 import { TraderFormPage } from './ui/pages/TraderForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { deleteChainId, getChainId, setChainId } from './utilities/network/chain-store';
@@ -205,9 +205,9 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
-              <Profile />
-            </NetworkProtectedPage>
+            <NetworkProtectedVoltzPage hidden={isArbitrumChain(chainId)}>
+              <ProfilePage />
+            </NetworkProtectedVoltzPage>
           }
           path={routes.PROFILE}
         />
