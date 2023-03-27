@@ -18,7 +18,7 @@ import {
   SetSignerAndPositionsForAMMThunkSuccess,
 } from './thunks';
 import {
-  checkLowLeverageNotification, // todo: to we intend to use this component for the lp form as well, is it in designs?
+  checkLowLeverageNotification,
   getProspectiveLpMargin,
   getProspectiveLpNotional,
   hasExistingPosition,
@@ -134,8 +134,6 @@ export type SliceState = {
     error: string | null;
     txHash: string | null;
   };
-  // todo: assuming we want to also show low leverage notification for lps?
-  // intuitively makes sense but worth confirming
   showLowLeverageNotification: boolean;
 };
 
@@ -221,7 +219,7 @@ const initialState: SliceState = {
   showLowLeverageNotification: false,
 };
 
-// todo: this logic is the same as swap form
+
 const calculateLeverageOptions = (maxLeverage: string) => {
   if (maxLeverage === '--') {
     return [0, 0, 0];
@@ -281,7 +279,6 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
     hasExistingPosition(state) || getProspectiveLpMargin(state) > 0;
   const isProspectiveLpNotionalMarginValid =
     getProspectiveLpNotional(state) !== 0 || getProspectiveLpMargin(state) !== 0;
-  // todo: in the swap implementation there are more checks worth revisiting
   const isInfoPostLpLoaded = state.prospectiveLp.infoPostLp.status === 'success';
   const isWalletBalanceLoaded = state.walletBalance.status === 'success';
   const isWalletTokenAllowanceLoaded = state.walletTokenAllowance.status === 'success';
