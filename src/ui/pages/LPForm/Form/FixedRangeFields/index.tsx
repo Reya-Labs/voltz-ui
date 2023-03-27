@@ -3,6 +3,7 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
+  LpFormNumberLimits,
   selectLpFormAMM,
   selectUserInputFixedError,
   selectUserInputFixedLower,
@@ -100,6 +101,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
     <FixedRangeFieldsBox>
       <CurrencyField
         allowNegativeValue={false}
+        decimalsLimit={LpFormNumberLimits.fixedRangeDecimalLimit}
         disabled={false}
         error={Boolean(fixedError)}
         label="Fixed Low"
@@ -113,6 +115,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
       />
       <CurrencyField
         allowNegativeValue={false}
+        decimalsLimit={LpFormNumberLimits.fixedRangeDecimalLimit}
         disabled={false}
         label="Fixed High"
         labelColorToken="lavenderWeb3"
