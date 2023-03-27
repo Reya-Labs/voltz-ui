@@ -13,16 +13,16 @@ import {
   MarketTokenInformationProps,
 } from '../../../../../components/MarketTokenInformation';
 import { TransactionDetails } from '../../TransactionDetails';
-import { MintDetails } from '../MintDetails';
+import { LPDetails } from '../LPDetails';
 import {
   HorizontalLine,
   LpConfirmationStepBox,
   LpDetailsBox,
   LpFeeDetailsBox,
   TitleBox,
-} from './MintConfirmationStep.styled';
+} from './LPConfirmationStep.styled';
 
-export const MintConfirmationStep: React.FunctionComponent = () => {
+export const LPConfirmationStep: React.FunctionComponent = () => {
   const aMM = useAppSelector(selectLpFormAMM);
   const dispatch = useAppDispatch();
   const handleConfirmLp = useCallback(() => {
@@ -51,7 +51,7 @@ export const MintConfirmationStep: React.FunctionComponent = () => {
           market={aMM.market.name as MarketTokenInformationProps['market']}
           token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
         />
-        <MintDetails />
+        <LPDetails />
       </LpDetailsBox>
       <HorizontalLine />
       <LpFeeDetailsBox>

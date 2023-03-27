@@ -8,19 +8,19 @@ import {
   selectProspectiveLpNotionalFormatted,
 } from '../../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../../app/hooks';
-import { MintDetailBox, MintDetailsBox } from './MintDetails.styled';
+import { DetailBox, DetailsBox } from './MintDetails.styled';
 
-type MintDetailsProps = {};
+type LPDetailsProps = {};
 
-export const MintDetails: React.FunctionComponent<MintDetailsProps> = () => {
+export const LPDetails: React.FunctionComponent<LPDetailsProps> = () => {
   const prospectiveLpNotionalFormatted = useAppSelector(selectProspectiveLpNotionalFormatted);
   const prospectiveLpMarginFormatted = useAppSelector(selectProspectiveLpMarginFormatted);
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
   const token = useAppSelector(selectAMMTokenFormatted);
 
   return (
-    <MintDetailsBox>
-      <MintDetailBox>
+    <DetailsBox>
+      <DetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           Notional
         </Typography>
@@ -30,8 +30,8 @@ export const MintDetails: React.FunctionComponent<MintDetailsProps> = () => {
           typographyToken="secondaryBodySmallRegular"
           value={prospectiveLpNotionalFormatted}
         />
-      </MintDetailBox>
-      <MintDetailBox>
+      </DetailBox>
+      <DetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           Margin
         </Typography>
@@ -41,8 +41,8 @@ export const MintDetails: React.FunctionComponent<MintDetailsProps> = () => {
           typographyToken="secondaryBodySmallRegular"
           value={prospectiveLpMarginFormatted}
         />
-      </MintDetailBox>
-      <MintDetailBox>
+      </DetailBox>
+      <DetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
@@ -52,7 +52,7 @@ export const MintDetails: React.FunctionComponent<MintDetailsProps> = () => {
           typographyToken="secondaryBodySmallRegular"
           value={aMMMaturity}
         />
-      </MintDetailBox>
-    </MintDetailsBox>
+      </DetailBox>
+    </DetailsBox>
   );
 };

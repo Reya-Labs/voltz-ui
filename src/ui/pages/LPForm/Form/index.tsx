@@ -10,10 +10,10 @@ import {
   TransactionDetailsBox,
 } from './Form.styled';
 import { LeverageField } from './LeverageField';
+import { LPConfirmationFlow } from './LPConfirmationFlow';
 import { MarginAccount } from './MarginAccount';
 import { MarginAmountField } from './MarginAmountField';
 import { MarginUpdateConfirmationFlow } from './MarginUpdateConfirmationFlow';
-import { MintConfirmationFlow } from './MintConfirmationFlow';
 import { NotionalAmountField } from './NotionalAmountField';
 import { SubmitButton } from './SubmitButton';
 import { TransactionDetails } from './TransactionDetails';
@@ -21,7 +21,7 @@ import { TransactionDetails } from './TransactionDetails';
 export const Form: React.FunctionComponent = () => {
   return (
     <React.Fragment>
-      <MintConfirmationFlow />
+      <LPConfirmationFlow />
       <MarginUpdateConfirmationFlow />
       <FormOuterBox>
         <MarginAccountBox>

@@ -237,6 +237,10 @@ export const selectIsLeverageDisabled = (state: RootState) => {
   return true;
 };
 
+export const selectUserInputNotionalAmountEditMode = (state: RootState) => {
+  return state.lpForm.userInput.notionalAmount.editMode;
+};
+
 export const selectShowLeverageNotification = (state: RootState) =>
   state.lpForm.showLowLeverageNotification;
 

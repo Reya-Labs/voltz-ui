@@ -8,10 +8,10 @@ import {
 } from '../../../../../../app/features/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
-import { MintDetails } from '../MintDetails';
-import { MintCompletedStepBox } from './MintCompletedStep.styled';
+import { LPDetails } from '../LPDetails';
+import { LPCompletedStepBox } from './LPCompletedStep.styled';
 
-export const MintCompletedStep: React.FunctionComponent = () => {
+export const LPCompletedStep: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const etherscanLink = useAppSelector(selectLpConfirmationFlowEtherscanLink);
@@ -21,13 +21,13 @@ export const MintCompletedStep: React.FunctionComponent = () => {
     navigate(`/${routes.LP_PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
-    <MintCompletedStepBox>
+    <LPCompletedStepBox>
       <Confetti>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
           Lp Completed
         </Typography>
       </Confetti>
-      <MintDetails />
+      <LPDetails />
       <Confetti>
         <ExternalLink
           colorToken="lavenderWeb"
@@ -45,6 +45,6 @@ export const MintCompletedStep: React.FunctionComponent = () => {
           Visit Your Portfolio
         </Button>
       </Confetti>
-    </MintCompletedStepBox>
+    </LPCompletedStepBox>
   );
 };
