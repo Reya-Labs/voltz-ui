@@ -5,6 +5,8 @@ import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
   selectProspectiveLpMarginFormatted,
+  selectUserInputFixedLower,
+  selectUserInputFixedUpper,
 } from '../../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { MarginUpdateDetailBox, MarginUpdateDetailsBox } from './MarginUpdateDetails.styled';
@@ -15,9 +17,33 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
   const prospectiveLpMarginFormFormatted = useAppSelector(selectProspectiveLpMarginFormatted);
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
   const token = useAppSelector(selectAMMTokenFormatted);
+  const fixedLower = useAppSelector(selectUserInputFixedLower);
+  const fixedUpper = useAppSelector(selectUserInputFixedUpper);
 
   return (
     <MarginUpdateDetailsBox>
+      <MarginUpdateDetailBox>
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+          Fixed Lower
+        </Typography>
+        <TokenTypography
+          colorToken="lavenderWeb"
+          token={token}
+          typographyToken="secondaryBodySmallRegular"
+          value={fixedLower}
+        />
+      </MarginUpdateDetailBox>
+      <MarginUpdateDetailBox>
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+          Fixed Upper
+        </Typography>
+        <TokenTypography
+          colorToken="lavenderWeb"
+          token={token}
+          typographyToken="secondaryBodySmallRegular"
+          value={fixedUpper}
+        />
+      </MarginUpdateDetailBox>
       <MarginUpdateDetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           Margin
