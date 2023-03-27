@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const MintDetailsBox = styled('div')`
+export const DetailsBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
 
@@ -11,7 +11,7 @@ export const MintDetailsBox = styled('div')`
   gap: 4px;
 `;
 
-export const MintDetailBox = styled('div')`
+export const DetailBox = styled('div')`
   box-sizing: border-box;
 
   display: flex;

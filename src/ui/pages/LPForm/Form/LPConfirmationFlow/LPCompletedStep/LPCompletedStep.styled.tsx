@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const MintCompletedStepBox = styled('div')`
+export const LPCompletedStepBox = styled('div')`
   display: flex;
   box-sizing: border-box;
   width: 100%;
