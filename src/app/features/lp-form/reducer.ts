@@ -448,8 +448,12 @@ export const slice = createSlice({
     ) => {
       const amm = state.amm;
 
+      if (amm === null) {
+        return;
+      }
+
       let nextFixedRateUpperNumber: number | null = null;
-      if (amm !== null && value !== null) {
+      if (value !== null) {
         nextFixedRateUpperNumber = amm.getNextUsableFixedRate(value, 0);
       }
 
