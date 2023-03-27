@@ -82,10 +82,6 @@ export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
 
     if (getProspectiveLpNotional(state) < 0 && hasExistingPosition(state)) {
       maxMarginWithdrawable = (state.selectedPosition as Position).maxMarginWithdrawable;
-      // todo: once the periphery enables the flow of burning followed by withdrawal
-      // we need to make sure that available margin to withdraw goes down the the amount of
-      // notional in the perspective lp is negative i.e. burn, hence need to comment out the line below
-      // maxMarginWithdrawable = state.prospectiveLp.infoPostLp.value.maxMarginWithdrawable;
     }
 
     if (getProspectiveLpNotional(state) > 0) {
@@ -158,7 +154,6 @@ export const validateUserInput = (state: Draft<SliceState>): void => {
 };
 
 export const updateSelectedPosition = (state: Draft<SliceState>): void => {
-  // todo: consider creating a separate function for this -> has existing positions
   if (state.positions.status !== 'success' || state.positions.value === null) {
     return;
   }
@@ -186,20 +181,18 @@ export const updateLeverage = (state: Draft<SliceState>): void => {
   state.showLowLeverageNotification = checkLowLeverageNotification(state);
 };
 
-// todo: rename hasExistingPosition to hasExistingSelectedPosition
+
 export const hasExistingPosition = (state: Draft<SliceState>): boolean => {
   return state.selectedPosition !== null;
 };
 
 export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number => {
-  // todo: do we also want to have specific errros for fixedLow and fixedHigh
-
+  
   if (isUserInputFixedRangeError(state)) {
     return 1;
   }
 
   if (state.userInput.fixedLower === null) {
-    // todo: is this a sensible return for null case?
     return 1;
   }
 
@@ -210,12 +203,10 @@ export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number => {
 
 export const getProspectiveLpFixedHigh = (state: Draft<SliceState>): number => {
   if (isUserInputFixedRangeError(state)) {
-    // todo: is this a sensible return for null case?
     return 3;
   }
 
   if (state.userInput.fixedUpper === null) {
-    // todo: is this a sensible return for null case?
     return 3;
   }
 
