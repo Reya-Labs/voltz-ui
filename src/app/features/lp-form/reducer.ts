@@ -96,9 +96,14 @@ export type SliceState = {
     };
     leverage: number | null;
     // user-inputted fixed rate range along which liquidity is provided
-    fixedLower: number | null;
-    fixedUpper: number | null;
-    fixedError: string | null;
+    fixedRange: {
+      lower: number | null;
+      upper: number | null;
+      error: string | null;
+      // counts how many times update happens for lower or upper and refreshes UI
+      // in case a same value is recalculated by selectors UI won't refresh
+      updateCount: number;
+    };
   };
   // State of prospective liquidity provisioning or liquidity removal operation
   prospectiveLp: {
@@ -188,9 +193,12 @@ const initialState: SliceState = {
       error: null,
     },
     leverage: null,
-    fixedLower: null,
-    fixedUpper: null,
-    fixedError: '',
+    fixedRange: {
+      lower: null,
+      upper: null,
+      error: '',
+      updateCount: 0,
+    },
   },
   prospectiveLp: {
     leverage: {
@@ -343,12 +351,12 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
     return;
   }
 
-  if (state.userInput.fixedError) {
+  if (state.userInput.fixedRange.error) {
     state.submitButton = {
       state: 'fixed-range-error',
       disabled: true,
       message: {
-        text: state.userInput.fixedError,
+        text: state.userInput.fixedRange.error,
         isError: true,
       },
     };
@@ -432,7 +440,8 @@ export const slice = createSlice({
         nextFixedRateLowerNumber = amm.getNextUsableFixedRate(value, 0);
       }
 
-      state.userInput.fixedLower = nextFixedRateLowerNumber;
+      state.userInput.fixedRange.lower = nextFixedRateLowerNumber;
+      state.userInput.fixedRange.updateCount = state.userInput.fixedRange.updateCount + 1;
       updateSelectedPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
     },
@@ -457,7 +466,8 @@ export const slice = createSlice({
         nextFixedRateUpperNumber = amm.getNextUsableFixedRate(value, 0);
       }
 
-      state.userInput.fixedUpper = nextFixedRateUpperNumber;
+      state.userInput.fixedRange.upper = nextFixedRateUpperNumber;
+      state.userInput.fixedRange.updateCount = state.userInput.fixedRange.updateCount + 1;
       updateSelectedPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
     },

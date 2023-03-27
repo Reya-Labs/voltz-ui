@@ -48,7 +48,7 @@ export const isUserInputNotionalError = (state: Draft<SliceState>): boolean => {
 };
 
 export const isUserInputFixedRangeError = (state: Draft<SliceState>): boolean => {
-  return state.userInput.fixedError !== null;
+  return state.userInput.fixedRange.error !== null;
 };
 
 export const isUserInputMarginError = (state: Draft<SliceState>): boolean => {
@@ -139,11 +139,11 @@ const validateUserInputMargin = (state: Draft<SliceState>): void => {
 };
 
 const validateUserInputFixedRange = (state: Draft<SliceState>): void => {
-  const fixedLower = state.userInput.fixedLower;
-  const fixedUpper = state.userInput.fixedUpper;
-  state.userInput.fixedError = '';
+  const fixedLower = state.userInput.fixedRange.lower;
+  const fixedUpper = state.userInput.fixedRange.upper;
+  state.userInput.fixedRange.error = '';
   if (fixedLower !== null && fixedUpper !== null && fixedLower >= fixedUpper) {
-    state.userInput.fixedError = 'Fixed lower cannot be equal or higher than fixed upper';
+    state.userInput.fixedRange.error = 'Fixed lower cannot be equal or higher than fixed upper';
   }
 };
 
@@ -162,8 +162,8 @@ export const updateSelectedPosition = (state: Draft<SliceState>): void => {
     return;
   }
 
-  const fixedLower = state.userInput.fixedLower;
-  const fixedUpper = state.userInput.fixedUpper;
+  const fixedLower = state.userInput.fixedRange.lower;
+  const fixedUpper = state.userInput.fixedRange.upper;
   state.selectedPosition = state.positions.value[0];
 
   const filteredPosition = state.positions.value.find(
@@ -194,13 +194,11 @@ export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number => {
     return 1;
   }
 
-  if (state.userInput.fixedLower === null) {
+  if (state.userInput.fixedRange.lower === null) {
     return 1;
   }
 
-  const value = state.userInput.fixedLower;
-
-  return value;
+  return state.userInput.fixedRange.lower;
 };
 
 export const getProspectiveLpFixedHigh = (state: Draft<SliceState>): number => {
@@ -208,11 +206,11 @@ export const getProspectiveLpFixedHigh = (state: Draft<SliceState>): number => {
     return 3;
   }
 
-  if (state.userInput.fixedUpper === null) {
+  if (state.userInput.fixedRange.upper === null) {
     return 3;
   }
 
-  const value = state.userInput.fixedUpper;
+  const value = state.userInput.fixedRange.upper;
 
   return value;
 };

@@ -273,7 +273,7 @@ export const selectVariableRateValueFormatted = (state: RootState) => {
 };
 
 export const selectUserInputFixedLower = (state: RootState) => {
-  const fixedLower = state.lpForm.userInput.fixedLower;
+  const fixedLower = state.lpForm.userInput.fixedRange.lower;
 
   if (fixedLower === null) {
     return '';
@@ -283,7 +283,7 @@ export const selectUserInputFixedLower = (state: RootState) => {
 };
 
 export const selectUserInputFixedUpper = (state: RootState) => {
-  const fixedUpper = state.lpForm.userInput.fixedUpper;
+  const fixedUpper = state.lpForm.userInput.fixedRange.upper;
 
   if (fixedUpper === null) {
     return '';
@@ -293,5 +293,8 @@ export const selectUserInputFixedUpper = (state: RootState) => {
 };
 
 export const selectUserInputFixedError = (state: RootState) => {
-  return state.lpForm.userInput.fixedError;
+  return state.lpForm.userInput.fixedRange.error;
+};
+export const selectUserInputFixedUpdateCount = (state: RootState) => {
+  return state.lpForm.userInput.fixedRange.updateCount;
 };

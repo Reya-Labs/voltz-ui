@@ -7,6 +7,7 @@ import {
   selectLpFormAMM,
   selectUserInputFixedError,
   selectUserInputFixedLower,
+  selectUserInputFixedUpdateCount,
   selectUserInputFixedUpper,
   setUserInputFixedLowerAction,
   setUserInputFixedUpperAction,
@@ -23,6 +24,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
 
   const fixedLower = useAppSelector(selectUserInputFixedLower);
   const fixedUpper = useAppSelector(selectUserInputFixedUpper);
+  const fixedUpdateCount = useAppSelector(selectUserInputFixedUpdateCount);
   const fixedError = useAppSelector(selectUserInputFixedError);
   const { isLargeDesktopDevice } = useResponsiveQuery();
   const [localFixedLower, setLocalFixedLower] = useState<string>(fixedLower.toString());
@@ -30,11 +32,11 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
 
   useEffect(() => {
     setLocalFixedUpper(fixedUpper.toString());
-  }, [fixedUpper]);
+  }, [fixedUpper, fixedUpdateCount]);
 
   useEffect(() => {
     setLocalFixedLower(fixedLower.toString());
-  }, [fixedLower]);
+  }, [fixedLower, fixedUpdateCount]);
 
   const debouncedSetFixedLowerOnChange = useMemo(
     () =>
@@ -46,16 +48,6 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
         );
       }, 300),
     [dispatch],
-  );
-
-  const handleFixedLowerOnChange = useCallback(
-    (value: string | undefined) => {
-      setLocalFixedLower(value ?? '');
-
-      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
-      debouncedSetFixedLowerOnChange(valueAsNumber);
-    },
-    [debouncedSetFixedLowerOnChange],
   );
 
   const debouncedSetFixedUpperOnChange = useMemo(
@@ -70,15 +62,23 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
     [dispatch],
   );
 
-  const handleFixedUpperOnChange = useCallback(
-    (value: string | undefined) => {
-      setLocalFixedUpper(value ?? '');
+  const handleFixedLowerOnChange = useCallback((value: string | undefined) => {
+    setLocalFixedLower(value ?? '');
+  }, []);
 
-      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
-      debouncedSetFixedUpperOnChange(valueAsNumber);
-    },
-    [debouncedSetFixedUpperOnChange],
-  );
+  const handleFixedUpperOnChange = useCallback((value: string | undefined) => {
+    setLocalFixedUpper(value ?? '');
+  }, []);
+
+  const handleFixedLowerOnBlur = useCallback(() => {
+    const valueAsNumber = localFixedLower !== undefined ? stringToBigFloat(localFixedLower) : null;
+    debouncedSetFixedLowerOnChange(valueAsNumber);
+  }, [localFixedLower, debouncedSetFixedLowerOnChange]);
+
+  const handleFixedUpperOnBlur = useCallback(() => {
+    const valueAsNumber = localFixedUpper !== undefined ? stringToBigFloat(localFixedUpper) : null;
+    debouncedSetFixedUpperOnChange(valueAsNumber);
+  }, [localFixedUpper, debouncedSetFixedUpperOnChange]);
 
   // Stop the invocation of the debounced function
   // after unmounting
@@ -111,6 +111,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
         tooltip="TODO: MISSING TOOLTIP"
         tooltipColorToken="lavenderWeb3"
         value={localFixedLower}
+        onBlur={handleFixedLowerOnBlur}
         onChange={handleFixedLowerOnChange}
       />
       <CurrencyField
@@ -124,6 +125,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
         tooltip="TODO: MISSING TOOLTIP"
         tooltipColorToken="lavenderWeb3"
         value={localFixedUpper}
+        onBlur={handleFixedUpperOnBlur}
         onChange={handleFixedUpperOnChange}
       />
     </FixedRangeFieldsBox>

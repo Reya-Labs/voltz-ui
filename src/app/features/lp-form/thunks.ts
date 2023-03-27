@@ -176,8 +176,8 @@ export const getInfoPostLpThunk = createAsyncThunk<
   try {
     const lpFormState = thunkAPI.getState().lpForm;
 
-    const fixedLower = lpFormState.userInput.fixedLower;
-    const fixedUpper = lpFormState.userInput.fixedUpper;
+    const fixedLower = lpFormState.userInput.fixedRange.lower;
+    const fixedUpper = lpFormState.userInput.fixedRange.upper;
 
     if (fixedLower === null || fixedUpper === null) {
       return {
