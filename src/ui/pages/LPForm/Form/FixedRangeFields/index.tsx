@@ -1,5 +1,6 @@
 import { CurrencyField, TypographyToken } from 'brokoli-ui';
-import React from 'react';
+import debounce from 'lodash.debounce';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   selectLpFormAMM,
@@ -19,12 +20,73 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
   const aMM = useAppSelector(selectLpFormAMM);
   const dispatch = useAppDispatch();
 
-  // define state for the inputs -> the below inputs should live in redux
-  // because we want to be able to use them in other parts of the ui that depend on this data
   const fixedLower = useAppSelector(selectUserInputFixedLower);
   const fixedUpper = useAppSelector(selectUserInputFixedUpper);
   const fixedError = useAppSelector(selectUserInputFixedError);
   const { isLargeDesktopDevice } = useResponsiveQuery();
+  const [localFixedLower, setLocalFixedLower] = useState<string>(fixedLower.toString());
+  const [localFixedUpper, setLocalFixedUpper] = useState<string>(fixedUpper.toString());
+
+  useEffect(() => {
+    setLocalFixedUpper(fixedUpper.toString());
+  }, [fixedUpper]);
+
+  useEffect(() => {
+    setLocalFixedLower(fixedLower.toString());
+  }, [fixedLower]);
+
+  const debouncedSetFixedLowerOnChange = useMemo(
+    () =>
+      debounce((value: number | null) => {
+        dispatch(
+          setUserInputFixedLowerAction({
+            value,
+          }),
+        );
+      }, 300),
+    [dispatch],
+  );
+
+  const handleFixedLowerOnChange = useCallback(
+    (value: string | undefined) => {
+      setLocalFixedLower(value ?? '');
+
+      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
+      debouncedSetFixedLowerOnChange(valueAsNumber);
+    },
+    [debouncedSetFixedLowerOnChange],
+  );
+
+  const debouncedSetFixedUpperOnChange = useMemo(
+    () =>
+      debounce((value: number | null) => {
+        dispatch(
+          setUserInputFixedUpperAction({
+            value,
+          }),
+        );
+      }, 300),
+    [dispatch],
+  );
+
+  const handleFixedUpperOnChange = useCallback(
+    (value: string | undefined) => {
+      setLocalFixedUpper(value ?? '');
+
+      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
+      debouncedSetFixedUpperOnChange(valueAsNumber);
+    },
+    [debouncedSetFixedUpperOnChange],
+  );
+
+  // Stop the invocation of the debounced function
+  // after unmounting
+  useEffect(() => {
+    return () => {
+      debouncedSetFixedLowerOnChange.cancel();
+      debouncedSetFixedUpperOnChange.cancel();
+    };
+  }, []);
 
   const labelTypographyToken: TypographyToken = isLargeDesktopDevice
     ? 'primaryBodyMediumRegular'
@@ -33,27 +95,6 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
   if (!aMM) {
     return null;
   }
-
-  // two fields in a box with a separator in between
-
-  const handleFixedLowerOnChange = (value: string | undefined) => {
-    // tell redux -> we have some value for you
-
-    dispatch(
-      setUserInputFixedLowerAction({
-        value: value !== undefined ? stringToBigFloat(value) : null,
-      }),
-    );
-  };
-
-  const handleFixedUpperOnChange = (value: string | undefined) => {
-    // tell redux -> we have some value for you
-    dispatch(
-      setUserInputFixedUpperAction({
-        value: value !== undefined ? stringToBigFloat(value) : null,
-      }),
-    );
-  };
 
   return (
     <FixedRangeFieldsBox>
@@ -67,7 +108,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
         suffix="%"
         tooltip="TODO: MISSING TOOLTIP"
         tooltipColorToken="lavenderWeb3"
-        value={fixedLower}
+        value={localFixedLower}
         onChange={handleFixedLowerOnChange}
       />
       <CurrencyField
@@ -79,7 +120,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
         suffix="%"
         tooltip="TODO: MISSING TOOLTIP"
         tooltipColorToken="lavenderWeb3"
-        value={fixedUpper}
+        value={localFixedUpper}
         onChange={handleFixedUpperOnChange}
       />
     </FixedRangeFieldsBox>
