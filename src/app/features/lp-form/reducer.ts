@@ -219,7 +219,6 @@ const initialState: SliceState = {
   showLowLeverageNotification: false,
 };
 
-
 const calculateLeverageOptions = (maxLeverage: string) => {
   if (maxLeverage === '--') {
     return [0, 0, 0];
