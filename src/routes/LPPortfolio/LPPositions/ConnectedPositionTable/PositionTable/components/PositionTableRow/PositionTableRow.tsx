@@ -37,7 +37,9 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
       ammId: generateAmmIdForRoute(position.amm),
       poolId: generatePoolId(position.amm),
     });
-    navigate(`/${path}`);
+    navigate(
+      `/${path}?fixedLower=${position.fixedRateLower.toNumber()}&fixedUpper=${position.fixedRateUpper.toNumber()}`,
+    );
     return;
   };
 

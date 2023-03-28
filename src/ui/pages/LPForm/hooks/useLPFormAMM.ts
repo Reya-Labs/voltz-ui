@@ -1,6 +1,6 @@
 import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import {
   getFixedRateThunk,
@@ -16,6 +16,8 @@ import {
   selectPoolLpInfoStatus,
   setLpFormAMMAction,
   setSignerAndPositionsForAMMThunk,
+  setUserInputFixedLowerAction,
+  setUserInputFixedUpperAction,
 } from '../../../../app/features/lp-form';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -32,6 +34,7 @@ export type UseAMMsResult = {
 };
 
 export const useLPFormAMM = (): UseAMMsResult => {
+  const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
@@ -40,6 +43,8 @@ export const useLPFormAMM = (): UseAMMsResult => {
   const positionsFetchingStatus = useAppSelector(selectLpFormPositionsFetchingStatus);
   const poolLpInfoStatus = useAppSelector(selectPoolLpInfoStatus);
   const chainId = useAppSelector(selectChainId);
+  const queryFixedLower = searchParams.get('fixedLower');
+  const queryFixedUpper = searchParams.get('fixedUpper');
 
   const [loading, setLoading] = useState(true);
 
@@ -100,6 +105,31 @@ export const useLPFormAMM = (): UseAMMsResult => {
       }),
     );
   }, [dispatch, aMMsLoading, error, chainId, signer]);
+
+  useEffect(() => {
+    if (positionsFetchingStatus !== 'success') {
+      return;
+    }
+    if (!queryFixedLower || !queryFixedUpper) {
+      return;
+    }
+    const fixedLower = parseFloat(queryFixedLower);
+    const fixedUpper = parseFloat(queryFixedUpper);
+    if (isNaN(fixedLower) || isNaN(fixedUpper)) {
+      return;
+    }
+
+    dispatch(
+      setUserInputFixedLowerAction({
+        value: fixedLower,
+      }),
+    );
+    dispatch(
+      setUserInputFixedUpperAction({
+        value: fixedUpper,
+      }),
+    );
+  }, [dispatch, positionsFetchingStatus, queryFixedLower, queryFixedUpper]);
 
   useEffect(() => {
     if (!aMM || !aMM.signer || !chainId) {
