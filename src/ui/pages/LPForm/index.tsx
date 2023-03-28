@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { resetStateAction } from '../../../app/features/lp-form';
 import { useAppDispatch } from '../../../app/hooks';
 import { routes } from '../../../routes/paths';
+import { AMMFetchingError } from '../../components/AMMFetchingError';
 import { NoAMMFound } from '../../components/NoAMMFound';
 import { PageLoading } from '../../components/PageLoading';
 import { VoltzPage } from '../../components/VoltzPage';
@@ -23,10 +24,11 @@ export const LPFormPage: React.FunctionComponent = () => {
     };
   }, []);
 
-  const pageNotFound = form !== 'liquidity' || noAMMFound || error;
+  const pageNotFound = form !== 'liquidity' || noAMMFound;
 
   return (
     <VoltzPage
+      errorSlot={error ? <AMMFetchingError to={`/${routes.LP_POOLS}`} /> : undefined}
       mainSlot={<Main />}
       notFoundSlot={pageNotFound ? <NoAMMFound to={`/${routes.LP_POOLS}`} /> : undefined}
       pageLoadingSlot={loading ? <PageLoading /> : undefined}

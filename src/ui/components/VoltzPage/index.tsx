@@ -13,6 +13,7 @@ import {
 
 type VoltzPageProps = {
   mainSlot: React.ReactNode;
+  errorSlot?: React.ReactNode;
   rightSlot?: React.ReactNode;
   notFoundSlot?: React.ReactNode;
   pageLoadingSlot?: React.ReactNode;
@@ -20,6 +21,7 @@ type VoltzPageProps = {
 export const VoltzPage: React.FunctionComponent<VoltzPageProps> = ({
   mainSlot,
   rightSlot,
+  errorSlot,
   notFoundSlot,
   pageLoadingSlot,
 }) => {
@@ -37,6 +39,8 @@ export const VoltzPage: React.FunctionComponent<VoltzPageProps> = ({
     pageContent = notFoundSlot;
   } else if (pageLoadingSlot) {
     pageContent = pageLoadingSlot;
+  } else if (errorSlot) {
+    pageContent = errorSlot;
   }
   return (
     <Page data-testid="VoltzPage">
