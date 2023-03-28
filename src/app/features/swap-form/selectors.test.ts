@@ -4,6 +4,7 @@ import {
   selectAvailableNotional,
   selectBottomRightMarginNumber,
   selectExistingPositionMode,
+  selectExistingPositionPayingRateFormatted,
   selectExistingPositionReceivingRateFormatted,
   selectFixedRateInfo,
   selectInfoPostSwap,
@@ -1038,6 +1039,53 @@ describe('swap-form.selectors', () => {
 
       expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getExistingPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
+      expect(result).toEqual('--');
+    });
+  });
+
+  describe('selectExistingPositionPayingRateFormatted', () => {
+    const state = {
+      swapForm: jest.fn(),
+    };
+    afterEach(() => {
+      // Clear mock call history after each test
+      jest.clearAllMocks();
+    });
+
+    it('returns the formatted paying rate for an existing fixed position', () => {
+      (getExistingPositionMode as jest.Mock).mockReturnValueOnce('fixed');
+      (getExistingPositionVariableRate as jest.Mock).mockReturnValueOnce(1.5);
+      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.50');
+
+      const result = selectExistingPositionPayingRateFormatted(state as never);
+
+      expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
+      expect(getExistingPositionVariableRate).toHaveBeenCalledWith(state.swapForm);
+      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.5);
+      expect(result).toEqual('1.50');
+    });
+
+    it('returns the formatted paying rate for an existing variable position', () => {
+      (getExistingPositionMode as jest.Mock).mockReturnValueOnce('variable');
+      (getExistingPositionFixedRate as jest.Mock).mockReturnValueOnce(1.2);
+      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.20');
+
+      const result = selectExistingPositionPayingRateFormatted(state as never);
+
+      expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
+      expect(getExistingPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
+      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.2);
+      expect(result).toEqual('1.20');
+    });
+
+    it('returns "--" if receiving rate is null', () => {
+      (getExistingPositionMode as jest.Mock).mockReturnValueOnce('fixed');
+      (getExistingPositionVariableRate as jest.Mock).mockReturnValueOnce(null);
+
+      const result = selectExistingPositionPayingRateFormatted(state as never);
+
+      expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
+      expect(getExistingPositionVariableRate).toHaveBeenCalledWith(state.swapForm);
       expect(result).toEqual('--');
     });
   });
