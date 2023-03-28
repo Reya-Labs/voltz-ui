@@ -3,6 +3,7 @@ import {
   selectAMMTokenFormatted,
   selectAvailableNotional,
   selectBottomRightMarginNumber,
+  selectExistingPositionCompactNotional,
   selectExistingPositionMode,
   selectExistingPositionPayingRateFormatted,
   selectExistingPositionReceivingRateFormatted,
@@ -43,6 +44,7 @@ import {
   getVariableRate,
   hasExistingPosition,
   swapFormCompactFormat,
+  swapFormCompactFormatToParts,
   swapFormFormatNumber,
   swapFormLimitAndFormatNumber,
 } from './utils';
@@ -63,6 +65,7 @@ jest.mock('./utils', () => ({
   getExistingPositionMode: jest.fn(),
   getExistingPositionFixedRate: jest.fn(),
   getExistingPositionVariableRate: jest.fn(),
+  swapFormCompactFormatToParts: jest.fn(),
 }));
 
 describe('swap-form.selectors', () => {
@@ -1087,6 +1090,68 @@ describe('swap-form.selectors', () => {
       expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getExistingPositionVariableRate).toHaveBeenCalledWith(state.swapForm);
       expect(result).toEqual('--');
+    });
+  });
+
+  describe('selectExistingPositionCompactNotional', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should return null when position status is not "success"', () => {
+      const state = {
+        swapForm: {
+          position: {
+            status: 'pending',
+            value: null,
+          },
+        },
+      } as never;
+
+      const result = selectExistingPositionCompactNotional(state);
+
+      expect(result).toBeNull();
+    });
+
+    it('should return null when position value is falsy', () => {
+      const state = {
+        swapForm: {
+          position: {
+            status: 'success',
+            value: null,
+          },
+        },
+      } as never;
+
+      const result = selectExistingPositionCompactNotional(state);
+
+      expect(result).toBeNull();
+    });
+
+    it('should return an object with the correct properties when position status is "success" and position value is truthy', () => {
+      const state = {
+        swapForm: {
+          position: {
+            status: 'success',
+            value: {
+              notional: '1000000000000000000',
+            },
+          },
+        },
+      } as never;
+
+      (swapFormCompactFormatToParts as jest.Mock).mockReturnValueOnce({
+        compactSuffix: 'ETH',
+        compactNumber: '1',
+      });
+
+      const result = selectExistingPositionCompactNotional(state);
+
+      expect(swapFormCompactFormatToParts as jest.Mock).toHaveBeenCalledWith('1000000000000000000');
+      expect(result).toEqual({
+        compactNotionalSuffix: 'ETH',
+        compactNotionalNumber: '1',
+      });
     });
   });
 });
