@@ -3,11 +3,16 @@ import { Position } from '@voltz-protocol/v1-sdk';
 
 import { stringToBigFloat } from '../../../../utilities/number';
 import { SliceState } from '../reducer';
+import { getExistingPositionMode } from './getExistingPositionMode';
 import { getExistingPositionNotional } from './getExistingPositionNotional';
+import { getProspectiveSwapMode } from './getProspectiveSwapMode';
 import { hasExistingPosition } from './hasExistingPosition';
 import { isUserInputNotionalError } from './isUserInputNotionalError';
 import { swapFormLimitAndFormatNumber } from './swapFormLimitAndFormatNumber';
 
+export * from './getExistingPositionMode';
+export * from './getExistingPositionNotional';
+export * from './getProspectiveSwapMode';
 export * from './hasExistingPosition';
 export * from './isUserInputMarginError';
 export * from './isUserInputNotionalError';
@@ -139,32 +144,6 @@ export const updateLeverage = (state: Draft<SliceState>): void => {
   state.showLowLeverageNotification = checkLowLeverageNotification(state);
 };
 
-export const getProspectiveSwapMode = (state: Draft<SliceState>): 'fixed' | 'variable' => {
-  if (state.position.value === null) {
-    return state.userInput.mode;
-  }
-
-  const existingPositionMode = getExistingPositionMode(state);
-
-  if (
-    existingPositionMode === 'fixed' &&
-    state.userInput.mode === 'fixed' &&
-    state.userInput.notionalAmount.editMode === 'add'
-  ) {
-    return 'fixed';
-  }
-
-  if (
-    existingPositionMode === 'variable' &&
-    state.userInput.mode === 'variable' &&
-    state.userInput.notionalAmount.editMode === 'add'
-  ) {
-    return 'variable';
-  }
-
-  return existingPositionMode === 'fixed' ? 'variable' : 'fixed';
-};
-
 export const getProspectiveSwapNotional = (state: Draft<SliceState>): number => {
   if (isUserInputNotionalError(state)) {
     return 0;
@@ -216,16 +195,6 @@ export const getExistingPositionVariableRate = (state: Draft<SliceState>) => {
 
   return getVariableRate(state);
 };
-
-export const getExistingPositionMode = (state: Draft<SliceState>) => {
-  if (state.position.status !== 'success' || !state.position.value) {
-    return null;
-  }
-
-  return state.position.value.positionType === 1 ? 'fixed' : 'variable';
-};
-
-export * from './getExistingPositionNotional';
 
 export const getEditPositionTokenBalance = (state: Draft<SliceState>) => {
   let fixedTokenBalance = 0;
