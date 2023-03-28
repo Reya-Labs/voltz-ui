@@ -3,6 +3,7 @@ import {
   selectAMMTokenFormatted,
   selectAvailableNotional,
   selectBottomRightMarginNumber,
+  selectEditPositionMode,
   selectExistingPositionCompactNotional,
   selectExistingPositionMode,
   selectExistingPositionPayingRateFormatted,
@@ -34,6 +35,7 @@ import {
 import {
   getAvailableMargin,
   getAvailableNotional,
+  getEditPositionMode,
   getExistingPositionFixedRate,
   getExistingPositionMode,
   getExistingPositionVariableRate,
@@ -66,6 +68,7 @@ jest.mock('./utils', () => ({
   getExistingPositionFixedRate: jest.fn(),
   getExistingPositionVariableRate: jest.fn(),
   swapFormCompactFormatToParts: jest.fn(),
+  getEditPositionMode: jest.fn(),
 }));
 
 describe('swap-form.selectors', () => {
@@ -1152,6 +1155,62 @@ describe('swap-form.selectors', () => {
         compactNotionalSuffix: 'ETH',
         compactNotionalNumber: '1',
       });
+    });
+  });
+
+  describe('selectEditPositionMode', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should call getEditPositionMode with the correct argument', () => {
+      const state = {
+        swapForm: {
+          position: {
+            status: 'success',
+            value: {
+              tokenA: 'USDC',
+              tokenB: 'ETH',
+            },
+          },
+        },
+      };
+
+      selectEditPositionMode(state as never);
+
+      expect(getEditPositionMode).toHaveBeenCalledWith({
+        position: {
+          status: 'success',
+          value: {
+            tokenA: 'USDC',
+            tokenB: 'ETH',
+          },
+        },
+      });
+    });
+
+    it('should return the value returned by getEditPositionMode', () => {
+      const state = {
+        swapForm: {
+          position: {
+            status: 'success',
+            value: {
+              tokenA: 'USDC',
+              tokenB: 'ETH',
+            },
+          },
+        },
+      } as never;
+
+      const mode = {
+        type: 'my-mode',
+        params: {},
+      };
+
+      (getEditPositionMode as jest.Mock).mockReturnValueOnce(mode);
+
+      const result = selectEditPositionMode(state);
+      expect(result).toEqual(mode);
     });
   });
 });
