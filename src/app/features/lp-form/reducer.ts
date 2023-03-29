@@ -197,7 +197,7 @@ const initialState: SliceState = {
     fixedRange: {
       lower: null,
       upper: null,
-      error: '',
+      error: null,
       updateCount: 0,
     },
   },
