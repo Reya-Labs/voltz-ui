@@ -92,9 +92,11 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
   const lpFormState = state.lpForm;
 
   if (lpFormState.userInput.marginAmount.editMode === 'remove') {
-    return getAvailableMargin(lpFormState) !== null
-      ? lpFormLimitAndFormatNumber(getAvailableMargin(lpFormState) as number, 'floor')
-      : null;
+    const margin = getAvailableMargin(lpFormState);
+    if (margin === null) {
+      return null;
+    }
+    return lpFormLimitAndFormatNumber(margin, 'floor');
   }
 
   if (lpFormState.prospectiveLp.infoPostLp.status === 'success') {
@@ -263,6 +265,8 @@ export const selectPositionMarginFormatted = (state: RootState) => {
   }
   return lpFormCompactFormat(state.lpForm.selectedPosition.margin);
 };
+export const selectFixedRateInfo = (state: RootState) => state.lpForm.fixedRate;
+export const selectVariableRateInfo = (state: RootState) => state.lpForm.variableRate;
 
 export const selectFixedRateValueFormatted = (state: RootState) => {
   return state.lpForm.fixedRate.status !== 'success'
@@ -301,4 +305,10 @@ export const selectUserInputFixedError = (state: RootState) => {
 };
 export const selectUserInputFixedUpdateCount = (state: RootState) => {
   return state.lpForm.userInput.fixedRange.updateCount;
+};
+
+export const selectMarginRequirementFormatted = (state: RootState) => {
+  return state.lpForm.prospectiveLp.infoPostLp.status === 'success'
+    ? formatNumber(state.lpForm.prospectiveLp.infoPostLp.value.marginRequirement, 2, 4)
+    : '--';
 };

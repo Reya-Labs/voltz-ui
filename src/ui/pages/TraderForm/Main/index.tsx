@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { selectSwapFormAMM } from '../../../../app/features/swap-form';
+import {
+  selectFixedRateInfo,
+  selectSwapFormAMM,
+  selectVariableRateInfo,
+} from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
 import { CashFlowCalculator } from './CashflowCalculator';
@@ -10,6 +14,8 @@ import { PositionDetails } from './PositionDetails';
 
 export const Main: React.FunctionComponent = () => {
   const aMM = useAppSelector(selectSwapFormAMM);
+  const fixedRateInfo = useAppSelector(selectFixedRateInfo);
+  const variableRateInfo = useAppSelector(selectVariableRateInfo);
   if (!aMM) {
     return null;
   }
@@ -17,7 +23,12 @@ export const Main: React.FunctionComponent = () => {
   return (
     <MainBox>
       <PoolHeader />
-      <HistoricalRatesChart aMMId={aMM.id} aMMRateOracleId={aMM.rateOracle.id} />
+      <HistoricalRatesChart
+        aMMId={aMM.id}
+        aMMRateOracleId={aMM.rateOracle.id}
+        fixedRate={fixedRateInfo.status !== 'success' ? null : fixedRateInfo.value}
+        variableRate={variableRateInfo.status !== 'success' ? null : variableRateInfo.value}
+      />
       <BottomMainBox>
         <PositionDetails />
         <CashFlowCalculator />
