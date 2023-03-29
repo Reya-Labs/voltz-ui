@@ -143,11 +143,10 @@ export const useLPFormAMM = (): UseAMMsResult => {
   }, [dispatch, positionsFetchingStatus, queryFixedLower, queryFixedUpper]);
 
   useEffect(() => {
-    if (!aMM || !aMM.signer || !chainId) {
+    void dispatch(getWalletBalanceThunk());
+    if (!chainId) {
       return;
     }
-
-    void dispatch(getWalletBalanceThunk());
     void dispatch(
       getUnderlyingTokenAllowanceThunk({ chainId, alchemyApiKey: getAlchemyKeyForChain(chainId) }),
     );
