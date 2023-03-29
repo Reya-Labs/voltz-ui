@@ -14,6 +14,8 @@ import {
   selectLpFormPositionsFetchingStatus,
   selectLpFormSelectedPosition,
   selectPoolLpInfoStatus,
+  selectUserInputFixedLower,
+  selectUserInputFixedUpper,
   setLpFormAMMAction,
   setSignerAndPositionsForAMMThunk,
   setUserInputFixedLowerAction,
@@ -45,6 +47,9 @@ export const useLPFormAMM = (): UseAMMsResult => {
   const chainId = useAppSelector(selectChainId);
   const queryFixedLower = searchParams.get('fixedLower');
   const queryFixedUpper = searchParams.get('fixedUpper');
+
+  const fixedRateLower = useAppSelector(selectUserInputFixedLower);
+  const fixedRateUpper = useAppSelector(selectUserInputFixedUpper); 
 
   const [loading, setLoading] = useState(true);
 
@@ -85,8 +90,14 @@ export const useLPFormAMM = (): UseAMMsResult => {
     void dispatch(getFixedRateThunk());
     void dispatch(getVariableRateThunk());
     void dispatch(getVariableRate24hAgoThunk());
-    void dispatch(getPoolLpInfoThunk());
   }, [dispatch, aMM]);
+
+  useEffect(() => {
+    if (!aMM) {
+      return;
+    }
+    void dispatch(getPoolLpInfoThunk());
+  }, [dispatch, aMM, fixedRateLower, fixedRateUpper]);
 
   useEffect(() => {
     if (!chainId) {
@@ -155,10 +166,8 @@ export const useLPFormAMM = (): UseAMMsResult => {
     loading:
       idle ||
       positionsFetchingStatus === 'idle' ||
-      poolLpInfoStatus === 'idle' ||
       loading ||
-      positionsFetchingStatus === 'pending' ||
-      poolLpInfoStatus === 'pending',
+      positionsFetchingStatus === 'pending',
     noAMMFound: !aMM && !loading,
     error: error || positionsFetchingStatus === 'error' || poolLpInfoStatus === 'error',
   };
