@@ -34,7 +34,7 @@ export const getWalletBalanceThunk = createAsyncThunk<
   try {
     const amm = thunkAPI.getState().lpForm.amm;
     if (!amm || !amm.signer) {
-      return;
+      return 0;
     }
 
     return await amm.underlyingTokens();
