@@ -30,7 +30,7 @@ export const LPDetails: React.FunctionComponent<LPDetailsProps> = () => {
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={token}
+          token="%"
           typographyToken="secondaryBodySmallRegular"
           value={fixedLower}
         />

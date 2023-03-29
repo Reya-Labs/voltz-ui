@@ -28,7 +28,7 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={token}
+          token="%"
           typographyToken="secondaryBodySmallRegular"
           value={fixedLower}
         />
@@ -39,7 +39,7 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={token}
+          token="%"
           typographyToken="secondaryBodySmallRegular"
           value={fixedUpper}
         />
