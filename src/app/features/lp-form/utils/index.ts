@@ -141,7 +141,6 @@ const validateUserInputMargin = (state: Draft<SliceState>): void => {
 const validateUserInputFixedRange = (state: Draft<SliceState>): void => {
   const fixedLower = state.userInput.fixedRange.lower;
   const fixedUpper = state.userInput.fixedRange.upper;
-  state.userInput.fixedRange.error = '';
   if (fixedLower !== null && fixedUpper !== null && fixedLower >= fixedUpper) {
     state.userInput.fixedRange.error = 'Fixed lower cannot be equal or higher than fixed upper';
   }
