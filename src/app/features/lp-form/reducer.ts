@@ -24,9 +24,9 @@ import {
   hasExistingPosition,
   isUserInputMarginError,
   lpFormLimitAndFormatNumber,
+  resetNotionalAndMarginEditMode,
   updateLeverage,
   updateSelectedPosition,
-  resetNotionalAndMarginEditMode,
   validateUserInput,
 } from './utils';
 

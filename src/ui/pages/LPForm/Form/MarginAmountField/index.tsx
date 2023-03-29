@@ -21,7 +21,6 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
   const selectedPosition = useAppSelector(selectLpFormSelectedPosition);
   const aMM = useAppSelector(selectLpFormAMM);
 
-  const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
   const [localMargin, setLocalMargin] = useState<string | null>(marginAmount.value.toString());
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
@@ -74,7 +73,6 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         return;
       }
 
-      setLocalEditMode(value);
       debouncedSetMarginAmount(undefined, value);
     },
     [debouncedSetMarginAmount],

@@ -18,7 +18,6 @@ import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 type NotionalAmountProps = {};
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
-  const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
   const [localNotional, setLocalNotional] = useState<string | null>(
     notionalAmount.value.toString(),
   );
@@ -62,7 +61,6 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
         return;
       }
 
-      setLocalEditMode(value);
       debouncedGetInfoPostLp(undefined, value);
     },
     [debouncedGetInfoPostLp],

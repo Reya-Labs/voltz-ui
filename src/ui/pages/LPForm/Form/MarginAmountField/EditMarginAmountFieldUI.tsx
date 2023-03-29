@@ -6,8 +6,8 @@ import {
   selectBottomRightMarginNumber,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
-  selectUserInputMarginInfo,
   selectUserInputMarginAmountEditMode,
+  selectUserInputMarginInfo,
   selectWalletBalance,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';

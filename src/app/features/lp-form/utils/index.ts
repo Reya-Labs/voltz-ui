@@ -153,13 +153,12 @@ export const validateUserInput = (state: Draft<SliceState>): void => {
   validateUserInputFixedRange(state);
 };
 
-
 export const resetNotionalAndMarginEditMode = (state: Draft<SliceState>): void => {
   state.userInput.notionalAmount.value = 0;
-  state.userInput.notionalAmount.editMode = "add";
+  state.userInput.notionalAmount.editMode = 'add';
   state.userInput.marginAmount.value = 0;
-  state.userInput.marginAmount.editMode = "add";
-}
+  state.userInput.marginAmount.editMode = 'add';
+};
 
 export const updateSelectedPosition = (state: Draft<SliceState>): void => {
   if (
