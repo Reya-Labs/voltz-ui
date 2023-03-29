@@ -5,6 +5,8 @@ import { BigNumber, ContractReceipt, providers } from 'ethers';
 import { findCurrentPositionsLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import {
+  getDefaultLpFixedHigh,
+  getDefaultLpFixedLow,
   getProspectiveLpFixedHigh,
   getProspectiveLpFixedLow,
   getProspectiveLpMargin,
@@ -151,10 +153,15 @@ export const getPoolLpInfoThunk = createAsyncThunk<
 
     const lpFormState = thunkAPI.getState().lpForm;
 
-    return await amm.getPoolLpInfo(
-      getProspectiveLpFixedLow(lpFormState),
-      getProspectiveLpFixedHigh(lpFormState),
-    );
+    let fixedLow: number | null = getProspectiveLpFixedLow(lpFormState);
+    let fixedHigh: number | null = getProspectiveLpFixedHigh(lpFormState);
+
+    if (fixedLow === null || fixedHigh === null) {
+      fixedLow = getDefaultLpFixedLow(lpFormState);
+      fixedHigh = getDefaultLpFixedHigh(lpFormState);
+    }
+
+    return await amm.getPoolLpInfo(fixedLow, fixedHigh);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
@@ -309,6 +316,13 @@ export const confirmLpThunk = createAsyncThunk<
       return;
     }
 
+    const fixedLow = getProspectiveLpFixedLow(lpFormState);
+    const fixedHigh = getProspectiveLpFixedHigh(lpFormState);
+
+    if (fixedLow === null || fixedHigh === null) {
+      return;
+    }
+
     let prospectiveNotional: number = getProspectiveLpNotional(lpFormState);
     let addLiquidity: boolean = true;
 
@@ -321,8 +335,8 @@ export const confirmLpThunk = createAsyncThunk<
       addLiquidity: addLiquidity,
       notional: prospectiveNotional,
       margin: getProspectiveLpMargin(lpFormState),
-      fixedLow: getProspectiveLpFixedLow(lpFormState),
-      fixedHigh: getProspectiveLpFixedHigh(lpFormState),
+      fixedLow: fixedLow,
+      fixedHigh: fixedHigh,
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
@@ -346,8 +360,12 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
       return;
     }
 
-    const fixedLow: number = getProspectiveLpFixedLow(lpFormState);
-    const fixedHigh: number = getProspectiveLpFixedHigh(lpFormState);
+    const fixedLow: number | null = getProspectiveLpFixedLow(lpFormState);
+    const fixedHigh: number | null = getProspectiveLpFixedHigh(lpFormState);
+
+    if (fixedLow === null || fixedHigh === null) {
+      return;
+    }
 
     return await amm.updatePositionMargin({
       fixedLow,
