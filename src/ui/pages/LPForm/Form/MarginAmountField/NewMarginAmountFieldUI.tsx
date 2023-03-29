@@ -3,14 +3,13 @@ import React from 'react';
 
 import {
   LpFormNumberLimits,
-  selectInfoPostLp,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
+  selectMarginRequirementFormatted,
   selectUserInputMarginInfo,
   selectWalletBalance,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 
 type NewMarginAmountFieldUIProps = {
@@ -35,8 +34,8 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
   const isMarginRequiredError = useAppSelector(selectIsMarginRequiredError);
   const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
   const marginAmount = useAppSelector(selectUserInputMarginInfo);
-  const infoPostLp = useAppSelector(selectInfoPostLp);
   const walletBalance = useAppSelector(selectWalletBalance);
+  const marginRequirementFormatted = useAppSelector(selectMarginRequirementFormatted);
 
   return (
     <MarginAmountFieldBox>
@@ -49,9 +48,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-        bottomRightTextValue={
-          infoPostLp.status === 'success' ? formatNumber(infoPostLp.value.marginRequirement) : '--'
-        }
+        bottomRightTextValue={marginRequirementFormatted}
         decimalsLimit={LpFormNumberLimits.decimalLimit}
         error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"

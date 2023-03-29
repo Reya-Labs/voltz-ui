@@ -369,3 +369,9 @@ export const selectVariableRateValueFormatted = (state: RootState) => {
     ? '--'
     : formatNumber(state.swapForm.variableRate.value);
 };
+
+export const selectMarginRequirementFormatted = (state: RootState) => {
+  return state.swapForm.prospectiveSwap.infoPostSwap.status === 'success'
+    ? formatNumber(state.swapForm.prospectiveSwap.infoPostSwap.value.marginRequirement, 2, 4)
+    : '--';
+};

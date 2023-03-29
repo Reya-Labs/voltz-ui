@@ -2,15 +2,14 @@ import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
-  selectInfoPostSwap,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
+  selectMarginRequirementFormatted,
   selectUserInputMarginInfo,
   selectWalletBalance,
   SwapFormNumberLimits,
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 
 type NewMarginAmountFieldUIProps = {
@@ -35,8 +34,8 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
   const isMarginRequiredError = useAppSelector(selectIsMarginRequiredError);
   const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
   const marginAmount = useAppSelector(selectUserInputMarginInfo);
-  const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const walletBalance = useAppSelector(selectWalletBalance);
+  const marginRequirementFormatted = useAppSelector(selectMarginRequirementFormatted);
 
   return (
     <MarginAmountFieldBox>
@@ -49,11 +48,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-        bottomRightTextValue={
-          infoPostSwap.status === 'success'
-            ? formatNumber(infoPostSwap.value.marginRequirement)
-            : '--'
-        }
+        bottomRightTextValue={marginRequirementFormatted}
         decimalsLimit={SwapFormNumberLimits.decimalLimit}
         error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"
