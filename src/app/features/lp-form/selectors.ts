@@ -255,7 +255,7 @@ export const selectLeverageOptions = (state: RootState) => {
 
   return {
     maxLeverage: lpFormState.prospectiveLp.leverage.maxLeverage,
-    leverageOptions: lpFormState.prospectiveLp.leverage.options,
+    leverageOptions: lpFormState.prospectiveLp.leverage.options.map(String),
   };
 };
 

@@ -6,10 +6,11 @@ import { LeverageFieldBox } from './LeverageField.styled';
 
 type LeverageFieldProps = {
   disabled: boolean;
-  leverageOptions: number[];
+  leverageOptions: string[];
   maxLeverage: string;
-  leverage: number | undefined;
-  onLeverageChange: (leverage: number, changeType: 'button' | 'input') => void;
+  leverage: string | undefined;
+  error: boolean;
+  onLeverageChange: (leverage: string | undefined, changeType: 'button' | 'input') => void;
 };
 export const LeverageField: React.FunctionComponent<LeverageFieldProps> = ({
   leverageOptions,
@@ -17,6 +18,7 @@ export const LeverageField: React.FunctionComponent<LeverageFieldProps> = ({
   onLeverageChange,
   maxLeverage,
   disabled,
+  error,
 }) => {
   const { isLargeDesktopDevice } = useResponsiveQuery();
   const labelTypographyToken: TypographyToken = isLargeDesktopDevice
@@ -31,6 +33,7 @@ export const LeverageField: React.FunctionComponent<LeverageFieldProps> = ({
     <LeverageFieldBox>
       <BrokoliLeverageField
         disabled={disabled}
+        error={error}
         label="Leverage"
         labelColorToken="lavenderWeb2"
         labelTypographyToken={labelTypographyToken}

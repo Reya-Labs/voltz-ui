@@ -540,6 +540,8 @@ export const slice = createSlice({
     ) => {
       if (getProspectiveSwapNotional(state) === 0 || isNaN(value) || value === 0) {
         state.userInput.leverage = null;
+        state.userInput.marginAmount.value = 0;
+        validateUserInputAndUpdateSubmitButton(state);
         return;
       }
 

@@ -343,7 +343,7 @@ export const selectLeverageOptions = (state: RootState) => {
 
   return {
     maxLeverage: swapFormState.prospectiveSwap.leverage.maxLeverage,
-    leverageOptions: swapFormState.prospectiveSwap.leverage.options,
+    leverageOptions: swapFormState.prospectiveSwap.leverage.options.map(String),
   };
 };
 
