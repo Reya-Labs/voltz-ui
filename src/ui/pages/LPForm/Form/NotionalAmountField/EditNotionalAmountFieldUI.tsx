@@ -5,6 +5,7 @@ import React from 'react';
 import {
   LpFormNumberLimits,
   selectSelectedPositionCompactNotional,
+  selectUserInputNotionalAmountEditMode,
   selectUserInputNotionalInfo,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -13,7 +14,6 @@ import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 type EditNotionalAmountFieldUIProps = {
   handleOnNotionalChange: (value?: string) => void;
   handleOnSwitchChange: (value: string) => void;
-  localEditMode: 'add' | 'remove';
   localNotional: string | null;
   position: Position;
   underlyingTokenName: string;
@@ -25,7 +25,6 @@ type EditNotionalAmountFieldUIProps = {
 export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmountFieldUIProps> = ({
   handleOnNotionalChange,
   handleOnSwitchChange,
-  localEditMode,
   localNotional,
   underlyingTokenName,
   labelTypographyToken,
@@ -37,6 +36,8 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
   const bottomLeftText = notionalAmount.error ? notionalAmount.error : '';
 
   const selectedPositionCompactNotional = useAppSelector(selectSelectedPositionCompactNotional);
+
+  const notionalAmountEditMode = useAppSelector(selectUserInputNotionalAmountEditMode);
 
   const bottomRightText = notionalAmount.error
     ? selectedPositionCompactNotional.compactNotionalNumber
@@ -61,7 +62,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         switchOffValue={'remove'}
         switchOnText={'Add'}
         switchOnValue={'add'}
-        switchValue={localEditMode}
+        switchValue={notionalAmountEditMode}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="TODO: fix copy"
         value={localNotional !== null ? localNotional : undefined}

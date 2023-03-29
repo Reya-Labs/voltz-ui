@@ -241,6 +241,10 @@ export const selectUserInputNotionalAmountEditMode = (state: RootState) => {
   return state.lpForm.userInput.notionalAmount.editMode;
 };
 
+export const selectUserInputMarginAmountEditMode = (state: RootState) => {
+  return state.lpForm.userInput.marginAmount.editMode;
+};
+
 export const selectShowLeverageNotification = (state: RootState) =>
   state.lpForm.showLowLeverageNotification;
 

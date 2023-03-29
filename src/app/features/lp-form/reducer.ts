@@ -26,6 +26,7 @@ import {
   lpFormLimitAndFormatNumber,
   updateLeverage,
   updateSelectedPosition,
+  resetNotionalAndMarginEditMode,
   validateUserInput,
 } from './utils';
 
@@ -444,6 +445,7 @@ export const slice = createSlice({
       state.userInput.fixedRange.updateCount = state.userInput.fixedRange.updateCount + 1;
       updateSelectedPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
+      resetNotionalAndMarginEditMode(state);
     },
     setUserInputFixedUpperAction: (
       // the current state of the lp-form slice of the redux store (defined in this file) -> we extended the type
@@ -470,6 +472,7 @@ export const slice = createSlice({
       state.userInput.fixedRange.updateCount = state.userInput.fixedRange.updateCount + 1;
       updateSelectedPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
+      resetNotionalAndMarginEditMode(state);
     },
     setNotionalAmountAction: (
       state,

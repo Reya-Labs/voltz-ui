@@ -108,7 +108,6 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       handleOnNotionalChange={handleOnNotionalChange}
       handleOnSwitchChange={handleOnSwitchChange}
       labelTypographyToken={labelTypographyToken}
-      localEditMode={localEditMode}
       localNotional={localNotional}
       position={selectedPosition}
       underlyingTokenName={aMM.underlyingToken.name}

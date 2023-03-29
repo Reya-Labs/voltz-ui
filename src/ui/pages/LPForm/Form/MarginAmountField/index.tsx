@@ -109,7 +109,6 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
       handleOnMarginChange={handleOnMarginChange}
       handleOnSwitchChange={handleOnSwitchChange}
       labelTypographyToken={labelTypographyToken}
-      localEditMode={localEditMode}
       localMargin={localMargin}
       topRightTextTypographyToken={topRightTextTypographyToken}
       underlyingTokenName={aMM.underlyingToken.name}
