@@ -194,30 +194,30 @@ export const hasExistingPosition = (state: Draft<SliceState>): boolean => {
   return state.selectedPosition !== null;
 };
 
-export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number => {
-  if (isUserInputFixedRangeError(state)) {
-    return 1;
-  }
+export const getDefaultLpFixedLow = (state: Draft<SliceState>): number => {
+  // todo: layer in smarter dynamic default range logic in here
+  return 1;
+};
 
-  if (state.userInput.fixedRange.lower === null) {
-    return 1;
+export const getDefaultLpFixedHigh = (state: Draft<SliceState>): number => {
+  // todo: layer in smarter dynamic default range logic in here
+  return 3;
+};
+
+export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number | null => {
+  if (isUserInputFixedRangeError(state)) {
+    return null;
   }
 
   return state.userInput.fixedRange.lower;
 };
 
-export const getProspectiveLpFixedHigh = (state: Draft<SliceState>): number => {
+export const getProspectiveLpFixedHigh = (state: Draft<SliceState>): number | null => {
   if (isUserInputFixedRangeError(state)) {
-    return 3;
+    return null;
   }
 
-  if (state.userInput.fixedRange.upper === null) {
-    return 3;
-  }
-
-  const value = state.userInput.fixedRange.upper;
-
-  return value;
+  return state.userInput.fixedRange.upper;
 };
 
 export const getProspectiveLpNotional = (state: Draft<SliceState>): number => {
