@@ -467,10 +467,10 @@ export const getCommunitySbt = (signer: Signer | null, chainId: SupportedChainId
   return new CommunitySBT({
     id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || '',
     signer: signer,
-    currentBadgesSubgraphUrl: chainId
+    currentBadgesSubgraphId: chainId
       ? getSubgraphURL(chainId, SubgraphURLEnum.badgesCurrentSeasonNoIPFS)
       : '',
-    nextBadgesSubgraphUrl: chainId
+    nextBadgesSubgraphId: chainId
       ? getSubgraphURL(chainId, SubgraphURLEnum.badgesRollingSeason)
       : '',
     nonProgDbUrl: process.env.REACT_APP_DB_BADGES_URL,
