@@ -3,6 +3,7 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
+  getInfoPostLpThunk,
   LpFormNumberLimits,
   selectLpFormAMM,
   selectUserInputFixedError,
@@ -46,6 +47,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
             value,
           }),
         );
+        void dispatch(getInfoPostLpThunk());
       }, 300),
     [dispatch],
   );
@@ -58,6 +60,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
             value,
           }),
         );
+        void dispatch(getInfoPostLpThunk());
       }, 300),
     [dispatch],
   );

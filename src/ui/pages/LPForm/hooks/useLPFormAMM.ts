@@ -49,7 +49,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
   const queryFixedUpper = searchParams.get('fixedUpper');
 
   const fixedRateLower = useAppSelector(selectUserInputFixedLower);
-  const fixedRateUpper = useAppSelector(selectUserInputFixedUpper); 
+  const fixedRateUpper = useAppSelector(selectUserInputFixedUpper);
 
   const [loading, setLoading] = useState(true);
 

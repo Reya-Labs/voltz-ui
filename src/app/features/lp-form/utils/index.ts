@@ -154,9 +154,7 @@ export const validateUserInput = (state: Draft<SliceState>): void => {
 };
 
 export const resetNotionalAndMarginEditMode = (state: Draft<SliceState>): void => {
-  state.userInput.notionalAmount.value = 0;
   state.userInput.notionalAmount.editMode = 'add';
-  state.userInput.marginAmount.value = 0;
   state.userInput.marginAmount.editMode = 'add';
 };
 
