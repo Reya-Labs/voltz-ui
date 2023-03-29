@@ -23,7 +23,7 @@ export const MainAndFormSectionBox = styled('div')`
   display: flex;
   flex-direction: row;
   flex: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 export const MainSectionBox = styled('div')`
