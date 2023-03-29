@@ -681,9 +681,10 @@ export const slice = createSlice({
         };
       })
       .addCase(getPoolLpInfoThunk.fulfilled, (state, { payload }) => {
-        const { maxLeverage } = payload as {
+        let { maxLeverage } = payload as {
           maxLeverage: number;
         };
+        maxLeverage = Math.floor((maxLeverage * 99) / 100);
         state.poolLpInfo = {
           maxLeverage: maxLeverage,
           status: 'success',
@@ -714,7 +715,7 @@ export const slice = createSlice({
       .addCase(getInfoPostLpThunk.fulfilled, (state, { payload }) => {
         const { infoPostLp, earlyReturn } = payload as {
           infoPostLp: InfoPostLp;
-          earlyReturn: boolean; //TODO Alex: maybe refactor this
+          earlyReturn: boolean;
         };
 
         if (earlyReturn) {
@@ -729,9 +730,11 @@ export const slice = createSlice({
           return;
         }
 
+        const marginRequirementWithBuffer: number = (infoPostLp.marginRequirement * 101) / 100;
+
         state.prospectiveLp.infoPostLp = {
           value: {
-            marginRequirement: infoPostLp.marginRequirement,
+            marginRequirement: marginRequirementWithBuffer,
             maxMarginWithdrawable: infoPostLp.maxMarginWithdrawable,
             gasFeeETH: infoPostLp.gasFeeETH,
           },
