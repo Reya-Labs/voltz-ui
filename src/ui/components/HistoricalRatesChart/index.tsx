@@ -8,7 +8,6 @@ import {
 } from '../../../app/features/historical-rates';
 import { fetchHistoricalRatesThunk } from '../../../app/features/historical-rates/thunks';
 import { selectChainId } from '../../../app/features/network';
-import { selectFixedRateInfo, selectVariableRateInfo } from '../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
@@ -22,6 +21,8 @@ import {
 type HistoricalRatesChartProps = {
   aMMId: string;
   aMMRateOracleId: string;
+  fixedRate: number | null;
+  variableRate: number | null;
 };
 
 const filterOptions: ChartFiltersProps['filterOptions'] = [
@@ -62,10 +63,10 @@ const filterOptions: ChartFiltersProps['filterOptions'] = [
 export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartProps> = ({
   aMMId,
   aMMRateOracleId,
+  fixedRate,
+  variableRate,
 }) => {
   const data = useAppSelector(selectHistoricalRates);
-  const fixedRateInfo = useAppSelector(selectFixedRateInfo);
-  const variableRateInfo = useAppSelector(selectVariableRateInfo);
 
   const loading = useAppSelector(selectHistoricalRatesStatus) === 'pending';
   const dispatch = useAppDispatch();
@@ -103,11 +104,11 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
   }, [dispatch, timeframe, isFixed, granularity, chainId, aMMId, aMMRateOracleId]);
 
   let yMarker = -100;
-  if (fixedRateInfo.status === 'success' && !isFixed) {
-    yMarker = fixedRateInfo.value;
+  if (fixedRate !== null && !isFixed) {
+    yMarker = fixedRate;
   }
-  if (variableRateInfo.status === 'success' && isFixed) {
-    yMarker = variableRateInfo.value;
+  if (variableRate !== null && isFixed) {
+    yMarker = variableRate;
   }
 
   return (

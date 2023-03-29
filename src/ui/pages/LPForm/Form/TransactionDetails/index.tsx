@@ -10,7 +10,7 @@ import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styl
 type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
-  const infoPostSwap = useAppSelector(selectInfoPostLp);
+  const infoPostLp = useAppSelector(selectInfoPostLp);
   const hideGasFees = false;
 
   return (
@@ -28,8 +28,8 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
             token=" ETH"
             typographyToken="secondaryBodySmallRegular"
             value={
-              infoPostSwap.status === 'success'
-                ? formatNumber(infoPostSwap.value.gasFeeETH, 2, 4)
+              infoPostLp.status === 'success'
+                ? formatNumber(infoPostLp.value.gasFeeETH, 2, 4)
                 : '--'
             }
           ></TokenTypography>

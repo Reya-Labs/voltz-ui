@@ -263,6 +263,8 @@ export const selectPositionMarginFormatted = (state: RootState) => {
   }
   return lpFormCompactFormat(state.lpForm.selectedPosition.margin);
 };
+export const selectFixedRateInfo = (state: RootState) => state.lpForm.fixedRate;
+export const selectVariableRateInfo = (state: RootState) => state.lpForm.variableRate;
 
 export const selectFixedRateValueFormatted = (state: RootState) => {
   return state.lpForm.fixedRate.status !== 'success'
