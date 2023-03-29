@@ -24,22 +24,22 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
     <MarginUpdateDetailsBox>
       <MarginUpdateDetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          Fixed Lower
+          Fixed Low
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={token}
+          token="%"
           typographyToken="secondaryBodySmallRegular"
           value={fixedLower}
         />
       </MarginUpdateDetailBox>
       <MarginUpdateDetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          Fixed Upper
+          Fixed High
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={token}
+          token="%"
           typographyToken="secondaryBodySmallRegular"
           value={fixedUpper}
         />

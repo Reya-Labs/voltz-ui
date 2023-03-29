@@ -26,18 +26,18 @@ export const LPDetails: React.FunctionComponent<LPDetailsProps> = () => {
     <DetailsBox>
       <DetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          Fixed Lower
+          Fixed Low
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={token}
+          token="%"
           typographyToken="secondaryBodySmallRegular"
           value={fixedLower}
         />
       </DetailBox>
       <DetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          Fixed Upper
+          Fixed High
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
