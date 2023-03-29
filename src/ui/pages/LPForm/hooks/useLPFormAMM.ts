@@ -154,12 +154,8 @@ export const useLPFormAMM = (): UseAMMsResult => {
   }, [dispatch, aMM, aMM?.signer, chainId]);
 
   useEffect(() => {
-    if (!selectedPosition) {
-      return;
-    }
-
     void dispatch(getInfoPostLpThunk());
-  }, [dispatch, selectedPosition]);
+  }, [dispatch, aMM, aMM?.signer, selectedPosition]);
 
   return {
     aMM,
