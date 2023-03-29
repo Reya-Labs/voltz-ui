@@ -467,16 +467,17 @@ export const getCommunitySbt = (signer: Signer | null, chainId: SupportedChainId
   return new CommunitySBT({
     id: process.env.REACT_APP_COMMUNITY_SBT_ADDRESS || '',
     signer: signer,
-    currentBadgesSubgraphId: chainId
+    chainId: chainId,
+    coingeckoKey: process.env.REACT_APP_COINGECKO_API_KEY,
+    currentBadgesSubgraphUrl: chainId
       ? getSubgraphURL(chainId, SubgraphURLEnum.badgesCurrentSeasonNoIPFS)
       : '',
-    nextBadgesSubgraphId: chainId
+    nextBadgesSubgraphUrl: chainId
       ? getSubgraphURL(chainId, SubgraphURLEnum.badgesRollingSeason)
       : '',
     nonProgDbUrl: process.env.REACT_APP_DB_BADGES_URL,
     referralsDbUrl: process.env.REACT_APP_REFERRAL_AND_SIGNATURE_SERVICE_URL,
     subgraphUrl: chainId ? getSubgraphURL(chainId, SubgraphURLEnum.voltzProtocol) : '',
-    coingeckoKey: process.env.REACT_APP_COINGECKO_API_KEY,
     ignoredWalletIds: ignoredWalletIds,
     badgesCids: badgesCids,
     leavesCids: leavesCids,
