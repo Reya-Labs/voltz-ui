@@ -3,6 +3,7 @@ import {
   selectAMMTokenFormatted,
   selectAvailableNotional,
   selectBottomRightMarginNumber,
+  selectCashflowInfoStatus,
   selectEditPositionCompactNotional,
   selectEditPositionMode,
   selectEditPositionPayingRateFormatted,
@@ -1360,6 +1361,25 @@ describe('swap-form.selectors', () => {
       };
       const result = selectEstimatedApy(mockState as never);
       expect(result).toEqual(0.05);
+    });
+  });
+
+  describe('selectCashflowInfoStatus', () => {
+    it('should return the estimated APY value from the state', () => {
+      const mockState = {
+        swapForm: {
+          userInput: {
+            estimatedApy: 0.05,
+          },
+          prospectiveSwap: {
+            cashflowInfo: {
+              status: 'success',
+            },
+          },
+        },
+      };
+      const result = selectCashflowInfoStatus(mockState as never);
+      expect(result).toEqual('success');
     });
   });
 });
