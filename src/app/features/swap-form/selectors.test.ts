@@ -24,6 +24,7 @@ import {
   selectLeverage,
   selectMarginAccountName,
   selectMarginUpdateConfirmationFlowError,
+  selectMarginUpdateConfirmationFlowEtherscanLink,
   selectMarginUpdateConfirmationFlowStep,
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
@@ -1663,6 +1664,28 @@ describe('swap-form.selectors', () => {
         };
 
         expect(selectMarginUpdateConfirmationFlowError(state as never)).toEqual('error');
+      });
+    });
+
+    describe('selectMarginUpdateConfirmationFlowEtherscanLink', () => {
+      it('returns the correct link', () => {
+        (getViewOnEtherScanLink as jest.Mock).mockReturnValueOnce(
+          'https://etherscan.io/tx/0xabc123',
+        );
+
+        const state = {
+          network: {
+            chainId: 1,
+          },
+          swapForm: {
+            marginUpdateConfirmationFlow: {
+              txHash: '0xabc123',
+            },
+          },
+        };
+        const result = selectMarginUpdateConfirmationFlowEtherscanLink(state as never);
+        expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
+        expect(result).toEqual('https://etherscan.io/tx/0xabc123');
       });
     });
   });
