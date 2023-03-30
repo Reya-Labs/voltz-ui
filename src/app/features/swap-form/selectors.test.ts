@@ -1,5 +1,6 @@
 import {
   selectAccruedCashflowExistingPositionFormatted,
+  selectAdditionalCashflow,
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
   selectAvailableNotional,
@@ -1426,6 +1427,47 @@ describe('swap-form.selectors', () => {
       const result = selectAccruedCashflowExistingPositionFormatted(mockState);
       expect(swapFormFormatNumber).not.toHaveBeenCalled();
       expect(result).toEqual('--');
+    });
+  });
+
+  describe('selectAdditionalCashflow', () => {
+    it('should return null if cashflowInfo status is not success', () => {
+      const mockState = {
+        swapForm: {
+          userInput: {
+            estimatedApy: 0.05,
+          },
+          prospectiveSwap: {
+            cashflowInfo: {
+              status: 'pending',
+              estimatedAdditionalCashflow: jest.fn(),
+            },
+          },
+        },
+      };
+      const result = selectAdditionalCashflow(mockState as never);
+      expect(result).toBeNull();
+    });
+
+    it('should call estimatedAdditionalCashflow with the estimatedApy value from userInput', () => {
+      const mockState = {
+        swapForm: {
+          userInput: {
+            estimatedApy: 0.05,
+          },
+          prospectiveSwap: {
+            cashflowInfo: {
+              status: 'success',
+              estimatedAdditionalCashflow: jest.fn().mockReturnValue(1234.56),
+            },
+          },
+        },
+      };
+      const result = selectAdditionalCashflow(mockState as never);
+      expect(
+        mockState.swapForm.prospectiveSwap.cashflowInfo.estimatedAdditionalCashflow,
+      ).toHaveBeenCalledWith(0.05);
+      expect(result).toEqual(1234.56);
     });
   });
 });
