@@ -28,6 +28,7 @@ import {
   selectProspectiveSwapMarginFormatted,
   selectProspectiveSwapMode,
   selectProspectiveSwapNotionalFormatted,
+  selectSlippageFormatted,
   selectSubmitButtonInfo,
   selectSwapFormAMM,
   selectSwapFormMode,
@@ -1511,6 +1512,70 @@ describe('swap-form.selectors', () => {
         mockState.swapForm.prospectiveSwap.cashflowInfo.estimatedTotalCashflow,
       ).toHaveBeenCalledWith(0.05);
       expect(result).toEqual(5678.9);
+    });
+  });
+
+  describe('selectSlippageFormatted', () => {
+    it('should return -- if fixedRate status is not success', () => {
+      const mockState = {
+        swapForm: {
+          fixedRate: {
+            status: 'pending',
+            value: null,
+          },
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'success',
+              value: {
+                averageFixedRate: 0.08,
+              },
+            },
+          },
+        },
+      };
+      const result = selectSlippageFormatted(mockState as never);
+      expect(result).toBe('--');
+    });
+
+    it('should return -- if infoPostSwap status is not success', () => {
+      const mockState = {
+        swapForm: {
+          fixedRate: {
+            status: 'success',
+            value: 0.1,
+          },
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'pending',
+              value: null,
+            },
+          },
+        },
+      };
+      const result = selectSlippageFormatted(mockState as never);
+      expect(result).toBe('--');
+    });
+
+    it('should return a formatted slippage value', () => {
+      const mockState = {
+        swapForm: {
+          fixedRate: {
+            status: 'success',
+            value: 0.1,
+          },
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'success',
+              value: {
+                averageFixedRate: 0.08,
+              },
+            },
+          },
+        },
+      };
+
+      const result = selectSlippageFormatted(mockState as never);
+      expect(result).toBe('0.02');
     });
   });
 });
