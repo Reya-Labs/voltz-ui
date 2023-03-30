@@ -205,7 +205,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage hidden={isArbitrumChain(chainId)}>
+            <NetworkProtectedVoltzPage>
               <ProfilePage />
             </NetworkProtectedVoltzPage>
           }
@@ -213,7 +213,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage hidden={isArbitrumChain(chainId)}>
+            <NetworkProtectedVoltzPage>
               <TradingLeaguePage />
             </NetworkProtectedVoltzPage>
           }
