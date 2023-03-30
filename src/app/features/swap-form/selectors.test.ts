@@ -3,6 +3,7 @@ import {
   selectAMMTokenFormatted,
   selectAvailableNotional,
   selectBottomRightMarginNumber,
+  selectEditPositionCompactNotional,
   selectEditPositionMode,
   selectEditPositionPayingRateFormatted,
   selectEditPositionReceivingRateFormatted,
@@ -39,6 +40,7 @@ import {
   getAvailableNotional,
   getEditPositionFixedRate,
   getEditPositionMode,
+  getEditPositionNotional,
   getEditPositionVariableRate,
   getExistingPositionFixedRate,
   getExistingPositionMode,
@@ -75,6 +77,7 @@ jest.mock('./utils', () => ({
   getEditPositionMode: jest.fn(),
   getEditPositionFixedRate: jest.fn(),
   getEditPositionVariableRate: jest.fn(),
+  getEditPositionNotional: jest.fn(),
 }));
 
 describe('swap-form.selectors', () => {
@@ -1311,6 +1314,32 @@ describe('swap-form.selectors', () => {
       expect(getEditPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getEditPositionVariableRate).toHaveBeenCalledWith(state.swapForm);
       expect(result).toEqual('--');
+    });
+  });
+
+  describe('selectEditPositionCompactNotional', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should return an object with the correct properties when position status is "success" and position value is truthy', () => {
+      const state = {
+        swapForm: jest.fn(),
+      } as never;
+      (getEditPositionNotional as jest.Mock).mockReturnValueOnce(1000000000000000000);
+
+      (swapFormCompactFormatToParts as jest.Mock).mockReturnValueOnce({
+        compactSuffix: 'ETH',
+        compactNumber: '1',
+      });
+
+      const result = selectEditPositionCompactNotional(state);
+
+      expect(swapFormCompactFormatToParts as jest.Mock).toHaveBeenCalledWith(1000000000000000000);
+      expect(result).toEqual({
+        compactNotionalSuffix: 'ETH',
+        compactNotionalNumber: '1',
+      });
     });
   });
 });
