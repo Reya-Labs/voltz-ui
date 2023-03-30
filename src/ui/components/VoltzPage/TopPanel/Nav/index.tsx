@@ -45,12 +45,12 @@ const getLinks = (chainId?: SupportedChainId | null) =>
           ],
         },
         {
-          isHidden: isArbitrumChain(chainId),
+          isHidden: false,
           text: 'Leaderboard',
           link: `/${routes.TRADING_LEAGUE}`,
         },
         {
-          isHidden: isArbitrumChain(chainId),
+          isHidden: false,
           text: 'Profile',
           link: `/${routes.PROFILE}`,
         },
