@@ -129,6 +129,6 @@ export const useSwapFormAMM = (): UseAMMsResult => {
       positionFetchingStatus === 'pending' ||
       poolSwapInfoStatus === 'pending',
     noAMMFound: !aMM && !loading,
-    error: error || positionFetchingStatus === 'error' || poolSwapInfoStatus === 'error',
+    error: error || positionFetchingStatus === 'error',
   };
 };
