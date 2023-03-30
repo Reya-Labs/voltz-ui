@@ -20,6 +20,7 @@ import {
   selectExistingPositionReceivingRateFormatted,
   selectFixedRateInfo,
   selectInfoPostSwap,
+  selectIsLeverageDisabled,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
   selectLeverage,
@@ -1595,7 +1596,7 @@ describe('swap-form.selectors', () => {
           },
         },
       };
-
+      (formatNumber as jest.Mock).mockImplementationOnce((n) => n.toFixed(2));
       const result = selectSlippageFormatted(mockState as never);
       expect(result).toBe('0.02');
     });
@@ -1845,6 +1846,30 @@ describe('swap-form.selectors', () => {
           },
         };
         expect(selectSubmitButtonText(state as never)).toBe('Connect Your Wallet to Start Trading');
+      });
+    });
+
+    describe('selectIsLeverageDisabled', () => {
+      const mockState = {
+        swapForm: jest.fn(),
+      };
+
+      it('returns true if getProspectiveSwapNotional returns 0', () => {
+        (getProspectiveSwapNotional as jest.Mock).mockReturnValue(0);
+
+        const result = selectIsLeverageDisabled(mockState as never);
+
+        expect(result).toBe(true);
+        expect(getProspectiveSwapNotional).toHaveBeenCalledWith(mockState.swapForm);
+      });
+
+      it('returns false if getProspectiveSwapNotional returns a non-zero value', () => {
+        (getProspectiveSwapNotional as jest.Mock).mockReturnValue(100);
+
+        const result = selectIsLeverageDisabled(mockState as never);
+
+        expect(result).toBe(false);
+        expect(getProspectiveSwapNotional).toHaveBeenCalledWith(mockState.swapForm);
       });
     });
   });
