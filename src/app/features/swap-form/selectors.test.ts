@@ -30,6 +30,8 @@ import {
   selectProspectiveSwapNotionalFormatted,
   selectSlippageFormatted,
   selectSubmitButtonInfo,
+  selectSwapConfirmationFlowError,
+  selectSwapConfirmationFlowStep,
   selectSwapFormAMM,
   selectSwapFormMode,
   selectSwapFormPosition,
@@ -1576,6 +1578,34 @@ describe('swap-form.selectors', () => {
 
       const result = selectSlippageFormatted(mockState as never);
       expect(result).toBe('0.02');
+    });
+  });
+
+  describe('selectSwapConfirmationFlowStep', () => {
+    it('returns the correct step', () => {
+      const state = {
+        swapForm: {
+          swapConfirmationFlow: {
+            step: 'confirmSwap',
+          },
+        },
+      };
+
+      expect(selectSwapConfirmationFlowStep(state as never)).toEqual('confirmSwap');
+    });
+  });
+
+  describe('selectSwapConfirmationFlowError', () => {
+    it('returns the correct step', () => {
+      const state = {
+        swapForm: {
+          swapConfirmationFlow: {
+            error: 'error',
+          },
+        },
+      };
+
+      expect(selectSwapConfirmationFlowError(state as never)).toEqual('error');
     });
   });
 });
