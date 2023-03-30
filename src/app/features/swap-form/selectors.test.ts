@@ -1,5 +1,6 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
+import { formatNumber, stringToBigFloat } from '../../../utilities/number';
 import {
   selectAccruedCashflowExistingPositionFormatted,
   selectAdditionalCashflow,
@@ -46,6 +47,7 @@ import {
   selectUserInputMarginInfo,
   selectUserInputMode,
   selectUserInputNotionalInfo,
+  selectVariableRate24hDelta,
   selectVariableRateInfo,
   selectWalletBalance,
 } from './selectors';
@@ -74,6 +76,12 @@ import {
 // Mock @voltz-protocol/v1-sdk
 jest.mock('@voltz-protocol/v1-sdk', () => ({
   getViewOnEtherScanLink: jest.fn(),
+}));
+
+// Mock number utils
+jest.mock('../../../utilities/number', () => ({
+  formatNumber: jest.fn(),
+  stringToBigFloat: jest.fn(),
 }));
 
 // Mock utils
@@ -1686,6 +1694,83 @@ describe('swap-form.selectors', () => {
         const result = selectMarginUpdateConfirmationFlowEtherscanLink(state as never);
         expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
         expect(result).toEqual('https://etherscan.io/tx/0xabc123');
+      });
+    });
+
+    describe('selectVariableRate24hDelta', () => {
+      beforeEach(() => {
+        jest.resetAllMocks();
+      });
+
+      it('calls formatNumber and stringToBigFloat with the correct arguments', () => {
+        const state = {
+          swapForm: {
+            variableRate24hAgo: {
+              status: 'success',
+              value: 100,
+            },
+            variableRate: {
+              status: 'success',
+              value: 150,
+            },
+          },
+        };
+        (formatNumber as jest.Mock).mockReturnValueOnce('50');
+        selectVariableRate24hDelta(state as never);
+
+        expect(formatNumber).toHaveBeenCalledWith(50, 0, 3);
+        expect(stringToBigFloat).toHaveBeenCalledWith('50');
+      });
+
+      it('returns undefined if either variableRate24hAgo or variableRate has a status other than success', () => {
+        const state1 = {
+          swapForm: {
+            variableRate24hAgo: {
+              status: 'failure',
+              value: null,
+            },
+            variableRate: {
+              status: 'success',
+              value: 150,
+            },
+          },
+        };
+
+        const state2 = {
+          swapForm: {
+            variableRate24hAgo: {
+              status: 'success',
+              value: 100,
+            },
+            variableRate: {
+              status: 'failure',
+              value: null,
+            },
+          },
+        };
+
+        expect(selectVariableRate24hDelta(state1 as never)).toBeUndefined();
+        expect(selectVariableRate24hDelta(state2 as never)).toBeUndefined();
+      });
+
+      it('returns the correct value', () => {
+        (formatNumber as jest.Mock).mockReturnValueOnce('50');
+        (stringToBigFloat as jest.Mock).mockReturnValueOnce(50);
+
+        const state = {
+          swapForm: {
+            variableRate24hAgo: {
+              status: 'success',
+              value: 100,
+            },
+            variableRate: {
+              status: 'success',
+              value: 150,
+            },
+          },
+        };
+
+        expect(selectVariableRate24hDelta(state as never)).toEqual(50);
       });
     });
   });
