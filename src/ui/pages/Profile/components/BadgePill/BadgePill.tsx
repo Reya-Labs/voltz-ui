@@ -1,16 +1,16 @@
-import { PillProps } from 'brokoli-ui';
+import { Pill, PillProps } from 'brokoli-ui';
 import React from 'react';
 
 import { BadgeVariant } from '../../data/getSeasonBadges';
 import { BADGE_VARIANT_TIER_MAP, BADGE_VARIANT_TRADER_LP_MAP, TIER_COPY_MAP } from '../../helpers';
 import { BadgeTier } from '../../types';
-import { Pill, Skeleton } from './BadgePill.styled';
+import { Skeleton } from './BadgePill.styled';
 
 const TIER_COLOR_TOKEN_MAP: Record<BadgeTier, PillProps['colorToken']> = {
   tier1: 'wildStrawberry',
   tier2: 'orangeYellow',
   tier3: 'skyBlueCrayola',
-  easterEgg: 'liberty',
+  easterEgg: 'rainbow',
   legendary: 'lavenderWeb',
 };
 
