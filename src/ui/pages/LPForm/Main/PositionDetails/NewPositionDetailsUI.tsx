@@ -42,7 +42,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
       <PositionDetailsLeftBox>
         <LabelTokenTypography
           colorToken="wildStrawberry"
-          label="Your Position"
+          label="New Position"
           labelColorToken="lavenderWeb"
           labelTypographyToken={actionLabelTypographyToken}
           token=""
