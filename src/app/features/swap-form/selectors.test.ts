@@ -35,6 +35,7 @@ import {
   selectProspectiveSwapMarginFormatted,
   selectProspectiveSwapMode,
   selectProspectiveSwapNotionalFormatted,
+  selectShowLeverageNotification,
   selectSlippageFormatted,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
@@ -1870,6 +1871,19 @@ describe('swap-form.selectors', () => {
 
         expect(result).toBe(false);
         expect(getProspectiveSwapNotional).toHaveBeenCalledWith(mockState.swapForm);
+      });
+    });
+
+    describe('selectShowLeverageNotification', () => {
+      it('returns the value of showLowLeverageNotification from state', () => {
+        const state = {
+          swapForm: {
+            showLowLeverageNotification: true,
+          },
+        };
+
+        const result = selectShowLeverageNotification(state as never);
+        expect(result).toEqual(true);
       });
     });
   });
