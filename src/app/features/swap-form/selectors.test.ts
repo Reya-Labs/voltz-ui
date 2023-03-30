@@ -36,6 +36,7 @@ import {
   selectProspectiveSwapNotionalFormatted,
   selectSlippageFormatted,
   selectSubmitButtonInfo,
+  selectSubmitButtonText,
   selectSwapConfirmationFlowError,
   selectSwapConfirmationFlowEtherscanLink,
   selectSwapConfirmationFlowStep,
@@ -1771,6 +1772,79 @@ describe('swap-form.selectors', () => {
         };
 
         expect(selectVariableRate24hDelta(state as never)).toEqual(50);
+      });
+    });
+
+    describe('selectSubmitButtonText', () => {
+      it('returns the correct text for the "swap" state', () => {
+        const state = {
+          swapForm: {
+            submitButton: {
+              state: 'swap',
+            },
+          },
+        };
+        expect(selectSubmitButtonText(state as never)).toBe('Swap');
+      });
+
+      it('returns the correct text for the "margin-update" state', () => {
+        const state = {
+          swapForm: {
+            submitButton: {
+              state: 'margin-update',
+            },
+          },
+        };
+        expect(selectSubmitButtonText(state as never)).toBe('Update margin');
+      });
+
+      it('returns the correct text for the "not-enough-balance" state', () => {
+        const state = {
+          swapForm: {
+            submitButton: {
+              state: 'not-enough-balance',
+            },
+          },
+        };
+        expect(selectSubmitButtonText(state as never)).toBe('Not enough balance');
+      });
+
+      it('returns the correct text for the "approve" state', () => {
+        const state = {
+          swapForm: {
+            submitButton: {
+              state: 'approve',
+            },
+            amm: {
+              underlyingToken: {
+                name: 'token',
+              },
+            },
+          },
+        };
+        expect(selectSubmitButtonText(state as never)).toBe('Approve TOKEN');
+      });
+
+      it('returns the correct text for the "approving" state', () => {
+        const state = {
+          swapForm: {
+            submitButton: {
+              state: 'approving',
+            },
+          },
+        };
+        expect(selectSubmitButtonText(state as never)).toBe('Approving...');
+      });
+
+      it('returns the correct text for the "connect-wallet" state', () => {
+        const state = {
+          swapForm: {
+            submitButton: {
+              state: 'connect-wallet',
+            },
+          },
+        };
+        expect(selectSubmitButtonText(state as never)).toBe('Connect Your Wallet to Start Trading');
       });
     });
   });
