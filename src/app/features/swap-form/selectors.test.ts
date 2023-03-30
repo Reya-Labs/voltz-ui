@@ -33,6 +33,7 @@ import {
   selectSwapFormMode,
   selectSwapFormPosition,
   selectSwapFormPositionFetchingStatus,
+  selectTotalCashflow,
   selectUserInputMarginInfo,
   selectUserInputMode,
   selectUserInputNotionalInfo,
@@ -1468,6 +1469,48 @@ describe('swap-form.selectors', () => {
         mockState.swapForm.prospectiveSwap.cashflowInfo.estimatedAdditionalCashflow,
       ).toHaveBeenCalledWith(0.05);
       expect(result).toEqual(1234.56);
+    });
+  });
+
+  describe('selectTotalCashflow', () => {
+    it('should return null if cashflowInfo status is not success', () => {
+      const mockState = {
+        swapForm: {
+          userInput: {
+            estimatedApy: 0.05,
+          },
+          prospectiveSwap: {
+            cashflowInfo: {
+              status: 'pending',
+              estimatedTotalCashflow: jest.fn(),
+            },
+          },
+        },
+      };
+      const result = selectTotalCashflow(mockState as never);
+      expect(result).toBeNull();
+    });
+
+    it('should call estimatedTotalCashflow with the estimatedApy value from userInput', () => {
+      const mockState = {
+        swapForm: {
+          userInput: {
+            estimatedApy: 0.05,
+          },
+          prospectiveSwap: {
+            cashflowInfo: {
+              status: 'success',
+              estimatedTotalCashflow: jest.fn().mockReturnValue(5678.9),
+            },
+          },
+        },
+      };
+
+      const result = selectTotalCashflow(mockState as never);
+      expect(
+        mockState.swapForm.prospectiveSwap.cashflowInfo.estimatedTotalCashflow,
+      ).toHaveBeenCalledWith(0.05);
+      expect(result).toEqual(5678.9);
     });
   });
 });
