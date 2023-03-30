@@ -23,6 +23,8 @@ import {
   selectIsWalletMarginError,
   selectLeverage,
   selectMarginAccountName,
+  selectMarginUpdateConfirmationFlowError,
+  selectMarginUpdateConfirmationFlowStep,
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
   selectPoolSwapInfoStatus,
@@ -1631,9 +1633,37 @@ describe('swap-form.selectors', () => {
           },
         },
       };
-      const result = selectSwapConfirmationFlowEtherscanLink(state);
+      const result = selectSwapConfirmationFlowEtherscanLink(state as never);
       expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
       expect(result).toEqual('https://etherscan.io/tx/0xabc123');
+    });
+
+    describe('selectMarginUpdateConfirmationFlowStep', () => {
+      it('returns the correct step', () => {
+        const state = {
+          swapForm: {
+            marginUpdateConfirmationFlow: {
+              step: 'confirmSwap',
+            },
+          },
+        };
+
+        expect(selectMarginUpdateConfirmationFlowStep(state as never)).toEqual('confirmSwap');
+      });
+    });
+
+    describe('selectMarginUpdateConfirmationFlowError', () => {
+      it('returns the correct step', () => {
+        const state = {
+          swapForm: {
+            marginUpdateConfirmationFlow: {
+              error: 'error',
+            },
+          },
+        };
+
+        expect(selectMarginUpdateConfirmationFlowError(state as never)).toEqual('error');
+      });
     });
   });
 });
