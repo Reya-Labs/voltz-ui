@@ -7,6 +7,7 @@ import {
   selectEditPositionMode,
   selectEditPositionPayingRateFormatted,
   selectEditPositionReceivingRateFormatted,
+  selectEstimatedApy,
   selectExistingPositionCompactNotional,
   selectExistingPositionMode,
   selectExistingPositionPayingRateFormatted,
@@ -1340,6 +1341,25 @@ describe('swap-form.selectors', () => {
         compactNotionalSuffix: 'ETH',
         compactNotionalNumber: '1',
       });
+    });
+  });
+
+  describe('selectEstimatedApy', () => {
+    it('should return the estimated APY value from the state', () => {
+      const mockState = {
+        swapForm: {
+          userInput: {
+            estimatedApy: 0.05,
+          },
+          prospectiveSwap: {
+            cashflowInfo: {
+              status: 'success',
+            },
+          },
+        },
+      };
+      const result = selectEstimatedApy(mockState as never);
+      expect(result).toEqual(0.05);
     });
   });
 });
