@@ -58,7 +58,7 @@ export const TradingLeague: React.FunctionComponent = () => {
     if (!chainId) {
       return;
     }
-    if (tradingLeagueStatus === 'succeeded' && rankings.length !== 0) {
+    if (tradingLeagueStatus === 'succeeded') {
       return;
     }
     void dispatch(
@@ -68,7 +68,7 @@ export const TradingLeague: React.FunctionComponent = () => {
         signer,
       }),
     );
-  }, [rankings, tradingLeagueStatus, season.id, chainId]);
+  }, [signer, dispatch, tradingLeagueStatus, season.id, chainId]);
 
   return (
     <TradingLeagueBox>
