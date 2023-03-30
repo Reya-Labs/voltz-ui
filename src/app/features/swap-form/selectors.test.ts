@@ -28,6 +28,7 @@ import {
   selectLeverage,
   selectLeverageOptions,
   selectMarginAccountName,
+  selectMarginRequirementFormatted,
   selectMarginUpdateConfirmationFlowError,
   selectMarginUpdateConfirmationFlowEtherscanLink,
   selectMarginUpdateConfirmationFlowStep,
@@ -1602,7 +1603,7 @@ describe('swap-form.selectors', () => {
           },
         },
       };
-      (formatNumber as jest.Mock).mockImplementationOnce((n) => n.toFixed(2));
+      (formatNumber as jest.Mock).mockImplementationOnce((n: number) => n.toFixed(2));
       const result = selectSlippageFormatted(mockState as never);
       expect(result).toBe('0.02');
     });
@@ -2017,6 +2018,48 @@ describe('swap-form.selectors', () => {
         const result = selectVariableRateValueFormatted(state as never);
         expect(result).toBe('formatted_123.456');
         expect(formatNumber).toHaveBeenCalledWith(123.456);
+      });
+    });
+
+    describe('selectMarginRequirementFormatted', () => {
+      beforeEach(() => {
+        jest.clearAllMocks();
+      });
+
+      it('should return formatted margin requirement when infoPostSwap status is success', () => {
+        const state = {
+          swapForm: {
+            prospectiveSwap: {
+              infoPostSwap: {
+                status: 'success',
+                value: {
+                  marginRequirement: 0.05,
+                },
+              },
+            },
+          },
+        };
+        (formatNumber as jest.Mock).mockImplementationOnce((value: number) => String(value));
+
+        const result = selectMarginRequirementFormatted(state as never);
+
+        expect(result).toEqual('0.05');
+        expect(formatNumber).toHaveBeenCalledWith(0.05, 2, 4);
+      });
+
+      it('should return -- when infoPostSwap status is not success', () => {
+        const state = {
+          swapForm: {
+            prospectiveSwap: {
+              infoPostSwap: {
+                status: 'pending',
+              },
+            },
+          },
+        };
+
+        const result = selectMarginRequirementFormatted(state as never);
+        expect(result).toEqual('--');
       });
     });
   });
