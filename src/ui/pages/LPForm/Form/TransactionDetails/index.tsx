@@ -11,30 +11,25 @@ type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
   const infoPostLp = useAppSelector(selectInfoPostLp);
-  const hideGasFees = false;
 
   return (
     <React.Fragment>
-      {hideGasFees ? null : (
-        <TransactionDetailBox>
-          <IconTextWrapper>
-            <GasIcon />
-            <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-              Gas Fees
-            </Typography>
-          </IconTextWrapper>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            token=" ETH"
-            typographyToken="secondaryBodySmallRegular"
-            value={
-              infoPostLp.status === 'success'
-                ? formatNumber(infoPostLp.value.gasFeeETH, 2, 4)
-                : '--'
-            }
-          ></TokenTypography>
-        </TransactionDetailBox>
-      )}
+      <TransactionDetailBox>
+        <IconTextWrapper>
+          <GasIcon />
+          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+            Gas Fees
+          </Typography>
+        </IconTextWrapper>
+        <TokenTypography
+          colorToken="lavenderWeb"
+          token=" ETH"
+          typographyToken="secondaryBodySmallRegular"
+          value={
+            infoPostLp.status === 'success' ? formatNumber(infoPostLp.value.gasFeeETH, 2, 4) : '--'
+          }
+        ></TokenTypography>
+      </TransactionDetailBox>
     </React.Fragment>
   );
 };

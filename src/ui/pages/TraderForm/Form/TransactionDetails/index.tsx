@@ -24,7 +24,6 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
 
   const hideFees = submitButtonInfo.state === 'margin-update';
   const hideSlippage = submitButtonInfo.state === 'margin-update';
-  const hideGasFees = false;
 
   return (
     <React.Fragment>
@@ -54,26 +53,24 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
           ></TokenTypography>
         </TransactionDetailBox>
       )}
-      {hideGasFees ? null : (
-        <TransactionDetailBox>
-          <IconTextWrapper>
-            <GasIcon />
-            <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-              Gas Fees
-            </Typography>
-          </IconTextWrapper>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            token=" ETH"
-            typographyToken="secondaryBodySmallRegular"
-            value={
-              infoPostSwap.status === 'success'
-                ? formatNumber(infoPostSwap.value.gasFeeETH, 2, 4)
-                : '--'
-            }
-          ></TokenTypography>
-        </TransactionDetailBox>
-      )}
+      <TransactionDetailBox>
+        <IconTextWrapper>
+          <GasIcon />
+          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+            Gas Fees
+          </Typography>
+        </IconTextWrapper>
+        <TokenTypography
+          colorToken="lavenderWeb"
+          token=" ETH"
+          typographyToken="secondaryBodySmallRegular"
+          value={
+            infoPostSwap.status === 'success'
+              ? formatNumber(infoPostSwap.value.gasFeeETH, 2, 4)
+              : '--'
+          }
+        ></TokenTypography>
+      </TransactionDetailBox>
     </React.Fragment>
   );
 };
