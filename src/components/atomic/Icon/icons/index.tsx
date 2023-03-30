@@ -193,7 +193,7 @@ export const S3Rainmaker: React.FunctionComponent<IconProps> = ({
   <IconImage
     className={className}
     data-testid={dataTestId}
-    src="/images/badges/season3/ethereum/s3Rainmaker.png"
+    src="/images/badges/season3/ethereum/s3RainMaker.png"
   />
 );
 export const S3SushiRoll: React.FunctionComponent<IconProps> = ({
@@ -337,7 +337,7 @@ export const S3RainmakerArbitrum: React.FunctionComponent<IconProps> = ({
   <IconImage
     className={className}
     data-testid={dataTestId}
-    src="/images/badges/season3/arbitrum/s3Rainmaker.png"
+    src="/images/badges/season3/arbitrum/s3RainMaker.png"
   />
 );
 export const S3SushiRollArbitrum: React.FunctionComponent<IconProps> = ({
