@@ -20,6 +20,7 @@ import {
   selectExistingPositionReceivingRateFormatted,
   selectFixedRateInfo,
   selectInfoPostSwap,
+  selectIsGetInfoPostSwapLoading,
   selectIsLeverageDisabled,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
@@ -1907,6 +1908,38 @@ describe('swap-form.selectors', () => {
           maxLeverage: 5,
           leverageOptions: ['2', '3', '4', '5'],
         });
+      });
+    });
+
+    describe('selectIsGetInfoPostSwapLoading', () => {
+      it('returns true when infoPostSwap status is "pending"', () => {
+        const state = {
+          swapForm: {
+            prospectiveSwap: {
+              infoPostSwap: {
+                status: 'pending',
+              },
+            },
+          },
+        };
+
+        const result = selectIsGetInfoPostSwapLoading(state as never);
+        expect(result).toBe(true);
+      });
+
+      it('returns false when infoPostSwap status is not "pending"', () => {
+        const state = {
+          swapForm: {
+            prospectiveSwap: {
+              infoPostSwap: {
+                status: 'success',
+              },
+            },
+          },
+        };
+
+        const result = selectIsGetInfoPostSwapLoading(state as never);
+        expect(result).toBe(false);
       });
     });
   });
