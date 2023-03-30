@@ -24,6 +24,7 @@ import {
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
   selectLeverage,
+  selectLeverageOptions,
   selectMarginAccountName,
   selectMarginUpdateConfirmationFlowError,
   selectMarginUpdateConfirmationFlowEtherscanLink,
@@ -1884,6 +1885,28 @@ describe('swap-form.selectors', () => {
 
         const result = selectShowLeverageNotification(state as never);
         expect(result).toEqual(true);
+      });
+    });
+
+    describe('selectLeverageOptions', () => {
+      it('should return the correct leverage options', () => {
+        const state = {
+          swapForm: {
+            prospectiveSwap: {
+              leverage: {
+                maxLeverage: 5,
+                options: [2, 3, 4, 5],
+              },
+            },
+          },
+        };
+
+        const result = selectLeverageOptions(state as never);
+
+        expect(result).toEqual({
+          maxLeverage: 5,
+          leverageOptions: ['2', '3', '4', '5'],
+        });
       });
     });
   });
