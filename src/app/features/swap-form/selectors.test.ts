@@ -1,3 +1,5 @@
+import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
+
 import {
   selectAccruedCashflowExistingPositionFormatted,
   selectAdditionalCashflow,
@@ -31,6 +33,7 @@ import {
   selectSlippageFormatted,
   selectSubmitButtonInfo,
   selectSwapConfirmationFlowError,
+  selectSwapConfirmationFlowEtherscanLink,
   selectSwapConfirmationFlowStep,
   selectSwapFormAMM,
   selectSwapFormMode,
@@ -64,6 +67,11 @@ import {
   swapFormFormatNumber,
   swapFormLimitAndFormatNumber,
 } from './utils';
+
+// Mock @voltz-protocol/v1-sdk
+jest.mock('@voltz-protocol/v1-sdk', () => ({
+  getViewOnEtherScanLink: jest.fn(),
+}));
 
 // Mock utils
 jest.mock('./utils', () => ({
@@ -1606,6 +1614,26 @@ describe('swap-form.selectors', () => {
       };
 
       expect(selectSwapConfirmationFlowError(state as never)).toEqual('error');
+    });
+  });
+
+  describe('selectSwapConfirmationFlowEtherscanLink', () => {
+    it('returns the correct link', () => {
+      (getViewOnEtherScanLink as jest.Mock).mockReturnValueOnce('https://etherscan.io/tx/0xabc123');
+
+      const state = {
+        network: {
+          chainId: 1,
+        },
+        swapForm: {
+          swapConfirmationFlow: {
+            txHash: '0xabc123',
+          },
+        },
+      };
+      const result = selectSwapConfirmationFlowEtherscanLink(state);
+      expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
+      expect(result).toEqual('https://etherscan.io/tx/0xabc123');
     });
   });
 });
