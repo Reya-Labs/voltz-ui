@@ -6,7 +6,7 @@ import {
   Position,
   SupportedChainId,
 } from '@voltz-protocol/v1-sdk';
-import { BigNumber, ContractReceipt, providers } from 'ethers';
+import { ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPosition, getAmmProtocol } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
@@ -69,17 +69,11 @@ export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
       return;
     }
 
-    const allowance = await amm.getUnderlyingTokenAllowance({
+    return await amm.getUnderlyingTokenAllowance({
       forceErc20Check: false,
       chainId,
       alchemyApiKey,
     });
-
-    if (allowance.gt(BigNumber.from(Number.MAX_SAFE_INTEGER.toString()))) {
-      return Number.MAX_SAFE_INTEGER;
-    }
-
-    return Number(allowance.toString());
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
