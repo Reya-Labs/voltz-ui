@@ -110,6 +110,9 @@ const getProtocolName = (protocolId: number): string => {
     case 8: {
       return 'gmxGlp';
     }
+    case 9: {
+      return 'aaveV3Borrowing';
+    }
     default:
       throw new Error('Not supported protocolId');
   }
