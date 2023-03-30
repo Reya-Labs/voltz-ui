@@ -33,6 +33,7 @@ import {
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
   selectPoolSwapInfoStatus,
+  selectPositionMarginFormatted,
   selectProspectiveSwapFeeFormatted,
   selectProspectiveSwapMarginFormatted,
   selectProspectiveSwapMode,
@@ -1940,6 +1941,24 @@ describe('swap-form.selectors', () => {
 
         const result = selectIsGetInfoPostSwapLoading(state as never);
         expect(result).toBe(false);
+      });
+    });
+
+    describe('selectPositionMarginFormatted', () => {
+      it('should return -- when position value is not available', () => {
+        const state = { swapForm: { position: { value: null } } };
+        const result = selectPositionMarginFormatted(state as never);
+        expect(result).toBe('--');
+      });
+
+      it('should return the formatted margin value when position value is available', () => {
+        const margin = 1234567.89;
+        const state = { swapForm: { position: { value: { margin } } } };
+        const formattedMargin = '1,234,567.89';
+        (swapFormCompactFormat as jest.Mock).mockReturnValueOnce(formattedMargin);
+        const result = selectPositionMarginFormatted(state as never);
+        expect(result).toBe(formattedMargin);
+        expect(swapFormCompactFormat).toHaveBeenCalledWith(margin);
       });
     });
   });
