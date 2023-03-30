@@ -1,5 +1,5 @@
 import { compactFormat } from '../../../../../utilities/number';
-import { SwapFormNumberLimits } from '../../../lp-form';
+import { SwapFormNumberLimits } from '../../../swap-form';
 import { swapFormCompactFormat } from './index';
 
 jest.mock('../../../../../utilities/number', () => {

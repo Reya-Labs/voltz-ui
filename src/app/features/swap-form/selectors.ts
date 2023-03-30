@@ -343,7 +343,7 @@ export const selectLeverageOptions = (state: RootState) => {
 
   return {
     maxLeverage: swapFormState.prospectiveSwap.leverage.maxLeverage,
-    leverageOptions: swapFormState.prospectiveSwap.leverage.options,
+    leverageOptions: swapFormState.prospectiveSwap.leverage.options.map(String),
   };
 };
 
@@ -368,4 +368,10 @@ export const selectVariableRateValueFormatted = (state: RootState) => {
   return state.swapForm.variableRate.status !== 'success'
     ? '--'
     : formatNumber(state.swapForm.variableRate.value);
+};
+
+export const selectMarginRequirementFormatted = (state: RootState) => {
+  return state.swapForm.prospectiveSwap.infoPostSwap.status === 'success'
+    ? formatNumber(state.swapForm.prospectiveSwap.infoPostSwap.value.marginRequirement, 2, 4)
+    : '--';
 };

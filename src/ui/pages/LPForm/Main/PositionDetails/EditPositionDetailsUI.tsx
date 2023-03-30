@@ -2,15 +2,15 @@ import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'br
 import React from 'react';
 
 import {
-  selectAccruedCashflowEditPositionFormatted,
-  selectAccruedCashflowExistingPositionFormatted,
   selectEditPositionCompactNotional,
-  selectEditPositionPayingRateFormatted,
-  selectEditPositionReceivingRateFormatted,
   selectExistingPositionCompactNotional,
-  selectSwapFormPosition,
-} from '../../../../../app/features/swap-form';
+  selectExistingPositionFixedLower,
+  selectExistingPositionFixedUpper,
+  selectLpFormSelectedPosition,
+} from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
+import { formatNumber } from '../../../../../utilities/number';
+import { PnLDetails } from './PnLDetails';
 import {
   BorderedBox,
   NotionalBox,
@@ -36,14 +36,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
 }) => {
   const existingPositionCompactNotional = useAppSelector(selectExistingPositionCompactNotional);
 
-  const receivingRateTo = useAppSelector(selectEditPositionReceivingRateFormatted);
-  const payingRateTo = useAppSelector(selectEditPositionPayingRateFormatted);
   const editPositionCompactNotional = useAppSelector(selectEditPositionCompactNotional);
+  const fixedLower = useAppSelector(selectExistingPositionFixedLower);
+  const fixedUpper = useAppSelector(selectExistingPositionFixedUpper);
+  // TODO: Artur, Filip when SDK has support for PNL show it
+  const hidePNL = true;
 
-  const accruedCashflowFrom = useAppSelector(selectAccruedCashflowExistingPositionFormatted);
-  const accruedCashflowTo = useAppSelector(selectAccruedCashflowEditPositionFormatted);
-
-  const existingPosition = useAppSelector(selectSwapFormPosition);
+  const existingPosition = useAppSelector(selectLpFormSelectedPosition);
   if (!existingPosition) {
     return null;
   }
@@ -103,47 +102,38 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
-            value={receivingRateTo !== null ? receivingRateTo : '--'}
-            value2={receivingRateTo !== null ? receivingRateTo : '--'}
+            value={fixedLower !== null ? formatNumber(fixedLower) : '--'}
+            value2={fixedUpper !== null ? formatNumber(fixedUpper) : '--'}
           />
         </BorderedBox>
-        <BorderedBox>
-          <LabelTokenTypography
-            colorToken="lavenderWeb"
-            label="Generated Fees"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken={labelTypographyToken}
-            token=" USDC"
-            typographyToken={typographyToken}
-            value={payingRateTo}
-          />
-        </BorderedBox>
-        <BorderedBox>
-          {accruedCashflowFrom === accruedCashflowTo ? (
-            <LabelTokenTypography
-              colorToken="lavenderWeb"
-              label="Cash Flow"
-              labelColorToken="lavenderWeb3"
-              labelTypographyToken={labelTypographyToken}
-              token={` ${underlyingTokenName.toUpperCase()}`}
-              typographyToken={typographyToken}
-              value={accruedCashflowTo}
-            />
-          ) : (
-            <FromToTokenTypography
-              fromColorToken="lavenderWeb"
-              fromToken=""
-              fromValue={accruedCashflowFrom}
-              label="Cash Flow"
-              labelColorToken="lavenderWeb3"
-              labelTypographyToken={labelTypographyToken}
-              toColorToken="lavenderWeb"
-              toToken={` ${underlyingTokenName.toUpperCase()}`}
-              toValue={accruedCashflowTo}
-              typographyToken={typographyToken}
-            />
-          )}
-        </BorderedBox>
+        {!hidePNL && (
+          <>
+            <BorderedBox>
+              <LabelTokenTypography
+                colorToken="skyBlueCrayola"
+                label="Unrealised PnL"
+                labelColorToken="lavenderWeb3"
+                labelTypographyToken={labelTypographyToken}
+                token={` ${underlyingTokenName.toUpperCase()}`}
+                tooltip={<PnLDetails />}
+                typographyToken={typographyToken}
+                value="+40.00"
+              />
+            </BorderedBox>
+            <BorderedBox>
+              <LabelTokenTypography
+                colorToken="wildStrawberry"
+                label="Realised PnL"
+                labelColorToken="lavenderWeb3"
+                labelTypographyToken={labelTypographyToken}
+                token={` ${underlyingTokenName.toUpperCase()}`}
+                tooltip={<PnLDetails />}
+                typographyToken={typographyToken}
+                value="-40.00"
+              />
+            </BorderedBox>
+          </>
+        )}
       </PositionDetailsRightBox>
     </PositionDetailsBox>
   );

@@ -25,10 +25,11 @@ export const FormSubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
       <Button
         bottomLeftText={bottomLeftText}
         bottomLeftTextColorToken={bottomLeftTextColorToken}
+        data-testid="FormSubmitButton"
         disabled={disabled}
         loading={loading}
         variant="primary"
-        onClick={onClick}
+        onClick={loading || disabled ? undefined : onClick}
       >
         {children}
       </Button>

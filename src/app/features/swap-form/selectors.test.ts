@@ -3,7 +3,10 @@ import {
   selectAMMTokenFormatted,
   selectAvailableNotional,
   selectBottomRightMarginNumber,
+  selectEditPositionMode,
+  selectExistingPositionCompactNotional,
   selectExistingPositionMode,
+  selectExistingPositionPayingRateFormatted,
   selectExistingPositionReceivingRateFormatted,
   selectFixedRateInfo,
   selectInfoPostSwap,
@@ -32,6 +35,7 @@ import {
 import {
   getAvailableMargin,
   getAvailableNotional,
+  getEditPositionMode,
   getExistingPositionFixedRate,
   getExistingPositionMode,
   getExistingPositionVariableRate,
@@ -42,6 +46,7 @@ import {
   getVariableRate,
   hasExistingPosition,
   swapFormCompactFormat,
+  swapFormCompactFormatToParts,
   swapFormFormatNumber,
   swapFormLimitAndFormatNumber,
 } from './utils';
@@ -62,6 +67,8 @@ jest.mock('./utils', () => ({
   getExistingPositionMode: jest.fn(),
   getExistingPositionFixedRate: jest.fn(),
   getExistingPositionVariableRate: jest.fn(),
+  swapFormCompactFormatToParts: jest.fn(),
+  getEditPositionMode: jest.fn(),
 }));
 
 describe('swap-form.selectors', () => {
@@ -1039,6 +1046,171 @@ describe('swap-form.selectors', () => {
       expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getExistingPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
       expect(result).toEqual('--');
+    });
+  });
+
+  describe('selectExistingPositionPayingRateFormatted', () => {
+    const state = {
+      swapForm: jest.fn(),
+    };
+    afterEach(() => {
+      // Clear mock call history after each test
+      jest.clearAllMocks();
+    });
+
+    it('returns the formatted paying rate for an existing fixed position', () => {
+      (getExistingPositionMode as jest.Mock).mockReturnValueOnce('fixed');
+      (getExistingPositionVariableRate as jest.Mock).mockReturnValueOnce(1.5);
+      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.50');
+
+      const result = selectExistingPositionPayingRateFormatted(state as never);
+
+      expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
+      expect(getExistingPositionVariableRate).toHaveBeenCalledWith(state.swapForm);
+      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.5);
+      expect(result).toEqual('1.50');
+    });
+
+    it('returns the formatted paying rate for an existing variable position', () => {
+      (getExistingPositionMode as jest.Mock).mockReturnValueOnce('variable');
+      (getExistingPositionFixedRate as jest.Mock).mockReturnValueOnce(1.2);
+      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.20');
+
+      const result = selectExistingPositionPayingRateFormatted(state as never);
+
+      expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
+      expect(getExistingPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
+      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.2);
+      expect(result).toEqual('1.20');
+    });
+
+    it('returns "--" if receiving rate is null', () => {
+      (getExistingPositionMode as jest.Mock).mockReturnValueOnce('fixed');
+      (getExistingPositionVariableRate as jest.Mock).mockReturnValueOnce(null);
+
+      const result = selectExistingPositionPayingRateFormatted(state as never);
+
+      expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
+      expect(getExistingPositionVariableRate).toHaveBeenCalledWith(state.swapForm);
+      expect(result).toEqual('--');
+    });
+  });
+
+  describe('selectExistingPositionCompactNotional', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should return null when position status is not "success"', () => {
+      const state = {
+        swapForm: {
+          position: {
+            status: 'pending',
+            value: null,
+          },
+        },
+      } as never;
+
+      const result = selectExistingPositionCompactNotional(state);
+
+      expect(result).toBeNull();
+    });
+
+    it('should return null when position value is falsy', () => {
+      const state = {
+        swapForm: {
+          position: {
+            status: 'success',
+            value: null,
+          },
+        },
+      } as never;
+
+      const result = selectExistingPositionCompactNotional(state);
+
+      expect(result).toBeNull();
+    });
+
+    it('should return an object with the correct properties when position status is "success" and position value is truthy', () => {
+      const state = {
+        swapForm: {
+          position: {
+            status: 'success',
+            value: {
+              notional: '1000000000000000000',
+            },
+          },
+        },
+      } as never;
+
+      (swapFormCompactFormatToParts as jest.Mock).mockReturnValueOnce({
+        compactSuffix: 'ETH',
+        compactNumber: '1',
+      });
+
+      const result = selectExistingPositionCompactNotional(state);
+
+      expect(swapFormCompactFormatToParts as jest.Mock).toHaveBeenCalledWith('1000000000000000000');
+      expect(result).toEqual({
+        compactNotionalSuffix: 'ETH',
+        compactNotionalNumber: '1',
+      });
+    });
+  });
+
+  describe('selectEditPositionMode', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should call getEditPositionMode with the correct argument', () => {
+      const state = {
+        swapForm: {
+          position: {
+            status: 'success',
+            value: {
+              tokenA: 'USDC',
+              tokenB: 'ETH',
+            },
+          },
+        },
+      };
+
+      selectEditPositionMode(state as never);
+
+      expect(getEditPositionMode).toHaveBeenCalledWith({
+        position: {
+          status: 'success',
+          value: {
+            tokenA: 'USDC',
+            tokenB: 'ETH',
+          },
+        },
+      });
+    });
+
+    it('should return the value returned by getEditPositionMode', () => {
+      const state = {
+        swapForm: {
+          position: {
+            status: 'success',
+            value: {
+              tokenA: 'USDC',
+              tokenB: 'ETH',
+            },
+          },
+        },
+      } as never;
+
+      const mode = {
+        type: 'my-mode',
+        params: {},
+      };
+
+      (getEditPositionMode as jest.Mock).mockReturnValueOnce(mode);
+
+      const result = selectEditPositionMode(state);
+      expect(result).toEqual(mode);
     });
   });
 });

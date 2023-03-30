@@ -3,10 +3,10 @@ import React from 'react';
 
 import {
   selectNewPositionCompactNotional,
-  selectNewPositionReceivingRate,
-} from '../../../../../app/features/swap-form';
+  selectUserInputFixedLower,
+  selectUserInputFixedUpper,
+} from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
 import { PnLDetails } from './PnLDetails';
 import {
   BorderedBox,
@@ -31,8 +31,11 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
   labelTypographyToken,
   typographyToken,
 }) => {
-  const receivingRate = useAppSelector(selectNewPositionReceivingRate);
   const compactNotional = useAppSelector(selectNewPositionCompactNotional);
+  const fixedLower = useAppSelector(selectUserInputFixedLower);
+  const fixedUpper = useAppSelector(selectUserInputFixedUpper);
+  // TODO: Artur, Filip when SDK has support for PNL show it
+  const hidePNL = true;
 
   return (
     <PositionDetailsBox>
@@ -67,34 +70,38 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
-            value={receivingRate !== null ? formatNumber(receivingRate) : '--'}
-            value2={receivingRate !== null ? formatNumber(receivingRate) : '--'}
+            value={fixedLower ? fixedLower : '--'}
+            value2={fixedUpper ? fixedUpper : '--'}
           />
         </BorderedBox>
-        <BorderedBox>
-          <LabelTokenTypography
-            colorToken="skyBlueCrayola"
-            label="Unrealised PnL"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken={labelTypographyToken}
-            token=" USDC"
-            tooltip={<PnLDetails />}
-            typographyToken={typographyToken}
-            value="+40.00"
-          />
-        </BorderedBox>
-        <BorderedBox>
-          <LabelTokenTypography
-            colorToken="wildStrawberry"
-            label="Realised PnL"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken={labelTypographyToken}
-            token=" USDC"
-            tooltip={<PnLDetails />}
-            typographyToken={typographyToken}
-            value="-40.00"
-          />
-        </BorderedBox>
+        {!hidePNL && (
+          <>
+            <BorderedBox>
+              <LabelTokenTypography
+                colorToken="skyBlueCrayola"
+                label="Unrealised PnL"
+                labelColorToken="lavenderWeb3"
+                labelTypographyToken={labelTypographyToken}
+                token={` ${underlyingTokenName.toUpperCase()}`}
+                tooltip={<PnLDetails />}
+                typographyToken={typographyToken}
+                value="+40.00"
+              />
+            </BorderedBox>
+            <BorderedBox>
+              <LabelTokenTypography
+                colorToken="wildStrawberry"
+                label="Realised PnL"
+                labelColorToken="lavenderWeb3"
+                labelTypographyToken={labelTypographyToken}
+                token={` ${underlyingTokenName.toUpperCase()}`}
+                tooltip={<PnLDetails />}
+                typographyToken={typographyToken}
+                value="-40.00"
+              />
+            </BorderedBox>
+          </>
+        )}
       </PositionDetailsRightBox>
     </PositionDetailsBox>
   );

@@ -1,23 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  ExpectedCashflowInfo,
-  getPositions,
-  InfoPostSwapV1,
-  Position,
-  SupportedChainId,
-} from '@voltz-protocol/v1-sdk';
+import { AMM, getPositions, InfoPostLp, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { BigNumber, ContractReceipt, providers } from 'ethers';
 
-import { findCurrentPosition } from '../../../utilities/amm';
-import { isBorrowingPosition } from '../../../utilities/borrowAmm';
+import { findCurrentPositionsLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import {
-  getProspectiveSwapMargin,
-  getProspectiveSwapMode,
-  getProspectiveSwapNotional,
+  getDefaultLpFixedHigh,
+  getDefaultLpFixedLow,
+  getProspectiveLpFixedHigh,
+  getProspectiveLpFixedLow,
+  getProspectiveLpMargin,
+  getProspectiveLpNotional,
   isUserInputNotionalError,
 } from './utils';
-// TODO: any reference of swap should be changed
+
 const rejectThunkWithError = (
   thunkAPI: {
     rejectWithValue: (value: string | undefined) => unknown;
@@ -34,11 +30,11 @@ export const getWalletBalanceThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/getWalletBalance', async (_, thunkAPI) => {
+>('lpForm/getWalletBalance', async (_, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().swapForm.amm;
+    const amm = thunkAPI.getState().lpForm.amm;
     if (!amm || !amm.signer) {
-      return;
+      return 0;
     }
 
     return await amm.underlyingTokens();
@@ -51,9 +47,9 @@ export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   { chainId: SupportedChainId; alchemyApiKey: string },
   { state: RootState }
->('swapForm/getUnderlyingTokenAllowance', async ({ chainId, alchemyApiKey }, thunkAPI) => {
+>('lpForm/getUnderlyingTokenAllowance', async ({ chainId, alchemyApiKey }, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().swapForm.amm;
+    const amm = thunkAPI.getState().lpForm.amm;
     if (!amm || !amm.signer) {
       return;
     }
@@ -78,9 +74,9 @@ export const approveUnderlyingTokenThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/approveUnderlyingToken', async (_, thunkAPI) => {
+>('lpForm/approveUnderlyingToken', async (_, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().swapForm.amm;
+    const amm = thunkAPI.getState().lpForm.amm;
     if (!amm || !amm.signer) {
       return;
     }
@@ -95,9 +91,9 @@ export const getFixedRateThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/getFixedRate', async (_, thunkAPI) => {
+>('lpForm/getFixedRate', async (_, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().swapForm.amm;
+    const amm = thunkAPI.getState().lpForm.amm;
     if (!amm) {
       return;
     }
@@ -112,9 +108,9 @@ export const getVariableRateThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/getVariableRate', async (_, thunkAPI) => {
+>('lpForm/getVariableRate', async (_, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().swapForm.amm;
+    const amm = thunkAPI.getState().lpForm.amm;
     if (!amm) {
       return;
     }
@@ -130,9 +126,9 @@ export const getVariableRate24hAgoThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/getVariableRate24hAgo', async (_, thunkAPI) => {
+>('lpForm/getVariableRate24hAgo', async (_, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().swapForm.amm;
+    const amm: AMM | null = thunkAPI.getState().lpForm.amm;
     if (!amm) {
       return;
     }
@@ -144,86 +140,99 @@ export const getVariableRate24hAgoThunk = createAsyncThunk<
   }
 });
 
-export const getPoolSwapInfoThunk = createAsyncThunk<
+export const getPoolLpInfoThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/getPoolSwapInfo', async (_, thunkAPI) => {
+>('lpForm/getPoolLpInfo', async (_, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().swapForm.amm;
+    const amm = thunkAPI.getState().lpForm.amm;
     if (!amm) {
       return;
     }
 
-    return await amm.getPoolSwapInfo();
+    const lpFormState = thunkAPI.getState().lpForm;
+
+    let fixedLow: number | null = getProspectiveLpFixedLow(lpFormState);
+    let fixedHigh: number | null = getProspectiveLpFixedHigh(lpFormState);
+
+    if (fixedLow === null || fixedHigh === null) {
+      fixedLow = getDefaultLpFixedLow(lpFormState);
+      fixedHigh = getDefaultLpFixedHigh(lpFormState);
+    }
+
+    return await amm.getPoolLpInfo(fixedLow, fixedHigh);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
 });
 
-export const getInfoPostSwapThunk = createAsyncThunk<
+export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<
     | {
         notionalAmount: number;
-        swapMode: 'fixed' | 'variable';
-        infoPostSwapV1: InfoPostSwapV1;
+        lpMode: 'add' | 'remove';
+        infoPostLpV1: InfoPostLp;
         earlyReturn: boolean;
       }
     | ReturnType<typeof rejectThunkWithError>
   >,
   void,
   { state: RootState }
->('swapForm/getInfoPostSwap', async (_, thunkAPI) => {
+>('lpForm/getInfoPostLp', async (_, thunkAPI) => {
   try {
-    const swapFormState = thunkAPI.getState().swapForm;
-    const amm = swapFormState.amm;
-    if (!amm || isUserInputNotionalError(swapFormState)) {
+    const lpFormState = thunkAPI.getState().lpForm;
+
+    const fixedLower = lpFormState.userInput.fixedRange.lower;
+    const fixedUpper = lpFormState.userInput.fixedRange.upper;
+
+    if (fixedLower === null || fixedUpper === null) {
       return {
         notionalAmount: NaN,
-        swapMode: getProspectiveSwapMode(swapFormState),
-        infoPostSwap: {},
+        infoPostLp: {},
         earlyReturn: true,
       };
     }
 
-    if (getProspectiveSwapNotional(swapFormState) === 0) {
+    const amm = lpFormState.amm;
+    if (!amm || isUserInputNotionalError(lpFormState)) {
+      return {
+        notionalAmount: NaN,
+        infoPostLp: {},
+        earlyReturn: true,
+      };
+    }
+
+    if (getProspectiveLpNotional(lpFormState) === 0) {
       return {
         notionalAmount: 0,
-        swapMode: getProspectiveSwapMode(swapFormState),
-        infoPostSwap: {
+        infoPostLp: {
           marginRequirement: 0,
           maxMarginWithdrawable: 0,
-          averageFixedRate: 0,
-          fixedTokenDeltaBalance: 0,
-          variableTokenDeltaBalance: 0,
-          fixedTokenDeltaUnbalanced: 0,
-          fee: 0,
-          slippage: 0,
           gasFeeETH: 0,
         },
         earlyReturn: false,
       };
     }
 
-    const notionalAmount = getProspectiveSwapNotional(swapFormState);
-    const infoPostSwapV1 = await amm.getInfoPostSwapV1({
-      isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
-      notional: notionalAmount,
-      fixedLow: 1,
-      fixedHigh: 999,
-    });
+    let prospectiveNotional: number = getProspectiveLpNotional(lpFormState);
+    let addLiquidity: boolean = true;
 
-    // margin requirement is collateral only now
-    if (infoPostSwapV1.marginRequirement > infoPostSwapV1.fee) {
-      infoPostSwapV1.marginRequirement -= infoPostSwapV1.fee;
-    } else {
-      infoPostSwapV1.marginRequirement = 0;
+    if (prospectiveNotional < 0) {
+      addLiquidity = false;
+      prospectiveNotional = -prospectiveNotional;
     }
 
+    const infoPostLpV1: InfoPostLp = await amm.getInfoPostLp({
+      addLiquidity: addLiquidity,
+      notional: prospectiveNotional,
+      fixedLow: fixedLower,
+      fixedHigh: fixedUpper,
+    });
+
     return {
-      notionalAmount,
-      swapMode: getProspectiveSwapMode(swapFormState),
-      infoPostSwap: infoPostSwapV1,
+      prospectiveNotional,
+      infoPostLp: infoPostLpV1,
       earlyReturn: false,
     };
   } catch (err) {
@@ -231,28 +240,37 @@ export const getInfoPostSwapThunk = createAsyncThunk<
   }
 });
 
-export type SetSignerAndPositionForAMMThunkSuccess = {
-  position: Position | null;
+export type SetSignerAndPositionsForAMMThunkSuccess = {
   signer: providers.JsonRpcSigner | null;
+  positions: Position[] | null;
 };
-export const setSignerAndPositionForAMMThunk = createAsyncThunk<
-  Awaited<SetSignerAndPositionForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
+
+export const setSignerAndPositionsForAMMThunk = createAsyncThunk<
+  Awaited<SetSignerAndPositionsForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
   { signer: providers.JsonRpcSigner | null; chainId: SupportedChainId },
   { state: RootState }
->('swapForm/setSignerAndPositionForAMM', async ({ signer, chainId }, thunkAPI) => {
+>('lpForm/setSignerAndPositionsForAMM', async ({ signer, chainId }, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().swapForm.amm;
+    const amm = thunkAPI.getState().lpForm.amm;
+
     if (!amm) {
       return {
         signer: null,
-        position: null,
+        positions: null,
       };
     }
 
     if (!signer) {
       return {
         signer: null,
-        position: null,
+        positions: null,
+      };
+    }
+
+    if (!chainId) {
+      return {
+        signer: null,
+        positions: null,
       };
     }
 
@@ -262,42 +280,63 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
       chainId,
       userWalletId: userWalletId,
       amms: [amm],
-      // TODO: Artur is this still valid enough to get position details for LPs
-      type: 'Trader',
+      type: 'LP',
     });
+
     if (error) {
       return rejectThunkWithError(thunkAPI, error);
     }
-    // TODO: Artur is this still valid enough to get position details for LPs
-    const nonBorrowPositions = positions.filter((pos) => !isBorrowingPosition(pos));
-    const position = findCurrentPosition(nonBorrowPositions || [], amm.id) || null;
+
+    if (positions.length === 0) {
+      return {
+        signer: signer,
+        positions: positions,
+      };
+    }
+
+    const filteredPositions: Position[] = findCurrentPositionsLp(positions || [], amm.id) || null;
     return {
-      position,
-      signer,
+      signer: signer,
+      positions: filteredPositions,
     };
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
 });
 
-export const confirmSwapThunk = createAsyncThunk<
+export const confirmLpThunk = createAsyncThunk<
   Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/confirmSwap', async (_, thunkAPI) => {
+>('lpForm/confirmLp', async (_, thunkAPI) => {
   try {
-    const swapFormState = thunkAPI.getState().swapForm;
-    const amm = swapFormState.amm;
+    const lpFormState = thunkAPI.getState().lpForm;
+    const amm = lpFormState.amm;
     if (!amm) {
       return;
     }
 
-    return await amm.swap({
-      isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
-      notional: getProspectiveSwapNotional(swapFormState),
-      margin: getProspectiveSwapMargin(swapFormState),
-      fixedLow: 1,
-      fixedHigh: 999,
+    const fixedLow = getProspectiveLpFixedLow(lpFormState);
+    const fixedHigh = getProspectiveLpFixedHigh(lpFormState);
+
+    if (fixedLow === null || fixedHigh === null) {
+      return;
+    }
+
+    let prospectiveNotional: number = getProspectiveLpNotional(lpFormState);
+    let addLiquidity: boolean = true;
+
+    if (prospectiveNotional < 0) {
+      addLiquidity = false;
+      prospectiveNotional = -prospectiveNotional;
+    }
+
+    return await amm.lp({
+      addLiquidity: addLiquidity,
+      notional: prospectiveNotional,
+      margin: getProspectiveLpMargin(lpFormState),
+      fixedLow: fixedLow,
+      fixedHigh: fixedHigh,
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
@@ -308,42 +347,30 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
   Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/confirmMarginUpdate', async (_, thunkAPI) => {
+>('lpForm/confirmMarginUpdate', async (_, thunkAPI) => {
   try {
-    const swapFormState = thunkAPI.getState().swapForm;
-    const amm = swapFormState.amm;
+    const lpFormState = thunkAPI.getState().lpForm;
+    const amm = lpFormState.amm;
+
     if (!amm) {
+      return;
+    }
+
+    if (!lpFormState.selectedPosition) {
+      return;
+    }
+
+    const fixedLow: number | null = getProspectiveLpFixedLow(lpFormState);
+    const fixedHigh: number | null = getProspectiveLpFixedHigh(lpFormState);
+
+    if (fixedLow === null || fixedHigh === null) {
       return;
     }
 
     return await amm.updatePositionMargin({
-      fixedLow: 1,
-      fixedHigh: 999,
-      marginDelta: getProspectiveSwapMargin(swapFormState),
-    });
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
-export const getExpectedCashflowInfoThunk = createAsyncThunk<
-  Awaited<ExpectedCashflowInfo | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('swapForm/getExpectedCashflowInfo', async (_, thunkAPI) => {
-  try {
-    const swapFormState = thunkAPI.getState().swapForm;
-    const amm = swapFormState.amm;
-    if (!amm) {
-      return;
-    }
-
-    return await amm.getExpectedCashflowInfo({
-      position: swapFormState.position.value ?? undefined,
-      prospectiveSwapAvgFixedRate:
-        swapFormState.prospectiveSwap.infoPostSwap.value.averageFixedRate / 100,
-      prospectiveSwapNotional:
-        swapFormState.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance,
+      fixedLow,
+      fixedHigh,
+      marginDelta: getProspectiveLpMargin(lpFormState),
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

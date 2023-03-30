@@ -2,11 +2,11 @@ import React, { useCallback } from 'react';
 
 import {
   approveUnderlyingTokenThunk,
+  closeLpConfirmationFlowAction,
   closeMarginUpdateConfirmationFlowAction,
-  closeSwapConfirmationFlowAction,
+  openLpConfirmationFlowAction,
   openMarginUpdateConfirmationFlowAction,
-  openSwapConfirmationFlowAction,
-  selectInfoPostSwap,
+  selectInfoPostLp,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
 } from '../../../../../app/features/lp-form';
@@ -19,19 +19,19 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
   const dispatch = useAppDispatch();
   const submitButtonInfo = useAppSelector(selectSubmitButtonInfo);
   const submitButtonText = useAppSelector(selectSubmitButtonText);
-  const infoPostSwap = useAppSelector(selectInfoPostSwap);
+  const infoPostLp = useAppSelector(selectInfoPostLp);
 
   const handleButtonClick = useCallback(() => {
     switch (submitButtonInfo.state) {
       case 'approve':
         void dispatch(approveUnderlyingTokenThunk());
         break;
-      case 'swap':
+      case 'lp':
         void dispatch(closeMarginUpdateConfirmationFlowAction());
-        void dispatch(openSwapConfirmationFlowAction());
+        void dispatch(openLpConfirmationFlowAction());
         break;
       case 'margin-update':
-        void dispatch(closeSwapConfirmationFlowAction());
+        void dispatch(closeLpConfirmationFlowAction());
         void dispatch(openMarginUpdateConfirmationFlowAction());
         break;
       default:
@@ -46,7 +46,7 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
         submitButtonInfo.message.isError ? 'wildStrawberry' : 'lavenderWeb2'
       }
       disabled={submitButtonInfo.disabled}
-      loading={infoPostSwap.status === 'pending'}
+      loading={infoPostLp.status === 'pending'}
       onClick={handleButtonClick}
     >
       {submitButtonText}

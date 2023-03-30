@@ -3,6 +3,7 @@ import React from 'react';
 import { IconImage } from './IconImage';
 type IconProps = {
   'data-testid'?: string;
+  className?: string;
 };
 export { ReactComponent as ArrowLeft } from './arrow-left.svg';
 export { ReactComponent as ArrowRight } from './arrow-right.svg';
@@ -97,55 +98,143 @@ export { ReactComponent as S2Yikes } from './badges/season2/s2Yikes.svg';
 // season3 badges
 export const S3BeWaterMyFriend: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
+  className,
 }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3BeWaterMyFriend.png" />
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3BeWaterMyFriend.png"
+  />
 );
-export const S3DegenStuff: React.FunctionComponent<IconProps> = ({ 'data-testid': dataTestId }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3DegenStuff.png" />
+export const S3DegenStuff: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3DegenStuff.png"
+  />
 );
-export const S3DeltaDegen: React.FunctionComponent<IconProps> = ({ 'data-testid': dataTestId }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3DeltaDegen.png" />
+export const S3DeltaDegen: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3DeltaDegen.png"
+  />
 );
 export const S3FixedTrader: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
+  className,
 }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3FixedTrader.png" />
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3FixedTrader.png"
+  />
 );
 export const S3IrsConnoisseur: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
+  className,
 }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3IrsConnoisseur.png" />
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3IrsConnoisseur.png"
+  />
 );
 export const S3LeverageCrowbar: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
+  className,
 }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3LeverageCrowbar.png" />
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3LeverageCrowbar.png"
+  />
 );
-export const S3Lpoor: React.FunctionComponent<IconProps> = ({ 'data-testid': dataTestId }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3Lpoor.png" />
+export const S3Lpoor: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3Lpoor.png"
+  />
 );
-export const S3MaxBidding: React.FunctionComponent<IconProps> = ({ 'data-testid': dataTestId }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3MaxBidding.png" />
+export const S3MaxBidding: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3MaxBidding.png"
+  />
 );
 export const S3MoneyMoneyMoney: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
+  className,
 }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3MoneyMoneyMoney.png" />
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3MoneyMoneyMoney.png"
+  />
 );
-export const S3Rainmaker: React.FunctionComponent<IconProps> = ({ 'data-testid': dataTestId }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3Rainmaker.png" />
+export const S3Rainmaker: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3Rainmaker.png"
+  />
 );
-export const S3SushiRoll: React.FunctionComponent<IconProps> = ({ 'data-testid': dataTestId }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3SushiRoll.png" />
+export const S3SushiRoll: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3SushiRoll.png"
+  />
 );
-export const S3TopTrader: React.FunctionComponent<IconProps> = ({ 'data-testid': dataTestId }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3TopTrader.png" />
+export const S3TopTrader: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3TopTrader.png"
+  />
 );
-export const S3WaterHose: React.FunctionComponent<IconProps> = ({ 'data-testid': dataTestId }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3WaterHose.png" />
+export const S3WaterHose: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3WaterHose.png"
+  />
 );
-export const S3Yikes: React.FunctionComponent<IconProps> = ({ 'data-testid': dataTestId }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/ethereum/s3Yikes.png" />
+export const S3Yikes: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/ethereum/s3Yikes.png"
+  />
 );
 export { ReactComponent as S3MellowLpVaultTier1 } from './badges/season2/s2MellowLpVaultTier1.svg';
 export { ReactComponent as S3MellowLpVaultTier2 } from './badges/season2/s2MellowLpVaultTier2.svg';
@@ -153,56 +242,144 @@ export { ReactComponent as S3MellowLpVaultTier3 } from './badges/season2/s2Mello
 // season3 badges - arbitrum
 export const S3BeWaterMyFriendArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
+  className,
 }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3BeWaterMyFriend.png" />
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3BeWaterMyFriend.png"
+  />
 );
 export const S3DegenStuffArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
-}) => <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3DegenStuff.png" />;
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3DegenStuff.png"
+  />
+);
 export const S3DeltaDegenArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
-}) => <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3DeltaDegen.png" />;
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3DeltaDegen.png"
+  />
+);
 export const S3FixedTraderArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
+  className,
 }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3FixedTrader.png" />
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3FixedTrader.png"
+  />
 );
 export const S3IrsConnoisseurArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
+  className,
 }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3IrsConnoisseur.png" />
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3IrsConnoisseur.png"
+  />
 );
 export const S3LeverageCrowbarArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
+  className,
 }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3LeverageCrowbar.png" />
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3LeverageCrowbar.png"
+  />
 );
 export const S3LpoorArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
-}) => <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3Lpoor.png" />;
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3Lpoor.png"
+  />
+);
 export const S3MaxBiddingArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
-}) => <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3MaxBidding.png" />;
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3MaxBidding.png"
+  />
+);
 export const S3MoneyMoneyMoneyArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
+  className,
 }) => (
-  <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3MoneyMoneyMoney.png" />
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3MoneyMoneyMoney.png"
+  />
 );
 export const S3RainmakerArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
-}) => <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3Rainmaker.png" />;
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3Rainmaker.png"
+  />
+);
 export const S3SushiRollArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
-}) => <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3SushiRoll.png" />;
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3SushiRoll.png"
+  />
+);
 export const S3TopTraderArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
-}) => <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3TopTrader.png" />;
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3TopTrader.png"
+  />
+);
 export const S3WaterHoseArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
-}) => <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3WaterHose.png" />;
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3WaterHose.png"
+  />
+);
 export const S3YikesArbitrum: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
-}) => <IconImage data-testid={dataTestId} src="/images/badges/season3/arbitrum/s3Yikes.png" />;
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season3/arbitrum/s3Yikes.png"
+  />
+);
 export { ReactComponent as S3MellowLpVaultTier1Arbitrum } from './badges/season2/s2MellowLpVaultTier1.svg';
 export { ReactComponent as S3MellowLpVaultTier2Arbitrum } from './badges/season2/s2MellowLpVaultTier2.svg';
 export { ReactComponent as S3MellowLpVaultTier3Arbitrum } from './badges/season2/s2MellowLpVaultTier3.svg';

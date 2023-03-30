@@ -3,8 +3,8 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  selectSwapFormAMM,
-  selectSwapFormPosition,
+  selectLpFormAMM,
+  selectLpFormSelectedPosition,
   selectUserInputMarginInfo,
   setMarginAmountAction,
 } from '../../../../../app/features/lp-form';
@@ -18,10 +18,9 @@ type NotionalAmountProps = {};
 export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const dispatch = useAppDispatch();
   const marginAmount = useAppSelector(selectUserInputMarginInfo);
-  const position = useAppSelector(selectSwapFormPosition);
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const selectedPosition = useAppSelector(selectLpFormSelectedPosition);
+  const aMM = useAppSelector(selectLpFormAMM);
 
-  const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
   const [localMargin, setLocalMargin] = useState<string | null>(marginAmount.value.toString());
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
@@ -74,7 +73,6 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
         return;
       }
 
-      setLocalEditMode(value);
       debouncedSetMarginAmount(undefined, value);
     },
     [debouncedSetMarginAmount],
@@ -92,7 +90,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
     return null;
   }
 
-  return !position ? (
+  return !selectedPosition ? (
     <NewMarginAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
@@ -109,7 +107,6 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
       handleOnMarginChange={handleOnMarginChange}
       handleOnSwitchChange={handleOnSwitchChange}
       labelTypographyToken={labelTypographyToken}
-      localEditMode={localEditMode}
       localMargin={localMargin}
       topRightTextTypographyToken={topRightTextTypographyToken}
       underlyingTokenName={aMM.underlyingToken.name}

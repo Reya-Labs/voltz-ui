@@ -2,12 +2,13 @@ import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
+  LpFormNumberLimits,
   selectBottomRightMarginNumber,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
+  selectUserInputMarginAmountEditMode,
   selectUserInputMarginInfo,
   selectWalletBalance,
-  SwapFormNumberLimits,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
@@ -15,7 +16,6 @@ import { MarginAmountFieldBox } from './MarginAmountField.styled';
 type EditMarginAmountFieldUIProps = {
   handleOnMarginChange: (value?: string) => void;
   handleOnSwitchChange: (value: string) => void;
-  localEditMode: 'add' | 'remove';
   localMargin: string | null;
   underlyingTokenName: string;
   labelTypographyToken: TypographyToken;
@@ -27,7 +27,6 @@ type EditMarginAmountFieldUIProps = {
 export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFieldUIProps> = ({
   handleOnMarginChange,
   handleOnSwitchChange,
-  localEditMode,
   localMargin,
   underlyingTokenName,
   labelTypographyToken,
@@ -39,10 +38,11 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
   const isWalletMarginError = useAppSelector(selectIsWalletMarginError);
   const marginAmount = useAppSelector(selectUserInputMarginInfo);
   const walletBalance = useAppSelector(selectWalletBalance);
+  const marginAmountEditMode = useAppSelector(selectUserInputMarginAmountEditMode);
 
   const bottomLeftText = isMarginRequiredError
     ? (marginAmount.error as string)
-    : localEditMode === 'add'
+    : marginAmountEditMode === 'add'
     ? 'Additional Margin Required'
     : 'Available margin to withdraw';
 
@@ -58,16 +58,16 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
         bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={bottomRightNumber !== null ? bottomRightNumber : '--'}
-        decimalsLimit={SwapFormNumberLimits.decimalLimit}
+        decimalsLimit={LpFormNumberLimits.decimalLimit}
         error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"
         labelTypographyToken={labelTypographyToken}
-        maxLength={SwapFormNumberLimits.digitLimit}
+        maxLength={LpFormNumberLimits.digitLimit}
         switchOffText={'Withdraw'}
         switchOffValue={'remove'}
         switchOnText={'Deposit'}
         switchOnValue={'add'}
-        switchValue={localEditMode}
+        switchValue={marginAmountEditMode}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="The protocol requires every position to have enough margin to support trades. Adding more than the minimum reduces liquidation risk."
         topRightText={`Wallet: ${walletBalance} ${underlyingTokenName.toUpperCase()}`}

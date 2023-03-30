@@ -3,7 +3,7 @@ import { RankType, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { Season } from '../../../hooks/season/types';
-import { getCommunitySbt } from '../../../routes/Profile/helpers';
+import { getCommunitySbt } from '../../../ui/pages/Profile/helpers';
 
 const rejectThunkWithError = (
   thunkAPI: {

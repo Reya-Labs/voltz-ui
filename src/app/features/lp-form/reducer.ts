@@ -1,33 +1,32 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, ExpectedCashflowInfo, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
+import { AMM, InfoPostLp, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
 import {
   approveUnderlyingTokenThunk,
+  confirmLpThunk,
   confirmMarginUpdateThunk,
-  confirmSwapThunk,
-  getExpectedCashflowInfoThunk,
   getFixedRateThunk,
-  getInfoPostSwapThunk,
-  getPoolSwapInfoThunk,
+  getInfoPostLpThunk,
+  getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
-  setSignerAndPositionForAMMThunk,
-  SetSignerAndPositionForAMMThunkSuccess,
+  setSignerAndPositionsForAMMThunk,
+  SetSignerAndPositionsForAMMThunkSuccess,
 } from './thunks';
 import {
   checkLowLeverageNotification,
-  getExistingPositionMode,
-  getProspectiveSwapMargin,
-  getProspectiveSwapMode,
-  getProspectiveSwapNotional,
+  getProspectiveLpMargin,
+  getProspectiveLpNotional,
   hasExistingPosition,
   isUserInputMarginError,
-  swapFormLimitAndFormatNumber,
+  lpFormLimitAndFormatNumber,
+  resetNotionalAndMarginEditMode,
   updateLeverage,
+  updateSelectedPosition,
   validateUserInput,
 } from './utils';
 
@@ -36,10 +35,11 @@ type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 export type SliceState = {
   submitButton: {
     state:
-      | 'swap'
+      | 'lp'
       | 'margin-update'
       | 'not-enough-balance'
       | 'connect-wallet'
+      | 'fixed-range-error'
       | 'approve'
       | 'approving';
     disabled: boolean;
@@ -49,10 +49,12 @@ export type SliceState = {
     };
   };
   amm: AMM | null;
-  position: {
-    value: Position | null;
+  positions: {
+    value: Position[] | null;
     status: ThunkStatus;
   };
+  // position from the list of positions above that matches the fixed rate range selected by user
+  selectedPosition: Position | null;
   walletBalance: {
     value: number;
     status: ThunkStatus;
@@ -74,71 +76,61 @@ export type SliceState = {
     status: ThunkStatus;
   };
   // User-agnostic swap info about pool
-  poolSwapInfo: {
-    availableNotional: Record<'fixed' | 'variable', number>;
-    maxLeverage: Record<'fixed' | 'variable', number>;
+  poolLpInfo: {
+    maxLeverage: number;
     status: ThunkStatus;
   };
+  // the lp form is a slice of the redux store and userInput is a "slice of a slice", doesn't have actions
   userInput: {
-    // Side chosen by user in the UI
-    mode: 'fixed' | 'variable';
-    // User-inputted notional amount
+    // User-inputted notional amount of liquidity they want to provide or remove from the vamm
     notionalAmount: {
       value: number;
+      // provide -> user is adding more liquidity into the vamm, remove means the user is removing liquidity from vamm
       editMode: 'add' | 'remove';
       error: string | null;
     };
-    // User-inputted margin amount
+    // User-inputted margin amount (same as the swap form)
     marginAmount: {
       value: number;
       editMode: 'add' | 'remove';
       error: string | null;
     };
     leverage: number | null;
-    estimatedApy: number;
+    // user-inputted fixed rate range along which liquidity is provided
+    fixedRange: {
+      lower: number | null;
+      upper: number | null;
+      error: string | null;
+      // counts how many times update happens for lower or upper and refreshes UI
+      // in case a same value is recalculated by selectors UI won't refresh
+      updateCount: number;
+    };
   };
-  // State of prospective swap
-  prospectiveSwap: {
+  // State of prospective liquidity provisioning or liquidity removal operation
+  prospectiveLp: {
     // Leverage options
     leverage: {
       options: number[];
       maxLeverage: string;
     };
-    infoPostSwap: {
+    infoPostLp: {
       value: {
-        // Margin requirement for prospective swap
+        // Margin requirement for prospective lp operation (either removing or adding liquidity)
         marginRequirement: number;
-        // Max margin that can be withdrawn after prospective swap
+        // Max margin that can be withdrawn after prospective liquidity addition or removal operation
         maxMarginWithdrawable: number;
-        // Average fixed rate obtained by the prospective swap
-        averageFixedRate: number;
-
-        // Token balance deltas resulted by prospective swap
-        fixedTokenDeltaBalance: number;
-        variableTokenDeltaBalance: number;
-        fixedTokenDeltaUnbalanced: number;
-
         // Extra information about prospective swap
-        fee: number;
-        slippage: number;
         gasFeeETH: number;
       };
       status: ThunkStatus;
     };
-    cashflowInfo: {
-      averageFixedRate: number;
-      accruedCashflowExistingPosition: number;
-      accruedCashflowEditPosition: number;
-      estimatedAdditionalCashflow: (estimatedApy: number) => number;
-      estimatedTotalCashflow: (estimatedApy: number) => number;
-      status: ThunkStatus;
-    };
   };
-  swapConfirmationFlow: {
-    step: 'swapConfirmation' | 'waitingForSwapConfirmation' | 'swapCompleted' | null;
+  lpConfirmationFlow: {
+    step: 'lpConfirmation' | 'waitingForLpConfirmation' | 'lpCompleted' | null;
     error: string | null;
     txHash: string | null;
   };
+  // note, behaviour is the same as in the swap form
   marginUpdateConfirmationFlow: {
     step:
       | 'marginUpdateConfirmation'
@@ -161,7 +153,8 @@ const initialState: SliceState = {
     },
   },
   amm: null,
-  position: {
+  selectedPosition: null,
+  positions: {
     value: null,
     status: 'idle',
   },
@@ -185,19 +178,11 @@ const initialState: SliceState = {
     value: 0,
     status: 'idle',
   },
-  poolSwapInfo: {
-    availableNotional: {
-      fixed: 0,
-      variable: 0,
-    },
-    maxLeverage: {
-      fixed: 0,
-      variable: 0,
-    },
+  poolLpInfo: {
+    maxLeverage: 1,
     status: 'idle',
   },
   userInput: {
-    mode: 'fixed',
     notionalAmount: {
       value: 0,
       editMode: 'add',
@@ -209,37 +194,28 @@ const initialState: SliceState = {
       error: null,
     },
     leverage: null,
-    estimatedApy: 0,
+    fixedRange: {
+      lower: null,
+      upper: null,
+      error: null,
+      updateCount: 0,
+    },
   },
-  prospectiveSwap: {
+  prospectiveLp: {
     leverage: {
       options: [0, 0, 0],
       maxLeverage: '--',
     },
-    infoPostSwap: {
+    infoPostLp: {
       value: {
         marginRequirement: 0,
         maxMarginWithdrawable: 0,
-        averageFixedRate: 0,
-        fixedTokenDeltaBalance: 0,
-        variableTokenDeltaBalance: 0,
-        fixedTokenDeltaUnbalanced: 0,
-        fee: 0,
-        slippage: 0,
         gasFeeETH: 0,
       },
       status: 'idle',
     },
-    cashflowInfo: {
-      averageFixedRate: 0,
-      accruedCashflowExistingPosition: 0,
-      accruedCashflowEditPosition: 0,
-      estimatedAdditionalCashflow: () => 0,
-      estimatedTotalCashflow: () => 0,
-      status: 'idle',
-    },
   },
-  swapConfirmationFlow: {
+  lpConfirmationFlow: {
     step: null,
     error: null,
     txHash: null,
@@ -273,58 +249,45 @@ const calculateLeverageOptions = (maxLeverage: string) => {
   ];
 };
 
-const updateLeverageOptionsAfterGetPoolSwapInfo = (state: Draft<SliceState>): void => {
-  const maxLeverage = formatNumber(
-    Math.floor(state.poolSwapInfo.maxLeverage[getProspectiveSwapMode(state)]),
-    0,
-    0,
-  );
-  state.prospectiveSwap.leverage.maxLeverage = maxLeverage;
-  state.prospectiveSwap.leverage.options = calculateLeverageOptions(maxLeverage);
+const updateLeverageOptionsAfterGetPoolLpInfo = (state: Draft<SliceState>): void => {
+  const maxLeverage = formatNumber(Math.floor(state.poolLpInfo.maxLeverage), 0, 0);
+  state.prospectiveLp.leverage.maxLeverage = maxLeverage;
+  state.prospectiveLp.leverage.options = calculateLeverageOptions(maxLeverage);
 };
 
-const updateLeverageOptionsAfterGetInfoPostSwap = (state: Draft<SliceState>): void => {
+const updateLeverageOptionsAfterGetInfoPostLp = (state: Draft<SliceState>): void => {
   let maxLeverage = '--';
   if (
     !state.userInput.notionalAmount.error &&
-    state.prospectiveSwap.infoPostSwap.status === 'success'
+    state.prospectiveLp.infoPostLp.status === 'success'
   ) {
-    if (state.prospectiveSwap.infoPostSwap.value.marginRequirement > 0) {
+    if (state.prospectiveLp.infoPostLp.value.marginRequirement > 0) {
       maxLeverage = formatNumber(
         Math.floor(
-          getProspectiveSwapNotional(state) /
-            state.prospectiveSwap.infoPostSwap.value.marginRequirement,
+          getProspectiveLpNotional(state) / state.prospectiveLp.infoPostLp.value.marginRequirement,
         ),
         0,
         0,
       );
     } else {
-      maxLeverage = formatNumber(
-        Math.floor(state.poolSwapInfo.maxLeverage[getProspectiveSwapMode(state)]),
-        0,
-        0,
-      );
+      maxLeverage = formatNumber(Math.floor(state.poolLpInfo.maxLeverage), 0, 0);
     }
   }
 
-  state.prospectiveSwap.leverage.maxLeverage = maxLeverage;
-  state.prospectiveSwap.leverage.options = calculateLeverageOptions(maxLeverage);
+  state.prospectiveLp.leverage.maxLeverage = maxLeverage;
+  state.prospectiveLp.leverage.options = calculateLeverageOptions(maxLeverage);
 };
 
 const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void => {
   validateUserInput(state);
 
-  const isProspectiveSwapNotionalValid =
-    hasExistingPosition(state) || getProspectiveSwapNotional(state) > 0;
-  const isProspectiveSwapMarginValid =
-    hasExistingPosition(state) || getProspectiveSwapMargin(state) > 0;
-  const isProspectiveSwapNotionalMarginValid =
-    getProspectiveSwapNotional(state) !== 0 || getProspectiveSwapMargin(state) !== 0;
-  const isInfoPostSwapLoaded =
-    state.prospectiveSwap.infoPostSwap.status === 'success' &&
-    state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance *
-      (getProspectiveSwapMode(state) === 'fixed' ? -1 : 1) ===
-      getProspectiveSwapNotional(state);
+  const isProspectiveLpNotionalValid =
+    hasExistingPosition(state) || getProspectiveLpNotional(state) > 0;
+  const isProspectiveLpMarginValid =
+    hasExistingPosition(state) || getProspectiveLpMargin(state) > 0;
+  const isProspectiveLpNotionalMarginValid =
+    getProspectiveLpNotional(state) !== 0 || getProspectiveLpMargin(state) !== 0;
+  const isInfoPostLpLoaded = state.prospectiveLp.infoPostLp.status === 'success';
   const isWalletBalanceLoaded = state.walletBalance.status === 'success';
   const isWalletTokenAllowanceLoaded = state.walletTokenAllowance.status === 'success';
 
@@ -374,16 +337,27 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
 
   if (
     isWalletBalanceLoaded &&
-    isInfoPostSwapLoaded &&
+    isInfoPostLpLoaded &&
     state.userInput.marginAmount.editMode === 'add' &&
-    state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee >
-      state.walletBalance.value
+    state.userInput.marginAmount.value > state.walletBalance.value
   ) {
     state.submitButton = {
       state: 'not-enough-balance',
       disabled: true,
       message: {
-        text: `Insufficient ${state.amm.underlyingToken.name.toUpperCase()} balance to cover for both the margin and the fees.`,
+        text: `Insufficient ${state.amm.underlyingToken.name.toUpperCase()} balance to cover for margin.`,
+        isError: true,
+      },
+    };
+    return;
+  }
+
+  if (state.userInput.fixedRange.error) {
+    state.submitButton = {
+      state: 'fixed-range-error',
+      disabled: true,
+      message: {
+        text: state.userInput.fixedRange.error,
         isError: true,
       },
     };
@@ -393,18 +367,18 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   if (
     !isUserInputMarginError(state) &&
     !isUserInputMarginError(state) &&
-    isProspectiveSwapNotionalValid &&
-    isProspectiveSwapMarginValid &&
-    isProspectiveSwapNotionalMarginValid &&
-    isInfoPostSwapLoaded &&
+    isProspectiveLpNotionalValid &&
+    isProspectiveLpMarginValid &&
+    isProspectiveLpNotionalMarginValid &&
+    isInfoPostLpLoaded &&
     isWalletBalanceLoaded &&
     isWalletTokenAllowanceLoaded
   ) {
     state.submitButton = {
-      state: getProspectiveSwapNotional(state) !== 0 ? 'swap' : 'margin-update',
+      state: getProspectiveLpNotional(state) !== 0 ? 'lp' : 'margin-update',
       disabled: false,
       message: {
-        text: "Token approved, let's trade",
+        text: 'Token approved',
         isError: false,
       },
     };
@@ -412,7 +386,7 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   }
 
   state.submitButton = {
-    state: 'swap',
+    state: 'lp',
     disabled: true,
     message: {
       text: 'Almost ready',
@@ -422,15 +396,15 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
 };
 
 export const slice = createSlice({
-  name: 'swapForm',
+  name: 'lpForm',
   initialState,
   reducers: {
     resetStateAction: () => initialState,
-    openSwapConfirmationFlowAction: (state) => {
-      state.swapConfirmationFlow.step = 'swapConfirmation';
+    openLpConfirmationFlowAction: (state) => {
+      state.lpConfirmationFlow.step = 'lpConfirmation';
     },
-    closeSwapConfirmationFlowAction: (state) => {
-      state.swapConfirmationFlow = {
+    closeLpConfirmationFlowAction: (state) => {
+      state.lpConfirmationFlow = {
         step: null,
         error: null,
         txHash: null,
@@ -446,31 +420,59 @@ export const slice = createSlice({
         txHash: null,
       };
     },
-    setUserInputModeAction: (
+    setUserInputFixedLowerAction: (
+      // the current state of the lp-form slice of the redux store (defined in this file) -> we extended the type
       state,
       {
+        // what you send from the frontend world with type PayloadAction and the value can be a number
         payload: { value },
       }: PayloadAction<{
-        value: 'fixed' | 'variable';
+        value: number | null;
       }>,
     ) => {
-      state.userInput.mode = value;
-      state.prospectiveSwap.infoPostSwap = {
-        value: {
-          marginRequirement: 0,
-          maxMarginWithdrawable: 0,
-          averageFixedRate: 0,
-          fixedTokenDeltaBalance: 0,
-          variableTokenDeltaBalance: 0,
-          fixedTokenDeltaUnbalanced: 0,
-          fee: 0,
-          slippage: 0,
-          gasFeeETH: 0,
-        },
-        status: 'idle',
-      };
+      const amm = state.amm;
 
+      if (!amm) {
+        return;
+      }
+
+      let nextFixedRateLowerNumber: number | null = null;
+      if (value !== null) {
+        nextFixedRateLowerNumber = amm.getNextUsableFixedRate(value, 0);
+      }
+
+      state.userInput.fixedRange.lower = nextFixedRateLowerNumber;
+      state.userInput.fixedRange.updateCount = state.userInput.fixedRange.updateCount + 1;
+      updateSelectedPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
+      resetNotionalAndMarginEditMode(state);
+    },
+    setUserInputFixedUpperAction: (
+      // the current state of the lp-form slice of the redux store (defined in this file) -> we extended the type
+      state,
+      {
+        // what you send from the frontend world with type PayloadAction and the value can be a number
+        payload: { value },
+      }: PayloadAction<{
+        value: number | null;
+      }>,
+    ) => {
+      const amm = state.amm;
+
+      if (!amm) {
+        return;
+      }
+
+      let nextFixedRateUpperNumber: number | null = null;
+      if (value !== null) {
+        nextFixedRateUpperNumber = amm.getNextUsableFixedRate(value, 0);
+      }
+
+      state.userInput.fixedRange.upper = nextFixedRateUpperNumber;
+      state.userInput.fixedRange.updateCount = state.userInput.fixedRange.updateCount + 1;
+      updateSelectedPosition(state);
+      validateUserInputAndUpdateSubmitButton(state);
+      resetNotionalAndMarginEditMode(state);
     },
     setNotionalAmountAction: (
       state,
@@ -520,30 +522,22 @@ export const slice = createSlice({
         value: number;
       }>,
     ) => {
-      if (getProspectiveSwapNotional(state) === 0 || isNaN(value) || value === 0) {
+      if (getProspectiveLpNotional(state) === 0 || isNaN(value) || value === 0) {
         state.userInput.leverage = null;
+        state.userInput.marginAmount.value = 0;
+        validateUserInputAndUpdateSubmitButton(state);
         return;
       }
 
       state.userInput.leverage = value;
       state.userInput.marginAmount.value = stringToBigFloat(
-        swapFormLimitAndFormatNumber(getProspectiveSwapNotional(state) / value, 'ceil'),
+        lpFormLimitAndFormatNumber(getProspectiveLpNotional(state) / value, 'ceil'),
       );
 
       validateUserInputAndUpdateSubmitButton(state);
       state.showLowLeverageNotification = checkLowLeverageNotification(state);
     },
-    setEstimatedApyAction: (
-      state,
-      {
-        payload: { value },
-      }: PayloadAction<{
-        value: number;
-      }>,
-    ) => {
-      state.userInput.estimatedApy = value;
-    },
-    setSwapFormAMMAction: (
+    setLpFormAMMAction: (
       state,
       {
         payload: { amm },
@@ -675,105 +669,62 @@ export const slice = createSlice({
           status: 'success',
         };
       })
-      .addCase(getPoolSwapInfoThunk.pending, (state) => {
-        state.poolSwapInfo = {
-          availableNotional: {
-            fixed: 0,
-            variable: 0,
-          },
-          maxLeverage: {
-            fixed: 0,
-            variable: 0,
-          },
+      .addCase(getPoolLpInfoThunk.pending, (state) => {
+        state.poolLpInfo = {
+          // note max leverage is a function of the fixed rate range selected by the lp
+          maxLeverage: 0,
           status: 'pending',
         };
       })
-      .addCase(getPoolSwapInfoThunk.rejected, (state) => {
-        state.poolSwapInfo = {
-          availableNotional: {
-            fixed: 0,
-            variable: 0,
-          },
-          maxLeverage: {
-            fixed: 0,
-            variable: 0,
-          },
+      .addCase(getPoolLpInfoThunk.rejected, (state) => {
+        state.poolLpInfo = {
+          maxLeverage: 0,
           status: 'error',
         };
       })
-      .addCase(getPoolSwapInfoThunk.fulfilled, (state, { payload }) => {
-        const { availableNotionalFT, availableNotionalVT, maxLeverageFT, maxLeverageVT } =
-          payload as {
-            availableNotionalFT: number;
-            availableNotionalVT: number;
-            maxLeverageFT: number;
-            maxLeverageVT: number;
-          };
-        state.poolSwapInfo = {
-          availableNotional: {
-            fixed: availableNotionalFT,
-            variable: availableNotionalVT,
-          },
-          maxLeverage: {
-            fixed: maxLeverageFT,
-            variable: maxLeverageVT,
-          },
+      .addCase(getPoolLpInfoThunk.fulfilled, (state, { payload }) => {
+        let { maxLeverage } = payload as {
+          maxLeverage: number;
+        };
+        maxLeverage = Math.floor((maxLeverage * 99) / 100);
+        state.poolLpInfo = {
+          maxLeverage: maxLeverage,
           status: 'success',
         };
-        updateLeverageOptionsAfterGetPoolSwapInfo(state);
+        updateLeverageOptionsAfterGetPoolLpInfo(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(getInfoPostSwapThunk.pending, (state) => {
-        state.prospectiveSwap.infoPostSwap = {
+      .addCase(getInfoPostLpThunk.pending, (state) => {
+        state.prospectiveLp.infoPostLp = {
           value: {
             marginRequirement: 0,
             maxMarginWithdrawable: 0,
-            averageFixedRate: 0,
-            fixedTokenDeltaBalance: 0,
-            variableTokenDeltaBalance: 0,
-            fixedTokenDeltaUnbalanced: 0,
-            fee: 0,
-            slippage: 0,
             gasFeeETH: 0,
           },
           status: 'pending',
         };
       })
-      .addCase(getInfoPostSwapThunk.rejected, (state) => {
-        state.prospectiveSwap.infoPostSwap = {
+      .addCase(getInfoPostLpThunk.rejected, (state) => {
+        state.prospectiveLp.infoPostLp = {
           value: {
             marginRequirement: 0,
             maxMarginWithdrawable: 0,
-            averageFixedRate: 0,
-            fixedTokenDeltaBalance: 0,
-            variableTokenDeltaBalance: 0,
-            fixedTokenDeltaUnbalanced: 0,
-            fee: 0,
-            slippage: 0,
             gasFeeETH: 0,
           },
           status: 'error',
         };
       })
-      .addCase(getInfoPostSwapThunk.fulfilled, (state, { payload }) => {
-        const { notionalAmount, swapMode, infoPostSwap, earlyReturn } = payload as {
-          notionalAmount: number;
-          swapMode: 'fixed' | 'variable';
-          infoPostSwap: InfoPostSwapV1;
-          earlyReturn: boolean; //TODO Alex: maybe refactor this
+      .addCase(getInfoPostLpThunk.fulfilled, (state, { payload }) => {
+        const { infoPostLp, earlyReturn } = payload as {
+          infoPostLp: InfoPostLp;
+          earlyReturn: boolean;
         };
 
         if (earlyReturn) {
-          state.prospectiveSwap.infoPostSwap = {
+          state.prospectiveLp.infoPostLp = {
             value: {
               marginRequirement: 0,
               maxMarginWithdrawable: 0,
-              averageFixedRate: 0,
-              fixedTokenDeltaBalance: 0,
-              variableTokenDeltaBalance: 0,
-              fixedTokenDeltaUnbalanced: 0,
-              fee: 0,
-              slippage: 0,
               gasFeeETH: 0,
             },
             status: 'idle',
@@ -781,72 +732,62 @@ export const slice = createSlice({
           return;
         }
 
-        state.prospectiveSwap.infoPostSwap = {
+        const marginRequirementWithBuffer: number = (infoPostLp.marginRequirement * 101) / 100;
+
+        state.prospectiveLp.infoPostLp = {
           value: {
-            marginRequirement: infoPostSwap.marginRequirement,
-            maxMarginWithdrawable: infoPostSwap.maxMarginWithdrawable,
-            averageFixedRate: infoPostSwap.averageFixedRate,
-            fixedTokenDeltaBalance: infoPostSwap.fixedTokenDeltaBalance,
-            variableTokenDeltaBalance: infoPostSwap.variableTokenDeltaBalance,
-            fixedTokenDeltaUnbalanced: infoPostSwap.fixedTokenDeltaUnbalanced,
-            fee: infoPostSwap.fee,
-            slippage: infoPostSwap.slippage,
-            gasFeeETH: infoPostSwap.gasFeeETH,
+            marginRequirement: marginRequirementWithBuffer,
+            maxMarginWithdrawable: infoPostLp.maxMarginWithdrawable,
+            gasFeeETH: infoPostLp.gasFeeETH,
           },
           status: 'success',
         };
-        if (infoPostSwap.availableNotional < notionalAmount) {
-          state.poolSwapInfo.availableNotional[swapMode] = infoPostSwap.availableNotional;
-        }
 
-        updateLeverageOptionsAfterGetInfoPostSwap(state);
+        updateLeverageOptionsAfterGetInfoPostLp(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
-        state.position.value = null;
-        state.position.status = 'pending';
-        if (!state.amm) {
+      .addCase(setSignerAndPositionsForAMMThunk.pending, (state) => {
+        if (state.amm === null) {
           return;
         }
+        state.positions.value = null;
+        state.positions.status = 'pending';
         state.amm.signer = null;
       })
-      .addCase(setSignerAndPositionForAMMThunk.rejected, (state) => {
-        state.position.value = null;
-        state.position.status = 'error';
-        if (!state.amm) {
+      .addCase(setSignerAndPositionsForAMMThunk.rejected, (state) => {
+        if (state.amm === null) {
           return;
         }
+        state.positions.value = null;
+        state.positions.status = 'error';
         state.amm.signer = null;
       })
-      .addCase(setSignerAndPositionForAMMThunk.fulfilled, (state, { payload }) => {
-        state.position.value = (payload as SetSignerAndPositionForAMMThunkSuccess).position;
-        state.position.status = 'success';
-        if (!state.amm) {
+      .addCase(setSignerAndPositionsForAMMThunk.fulfilled, (state, { payload }) => {
+        if (state.amm === null) {
           return;
         }
-        state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
-        if (state.position.value) {
-          state.userInput.mode = getExistingPositionMode(state) as 'fixed' | 'variable';
-        }
+        state.positions.value = (payload as SetSignerAndPositionsForAMMThunkSuccess).positions;
+        state.positions.status = 'success';
+        state.amm.signer = (payload as SetSignerAndPositionsForAMMThunkSuccess).signer;
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(confirmSwapThunk.pending, (state) => {
-        state.swapConfirmationFlow = {
-          step: 'waitingForSwapConfirmation',
+      .addCase(confirmLpThunk.pending, (state) => {
+        state.lpConfirmationFlow = {
+          step: 'waitingForLpConfirmation',
           error: null,
           txHash: null,
         };
       })
-      .addCase(confirmSwapThunk.rejected, (state, { payload }) => {
-        state.swapConfirmationFlow = {
-          step: 'swapConfirmation',
+      .addCase(confirmLpThunk.rejected, (state, { payload }) => {
+        state.lpConfirmationFlow = {
+          step: 'lpConfirmation',
           error: payload as string,
           txHash: null,
         };
       })
-      .addCase(confirmSwapThunk.fulfilled, (state, { payload }) => {
-        state.swapConfirmationFlow = {
-          step: 'swapCompleted',
+      .addCase(confirmLpThunk.fulfilled, (state, { payload }) => {
+        state.lpConfirmationFlow = {
+          step: 'lpCompleted',
           error: null,
           txHash: (payload as ContractReceipt).transactionHash,
         };
@@ -871,36 +812,19 @@ export const slice = createSlice({
           error: null,
           txHash: (payload as ContractReceipt).transactionHash,
         };
-      })
-      .addCase(getExpectedCashflowInfoThunk.pending, (state) => {
-        state.prospectiveSwap.cashflowInfo.status = 'pending';
-      })
-      .addCase(getExpectedCashflowInfoThunk.rejected, (state, {}) => {
-        state.prospectiveSwap.cashflowInfo.status = 'error';
-      })
-      .addCase(getExpectedCashflowInfoThunk.fulfilled, (state, { payload }) => {
-        const expectedCashflowInfo = payload as ExpectedCashflowInfo;
-        state.prospectiveSwap.cashflowInfo = {
-          averageFixedRate: expectedCashflowInfo.averageFixedRate,
-          accruedCashflowExistingPosition: expectedCashflowInfo.accruedCashflowExistingPosition,
-          accruedCashflowEditPosition: expectedCashflowInfo.accruedCashflowEditPosition,
-          estimatedAdditionalCashflow: expectedCashflowInfo.estimatedAdditionalCashflow,
-          estimatedTotalCashflow: expectedCashflowInfo.estimatedTotalCashflow,
-          status: 'success',
-        };
       });
   },
 });
 export const {
   resetStateAction,
-  setUserInputModeAction,
-  setSwapFormAMMAction,
+  setLpFormAMMAction,
   setNotionalAmountAction,
   setMarginAmountAction,
   setLeverageAction,
-  setEstimatedApyAction,
-  openSwapConfirmationFlowAction,
-  closeSwapConfirmationFlowAction,
+  setUserInputFixedLowerAction,
+  setUserInputFixedUpperAction,
+  openLpConfirmationFlowAction,
+  closeLpConfirmationFlowAction,
   openMarginUpdateConfirmationFlowAction,
   closeMarginUpdateConfirmationFlowAction,
 } = slice.actions;

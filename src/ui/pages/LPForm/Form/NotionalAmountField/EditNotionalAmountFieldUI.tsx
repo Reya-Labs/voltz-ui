@@ -3,18 +3,17 @@ import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
-  selectAvailableNotional,
+  LpFormNumberLimits,
+  selectSelectedPositionCompactNotional,
+  selectUserInputNotionalAmountEditMode,
   selectUserInputNotionalInfo,
-  SwapFormNumberLimits,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 
 type EditNotionalAmountFieldUIProps = {
   handleOnNotionalChange: (value?: string) => void;
   handleOnSwitchChange: (value: string) => void;
-  localEditMode: 'add' | 'remove';
   localNotional: string | null;
   position: Position;
   underlyingTokenName: string;
@@ -26,7 +25,6 @@ type EditNotionalAmountFieldUIProps = {
 export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmountFieldUIProps> = ({
   handleOnNotionalChange,
   handleOnSwitchChange,
-  localEditMode,
   localNotional,
   underlyingTokenName,
   labelTypographyToken,
@@ -34,13 +32,16 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
   bottomLeftTextTypographyToken,
 }) => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
-  const notionalAvailable = useAppSelector(selectAvailableNotional);
 
-  const bottomLeftText = notionalAmount.error
-    ? notionalAmount.error
-    : localEditMode === 'add'
-    ? 'Liquidity Available'
-    : 'Notional Available';
+  const bottomLeftText = notionalAmount.error ? notionalAmount.error : '';
+
+  const selectedPositionCompactNotional = useAppSelector(selectSelectedPositionCompactNotional);
+
+  const notionalAmountEditMode = useAppSelector(selectUserInputNotionalAmountEditMode);
+
+  const bottomRightText = notionalAmount.error
+    ? selectedPositionCompactNotional.compactNotionalNumber
+    : '';
 
   return (
     <NotionalAmountFieldBox>
@@ -51,19 +52,19 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-        bottomRightTextValue={formatNumber(notionalAvailable)}
-        decimalsLimit={SwapFormNumberLimits.decimalLimit}
+        bottomRightTextValue={bottomRightText}
+        decimalsLimit={LpFormNumberLimits.decimalLimit}
         error={notionalAmount.error !== null}
         label="Notional Amount"
         labelTypographyToken={labelTypographyToken}
-        maxLength={SwapFormNumberLimits.digitLimit}
+        maxLength={LpFormNumberLimits.digitLimit}
         switchOffText={'Remove'}
         switchOffValue={'remove'}
         switchOnText={'Add'}
         switchOnValue={'add'}
-        switchValue={localEditMode}
+        switchValue={notionalAmountEditMode}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
-        tooltip="When trading rates, the amount you receive and pay is calculated as a percentage of the notional value you choose."
+        tooltip="TODO: fix copy"
         value={localNotional !== null ? localNotional : undefined}
         onChange={handleOnNotionalChange}
         onSwitchChange={handleOnSwitchChange}

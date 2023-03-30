@@ -6,40 +6,39 @@ import {
   compactFormatToParts,
   formatNumber,
   limitAndFormatNumber,
-  stringToBigFloat,
 } from '../../../../utilities/number';
-import { SwapFormNumberLimits } from '../constants';
+import { LpFormNumberLimits } from '../constants';
 import { SliceState } from '../reducer';
 
-export const swapFormFormatNumber = (value: number) => {
+export const lpFormFormatNumber = (value: number) => {
   if (value < 1) {
-    return formatNumber(value, 0, SwapFormNumberLimits.decimalLimit);
+    return formatNumber(value, 0, LpFormNumberLimits.decimalLimit);
   }
 
   return formatNumber(value, 0, 2);
 };
 
-export const swapFormCompactFormat = (value: number) => {
+export const lpFormCompactFormat = (value: number) => {
   if (value < 1) {
-    return compactFormat(value, 0, SwapFormNumberLimits.decimalLimit);
+    return compactFormat(value, 0, LpFormNumberLimits.decimalLimit);
   }
 
   return compactFormat(value, 0, 2);
 };
 
-export const swapFormCompactFormatToParts = (value: number) => {
+export const lpFormCompactFormatToParts = (value: number) => {
   if (value < 1) {
-    return compactFormatToParts(value, 0, SwapFormNumberLimits.decimalLimit);
+    return compactFormatToParts(value, 0, LpFormNumberLimits.decimalLimit);
   }
 
   return compactFormatToParts(value, 0, 2);
 };
 
-export const swapFormLimitAndFormatNumber = (value: number, mode: 'floor' | 'ceil') => {
+export const lpFormLimitAndFormatNumber = (value: number, mode: 'floor' | 'ceil') => {
   return limitAndFormatNumber(
     value,
-    SwapFormNumberLimits.digitLimit,
-    SwapFormNumberLimits.decimalLimit,
+    LpFormNumberLimits.digitLimit,
+    LpFormNumberLimits.decimalLimit,
     mode,
   );
 };
@@ -48,36 +47,23 @@ export const isUserInputNotionalError = (state: Draft<SliceState>): boolean => {
   return state.userInput.notionalAmount.error !== null;
 };
 
+export const isUserInputFixedRangeError = (state: Draft<SliceState>): boolean => {
+  return state.userInput.fixedRange.error !== null;
+};
+
 export const isUserInputMarginError = (state: Draft<SliceState>): boolean => {
   return state.userInput.marginAmount.error !== null;
 };
 
-export const getAvailableNotional = (state: Draft<SliceState>): number => {
-  if (hasExistingPosition(state) && state.userInput.notionalAmount.editMode === 'remove') {
-    return Math.min(
-      (state.position.value as Position).notional,
-      state.poolSwapInfo.availableNotional[getProspectiveSwapMode(state)],
-    );
-  }
-
-  return state.poolSwapInfo.availableNotional[getProspectiveSwapMode(state)];
-};
-
 const validateUserInputNotional = (state: Draft<SliceState>): void => {
   let error = null;
-  if (
-    state.userInput.notionalAmount.editMode === 'add' &&
-    getProspectiveSwapNotional(state) > getAvailableNotional(state)
-  ) {
-    error = 'Not enough liquidity. Available:';
-  }
 
   if (
     hasExistingPosition(state) &&
     state.userInput.notionalAmount.editMode === 'remove' &&
-    state.userInput.notionalAmount.value > getAvailableNotional(state)
+    state.userInput.notionalAmount.value > (state.selectedPosition as Position).notional
   ) {
-    error = 'Not enough notional. Available:';
+    error = 'Not enough notional. Available notional:';
   }
 
   state.userInput.notionalAmount.error = error;
@@ -85,30 +71,21 @@ const validateUserInputNotional = (state: Draft<SliceState>): void => {
 
 export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
   if (state.userInput.marginAmount.editMode === 'remove') {
-    if (state.prospectiveSwap.infoPostSwap.status !== 'success') {
+    if (state.prospectiveLp.infoPostLp.status !== 'success') {
       return null;
     }
 
     let maxMarginWithdrawable = null;
-    if (getProspectiveSwapNotional(state) === 0 && hasExistingPosition(state)) {
-      maxMarginWithdrawable = (state.position.value as Position).maxMarginWithdrawable;
+    if (getProspectiveLpNotional(state) === 0 && hasExistingPosition(state)) {
+      maxMarginWithdrawable = (state.selectedPosition as Position).maxMarginWithdrawable;
     }
 
-    if (getProspectiveSwapNotional(state) > 0) {
-      maxMarginWithdrawable = state.prospectiveSwap.infoPostSwap.value.maxMarginWithdrawable;
+    if (getProspectiveLpNotional(state) < 0 && hasExistingPosition(state)) {
+      maxMarginWithdrawable = (state.selectedPosition as Position).maxMarginWithdrawable;
     }
 
-    if (maxMarginWithdrawable !== null) {
-      if (maxMarginWithdrawable > state.prospectiveSwap.infoPostSwap.value.fee) {
-        maxMarginWithdrawable = stringToBigFloat(
-          swapFormLimitAndFormatNumber(
-            maxMarginWithdrawable - state.prospectiveSwap.infoPostSwap.value.fee,
-            'floor',
-          ),
-        );
-      } else {
-        maxMarginWithdrawable = 0;
-      }
+    if (getProspectiveLpNotional(state) > 0) {
+      maxMarginWithdrawable = state.prospectiveLp.infoPostLp.value.maxMarginWithdrawable;
     }
 
     return maxMarginWithdrawable;
@@ -134,8 +111,8 @@ const validateUserInputMargin = (state: Draft<SliceState>): void => {
 
   if (
     state.userInput.marginAmount.editMode === 'add' &&
-    state.prospectiveSwap.infoPostSwap.status === 'success' &&
-    state.userInput.marginAmount.value < state.prospectiveSwap.infoPostSwap.value.marginRequirement
+    state.prospectiveLp.infoPostLp.status === 'success' &&
+    state.userInput.marginAmount.value < state.prospectiveLp.infoPostLp.value.marginRequirement
   ) {
     error = 'Margin too low. Additional margin required:';
   }
@@ -152,8 +129,8 @@ const validateUserInputMargin = (state: Draft<SliceState>): void => {
   if (
     hasExistingPosition(state) &&
     state.userInput.marginAmount.editMode === 'remove' &&
-    state.prospectiveSwap.infoPostSwap.status === 'success' &&
-    state.prospectiveSwap.infoPostSwap.value.marginRequirement > 0
+    state.prospectiveLp.infoPostLp.status === 'success' &&
+    state.prospectiveLp.infoPostLp.value.marginRequirement > 0
   ) {
     error = 'You must add margin. Available margin:';
   }
@@ -161,177 +138,149 @@ const validateUserInputMargin = (state: Draft<SliceState>): void => {
   state.userInput.marginAmount.error = error;
 };
 
+const validateUserInputFixedRange = (state: Draft<SliceState>): void => {
+  const fixedLower = state.userInput.fixedRange.lower;
+  const fixedUpper = state.userInput.fixedRange.upper;
+  if (fixedLower !== null && fixedUpper !== null && fixedLower >= fixedUpper) {
+    state.userInput.fixedRange.error = 'Fixed lower cannot be equal or higher than fixed upper';
+  }
+};
+
 export const validateUserInput = (state: Draft<SliceState>): void => {
   validateUserInputNotional(state);
   validateUserInputMargin(state);
+  validateUserInputFixedRange(state);
+};
+
+export const resetNotionalAndMarginEditMode = (state: Draft<SliceState>): void => {
+  state.userInput.notionalAmount.editMode = 'add';
+  state.userInput.marginAmount.editMode = 'add';
+};
+
+export const updateSelectedPosition = (state: Draft<SliceState>): void => {
+  if (
+    state.positions.status !== 'success' ||
+    state.positions.value === null ||
+    state.positions.value.length === 0
+  ) {
+    return;
+  }
+
+  const fixedLower = state.userInput.fixedRange.lower;
+  const fixedUpper = state.userInput.fixedRange.upper;
+  state.selectedPosition = state.positions.value[0];
+
+  const filteredPosition = state.positions.value.find(
+    (i) => i.fixedRateLower.toNumber() === fixedLower && i.fixedRateUpper.toNumber() === fixedUpper,
+  );
+
+  if (filteredPosition === undefined) {
+    state.selectedPosition = null;
+  } else {
+    state.selectedPosition = filteredPosition;
+  }
 };
 
 export const updateLeverage = (state: Draft<SliceState>): void => {
-  if (getProspectiveSwapNotional(state) > 0 && state.userInput.marginAmount.value > 0) {
-    state.userInput.leverage =
-      getProspectiveSwapNotional(state) / state.userInput.marginAmount.value;
+  if (getProspectiveLpNotional(state) > 0 && state.userInput.marginAmount.value > 0) {
+    state.userInput.leverage = getProspectiveLpNotional(state) / state.userInput.marginAmount.value;
   }
 
   state.showLowLeverageNotification = checkLowLeverageNotification(state);
 };
 
 export const hasExistingPosition = (state: Draft<SliceState>): boolean => {
-  return state.position.status === 'success' && state.position.value !== null;
+  return state.selectedPosition !== null;
 };
 
-export const getProspectiveSwapMode = (state: Draft<SliceState>): 'fixed' | 'variable' => {
-  if (state.position.value === null) {
-    return state.userInput.mode;
-  }
-
-  const existingPositionMode = getExistingPositionMode(state);
-
-  if (
-    existingPositionMode === 'fixed' &&
-    state.userInput.mode === 'fixed' &&
-    state.userInput.notionalAmount.editMode === 'add'
-  ) {
-    return 'fixed';
-  }
-
-  if (
-    existingPositionMode === 'variable' &&
-    state.userInput.mode === 'variable' &&
-    state.userInput.notionalAmount.editMode === 'add'
-  ) {
-    return 'variable';
-  }
-
-  return existingPositionMode === 'fixed' ? 'variable' : 'fixed';
+export const getDefaultLpFixedLow = (state: Draft<SliceState>): number => {
+  // todo: layer in smarter dynamic default range logic in here
+  return 1;
 };
 
-export const getProspectiveSwapNotional = (state: Draft<SliceState>): number => {
+export const getDefaultLpFixedHigh = (state: Draft<SliceState>): number => {
+  // todo: layer in smarter dynamic default range logic in here
+  return 3;
+};
+
+export const getProspectiveLpFixedLow = (state: Draft<SliceState>): number | null => {
+  if (isUserInputFixedRangeError(state)) {
+    return null;
+  }
+
+  return state.userInput.fixedRange.lower;
+};
+
+export const getProspectiveLpFixedHigh = (state: Draft<SliceState>): number | null => {
+  if (isUserInputFixedRangeError(state)) {
+    return null;
+  }
+
+  return state.userInput.fixedRange.upper;
+};
+
+export const getProspectiveLpNotional = (state: Draft<SliceState>): number => {
   if (isUserInputNotionalError(state)) {
     return 0;
   }
 
-  let value = state.userInput.notionalAmount.value;
-
-  const existingPositionNotional = getExistingPositionNotional(state);
-  if (
-    state.position.value !== null &&
-    existingPositionNotional !== null &&
-    state.userInput.mode !== getExistingPositionMode(state)
-  ) {
-    value =
-      state.userInput.notionalAmount.editMode === 'add'
-        ? 2 * existingPositionNotional + value
-        : 2 * existingPositionNotional - value;
+  if (state.userInput.notionalAmount.editMode === 'add') {
+    return state.userInput.notionalAmount.value;
   }
 
-  return value;
+  return -state.userInput.notionalAmount.value;
 };
 
-export const getProspectiveSwapMargin = (state: Draft<SliceState>): number => {
+export const getProspectiveLpMargin = (state: Draft<SliceState>): number => {
+  if (isUserInputMarginError(state)) {
+    return 0;
+  }
+
   if (state.userInput.marginAmount.editMode === 'add') {
-    return state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee;
+    return state.userInput.marginAmount.value;
   }
 
   return -state.userInput.marginAmount.value;
 };
 
-export const getExistingPositionFixedRate = (state: Draft<SliceState>) => {
-  if (state.position.status !== 'success' || !state.position.value) {
+export const getExistingSelectedPositionNotional = (state: Draft<SliceState>) => {
+  if (state.selectedPosition === null) {
     return null;
   }
 
-  if (getExistingPositionNotional(state) === 0) {
-    return null;
-  }
-
-  return getExistingPositionMode(state) === 'fixed'
-    ? state.position.value.receivingRate
-    : state.position.value.payingRate;
+  return state.selectedPosition.notional;
 };
 
-export const getExistingPositionVariableRate = (state: Draft<SliceState>) => {
-  if (getExistingPositionNotional(state) === 0) {
-    return null;
+export const getSelectedPositionNotional = (state: Draft<SliceState>) => {
+  let selectedPositionNotional = 0;
+
+  if (state.selectedPosition !== null) {
+    selectedPositionNotional += state.selectedPosition.notional;
   }
 
-  return getVariableRate(state);
-};
-
-export const getExistingPositionMode = (state: Draft<SliceState>) => {
-  if (state.position.status !== 'success' || !state.position.value) {
-    return null;
-  }
-
-  return state.position.value.positionType === 1 ? 'fixed' : 'variable';
-};
-
-export const getExistingPositionNotional = (state: Draft<SliceState>) => {
-  if (state.position.status !== 'success' || !state.position.value) {
-    return null;
-  }
-
-  return state.position.value.notional;
-};
-
-export const getEditPositionTokenBalance = (state: Draft<SliceState>) => {
-  let fixedTokenBalance = 0;
-  let variableTokenBalance = 0;
-
-  if (state.position.status === 'success' && state.position.value) {
-    fixedTokenBalance += state.position.value.fixedTokenBalance;
-    variableTokenBalance += state.position.value.variableTokenBalance;
-  }
-
-  if (state.prospectiveSwap.infoPostSwap.status === 'success') {
-    fixedTokenBalance += state.prospectiveSwap.infoPostSwap.value.fixedTokenDeltaBalance;
-    variableTokenBalance += state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance;
-  }
-
-  return {
-    fixedTokenBalance,
-    variableTokenBalance,
-  };
-};
-
-export const getEditPositionMode = (state: Draft<SliceState>) => {
-  return getEditPositionTokenBalance(state).variableTokenBalance < 0 ? 'fixed' : 'variable';
-};
-
-export const getEditPositionFixedRate = (state: Draft<SliceState>) => {
-  if (state.prospectiveSwap.cashflowInfo.status === 'success') {
-    if (getEditPositionNotional(state) === 0) {
-      return null;
-    }
-
-    return state.prospectiveSwap.cashflowInfo.averageFixedRate;
-  }
-
-  return null;
-};
-
-export const getEditPositionVariableRate = (state: Draft<SliceState>) => {
-  if (getEditPositionNotional(state) === 0) {
-    return null;
-  }
-
-  return getVariableRate(state);
+  return selectedPositionNotional;
 };
 
 export const getEditPositionNotional = (state: Draft<SliceState>) => {
-  const { variableTokenBalance: notional } = getEditPositionTokenBalance(state);
-  return Math.abs(notional);
-};
+  let editPositionNotional = 0;
 
-export const getNewPositionFixedRate = (state: Draft<SliceState>) => {
-  if (state.prospectiveSwap.infoPostSwap.status === 'success') {
-    return state.prospectiveSwap.infoPostSwap.value.averageFixedRate;
+  if (state.selectedPosition !== null) {
+    editPositionNotional += state.selectedPosition.notional;
   }
 
-  if (state.fixedRate.status === 'success') {
-    return state.fixedRate.value;
+  if (state.userInput.notionalAmount.value > 0) {
+    if (state.userInput.notionalAmount.editMode === 'add') {
+      editPositionNotional += state.userInput.notionalAmount.value;
+    } else {
+      editPositionNotional -= state.userInput.notionalAmount.value;
+    }
   }
 
-  return null;
+  if (editPositionNotional < 0) {
+    return 0;
+  }
+
+  return editPositionNotional;
 };
 
 export const getVariableRate = (state: Draft<SliceState>) => {

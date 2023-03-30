@@ -2,12 +2,10 @@ import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
-  selectAvailableNotional,
+  LpFormNumberLimits,
   selectUserInputNotionalInfo,
-  SwapFormNumberLimits,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 
 type NewNotionalAmountFieldUIProps = {
@@ -28,7 +26,6 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
   bottomLeftTextTypographyToken,
 }) => {
   const notionalInfo = useAppSelector(selectUserInputNotionalInfo);
-  const notionalAvailable = useAppSelector(selectAvailableNotional);
 
   return (
     <NotionalAmountFieldBox>
@@ -39,12 +36,12 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-        bottomRightTextValue={formatNumber(notionalAvailable)}
-        decimalsLimit={SwapFormNumberLimits.decimalLimit}
+        // bottomRightTextValue={formatNumber(notionalAvailable)}
+        decimalsLimit={LpFormNumberLimits.decimalLimit}
         error={notionalInfo.error !== null}
         label="Notional Amount"
         labelTypographyToken={labelTypographyToken}
-        maxLength={SwapFormNumberLimits.digitLimit}
+        maxLength={LpFormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When trading rates, the amount you receive and pay is calculated as a percentage of the notional value you choose."
         value={localNotional !== null ? localNotional : undefined}

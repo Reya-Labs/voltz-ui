@@ -1,5 +1,6 @@
 import { showNotification } from 'brokoli-ui';
-import React, { useCallback, useEffect, useState } from 'react';
+import debounce from 'lodash.debounce';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   selectIsLeverageDisabled,
@@ -10,6 +11,7 @@ import {
 } from '../../../../../app/features/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useWallet } from '../../../../../hooks/useWallet';
+import { stringToBigFloat } from '../../../../../utilities/number';
 import { LeverageField as LeverageFieldComponent } from '../../../../components/LeverageField';
 type NotionalAmountProps = {};
 
@@ -20,6 +22,13 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
   const [notificationRead, setNotificationRead] = useState(false);
   const { maxLeverage, leverageOptions } = useAppSelector(selectLeverageOptions);
   const { account } = useWallet();
+  const [localLeverage, setLocalLeverage] = useState<string | undefined>(
+    leverage ? leverage.toFixed(2) : '',
+  );
+
+  useEffect(() => {
+    setLocalLeverage(leverage ? leverage.toFixed(2) : '');
+  }, [leverage]);
 
   const showLowLeverageNotification = useAppSelector(selectShowLeverageNotification);
 
@@ -36,23 +45,43 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
     }
   }, [notificationRead, showLowLeverageNotification]);
 
-  const handleOnChange = useCallback(
-    (value: number, changeType: 'button' | 'input') => {
-      dispatch(
-        setLeverageAction({
-          value,
-          account: account || '',
-          changeType,
-        }),
-      );
-    },
+  const debouncedSetLeverage = useMemo(
+    () =>
+      debounce((value: number | undefined, changeType: 'button' | 'input') => {
+        dispatch(
+          setLeverageAction({
+            value: value === undefined ? NaN : value,
+            account: account || '',
+            changeType,
+          }),
+        );
+      }, 300),
     [account, dispatch],
   );
+
+  const handleOnChange = useCallback(
+    (value: string | undefined, changeType: 'button' | 'input') => {
+      setLocalLeverage(value);
+
+      const valueAsNumber = value ? stringToBigFloat(value) : undefined;
+      debouncedSetLeverage(valueAsNumber, changeType);
+    },
+    [debouncedSetLeverage],
+  );
+
+  // Stop the invocation of the debounced function
+  // after unmounting
+  useEffect(() => {
+    return () => {
+      debouncedSetLeverage.cancel();
+    };
+  }, []);
 
   return (
     <LeverageFieldComponent
       disabled={isLeverageDisabled || maxLeverage === '--'}
-      leverage={leverage || undefined}
+      error={!localLeverage}
+      leverage={localLeverage}
       leverageOptions={leverageOptions}
       maxLeverage={maxLeverage}
       onLeverageChange={handleOnChange}

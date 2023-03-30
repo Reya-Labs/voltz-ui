@@ -1,21 +1,25 @@
 import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import {
   getFixedRateThunk,
-  getInfoPostSwapThunk,
-  getPoolSwapInfoThunk,
+  getInfoPostLpThunk,
+  getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getVariableRate24hAgoThunk,
   getVariableRateThunk,
   getWalletBalanceThunk,
-  selectPoolSwapInfoStatus,
-  selectSwapFormAMM,
-  selectSwapFormPosition,
-  selectSwapFormPositionFetchingStatus,
-  setSignerAndPositionForAMMThunk,
-  setSwapFormAMMAction,
+  selectLpFormAMM,
+  selectLpFormPositionsFetchingStatus,
+  selectLpFormSelectedPosition,
+  selectPoolLpInfoStatus,
+  selectUserInputFixedLower,
+  selectUserInputFixedUpper,
+  setLpFormAMMAction,
+  setSignerAndPositionsForAMMThunk,
+  setUserInputFixedLowerAction,
+  setUserInputFixedUpperAction,
 } from '../../../../app/features/lp-form';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -32,15 +36,21 @@ export type UseAMMsResult = {
 };
 
 export const useLPFormAMM = (): UseAMMsResult => {
+  const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
-  // TODO: Artur Rename any reference of SwapForm with LPForm
-  const aMM = useAppSelector(selectSwapFormAMM);
-  const position = useAppSelector(selectSwapFormPosition);
-  const positionFetchingStatus = useAppSelector(selectSwapFormPositionFetchingStatus);
-  const poolSwapInfoStatus = useAppSelector(selectPoolSwapInfoStatus);
+  const aMM = useAppSelector(selectLpFormAMM);
+  const selectedPosition = useAppSelector(selectLpFormSelectedPosition);
+  const positionsFetchingStatus = useAppSelector(selectLpFormPositionsFetchingStatus);
+  const poolLpInfoStatus = useAppSelector(selectPoolLpInfoStatus);
   const chainId = useAppSelector(selectChainId);
+  const queryFixedLower = searchParams.get('fixedLower');
+  const queryFixedUpper = searchParams.get('fixedUpper');
+
+  const fixedRateLower = useAppSelector(selectUserInputFixedLower);
+  const fixedRateUpper = useAppSelector(selectUserInputFixedUpper);
+
   const [loading, setLoading] = useState(true);
 
   const { signer } = useWallet();
@@ -64,9 +74,8 @@ export const useLPFormAMM = (): UseAMMsResult => {
       return;
     }
 
-    // TODO: Artur change name to LP FORM, this part of codes update the lp-form/reducer to have a reference of AMM
     dispatch(
-      setSwapFormAMMAction({
+      setLpFormAMMAction({
         amm: foundAMM ? foundAMM : null,
       }),
     );
@@ -81,9 +90,14 @@ export const useLPFormAMM = (): UseAMMsResult => {
     void dispatch(getFixedRateThunk());
     void dispatch(getVariableRateThunk());
     void dispatch(getVariableRate24hAgoThunk());
-    // TODO: Artur + Filip, check if this is really needed
-    void dispatch(getPoolSwapInfoThunk());
   }, [dispatch, aMM]);
+
+  useEffect(() => {
+    if (!aMM) {
+      return;
+    }
+    void dispatch(getPoolLpInfoThunk());
+  }, [dispatch, aMM, fixedRateLower, fixedRateUpper]);
 
   useEffect(() => {
     if (!chainId) {
@@ -96,7 +110,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
       return;
     }
     void dispatch(
-      setSignerAndPositionForAMMThunk({
+      setSignerAndPositionsForAMMThunk({
         signer,
         chainId,
       }),
@@ -104,34 +118,52 @@ export const useLPFormAMM = (): UseAMMsResult => {
   }, [dispatch, aMMsLoading, error, chainId, signer]);
 
   useEffect(() => {
-    if (!aMM || !aMM.signer || !chainId) {
+    if (positionsFetchingStatus !== 'success') {
+      return;
+    }
+    if (!queryFixedLower || !queryFixedUpper) {
+      return;
+    }
+    const fixedLower = parseFloat(queryFixedLower);
+    const fixedUpper = parseFloat(queryFixedUpper);
+    if (isNaN(fixedLower) || isNaN(fixedUpper)) {
       return;
     }
 
+    dispatch(
+      setUserInputFixedLowerAction({
+        value: fixedLower,
+      }),
+    );
+    dispatch(
+      setUserInputFixedUpperAction({
+        value: fixedUpper,
+      }),
+    );
+  }, [dispatch, positionsFetchingStatus, queryFixedLower, queryFixedUpper]);
+
+  useEffect(() => {
     void dispatch(getWalletBalanceThunk());
+    if (!chainId) {
+      return;
+    }
     void dispatch(
       getUnderlyingTokenAllowanceThunk({ chainId, alchemyApiKey: getAlchemyKeyForChain(chainId) }),
     );
   }, [dispatch, aMM, aMM?.signer, chainId]);
 
   useEffect(() => {
-    if (!position) {
-      return;
-    }
-
-    void dispatch(getInfoPostSwapThunk());
-  }, [dispatch, position]);
+    void dispatch(getInfoPostLpThunk());
+  }, [dispatch, aMM, aMM?.signer, selectedPosition]);
 
   return {
     aMM,
     loading:
       idle ||
-      positionFetchingStatus === 'idle' ||
-      poolSwapInfoStatus === 'idle' ||
+      positionsFetchingStatus === 'idle' ||
       loading ||
-      positionFetchingStatus === 'pending' ||
-      poolSwapInfoStatus === 'pending',
+      positionsFetchingStatus === 'pending',
     noAMMFound: !aMM && !loading,
-    error: error || positionFetchingStatus === 'error' || poolSwapInfoStatus === 'error',
+    error: error || positionsFetchingStatus === 'error' || poolLpInfoStatus === 'error',
   };
 };
