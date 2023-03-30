@@ -56,6 +56,7 @@ import {
   selectUserInputNotionalInfo,
   selectVariableRate24hDelta,
   selectVariableRateInfo,
+  selectVariableRateValueFormatted,
   selectWalletBalance,
 } from './selectors';
 import {
@@ -1986,6 +1987,34 @@ describe('swap-form.selectors', () => {
         };
         (formatNumber as jest.Mock).mockImplementationOnce((value: number) => `formatted_${value}`);
         const result = selectFixedRateValueFormatted(state as never);
+        expect(result).toBe('formatted_123.456');
+        expect(formatNumber).toHaveBeenCalledWith(123.456);
+      });
+    });
+
+    describe('selectVariableRateValueFormatted', () => {
+      beforeEach(() => {
+        jest.clearAllMocks();
+      });
+
+      it('should return "--" if variable rate status is not "success"', () => {
+        const state = {
+          swapForm: {
+            variableRate: { status: 'pending' },
+          },
+        };
+        const result = selectVariableRateValueFormatted(state as never);
+        expect(result).toBe('--');
+      });
+
+      it('should return formatted variable rate value', () => {
+        const state = {
+          swapForm: {
+            variableRate: { status: 'success', value: 123.456 },
+          },
+        };
+        (formatNumber as jest.Mock).mockImplementationOnce((value: number) => `formatted_${value}`);
+        const result = selectVariableRateValueFormatted(state as never);
         expect(result).toBe('formatted_123.456');
         expect(formatNumber).toHaveBeenCalledWith(123.456);
       });
