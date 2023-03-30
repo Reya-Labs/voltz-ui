@@ -269,7 +269,7 @@ export const selectSlippageFormatted = (state: RootState) => {
       state.swapForm.fixedRate.value,
   );
 
-  return slippage !== null ? formatNumber(slippage) : '--';
+  return formatNumber(slippage);
 };
 
 // ------------ Swap Confirmation Flow Selectors ------------
