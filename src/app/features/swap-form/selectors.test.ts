@@ -19,6 +19,7 @@ import {
   selectExistingPositionPayingRateFormatted,
   selectExistingPositionReceivingRateFormatted,
   selectFixedRateInfo,
+  selectFixedRateValueFormatted,
   selectInfoPostSwap,
   selectIsGetInfoPostSwapLoading,
   selectIsLeverageDisabled,
@@ -1959,6 +1960,34 @@ describe('swap-form.selectors', () => {
         const result = selectPositionMarginFormatted(state as never);
         expect(result).toBe(formattedMargin);
         expect(swapFormCompactFormat).toHaveBeenCalledWith(margin);
+      });
+    });
+
+    describe('selectFixedRateValueFormatted', () => {
+      beforeEach(() => {
+        jest.clearAllMocks();
+      });
+
+      it('should return "--" if fixed rate status is not "success"', () => {
+        const state = {
+          swapForm: {
+            fixedRate: { status: 'pending' },
+          },
+        };
+        const result = selectFixedRateValueFormatted(state as never);
+        expect(result).toBe('--');
+      });
+
+      it('should return formatted fixed rate value', () => {
+        const state = {
+          swapForm: {
+            fixedRate: { status: 'success', value: 123.456 },
+          },
+        };
+        (formatNumber as jest.Mock).mockImplementationOnce((value: number) => `formatted_${value}`);
+        const result = selectFixedRateValueFormatted(state as never);
+        expect(result).toBe('formatted_123.456');
+        expect(formatNumber).toHaveBeenCalledWith(123.456);
       });
     });
   });
