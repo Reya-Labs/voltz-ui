@@ -25,14 +25,14 @@ const ethSeasons: Season[] = [
     label: 'Season 02',
     shortName: '02',
     startDate: DateTime.fromSQL('2022-12-31 12:00:00', { zone: 'utc' }),
-    endDate: DateTime.fromSQL('2023-03-29 11:59:59', { zone: 'utc' }), // TODO: change after QA
+    endDate: DateTime.fromSQL('2023-03-30 23:59:59', { zone: 'utc' }),
     claimingEnabled: false,
   },
   {
     id: 3,
     label: 'Season 03',
     shortName: '03',
-    startDate: DateTime.fromSQL('2023-03-29 12:00:00', { zone: 'utc' }), // TODO: change after QA
+    startDate: DateTime.fromSQL('2023-03-31 00:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2023-06-30 23:59:59', { zone: 'utc' }),
     claimingEnabled: false,
   },
@@ -55,14 +55,6 @@ const ethSeasons: Season[] = [
 ];
 
 const arbitrumSeasons: Season[] = [
-  {
-    id: 2,
-    label: 'Season 02',
-    shortName: '02',
-    startDate: DateTime.fromSQL('2022-12-31 12:00:00', { zone: 'utc' }),
-    endDate: DateTime.fromSQL('2023-03-31 11:59:59', { zone: 'utc' }), // TODO: remove after QA
-    claimingEnabled: false,
-  },
   {
     id: 3,
     label: 'Season 03',
