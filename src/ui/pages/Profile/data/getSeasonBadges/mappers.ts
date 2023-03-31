@@ -283,11 +283,7 @@ const arbitrumChainSeasonBadgeVariants: SeasonBadgeVariants = {
     's3BeWaterMyFriendArbitrum',
     's3YikesArbitrum',
     's3MaxBiddingArbitrum',
-    's3TopTraderArbitrum',
-    's3MellowLpVaultTier1Arbitrum',
-    's3MellowLpVaultTier2Arbitrum',
-    's3MellowLpVaultTier3Arbitrum',
-    ...NON_PROGRAMMATIC_BADGES,
+    's3TopTraderArbitrum'
   ],
   4: [],
   5: [],
