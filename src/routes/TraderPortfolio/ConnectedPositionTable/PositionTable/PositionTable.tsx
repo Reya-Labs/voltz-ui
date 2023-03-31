@@ -131,6 +131,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 }
                 positionType={pos.positionType}
                 rolloverAvailable={rolloverAvailable}
+                settlementCashflowInUSD={pos.settlementCashflowInUSD}
                 onRollover={() => handleSelectRow(index, 'rollover')}
                 onSelect={
                   closeToMaturity

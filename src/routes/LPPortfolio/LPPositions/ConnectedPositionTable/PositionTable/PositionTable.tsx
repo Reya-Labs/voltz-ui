@@ -67,6 +67,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 isBothTraderAndLP={position.isBothTraderAndLP ?? false}
                 isSettled={position.isSettled}
                 rolloverAvailable={rolloverAvailable}
+                settlementCashflowInUSD={position.settlementCashflowInUSD}
                 onRollover={() => handleSelectRow(position, 'rollover')}
                 onSettle={() => onSettle(position)}
               />
