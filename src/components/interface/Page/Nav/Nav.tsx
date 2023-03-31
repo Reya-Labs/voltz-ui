@@ -67,10 +67,10 @@ export const Nav: React.FunctionComponent = React.memo(() => {
       <NavLink hidden={true} link={`/${routes.BORROW_POS}`}>
         Fixed Borrow
       </NavLink>
-      <NavLink hidden={isArbitrum} isNew={true} link={`/${routes.TRADING_LEAGUE}`}>
+      <NavLink hidden={false} isNew={true} link={`/${routes.TRADING_LEAGUE}`}>
         Leaderboard
       </NavLink>
-      <NavLink hidden={isArbitrum} isNew={true} link={`/${routes.PROFILE}`}>
+      <NavLink hidden={false} isNew={true} link={`/${routes.PROFILE}`}>
         Profile
       </NavLink>
     </NavBox>
