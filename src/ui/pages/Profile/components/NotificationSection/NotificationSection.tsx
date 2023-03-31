@@ -18,6 +18,7 @@ type NotificationSectionProps = {
   onClaimBulkClick: () => void;
   onCopyLinkButtonClick: () => void;
   copyLinkButtonMode: CopyLinkButtonProps['mode'];
+  claimingDisabled: boolean;
 };
 export const NotificationSection: React.FunctionComponent<NotificationSectionProps> = ({
   isOnGoingSeason,
@@ -26,6 +27,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
   onClaimBulkClick,
   onCopyLinkButtonClick,
   copyLinkButtonMode,
+  claimingDisabled,
 }) => {
   const copyLinkNotification = (
     <NotificationContainer>
@@ -45,6 +47,22 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
         <NotificationContainer>
           <NotificationBox>
             <ProfileNotification pillText="Claim" text="Unavailable until the end of the season" />
+          </NotificationBox>
+        </NotificationContainer>
+      </NotificationsContainer>
+    );
+  }
+
+  if (claimingDisabled) {
+    return (
+      <NotificationsContainer>
+        {copyLinkNotification}
+        <NotificationContainer>
+          <NotificationBox>
+            <ProfileNotification
+              pillText="Claim"
+              text="Unavailable at this moment. Keep an eye out for announcements"
+            />
           </NotificationBox>
         </NotificationContainer>
       </NotificationsContainer>

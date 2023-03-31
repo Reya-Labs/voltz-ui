@@ -278,6 +278,7 @@ export const Profile: React.FunctionComponent = () => {
       chainId={chainId}
       claimButtonBulkMode={claimButtonBulkMode}
       claimButtonModes={claimButtonModes}
+      claimingEnabled={season.claimingEnabled}
       copyLinkButtonMode={copyLinkButtonMode}
       isOnGoingSeason={season.id === currentActiveSeason.id}
       loading={loading}

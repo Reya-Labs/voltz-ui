@@ -10,6 +10,7 @@ const ethSeasons: Season[] = [
     shortName: 'OG',
     startDate: DateTime.fromSQL('2022-06-01 00:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2022-09-30 23:59:59', { zone: 'utc' }),
+    claimingEnabled: true,
   },
   {
     id: 1,
@@ -17,6 +18,7 @@ const ethSeasons: Season[] = [
     shortName: '01',
     startDate: DateTime.fromSQL('2022-10-01 00:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2022-12-31 11:59:59', { zone: 'utc' }),
+    claimingEnabled: true,
   },
   {
     id: 2,
@@ -24,6 +26,7 @@ const ethSeasons: Season[] = [
     shortName: '02',
     startDate: DateTime.fromSQL('2022-12-31 12:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2023-03-29 11:59:59', { zone: 'utc' }), // TODO: change after QA
+    claimingEnabled: false,
   },
   {
     id: 3,
@@ -31,6 +34,7 @@ const ethSeasons: Season[] = [
     shortName: '03',
     startDate: DateTime.fromSQL('2023-03-29 12:00:00', { zone: 'utc' }), // TODO: change after QA
     endDate: DateTime.fromSQL('2023-06-30 23:59:59', { zone: 'utc' }),
+    claimingEnabled: false,
   },
   {
     id: 4,
@@ -38,6 +42,7 @@ const ethSeasons: Season[] = [
     shortName: '04',
     startDate: DateTime.fromSQL('2023-07-01 00:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2023-09-30 23:59:59', { zone: 'utc' }),
+    claimingEnabled: false,
   },
   {
     id: 5,
@@ -45,6 +50,7 @@ const ethSeasons: Season[] = [
     shortName: '05',
     startDate: DateTime.fromSQL('2023-10-01 00:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2023-12-31 23:59:59', { zone: 'utc' }),
+    claimingEnabled: false,
   },
 ];
 
@@ -55,6 +61,7 @@ const arbitrumSeasons: Season[] = [
     shortName: '02',
     startDate: DateTime.fromSQL('2022-12-31 12:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2023-03-31 11:59:59', { zone: 'utc' }), // TODO: remove after QA
+    claimingEnabled: false,
   },
   {
     id: 3,
@@ -62,6 +69,7 @@ const arbitrumSeasons: Season[] = [
     shortName: '03',
     startDate: DateTime.fromSQL('2023-03-31 12:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2023-06-30 23:59:59', { zone: 'utc' }),
+    claimingEnabled: false,
   },
   {
     id: 4,
@@ -69,6 +77,7 @@ const arbitrumSeasons: Season[] = [
     shortName: '04',
     startDate: DateTime.fromSQL('2023-07-01 00:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2023-09-30 23:59:59', { zone: 'utc' }),
+    claimingEnabled: false,
   },
   {
     id: 5,
@@ -76,6 +85,7 @@ const arbitrumSeasons: Season[] = [
     shortName: '05',
     startDate: DateTime.fromSQL('2023-10-01 00:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2023-12-31 23:59:59', { zone: 'utc' }),
+    claimingEnabled: false,
   },
 ];
 

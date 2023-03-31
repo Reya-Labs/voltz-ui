@@ -92,6 +92,7 @@ const Template: ComponentStory<typeof ProfilePageWalletConnected> = (args) => {
       badges={achievedBadges}
       claimButtonBulkMode={claimButtonBulkMode}
       claimButtonModes={claimButtonModes}
+      claimingEnabled={season.claimingEnabled}
       copyLinkButtonMode={copyLinkButtonMode}
       isOnGoingSeason={season.id === 1}
       season={season}

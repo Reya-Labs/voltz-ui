@@ -41,6 +41,7 @@ export type ProfilePageWalletConnectedProps = {
   season: Season;
   loading?: boolean;
   isOnGoingSeason: boolean;
+  claimingEnabled: boolean;
   seasonBadgeVariants: string[];
   onSeasonChange: (season: Season) => void;
   onClaimBulkClick?: (badgeVariants: BadgeVariant[]) => void;
@@ -59,6 +60,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     season,
     badges,
     loading,
+    claimingEnabled,
     isOnGoingSeason,
     seasonBadgeVariants = [],
     onSeasonChange = doNothing,
@@ -106,6 +108,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
     const handleSmoothScroll = React.useCallback((variant: BadgeVariant) => {
       badgeCardRefs.current[variant]?.scrollIntoView();
     }, []);
+
     return (
       <ContainerBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Black">
@@ -125,6 +128,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
         </Subheading>
         <NotificationSection
           claimButtonBulkMode={claimButtonBulkMode}
+          claimingDisabled={!claimingEnabled}
           copyLinkButtonMode={copyLinkButtonMode}
           isOnGoingSeason={isOnGoingSeason}
           notClaimedBadgesCount={notClaimedBadges.length}
@@ -158,7 +162,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
                     ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
                     claimButtonMode={claimButtonModes[badge.variant] || 'claim'}
                     claimedAt={badge.claimedAt}
-                    disableClaiming={isOnGoingSeason}
+                    disableClaiming={isOnGoingSeason || !claimingEnabled}
                     loading={loading}
                     variant={badge.variant}
                     onClaimButtonClick={() => onClaimButtonClick(badge.variant)}
