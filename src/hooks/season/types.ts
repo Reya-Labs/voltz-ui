@@ -7,4 +7,5 @@ export type Season = {
   shortName: string;
   startDate: DateTime;
   endDate: DateTime;
+  claimingEnabled: boolean;
 };
