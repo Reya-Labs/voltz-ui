@@ -59,7 +59,7 @@ const arbitrumSeasons: Season[] = [
     id: 3,
     label: 'Season 03',
     shortName: '03',
-    startDate: DateTime.fromSQL('2023-03-31 12:00:00', { zone: 'utc' }),
+    startDate: DateTime.fromSQL('2023-03-31 00:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2023-06-30 23:59:59', { zone: 'utc' }),
     claimingEnabled: false,
   },
