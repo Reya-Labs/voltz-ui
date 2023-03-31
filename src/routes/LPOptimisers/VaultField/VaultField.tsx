@@ -68,7 +68,7 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
             <IconLabel
               icon="information-circle"
               info="Estimated return of this strategy had it been running during the last quarter of 2022, depending on when the deposit was made."
-              label="ESTIMATED APY RANGING FROM"
+              label="HISTORIC ESTIMATED APY RANGING FROM"
             />
           }
         >
