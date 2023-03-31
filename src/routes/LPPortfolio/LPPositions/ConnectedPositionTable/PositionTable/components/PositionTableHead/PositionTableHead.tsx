@@ -36,6 +36,7 @@ export type PositionTableHeadProps = {
   fixedApr: number;
   fees: number;
   isBothTraderAndLP: boolean;
+  settlementCashflowInUSD: number;
 };
 
 const containerStyles: SystemStyleObject<Theme> = {
@@ -59,6 +60,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   fixedApr,
   fees,
   isBothTraderAndLP,
+  settlementCashflowInUSD,
 }) => {
   const FeesValueTypography = feesPositive
     ? PositiveFeesValueTypography
@@ -99,6 +101,11 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
 
         {beforeMaturity === false && !isSettled && (
           <>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <FeesTypography>
+                SETTLEMENT CASHFLOW: {formatNumber(settlementCashflowInUSD)} USD&nbsp;
+              </FeesTypography>
+            </Box>
             <SettleButton id={gaButtonId} onClick={onSettle}>
               Settle
             </SettleButton>

@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
 import isUndefined from 'lodash.isundefined';
 import React from 'react';
 
@@ -7,13 +8,26 @@ import {
   getPositionBadgeVariant,
   PositionBadge,
 } from '../../../../../../components/atomic/PositionBadge/PositionBadge';
+import { Typography } from '../../../../../../components/atomic/Typography/Typography';
 import {
   getHealthTextColor,
   HealthFactorText,
 } from '../../../../../../components/composite/HealthFactorText/HealthFactorText';
 import { SystemStyleObject, Theme } from '../../../../../../theme';
+import { formatNumber } from '../../../../../../utilities/number';
 import { BulletLabel } from './BulletLabel/BulletLabel';
 import { ReactComponent as EditIcon } from './editPosition.svg';
+
+const FeesTypography = styled(Typography)`
+  font-family: 'PixelOperatorMono', monospace;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+
+  /* Lavender Web */
+  color: #e5e1f9;
+`;
 
 export type PositionTableHeadProps = {
   poolTraderWithdrawable: boolean;
@@ -27,6 +41,7 @@ export type PositionTableHeadProps = {
   beforeMaturity?: boolean;
   healthFactor?: number;
   isBothTraderAndLP: boolean;
+  settlementCashflowInUSD: number;
 };
 
 const containerStyles: SystemStyleObject<Theme> = {
@@ -48,6 +63,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   beforeMaturity,
   healthFactor,
   isBothTraderAndLP,
+  settlementCashflowInUSD,
 }) => {
   const handleEditNotional = () => {
     onSelect && onSelect('notional');
@@ -97,6 +113,11 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
 
         {beforeMaturity === false && !isSettled && poolTraderWithdrawable && (
           <>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <FeesTypography>
+                SETTLEMENT CASHFLOW: {formatNumber(settlementCashflowInUSD)} USD&nbsp;
+              </FeesTypography>
+            </Box>
             <Button
               id={gaButtonId}
               size="xs"
