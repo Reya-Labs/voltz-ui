@@ -55,7 +55,7 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
         labelTypographyToken={labelTypographyToken}
         maxLength={LpFormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
-        tooltip="The protocol requires every lp position to have enough margin to support trades against their liquidity. Adding more than the minimum reduces liquidation risk."
+        tooltip="The protocol requires every LP position to have enough margin to support trades against their liquidity. Adding more than the minimum reduces liquidation risk."
         topRightText={`Wallet: ${`${walletBalance} ${underlyingTokenName.toUpperCase()}`}`}
         topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
         topRightTextTypographyToken={topRightTextTypographyToken}
