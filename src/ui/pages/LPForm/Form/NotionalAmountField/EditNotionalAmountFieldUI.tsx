@@ -64,7 +64,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         switchOnValue={'add'}
         switchValue={notionalAmountEditMode}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
-        tooltip="When providing liquidity, your pnl from fees and swap cashflows is calculated as a percentage of the notional value you choose."
+        tooltip="When providing liquidity, your profit or loss, generated from fees and funding rate cashflow, is calculated as a percentage of the notional value you choose."
         value={localNotional !== null ? localNotional : undefined}
         onChange={handleOnNotionalChange}
         onSwitchChange={handleOnSwitchChange}
