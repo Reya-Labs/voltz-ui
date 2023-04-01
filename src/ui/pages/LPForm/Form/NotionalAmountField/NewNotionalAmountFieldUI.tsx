@@ -43,7 +43,7 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
         labelTypographyToken={labelTypographyToken}
         maxLength={LpFormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
-        tooltip="When trading rates, the amount you receive and pay is calculated as a percentage of the notional value you choose."
+        tooltip="When providing liquidity, your pnl from fees and swap cashflows is calculated as a percentage of the notional value you choose."
         value={localNotional !== null ? localNotional : undefined}
         onChange={handleOnNotionalChange}
       />
