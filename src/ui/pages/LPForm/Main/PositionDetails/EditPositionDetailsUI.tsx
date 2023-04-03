@@ -109,18 +109,6 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           <>
             <BorderedBox>
               <LabelTokenTypography
-                colorToken="skyBlueCrayola"
-                label="Unrealised PnL"
-                labelColorToken="lavenderWeb3"
-                labelTypographyToken={labelTypographyToken}
-                token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={<PnLDetails />}
-                typographyToken={typographyToken}
-                value="+40.00"
-              />
-            </BorderedBox>
-            <BorderedBox>
-              <LabelTokenTypography
                 colorToken="wildStrawberry"
                 label="Realised PnL"
                 labelColorToken="lavenderWeb3"
@@ -129,6 +117,18 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                 tooltip={<PnLDetails />}
                 typographyToken={typographyToken}
                 value="-40.00"
+              />
+            </BorderedBox>
+            <BorderedBox>
+              <LabelTokenTypography
+                colorToken="skyBlueCrayola"
+                label="Unrealised PnL"
+                labelColorToken="lavenderWeb3"
+                labelTypographyToken={labelTypographyToken}
+                token={` ${underlyingTokenName.toUpperCase()}`}
+                tooltip={<PnLDetails />}
+                typographyToken={typographyToken}
+                value="+40.00"
               />
             </BorderedBox>
           </>

@@ -176,19 +176,6 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           )}
         </PayingBox>
         <CashFlowBox>
-        <LabelTokenTypography
-                colorToken="skyBlueCrayola"
-                label="Unrealised PnL"
-                labelColorToken="lavenderWeb3"
-                labelTypographyToken={labelTypographyToken}
-                token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={<PnLDetails />}
-                typographyToken={typographyToken}
-                value={unrealizedPnLFromSwaps}
-              />
-        </CashFlowBox>
-
-        <CashFlowBox>
           <LabelTokenTypography
                   colorToken="wildStrawberry"
                   label="Realised PnL"
@@ -199,6 +186,18 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                   typographyToken={typographyToken}
                   value={realizedPnLFromSwaps}
                 />
+        </CashFlowBox>
+        <CashFlowBox>
+        <LabelTokenTypography
+                colorToken="skyBlueCrayola"
+                label="Unrealised PnL"
+                labelColorToken="lavenderWeb3"
+                labelTypographyToken={labelTypographyToken}
+                token={` ${underlyingTokenName.toUpperCase()}`}
+                tooltip={<PnLDetails />}
+                typographyToken={typographyToken}
+                value={unrealizedPnLFromSwaps}
+              />
         </CashFlowBox>
 
       </PositionDetailsRightBox>
