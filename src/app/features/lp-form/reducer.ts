@@ -598,12 +598,12 @@ export const slice = createSlice({
           },
         };
       })
-      .addCase(approveUnderlyingTokenThunk.rejected, (state) => {
+      .addCase(approveUnderlyingTokenThunk.rejected, (state, { payload }) => {
         state.submitButton = {
           state: 'approve',
           disabled: false,
           message: {
-            text: 'Signature declined by user',
+            text: payload as string,
             isError: true,
           },
         };
