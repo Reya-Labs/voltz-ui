@@ -26,6 +26,8 @@ import {
   ReceivingBox,
 } from './PositionDetails.styled';
 
+import { PnLDetails } from './PnLDetails';
+
 type EditPositionDetailsUIProps = {
   underlyingTokenName: string;
   actionLabelTypographyToken: TypographyToken;
@@ -173,31 +175,31 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           )}
         </PayingBox>
         <CashFlowBox>
-          {accruedCashflowFrom === accruedCashflowTo ? (
-            <LabelTokenTypography
-              colorToken="lavenderWeb"
-              label="Cash Flow"
-              labelColorToken="lavenderWeb3"
-              labelTypographyToken={labelTypographyToken}
-              token={` ${underlyingTokenName.toUpperCase()}`}
-              typographyToken={typographyToken}
-              value={accruedCashflowTo}
-            />
-          ) : (
-            <FromToTokenTypography
-              fromColorToken="lavenderWeb"
-              fromToken=""
-              fromValue={accruedCashflowFrom}
-              label="Cash Flow"
-              labelColorToken="lavenderWeb3"
-              labelTypographyToken={labelTypographyToken}
-              toColorToken="lavenderWeb"
-              toToken={` ${underlyingTokenName.toUpperCase()}`}
-              toValue={accruedCashflowTo}
-              typographyToken={typographyToken}
-            />
-          )}
+        <LabelTokenTypography
+                colorToken="skyBlueCrayola"
+                label="Unrealised PnL"
+                labelColorToken="lavenderWeb3"
+                labelTypographyToken={labelTypographyToken}
+                token={` ${underlyingTokenName.toUpperCase()}`}
+                tooltip={<PnLDetails />}
+                typographyToken={typographyToken}
+                value="+40.00"
+              />
         </CashFlowBox>
+
+        <CashFlowBox>
+          <LabelTokenTypography
+                  colorToken="wildStrawberry"
+                  label="Realised PnL"
+                  labelColorToken="lavenderWeb3"
+                  labelTypographyToken={labelTypographyToken}
+                  token={` ${underlyingTokenName.toUpperCase()}`}
+                  tooltip={<PnLDetails />}
+                  typographyToken={typographyToken}
+                  value="-40.00"
+                />
+        </CashFlowBox>
+
       </PositionDetailsRightBox>
     </PositionDetailsBox>
   );
