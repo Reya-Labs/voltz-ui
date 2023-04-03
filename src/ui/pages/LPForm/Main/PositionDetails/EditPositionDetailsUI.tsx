@@ -40,7 +40,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   const fixedLower = useAppSelector(selectExistingPositionFixedLower);
   const fixedUpper = useAppSelector(selectExistingPositionFixedUpper);
   // TODO: Artur, Filip when SDK has support for PNL show it
-  const hidePNL = true;
+  const hidePNL = false;
 
   const existingPosition = useAppSelector(selectLpFormSelectedPosition);
   if (!existingPosition) {
