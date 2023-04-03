@@ -2,8 +2,6 @@ import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'br
 import React from 'react';
 
 import {
-  selectAccruedCashflowEditPositionFormatted,
-  selectAccruedCashflowExistingPositionFormatted,
   selectEditPositionCompactNotional,
   selectEditPositionMode,
   selectEditPositionPayingRateFormatted,
@@ -13,6 +11,8 @@ import {
   selectExistingPositionPayingRateFormatted,
   selectExistingPositionReceivingRateFormatted,
   selectSwapFormPosition,
+  selectEditPositionRealizedPnLFromSwapsFormatted,
+  selectEditPositionUnrealizedPnLFromSwapsFormatted
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MODE_COLOR_TOKEN_MAP, MODE_TEXT_MAP } from '../../helpers';
@@ -51,10 +51,11 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   const editPositionMode = useAppSelector(selectEditPositionMode);
   const receivingRateTo = useAppSelector(selectEditPositionReceivingRateFormatted);
   const payingRateTo = useAppSelector(selectEditPositionPayingRateFormatted);
-  const editPositionCompactNotional = useAppSelector(selectEditPositionCompactNotional);
 
-  const accruedCashflowFrom = useAppSelector(selectAccruedCashflowExistingPositionFormatted);
-  const accruedCashflowTo = useAppSelector(selectAccruedCashflowEditPositionFormatted);
+  const realizedPnLFromSwaps = useAppSelector(selectEditPositionRealizedPnLFromSwapsFormatted);
+  const unrealizedPnLFromSwaps = useAppSelector(selectEditPositionUnrealizedPnLFromSwapsFormatted);
+
+  const editPositionCompactNotional = useAppSelector(selectEditPositionCompactNotional);
 
   const existingPosition = useAppSelector(selectSwapFormPosition);
   if (!existingPosition) {
@@ -183,7 +184,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                 token={` ${underlyingTokenName.toUpperCase()}`}
                 tooltip={<PnLDetails />}
                 typographyToken={typographyToken}
-                value="+40.00"
+                value={unrealizedPnLFromSwaps}
               />
         </CashFlowBox>
 
@@ -196,7 +197,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                   token={` ${underlyingTokenName.toUpperCase()}`}
                   tooltip={<PnLDetails />}
                   typographyToken={typographyToken}
-                  value="-40.00"
+                  value={realizedPnLFromSwaps}
                 />
         </CashFlowBox>
 
