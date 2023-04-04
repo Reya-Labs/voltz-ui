@@ -26,7 +26,7 @@ const ethSeasons: Season[] = [
     shortName: '02',
     startDate: DateTime.fromSQL('2022-12-31 12:00:00', { zone: 'utc' }),
     endDate: DateTime.fromSQL('2023-03-30 23:59:59', { zone: 'utc' }),
-    claimingEnabled: false,
+    claimingEnabled: true,
   },
   {
     id: 3,
