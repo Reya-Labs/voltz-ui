@@ -17,9 +17,9 @@ import {
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
-  getVariableRate,
   getRealizedPnLFromSwaps,
   getUnrealizedPnLFromSwaps,
+  getVariableRate,
   hasExistingPosition,
   swapFormCompactFormat,
   swapFormCompactFormatToParts,
@@ -201,22 +201,17 @@ export const selectEditPositionReceivingRateFormatted = (state: RootState) => {
   return receivingRate === null ? '--' : swapFormFormatNumber(receivingRate);
 };
 
-export const selectEditPositionRealizedPnLFromSwapsFormatted = (state: RootState) => { 
-
+export const selectEditPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
   const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.swapForm);
 
   return realizedPnLFromSwaps === null ? '--' : swapFormFormatNumber(realizedPnLFromSwaps);
+};
 
-}
-
-export const selectEditPositionUnrealizedPnLFromSwapsFormatted = (state: RootState) => { 
-
+export const selectEditPositionUnrealizedPnLFromSwapsFormatted = (state: RootState) => {
   const unrealizedPnLFromSwaps = getUnrealizedPnLFromSwaps(state.swapForm);
 
   return unrealizedPnLFromSwaps === null ? '--' : swapFormFormatNumber(unrealizedPnLFromSwaps);
-
-}
-
+};
 
 export const selectEditPositionPayingRateFormatted = (state: RootState) => {
   const payingRate =
@@ -226,7 +221,6 @@ export const selectEditPositionPayingRateFormatted = (state: RootState) => {
 
   return payingRate === null ? '--' : swapFormFormatNumber(payingRate);
 };
-
 
 export const selectEditPositionCompactNotional = (state: RootState) => {
   const notional = getEditPositionNotional(state.swapForm);
