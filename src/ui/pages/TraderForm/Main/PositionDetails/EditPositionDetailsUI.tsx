@@ -5,17 +5,18 @@ import {
   selectEditPositionCompactNotional,
   selectEditPositionMode,
   selectEditPositionPayingRateFormatted,
+  selectEditPositionRealizedPnLFromSwapsFormatted,
   selectEditPositionReceivingRateFormatted,
+  selectEditPositionUnrealizedPnLFromSwapsFormatted,
   selectExistingPositionCompactNotional,
   selectExistingPositionMode,
   selectExistingPositionPayingRateFormatted,
   selectExistingPositionReceivingRateFormatted,
   selectSwapFormPosition,
-  selectEditPositionRealizedPnLFromSwapsFormatted,
-  selectEditPositionUnrealizedPnLFromSwapsFormatted
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MODE_COLOR_TOKEN_MAP, MODE_TEXT_MAP } from '../../helpers';
+import { PnLDetails } from './PnLDetails';
 import {
   CashFlowBox,
   NotionalBox,
@@ -25,8 +26,6 @@ import {
   PositionDetailsRightBox,
   ReceivingBox,
 } from './PositionDetails.styled';
-
-import { PnLDetails } from './PnLDetails';
 
 type EditPositionDetailsUIProps = {
   underlyingTokenName: string;
@@ -177,29 +176,28 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
         </PayingBox>
         <CashFlowBox>
           <LabelTokenTypography
-                  colorToken="wildStrawberry"
-                  label="Realised PnL"
-                  labelColorToken="lavenderWeb3"
-                  labelTypographyToken={labelTypographyToken}
-                  token={` ${underlyingTokenName.toUpperCase()}`}
-                  tooltip={<PnLDetails />}
-                  typographyToken={typographyToken}
-                  value={realizedPnLFromSwaps}
-                />
+            colorToken="wildStrawberry"
+            label="Realised PnL"
+            labelColorToken="lavenderWeb3"
+            labelTypographyToken={labelTypographyToken}
+            token={` ${underlyingTokenName.toUpperCase()}`}
+            tooltip={<PnLDetails />}
+            typographyToken={typographyToken}
+            value={realizedPnLFromSwaps}
+          />
         </CashFlowBox>
         <CashFlowBox>
-        <LabelTokenTypography
-                colorToken="skyBlueCrayola"
-                label="Unrealised PnL"
-                labelColorToken="lavenderWeb3"
-                labelTypographyToken={labelTypographyToken}
-                token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={<PnLDetails />}
-                typographyToken={typographyToken}
-                value={unrealizedPnLFromSwaps}
-              />
+          <LabelTokenTypography
+            colorToken="skyBlueCrayola"
+            label="Unrealised PnL"
+            labelColorToken="lavenderWeb3"
+            labelTypographyToken={labelTypographyToken}
+            token={` ${underlyingTokenName.toUpperCase()}`}
+            tooltip={<PnLDetails />}
+            typographyToken={typographyToken}
+            value={unrealizedPnLFromSwaps}
+          />
         </CashFlowBox>
-
       </PositionDetailsRightBox>
     </PositionDetailsBox>
   );
