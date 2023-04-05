@@ -9,12 +9,11 @@ import {
 } from '../../../../utilities/number';
 import { LpFormNumberLimits } from '../constants';
 import { SliceState } from '../reducer';
-export * from './lpFormFormatNumber';
 
 export const getRealizedPnLFromSwaps = (state: Draft<SliceState>) => {
   if (hasExistingPosition(state)) {
     // feels redundunt
-    if (state.selectedPosition) { 
+    if (state.selectedPosition) {
       return state.selectedPosition.realizedPnLFromSwaps;
     }
   }
@@ -23,7 +22,7 @@ export const getRealizedPnLFromSwaps = (state: Draft<SliceState>) => {
 
 export const getUnrealizedPnLFromSwaps = (state: Draft<SliceState>) => {
   if (hasExistingPosition(state)) {
-    if (state.selectedPosition) { 
+    if (state.selectedPosition) {
       return state.selectedPosition?.unrealizedPnLFromSwaps;
     }
   }
