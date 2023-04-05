@@ -9,25 +9,27 @@ import {
 } from '../../../../utilities/number';
 import { LpFormNumberLimits } from '../constants';
 import { SliceState } from '../reducer';
-
+export * from './lpFormFormatNumber';
 
 export const getRealizedPnLFromSwaps = (state: Draft<SliceState>) => {
-  
   if (hasExistingPosition(state)) {
-    return state.selectedPosition?.realizedPnLFromSwaps;
+    // feels redundunt
+    if (state.selectedPosition) { 
+      return state.selectedPosition.realizedPnLFromSwaps;
+    }
   }
-
   return null;
 };
 
 export const getUnrealizedPnLFromSwaps = (state: Draft<SliceState>) => {
   if (hasExistingPosition(state)) {
-    return state.selectedPosition?.unrealizedPnLFromSwaps;
+    if (state.selectedPosition) { 
+      return state.selectedPosition?.unrealizedPnLFromSwaps;
+    }
   }
 
   return null;
 };
-
 
 export const lpFormFormatNumber = (value: number) => {
   if (value < 1) {
