@@ -7,6 +7,8 @@ import {
   selectExistingPositionFixedLower,
   selectExistingPositionFixedUpper,
   selectLpFormSelectedPosition,
+  selectEditLpPositionRealizedPnLFromSwapsFormatted,
+  selectEditLpPositionUnrealizedPnLFromSwapsFormatted
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
@@ -39,6 +41,12 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   const editPositionCompactNotional = useAppSelector(selectEditPositionCompactNotional);
   const fixedLower = useAppSelector(selectExistingPositionFixedLower);
   const fixedUpper = useAppSelector(selectExistingPositionFixedUpper);
+
+
+  // pnl
+  const realizedPnLFromSwaps = useAppSelector(selectEditLpPositionRealizedPnLFromSwapsFormatted);
+  const unrealizedPnLFromSwaps = useAppSelector(selectEditLpPositionUnrealizedPnLFromSwapsFormatted);
+
   const hidePNL = false;
 
   const existingPosition = useAppSelector(selectLpFormSelectedPosition);
@@ -116,7 +124,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                 token={` ${underlyingTokenName.toUpperCase()}`}
                 tooltip={<PnLDetails />}
                 typographyToken={typographyToken}
-                value="-40.00"
+                value={realizedPnLFromSwaps}
               />
             </BorderedBox>
             <BorderedBox>
@@ -128,7 +136,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                 token={` ${underlyingTokenName.toUpperCase()}`}
                 tooltip={<PnLDetails />}
                 typographyToken={typographyToken}
-                value="+40.00"
+                value={unrealizedPnLFromSwaps}
               />
             </BorderedBox>
           </>
