@@ -8,13 +8,14 @@ import {
   getEditPositionNotional,
   getProspectiveLpMargin,
   getProspectiveLpNotional,
+  getRealizedPnLFromSwaps,
   getSelectedPositionNotional,
+  getUnrealizedPnLFromSwaps,
   hasExistingPosition,
   lpFormCompactFormat,
   lpFormCompactFormatToParts,
+  lpFormFormatNumber,
   lpFormLimitAndFormatNumber,
-  getRealizedPnLFromSwaps,
-  getUnrealizedPnLFromSwaps
 } from './utils';
 
 // ------------ General Lp Form State Info ------------
@@ -111,7 +112,6 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
   return null;
 };
 
-
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.lpForm.userInput.notionalAmount.error) return null;
 
@@ -137,20 +137,13 @@ export const selectExistingPositionCompactNotional = (state: RootState) => {
 
 export const selectEditLpPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
   const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.lpForm);
-
-  // todo: introduce smth like swap form format number
-
-  return realizedPnLFromSwaps === null ? '--' : realizedPnLFromSwaps;
+  return realizedPnLFromSwaps === null ? '--' : lpFormFormatNumber(realizedPnLFromSwaps);
 };
 
 export const selectEditLpPositionUnrealizedPnLFromSwapsFormatted = (state: RootState) => {
   const unrealizedPnLFromSwaps = getUnrealizedPnLFromSwaps(state.lpForm);
-
-  // todo: introduce smth like swap form format number
-
-  return unrealizedPnLFromSwaps === null ? '--' : unrealizedPnLFromSwaps;
+  return unrealizedPnLFromSwaps === null ? '--' : lpFormFormatNumber(unrealizedPnLFromSwaps);
 };
-
 
 export const selectExistingPositionFixedLower = (state: RootState) => {
   if (state.lpForm.selectedPosition === null) {

@@ -2,13 +2,13 @@ import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'br
 import React from 'react';
 
 import {
+  selectEditLpPositionRealizedPnLFromSwapsFormatted,
+  selectEditLpPositionUnrealizedPnLFromSwapsFormatted,
   selectEditPositionCompactNotional,
   selectExistingPositionCompactNotional,
   selectExistingPositionFixedLower,
   selectExistingPositionFixedUpper,
   selectLpFormSelectedPosition,
-  selectEditLpPositionRealizedPnLFromSwapsFormatted,
-  selectEditLpPositionUnrealizedPnLFromSwapsFormatted
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
@@ -42,10 +42,11 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   const fixedLower = useAppSelector(selectExistingPositionFixedLower);
   const fixedUpper = useAppSelector(selectExistingPositionFixedUpper);
 
-
   // pnl
   const realizedPnLFromSwaps = useAppSelector(selectEditLpPositionRealizedPnLFromSwapsFormatted);
-  const unrealizedPnLFromSwaps = useAppSelector(selectEditLpPositionUnrealizedPnLFromSwapsFormatted);
+  const unrealizedPnLFromSwaps = useAppSelector(
+    selectEditLpPositionUnrealizedPnLFromSwapsFormatted,
+  );
 
   const hidePNL = false;
 
