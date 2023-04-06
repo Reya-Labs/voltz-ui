@@ -264,12 +264,16 @@ export const selectSlippageFormatted = (state: RootState) => {
     return '--';
   }
 
+  if (state.swapForm.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance === 0) {
+    return swapFormFormatNumber(0);
+  }
+
   const slippage = Math.abs(
     state.swapForm.prospectiveSwap.infoPostSwap.value.averageFixedRate -
       state.swapForm.fixedRate.value,
   );
 
-  return formatNumber(slippage);
+  return swapFormFormatNumber(slippage);
 };
 
 // ------------ Swap Confirmation Flow Selectors ------------
