@@ -1546,6 +1546,10 @@ describe('swap-form.selectors', () => {
   });
 
   describe('selectSlippageFormatted', () => {
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
     it('should return -- if fixedRate status is not success', () => {
       const mockState = {
         swapForm: {
@@ -1597,15 +1601,37 @@ describe('swap-form.selectors', () => {
             infoPostSwap: {
               status: 'success',
               value: {
-                averageFixedRate: 0.08,
+                averageFixedRate: 0.008,
               },
             },
           },
         },
       };
-      (formatNumber as jest.Mock).mockImplementationOnce((n: number) => n.toFixed(2));
+      (swapFormFormatNumber as jest.Mock).mockImplementationOnce((n: number) => n.toFixed(3));
       const result = selectSlippageFormatted(mockState as never);
-      expect(result).toBe('0.02');
+      expect(result).toBe('0.092');
+    });
+
+    it('should return 0 if info post swap has 0 notional', () => {
+      const mockState = {
+        swapForm: {
+          fixedRate: {
+            status: 'success',
+            value: 0.1,
+          },
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'success',
+              value: {
+                variableTokenDeltaBalance: 0,
+              },
+            },
+          },
+        },
+      };
+      (swapFormFormatNumber as jest.Mock).mockImplementationOnce((n: number) => n.toFixed());
+      const result = selectSlippageFormatted(mockState as never);
+      expect(result).toBe('0');
     });
   });
 
