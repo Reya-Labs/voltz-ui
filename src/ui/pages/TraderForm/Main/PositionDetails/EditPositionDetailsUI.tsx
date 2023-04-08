@@ -181,7 +181,11 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
-            tooltip={<PnLDetails />}
+            tooltip={<PnLDetails 
+              underlyingTokenName={underlyingTokenName}
+              pnlFromSwaps={realizedPnLFromSwaps}
+              pnlFromFees={`0`}
+            />}
             typographyToken={typographyToken}
             value={realizedPnLFromSwaps}
           />
@@ -193,7 +197,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
-            tooltip={<PnLDetails />}
+            tooltip="Profit or loss you would earn by closing your position now"
             typographyToken={typographyToken}
             value={unrealizedPnLFromSwaps}
           />
