@@ -14,7 +14,8 @@ export const GweiBar: React.FunctionComponent = () => {
       return;
     }
     const block = await provider.getBlockNumber();
-    const gasPrice = await provider.getGasPrice();
+    let gasPrice = await provider.getGasPrice();
+    gasPrice = gasPrice.div("1000000000");
     setBlockNumber(block);
     setGwei(gasPrice.toNumber());
   }, [provider]);
