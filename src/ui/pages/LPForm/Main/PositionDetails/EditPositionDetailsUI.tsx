@@ -9,6 +9,9 @@ import {
   selectExistingPositionFixedLower,
   selectExistingPositionFixedUpper,
   selectLpFormSelectedPosition,
+  selectEditLpPositionRealizedPnLTotalFormatted,
+  selectEditLpPositionRealizedPnLFromFeesFormatted
+
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
