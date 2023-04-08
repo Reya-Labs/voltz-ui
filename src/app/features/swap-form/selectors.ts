@@ -202,6 +202,18 @@ export const selectEditPositionReceivingRateFormatted = (state: RootState) => {
   return receivingRate === null ? '--' : swapFormFormatNumber(receivingRate);
 };
 
+export const selectEditPositionRealizedPnLTotalFormatted = (state: RootState) => {
+  const realizedPnLFromFees = getRealizedPnLFromFees(state.swapForm);
+  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.swapForm);
+  let realizedPnLTotal = null;
+
+  if (realizedPnLFromFees && realizedPnLFromSwaps) { 
+    realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
+  }
+
+  return realizedPnLTotal === null ? '--' : swapFormFormatNumber(realizedPnLTotal);
+};
+
 export const selectEditPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
   const realizedPnLFromFees = getRealizedPnLFromFees(state.swapForm);
 

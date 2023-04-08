@@ -7,6 +7,7 @@ import {
   selectEditPositionPayingRateFormatted,
   selectEditPositionRealizedPnLFromSwapsFormatted,
   selectEditPositionRealizedPnLFromFeesFormatted,
+  selectEditPositionRealizedPnLTotalFormatted,
   selectEditPositionReceivingRateFormatted,
   selectEditPositionUnrealizedPnLFromSwapsFormatted,
   selectExistingPositionCompactNotional,
@@ -52,6 +53,8 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   const receivingRateTo = useAppSelector(selectEditPositionReceivingRateFormatted);
   const payingRateTo = useAppSelector(selectEditPositionPayingRateFormatted);
 
+  
+  const realizedPnLTotal = useAppSelector(selectEditPositionRealizedPnLTotalFormatted);
   const realizedPnLFromFees = useAppSelector(selectEditPositionRealizedPnLFromFeesFormatted);
   const realizedPnLFromSwaps = useAppSelector(selectEditPositionRealizedPnLFromSwapsFormatted);
   const unrealizedPnLFromSwaps = useAppSelector(selectEditPositionUnrealizedPnLFromSwapsFormatted);
