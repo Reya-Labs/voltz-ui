@@ -3,26 +3,22 @@ import React from 'react';
 
 import { PnLDetailsBox, RowBox, RowsBox } from './PnLDetails.styled';
 
-
 type PnLDetailsProps = {
   underlyingTokenName: string;
   pnlFromSwaps: string;
   pnlFromFees: string;
 };
 
-export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = (
-  { 
-    underlyingTokenName,
-    pnlFromSwaps,
-    pnlFromFees
-  }
-) => {
-
+export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
+  underlyingTokenName,
+  pnlFromSwaps,
+  pnlFromFees,
+}) => {
   return (
     <PnLDetailsBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-        Profit or loss already captured from fees as well as the position after closing it 
-        or accrued cashflows while it is active
+        Profit or loss already captured from fees as well as the position after closing it or
+        accrued cashflows while it is active
       </Typography>
       <RowsBox>
         <RowBox>

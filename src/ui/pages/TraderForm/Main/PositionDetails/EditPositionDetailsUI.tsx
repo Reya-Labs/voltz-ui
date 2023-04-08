@@ -5,8 +5,8 @@ import {
   selectEditPositionCompactNotional,
   selectEditPositionMode,
   selectEditPositionPayingRateFormatted,
-  selectEditPositionRealizedPnLFromSwapsFormatted,
   selectEditPositionRealizedPnLFromFeesFormatted,
+  selectEditPositionRealizedPnLFromSwapsFormatted,
   selectEditPositionRealizedPnLTotalFormatted,
   selectEditPositionReceivingRateFormatted,
   selectEditPositionUnrealizedPnLFromSwapsFormatted,
@@ -53,7 +53,6 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   const receivingRateTo = useAppSelector(selectEditPositionReceivingRateFormatted);
   const payingRateTo = useAppSelector(selectEditPositionPayingRateFormatted);
 
-  
   const realizedPnLTotal = useAppSelector(selectEditPositionRealizedPnLTotalFormatted);
   const realizedPnLFromFees = useAppSelector(selectEditPositionRealizedPnLFromFeesFormatted);
   const realizedPnLFromSwaps = useAppSelector(selectEditPositionRealizedPnLFromSwapsFormatted);
@@ -186,11 +185,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
-            tooltip={<PnLDetails 
-              underlyingTokenName={underlyingTokenName}
-              pnlFromSwaps={realizedPnLFromSwaps}
-              pnlFromFees={realizedPnLFromFees}
-            />}
+            tooltip={
+              <PnLDetails
+                pnlFromFees={realizedPnLFromFees}
+                pnlFromSwaps={realizedPnLFromSwaps}
+                underlyingTokenName={underlyingTokenName}
+              />
+            }
             typographyToken={typographyToken}
             value={realizedPnLTotal}
           />
