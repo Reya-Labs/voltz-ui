@@ -43,6 +43,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   const fixedUpper = useAppSelector(selectExistingPositionFixedUpper);
 
   // pnl
+
+  const realizedPnLTotal = useAppSelector(selectEditLpPositionRealizedPnLTotalFormatted);
+  const realizedPnLFromFees = useAppSelector(selectEditLpPositionRealizedPnLFromFeesFormatted);
   const realizedPnLFromSwaps = useAppSelector(selectEditLpPositionRealizedPnLFromSwapsFormatted);
   const unrealizedPnLFromSwaps = useAppSelector(
     selectEditLpPositionUnrealizedPnLFromSwapsFormatted,
@@ -123,9 +126,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                 labelColorToken="lavenderWeb3"
                 labelTypographyToken={labelTypographyToken}
                 token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={<PnLDetails />}
+                tooltip={<PnLDetails 
+                  pnlFromFees={realizedPnLFromFees}
+                  pnlFromSwaps={realizedPnLFromSwaps}
+                  underlyingTokenName={underlyingTokenName}
+                />}
                 typographyToken={typographyToken}
-                value={realizedPnLFromSwaps}
+                value={realizedPnLTotal}
               />
             </BorderedBox>
             <BorderedBox>
@@ -135,7 +142,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                 labelColorToken="lavenderWeb3"
                 labelTypographyToken={labelTypographyToken}
                 token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={<PnLDetails />}
+                tooltip={"Profit or loss you would earn by fully closing your lp position"}
                 typographyToken={typographyToken}
                 value={unrealizedPnLFromSwaps}
               />
