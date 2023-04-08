@@ -19,6 +19,7 @@ import {
   getProspectiveSwapNotional,
   getRealizedPnLFromSwaps,
   getUnrealizedPnLFromSwaps,
+  getRealizedPnLFromFees,
   getVariableRate,
   hasExistingPosition,
   swapFormCompactFormat,
@@ -199,6 +200,12 @@ export const selectEditPositionReceivingRateFormatted = (state: RootState) => {
       : getEditPositionVariableRate(state.swapForm);
 
   return receivingRate === null ? '--' : swapFormFormatNumber(receivingRate);
+};
+
+export const selectEditPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
+  const realizedPnLFromFees = getRealizedPnLFromFees(state.swapForm);
+
+  return realizedPnLFromFees === null ? '--' : swapFormFormatNumber(realizedPnLFromFees);
 };
 
 export const selectEditPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
