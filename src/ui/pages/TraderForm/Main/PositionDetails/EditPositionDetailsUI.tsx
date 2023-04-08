@@ -186,7 +186,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             tooltip={<PnLDetails 
               underlyingTokenName={underlyingTokenName}
               pnlFromSwaps={realizedPnLFromSwaps}
-              pnlFromFees={`0`}
+              pnlFromFees={realizedPnLFromFees}
             />}
             typographyToken={typographyToken}
             value={realizedPnLFromSwaps}
