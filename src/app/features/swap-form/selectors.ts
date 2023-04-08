@@ -17,9 +17,9 @@ import {
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
+  getRealizedPnLFromFees,
   getRealizedPnLFromSwaps,
   getUnrealizedPnLFromSwaps,
-  getRealizedPnLFromFees,
   getVariableRate,
   hasExistingPosition,
   swapFormCompactFormat,
@@ -207,7 +207,7 @@ export const selectEditPositionRealizedPnLTotalFormatted = (state: RootState) =>
   const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.swapForm);
   let realizedPnLTotal = null;
 
-  if (realizedPnLFromFees && realizedPnLFromSwaps) { 
+  if (realizedPnLFromFees && realizedPnLFromSwaps) {
     realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
   }
 
