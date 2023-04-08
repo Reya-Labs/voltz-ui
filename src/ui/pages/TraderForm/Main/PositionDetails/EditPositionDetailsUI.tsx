@@ -192,7 +192,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               pnlFromFees={realizedPnLFromFees}
             />}
             typographyToken={typographyToken}
-            value={realizedPnLFromSwaps}
+            value={realizedPnLTotal}
           />
         </CashFlowBox>
         <CashFlowBox>
