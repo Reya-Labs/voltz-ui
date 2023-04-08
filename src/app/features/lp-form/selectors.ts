@@ -135,6 +135,18 @@ export const selectExistingPositionCompactNotional = (state: RootState) => {
   };
 };
 
+export const selectEditLpPositionRealizedPnLTotalFormatted = (state: RootState) => {
+
+  let realizedPnLTotal = null;
+  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.lpForm);
+
+  if ((state.lpForm.selectedPosition !== null) && (realizedPnLFromSwaps !== null)) {
+    const realizedPnLFromFees = state.lpForm.selectedPosition.fees;
+    realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps; 
+  }
+
+  return realizedPnLTotal === null ? '--' : lpFormFormatNumber(realizedPnLTotal);
+};
 
 export const selectEditLpPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
 
