@@ -2,16 +2,15 @@ import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'br
 import React from 'react';
 
 import {
+  selectEditLpPositionRealizedPnLFromFeesFormatted,
   selectEditLpPositionRealizedPnLFromSwapsFormatted,
+  selectEditLpPositionRealizedPnLTotalFormatted,
   selectEditLpPositionUnrealizedPnLFromSwapsFormatted,
   selectEditPositionCompactNotional,
   selectExistingPositionCompactNotional,
   selectExistingPositionFixedLower,
   selectExistingPositionFixedUpper,
   selectLpFormSelectedPosition,
-  selectEditLpPositionRealizedPnLTotalFormatted,
-  selectEditLpPositionRealizedPnLFromFeesFormatted
-
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
@@ -129,11 +128,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                 labelColorToken="lavenderWeb3"
                 labelTypographyToken={labelTypographyToken}
                 token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={<PnLDetails 
-                  pnlFromFees={realizedPnLFromFees}
-                  pnlFromSwaps={realizedPnLFromSwaps}
-                  underlyingTokenName={underlyingTokenName}
-                />}
+                tooltip={
+                  <PnLDetails
+                    pnlFromFees={realizedPnLFromFees}
+                    pnlFromSwaps={realizedPnLFromSwaps}
+                    underlyingTokenName={underlyingTokenName}
+                  />
+                }
                 typographyToken={typographyToken}
                 value={realizedPnLTotal}
               />
@@ -145,7 +146,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                 labelColorToken="lavenderWeb3"
                 labelTypographyToken={labelTypographyToken}
                 token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={"Profit or loss you would earn by fully closing your lp position"}
+                tooltip={'Profit or loss you would earn by fully closing your lp position'}
                 typographyToken={typographyToken}
                 value={unrealizedPnLFromSwaps}
               />
