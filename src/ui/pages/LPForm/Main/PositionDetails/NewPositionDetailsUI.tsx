@@ -7,7 +7,6 @@ import {
   selectUserInputFixedUpper,
 } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { PnLDetails } from './PnLDetails';
 import {
   BorderedBox,
   NotionalBox,
@@ -17,7 +16,6 @@ import {
 } from './PositionDetails.styled';
 
 type NewPositionDetailsUIProps = {
-  underlyingTokenName: string;
   actionLabelTypographyToken: TypographyToken;
   actionTypographyToken: TypographyToken;
   labelTypographyToken: TypographyToken;
@@ -25,7 +23,6 @@ type NewPositionDetailsUIProps = {
 };
 
 export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIProps> = ({
-  underlyingTokenName,
   actionLabelTypographyToken,
   actionTypographyToken,
   labelTypographyToken,
@@ -74,34 +71,6 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             value2={fixedUpper ? fixedUpper : '--'}
           />
         </BorderedBox>
-        {!hidePNL && (
-          <>
-            <BorderedBox>
-              <LabelTokenTypography
-                colorToken="skyBlueCrayola"
-                label="Unrealised PnL"
-                labelColorToken="lavenderWeb3"
-                labelTypographyToken={labelTypographyToken}
-                token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={<PnLDetails />}
-                typographyToken={typographyToken}
-                value="+40.00"
-              />
-            </BorderedBox>
-            <BorderedBox>
-              <LabelTokenTypography
-                colorToken="wildStrawberry"
-                label="Realised PnL"
-                labelColorToken="lavenderWeb3"
-                labelTypographyToken={labelTypographyToken}
-                token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={<PnLDetails />}
-                typographyToken={typographyToken}
-                value="-40.00"
-              />
-            </BorderedBox>
-          </>
-        )}
       </PositionDetailsRightBox>
     </PositionDetailsBox>
   );

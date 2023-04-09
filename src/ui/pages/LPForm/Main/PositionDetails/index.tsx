@@ -39,7 +39,6 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
       actionTypographyToken={actionTypographyToken}
       labelTypographyToken={labelTypographyToken}
       typographyToken={typographyToken}
-      underlyingTokenName={aMM.underlyingToken.name}
     />
   ) : (
     <EditPositionDetailsUI
