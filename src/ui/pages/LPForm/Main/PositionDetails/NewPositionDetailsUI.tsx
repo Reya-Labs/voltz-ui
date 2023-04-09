@@ -31,8 +31,6 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
   const compactNotional = useAppSelector(selectNewPositionCompactNotional);
   const fixedLower = useAppSelector(selectUserInputFixedLower);
   const fixedUpper = useAppSelector(selectUserInputFixedUpper);
-  // TODO: Artur, Filip when SDK has support for PNL show it
-  const hidePNL = true;
 
   return (
     <PositionDetailsBox>
