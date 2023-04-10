@@ -118,9 +118,9 @@ export const AppRoutes = () => {
     <Routes>
       <Route element={<NotFoundPage />} path="*" />
       <Route path="/">
-        <Route element={<Navigate to={routes.TRADER_POOLS} />} index />
+        <Route element={<Navigate to={routes.POOLS} />} index />
         <Route
-          element={<Navigate replace={true} to={`/${routes.TRADER_POOLS}`} />}
+          element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
           path={routes.WELCOME}
         />
         <Route
@@ -129,7 +129,7 @@ export const AppRoutes = () => {
               <TraderPools />
             </NetworkProtectedPage>
           }
-          path={routes.TRADER_POOLS}
+          path={routes.POOLS}
         />
         <Route
           element={
@@ -145,7 +145,7 @@ export const AppRoutes = () => {
               <LPPools />
             </NetworkProtectedPage>
           }
-          path={routes.LP_POOLS}
+          path={routes.POOLS}
         />
         <Route
           element={
@@ -227,6 +227,14 @@ export const AppRoutes = () => {
         <Route
           element={<Navigate replace={true} to={`/${routes.LP_PORTFOLIO}`} />}
           path={routes.DEPRECATED_LP_PORTFOLIO}
+        />
+        <Route
+          element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
+          path={routes.DEPRECATED_TRADER_POOLS}
+        />
+        <Route
+          element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
+          path={routes.DEPRECATED_LP_POOLS}
         />
       </Route>
     </Routes>

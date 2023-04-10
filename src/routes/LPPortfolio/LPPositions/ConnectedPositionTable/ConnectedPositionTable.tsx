@@ -80,7 +80,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const renderNoPositions = () => {
     return (
       <Panel sx={{ width: '100%', textAlign: 'center' }} variant="main">
-        <RouteLink to={`/${routes.LP_POOLS}`}>OPEN YOUR FIRST POSITION</RouteLink>
+        <RouteLink to={`/${routes.POOLS}`}>OPEN YOUR FIRST POSITION</RouteLink>
       </Panel>
     );
   };
@@ -124,7 +124,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
           {positionStatus === 'open' && filteredPositions.length === 0 ? (
             <NoPositionsOrVaultsFound
               description="Open your first position here:"
-              navigateTo={`/${routes.LP_POOLS}`}
+              navigateTo={`/${routes.POOLS}`}
               navigateToText="LP POOLS"
               title="You haven’t provided liquidity to any pool yet."
             />
