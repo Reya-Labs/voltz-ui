@@ -12,7 +12,7 @@ describe('<Nav />', () => {
         <Nav />
       </HashRouter>,
     );
-    expect(screen.getAllByTestId('NavLinkButton').length).toBe(4);
+    expect(screen.getAllByTestId('NavLinkButton').length).toBe(5);
   });
 
   it('renders the correct text for each NavLink', () => {
@@ -21,26 +21,10 @@ describe('<Nav />', () => {
         <Nav />
       </HashRouter>,
     );
-    expect(screen.getAllByTestId('NavLinkButton')[0].textContent).toBe('Traders');
-    expect(screen.getAllByTestId('NavLinkButton')[1].textContent).toBe('Liquidity Providers');
-    expect(screen.getAllByTestId('NavLinkButton')[2].textContent).toBe('Leaderboard');
-    expect(screen.getAllByTestId('NavLinkButton')[3].textContent).toBe('Profile');
-  });
-
-  it('renders the new link indicator for NavLinks with isNew prop', () => {
-    renderWithProviders(
-      <HashRouter>
-        <Nav />
-      </HashRouter>,
-    );
-    expect(
-      screen.getAllByTestId('NavLinkButton')[1].querySelector('[data-testid="NewLinkIndicator"]'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getAllByTestId('NavLinkButton')[2].querySelector('[data-testid="NewLinkIndicator"]'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getAllByTestId('NavLinkButton')[3].querySelector('[data-testid="NewLinkIndicator"]'),
-    ).toBeInTheDocument();
+    expect(screen.getAllByTestId('NavLinkButton')[0].textContent).toBe('Pools');
+    expect(screen.getAllByTestId('NavLinkButton')[1].textContent).toBe('Portfolio');
+    expect(screen.getAllByTestId('NavLinkButton')[2].textContent).toBe('Optimisers');
+    expect(screen.getAllByTestId('NavLinkButton')[3].textContent).toBe('Leaderboard');
+    expect(screen.getAllByTestId('NavLinkButton')[4].textContent).toBe('Profile');
   });
 });
