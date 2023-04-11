@@ -54,6 +54,7 @@ export const PoolEntry: React.FunctionComponent<PoolEntryProps> = ({
           isAaveV3={isAaveV3}
           isBorrowing={isBorrowing}
           market={market}
+          pillVariant="compact"
           token={token}
           typographyToken="primaryBodyLargeBold"
         />

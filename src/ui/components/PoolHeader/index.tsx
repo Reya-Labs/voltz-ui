@@ -51,6 +51,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
           isAaveV3={isAaveV3}
           isBorrowing={isBorrowing}
           market={market}
+          pillVariant="regular"
           token={token}
           typographyToken="primaryHeader2Black"
         />
