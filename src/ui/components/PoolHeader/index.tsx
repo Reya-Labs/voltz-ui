@@ -46,10 +46,13 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
     <PoolHeaderBox>
       <MarketTokenInformationBox>
         <MarketTokenInformation
+          colorToken="lavenderWeb"
+          iconSize={30}
           isAaveV3={isAaveV3}
           isBorrowing={isBorrowing}
           market={market}
           token={token}
+          typographyToken="primaryHeader2Black"
         />
       </MarketTokenInformationBox>
       <PoolHeaderDetailsBox>
