@@ -23,7 +23,7 @@ export const UserSummary = ({
 }: UserSummaryProps) => {
   return (
     <UserSummaryBox>
-      <Pill colorToken="lavenderWeb" typographyToken="primaryBodySmallBold">
+      <Pill colorToken="lavenderWeb" typographyToken="primaryBodySmallBold" variant="regular">
         {`SEASON ${seasonNumber}`}
       </Pill>
       <PointsSystem />

@@ -1,8 +1,7 @@
 import { Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { HeaderBox, MainSectionBox, PoolsBox } from './Pools.styled';
-import { PoolsHeader } from './PoolsHeader';
+import { HeaderBox, PoolsBox } from './Pools.styled';
 import { PoolsInformation } from './PoolsInformation';
 import { PoolsList } from './PoolsList';
 
@@ -15,10 +14,7 @@ export const Pools: React.FunctionComponent = () => {
         </Typography>
         <PoolsInformation />
       </HeaderBox>
-      <MainSectionBox>
-        <PoolsHeader />
-        <PoolsList />
-      </MainSectionBox>
+      <PoolsList />
     </PoolsBox>
   );
 };
