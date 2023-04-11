@@ -53,8 +53,6 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
     selectEditLpPositionUnrealizedPnLFromSwapsFormatted,
   );
 
-  const hidePNL = false;
-
   const existingPosition = useAppSelector(selectLpFormSelectedPosition);
   if (!existingPosition) {
     return null;
@@ -119,8 +117,6 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             value2={fixedUpper !== null ? formatNumber(fixedUpper) : '--'}
           />
         </BorderedBox>
-        {!hidePNL && (
-          <>
             <BorderedBox>
               <LabelTokenTypography
                 colorToken="wildStrawberry"
@@ -151,8 +147,6 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
                 value={unrealizedPnLFromSwaps}
               />
             </BorderedBox>
-          </>
-        )}
       </PositionDetailsRightBox>
     </PositionDetailsBox>
   );
