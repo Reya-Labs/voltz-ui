@@ -51,6 +51,7 @@ export const SwapConfirmationStep: React.FunctionComponent = () => {
           isAaveV3={aMM.market.tags.isAaveV3}
           isBorrowing={aMM.market.tags.isBorrowing}
           market={aMM.market.name as MarketTokenInformationProps['market']}
+          pillVariant="regular"
           token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
           typographyToken="primaryHeader2Black"
         />

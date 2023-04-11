@@ -1,4 +1,4 @@
-import { MarketToken, MarketTokenProps, Pill } from 'brokoli-ui';
+import { MarketToken, MarketTokenProps, Pill, PillProps } from 'brokoli-ui';
 import React from 'react';
 
 import { MarketTokenBox } from './MarketTokenInformation.styled';
@@ -8,6 +8,7 @@ export type MarketTokenInformationProps = {
   token: MarketTokenProps['token'];
   isBorrowing: boolean;
   isAaveV3: boolean;
+  pillVariant: PillProps['variant'];
   colorToken: MarketTokenProps['colorToken'];
   iconSize: MarketTokenProps['iconSize'];
   typographyToken: MarketTokenProps['typographyToken'];
@@ -21,6 +22,7 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
   typographyToken,
   colorToken,
   iconSize,
+  pillVariant,
 }) => {
   return (
     <MarketTokenBox data-testid="MarketTokenInformation-MarketTokenBox">
@@ -37,7 +39,7 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
           colorToken="wildStrawberry"
           data-testid="MarketTokenInformation-PillBorrowing"
           typographyToken="primaryBodySmallRegular"
-          variant="regular"
+          variant={pillVariant}
         >
           Borrow
         </Pill>
@@ -47,7 +49,7 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
           colorToken="wildStrawberry"
           data-testid="MarketTokenInformation-PillAaveV3"
           typographyToken="primaryBodySmallRegular"
-          variant="regular"
+          variant={pillVariant}
         >
           v3
         </Pill>

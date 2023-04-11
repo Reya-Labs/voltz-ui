@@ -98,7 +98,7 @@ const aMMs: {
     isBorrowing: true,
     isAaveV3: true,
     fixedRateFormatted: '7.00',
-    aMMMaturity: '03/31/2024',
+    aMMMaturity: '03/31/24',
     id: 'lido-usdt-borrow',
     variableRate24hDelta: -0.1,
     variableRateFormatted: '1.50',
