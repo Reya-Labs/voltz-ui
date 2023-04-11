@@ -24,9 +24,31 @@ export const PoolsInformation: React.FunctionComponent = () => {
   const numberOfPools = 12;
   const tradingVolume7dValue = '$245';
   const tradingVolume7dToken = 'M';
-  const tradingVolume7dDifference = -2;
   const totalLiquidityValue = '$245.004';
   const totalLiquidityToken = 'M';
+
+  const filters = [
+    {
+      id: 'borrow',
+      label: 'Borrow',
+      isActive: true,
+    },
+    {
+      id: 'eth',
+      label: 'ETH',
+      isActive: true,
+    },
+    {
+      id: 'staking',
+      label: 'Staking',
+      isActive: true,
+    },
+    {
+      id: 'lending',
+      label: 'Lending',
+      isActive: true,
+    },
+  ];
 
   return (
     <PoolsInformationBox>
@@ -45,8 +67,6 @@ export const PoolsInformation: React.FunctionComponent = () => {
       <InformationBox>
         <LabelTokenTypography
           colorToken="lavenderWeb"
-          differenceToken="%"
-          differenceValue={tradingVolume7dDifference}
           label="Trading Volume 7d"
           labelColorToken="lavenderWeb3"
           labelTypographyToken={labelTypographyToken}
@@ -60,7 +80,6 @@ export const PoolsInformation: React.FunctionComponent = () => {
       <InformationBox>
         <LabelTokenTypography
           colorToken="lavenderWeb"
-          differenceValue={tradingVolume7dDifference}
           label="Total Liquidity"
           labelColorToken="lavenderWeb3"
           labelTypographyToken={labelTypographyToken}
@@ -79,18 +98,16 @@ export const PoolsInformation: React.FunctionComponent = () => {
           Filter by
         </TypographyWithTooltip>
         <FiltersBox>
-          <Pill colorToken="lavenderWeb" typographyToken={labelTypographyToken}>
-            Borrow
-          </Pill>
-          <Pill colorToken="liberty" typographyToken={labelTypographyToken}>
-            ETH
-          </Pill>
-          <Pill colorToken="lavenderWeb" typographyToken={labelTypographyToken}>
-            v2
-          </Pill>
-          <Pill colorToken="liberty" typographyToken={labelTypographyToken}>
-            Lending
-          </Pill>
+          {filters.map((filter) => (
+            <Pill
+              key={filter.id}
+              colorToken={filter.isActive ? 'lavenderWeb' : 'liberty'}
+              typographyToken="primaryBodySmallRegular"
+              variant="compact"
+            >
+              {filter.label}
+            </Pill>
+          ))}
         </FiltersBox>
       </FilterBox>
     </PoolsInformationBox>

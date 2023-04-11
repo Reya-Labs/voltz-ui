@@ -4,7 +4,7 @@ import { colors } from 'brokoli-ui';
 export const PoolsInformationBox = styled('div')`
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 24px;
   width: 100%;
   box-sizing: border-box;
 `;
@@ -20,6 +20,7 @@ export const FiltersBox = styled('div')`
   display: flex;
   flex-direction: row;
   gap: 8px;
+  cursor: pointer;
 `;
 
 export const VerticalLine = styled('div')`

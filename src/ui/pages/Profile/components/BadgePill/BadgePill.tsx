@@ -41,6 +41,7 @@ export const BadgePill: React.FunctionComponent<{
       colorToken={TIER_COLOR_TOKEN_MAP[tier]}
       data-testid={`BadgePill-Pill-${tier}-${category}-${variant}`}
       typographyToken="primaryBodySmallRegular"
+      variant="regular"
     >
       {tier !== 'legendary' && tier !== 'easterEgg' ? categoryText + tierText : tierText}
     </Pill>

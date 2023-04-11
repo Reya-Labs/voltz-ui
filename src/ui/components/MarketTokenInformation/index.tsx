@@ -37,6 +37,7 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
           colorToken="wildStrawberry"
           data-testid="MarketTokenInformation-PillBorrowing"
           typographyToken="primaryBodySmallRegular"
+          variant="regular"
         >
           Borrow
         </Pill>
@@ -46,6 +47,7 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
           colorToken="wildStrawberry"
           data-testid="MarketTokenInformation-PillAaveV3"
           typographyToken="primaryBodySmallRegular"
+          variant="regular"
         >
           v3
         </Pill>
