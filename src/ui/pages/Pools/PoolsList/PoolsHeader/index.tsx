@@ -1,14 +1,15 @@
 import { Typography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
+import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import {
   FixedAPRBox,
+  LeftBox,
   MaturityBox,
-  PoolsBox,
+  MiddleBox,
   PoolsHeaderBox,
+  RightBox,
   RowsBox,
-  TradingVolumeBox,
   VariableAPYBox,
 } from './PoolsHeader.styled';
 
@@ -21,41 +22,38 @@ export const PoolsHeader: React.FunctionComponent = () => {
 
   return (
     <PoolsHeaderBox>
-      <PoolsBox>
+      <LeftBox>
         <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
           Pools
         </Typography>
-      </PoolsBox>
-      <FixedAPRBox>
-        <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
-          Fixed APR
-        </Typography>
-      </FixedAPRBox>
-      <VariableAPYBox>
-        <RowsBox>
+      </LeftBox>
+      <MiddleBox>
+        <FixedAPRBox>
           <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
-            Variable APY
+            Fixed APR
           </Typography>
-          <Typography colorToken="lavenderWeb5" typographyToken={typographyToken}>
-            24h Change
-          </Typography>
-        </RowsBox>
-      </VariableAPYBox>
-      <TradingVolumeBox>
-        <RowsBox>
+        </FixedAPRBox>
+        <VariableAPYBox>
+          <RowsBox>
+            <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
+              Variable APY
+            </Typography>
+            <Typography colorToken="lavenderWeb5" typographyToken={typographyToken}>
+              24h Change
+            </Typography>
+          </RowsBox>
+        </VariableAPYBox>
+        <MaturityBox>
           <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
-            Trading volume
+            Maturity
           </Typography>
-          <Typography colorToken="lavenderWeb5" typographyToken={typographyToken}>
-            Last 30 days
-          </Typography>
-        </RowsBox>
-      </TradingVolumeBox>
-      <MaturityBox>
+        </MaturityBox>
+      </MiddleBox>
+      <RightBox>
         <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
-          Maturity
+          Trade or LP
         </Typography>
-      </MaturityBox>
+      </RightBox>
     </PoolsHeaderBox>
   );
 };
