@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, getAMMs, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
+import { initialFilters, PoolFilterId, PoolFilters } from './constants';
 import { initialiseAMMsThunk } from './thunks';
 
 type SliceState = {
   aMMsLoadedState: Record<SupportedChainId, 'idle' | 'pending' | 'succeeded' | 'failed'>;
   aMMs: Record<SupportedChainId, AMM[]>;
+  filters: Record<SupportedChainId, PoolFilters>;
 };
 
 const initialState: SliceState = {
@@ -21,6 +23,12 @@ const initialState: SliceState = {
     [SupportedChainId.goerli]: [],
     [SupportedChainId.arbitrum]: [],
     [SupportedChainId.arbitrumGoerli]: [],
+  },
+  filters: {
+    [SupportedChainId.mainnet]: { ...initialFilters },
+    [SupportedChainId.goerli]: { ...initialFilters },
+    [SupportedChainId.arbitrum]: { ...initialFilters },
+    [SupportedChainId.arbitrumGoerli]: { ...initialFilters },
   },
 };
 
@@ -39,6 +47,17 @@ export const slice = createSlice({
     ) => {
       state.aMMs[chainId].forEach((aMM) => (aMM.signer = signer));
     },
+    togglePoolFilterAction: (
+      state,
+      {
+        payload: { chainId, filterId },
+      }: PayloadAction<{
+        chainId: SupportedChainId;
+        filterId: PoolFilterId;
+      }>,
+    ) => {
+      state.filters[chainId][filterId] = !state.filters[chainId][filterId];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -56,5 +75,5 @@ export const slice = createSlice({
   },
 });
 
-export const { setSignerForAMMsAction } = slice.actions;
+export const { setSignerForAMMsAction, togglePoolFilterAction } = slice.actions;
 export const aMMsReducer = slice.reducer;

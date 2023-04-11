@@ -1,7 +1,9 @@
 import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
+import { routes } from '../../../../../routes/paths';
 import {
   MarketTokenInformation,
   MarketTokenInformationProps,
@@ -16,6 +18,7 @@ import {
   RightBox,
   VariableAPYBox,
 } from './PoolEntry.styled';
+
 type PoolEntryProps = {
   isAaveV3: boolean;
   isBorrowing: boolean;
@@ -26,6 +29,8 @@ type PoolEntryProps = {
   variableRateFormatted: string;
   aMMMaturity: string;
   backgroundColorToken: ColorTokens;
+  routeAmmId: string;
+  routePoolId: string;
 };
 
 export const PoolEntry: React.FunctionComponent<PoolEntryProps> = ({
@@ -38,12 +43,33 @@ export const PoolEntry: React.FunctionComponent<PoolEntryProps> = ({
   variableRateFormatted,
   aMMMaturity,
   backgroundColorToken,
+  routePoolId,
+  routeAmmId,
 }) => {
   const { isLargeDesktopDevice } = useResponsiveQuery();
+  const navigate = useNavigate();
 
   const typographyToken: TypographyToken = isLargeDesktopDevice
     ? 'secondaryBodyLargeRegular'
     : 'secondaryBodyMediumRegular';
+
+  const handleOnMakeClick = () => {
+    const path = generatePath(routes.LP_FORM, {
+      form: 'liquidity',
+      ammId: routeAmmId,
+      poolId: routePoolId,
+    });
+    navigate(`/${path}`);
+  };
+
+  const handleOnTradeClick = () => {
+    const path = generatePath(routes.TRADER_FORM, {
+      form: 'swap',
+      ammId: routeAmmId,
+      poolId: routePoolId,
+    });
+    navigate(`/${path}`);
+  };
 
   return (
     <PoolEntryBox backgroundColorToken={backgroundColorToken}>
@@ -88,10 +114,18 @@ export const PoolEntry: React.FunctionComponent<PoolEntryProps> = ({
         </MaturityBox>
       </MiddleBox>
       <RightBox>
-        <ButtonStyled typographyToken="primaryBodySmallBold" variant="primary">
+        <ButtonStyled
+          typographyToken="primaryBodySmallBold"
+          variant="primary"
+          onClick={handleOnTradeClick}
+        >
           Trade
         </ButtonStyled>
-        <ButtonStyled typographyToken="primaryBodySmallBold" variant="secondary">
+        <ButtonStyled
+          typographyToken="primaryBodySmallBold"
+          variant="secondary"
+          onClick={handleOnMakeClick}
+        >
           Make
         </ButtonStyled>
       </RightBox>

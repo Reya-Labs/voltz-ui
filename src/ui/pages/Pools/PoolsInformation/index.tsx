@@ -1,6 +1,13 @@
 import { LabelTokenTypography, Pill, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import React from 'react';
 
+import {
+  selectPoolFilterOptions,
+  selectPoolsSize,
+  togglePoolFilterAction,
+} from '../../../../app/features/aMMs';
+import { selectChainId } from '../../../../app/features/network';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import {
   FilterBox,
@@ -11,6 +18,10 @@ import {
 } from './PoolsInformation.styled';
 
 export const PoolsInformation: React.FunctionComponent = () => {
+  const dispatch = useAppDispatch();
+  const chainId = useAppSelector(selectChainId);
+  const poolsSize = useAppSelector(selectPoolsSize);
+  const filterOptions = useAppSelector(selectPoolFilterOptions);
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const labelTypographyToken: TypographyToken = isLargeDesktopDevice
@@ -21,34 +32,15 @@ export const PoolsInformation: React.FunctionComponent = () => {
     ? 'secondaryBodyLargeBold'
     : 'secondaryBodyMediumBold';
 
-  const numberOfPools = 12;
+  // TODO: Filip move to store + Artur to provide SDK utility
   const tradingVolume7dValue = '$245';
   const tradingVolume7dToken = 'M';
   const totalLiquidityValue = '$245.004';
   const totalLiquidityToken = 'M';
 
-  const filters = [
-    {
-      id: 'borrow',
-      label: 'Borrow',
-      isActive: true,
-    },
-    {
-      id: 'eth',
-      label: 'ETH',
-      isActive: true,
-    },
-    {
-      id: 'staking',
-      label: 'Staking',
-      isActive: true,
-    },
-    {
-      id: 'lending',
-      label: 'Lending',
-      isActive: true,
-    },
-  ];
+  if (!chainId) {
+    return null;
+  }
 
   return (
     <PoolsInformationBox>
@@ -60,7 +52,7 @@ export const PoolsInformation: React.FunctionComponent = () => {
           labelTypographyToken={labelTypographyToken}
           token=""
           typographyToken={typographyToken}
-          value={numberOfPools}
+          value={poolsSize}
         />
       </InformationBox>
       <VerticalLine />
@@ -98,12 +90,20 @@ export const PoolsInformation: React.FunctionComponent = () => {
           Filter by
         </TypographyWithTooltip>
         <FiltersBox>
-          {filters.map((filter) => (
+          {filterOptions.map((filter) => (
             <Pill
               key={filter.id}
               colorToken={filter.isActive ? 'lavenderWeb' : 'liberty'}
               typographyToken="primaryBodySmallRegular"
               variant="compact"
+              onClick={() => {
+                dispatch(
+                  togglePoolFilterAction({
+                    chainId,
+                    filterId: filter.id,
+                  }),
+                );
+              }}
             >
               {filter.label}
             </Pill>
