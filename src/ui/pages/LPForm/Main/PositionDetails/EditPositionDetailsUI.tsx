@@ -117,36 +117,36 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             value2={fixedUpper !== null ? formatNumber(fixedUpper) : '--'}
           />
         </BorderedBox>
-            <BorderedBox>
-              <LabelTokenTypography
-                colorToken="wildStrawberry"
-                label="Realised PnL"
-                labelColorToken="lavenderWeb3"
-                labelTypographyToken={labelTypographyToken}
-                token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={
-                  <PnLDetails
-                    pnlFromFees={realizedPnLFromFees}
-                    pnlFromSwaps={realizedPnLFromSwaps}
-                    underlyingTokenName={underlyingTokenName}
-                  />
-                }
-                typographyToken={typographyToken}
-                value={realizedPnLTotal}
+        <BorderedBox>
+          <LabelTokenTypography
+            colorToken="wildStrawberry"
+            label="Realised PnL"
+            labelColorToken="lavenderWeb3"
+            labelTypographyToken={labelTypographyToken}
+            token={` ${underlyingTokenName.toUpperCase()}`}
+            tooltip={
+              <PnLDetails
+                pnlFromFees={realizedPnLFromFees}
+                pnlFromSwaps={realizedPnLFromSwaps}
+                underlyingTokenName={underlyingTokenName}
               />
-            </BorderedBox>
-            <BorderedBox>
-              <LabelTokenTypography
-                colorToken="skyBlueCrayola"
-                label="Unrealised PnL"
-                labelColorToken="lavenderWeb3"
-                labelTypographyToken={labelTypographyToken}
-                token={` ${underlyingTokenName.toUpperCase()}`}
-                tooltip={'Profit or loss you would earn by fully closing your lp position'}
-                typographyToken={typographyToken}
-                value={unrealizedPnLFromSwaps}
-              />
-            </BorderedBox>
+            }
+            typographyToken={typographyToken}
+            value={realizedPnLTotal}
+          />
+        </BorderedBox>
+        <BorderedBox>
+          <LabelTokenTypography
+            colorToken="skyBlueCrayola"
+            label="Unrealised PnL"
+            labelColorToken="lavenderWeb3"
+            labelTypographyToken={labelTypographyToken}
+            token={` ${underlyingTokenName.toUpperCase()}`}
+            tooltip={'Profit or loss you would earn by fully closing your lp position'}
+            typographyToken={typographyToken}
+            value={unrealizedPnLFromSwaps}
+          />
+        </BorderedBox>
       </PositionDetailsRightBox>
     </PositionDetailsBox>
   );
