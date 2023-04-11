@@ -9541,10 +9541,10 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.51.0:
-  version "1.51.0"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.51.0.tgz#59d469eda0cdb95bc2fc325e5a592473629da6d1"
-  integrity sha512-c7roR6y7ZvFDlt0Op5FqfzuVw2EJAHlwuq5LRQWstUW6cozpwY24Y1V+POj9WGeW6LhQfWmr4ShR3dDD6O8qrw==
+brokoli-ui@1.53.0:
+  version "1.53.0"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.53.0.tgz#b4100af7bb5144400d2b0ffd5302e1e6112dc4ba"
+  integrity sha512-HdFXxGu1afo3jYXEETuFCNDwCRkSw6AMN+MEMXY2wR6eglD7PtzvhZnBwiyA0d1G6IeaZnOXmVut3OSJIlc/hA==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"

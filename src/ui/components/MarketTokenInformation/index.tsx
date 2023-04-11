@@ -8,6 +8,9 @@ export type MarketTokenInformationProps = {
   token: MarketTokenProps['token'];
   isBorrowing: boolean;
   isAaveV3: boolean;
+  colorToken: MarketTokenProps['colorToken'];
+  iconSize: MarketTokenProps['iconSize'];
+  typographyToken: MarketTokenProps['typographyToken'];
 };
 
 export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformationProps> = ({
@@ -15,10 +18,20 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
   token,
   isBorrowing,
   isAaveV3,
+  typographyToken,
+  colorToken,
+  iconSize,
 }) => {
   return (
     <MarketTokenBox data-testid="MarketTokenInformation-MarketTokenBox">
-      <MarketToken data-testid="MarketTokenInformation-MarketToken" market={market} token={token} />
+      <MarketToken
+        colorToken={colorToken}
+        data-testid="MarketTokenInformation-MarketToken"
+        iconSize={iconSize}
+        market={market}
+        token={token}
+        typographyToken={typographyToken}
+      />
       {isBorrowing ? (
         <Pill
           colorToken="wildStrawberry"
