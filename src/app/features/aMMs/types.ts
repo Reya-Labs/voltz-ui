@@ -3,6 +3,7 @@ export type PoolUI = {
   token?: 'eth' | 'usdc' | 'usdt' | 'dai';
   name: string;
   isBorrowing: boolean;
+  isV2: boolean;
   isAaveV3: boolean;
   fixedRateFormatted: string;
   fixedRate: number;

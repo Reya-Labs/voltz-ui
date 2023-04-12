@@ -48,6 +48,7 @@ export const PoolsList: React.FunctionComponent = () => {
                     fixedRateFormatted={pool.fixedRateFormatted}
                     isAaveV3={pool.isAaveV3}
                     isBorrowing={pool.isBorrowing}
+                    isV2={pool.isV2}
                     market={pool.market}
                     routeAmmId={pool.routeAmmId}
                     routePoolId={pool.routePoolId}

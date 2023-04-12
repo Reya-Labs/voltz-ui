@@ -21,6 +21,7 @@ import {
 
 type PoolEntryProps = {
   isAaveV3: boolean;
+  isV2: boolean;
   isBorrowing: boolean;
   market: MarketTokenInformationProps['market'];
   token: MarketTokenInformationProps['token'];
@@ -47,6 +48,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
       backgroundColorToken,
       routePoolId,
       routeAmmId,
+      isV2,
     },
     ref,
   ) => {
@@ -83,6 +85,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
             iconSize={24}
             isAaveV3={isAaveV3}
             isBorrowing={isBorrowing}
+            isV2={isV2}
             market={market}
             pillVariant="compact"
             token={token}
