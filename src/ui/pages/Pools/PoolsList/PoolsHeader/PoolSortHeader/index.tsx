@@ -1,7 +1,10 @@
 import { Typography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { togglePoolSortingDirectionAction } from '../../../../../../app/features/aMMs';
+import {
+  selectPoolsLoading,
+  togglePoolSortingDirectionAction,
+} from '../../../../../../app/features/aMMs';
 import { PoolSortDirection, PoolSortId } from '../../../../../../app/features/aMMs/constants';
 import { selectChainId } from '../../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
@@ -30,6 +33,7 @@ export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
   const dispatch = useAppDispatch();
   const chainId = useAppSelector(selectChainId);
   const { isLargeDesktopDevice } = useResponsiveQuery();
+  const loading = useAppSelector(selectPoolsLoading);
 
   const typographyToken: TypographyToken = isLargeDesktopDevice
     ? 'primaryBodySmallRegular'
@@ -49,6 +53,9 @@ export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
   return (
     <RowsBox
       onClick={() => {
+        if (loading) {
+          return;
+        }
         dispatch(
           togglePoolSortingDirectionAction({
             sortId: id,
