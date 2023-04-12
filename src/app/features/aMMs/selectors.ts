@@ -5,9 +5,18 @@ import { MarketTokenInformationProps } from '../../../ui/components/MarketTokenI
 import { generateAmmIdForRoute, generatePoolId } from '../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../utilities/constants';
 import { formatPOSIXTimestamp } from '../../../utilities/date';
+import { formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { selectChainId } from '../network';
-import { FILTER_LABELS, PoolFilterId } from './constants';
+import {
+  FILTER_LABELS,
+  PoolFilterId,
+  PoolSortDirection,
+  PoolSortId,
+  SORT_LABELS,
+} from './constants';
+import { sortPools } from './helpers/sortPools';
+import { PoolUI } from './types';
 
 export const selectAMMs = (state: RootState): AMM[] => {
   const chainId = selectChainId(state);
@@ -27,70 +36,78 @@ export const selectAMMs = (state: RootState): AMM[] => {
   return state.aMMs.aMMs[chainId].filter((amm) => generalPoolIds.includes(amm.id.toLowerCase()));
 };
 
-export const selectPools = (
-  state: RootState,
-): {
-  market: 'Aave' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP';
-  token?: 'eth' | 'usdc' | 'usdt' | 'dai';
-  isBorrowing: boolean;
-  isAaveV3: boolean;
-  fixedRateFormatted: string;
-  aMMMaturity: string;
-  id: string;
-  variableRate24hDelta: number;
-  variableRateFormatted: string;
-  routeAmmId: string;
-  routePoolId: string;
-}[] => {
+// TODO: Artur remove once SDK
+const cacheFixed: Record<string, number> = {};
+const cacheVariable: Record<string, number> = {};
+
+export const selectPools = (state: RootState): PoolUI[] => {
   const aMMs = selectAMMs(state);
   const appliedFilters = selectPoolFilters(state);
-  if (!appliedFilters) {
+  const appliedSortingDirection = selectPoolSortingDirection(state);
+  if (!appliedFilters || !appliedSortingDirection) {
     return [];
   }
+  const maturityEndMilliseconds = Date.now().valueOf() + MATURITY_WINDOW;
 
-  return (
-    aMMs
-      // TODO: Artur is it possible to be moved to SDK level (subgraph)?
-      .filter((amm) => Date.now().valueOf() + MATURITY_WINDOW < amm.endDateTime.toMillis())
-      .filter((amm) => {
-        if (appliedFilters['eth'] && amm.isETH) {
-          return true;
-        }
-        if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
-          return true;
-        }
-        // TODO: Artur to provide with functionality from SDK
-        // if(appliedFilters['lending'] && amm.market.tags.isBorrowing) {
-        //   return true;
-        // }
-        // TODO: Artur to provide with functionality from SDK
-        // if(appliedFilters['staking'] && amm.market.tags.isBorrowing) {
-        //   return true;
-        // }
-        return false;
-      })
-      .map((aMM) => {
-        const isAaveV3 = aMM.market.tags.isAaveV3;
-        const isBorrowing = aMM.market.tags.isBorrowing;
-        const market = aMM.market.name as MarketTokenInformationProps['market'];
-        const token =
-          aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token'];
+  const pools = aMMs
+    // TODO: Artur is it possible to be moved to SDK level (subgraph)?
+    .filter((amm) => maturityEndMilliseconds < amm.endDateTime.toMillis())
+    .filter((amm) => {
+      if (appliedFilters['eth'] && amm.isETH) {
+        return true;
+      }
+      if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
+        return true;
+      }
+      // TODO: Artur to provide with functionality from SDK
+      // if(appliedFilters['lending'] && amm.market.tags.isBorrowing) {
+      //   return true;
+      // }
+      // TODO: Artur to provide with functionality from SDK
+      // if(appliedFilters['staking'] && amm.market.tags.isBorrowing) {
+      //   return true;
+      // }
+      return false;
+    })
+    .map((aMM) => {
+      const isAaveV3 = aMM.market.tags.isAaveV3;
+      const isBorrowing = aMM.market.tags.isBorrowing;
+      const market = aMM.market.name as MarketTokenInformationProps['market'];
+      const token = aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token'];
+      cacheFixed[aMM.id] = cacheFixed[aMM.id] || Math.random() * 100;
+      cacheVariable[aMM.id] = cacheVariable[aMM.id] || Math.random() * 100;
+      const fixedRate = cacheFixed[aMM.id];
+      const variableRate = cacheVariable[aMM.id];
 
-        return {
-          market,
-          token,
-          isBorrowing,
-          isAaveV3,
-          fixedRateFormatted: 'TODO',
-          aMMMaturity: formatPOSIXTimestamp(aMM.termEndTimestampInMS),
-          id: aMM.id,
-          variableRate24hDelta: -1000,
-          variableRateFormatted: 'TODO',
-          routeAmmId: generateAmmIdForRoute(aMM),
-          routePoolId: generatePoolId(aMM),
-        };
-      })
-  );
+      return {
+        market,
+        token,
+        isBorrowing,
+        isAaveV3,
+        // TODO: Artur to provide SDK
+        fixedRateFormatted: fixedRate.toFixed(2),
+        fixedRate: fixedRate,
+        maturityTimestampInMS: aMM.termEndTimestampInMS,
+        aMMMaturity: formatPOSIXTimestamp(aMM.termEndTimestampInMS),
+        id: aMM.id,
+        // TODO: Artur to provide SDK
+        variableRate24hDelta: stringToBigFloat(
+          formatNumber(Math.random() * 10 * (Math.random() * 10 > 5 ? -1 : 1), 0, 3),
+        ),
+        variableRateFormatted: variableRate.toFixed(2),
+        variableRate,
+        routeAmmId: generateAmmIdForRoute(aMM),
+        routePoolId: generatePoolId(aMM),
+        name: `${market} - ${token as string}`,
+      };
+    });
+
+  return sortPools(pools, {
+    nameSortingDirection: appliedSortingDirection['pools'],
+    fixedAPRSortingDirection: appliedSortingDirection['fixedAPR'],
+    variableAPYSortingDirection: appliedSortingDirection['variableAPY'],
+    maturitySortingDirection: appliedSortingDirection['maturity'],
+  });
 };
 
 export const selectPoolsLoading = (state: RootState): boolean => {
@@ -113,6 +130,14 @@ export const selectPoolFilters = (state: RootState) => {
   return state.aMMs.filters[chainId];
 };
 
+export const selectPoolSortingDirection = (state: RootState) => {
+  const chainId = selectChainId(state);
+  if (!chainId) {
+    return undefined;
+  }
+  return state.aMMs.sortingDirection[chainId];
+};
+
 export const selectPoolFilterOptions = (
   state: RootState,
 ): {
@@ -129,6 +154,27 @@ export const selectPoolFilterOptions = (
     id: filterKey as PoolFilterId,
     label: FILTER_LABELS[filterKey as PoolFilterId],
     isActive: filters[filterKey as PoolFilterId],
+  }));
+};
+
+export const selectPoolSortOptions = (
+  state: RootState,
+): {
+  id: PoolSortId;
+  text: string;
+  subtext?: string;
+  direction: PoolSortDirection;
+}[] => {
+  const chainId = selectChainId(state);
+  if (!chainId) {
+    return [];
+  }
+  const sortingDirection = state.aMMs.sortingDirection[chainId];
+  return Object.keys(sortingDirection).map((sortKey) => ({
+    id: sortKey as PoolSortId,
+    text: SORT_LABELS[sortKey as PoolSortId].text,
+    subtext: SORT_LABELS[sortKey as PoolSortId].subtext,
+    direction: sortingDirection[sortKey as PoolSortId],
   }));
 };
 

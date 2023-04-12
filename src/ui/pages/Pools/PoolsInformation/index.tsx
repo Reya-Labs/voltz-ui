@@ -1,4 +1,4 @@
-import { LabelTokenTypography, Pill, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
+import { LabelTokenTypography, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -13,6 +13,7 @@ import {
   FilterBox,
   FiltersBox,
   InformationBox,
+  PoolFilterPill,
   PoolsInformationBox,
   VerticalLine,
 } from './PoolsInformation.styled';
@@ -91,7 +92,7 @@ export const PoolsInformation: React.FunctionComponent = () => {
         </TypographyWithTooltip>
         <FiltersBox>
           {filterOptions.map((filter) => (
-            <Pill
+            <PoolFilterPill
               key={filter.id}
               colorToken={filter.isActive ? 'lavenderWeb' : 'liberty'}
               typographyToken="primaryBodySmallRegular"
@@ -106,7 +107,7 @@ export const PoolsInformation: React.FunctionComponent = () => {
               }}
             >
               {filter.label}
-            </Pill>
+            </PoolFilterPill>
           ))}
         </FiltersBox>
       </FilterBox>

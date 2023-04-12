@@ -2,13 +2,23 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, getAMMs, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { initialFilters, PoolFilterId, PoolFilters } from './constants';
+import {
+  initialFilters,
+  initialSortingDirection,
+  PoolFilterId,
+  PoolFilters,
+  PoolSortDirection,
+  PoolSortId,
+  PoolSorting,
+  resetSortingDirection,
+} from './constants';
 import { initialiseAMMsThunk } from './thunks';
 
 type SliceState = {
   aMMsLoadedState: Record<SupportedChainId, 'idle' | 'pending' | 'succeeded' | 'failed'>;
   aMMs: Record<SupportedChainId, AMM[]>;
   filters: Record<SupportedChainId, PoolFilters>;
+  sortingDirection: Record<SupportedChainId, PoolSorting>;
 };
 
 const initialState: SliceState = {
@@ -29,6 +39,12 @@ const initialState: SliceState = {
     [SupportedChainId.goerli]: { ...initialFilters },
     [SupportedChainId.arbitrum]: { ...initialFilters },
     [SupportedChainId.arbitrumGoerli]: { ...initialFilters },
+  },
+  sortingDirection: {
+    [SupportedChainId.mainnet]: { ...initialSortingDirection },
+    [SupportedChainId.goerli]: { ...initialSortingDirection },
+    [SupportedChainId.arbitrum]: { ...initialSortingDirection },
+    [SupportedChainId.arbitrumGoerli]: { ...initialSortingDirection },
   },
 };
 
@@ -58,6 +74,32 @@ export const slice = createSlice({
     ) => {
       state.filters[chainId][filterId] = !state.filters[chainId][filterId];
     },
+    togglePoolSortingDirectionAction: (
+      state,
+      {
+        payload: { chainId, sortId },
+      }: PayloadAction<{
+        chainId: SupportedChainId;
+        sortId: PoolSortId;
+      }>,
+    ) => {
+      let nextSort: PoolSortDirection = 'noSort';
+      const currentSort = state.sortingDirection[chainId][sortId];
+      if (currentSort === 'noSort') {
+        nextSort = 'ascending';
+      }
+      if (currentSort === 'ascending') {
+        nextSort = 'descending';
+      }
+      if (currentSort === 'descending') {
+        nextSort = 'ascending';
+      }
+
+      state.sortingDirection[chainId] = {
+        ...resetSortingDirection,
+        [sortId]: nextSort,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -75,5 +117,6 @@ export const slice = createSlice({
   },
 });
 
-export const { setSignerForAMMsAction, togglePoolFilterAction } = slice.actions;
+export const { togglePoolSortingDirectionAction, setSignerForAMMsAction, togglePoolFilterAction } =
+  slice.actions;
 export const aMMsReducer = slice.reducer;
