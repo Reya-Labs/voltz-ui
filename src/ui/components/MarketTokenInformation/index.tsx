@@ -51,7 +51,7 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
           typographyToken="primaryBodySmallRegular"
           variant={pillVariant}
         >
-          v3
+          Aave v3
         </Pill>
       ) : null}
     </MarketTokenBox>

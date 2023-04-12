@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Skeleton } from 'brokoli-ui';
+import { getColorFromToken, Skeleton } from 'brokoli-ui';
 
 export const PoolsListBox = styled('div')`
   display: flex;
@@ -23,4 +23,14 @@ export const PoolEntrySkeleton = styled(Skeleton)`
   border-radius: 8px;
   font-size: 18px;
   line-height: 24px;
+`;
+
+export const NoPoolsFoundBox = styled('div')`
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  border-radius: 8px;
+  background-color: ${getColorFromToken('liberty7')};
 `;
