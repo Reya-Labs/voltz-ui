@@ -24,7 +24,7 @@ const getLinks = (chainId?: SupportedChainId | null) =>
               link: `/${routes.TRADER_PORTFOLIO}`,
             },
             {
-              text: 'LPPortfolio',
+              text: 'LP Portfolio',
               link: `/${routes.LP_PORTFOLIO}`,
             },
           ],
