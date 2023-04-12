@@ -62,7 +62,7 @@ export const PoolsList: React.FunctionComponent = () => {
               <NoPoolsFoundBox>
                 <img alt="Gimme" src="/images/no-pools-found.png" />
                 <Typography colorToken="lavenderWeb" typographyToken="primaryBodyLargeBold">
-                  No Pools matching the filter criteria
+                  No pools match the filter criteria. Try refining them.
                 </Typography>
               </NoPoolsFoundBox>
             ) : null}
