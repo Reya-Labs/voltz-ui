@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Typography } from 'brokoli-ui';
 
 import { ReactComponent as AscendingSort } from './assets/ascending-sort.svg';
 import { ReactComponent as DescendingSort } from './assets/descending-sort.svg';
@@ -8,6 +9,11 @@ export const RowsBox = styled('div')`
   display: flex;
   flex-direction: column;
   cursor: pointer;
+`;
+
+export const TypographyWithIcon = styled(Typography)`
+  display: inline-flex;
+  align-items: center;
 `;
 
 export const NoSortIcon = styled(NoSort)`

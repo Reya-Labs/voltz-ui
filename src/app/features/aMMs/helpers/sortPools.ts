@@ -3,15 +3,6 @@ import orderBy from 'lodash.orderby';
 import { PoolSortDirection } from '../constants';
 import { PoolUI } from '../types';
 
-type SortPoolsArgs = {
-  poolA: PoolUI;
-  poolB: PoolUI;
-  nameSortingDirection: PoolSortDirection;
-  fixedAPRSortingDirection: PoolSortDirection;
-  variableAPYSortingDirection: PoolSortDirection;
-  maturitySortingDirection: PoolSortDirection;
-};
-
 export const sortPools = (
   pools: PoolUI[],
   {

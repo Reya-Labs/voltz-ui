@@ -11,6 +11,7 @@ import {
   DescendingSortIcon,
   NoSortIcon,
   RowsBox,
+  TypographyWithIcon,
 } from './PoolSortHeader.styled';
 
 type PoolSortHeaderProps = {
@@ -56,10 +57,10 @@ export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
         );
       }}
     >
-      <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
+      <TypographyWithIcon colorToken="lavenderWeb3" typographyToken={typographyToken}>
         {text}&nbsp;
         <DirectionIcon />
-      </Typography>
+      </TypographyWithIcon>
       {subtext ? (
         <Typography colorToken="lavenderWeb5" typographyToken={typographyToken}>
           {subtext}
