@@ -33,102 +33,107 @@ type PoolEntryProps = {
   routePoolId: string;
 };
 
-export const PoolEntry: React.FunctionComponent<PoolEntryProps> = ({
-  isAaveV3,
-  isBorrowing,
-  market,
-  token,
-  fixedRateFormatted,
-  variableRate24hDelta,
-  variableRateFormatted,
-  aMMMaturity,
-  backgroundColorToken,
-  routePoolId,
-  routeAmmId,
-}) => {
-  const { isLargeDesktopDevice } = useResponsiveQuery();
-  const navigate = useNavigate();
+export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
+  (
+    {
+      isAaveV3,
+      isBorrowing,
+      market,
+      token,
+      fixedRateFormatted,
+      variableRate24hDelta,
+      variableRateFormatted,
+      aMMMaturity,
+      backgroundColorToken,
+      routePoolId,
+      routeAmmId,
+    },
+    ref,
+  ) => {
+    const { isLargeDesktopDevice } = useResponsiveQuery();
+    const navigate = useNavigate();
 
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyLargeRegular'
-    : 'secondaryBodyMediumRegular';
+    const typographyToken: TypographyToken = isLargeDesktopDevice
+      ? 'secondaryBodyLargeRegular'
+      : 'secondaryBodyMediumRegular';
 
-  const handleOnMakeClick = () => {
-    const path = generatePath(routes.LP_FORM, {
-      form: 'liquidity',
-      ammId: routeAmmId,
-      poolId: routePoolId,
-    });
-    navigate(`/${path}`);
-  };
+    const handleOnMakeClick = () => {
+      const path = generatePath(routes.LP_FORM, {
+        form: 'liquidity',
+        ammId: routeAmmId,
+        poolId: routePoolId,
+      });
+      navigate(`/${path}`);
+    };
 
-  const handleOnTradeClick = () => {
-    const path = generatePath(routes.TRADER_FORM, {
-      form: 'swap',
-      ammId: routeAmmId,
-      poolId: routePoolId,
-    });
-    navigate(`/${path}`);
-  };
+    const handleOnTradeClick = () => {
+      const path = generatePath(routes.TRADER_FORM, {
+        form: 'swap',
+        ammId: routeAmmId,
+        poolId: routePoolId,
+      });
+      navigate(`/${path}`);
+    };
 
-  return (
-    <PoolEntryBox backgroundColorToken={backgroundColorToken}>
-      <LeftBox>
-        <MarketTokenInformation
-          colorToken="lavenderWeb"
-          iconSize={24}
-          isAaveV3={isAaveV3}
-          isBorrowing={isBorrowing}
-          market={market}
-          pillVariant="compact"
-          token={token}
-          typographyToken="primaryBodyLargeBold"
-        />
-      </LeftBox>
-      <MiddleBox>
-        <FixedAPRBox>
-          <TokenTypography
+    return (
+      <PoolEntryBox ref={ref} backgroundColorToken={backgroundColorToken}>
+        <LeftBox>
+          <MarketTokenInformation
             colorToken="lavenderWeb"
-            token="%"
-            typographyToken={typographyToken}
-            value={fixedRateFormatted}
+            iconSize={24}
+            isAaveV3={isAaveV3}
+            isBorrowing={isBorrowing}
+            market={market}
+            pillVariant="compact"
+            token={token}
+            typographyToken="primaryBodyLargeBold"
           />
-        </FixedAPRBox>
-        <VariableAPYBox>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            differenceToken="%"
-            differenceValue={variableRate24hDelta}
-            token="%"
-            typographyToken={typographyToken}
-            value={variableRateFormatted}
-          />
-        </VariableAPYBox>
-        <MaturityBox>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            token=""
-            typographyToken={typographyToken}
-            value={aMMMaturity}
-          />
-        </MaturityBox>
-      </MiddleBox>
-      <RightBox>
-        <ButtonStyled
-          typographyToken="primaryBodySmallBold"
-          variant="primary"
-          onClick={handleOnTradeClick}
-        >
-          Trade
-        </ButtonStyled>
-        <ButtonStyled
-          typographyToken="primaryBodySmallBold"
-          variant="secondary"
-          onClick={handleOnMakeClick}
-        >
-          Make
-        </ButtonStyled>
-      </RightBox>
-    </PoolEntryBox>
-  );
-};
+        </LeftBox>
+        <MiddleBox>
+          <FixedAPRBox>
+            <TokenTypography
+              colorToken="lavenderWeb"
+              token="%"
+              typographyToken={typographyToken}
+              value={fixedRateFormatted}
+            />
+          </FixedAPRBox>
+          <VariableAPYBox>
+            <TokenTypography
+              colorToken="lavenderWeb"
+              differenceToken="%"
+              differenceValue={variableRate24hDelta}
+              token="%"
+              typographyToken={typographyToken}
+              value={variableRateFormatted}
+            />
+          </VariableAPYBox>
+          <MaturityBox>
+            <TokenTypography
+              colorToken="lavenderWeb"
+              token=""
+              typographyToken={typographyToken}
+              value={aMMMaturity}
+            />
+          </MaturityBox>
+        </MiddleBox>
+        <RightBox>
+          <ButtonStyled
+            typographyToken="primaryBodySmallBold"
+            variant="primary"
+            onClick={handleOnTradeClick}
+          >
+            Trade
+          </ButtonStyled>
+          <ButtonStyled
+            typographyToken="primaryBodySmallBold"
+            variant="secondary"
+            onClick={handleOnMakeClick}
+          >
+            Make
+          </ButtonStyled>
+        </RightBox>
+      </PoolEntryBox>
+    );
+  },
+);
