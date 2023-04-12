@@ -53,23 +53,20 @@ export const selectPools = (state: RootState): PoolUI[] => {
     // TODO: Artur is it possible to be moved to SDK level (subgraph)?
     .filter((amm) => maturityEndMilliseconds < amm.endDateTime.toMillis())
     .filter((amm) => {
-      if (appliedFilters['eth'] && amm.isETH) {
+      if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
         return true;
       }
-      if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
+      if (appliedFilters['v2'] && amm.market.tags.isV2) {
         return true;
       }
       // TODO: Artur to provide with functionality from SDK
       // if(appliedFilters['lending'] && amm.market.tags.isBorrowing) {
       //   return true;
       // }
-      // TODO: Artur to provide with functionality from SDK
-      // if(appliedFilters['staking'] && amm.market.tags.isBorrowing) {
-      //   return true;
-      // }
       return false;
     })
     .map((aMM) => {
+      const isV2 = aMM.market.tags.isV2;
       const isAaveV3 = aMM.market.tags.isAaveV3;
       const isBorrowing = aMM.market.tags.isBorrowing;
       const market = aMM.market.name as MarketTokenInformationProps['market'];
@@ -84,6 +81,7 @@ export const selectPools = (state: RootState): PoolUI[] => {
         token,
         isBorrowing,
         isAaveV3,
+        isV2,
         // TODO: Artur to provide SDK
         fixedRateFormatted: fixedRate.toFixed(2),
         fixedRate: fixedRate,

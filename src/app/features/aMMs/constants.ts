@@ -1,4 +1,4 @@
-export type PoolFilterId = 'borrow' | 'eth' | 'staking' | 'lending';
+export type PoolFilterId = 'borrow' | 'v2' | 'lend';
 export type PoolSortId = 'pools' | 'fixedAPR' | 'variableAPY' | 'maturity';
 export type PoolFilters = Record<PoolFilterId, boolean>;
 export type PoolSortDirection = 'noSort' | 'ascending' | 'descending';
@@ -6,9 +6,8 @@ export type PoolSorting = Record<PoolSortId, PoolSortDirection>;
 
 export const initialFilters: PoolFilters = {
   borrow: true,
-  eth: true,
-  lending: true,
-  staking: true,
+  v2: true,
+  lend: true,
 };
 
 export const resetSortingDirection: PoolSorting = {
@@ -25,9 +24,8 @@ export const initialSortingDirection: PoolSorting = {
 
 export const FILTER_LABELS: Record<PoolFilterId, string> = {
   borrow: 'Borrow',
-  eth: 'ETH',
-  lending: 'Lending',
-  staking: 'Staking',
+  v2: 'v2',
+  lend: 'Lend',
 };
 
 export const SORT_LABELS: Record<

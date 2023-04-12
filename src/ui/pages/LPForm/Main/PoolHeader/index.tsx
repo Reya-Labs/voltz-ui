@@ -24,6 +24,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
     return null;
   }
   const isAaveV3 = aMM.market.tags.isAaveV3;
+  const isV2 = aMM.market.tags.isV2;
   const isBorrowing = aMM.market.tags.isBorrowing;
   const market = aMM.market.name as MarketTokenInformationProps['market'];
   const token = aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token'];
@@ -34,6 +35,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
       fixedRateFormatted={fixedRateFormatted}
       isAaveV3={isAaveV3}
       isBorrowing={isBorrowing}
+      isV2={isV2}
       market={market}
       token={token}
       variableRate24hDelta={variableRate24hDelta}
