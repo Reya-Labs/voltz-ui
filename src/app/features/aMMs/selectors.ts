@@ -45,6 +45,9 @@ export const selectPools = (state: RootState): PoolUI[] => {
       if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
         return true;
       }
+      if (appliedFilters['aaveV3'] && amm.market.tags.isAaveV3) {
+        return true;
+      }
       if (appliedFilters['v2'] && amm.market.tags.isV2) {
         return true;
       }
