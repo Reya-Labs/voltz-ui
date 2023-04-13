@@ -1,9 +1,7 @@
-import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import { selectPoolSortOptions } from '../../../../../app/features/aMMs';
 import { useAppSelector } from '../../../../../app/hooks';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import {
   FixedAPRBox,
   LeftBox,
@@ -16,11 +14,6 @@ import {
 import { PoolSortHeader } from './PoolSortHeader';
 
 export const PoolsHeader: React.FunctionComponent = () => {
-  const { isLargeDesktopDevice } = useResponsiveQuery();
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
   const sortOptions = useAppSelector(selectPoolSortOptions);
   const poolsSortOption = sortOptions.find((o) => o.id === 'pools');
   const fixedAPRSortOption = sortOptions.find((o) => o.id === 'fixedAPR');
