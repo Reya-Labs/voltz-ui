@@ -1,7 +1,6 @@
 import orderBy from 'lodash.orderby';
 
-import { PoolSortDirection } from '../constants';
-import { PoolUI } from '../types';
+import { PoolSortDirection, PoolUI } from '../types';
 
 export const sortPools = (
   pools: PoolUI[],
@@ -24,11 +23,11 @@ export const sortPools = (
     directions.push(nameSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   if (fixedAPRSortingDirection !== 'noSort') {
-    fields.push('fixedRate');
+    fields.push('fixedAPRRate');
     directions.push(fixedAPRSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   if (variableAPYSortingDirection !== 'noSort') {
-    fields.push('variableRate');
+    fields.push('variableAPYRate');
     directions.push(variableAPYSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   if (maturitySortingDirection !== 'noSort') {

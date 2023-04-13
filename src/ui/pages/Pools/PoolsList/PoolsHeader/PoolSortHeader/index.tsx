@@ -5,7 +5,7 @@ import {
   selectPoolsLoading,
   togglePoolSortingDirectionAction,
 } from '../../../../../../app/features/aMMs';
-import { PoolSortDirection, PoolSortId } from '../../../../../../app/features/aMMs/constants';
+import { PoolSortDirection, PoolSortId } from '../../../../../../app/features/aMMs/types';
 import { selectChainId } from '../../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../../hooks/useResponsiveQuery';

@@ -4,21 +4,30 @@ import { providers } from 'ethers';
 
 import {
   initialFilters,
+  initialPoolsInformation,
   initialSortingDirection,
+  resetSortingDirection,
+} from './constants';
+import { fetchPoolsInformationThunk, initialiseAMMsThunk } from './thunks';
+import {
   PoolFilterId,
   PoolFilters,
+  PoolsInformation,
   PoolSortDirection,
   PoolSortId,
   PoolSorting,
-  resetSortingDirection,
-} from './constants';
-import { initialiseAMMsThunk } from './thunks';
+} from './types';
 
 type SliceState = {
   aMMsLoadedState: Record<SupportedChainId, 'idle' | 'pending' | 'succeeded' | 'failed'>;
   aMMs: Record<SupportedChainId, AMM[]>;
   filters: Record<SupportedChainId, PoolFilters>;
   sortingDirection: Record<SupportedChainId, PoolSorting>;
+  poolsInformationLoadedState: Record<
+    SupportedChainId,
+    'idle' | 'pending' | 'succeeded' | 'failed'
+  >;
+  poolsInformation: Record<SupportedChainId, PoolsInformation>;
 };
 
 const initialState: SliceState = {
@@ -45,6 +54,18 @@ const initialState: SliceState = {
     [SupportedChainId.goerli]: { ...initialSortingDirection },
     [SupportedChainId.arbitrum]: { ...initialSortingDirection },
     [SupportedChainId.arbitrumGoerli]: { ...initialSortingDirection },
+  },
+  poolsInformationLoadedState: {
+    [SupportedChainId.mainnet]: 'idle',
+    [SupportedChainId.goerli]: 'idle',
+    [SupportedChainId.arbitrum]: 'idle',
+    [SupportedChainId.arbitrumGoerli]: 'idle',
+  },
+  poolsInformation: {
+    [SupportedChainId.mainnet]: { ...initialPoolsInformation },
+    [SupportedChainId.goerli]: { ...initialPoolsInformation },
+    [SupportedChainId.arbitrum]: { ...initialPoolsInformation },
+    [SupportedChainId.arbitrumGoerli]: { ...initialPoolsInformation },
   },
 };
 
@@ -113,6 +134,19 @@ export const slice = createSlice({
       .addCase(initialiseAMMsThunk.fulfilled, (state, { payload, meta }) => {
         state.aMMsLoadedState[meta.arg.chainId] = 'succeeded';
         state.aMMs[meta.arg.chainId] = payload as Awaited<ReturnType<typeof getAMMs>>['amms'];
+      })
+      .addCase(fetchPoolsInformationThunk.pending, (state, { meta }) => {
+        state.poolsInformationLoadedState[meta.arg.chainId] = 'pending';
+      })
+      .addCase(fetchPoolsInformationThunk.rejected, (state, { meta }) => {
+        state.poolsInformationLoadedState[meta.arg.chainId] = 'failed';
+        state.poolsInformation[meta.arg.chainId] = {
+          ...initialPoolsInformation,
+        };
+      })
+      .addCase(fetchPoolsInformationThunk.fulfilled, (state, { payload, meta }) => {
+        state.poolsInformationLoadedState[meta.arg.chainId] = 'succeeded';
+        state.poolsInformation[meta.arg.chainId] = payload as PoolsInformation;
       });
   },
 });

@@ -105,6 +105,8 @@ export const stringToBigFloat = (stringValue: string): number => {
  * It takes a number and returns a string using Intl.NumberFormat formatter
  * it creates compact number format
  * @param {number} value - number - The number to format.
+ * @param {number} minimumFractionDigits - Min. fraction digits
+ * @param {number} maximumFractionDigits - Max. fraction digits
  * @returns A string
  */
 export const compactFormat = (
@@ -123,7 +125,9 @@ export const compactFormat = (
 /**
  * It takes a number and returns a string using Intl.NumberFormat formatter
  * it creates compact number format
- * @param {number} value - number - The number to format.
+ * @param {number} number - The number to format.
+ * @param {number} minimumFractionDigits - Min. fraction digits
+ * @param {number} maximumFractionDigits - Max. fraction digits
  * @returns {Object} compactFormatToParts containing the compacted number and suffix.
  * @returns {string} compactFormatToParts.compactNumber, representing a
  * language-sensitive representation of the compacted number.

@@ -5,18 +5,12 @@ import { MarketTokenInformationProps } from '../../../ui/components/MarketTokenI
 import { generateAmmIdForRoute, generatePoolId } from '../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../utilities/constants';
 import { formatPOSIXTimestamp } from '../../../utilities/date';
-import { formatNumber, stringToBigFloat } from '../../../utilities/number';
+import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { selectChainId } from '../network';
-import {
-  FILTER_LABELS,
-  PoolFilterId,
-  PoolSortDirection,
-  PoolSortId,
-  SORT_LABELS,
-} from './constants';
+import { FILTER_LABELS, SORT_LABELS } from './constants';
 import { sortPools } from './helpers/sortPools';
-import { PoolUI } from './types';
+import { PoolFilterId, PoolSortDirection, PoolSortId, PoolUI } from './types';
 
 export const selectAMMs = (state: RootState): AMM[] => {
   const chainId = selectChainId(state);
@@ -36,10 +30,6 @@ export const selectAMMs = (state: RootState): AMM[] => {
   return state.aMMs.aMMs[chainId].filter((amm) => generalPoolIds.includes(amm.id.toLowerCase()));
 };
 
-// TODO: Artur remove once SDK
-const cacheFixed: Record<string, number> = {};
-const cacheVariable: Record<string, number> = {};
-
 export const selectPools = (state: RootState): PoolUI[] => {
   const aMMs = selectAMMs(state);
   const appliedFilters = selectPoolFilters(state);
@@ -50,7 +40,6 @@ export const selectPools = (state: RootState): PoolUI[] => {
   const maturityEndMilliseconds = Date.now().valueOf() + MATURITY_WINDOW;
 
   const pools = aMMs
-    // TODO: Artur is it possible to be moved to SDK level (subgraph)?
     .filter((amm) => maturityEndMilliseconds < amm.endDateTime.toMillis())
     .filter((amm) => {
       if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
@@ -59,10 +48,9 @@ export const selectPools = (state: RootState): PoolUI[] => {
       if (appliedFilters['v2'] && amm.market.tags.isV2) {
         return true;
       }
-      // TODO: Artur to provide with functionality from SDK
-      // if(appliedFilters['lending'] && amm.market.tags.isBorrowing) {
-      //   return true;
-      // }
+      if (appliedFilters['yield'] && amm.market.tags.isYield) {
+        return true;
+      }
       return false;
     })
     .map((aMM) => {
@@ -71,10 +59,9 @@ export const selectPools = (state: RootState): PoolUI[] => {
       const isBorrowing = aMM.market.tags.isBorrowing;
       const market = aMM.market.name as MarketTokenInformationProps['market'];
       const token = aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token'];
-      cacheFixed[aMM.id] = cacheFixed[aMM.id] || Math.random() * 100;
-      cacheVariable[aMM.id] = cacheVariable[aMM.id] || Math.random() * 100;
-      const fixedRate = cacheFixed[aMM.id];
-      const variableRate = cacheVariable[aMM.id];
+      const fixedAPRRate = aMM.fixedApr;
+      const variableAPYRate = aMM.variableApy;
+      const variableApy24Ago = aMM.variableApy24Ago;
 
       return {
         market,
@@ -82,18 +69,14 @@ export const selectPools = (state: RootState): PoolUI[] => {
         isBorrowing,
         isAaveV3,
         isV2,
-        // TODO: Artur to provide SDK
-        fixedRateFormatted: fixedRate.toFixed(2),
-        fixedRate: fixedRate,
+        fixedAPRRateFormatted: formatNumber(fixedAPRRate),
+        fixedAPRRate,
         maturityTimestampInMS: aMM.termEndTimestampInMS,
         aMMMaturity: formatPOSIXTimestamp(aMM.termEndTimestampInMS),
         id: aMM.id,
-        // TODO: Artur to provide SDK
-        variableRate24hDelta: stringToBigFloat(
-          formatNumber(Math.random() * 10 * (Math.random() * 10 > 5 ? -1 : 1), 0, 3),
-        ),
-        variableRateFormatted: variableRate.toFixed(2),
-        variableRate,
+        variableAPYRate24hDelta: stringToBigFloat(formatNumber(variableApy24Ago, 0, 3)),
+        variableAPYRateFormatted: formatNumber(variableAPYRate),
+        variableAPYRate,
         routeAmmId: generateAmmIdForRoute(aMM),
         routePoolId: generatePoolId(aMM),
         name: `${market} - ${token as string}`,
@@ -109,8 +92,13 @@ export const selectPools = (state: RootState): PoolUI[] => {
 };
 
 export const selectPoolsLoading = (state: RootState): boolean => {
-  const aMMsLoadedState = selectAMMsLoadedState(state);
-  return aMMsLoadedState === 'idle' || aMMsLoadedState === 'pending';
+  const loadedState = selectAMMsLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectPoolsInformationLoading = (state: RootState): boolean => {
+  const loadedState = selectPoolsInformationLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
 };
 
 export const selectPoolsSize = (state: RootState): string => {
@@ -118,6 +106,44 @@ export const selectPoolsSize = (state: RootState): string => {
     return '--';
   }
   return selectPools(state).length.toString();
+};
+
+export const selectVolume30DaysFormatted = (
+  state: RootState,
+): ReturnType<typeof compactFormatToParts> => {
+  const chainId = selectChainId(state);
+  if (selectPoolsInformationLoading(state) || !chainId) {
+    return {
+      compactNumber: '--',
+      compactSuffix: '',
+    };
+  }
+  const compactFormat = compactFormatToParts(
+    state.aMMs.poolsInformation[chainId].volume30DayInDollars,
+  );
+  return {
+    compactNumber: `$${compactFormat.compactNumber}`,
+    compactSuffix: compactFormat.compactSuffix,
+  };
+};
+
+export const selectTotalLiquidityFormatted = (
+  state: RootState,
+): ReturnType<typeof compactFormatToParts> => {
+  const chainId = selectChainId(state);
+  if (selectPoolsInformationLoading(state) || !chainId) {
+    return {
+      compactNumber: '--',
+      compactSuffix: '',
+    };
+  }
+  const compactFormat = compactFormatToParts(
+    state.aMMs.poolsInformation[chainId].totalLiquidityInDollars,
+  );
+  return {
+    compactNumber: `$${compactFormat.compactNumber}`,
+    compactSuffix: compactFormat.compactSuffix,
+  };
 };
 
 export const selectPoolFilters = (state: RootState) => {
@@ -213,4 +239,12 @@ export const selectAMMsLoadedState = (state: RootState) => {
     return 'idle';
   }
   return state.aMMs.aMMsLoadedState[chainId];
+};
+
+export const selectPoolsInformationLoadedState = (state: RootState) => {
+  const chainId = selectChainId(state);
+  if (!chainId) {
+    return 'idle';
+  }
+  return state.aMMs.poolsInformationLoadedState[chainId];
 };
