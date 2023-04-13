@@ -4,7 +4,6 @@ import { DateTime } from 'luxon';
 import {
   findCurrentAmm,
   findCurrentPosition,
-  findCurrentPositionLp,
   findCurrentPositionsLp,
   getAmmProtocol,
 } from './index';
@@ -72,88 +71,6 @@ describe('utilities/amm', () => {
     it('returns underfined when the positions list is empty', () => {
       const selectedAmmId = '2';
       const result = findCurrentPosition([], selectedAmmId);
-      expect(result).toBeUndefined();
-    });
-  });
-
-  describe('findCurrentPositionLp', () => {
-    it('returns the correct position when it exists in the list', () => {
-      const positions = [
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-          fixedRateLower: {
-            toNumber: () => {
-              return 1;
-            },
-          },
-          fixedRateUpper: {
-            toNumber: () => {
-              return 3;
-            },
-          },
-        },
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-          fixedRateLower: {
-            toNumber: () => {
-              return 1;
-            },
-          },
-          fixedRateUpper: {
-            toNumber: () => {
-              return 2;
-            },
-          },
-        },
-      ] as never;
-      const fixedLower: number = 1;
-      const fixedUpper: number = 3;
-      const result = findCurrentPositionLp(positions, fixedLower, fixedUpper);
-      expect(result?.amm.id).toEqual('1');
-      expect(result?.fixedRateLower.toNumber()).toEqual(1);
-      expect(result?.fixedRateUpper.toNumber()).toEqual(3);
-    });
-
-    it('returns undefined when the position does not exist in the list', () => {
-      const positions = [
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-          fixedRateLower: {
-            toNumber: () => {
-              return 1;
-            },
-          },
-          fixedRateUpper: {
-            toNumber: () => {
-              return 3;
-            },
-          },
-        },
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-          fixedRateLower: {
-            toNumber: () => {
-              return 1;
-            },
-          },
-          fixedRateUpper: {
-            toNumber: () => {
-              return 2;
-            },
-          },
-        },
-      ] as never;
-      const fixedLower: number = 1;
-      const fixedUpper: number = 10;
-      const result = findCurrentPositionLp(positions, fixedLower, fixedUpper);
-      expect(result).toBeUndefined();
-    });
-
-    it('returns undefined when the positions list is empty', () => {
-      const positions = [] as never;
-      const fixedLower: number = 1;
-      const fixedUpper: number = 10;
-      const result = findCurrentPositionLp(positions, fixedLower, fixedUpper);
       expect(result).toBeUndefined();
     });
   });

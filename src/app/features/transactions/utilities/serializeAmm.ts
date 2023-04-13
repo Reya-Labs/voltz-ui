@@ -2,7 +2,7 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 
 import { SerializedAMM } from '../../../types';
 
-const serializeAmm = (amm: AMM): SerializedAMM => ({
+export const serializeAmm = (amm: AMM): SerializedAMM => ({
   id: amm.id,
   peripheryAddress: amm.peripheryAddress,
   factoryAddress: amm.factoryAddress,
@@ -22,5 +22,3 @@ const serializeAmm = (amm: AMM): SerializedAMM => ({
   wethAddress: amm.wethAddress,
   minLeverageAllowed: amm.minLeverageAllowed,
 });
-
-export default serializeAmm;

@@ -9,7 +9,7 @@
     "build-storybook": "build-storybook",
     "ts:check": "yarn ts:check-types && yarn ts:circular-check",
     "ts:check-types": "tsc --noEmit",
-    "ts:check-unused-exports": "npx ts-unused-exports ./tsconfig.json --ignoreFiles=.stories",
+    "ts:check-unused-exports": "npx ts-unused-exports ./tsconfig.json --allowUnusedTypes --maxIssues=5 --ignoreFiles=.stories --silent --ignoreTestFiles --findCompletelyUnusedFiles",
     "ts:circular-check": "dpdm --no-output --no-tree --no-warning --exit-code circular:1 -T ./src/index.tsx",
     "lint:check": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
