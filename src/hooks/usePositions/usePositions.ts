@@ -13,7 +13,6 @@ import { useWallet } from '../useWallet';
 
 type UsePositionsResult = {
   positionsByAgentGroup: Position[];
-  borrowPositions: Position[];
   loading: boolean;
   error: boolean;
 };
@@ -105,7 +104,6 @@ export const usePositions = (agent: Agents): UsePositionsResult => {
 
   return {
     positionsByAgentGroup: mePositions.filter((pos) => !isBorrowingPosition(pos)),
-    borrowPositions: mePositions.filter((pos) => isBorrowingPosition(pos)),
     loading: aMMsLoadedState === 'pending' || fetchLoading,
     error: aMMsLoadedState === 'failed' || fetchError,
   };

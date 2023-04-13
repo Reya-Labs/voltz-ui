@@ -1,4 +1,4 @@
-import { AMM, BorrowAMM } from '@voltz-protocol/v1-sdk';
+import { AMM } from '@voltz-protocol/v1-sdk';
 
 import { getConfig } from '../../../hooks/voltz-config/config';
 import { MarketTokenInformationProps } from '../../../ui/components/MarketTokenInformation';
@@ -220,19 +220,6 @@ export const selectTraderAMMs = (state: RootState): AMM[] => {
     return state.aMMs.aMMs[chainId];
   }
   return state.aMMs.aMMs[chainId].filter((amm) => traderPoolsIds.includes(amm.id.toLowerCase()));
-};
-
-export const selectBorrowAMMs = (state: RootState): BorrowAMM[] => {
-  const chainId = selectChainId(state);
-  if (!chainId) {
-    return [];
-  }
-  const aMMs = state.aMMs.aMMs[chainId];
-  const borrowMarkets = aMMs.filter((amm) => amm.market.tags.isBorrowing);
-  const liveBorrowMarkets = borrowMarkets.filter(
-    (amm) => Date.now().valueOf() < amm.endDateTime.toMillis(),
-  );
-  return liveBorrowMarkets.map((amm) => new BorrowAMM({ id: amm.id, amm: amm }));
 };
 
 export const selectAMMsLoadedState = (state: RootState) => {

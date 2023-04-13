@@ -1,11 +1,10 @@
-import { AMM, BorrowAMM } from '@voltz-protocol/v1-sdk';
+import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect } from 'react';
 
 import {
   initialiseAMMsThunk,
   selectAMMs,
   selectAMMsLoadedState,
-  selectBorrowAMMs,
   selectTraderAMMs,
   setSignerForAMMsAction,
 } from '../../app/features/aMMs';
@@ -16,7 +15,6 @@ import { useWallet } from '../useWallet';
 type UseAMMsResult = {
   aMMs: AMM[];
   traderAMMs: AMM[];
-  borrowAMMs: BorrowAMM[];
   loading: boolean;
   error: boolean;
   idle: boolean;
@@ -30,7 +28,6 @@ export const useAMMs = (): UseAMMsResult => {
   const aMMsLoadedState = useAppSelector(selectAMMsLoadedState);
   const aMMs = useAppSelector(selectAMMs);
   const traderAMMs = useAppSelector(selectTraderAMMs);
-  const borrowAMMs = useAppSelector(selectBorrowAMMs);
 
   useEffect(() => {
     if (!chainId) {
@@ -66,7 +63,6 @@ export const useAMMs = (): UseAMMsResult => {
   return {
     aMMs,
     traderAMMs,
-    borrowAMMs,
     idle: aMMsLoadedState === 'idle',
     loading: aMMsLoadedState === 'pending',
     error: aMMsLoadedState === 'failed',

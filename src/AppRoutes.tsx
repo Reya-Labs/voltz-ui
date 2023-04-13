@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { getDefaultChainId } from './components/interface/NetworkSelector/get-default-chain-id';
 import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
-import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
 import { VaultFormRoute } from './routes/LPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
 import { LPPortfolio } from './routes/LPPortfolio/LPPortfolio';
@@ -185,14 +184,6 @@ export const AppRoutes = () => {
             </NetworkProtectedPage>
           }
           path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM}
-        />
-        <Route
-          element={
-            <NetworkProtectedPage hidden={true}>
-              <FixedBorrower />
-            </NetworkProtectedPage>
-          }
-          path={routes.BORROW_POS}
         />
         <Route
           element={

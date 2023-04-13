@@ -47,9 +47,6 @@ export const Nav: React.FunctionComponent = React.memo(() => {
       <NavLink hidden={isArbitrum} isNew={false} link={`/${routes.LP_OPTIMISERS}`}>
         Optimisers
       </NavLink>
-      <NavLink hidden={true} link={`/${routes.BORROW_POS}`}>
-        Fixed Borrow
-      </NavLink>
       <NavLink hidden={false} isNew={false} link={`/${routes.TRADING_LEAGUE}`}>
         Leaderboard
       </NavLink>
