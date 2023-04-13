@@ -82,7 +82,17 @@ describe('validateUserInputMargin', () => {
       prospectiveSwap: {
         infoPostSwap: {
           status: 'idle',
-          value: null,
+          value: {
+            marginRequirement: 0,
+            maxMarginWithdrawable: 0,
+            averageFixedRate: 0,
+            fixedTokenDeltaBalance: 0,
+            variableTokenDeltaBalance: 0,
+            fixedTokenDeltaUnbalanced: 0,
+            fee: 0,
+            slippage: 0,
+            gasFeeETH: 0,
+          },
         },
       },
     };
