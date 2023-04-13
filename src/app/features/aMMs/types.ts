@@ -5,14 +5,25 @@ export type PoolUI = {
   isBorrowing: boolean;
   isV2: boolean;
   isAaveV3: boolean;
-  fixedRateFormatted: string;
-  fixedRate: number;
+  fixedAPRRateFormatted: string;
+  fixedAPRRate: number;
   aMMMaturity: string;
   id: string;
-  variableRate24hDelta: number;
-  variableRateFormatted: string;
-  variableRate: number;
+  variableAPYRate24hDelta: number;
+  variableAPYRateFormatted: string;
+  variableAPYRate: number;
   routeAmmId: string;
   routePoolId: string;
   maturityTimestampInMS: number;
+};
+
+export type PoolFilterId = 'borrow' | 'v2' | 'yield';
+export type PoolSortId = 'pools' | 'fixedAPR' | 'variableAPY' | 'maturity';
+export type PoolFilters = Record<PoolFilterId, boolean>;
+export type PoolSortDirection = 'noSort' | 'ascending' | 'descending';
+export type PoolSorting = Record<PoolSortId, PoolSortDirection>;
+
+export type PoolsInformation = {
+  volume30DayInDollars: number;
+  totalLiquidityInDollars: number;
 };

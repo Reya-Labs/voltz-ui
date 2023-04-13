@@ -1,13 +1,9 @@
-export type PoolFilterId = 'borrow' | 'v2' | 'lend';
-export type PoolSortId = 'pools' | 'fixedAPR' | 'variableAPY' | 'maturity';
-export type PoolFilters = Record<PoolFilterId, boolean>;
-export type PoolSortDirection = 'noSort' | 'ascending' | 'descending';
-export type PoolSorting = Record<PoolSortId, PoolSortDirection>;
+import { PoolFilterId, PoolFilters, PoolsInformation, PoolSortId, PoolSorting } from './types';
 
 export const initialFilters: PoolFilters = {
   borrow: true,
   v2: true,
-  lend: true,
+  yield: true,
 };
 
 export const resetSortingDirection: PoolSorting = {
@@ -25,7 +21,7 @@ export const initialSortingDirection: PoolSorting = {
 export const FILTER_LABELS: Record<PoolFilterId, string> = {
   borrow: 'Borrow',
   v2: 'v2',
-  lend: 'Lend',
+  yield: 'Yield',
 };
 
 export const SORT_LABELS: Record<
@@ -47,4 +43,9 @@ export const SORT_LABELS: Record<
   maturity: {
     text: 'Maturity',
   },
+};
+
+export const initialPoolsInformation: PoolsInformation = {
+  volume30DayInDollars: 0,
+  totalLiquidityInDollars: 0,
 };

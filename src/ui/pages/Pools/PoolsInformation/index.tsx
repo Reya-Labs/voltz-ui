@@ -8,6 +8,7 @@ import {
 } from '../../../../app/features/aMMs';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { usePoolsInformation } from '../../../../hooks/usePoolsInformation';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import {
   FilterBox,
@@ -22,6 +23,7 @@ export const PoolsInformation: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const chainId = useAppSelector(selectChainId);
   const poolsSize = useAppSelector(selectPoolsSize);
+  const { volume30DaysFormatted, totalLiquidityFormatted } = usePoolsInformation();
   const filterOptions = useAppSelector(selectPoolFilterOptions);
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
@@ -32,12 +34,6 @@ export const PoolsInformation: React.FunctionComponent = () => {
   const typographyToken: TypographyToken = isLargeDesktopDevice
     ? 'secondaryBodyLargeBold'
     : 'secondaryBodyMediumBold';
-
-  // TODO: Filip move to store + Artur to provide SDK utility
-  const tradingVolume7dValue = '$245';
-  const tradingVolume7dToken = 'M';
-  const totalLiquidityValue = '$245.004';
-  const totalLiquidityToken = 'M';
 
   if (!chainId) {
     return null;
@@ -63,10 +59,10 @@ export const PoolsInformation: React.FunctionComponent = () => {
           label="Trading Volume 7d"
           labelColorToken="lavenderWeb3"
           labelTypographyToken={labelTypographyToken}
-          token={tradingVolume7dToken}
+          token={volume30DaysFormatted.compactSuffix}
           tooltip="TODO: Tooltip"
           typographyToken={typographyToken}
-          value={tradingVolume7dValue}
+          value={volume30DaysFormatted.compactNumber}
         />
       </InformationBox>
       <VerticalLine />
@@ -76,9 +72,9 @@ export const PoolsInformation: React.FunctionComponent = () => {
           label="Total Liquidity"
           labelColorToken="lavenderWeb3"
           labelTypographyToken={labelTypographyToken}
-          token={totalLiquidityToken}
+          token={totalLiquidityFormatted.compactSuffix}
           typographyToken={typographyToken}
-          value={totalLiquidityValue}
+          value={totalLiquidityFormatted.compactNumber}
         />
       </InformationBox>
       <VerticalLine />

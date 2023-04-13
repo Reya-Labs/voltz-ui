@@ -45,7 +45,7 @@ export const PoolsList: React.FunctionComponent = () => {
                     key={pool.id}
                     aMMMaturity={pool.aMMMaturity}
                     backgroundColorToken={index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8'}
-                    fixedRateFormatted={pool.fixedRateFormatted}
+                    fixedRateFormatted={pool.fixedAPRRateFormatted}
                     isAaveV3={pool.isAaveV3}
                     isBorrowing={pool.isBorrowing}
                     isV2={pool.isV2}
@@ -53,8 +53,8 @@ export const PoolsList: React.FunctionComponent = () => {
                     routeAmmId={pool.routeAmmId}
                     routePoolId={pool.routePoolId}
                     token={pool.token}
-                    variableRate24hDelta={pool.variableRate24hDelta}
-                    variableRateFormatted={pool.variableRateFormatted}
+                    variableRate24hDelta={pool.variableAPYRate24hDelta}
+                    variableRateFormatted={pool.variableAPYRateFormatted}
                   />
                 ))
               : null}
