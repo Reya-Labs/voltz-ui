@@ -23,7 +23,7 @@ const initialState: SliceState = {
   },
 };
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'tradingLeague',
   initialState,
   reducers: {},

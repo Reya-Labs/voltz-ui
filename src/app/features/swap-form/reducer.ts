@@ -437,7 +437,7 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   };
 };
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'swapForm',
   initialState,
   reducers: {

@@ -395,7 +395,7 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   };
 };
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'lpForm',
   initialState,
   reducers: {

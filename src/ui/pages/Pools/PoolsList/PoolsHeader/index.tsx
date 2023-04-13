@@ -1,4 +1,4 @@
-import { Typography, TypographyToken } from 'brokoli-ui';
+import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import { selectPoolSortOptions } from '../../../../../app/features/aMMs';
@@ -71,11 +71,7 @@ export const PoolsHeader: React.FunctionComponent = () => {
           ) : null}
         </MaturityBox>
       </MiddleBox>
-      <RightBox>
-        <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
-          Trade or LP
-        </Typography>
-      </RightBox>
+      <RightBox />
     </PoolsHeaderBox>
   );
 };

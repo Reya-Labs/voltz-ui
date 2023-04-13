@@ -6,7 +6,7 @@ import { Header } from '../Header/Header';
 import { PointsSystem } from './PointsSystem/PointsSystem';
 import { CurrentPositionBox, HeaderEntryBox, UserSummaryBox } from './UserSummary.styled';
 
-export type UserSummaryProps = {
+type UserSummaryProps = {
   seasonNumber: string;
   userRank?: number;
   userAddress?: string;

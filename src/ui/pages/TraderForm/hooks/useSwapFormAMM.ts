@@ -24,7 +24,7 @@ import { useWallet } from '../../../../hooks/useWallet';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
 import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 
-export type UseAMMsResult = {
+type UseAMMsResult = {
   aMM: AMM | null;
   loading: boolean;
   error: boolean;
