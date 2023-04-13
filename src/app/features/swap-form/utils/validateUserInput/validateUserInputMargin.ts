@@ -6,6 +6,7 @@ import { hasExistingPosition } from '../hasExistingPosition';
 
 export const validateUserInputMargin = (state: Draft<SliceState>): void => {
   const availableMargin = getAvailableMargin(state);
+  const existingPosition = hasExistingPosition(state);
   let error = null;
   if (
     state.userInput.marginAmount.editMode === 'add' &&
@@ -24,7 +25,7 @@ export const validateUserInputMargin = (state: Draft<SliceState>): void => {
   }
 
   if (
-    hasExistingPosition(state) &&
+    existingPosition &&
     state.userInput.marginAmount.editMode === 'remove' &&
     availableMargin !== null &&
     state.userInput.marginAmount.value > availableMargin
@@ -33,7 +34,7 @@ export const validateUserInputMargin = (state: Draft<SliceState>): void => {
   }
 
   if (
-    hasExistingPosition(state) &&
+    existingPosition &&
     state.userInput.marginAmount.editMode === 'remove' &&
     state.prospectiveSwap.infoPostSwap.status === 'success' &&
     state.prospectiveSwap.infoPostSwap.value.marginRequirement > 0
