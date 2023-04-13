@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ActionButton, AnimatedBarBox, BarBox, PaginationBox } from './Pagination.styled';
 
-export type PaginationProps = {
+type PaginationProps = {
   onPrevPage: () => void;
   onNextPage: () => void;
   maxPages: number;

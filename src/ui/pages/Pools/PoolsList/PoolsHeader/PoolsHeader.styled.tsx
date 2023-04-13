@@ -9,11 +9,6 @@ export const PoolsHeaderBox = styled('div')`
   justify-content: space-between;
 `;
 
-export const RowsBox = styled('div')`
-  display: flex;
-  flex-direction: column;
-`;
-
 const InfoBox = styled('div')`
   display: flex;
   flex-direction: row;

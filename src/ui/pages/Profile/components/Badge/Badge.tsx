@@ -3,7 +3,7 @@ import React from 'react';
 import { BadgeVariant } from '../../data/getSeasonBadges';
 import { Icon, Skeleton } from './Badge.styled';
 
-export type BadgeProps = {
+type BadgeProps = {
   variant: BadgeVariant | 'noClaimedBadges';
   loading?: boolean;
 };

@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const SESSION_ID = uuidv4();
 
-export type TxEventPayload = {
+type TxEventPayload = {
   notional: number | undefined;
   margin: number | undefined;
   action: string;

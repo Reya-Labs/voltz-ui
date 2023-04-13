@@ -15,7 +15,7 @@ const initialState: SliceState = {
   chainChangeState: 'idle',
 };
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'network',
   initialState,
   reducers: {},

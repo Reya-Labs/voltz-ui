@@ -13,7 +13,7 @@ const initialState: SliceState = {
   status: 'idle',
 };
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'historicalRates',
   initialState,
   reducers: {},

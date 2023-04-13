@@ -60,7 +60,7 @@ export const PoolsInformation: React.FunctionComponent = () => {
           labelColorToken="lavenderWeb3"
           labelTypographyToken={labelTypographyToken}
           token={volume30DaysFormatted.compactSuffix}
-          tooltip="TODO: Tooltip"
+          tooltip="Cumulative notional traded in all our pools over the past 30 days"
           typographyToken={typographyToken}
           value={volume30DaysFormatted.compactNumber}
         />
@@ -81,7 +81,7 @@ export const PoolsInformation: React.FunctionComponent = () => {
       <FilterBox>
         <TypographyWithTooltip
           colorToken="lavenderWeb3"
-          tooltip="TODO: Missing tooltip"
+          tooltip="Filter pools by selecting a pool criteria"
           typographyToken={labelTypographyToken}
         >
           Filter by

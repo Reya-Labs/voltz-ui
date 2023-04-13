@@ -133,7 +133,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
             variant="secondary"
             onClick={handleOnMakeClick}
           >
-            Make
+            LP
           </ButtonStyled>
         </RightBox>
       </PoolEntryBox>

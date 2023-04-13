@@ -2,7 +2,7 @@ import { TradingLeagueHeader } from '../TradingLeagueHeader/TradingLeagueHeader'
 import { UserSummary } from '../UserSummary/UserSummary';
 import { LeaderboardHeaderBox } from './LeaderboardHeader.styled';
 
-export type RankingTableHeaderProps = {
+type RankingTableHeaderProps = {
   loading: boolean;
   seasonNumber: string;
   userRank: number;

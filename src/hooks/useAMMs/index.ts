@@ -13,7 +13,7 @@ import { selectChainId } from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useWallet } from '../useWallet';
 
-export type UseAMMsResult = {
+type UseAMMsResult = {
   aMMs: AMM[];
   traderAMMs: AMM[];
   borrowAMMs: BorrowAMM[];

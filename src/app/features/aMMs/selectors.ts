@@ -45,9 +45,6 @@ export const selectPools = (state: RootState): PoolUI[] => {
       if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
         return true;
       }
-      if (appliedFilters['aaveV3'] && amm.market.tags.isAaveV3) {
-        return true;
-      }
       if (appliedFilters['v2'] && amm.market.tags.isV2) {
         return true;
       }
@@ -77,7 +74,9 @@ export const selectPools = (state: RootState): PoolUI[] => {
         maturityTimestampInMS: aMM.termEndTimestampInMS,
         aMMMaturity: formatPOSIXTimestamp(aMM.termEndTimestampInMS),
         id: aMM.id,
-        variableAPYRate24hDelta: stringToBigFloat(formatNumber(variableApy24Ago, 0, 3)),
+        variableAPYRate24hDelta: stringToBigFloat(
+          formatNumber(variableAPYRate - variableApy24Ago, 0, 3),
+        ),
         variableAPYRateFormatted: formatNumber(variableAPYRate),
         variableAPYRate,
         routeAmmId: generateAmmIdForRoute(aMM),
@@ -99,7 +98,7 @@ export const selectPoolsLoading = (state: RootState): boolean => {
   return loadedState === 'idle' || loadedState === 'pending';
 };
 
-export const selectPoolsInformationLoading = (state: RootState): boolean => {
+const selectPoolsInformationLoading = (state: RootState): boolean => {
   const loadedState = selectPoolsInformationLoadedState(state);
   return loadedState === 'idle' || loadedState === 'pending';
 };
@@ -149,7 +148,7 @@ export const selectTotalLiquidityFormatted = (
   };
 };
 
-export const selectPoolFilters = (state: RootState) => {
+const selectPoolFilters = (state: RootState) => {
   const chainId = selectChainId(state);
   if (!chainId) {
     return undefined;
@@ -157,7 +156,7 @@ export const selectPoolFilters = (state: RootState) => {
   return state.aMMs.filters[chainId];
 };
 
-export const selectPoolSortingDirection = (state: RootState) => {
+const selectPoolSortingDirection = (state: RootState) => {
   const chainId = selectChainId(state);
   if (!chainId) {
     return undefined;

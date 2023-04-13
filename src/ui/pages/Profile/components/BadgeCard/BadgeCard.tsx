@@ -19,7 +19,7 @@ import {
   TitleSkeleton,
 } from './BadgeCard.styled';
 
-export type BadgeCardProps = {
+type BadgeCardProps = {
   variant: BadgeVariant;
   loading?: boolean;
   onClaimButtonClick?: ClaimButtonProps['onClick'];

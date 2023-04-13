@@ -4,7 +4,6 @@ export const initialFilters: PoolFilters = {
   borrow: true,
   v2: true,
   yield: true,
-  aaveV3: true,
 };
 
 export const resetSortingDirection: PoolSorting = {
@@ -23,7 +22,6 @@ export const FILTER_LABELS: Record<PoolFilterId, string> = {
   borrow: 'Borrow',
   v2: 'v2',
   yield: 'Yield',
-  aaveV3: 'Aave V3',
 };
 
 export const SORT_LABELS: Record<
