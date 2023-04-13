@@ -17,7 +17,6 @@ import { colors, SystemStyleObject, Theme } from '../../../../theme';
 import { findCurrentAmm, generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../../utilities/constants';
 import { getRowButtonId } from '../../../../utilities/googleAnalytics/helpers';
-import { isTraderExperienceFlowEnabled } from '../../../../utilities/is-trader-experience-flow-enabled';
 import { routes } from '../../../paths';
 import { PositionTableHead, PositionTableRow } from './components';
 import { TransactionList } from './TransactionList/TransactionList';
@@ -137,16 +136,13 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                   closeToMaturity
                     ? undefined
                     : (mode: 'margin' | 'liquidity' | 'notional') => {
-                        if (isTraderExperienceFlowEnabled()) {
-                          const path = generatePath(routes.TRADER_FORM, {
-                            form: 'swap',
-                            ammId: generateAmmIdForRoute(pos.amm),
-                            poolId: generatePoolId(pos.amm),
-                          });
-                          navigate(`/${path}`);
-                          return;
-                        }
-                        handleSelectRow(index, mode);
+                        const path = generatePath(routes.TRADER_FORM, {
+                          form: 'swap',
+                          ammId: generateAmmIdForRoute(pos.amm),
+                          poolId: generatePoolId(pos.amm),
+                        });
+                        navigate(`/${path}`);
+                        return;
                       }
                 }
                 onSettle={() => onSettle(pos)}
