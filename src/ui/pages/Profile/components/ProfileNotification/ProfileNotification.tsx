@@ -12,7 +12,7 @@ export const ProfileNotification: React.FunctionComponent<ProfileNotificationPro
   text,
 }) => (
   <ProfileNotificationBox>
-    <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
+    <Pill colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular" variant="regular">
       {pillText}
     </Pill>
     <Typography

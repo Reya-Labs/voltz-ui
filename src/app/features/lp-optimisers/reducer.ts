@@ -24,7 +24,7 @@ const initialState: SliceState = {
   },
 };
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'lp-optimisers',
   initialState,
   reducers: {

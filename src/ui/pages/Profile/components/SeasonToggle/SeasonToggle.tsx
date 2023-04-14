@@ -28,6 +28,7 @@ export const SeasonToggle: React.FunctionComponent<SeasonToggleProps> = ({
           <Pill
             colorToken={option.id === season.id ? 'lavenderWeb' : 'liberty'}
             typographyToken="primaryBodySmallBold"
+            variant="regular"
           >
             {option.label.toUpperCase()}
           </Pill>

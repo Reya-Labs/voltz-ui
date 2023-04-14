@@ -4,7 +4,7 @@ import { providers } from 'ethers';
 import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 import { SerializedAMM } from '../../../types';
 
-const deserializeAmm = (
+export const deserializeAmm = (
   serializedAmm: SerializedAMM,
   signer: providers.JsonRpcSigner,
   chainId: SupportedChainId,
@@ -46,5 +46,3 @@ const deserializeAmm = (
     minLeverageAllowed,
   });
 };
-
-export default deserializeAmm;

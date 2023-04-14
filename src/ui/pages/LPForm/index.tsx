@@ -28,9 +28,9 @@ export const LPFormPage: React.FunctionComponent = () => {
 
   return (
     <VoltzPage
-      errorSlot={error ? <AMMFetchingError to={`/${routes.LP_POOLS}`} /> : undefined}
+      errorSlot={error ? <AMMFetchingError to={`/${routes.POOLS}`} /> : undefined}
       mainSlot={<Main />}
-      notFoundSlot={pageNotFound ? <NoAMMFound to={`/${routes.LP_POOLS}`} /> : undefined}
+      notFoundSlot={pageNotFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
       pageLoadingSlot={loading ? <PageLoading /> : undefined}
       rightSlot={<Form />}
     />

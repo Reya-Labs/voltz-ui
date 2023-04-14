@@ -22,55 +22,35 @@ export const Nav: React.FunctionComponent = React.memo(() => {
         <VoltzIcon data-testid="Nav-VoltzIcon" name="voltz" />
       </VoltzIconBox>
 
-      <NavLink
-        hidden={false}
-        subLinks={[
-          {
-            text: 'POOLS',
-            link: `/${routes.TRADER_POOLS}`,
-            hidden: false,
-          },
-          {
-            text: 'PORTFOLIO',
-            link: `/${routes.TRADER_PORTFOLIO}`,
-            hidden: false,
-          },
-        ]}
-      >
-        Traders
+      <NavLink hidden={false} link={`/${routes.POOLS}`}>
+        Pools
       </NavLink>
 
       <NavLink
         hidden={false}
-        isNew={true}
         subLinks={[
           {
-            text: 'POOLS',
-            link: `/${routes.LP_POOLS}`,
+            text: 'TRADER PORTFOLIO',
+            link: `/${routes.TRADER_PORTFOLIO}`,
             hidden: false,
           },
           {
-            text: 'OPTIMISERS',
-            link: `/${routes.LP_OPTIMISERS}`,
-            hidden: isArbitrum,
-          },
-          {
-            text: 'PORTFOLIO',
+            text: 'LP PORTFOLIO',
             link: `/${routes.LP_PORTFOLIO}`,
-            isNew: true,
             hidden: false,
           },
         ]}
       >
-        Liquidity Providers
+        Portfolio
       </NavLink>
-      <NavLink hidden={true} link={`/${routes.BORROW_POS}`}>
-        Fixed Borrow
+
+      <NavLink hidden={isArbitrum} isNew={false} link={`/${routes.LP_OPTIMISERS}`}>
+        Optimisers
       </NavLink>
-      <NavLink hidden={false} isNew={true} link={`/${routes.TRADING_LEAGUE}`}>
+      <NavLink hidden={false} isNew={false} link={`/${routes.TRADING_LEAGUE}`}>
         Leaderboard
       </NavLink>
-      <NavLink hidden={false} isNew={true} link={`/${routes.PROFILE}`}>
+      <NavLink hidden={false} isNew={false} link={`/${routes.PROFILE}`}>
         Profile
       </NavLink>
     </NavBox>

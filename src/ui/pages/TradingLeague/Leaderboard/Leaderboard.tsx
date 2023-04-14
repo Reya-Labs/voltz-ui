@@ -8,7 +8,7 @@ import { LeaderboardHeader } from '../LeaderboardHeader/LeaderboardHeader';
 import { Pagination } from '../Pagination/Pagination';
 import { LeaderboardBox, LeaderboardGrid, LeaderboardGridBox } from './Leaderboard.styled';
 
-export type RankingTableProps = {
+type RankingTableProps = {
   rankings: RankType[];
   seasonNumber: string;
   maxPages: number;

@@ -10,6 +10,7 @@ export const PnLDetailsBox = styled('div')`
 
   width: 240px;
 `;
+
 export const RowsBox = styled('div')`
   box-sizing: border-box;
 

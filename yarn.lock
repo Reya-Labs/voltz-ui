@@ -6745,6 +6745,13 @@
   dependencies:
     "@types/lodash" "*"
 
+"@types/lodash.orderby@4.6.7":
+  version "4.6.7"
+  resolved "https://registry.yarnpkg.com/@types/lodash.orderby/-/lodash.orderby-4.6.7.tgz#3484098c0633f45aa0d3a57c5a8fc8a031cebb43"
+  integrity sha512-GaaUBTS4RTjL8gz1ZXkwAB/defpGMOWwCG9C4HL9g81i4wghIoVVESQCUa1xRsyUBqAb5JwLbSwvL0q36rK0sA==
+  dependencies:
+    "@types/lodash" "*"
+
 "@types/lodash@*":
   version "4.14.191"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.191.tgz#09511e7f7cba275acd8b419ddac8da9a6a79e2fa"
@@ -7212,10 +7219,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.109.0":
-  version "1.109.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.109.0.tgz#0433c2880e91016be8628ed9390e4cb6952b6e10"
-  integrity sha512-NYJNyU/CVoGjzwnu1p4cSqlMLV4LAhiJ7KjHWw/h7ivHovvmfr+1FE+EhhAkOxf5JUqE4mKS8lWMiZBYxl9lag==
+"@voltz-protocol/v1-sdk@1.110.5":
+  version "1.110.5"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.110.5.tgz#1af76c772b05cd9181ca111f75daca26b82577df"
+  integrity sha512-uj1dQdrIZEZc8WFv0sh7cFlGN/rVg/5aod71F5kfrRdx3hDZSOd09UTHJpaLeGi8F5MDp2DNnYg3d3Ksmph0RQ==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
@@ -9541,10 +9548,10 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.51.0:
-  version "1.51.0"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.51.0.tgz#59d469eda0cdb95bc2fc325e5a592473629da6d1"
-  integrity sha512-c7roR6y7ZvFDlt0Op5FqfzuVw2EJAHlwuq5LRQWstUW6cozpwY24Y1V+POj9WGeW6LhQfWmr4ShR3dDD6O8qrw==
+brokoli-ui@1.56.0:
+  version "1.56.0"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.56.0.tgz#f51c7c20ff36b03b128d754d141eabdcc9807286"
+  integrity sha512-v2n9/8QfhugZTAqqUC3TPw/mN6OhdM3TJ0hYtH+9xlCeeYVee+N30BZJGTiUxmTCSt5RZxW0CubumqdxQWNLKw==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"
@@ -16280,6 +16287,13 @@ json5@^1.0.1:
   dependencies:
     minimist "^1.2.0"
 
+json5@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.2.tgz#63d98d60f21b313b77c4d6da18bfa69d80e1d593"
+  integrity sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==
+  dependencies:
+    minimist "^1.2.0"
+
 jsonfile@^2.1.0:
   version "2.4.0"
   resolved "https://registry.npmjs.org/jsonfile/-/jsonfile-2.4.0.tgz"
@@ -16980,6 +16994,11 @@ lodash.merge@^4.6.2:
   resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
+lodash.orderby@4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.orderby/-/lodash.orderby-4.6.0.tgz#e697f04ce5d78522f54d9338b32b81a3393e4eb3"
+  integrity sha512-T0rZxKmghOOf5YPnn8EY5iLYeWCpZq8G41FfqoVHH5QDTAFaghJRmAdLiadEDq+ztgM2q5PjA+Z1fOwGrLgmtg==
+
 lodash.sortby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.npmjs.org/lodash.sortby/-/lodash.sortby-4.7.0.tgz"
@@ -17602,6 +17621,11 @@ minimist@^1.1.3:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.7.tgz#daa1c4d91f507390437c6a8bc01078e7000c4d18"
   integrity sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==
+
+minimist@^1.2.6:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
+  integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
 minimist@~0.0.1:
   version "0.0.10"
@@ -20291,6 +20315,11 @@ react-error-overlay@^6.0.11:
   version "6.0.11"
   resolved "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.11.tgz"
   integrity sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==
+
+react-flip-move@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/react-flip-move/-/react-flip-move-3.0.5.tgz#8b87510ad32ebef01ebca94902b445f456bbc0f7"
+  integrity sha512-Mf4XpbkUNZy9eu80iXXFIjToDvw+bnHxmKHVoositbMpV87O/EQswnXUqVovRHoTx/F+4dE+p//PyJnAT7OtPA==
 
 react-gtm-module@2.0.11:
   version "2.0.11"
@@ -23014,6 +23043,14 @@ ts-pnp@^1.1.6:
   resolved "https://registry.npmjs.org/ts-pnp/-/ts-pnp-1.2.0.tgz"
   integrity sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==
 
+ts-unused-exports@9.0.4:
+  version "9.0.4"
+  resolved "https://registry.yarnpkg.com/ts-unused-exports/-/ts-unused-exports-9.0.4.tgz#599504dffdefaf1b46ea6015c3f71e0e9092c45e"
+  integrity sha512-/PPy0B1zhOJkDTUd1XVyaCqE/yA3IL2FrQ8W5/6cQ2g0kKC/06q8LEoPeXI6ELfI6Bivmv3MMvsUup5u3WH+BQ==
+  dependencies:
+    chalk "^4.0.0"
+    tsconfig-paths "^3.9.0"
+
 tsconfig-paths@^3.12.0:
   version "3.12.0"
   resolved "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.12.0.tgz"
@@ -23022,6 +23059,16 @@ tsconfig-paths@^3.12.0:
     "@types/json5" "^0.0.29"
     json5 "^1.0.1"
     minimist "^1.2.0"
+    strip-bom "^3.0.0"
+
+tsconfig-paths@^3.9.0:
+  version "3.14.2"
+  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.14.2.tgz#6e32f1f79412decd261f92d633a9dc1cfa99f088"
+  integrity sha512-o/9iXgCYc5L/JxCHPe3Hvh8Q/2xm5Z+p18PESBU6Ff33695QnCHBEjcytY2q19ua7Mbl/DavtBOLq+oG0RCL+g==
+  dependencies:
+    "@types/json5" "^0.0.29"
+    json5 "^1.0.2"
+    minimist "^1.2.6"
     strip-bom "^3.0.0"
 
 tslib@^1.11.1, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:

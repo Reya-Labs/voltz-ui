@@ -14,22 +14,6 @@ export const findCurrentPositionsLp = (positions: Position[], selectedAmmId: str
 /**
  * Returns the current position that the user has for the given amm
  * @param positions - the array of positions the user has
- * @param fixedLower - the lower fixed rate selected by the lp
- * @param fixedUpper - the upper fixed rate selected by the user
- */
-export const findCurrentPositionLp = (
-  positions: Position[],
-  fixedLower: number,
-  fixedUpper: number,
-) => {
-  return (positions || []).find((p) => {
-    return p.fixedRateLower.toNumber() === fixedLower && p.fixedRateUpper.toNumber() === fixedUpper;
-  });
-};
-
-/**
- * Returns the current position that the user has for the given amm
- * @param positions - the array of positions the user has
  * @param selectedAmmId - the selected amm id
  */
 export const findCurrentPosition = (positions: Position[], selectedAmmId: string) => {

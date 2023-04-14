@@ -2,7 +2,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { DateTime } from 'luxon';
 
 import * as configHook from '../../../hooks/voltz-config/config';
-import { selectAMMs, selectBorrowAMMs, selectTraderAMMs } from './selectors';
+import { selectAMMs, selectTraderAMMs } from './selectors';
 
 describe('aMMs.selectors', () => {
   afterEach(() => {
@@ -106,13 +106,6 @@ describe('aMMs.selectors', () => {
         state.aMMs.aMMs[chainId][0],
         state.aMMs.aMMs[chainId][1],
       ]);
-    });
-  });
-
-  describe('selectBorrowAMMs', () => {
-    it('should return BorrowAMMs with endDateTime greater than current time', () => {
-      expect(selectBorrowAMMs(state as never)).toHaveLength(1);
-      expect(selectBorrowAMMs(state as never)[0].amm.id).toEqual('pool2');
     });
   });
 });

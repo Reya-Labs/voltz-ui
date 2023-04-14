@@ -6,7 +6,6 @@ import { MaturityInformation } from '../../../../../../../components/composite/M
 import { useAMMContext } from '../../../../../../../contexts/AMMContext/AMMContext';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../../../../../utilities/constants';
-import { isLPExperienceFlowEnabled } from '../../../../../../../utilities/is-lp-experience-flow-enabled';
 import { routes } from '../../../../../../paths';
 import { AccruedRates } from './components/AccruedRates/AccruedRates';
 import { Margin } from './components/Margin/Margin';
@@ -44,19 +43,11 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
   };
 
   const handleEditMargin = () => {
-    if (isLPExperienceFlowEnabled()) {
-      navigateToLPForm();
-      return;
-    }
-    onSelect('margin');
+    navigateToLPForm();
   };
 
   const handleEditLPNotional = () => {
-    if (isLPExperienceFlowEnabled()) {
-      navigateToLPForm();
-      return;
-    }
-    onSelect('liquidity');
+    navigateToLPForm();
   };
 
   // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC

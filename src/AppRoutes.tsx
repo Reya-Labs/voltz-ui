@@ -8,16 +8,14 @@ import { useAppDispatch, useAppSelector } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { getDefaultChainId } from './components/interface/NetworkSelector/get-default-chain-id';
 import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
-import { FixedBorrower } from './routes/FixedBorrower/FixedBorrower';
 import { VaultFormRoute } from './routes/LPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
-import { LPPools } from './routes/LPPools/LPPools';
 import { LPPortfolio } from './routes/LPPortfolio/LPPortfolio';
 import { routes } from './routes/paths';
-import { TraderPools } from './routes/TraderPools/TraderPools';
 import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
 import { LPFormPage } from './ui/pages/LPForm';
+import { PoolsPage } from './ui/pages/Pools';
 import { ProfilePage } from './ui/pages/Profile';
 import { TraderFormPage } from './ui/pages/TraderForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
@@ -118,18 +116,10 @@ export const AppRoutes = () => {
     <Routes>
       <Route element={<NotFoundPage />} path="*" />
       <Route path="/">
-        <Route element={<Navigate to={routes.TRADER_POOLS} />} index />
+        <Route element={<Navigate to={routes.POOLS} />} index />
         <Route
-          element={<Navigate replace={true} to={`/${routes.TRADER_POOLS}`} />}
+          element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
           path={routes.WELCOME}
-        />
-        <Route
-          element={
-            <NetworkProtectedPage>
-              <TraderPools />
-            </NetworkProtectedPage>
-          }
-          path={routes.TRADER_POOLS}
         />
         <Route
           element={
@@ -141,11 +131,11 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage>
-              <LPPools />
-            </NetworkProtectedPage>
+            <NetworkProtectedVoltzPage>
+              <PoolsPage />
+            </NetworkProtectedVoltzPage>
           }
-          path={routes.LP_POOLS}
+          path={routes.POOLS}
         />
         <Route
           element={
@@ -197,14 +187,6 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage hidden={true}>
-              <FixedBorrower />
-            </NetworkProtectedPage>
-          }
-          path={routes.BORROW_POS}
-        />
-        <Route
-          element={
             <NetworkProtectedVoltzPage>
               <ProfilePage />
             </NetworkProtectedVoltzPage>
@@ -227,6 +209,14 @@ export const AppRoutes = () => {
         <Route
           element={<Navigate replace={true} to={`/${routes.LP_PORTFOLIO}`} />}
           path={routes.DEPRECATED_LP_PORTFOLIO}
+        />
+        <Route
+          element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
+          path={routes.DEPRECATED_TRADER_POOLS}
+        />
+        <Route
+          element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
+          path={routes.DEPRECATED_LP_POOLS}
         />
       </Route>
     </Routes>

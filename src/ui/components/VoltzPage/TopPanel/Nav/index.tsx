@@ -12,37 +12,27 @@ const getLinks = (chainId?: SupportedChainId | null) =>
     ? []
     : ([
         {
-          text: 'Traders',
+          isHidden: false,
+          text: 'Pools',
+          link: `/${routes.POOLS}`,
+        },
+        {
+          text: 'Portfolio',
           subLinks: [
             {
-              text: 'Pools',
-              link: `/${routes.TRADER_POOLS}`,
+              text: 'Trader Portfolio',
+              link: `/${routes.TRADER_PORTFOLIO}`,
             },
             {
-              text: 'Portfolio',
-              link: `/${routes.TRADER_PORTFOLIO}`,
+              text: 'LP Portfolio',
+              link: `/${routes.LP_PORTFOLIO}`,
             },
           ],
         },
         {
-          text: 'Liquidity Providers',
-          subLinks: [
-            {
-              text: 'Pools',
-              link: `/${routes.LP_POOLS}`,
-            },
-            {
-              text: 'Optimisers',
-              link: `/${routes.LP_OPTIMISERS}`,
-              isHidden: isArbitrumChain(chainId),
-            },
-            {
-              text: 'Portfolio',
-              link: `/${routes.LP_PORTFOLIO}`,
-              isNew: true,
-              isHidden: false,
-            },
-          ],
+          isHidden: isArbitrumChain(chainId),
+          text: 'Optimisers',
+          link: `/${routes.LP_OPTIMISERS}`,
         },
         {
           isHidden: false,

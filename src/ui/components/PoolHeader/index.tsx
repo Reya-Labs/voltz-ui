@@ -20,10 +20,12 @@ type PoolHeaderProps = {
   variableRate24hDelta: number | undefined;
   variableRateFormatted: string;
   aMMMaturity: string;
+  isV2: boolean;
 };
 
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   isAaveV3,
+  isV2,
   isBorrowing,
   market,
   token,
@@ -46,10 +48,15 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
     <PoolHeaderBox>
       <MarketTokenInformationBox>
         <MarketTokenInformation
+          colorToken="lavenderWeb"
+          iconSize={30}
           isAaveV3={isAaveV3}
           isBorrowing={isBorrowing}
+          isV2={isV2}
           market={market}
+          pillVariant="regular"
           token={token}
+          typographyToken="primaryHeader2Black"
         />
       </MarketTokenInformationBox>
       <PoolHeaderDetailsBox>
