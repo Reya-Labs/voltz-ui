@@ -46,5 +46,4 @@ export const usePoolsInformation = (): UsePoolsInformationResult => {
     loading: poolsInformationLoadedState === 'pending',
     error: poolsInformationLoadedState === 'failed',
   };
-
 };
