@@ -42,20 +42,26 @@ export const usePoolsInformation = (): UsePoolsInformationResult => {
 
   // todo: remove hardcoded values
   return {
-    volume30DaysFormatted: chainId === SupportedChainId.arbitrum ? {
-      compactNumber: '$1.25',
-      compactSuffix: 'B'
-    } : {
-      compactNumber: '$697.40',
-      compactSuffix: 'M'
-    },
-    totalLiquidityFormatted: chainId === SupportedChainId.arbitrum ? {
-      compactNumber: '$5.61',
-      compactSuffix: 'B'
-    } : {
-      compactNumber: '$2.22',
-      compactSuffix: 'B'
-    },
+    volume30DaysFormatted:
+      chainId === SupportedChainId.arbitrum
+        ? {
+            compactNumber: '$1.25',
+            compactSuffix: 'B',
+          }
+        : {
+            compactNumber: '$697.40',
+            compactSuffix: 'M',
+          },
+    totalLiquidityFormatted:
+      chainId === SupportedChainId.arbitrum
+        ? {
+            compactNumber: '$5.61',
+            compactSuffix: 'B',
+          }
+        : {
+            compactNumber: '$2.22',
+            compactSuffix: 'B',
+          },
     idle: poolsInformationLoadedState === 'idle',
     loading: poolsInformationLoadedState === 'pending',
     error: poolsInformationLoadedState === 'failed',
