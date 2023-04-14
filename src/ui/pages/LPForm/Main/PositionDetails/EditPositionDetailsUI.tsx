@@ -135,7 +135,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             value={realizedPnLTotal}
           />
         </BorderedBox>
-        <BorderedBox>
+        {/* <BorderedBox>
           <LabelTokenTypography
             colorToken="skyBlueCrayola"
             label="Unrealised PnL"
@@ -146,7 +146,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             typographyToken={typographyToken}
             value={unrealizedPnLFromSwaps}
           />
-        </BorderedBox>
+        </BorderedBox> */}
       </PositionDetailsRightBox>
     </PositionDetailsBox>
   );
