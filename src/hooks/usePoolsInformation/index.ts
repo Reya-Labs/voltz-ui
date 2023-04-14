@@ -1,9 +1,9 @@
-import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { useEffect } from 'react';
 
 import {
   fetchPoolsInformationThunk,
   selectPoolsInformationLoadedState,
+  selectTotalLiquidityFormatted,
   selectVolume30DaysFormatted,
 } from '../../app/features/aMMs';
 import { selectChainId } from '../../app/features/network';
@@ -21,8 +21,8 @@ export const usePoolsInformation = (): UsePoolsInformationResult => {
   const dispatch = useAppDispatch();
   const chainId = useAppSelector(selectChainId);
   const poolsInformationLoadedState = useAppSelector(selectPoolsInformationLoadedState);
-  // const volume30DaysFormatted = useAppSelector(selectVolume30DaysFormatted);
-  // const totalLiquidityFormatted = useAppSelector(selectTotalLiquidityFormatted);
+  const volume30DaysFormatted = useAppSelector(selectVolume30DaysFormatted);
+  const totalLiquidityFormatted = useAppSelector(selectTotalLiquidityFormatted);
 
   useEffect(() => {
     if (!chainId) {
@@ -39,30 +39,12 @@ export const usePoolsInformation = (): UsePoolsInformationResult => {
     );
   }, [chainId, poolsInformationLoadedState, dispatch]);
 
-  // todo: remove hardcoded values
   return {
-    volume30DaysFormatted:
-      chainId === SupportedChainId.arbitrum
-        ? {
-            compactNumber: '$1.25',
-            compactSuffix: 'B',
-          }
-        : {
-            compactNumber: '$697.40',
-            compactSuffix: 'M',
-          },
-    totalLiquidityFormatted:
-      chainId === SupportedChainId.arbitrum
-        ? {
-            compactNumber: '$153.4',
-            compactSuffix: 'M',
-          }
-        : {
-            compactNumber: '$2.22',
-            compactSuffix: 'B',
-          },
+    volume30DaysFormatted,
+    totalLiquidityFormatted,
     idle: poolsInformationLoadedState === 'idle',
     loading: poolsInformationLoadedState === 'pending',
     error: poolsInformationLoadedState === 'failed',
   };
+
 };
