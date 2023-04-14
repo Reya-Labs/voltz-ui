@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { useEffect } from 'react';
 
 import {
@@ -39,9 +40,22 @@ export const usePoolsInformation = (): UsePoolsInformationResult => {
     );
   }, [chainId, poolsInformationLoadedState, dispatch]);
 
+  // todo: remove hardcoded values
   return {
-    volume30DaysFormatted,
-    totalLiquidityFormatted,
+    volume30DaysFormatted: chainId === SupportedChainId.arbitrum ? {
+      compactNumber: '$1.25',
+      compactSuffix: 'B'
+    } : {
+      compactNumber: '$697.40',
+      compactSuffix: 'M'
+    },
+    totalLiquidityFormatted: chainId === SupportedChainId.arbitrum ? {
+      compactNumber: '$5.61',
+      compactSuffix: 'B'
+    } : {
+      compactNumber: '$2.22',
+      compactSuffix: 'B'
+    },
     idle: poolsInformationLoadedState === 'idle',
     loading: poolsInformationLoadedState === 'pending',
     error: poolsInformationLoadedState === 'failed',
