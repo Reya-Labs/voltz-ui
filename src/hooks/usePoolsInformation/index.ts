@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import {
   fetchPoolsInformationThunk,
   selectPoolsInformationLoadedState,
-  selectTotalLiquidityFormatted,
   selectVolume30DaysFormatted,
 } from '../../app/features/aMMs';
 import { selectChainId } from '../../app/features/network';
@@ -22,8 +21,8 @@ export const usePoolsInformation = (): UsePoolsInformationResult => {
   const dispatch = useAppDispatch();
   const chainId = useAppSelector(selectChainId);
   const poolsInformationLoadedState = useAppSelector(selectPoolsInformationLoadedState);
-  const volume30DaysFormatted = useAppSelector(selectVolume30DaysFormatted);
-  const totalLiquidityFormatted = useAppSelector(selectTotalLiquidityFormatted);
+  // const volume30DaysFormatted = useAppSelector(selectVolume30DaysFormatted);
+  // const totalLiquidityFormatted = useAppSelector(selectTotalLiquidityFormatted);
 
   useEffect(() => {
     if (!chainId) {
