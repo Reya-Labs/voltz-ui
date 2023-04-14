@@ -54,8 +54,8 @@ export const usePoolsInformation = (): UsePoolsInformationResult => {
     totalLiquidityFormatted:
       chainId === SupportedChainId.arbitrum
         ? {
-            compactNumber: '$5.61',
-            compactSuffix: 'B',
+            compactNumber: '$153.4',
+            compactSuffix: 'M',
           }
         : {
             compactNumber: '$2.22',
