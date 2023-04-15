@@ -56,11 +56,11 @@ export const PoolsInformation: React.FunctionComponent = () => {
       <InformationBox>
         <LabelTokenTypography
           colorToken="lavenderWeb"
-          label="Trading Volume 7d"
+          label="Trading Volume 30d"
           labelColorToken="lavenderWeb3"
           labelTypographyToken={labelTypographyToken}
           token={volume30DaysFormatted.compactSuffix}
-          tooltip="Cumulative notional traded in all our pools over the past 30 days"
+          tooltip="Cumulative notional traded in all pools over the past 30 days"
           typographyToken={typographyToken}
           value={volume30DaysFormatted.compactNumber}
         />
