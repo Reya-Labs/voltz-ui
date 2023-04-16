@@ -66,8 +66,21 @@ export const useLPFormAMM = (): UseAMMsResult => {
     if (aMMsLoading || idle) {
       return;
     }
+
     const foundAMM = aMMs.find(
-      (a) => ammId === generateAmmIdForRoute(a) && poolId === generatePoolId(a),
+      (a) => {
+        console.log(`requested amm id ${ammId}`);
+
+        const idForRoute = generateAmmIdForRoute(a);
+
+        console.log(`requested pool id ${poolId}`);
+
+        const poolIdForRoute = generatePoolId(a);
+
+        const condition = ammId === idForRoute && poolId === poolIdForRoute;
+
+        return condition
+      } 
     );
     if (aMM && foundAMM && aMM.id === foundAMM.id) {
       setLoading(false);
