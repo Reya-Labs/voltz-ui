@@ -1,13 +1,17 @@
 import React from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 
+import { PoolUI } from '../../../../../app/features/aMMs/types';
 import {
+  resetStateAction,
   selectAMMMaturityFormatted,
   selectFixedRateValueFormatted,
   selectSwapFormAMM,
   selectVariableRate24hDelta,
   selectVariableRateValueFormatted,
 } from '../../../../../app/features/swap-form';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { routes } from '../../../../../routes/paths';
 import { MarketTokenInformationProps } from '../../../../components/MarketTokenInformation';
 import { PoolHeader as PoolHeaderComponent } from '../../../../components/PoolHeader';
 
@@ -19,6 +23,8 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
   const fixedRateFormatted = useAppSelector(selectFixedRateValueFormatted);
   const variableRateFormatted = useAppSelector(selectVariableRateValueFormatted);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   if (!aMM) {
     return null;
@@ -29,10 +35,20 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const market = aMM.market.name as MarketTokenInformationProps['market'];
   const token = aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token'];
 
+  const handleOnPoolItemClick = ({ routePoolId, routeAmmId }: PoolUI) => {
+    dispatch(resetStateAction());
+    const path = generatePath(routes.TRADER_FORM, {
+      form: 'swap',
+      ammId: routeAmmId,
+      poolId: routePoolId,
+    });
+    navigate(`/${path}`);
+  };
   return (
     <PoolHeaderComponent
       aMMMaturity={aMMMaturity}
       fixedRateFormatted={fixedRateFormatted}
+      id={aMM.id}
       isAaveV3={isAaveV3}
       isBorrowing={isBorrowing}
       isV2={isV2}
@@ -40,6 +56,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
       token={token}
       variableRate24hDelta={variableRate24hDelta}
       variableRateFormatted={variableRateFormatted}
+      onPoolItemClick={handleOnPoolItemClick}
     />
   );
 };

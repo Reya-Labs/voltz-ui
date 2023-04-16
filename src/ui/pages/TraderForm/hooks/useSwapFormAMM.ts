@@ -83,6 +83,9 @@ export const useSwapFormAMM = (): UseAMMsResult => {
   }, [dispatch, aMM]);
 
   useEffect(() => {
+    if (!aMM?.id) {
+      return;
+    }
     if (!chainId) {
       return;
     }
@@ -92,13 +95,14 @@ export const useSwapFormAMM = (): UseAMMsResult => {
     if (aMMsLoading) {
       return;
     }
+
     void dispatch(
       setSignerAndPositionForAMMThunk({
         signer,
         chainId,
       }),
     );
-  }, [dispatch, aMMsLoading, error, chainId, signer]);
+  }, [aMM?.id, dispatch, aMMsLoading, error, chainId, signer]);
 
   useEffect(() => {
     if (!aMM || !aMM.signer || !chainId) {
@@ -118,7 +122,15 @@ export const useSwapFormAMM = (): UseAMMsResult => {
 
     void dispatch(getInfoPostSwapThunk());
   }, [dispatch, position]);
-
+  console.log(
+    '####',
+    idle,
+    positionFetchingStatus === 'idle',
+    poolSwapInfoStatus === 'idle',
+    loading,
+    positionFetchingStatus === 'pending',
+    poolSwapInfoStatus === 'pending',
+  );
   return {
     aMM,
     loading:

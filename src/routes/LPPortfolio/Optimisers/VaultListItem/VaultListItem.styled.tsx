@@ -101,7 +101,6 @@ export const ManageButton = styled(Link)`
 `;
 
 export const VaultListItemBottomBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;

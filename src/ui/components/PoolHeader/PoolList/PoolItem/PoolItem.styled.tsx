@@ -7,8 +7,14 @@ export const PoolHeaderBox = styled('div')`
   flex-direction: row;
   align-items: center;
   padding: 0px 24px 0px 0px;
-
+  cursor: pointer;
   border-bottom: 1px solid ${colors.lavenderWeb8};
+  transition: background-color 300ms ease-in;
+  width: 100%;
+
+  &:hover {
+    background: ${colors.lavenderWeb7};
+  }
 `;
 
 export const PoolHeaderDetailsBox = styled('div')`
@@ -22,8 +28,8 @@ export const PoolHeaderDetailsBox = styled('div')`
 `;
 
 export const MarketTokenInformationBox = styled('div')`
-  box-sizing: border-box;
   padding: 8px 16px;
+  min-width: 250px;
 `;
 
 export const FixedBox = styled('div')`
@@ -32,6 +38,7 @@ export const FixedBox = styled('div')`
   align-items: center;
   padding-right: 12px;
   border-right: 1px solid ${colors.lavenderWeb7};
+  min-width: 70px;
 `;
 
 export const VariableBox = styled('div')`
@@ -40,6 +47,7 @@ export const VariableBox = styled('div')`
   align-items: center;
   padding-right: 12px;
   border-right: 1px solid ${colors.lavenderWeb7};
+  min-width: 110px;
 `;
 
 export const MaturityBox = styled('div')`

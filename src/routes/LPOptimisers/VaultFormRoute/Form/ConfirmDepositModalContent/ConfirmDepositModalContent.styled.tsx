@@ -119,7 +119,6 @@ export const GasIcon = styled(LocalGasStationIcon)`
 `;
 
 export const DepositFeeContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: center;

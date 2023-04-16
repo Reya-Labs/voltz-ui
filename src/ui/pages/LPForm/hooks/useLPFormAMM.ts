@@ -100,6 +100,9 @@ export const useLPFormAMM = (): UseAMMsResult => {
   }, [dispatch, aMM, fixedRateLower, fixedRateUpper]);
 
   useEffect(() => {
+    if (!aMM?.id) {
+      return;
+    }
     if (!chainId) {
       return;
     }
@@ -115,7 +118,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
         chainId,
       }),
     );
-  }, [dispatch, aMMsLoading, error, chainId, signer]);
+  }, [aMM?.id, dispatch, aMMsLoading, error, chainId, signer]);
 
   useEffect(() => {
     if (positionsFetchingStatus !== 'success') {

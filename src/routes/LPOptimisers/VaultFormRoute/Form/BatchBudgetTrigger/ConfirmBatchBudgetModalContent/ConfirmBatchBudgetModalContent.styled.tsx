@@ -84,7 +84,6 @@ export const CancelButton = styled(Button)`
 `;
 
 export const BatchFeeContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: center;

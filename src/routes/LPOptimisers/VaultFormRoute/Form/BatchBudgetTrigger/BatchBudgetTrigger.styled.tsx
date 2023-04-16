@@ -8,7 +8,6 @@ import { Typography } from '../../../../../components/atomic/Typography/Typograp
 import colors from '../../../../../theme/colors';
 
 export const ContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -30,7 +29,6 @@ export const DescriptionTypography = styled(Typography)`
 `;
 
 export const ActionBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -46,14 +44,12 @@ export const ActionBox = styled(Box)`
 `;
 
 export const ActionLeftContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
 `;
 export const ActionRightContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -61,7 +57,6 @@ export const ActionRightContentBox = styled(Box)`
 `;
 
 export const BatchButton = styled(Button)`
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -85,7 +80,6 @@ export const BatchButton = styled(Button)`
 `;
 
 export const BatchBudgetContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: center;

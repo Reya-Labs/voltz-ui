@@ -1,8 +1,11 @@
-import { LabelTokenTypography, Popover, TypographyToken } from 'brokoli-ui';
-import React, { useState } from 'react';
+import { LabelTokenTypography, TypographyToken } from 'brokoli-ui';
+import React from 'react';
 
-import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
-import { MarketTokenInformation, MarketTokenInformationProps } from '../MarketTokenInformation';
+import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
+import {
+  MarketTokenInformation,
+  MarketTokenInformationProps,
+} from '../../../MarketTokenInformation';
 import {
   FixedBox,
   MarketTokenInformationBox,
@@ -10,9 +13,9 @@ import {
   PoolHeaderBox,
   PoolHeaderDetailsBox,
   VariableBox,
-} from './PoolHeader.styled';
-import { PoolList, PoolListProps } from './PoolList';
-type PoolHeaderProps = {
+} from './PoolItem.styled';
+
+type PoolItemProps = {
   isAaveV3: boolean;
   isBorrowing: boolean;
   market: MarketTokenInformationProps['market'];
@@ -22,14 +25,12 @@ type PoolHeaderProps = {
   variableRateFormatted: string;
   aMMMaturity: string;
   isV2: boolean;
-  id: string;
-  onPoolItemClick: PoolListProps['onPoolItemClick'];
+  onClick: () => void;
 };
 
-export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
+export const PoolItem: React.FunctionComponent<PoolItemProps> = ({
   isAaveV3,
   isV2,
-  id,
   isBorrowing,
   market,
   token,
@@ -37,7 +38,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   variableRate24hDelta,
   variableRateFormatted,
   aMMMaturity,
-  onPoolItemClick,
+  onClick,
 }) => {
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
@@ -48,35 +49,22 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   const typographyToken: TypographyToken = isLargeDesktopDevice
     ? 'secondaryBodyLargeBold'
     : 'secondaryBodyMediumBold';
-  const [isToggleCaretOpen, setIsToggleCaretOpen] = useState(false);
-  const handleOnToggleCaretClick = () => setIsToggleCaretOpen(!isToggleCaretOpen);
-  const handleOnClickOutside = () => setIsToggleCaretOpen(false);
 
   return (
-    <PoolHeaderBox>
-      <Popover
-        content={<PoolList excludeId={id} onPoolItemClick={onPoolItemClick} />}
-        data-testid="PoolHeaderPopover"
-        isOpen={isToggleCaretOpen}
-        onClickOutside={handleOnClickOutside}
-      >
-        <MarketTokenInformationBox>
-          <MarketTokenInformation
-            colorToken="lavenderWeb"
-            iconSize={30}
-            isAaveV3={isAaveV3}
-            isBorrowing={isBorrowing}
-            isToggleCaretOpen={isToggleCaretOpen}
-            isV2={isV2}
-            market={market}
-            pillVariant="regular"
-            showToggleCaret={true}
-            token={token}
-            typographyToken="primaryHeader2Black"
-            onToggleCaretClick={handleOnToggleCaretClick}
-          />
-        </MarketTokenInformationBox>
-      </Popover>
+    <PoolHeaderBox onClick={onClick}>
+      <MarketTokenInformationBox>
+        <MarketTokenInformation
+          colorToken="lavenderWeb"
+          iconSize={24}
+          isAaveV3={isAaveV3}
+          isBorrowing={isBorrowing}
+          isV2={isV2}
+          market={market}
+          pillVariant="compact"
+          token={token}
+          typographyToken="primaryHeader3Bold"
+        />
+      </MarketTokenInformationBox>
       <PoolHeaderDetailsBox>
         <FixedBox>
           <LabelTokenTypography
