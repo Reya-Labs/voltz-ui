@@ -6,30 +6,27 @@ import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
 import { hasExistingPosition } from '../hasExistingPosition';
 
 export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
-  if (state.userInput.marginAmount.editMode === 'remove') {
-    if (state.prospectiveLp.infoPostLp.status !== 'success') {
+  const { userInput, prospectiveLp, selectedPosition, walletBalance } = state;
+
+  if (userInput.marginAmount.editMode === 'remove') {
+    if (prospectiveLp.infoPostLp.status !== 'success') {
       return null;
     }
 
+    const prospectiveLpNotional = getProspectiveLpNotional(state);
+    const hasExisting = hasExistingPosition(state);
+
     let maxMarginWithdrawable = null;
-    if (getProspectiveLpNotional(state) === 0 && hasExistingPosition(state)) {
-      maxMarginWithdrawable = (state.selectedPosition as Position).maxMarginWithdrawable;
-    }
-
-    if (getProspectiveLpNotional(state) < 0 && hasExistingPosition(state)) {
-      maxMarginWithdrawable = (state.selectedPosition as Position).maxMarginWithdrawable;
-    }
-
-    if (getProspectiveLpNotional(state) > 0) {
-      maxMarginWithdrawable = state.prospectiveLp.infoPostLp.value.maxMarginWithdrawable;
+    if (prospectiveLpNotional === 0 && hasExisting) {
+      maxMarginWithdrawable = (selectedPosition as Position).maxMarginWithdrawable;
+    } else if (prospectiveLpNotional < 0 && hasExisting) {
+      maxMarginWithdrawable = (selectedPosition as Position).maxMarginWithdrawable;
+    } else if (prospectiveLpNotional > 0) {
+      maxMarginWithdrawable = prospectiveLp.infoPostLp.value.maxMarginWithdrawable;
     }
 
     return maxMarginWithdrawable;
   }
 
-  if (state.walletBalance.status === 'success') {
-    return state.walletBalance.value;
-  }
-
-  return null;
+  return walletBalance.status === 'success' ? walletBalance.value : null;
 };
