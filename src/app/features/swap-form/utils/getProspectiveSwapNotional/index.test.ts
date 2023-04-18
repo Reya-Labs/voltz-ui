@@ -28,7 +28,7 @@ describe('getProspectiveSwapNotional', () => {
           value: 100,
           editMode: 'add',
         },
-        mode: 'some mode',
+        mode: 'variable',
       },
       position: {
         value: 123,
@@ -49,6 +49,7 @@ describe('getProspectiveSwapNotional', () => {
   });
 
   it('should return value when there is no existing position', () => {
+    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
     (getExistingPositionNotional as jest.Mock).mockReturnValue(null);
 
     const result = getProspectiveSwapNotional(mockState as never);
@@ -60,8 +61,9 @@ describe('getProspectiveSwapNotional', () => {
   });
 
   it('should return the calculated value when there is an existing position and editMode is add', () => {
+    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
     (getExistingPositionNotional as jest.Mock).mockReturnValue(50);
-    (getExistingPositionMode as jest.Mock).mockReturnValue('some mode');
+    (getExistingPositionMode as jest.Mock).mockReturnValue('fixed');
 
     const result = getProspectiveSwapNotional(mockState as never);
 
@@ -72,6 +74,7 @@ describe('getProspectiveSwapNotional', () => {
   });
 
   it('should return the calculated value when there is an existing position and editMode is subtract', () => {
+    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
     (getExistingPositionNotional as jest.Mock).mockReturnValue(50);
     (getExistingPositionMode as jest.Mock).mockReturnValue('different mode');
     mockState.userInput.notionalAmount.editMode = 'subtract';
