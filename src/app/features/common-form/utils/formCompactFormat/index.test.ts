@@ -1,6 +1,6 @@
 import { compactFormat } from '../../../../../utilities/number';
-import { FormNumberLimits } from '../../../common-form';
-import { swapFormCompactFormat } from './index';
+import { FormNumberLimits } from '../../constants';
+import { formCompactFormat } from './index';
 
 jest.mock('../../../../../utilities/number', () => {
   return {
@@ -8,18 +8,18 @@ jest.mock('../../../../../utilities/number', () => {
   };
 });
 
-describe('swapFormCompactFormat', () => {
+describe('formCompactFormat', () => {
   it('should call compactFormat with proper params when value < 1', () => {
-    swapFormCompactFormat(0.1234);
+    formCompactFormat(0.1234);
     expect(compactFormat).toHaveBeenCalledWith(0.1234, 0, FormNumberLimits.decimalLimit);
-    swapFormCompactFormat(0.9);
+    formCompactFormat(0.9);
     expect(compactFormat).toHaveBeenCalledWith(0.9, 0, FormNumberLimits.decimalLimit);
   });
 
   it('should call compactFormat with proper params when value >= 1', () => {
-    swapFormCompactFormat(1);
+    formCompactFormat(1);
     expect(compactFormat).toHaveBeenCalledWith(1, 0, 2);
-    swapFormCompactFormat(10);
+    formCompactFormat(10);
     expect(compactFormat).toHaveBeenCalledWith(10, 0, 2);
   });
 });

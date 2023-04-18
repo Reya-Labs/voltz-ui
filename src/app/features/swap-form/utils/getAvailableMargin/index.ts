@@ -2,10 +2,10 @@ import { Draft } from '@reduxjs/toolkit';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { stringToBigFloat } from '../../../../../utilities/number';
+import { formLimitAndFormatNumber } from '../../../common-form/utils';
 import { SliceState } from '../../reducer';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 import { hasExistingPosition } from '../hasExistingPosition';
-import { swapFormLimitAndFormatNumber } from '../swapFormLimitAndFormatNumber';
 
 export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
   const {
@@ -34,7 +34,7 @@ export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
     if (maxMarginWithdrawable !== null) {
       if (maxMarginWithdrawable > prospectiveSwap.infoPostSwap.value.fee) {
         return stringToBigFloat(
-          swapFormLimitAndFormatNumber(
+          formLimitAndFormatNumber(
             maxMarginWithdrawable - prospectiveSwap.infoPostSwap.value.fee,
             'floor',
           ),

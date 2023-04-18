@@ -80,6 +80,7 @@ export const PoolItem: React.FunctionComponent<PoolItemProps> = ({
         <VariableBox>
           <LabelTokenTypography
             colorToken="lavenderWeb"
+            differenceToken="%"
             differenceValue={variableRate24hDelta}
             label="Variable"
             labelColorToken="lavenderWeb3"

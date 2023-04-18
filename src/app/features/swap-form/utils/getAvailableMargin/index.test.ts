@@ -1,6 +1,6 @@
+import { formLimitAndFormatNumber } from '../../../common-form/utils';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 import { hasExistingPosition } from '../hasExistingPosition';
-import { swapFormLimitAndFormatNumber } from '../swapFormLimitAndFormatNumber';
 import { getAvailableMargin } from './index';
 
 jest.mock('../getProspectiveSwapNotional', () => ({
@@ -11,8 +11,8 @@ jest.mock('../hasExistingPosition', () => ({
   hasExistingPosition: jest.fn(),
 }));
 
-jest.mock('../swapFormLimitAndFormatNumber', () => ({
-  swapFormLimitAndFormatNumber: jest.fn(),
+jest.mock('../../../common-form/utils/formLimitAndFormatNumber', () => ({
+  formLimitAndFormatNumber: jest.fn(),
 }));
 
 describe('getAvailableMargin', () => {
@@ -101,13 +101,13 @@ describe('getAvailableMargin', () => {
     } as never;
     (getProspectiveSwapNotional as jest.Mock).mockReturnValue(0);
     (hasExistingPosition as jest.Mock).mockReturnValue(true);
-    (swapFormLimitAndFormatNumber as jest.Mock).mockReturnValue('500');
+    (formLimitAndFormatNumber as jest.Mock).mockReturnValue('500');
     const availableMargin = getAvailableMargin(state);
     expect(availableMargin).toBe(500);
     expect(getProspectiveSwapNotional).toHaveBeenCalledTimes(1);
     expect(hasExistingPosition).toHaveBeenCalledTimes(1);
-    expect(swapFormLimitAndFormatNumber).toHaveBeenCalledTimes(1);
-    expect(swapFormLimitAndFormatNumber).toHaveBeenCalledWith(499.99, 'floor');
+    expect(formLimitAndFormatNumber).toHaveBeenCalledTimes(1);
+    expect(formLimitAndFormatNumber).toHaveBeenCalledWith(499.99, 'floor');
   });
 
   it('returns the max margin withdrawable minus the swap fee when in "remove" margin edit mode and there is a prospective swap', () => {
@@ -137,13 +137,13 @@ describe('getAvailableMargin', () => {
     } as never;
     (getProspectiveSwapNotional as jest.Mock).mockReturnValue(100);
     (hasExistingPosition as jest.Mock).mockReturnValue(false);
-    (swapFormLimitAndFormatNumber as jest.Mock).mockReturnValue('500');
+    (formLimitAndFormatNumber as jest.Mock).mockReturnValue('500');
     const availableMargin = getAvailableMargin(state);
     expect(availableMargin).toBe(500);
     expect(getProspectiveSwapNotional).toHaveBeenCalledTimes(1);
     expect(hasExistingPosition).toHaveBeenCalledTimes(1);
-    expect(swapFormLimitAndFormatNumber).toHaveBeenCalledTimes(1);
-    expect(swapFormLimitAndFormatNumber).toHaveBeenCalledWith(999.99, 'floor');
+    expect(formLimitAndFormatNumber).toHaveBeenCalledTimes(1);
+    expect(formLimitAndFormatNumber).toHaveBeenCalledWith(999.99, 'floor');
   });
 
   it('returns the wallet balance when not in "remove" margin edit mode and wallet balance is available', () => {

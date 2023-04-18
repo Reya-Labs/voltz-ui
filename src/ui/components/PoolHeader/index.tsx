@@ -92,6 +92,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
         <VariableBox>
           <LabelTokenTypography
             colorToken="lavenderWeb"
+            differenceToken="%"
             differenceValue={variableRate24hDelta}
             label="Variable"
             labelColorToken="lavenderWeb3"

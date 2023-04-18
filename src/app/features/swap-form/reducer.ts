@@ -4,7 +4,7 @@ import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../utilities/amm';
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
-import { checkLowLeverageNotification } from '../common-form/utils';
+import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../common-form/utils';
 import { pushEstimatedApyChangeEvent, pushLeverageChangeEvent } from './analytics';
 import {
   approveUnderlyingTokenThunk,
@@ -28,7 +28,6 @@ import {
   getProspectiveSwapNotional,
   hasExistingPosition,
   isUserInputMarginError,
-  swapFormLimitAndFormatNumber,
   updateLeverage,
   validateUserInput,
 } from './utils';
@@ -556,7 +555,7 @@ const slice = createSlice({
         });
       }
       state.userInput.marginAmount.value = stringToBigFloat(
-        swapFormLimitAndFormatNumber(getProspectiveSwapNotional(state) / value, 'ceil'),
+        formLimitAndFormatNumber(getProspectiveSwapNotional(state) / value, 'ceil'),
       );
 
       validateUserInputAndUpdateSubmitButton(state);

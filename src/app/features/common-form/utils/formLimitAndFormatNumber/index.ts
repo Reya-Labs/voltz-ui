@@ -1,7 +1,7 @@
 import { limitAndFormatNumber } from '../../../../../utilities/number';
-import { FormNumberLimits } from '../../../common-form';
+import { FormNumberLimits } from '../../constants';
 
-export const swapFormLimitAndFormatNumber = (value: number, mode: 'floor' | 'ceil') => {
+export const formLimitAndFormatNumber = (value: number, mode: 'floor' | 'ceil') => {
   return limitAndFormatNumber(
     value,
     FormNumberLimits.digitLimit,

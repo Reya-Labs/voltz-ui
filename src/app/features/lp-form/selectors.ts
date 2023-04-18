@@ -4,19 +4,21 @@ import { formatTimestamp } from '../../../utilities/date';
 import { formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 import {
+  formCompactFormat,
+  formCompactFormatToParts,
+  formFormatNumber,
+  formLimitAndFormatNumber,
+} from '../common-form/utils';
+import {
   getAvailableMargin,
+  getEditPositionNotional,
+  getProspectiveLpMargin,
+  getProspectiveLpNotional,
   getRealizedPnLFromSwaps,
+  getSelectedPositionNotional,
   getUnrealizedPnLFromSwaps,
-  lpFormCompactFormat,
-  lpFormCompactFormatToParts,
-  lpFormFormatNumber,
-  lpFormLimitAndFormatNumber,
+  hasExistingPosition,
 } from './utils';
-import { getEditPositionNotional } from './utils/getEditPositionNotional';
-import { getProspectiveLpMargin } from './utils/getProspectiveLpMargin';
-import { getProspectiveLpNotional } from './utils/getProspectiveLpNotional';
-import { getSelectedPositionNotional } from './utils/getSelectedPositionNotional';
-import { hasExistingPosition } from './utils/hasExistingPosition';
 
 // ------------ General Lp Form State Info ------------
 export const selectSubmitButtonInfo = (state: RootState) => state.lpForm.submitButton;
@@ -29,7 +31,7 @@ export const selectWalletBalance = (state: RootState) => {
     return '--';
   }
 
-  return lpFormCompactFormat(state.lpForm.walletBalance.value);
+  return formCompactFormat(state.lpForm.walletBalance.value);
 };
 export const selectPoolLpInfoStatus = (state: RootState) => state.lpForm.poolLpInfo.status;
 export const selectLpFormMode = (state: RootState): 'new' | 'edit' => {
@@ -71,13 +73,13 @@ export const selectUserInputMarginInfo = (state: RootState) => state.lpForm.user
 
 // ------------ Prospective Lp ------------
 export const selectProspectiveLpNotionalFormatted = (state: RootState) => {
-  return lpFormCompactFormat(getProspectiveLpNotional(state.lpForm));
+  return formCompactFormat(getProspectiveLpNotional(state.lpForm));
 };
 export const selectProspectiveLpMarginFormatted = (state: RootState) => {
   if (state.lpForm.userInput.marginAmount.editMode === 'add') {
-    return lpFormCompactFormat(getProspectiveLpMargin(state.lpForm));
+    return formCompactFormat(getProspectiveLpMargin(state.lpForm));
   }
-  return lpFormCompactFormat(getProspectiveLpMargin(state.lpForm));
+  return formCompactFormat(getProspectiveLpMargin(state.lpForm));
 };
 
 export const selectLeverage = (state: RootState) => state.lpForm.userInput.leverage;
@@ -99,11 +101,11 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
     if (margin === null) {
       return null;
     }
-    return lpFormLimitAndFormatNumber(margin, 'floor');
+    return formLimitAndFormatNumber(margin, 'floor');
   }
 
   if (lpFormState.prospectiveLp.infoPostLp.status === 'success') {
-    return lpFormLimitAndFormatNumber(
+    return formLimitAndFormatNumber(
       lpFormState.prospectiveLp.infoPostLp.value.marginRequirement,
       'ceil',
     );
@@ -115,7 +117,7 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.lpForm.userInput.notionalAmount.error) return null;
 
-  const compactParts = lpFormCompactFormatToParts(getProspectiveLpNotional(state.lpForm));
+  const compactParts = formCompactFormatToParts(getProspectiveLpNotional(state.lpForm));
 
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
@@ -128,7 +130,7 @@ export const selectExistingPositionCompactNotional = (state: RootState) => {
     return null;
   }
 
-  const compactParts = lpFormCompactFormatToParts(state.lpForm.selectedPosition.notional);
+  const compactParts = formCompactFormatToParts(state.lpForm.selectedPosition.notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -144,7 +146,7 @@ export const selectEditLpPositionRealizedPnLTotalFormatted = (state: RootState) 
     realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
   }
 
-  return realizedPnLTotal === null ? '--' : lpFormFormatNumber(realizedPnLTotal);
+  return realizedPnLTotal === null ? '--' : formFormatNumber(realizedPnLTotal);
 };
 
 export const selectEditLpPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
@@ -154,17 +156,17 @@ export const selectEditLpPositionRealizedPnLFromFeesFormatted = (state: RootStat
     realizedPnLFromFees = state.lpForm.selectedPosition.fees;
   }
 
-  return realizedPnLFromFees === null ? '--' : lpFormFormatNumber(realizedPnLFromFees);
+  return realizedPnLFromFees === null ? '--' : formFormatNumber(realizedPnLFromFees);
 };
 
 export const selectEditLpPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
   const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.lpForm);
-  return realizedPnLFromSwaps === null ? '--' : lpFormFormatNumber(realizedPnLFromSwaps);
+  return realizedPnLFromSwaps === null ? '--' : formFormatNumber(realizedPnLFromSwaps);
 };
 
 export const selectEditLpPositionUnrealizedPnLFromSwapsFormatted = (state: RootState) => {
   const unrealizedPnLFromSwaps = getUnrealizedPnLFromSwaps(state.lpForm);
-  return unrealizedPnLFromSwaps === null ? '--' : lpFormFormatNumber(unrealizedPnLFromSwaps);
+  return unrealizedPnLFromSwaps === null ? '--' : formFormatNumber(unrealizedPnLFromSwaps);
 };
 
 export const selectExistingPositionFixedLower = (state: RootState) => {
@@ -185,7 +187,7 @@ export const selectExistingPositionFixedUpper = (state: RootState) => {
 export const selectSelectedPositionCompactNotional = (state: RootState) => {
   const notional = getSelectedPositionNotional(state.lpForm);
 
-  const compactParts = lpFormCompactFormatToParts(notional);
+  const compactParts = formCompactFormatToParts(notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -195,7 +197,7 @@ export const selectSelectedPositionCompactNotional = (state: RootState) => {
 export const selectEditPositionCompactNotional = (state: RootState) => {
   const notional = getEditPositionNotional(state.lpForm);
 
-  const compactParts = lpFormCompactFormatToParts(notional);
+  const compactParts = formCompactFormatToParts(notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -298,7 +300,7 @@ export const selectPositionMarginFormatted = (state: RootState) => {
   if (!state.lpForm.selectedPosition) {
     return '--';
   }
-  return lpFormCompactFormat(state.lpForm.selectedPosition.margin);
+  return formCompactFormat(state.lpForm.selectedPosition.margin);
 };
 export const selectFixedRateInfo = (state: RootState) => state.lpForm.fixedRate;
 export const selectVariableRateInfo = (state: RootState) => state.lpForm.variableRate;

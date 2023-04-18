@@ -29,7 +29,7 @@ export const PoolHeaderDetailsBox = styled('div')`
 
 export const MarketTokenInformationBox = styled('div')`
   padding: 8px 16px;
-  min-width: 250px;
+  min-width: 265px;
 `;
 
 export const FixedBox = styled('div')`

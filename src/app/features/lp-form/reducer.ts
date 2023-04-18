@@ -3,7 +3,7 @@ import { AMM, InfoPostLp, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
-import { checkLowLeverageNotification } from '../common-form/utils';
+import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../common-form/utils';
 import {
   approveUnderlyingTokenThunk,
   confirmLpThunk,
@@ -23,7 +23,6 @@ import {
   getProspectiveLpNotional,
   hasExistingPosition,
   isUserInputMarginError,
-  lpFormLimitAndFormatNumber,
   resetNotionalAndMarginEditMode,
   updateLeverage,
   updateSelectedPosition,
@@ -531,7 +530,7 @@ const slice = createSlice({
 
       state.userInput.leverage = value;
       state.userInput.marginAmount.value = stringToBigFloat(
-        lpFormLimitAndFormatNumber(getProspectiveLpNotional(state) / value, 'ceil'),
+        formLimitAndFormatNumber(getProspectiveLpNotional(state) / value, 'ceil'),
       );
 
       validateUserInputAndUpdateSubmitButton(state);
