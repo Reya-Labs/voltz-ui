@@ -39,6 +39,7 @@ export const SORT_LABELS: Record<
   },
   variableAPY: {
     text: 'Variable APY',
+    subtext: '24h Change',
   },
   maturity: {
     text: 'Maturity',
