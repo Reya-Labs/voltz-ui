@@ -5,18 +5,18 @@ import { formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 import {
   getAvailableMargin,
-  getEditPositionNotional,
-  getProspectiveLpMargin,
-  getProspectiveLpNotional,
   getRealizedPnLFromSwaps,
-  getSelectedPositionNotional,
   getUnrealizedPnLFromSwaps,
-  hasExistingPosition,
   lpFormCompactFormat,
   lpFormCompactFormatToParts,
   lpFormFormatNumber,
   lpFormLimitAndFormatNumber,
 } from './utils';
+import { getEditPositionNotional } from './utils/getEditPositionNotional';
+import { getProspectiveLpMargin } from './utils/getProspectiveLpMargin';
+import { getProspectiveLpNotional } from './utils/getProspectiveLpNotional';
+import { getSelectedPositionNotional } from './utils/getSelectedPositionNotional';
+import { hasExistingPosition } from './utils/hasExistingPosition';
 
 // ------------ General Lp Form State Info ------------
 export const selectSubmitButtonInfo = (state: RootState) => state.lpForm.submitButton;

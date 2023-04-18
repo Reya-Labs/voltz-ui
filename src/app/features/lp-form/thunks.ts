@@ -4,15 +4,13 @@ import { ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPositionsLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
-import {
-  getDefaultLpFixedHigh,
-  getDefaultLpFixedLow,
-  getProspectiveLpFixedHigh,
-  getProspectiveLpFixedLow,
-  getProspectiveLpMargin,
-  getProspectiveLpNotional,
-  isUserInputNotionalError,
-} from './utils';
+import { isUserInputNotionalError } from './utils';
+import { getDefaultLpFixedHigh } from './utils/getDefaultLpFixedHigh';
+import { getDefaultLpFixedLow } from './utils/getDefaultLpFixedLow';
+import { getProspectiveLpFixedHigh } from './utils/getProspectiveLpFixedHigh';
+import { getProspectiveLpFixedLow } from './utils/getProspectiveLpFixedLow';
+import { getProspectiveLpMargin } from './utils/getProspectiveLpMargin';
+import { getProspectiveLpNotional } from './utils/getProspectiveLpNotional';
 
 const rejectThunkWithError = (
   thunkAPI: {
