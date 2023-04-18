@@ -2,9 +2,9 @@ import { CurrencyField, TypographyToken } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { FormNumberLimits } from '../../../../../app/features/common-form';
 import {
   getInfoPostLpThunk,
-  LpFormNumberLimits,
   selectLpFormAMM,
   selectUserInputFixedError,
   selectUserInputFixedLower,
@@ -104,7 +104,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
     <FixedRangeFieldsBox>
       <CurrencyField
         allowNegativeValue={false}
-        decimalsLimit={LpFormNumberLimits.fixedRangeDecimalLimit}
+        decimalsLimit={FormNumberLimits.fixedRangeDecimalLimit}
         disabled={false}
         error={Boolean(fixedError)}
         label="Fixed Low"
@@ -119,7 +119,7 @@ export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = ()
       />
       <CurrencyField
         allowNegativeValue={false}
-        decimalsLimit={LpFormNumberLimits.fixedRangeDecimalLimit}
+        decimalsLimit={FormNumberLimits.fixedRangeDecimalLimit}
         disabled={false}
         label="Fixed High"
         labelColorToken="lavenderWeb3"

@@ -1,5 +1,5 @@
 import { limitAndFormatNumber } from '../../../../../utilities/number';
-import { SwapFormNumberLimits } from '../../constants';
+import { FormNumberLimits } from '../../../common-form';
 import { swapFormLimitAndFormatNumber } from './index';
 
 jest.mock('../../../../../utilities/number', () => {
@@ -13,8 +13,8 @@ describe('swapFormLimitAndFormatNumber', () => {
     swapFormLimitAndFormatNumber(0.1234, 'floor');
     expect(limitAndFormatNumber).toHaveBeenCalledWith(
       0.1234,
-      SwapFormNumberLimits.digitLimit,
-      SwapFormNumberLimits.decimalLimit,
+      FormNumberLimits.digitLimit,
+      FormNumberLimits.decimalLimit,
       'floor',
     );
   });
@@ -23,8 +23,8 @@ describe('swapFormLimitAndFormatNumber', () => {
     swapFormLimitAndFormatNumber(1234, 'ceil');
     expect(limitAndFormatNumber).toHaveBeenCalledWith(
       1234,
-      SwapFormNumberLimits.digitLimit,
-      SwapFormNumberLimits.decimalLimit,
+      FormNumberLimits.digitLimit,
+      FormNumberLimits.decimalLimit,
       'ceil',
     );
   });

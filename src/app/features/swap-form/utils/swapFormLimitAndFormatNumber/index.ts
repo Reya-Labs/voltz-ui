@@ -1,11 +1,11 @@
 import { limitAndFormatNumber } from '../../../../../utilities/number';
-import { SwapFormNumberLimits } from '../../constants';
+import { FormNumberLimits } from '../../../common-form';
 
 export const swapFormLimitAndFormatNumber = (value: number, mode: 'floor' | 'ceil') => {
   return limitAndFormatNumber(
     value,
-    SwapFormNumberLimits.digitLimit,
-    SwapFormNumberLimits.decimalLimit,
+    FormNumberLimits.digitLimit,
+    FormNumberLimits.decimalLimit,
     mode,
   );
 };

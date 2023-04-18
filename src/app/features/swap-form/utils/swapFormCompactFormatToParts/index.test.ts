@@ -1,5 +1,5 @@
 import { compactFormatToParts } from '../../../../../utilities/number';
-import { SwapFormNumberLimits } from '../../constants';
+import { FormNumberLimits } from '../../../common-form';
 import { swapFormCompactFormatToParts } from './index';
 
 jest.mock('../../../../../utilities/number', () => {
@@ -11,9 +11,9 @@ jest.mock('../../../../../utilities/number', () => {
 describe('swapFormCompactFormatToParts', () => {
   it('should call compactFormatToParts with proper params when value < 1', () => {
     swapFormCompactFormatToParts(0.1234);
-    expect(compactFormatToParts).toHaveBeenCalledWith(0.1234, 0, SwapFormNumberLimits.decimalLimit);
+    expect(compactFormatToParts).toHaveBeenCalledWith(0.1234, 0, FormNumberLimits.decimalLimit);
     swapFormCompactFormatToParts(0.9);
-    expect(compactFormatToParts).toHaveBeenCalledWith(0.9, 0, SwapFormNumberLimits.decimalLimit);
+    expect(compactFormatToParts).toHaveBeenCalledWith(0.9, 0, FormNumberLimits.decimalLimit);
   });
 
   it('should call compactFormatToParts with proper params when value >= 1', () => {

@@ -1,9 +1,9 @@
 import { formatNumber } from '../../../../../utilities/number';
-import { SwapFormNumberLimits } from '../../constants';
+import { FormNumberLimits } from '../../../common-form';
 
 export const swapFormFormatNumber = (value: number) => {
   if (value < 1) {
-    return formatNumber(value, 0, SwapFormNumberLimits.decimalLimit);
+    return formatNumber(value, 0, FormNumberLimits.decimalLimit);
   }
 
   return formatNumber(value, 0, 2);

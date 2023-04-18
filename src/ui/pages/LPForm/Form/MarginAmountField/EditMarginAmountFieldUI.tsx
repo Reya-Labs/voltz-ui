@@ -1,8 +1,8 @@
 import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { FormNumberLimits } from '../../../../../app/features/common-form';
 import {
-  LpFormNumberLimits,
   selectBottomRightMarginNumber,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
@@ -58,11 +58,11 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
         bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={bottomRightNumber !== null ? bottomRightNumber : '--'}
-        decimalsLimit={LpFormNumberLimits.decimalLimit}
+        decimalsLimit={FormNumberLimits.decimalLimit}
         error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"
         labelTypographyToken={labelTypographyToken}
-        maxLength={LpFormNumberLimits.digitLimit}
+        maxLength={FormNumberLimits.digitLimit}
         switchOffText={'Withdraw'}
         switchOffValue={'remove'}
         switchOnText={'Deposit'}

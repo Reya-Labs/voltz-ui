@@ -7,7 +7,7 @@ import {
   formatNumber,
   limitAndFormatNumber,
 } from '../../../../utilities/number';
-import { LpFormNumberLimits } from '../constants';
+import { FormNumberLimits } from '../../common-form';
 import { SliceState } from '../reducer';
 
 export const getRealizedPnLFromSwaps = (state: Draft<SliceState>) => {
@@ -32,7 +32,7 @@ export const getUnrealizedPnLFromSwaps = (state: Draft<SliceState>) => {
 
 export const lpFormFormatNumber = (value: number) => {
   if (value < 1) {
-    return formatNumber(value, 0, LpFormNumberLimits.decimalLimit);
+    return formatNumber(value, 0, FormNumberLimits.decimalLimit);
   }
 
   return formatNumber(value, 0, 2);
@@ -40,7 +40,7 @@ export const lpFormFormatNumber = (value: number) => {
 
 export const lpFormCompactFormat = (value: number) => {
   if (value < 1) {
-    return compactFormat(value, 0, LpFormNumberLimits.decimalLimit);
+    return compactFormat(value, 0, FormNumberLimits.decimalLimit);
   }
 
   return compactFormat(value, 0, 2);
@@ -48,7 +48,7 @@ export const lpFormCompactFormat = (value: number) => {
 
 export const lpFormCompactFormatToParts = (value: number) => {
   if (value < 1) {
-    return compactFormatToParts(value, 0, LpFormNumberLimits.decimalLimit);
+    return compactFormatToParts(value, 0, FormNumberLimits.decimalLimit);
   }
 
   return compactFormatToParts(value, 0, 2);
@@ -57,8 +57,8 @@ export const lpFormCompactFormatToParts = (value: number) => {
 export const lpFormLimitAndFormatNumber = (value: number, mode: 'floor' | 'ceil') => {
   return limitAndFormatNumber(
     value,
-    LpFormNumberLimits.digitLimit,
-    LpFormNumberLimits.decimalLimit,
+    FormNumberLimits.digitLimit,
+    FormNumberLimits.decimalLimit,
     mode,
   );
 };
