@@ -8,6 +8,7 @@ import {
   limitAndFormatNumber,
 } from '../../../../utilities/number';
 import { FormNumberLimits } from '../../common-form';
+import { checkLowLeverageNotification } from '../../common-form/utils';
 import { SliceState } from '../reducer';
 
 export const getRealizedPnLFromSwaps = (state: Draft<SliceState>) => {
@@ -305,13 +306,4 @@ export const getEditPositionNotional = (state: Draft<SliceState>) => {
 
 export const getVariableRate = (state: Draft<SliceState>) => {
   return state.variableRate.status === 'success' ? state.variableRate.value : null;
-};
-
-export const checkLowLeverageNotification = (state: Draft<SliceState>) => {
-  return !!(
-    state.amm &&
-    state.userInput.leverage !== null &&
-    state.userInput.leverage < state.amm.minLeverageAllowed &&
-    !state.showLowLeverageNotification
-  );
 };

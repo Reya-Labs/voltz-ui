@@ -1,4 +1,3 @@
-export * from './checkLowLeverageNotification';
 export * from './getAvailableMargin';
 export * from './getAvailableNotional';
 export * from './getEditPositionFixedRate';

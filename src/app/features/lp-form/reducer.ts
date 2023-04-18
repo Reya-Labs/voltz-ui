@@ -3,6 +3,7 @@ import { AMM, InfoPostLp, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
+import { checkLowLeverageNotification } from '../common-form/utils';
 import {
   approveUnderlyingTokenThunk,
   confirmLpThunk,
@@ -18,7 +19,6 @@ import {
   SetSignerAndPositionsForAMMThunkSuccess,
 } from './thunks';
 import {
-  checkLowLeverageNotification,
   getProspectiveLpMargin,
   getProspectiveLpNotional,
   hasExistingPosition,

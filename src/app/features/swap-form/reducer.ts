@@ -4,6 +4,7 @@ import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../utilities/amm';
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
+import { checkLowLeverageNotification } from '../common-form/utils';
 import { pushEstimatedApyChangeEvent, pushLeverageChangeEvent } from './analytics';
 import {
   approveUnderlyingTokenThunk,
@@ -21,7 +22,6 @@ import {
   SetSignerAndPositionForAMMThunkSuccess,
 } from './thunks';
 import {
-  checkLowLeverageNotification,
   getExistingPositionMode,
   getProspectiveSwapMargin,
   getProspectiveSwapMode,

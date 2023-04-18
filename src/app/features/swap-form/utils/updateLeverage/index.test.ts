@@ -1,8 +1,8 @@
-import { checkLowLeverageNotification } from '../checkLowLeverageNotification';
+import { checkLowLeverageNotification } from '../../../common-form/utils/checkLowLeverageNotification';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 import { updateLeverage } from './';
 
-jest.mock('../checkLowLeverageNotification');
+jest.mock('../../../common-form/utils/checkLowLeverageNotification');
 jest.mock('../getProspectiveSwapNotional');
 
 describe('updateLeverage', () => {

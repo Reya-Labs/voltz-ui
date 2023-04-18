@@ -1,7 +1,7 @@
 import { Draft } from '@reduxjs/toolkit';
 
+import { checkLowLeverageNotification } from '../../../common-form/utils';
 import { SliceState } from '../../reducer';
-import { checkLowLeverageNotification } from '../checkLowLeverageNotification';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 
 export const updateLeverage = (state: Draft<SliceState>): void => {

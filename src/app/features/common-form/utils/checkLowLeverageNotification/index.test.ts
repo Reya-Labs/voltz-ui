@@ -1,11 +1,8 @@
-import { Draft } from '@reduxjs/toolkit';
-
-import { SliceState } from '../../reducer';
 import { checkLowLeverageNotification } from './index';
 
 describe('checkLowLeverageNotification', () => {
   it('returns true when leverage is below minimum allowed and notification is not shown', () => {
-    const state: Draft<SliceState> = {
+    const state = {
       amm: {
         // mock the amm object
         minLeverageAllowed: 3,
@@ -19,7 +16,7 @@ describe('checkLowLeverageNotification', () => {
   });
 
   it('returns false when leverage is above or equal to minimum allowed', () => {
-    const state: Draft<SliceState> = {
+    const state = {
       amm: {
         minLeverageAllowed: 3,
       },
@@ -27,15 +24,15 @@ describe('checkLowLeverageNotification', () => {
         leverage: 3,
       },
       showLowLeverageNotification: false,
-    } as never;
-    expect(checkLowLeverageNotification(state)).toBe(false);
+    };
+    expect(checkLowLeverageNotification(state as never)).toBe(false);
 
     state.userInput.leverage = 4;
-    expect(checkLowLeverageNotification(state)).toBe(false);
+    expect(checkLowLeverageNotification(state as never)).toBe(false);
   });
 
   it('returns false when notification is already shown', () => {
-    const state: Draft<SliceState> = {
+    const state = {
       amm: {
         minLeverageAllowed: 3,
       },
