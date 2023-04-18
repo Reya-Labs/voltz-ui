@@ -1,4 +1,4 @@
-import { getEditPositionTokenBalance } from './index';
+import { getEditPositionTokenBalance } from './';
 
 describe('getEditPositionTokenBalance', () => {
   it('should return the correct token balance when there is a position and a prospective swap', () => {
