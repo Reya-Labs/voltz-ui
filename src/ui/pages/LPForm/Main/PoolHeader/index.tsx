@@ -1,8 +1,10 @@
 import React from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
+import { selectPools } from '../../../../../app/features/aMMs';
 import { PoolUI } from '../../../../../app/features/aMMs/types';
 import {
+  resetStateAction,
   selectAMMMaturityFormatted,
   selectFixedRateValueFormatted,
   selectLpFormAMM,
@@ -24,6 +26,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const variableRateFormatted = useAppSelector(selectVariableRateValueFormatted);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const pools = useAppSelector(selectPools);
 
   if (!aMM) {
     return null;
@@ -35,7 +38,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const token = aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token'];
 
   const handleOnPoolItemClick = ({ routePoolId, routeAmmId }: PoolUI) => {
-    // dispatch(resetStateAction());
+    dispatch(resetStateAction());
     const path = generatePath(routes.LP_FORM, {
       form: 'liquidity',
       ammId: routeAmmId,
@@ -48,11 +51,11 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
     <PoolHeaderComponent
       aMMMaturity={aMMMaturity}
       fixedRateFormatted={fixedRateFormatted}
-      id={aMM.id}
       isAaveV3={isAaveV3}
       isBorrowing={isBorrowing}
       isV2={isV2}
       market={market}
+      pools={pools.filter((p) => p.id !== aMM.id)}
       token={token}
       variableRate24hDelta={variableRate24hDelta}
       variableRateFormatted={variableRateFormatted}

@@ -22,14 +22,13 @@ type PoolHeaderProps = {
   variableRateFormatted: string;
   aMMMaturity: string;
   isV2: boolean;
-  id: string;
   onPoolItemClick: PoolListProps['onPoolItemClick'];
+  pools: PoolListProps['pools'];
 };
 
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   isAaveV3,
   isV2,
-  id,
   isBorrowing,
   market,
   token,
@@ -38,6 +37,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   variableRateFormatted,
   aMMMaturity,
   onPoolItemClick,
+  pools,
 }) => {
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
@@ -55,7 +55,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   return (
     <PoolHeaderBox>
       <Popover
-        content={<PoolList excludeId={id} onPoolItemClick={onPoolItemClick} />}
+        content={<PoolList pools={pools} onPoolItemClick={onPoolItemClick} />}
         data-testid="PoolHeaderPopover"
         isOpen={isToggleCaretOpen}
         onClickOutside={handleOnClickOutside}

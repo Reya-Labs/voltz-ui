@@ -1,21 +1,15 @@
 import React, { useLayoutEffect, useState } from 'react';
 import AnimateHeight from 'react-animate-height';
 
-import { selectPools } from '../../../../app/features/aMMs';
 import { PoolUI } from '../../../../app/features/aMMs/types';
-import { useAppSelector } from '../../../../app/hooks';
 import { PoolItem } from './PoolItem';
 
 export type PoolListProps = {
-  excludeId: string;
+  pools: PoolUI[];
   onPoolItemClick: (pool: PoolUI) => void;
 };
 
-export const PoolList: React.FunctionComponent<PoolListProps> = ({
-  onPoolItemClick,
-  excludeId,
-}) => {
-  const pools = useAppSelector(selectPools);
+export const PoolList: React.FunctionComponent<PoolListProps> = ({ onPoolItemClick, pools }) => {
   const [height, setHeight] = useState<'auto' | number>(0);
   const [width, setWidth] = useState<'auto' | number>('auto');
 
@@ -38,23 +32,21 @@ export const PoolList: React.FunctionComponent<PoolListProps> = ({
         width: width,
       }}
     >
-      {pools
-        .filter((p) => p.id !== excludeId)
-        .map((pool) => (
-          <PoolItem
-            key={pool.id}
-            aMMMaturity={pool.aMMMaturity}
-            fixedRateFormatted={pool.fixedAPRRateFormatted}
-            isAaveV3={pool.isAaveV3}
-            isBorrowing={pool.isBorrowing}
-            isV2={pool.isV2}
-            market={pool.market}
-            token={pool.token}
-            variableRate24hDelta={pool.variableAPYRate24hDelta}
-            variableRateFormatted={pool.variableAPYRateFormatted}
-            onClick={() => onPoolItemClick(pool)}
-          />
-        ))}
+      {pools.map((pool) => (
+        <PoolItem
+          key={pool.id}
+          aMMMaturity={pool.aMMMaturity}
+          fixedRateFormatted={pool.fixedAPRRateFormatted}
+          isAaveV3={pool.isAaveV3}
+          isBorrowing={pool.isBorrowing}
+          isV2={pool.isV2}
+          market={pool.market}
+          token={pool.token}
+          variableRate24hDelta={pool.variableAPYRate24hDelta}
+          variableRateFormatted={pool.variableAPYRateFormatted}
+          onClick={() => onPoolItemClick(pool)}
+        />
+      ))}
     </AnimateHeight>
   );
 };

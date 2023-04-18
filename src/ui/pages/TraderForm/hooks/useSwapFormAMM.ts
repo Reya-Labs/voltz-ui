@@ -122,15 +122,7 @@ export const useSwapFormAMM = (): UseAMMsResult => {
 
     void dispatch(getInfoPostSwapThunk());
   }, [dispatch, position]);
-  console.log(
-    '####',
-    idle,
-    positionFetchingStatus === 'idle',
-    poolSwapInfoStatus === 'idle',
-    loading,
-    positionFetchingStatus === 'pending',
-    poolSwapInfoStatus === 'pending',
-  );
+
   return {
     aMM,
     loading:
