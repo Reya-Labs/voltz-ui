@@ -4,26 +4,17 @@ import { SliceState } from '../../reducer';
 import { getExistingPositionMode } from '../getExistingPositionMode';
 
 export const getProspectiveSwapMode = (state: Draft<SliceState>): 'fixed' | 'variable' => {
+  const existingPositionMode = getExistingPositionMode(state);
+
   if (state.position.value === null) {
     return state.userInput.mode;
   }
 
-  const existingPositionMode = getExistingPositionMode(state);
-
   if (
-    existingPositionMode === 'fixed' &&
-    state.userInput.mode === 'fixed' &&
+    existingPositionMode === state.userInput.mode &&
     state.userInput.notionalAmount.editMode === 'add'
   ) {
-    return 'fixed';
-  }
-
-  if (
-    existingPositionMode === 'variable' &&
-    state.userInput.mode === 'variable' &&
-    state.userInput.notionalAmount.editMode === 'add'
-  ) {
-    return 'variable';
+    return existingPositionMode;
   }
 
   return existingPositionMode === 'fixed' ? 'variable' : 'fixed';
