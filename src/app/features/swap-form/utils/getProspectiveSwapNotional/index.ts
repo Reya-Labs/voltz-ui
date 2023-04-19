@@ -1,9 +1,9 @@
 import { Draft } from '@reduxjs/toolkit';
 
+import { isUserInputNotionalError } from '../../../common-form/utils';
 import { SliceState } from '../../reducer';
 import { getExistingPositionMode } from '../getExistingPositionMode';
 import { getExistingPositionNotional } from '../getExistingPositionNotional';
-import { isUserInputNotionalError } from '../isUserInputNotionalError';
 
 export const getProspectiveSwapNotional = (state: Draft<SliceState>): number => {
   if (isUserInputNotionalError(state)) {

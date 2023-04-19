@@ -11,6 +11,7 @@ import { ContractReceipt, providers } from 'ethers';
 import { findCurrentPosition, getAmmProtocol } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
 import { RootState } from '../../store';
+import { isUserInputNotionalError } from '../common-form/utils';
 import {
   pushPageViewEvent,
   pushSwapTransactionFailedEvent,
@@ -22,7 +23,6 @@ import {
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
   hasExistingPosition,
-  isUserInputNotionalError,
 } from './utils';
 
 const extractError = (err: unknown): string => {

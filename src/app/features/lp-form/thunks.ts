@@ -4,6 +4,7 @@ import { ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPositionsLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
+import { isUserInputNotionalError } from '../common-form/utils';
 import {
   getDefaultLpFixedHigh,
   getDefaultLpFixedLow,
@@ -11,7 +12,6 @@ import {
   getProspectiveLpFixedLow,
   getProspectiveLpMargin,
   getProspectiveLpNotional,
-  isUserInputNotionalError,
 } from './utils';
 
 const rejectThunkWithError = (

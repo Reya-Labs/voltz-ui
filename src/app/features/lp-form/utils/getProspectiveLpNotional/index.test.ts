@@ -1,7 +1,7 @@
-import { isUserInputNotionalError } from '../isUserInputNotionalError';
+import { isUserInputNotionalError } from '../../../common-form/utils/isUserInputNotionalError';
 import { getProspectiveLpNotional } from './index';
 
-jest.mock('../isUserInputNotionalError');
+jest.mock('../../../common-form/utils/isUserInputNotionalError');
 
 describe('getProspectiveLpNotional', () => {
   afterEach(() => {

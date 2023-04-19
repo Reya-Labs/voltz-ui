@@ -1,7 +1,7 @@
 import { Draft } from '@reduxjs/toolkit';
 
+import { isUserInputNotionalError } from '../../../common-form/utils';
 import { SliceState } from '../../reducer';
-import { isUserInputNotionalError } from '../isUserInputNotionalError';
 
 export const getProspectiveLpNotional = (state: Draft<SliceState>): number => {
   if (isUserInputNotionalError(state)) {
