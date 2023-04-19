@@ -23,7 +23,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const prospectiveSwapNotionalFormatted = useAppSelector(selectProspectiveSwapNotionalFormatted);
   const prospectiveSwapMarginFormatted = useAppSelector(selectProspectiveSwapMarginFormatted);
   const fixedRate = formatNumber(infoPostSwap.value.averageFixedRate);
-  const variableRate = formatNumber(variableRateInfo.value);
+  const variableRate = formatNumber(variableRateInfo || 0);
 
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;

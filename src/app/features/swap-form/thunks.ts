@@ -96,59 +96,6 @@ export const approveUnderlyingTokenThunk = createAsyncThunk<
   }
 });
 
-export const getFixedRateThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('swapForm/getFixedRate', async (_, thunkAPI) => {
-  try {
-    const amm = thunkAPI.getState().swapForm.amm;
-    if (!amm) {
-      return;
-    }
-
-    return await amm.getFixedApr();
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
-export const getVariableRateThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('swapForm/getVariableRate', async (_, thunkAPI) => {
-  try {
-    const amm = thunkAPI.getState().swapForm.amm;
-    if (!amm) {
-      return;
-    }
-
-    const variableRate = await amm.getInstantApy();
-    return variableRate * 100;
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
-export const getVariableRate24hAgoThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('swapForm/getVariableRate24hAgo', async (_, thunkAPI) => {
-  try {
-    const amm = thunkAPI.getState().swapForm.amm;
-    if (!amm) {
-      return;
-    }
-    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-    const variableRate = await amm.getInstantApy(Date.now() - oneDayInMilliseconds);
-    return variableRate * 100;
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
 export const getPoolSwapInfoThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,

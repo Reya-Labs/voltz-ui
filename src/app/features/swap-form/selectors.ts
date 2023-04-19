@@ -43,8 +43,8 @@ export const selectWalletBalance = (state: RootState) => {
 
   return formCompactFormat(state.swapForm.walletBalance.value);
 };
-export const selectFixedRateInfo = (state: RootState) => state.swapForm.fixedRate;
-export const selectVariableRateInfo = (state: RootState) => state.swapForm.variableRate;
+export const selectFixedRateInfo = (state: RootState) => state.swapForm.amm?.fixedApr;
+export const selectVariableRateInfo = (state: RootState) => state.swapForm.amm?.variableApy;
 export const selectPoolSwapInfoStatus = (state: RootState) => state.swapForm.poolSwapInfo.status;
 export const selectSwapFormMode = (state: RootState): 'new' | 'edit' => {
   return hasExistingPosition(state.swapForm) ? 'edit' : 'new';
@@ -278,10 +278,7 @@ export const selectTotalCashflow = (state: RootState) => {
 };
 
 export const selectSlippageFormatted = (state: RootState) => {
-  if (
-    state.swapForm.fixedRate.status !== 'success' ||
-    state.swapForm.prospectiveSwap.infoPostSwap.status !== 'success'
-  ) {
+  if (!state.swapForm.amm || state.swapForm.prospectiveSwap.infoPostSwap.status !== 'success') {
     return '--';
   }
 
@@ -291,7 +288,7 @@ export const selectSlippageFormatted = (state: RootState) => {
 
   const slippage = Math.abs(
     state.swapForm.prospectiveSwap.infoPostSwap.value.averageFixedRate -
-      state.swapForm.fixedRate.value,
+      state.swapForm.amm.fixedApr,
   );
 
   return formFormatNumber(slippage);
@@ -323,16 +320,13 @@ export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState
 
 // ------------ Variable Rate Delta ------------
 export const selectVariableRate24hDelta = (state: RootState) => {
-  return state.swapForm.variableRate24hAgo.status === 'success' &&
-    state.swapForm.variableRate.status === 'success'
-    ? stringToBigFloat(
-        formatNumber(
-          state.swapForm.variableRate.value - state.swapForm.variableRate24hAgo.value,
-          0,
-          3,
-        ),
-      )
-    : undefined;
+  if (!state.swapForm.amm) {
+    return undefined;
+  }
+
+  return stringToBigFloat(
+    formatNumber(state.swapForm.amm.variableApy - state.swapForm.amm.variableApy24Ago, 0, 3),
+  );
 };
 
 // ------------ Submit button text ------------
@@ -384,15 +378,11 @@ export const selectPositionMarginFormatted = (state: RootState) => {
 };
 
 export const selectFixedRateValueFormatted = (state: RootState) => {
-  return state.swapForm.fixedRate.status !== 'success'
-    ? '--'
-    : formatNumber(state.swapForm.fixedRate.value);
+  return !state.swapForm.amm ? '--' : formatNumber(state.swapForm.amm.fixedApr);
 };
 
 export const selectVariableRateValueFormatted = (state: RootState) => {
-  return state.swapForm.variableRate.status !== 'success'
-    ? '--'
-    : formatNumber(state.swapForm.variableRate.value);
+  return !state.swapForm.amm ? '--' : formatNumber(state.swapForm.amm.variableApy);
 };
 
 export const selectMarginRequirementFormatted = (state: RootState) => {

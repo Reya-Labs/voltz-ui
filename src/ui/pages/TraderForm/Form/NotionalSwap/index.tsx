@@ -32,9 +32,8 @@ export const NotionalSwap: React.FunctionComponent = () => {
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const mode = useAppSelector(selectUserInputMode);
   const [localMode, setLocalMode] = useState<'fixed' | 'variable'>('fixed');
-  const fixedRate = fixedRateInfo.status === 'success' ? formatNumber(fixedRateInfo.value) : '--';
-  const variableRate =
-    variableRateInfo.status === 'success' ? formatNumber(variableRateInfo.value) : '--';
+  const fixedRate = fixedRateInfo ? formatNumber(fixedRateInfo) : '--';
+  const variableRate = variableRateInfo ? formatNumber(variableRateInfo) : '--';
   const isFixedMode = localMode === 'fixed';
   const { isLargeDesktopDevice } = useResponsiveQuery();
 

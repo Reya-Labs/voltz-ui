@@ -15,7 +15,7 @@ export const Main: React.FunctionComponent = () => {
   const aMM = useAppSelector(selectLpFormAMM);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
-  if (!aMM) {
+  if (!aMM || fixedRateInfo === undefined || variableRateInfo === undefined) {
     return null;
   }
 
@@ -25,8 +25,8 @@ export const Main: React.FunctionComponent = () => {
       <HistoricalRatesChart
         aMMId={aMM.id}
         aMMRateOracleId={aMM.rateOracle.id}
-        fixedRate={fixedRateInfo.status !== 'success' ? null : fixedRateInfo.value}
-        variableRate={variableRateInfo.status !== 'success' ? null : variableRateInfo.value}
+        fixedRate={fixedRateInfo}
+        variableRate={variableRateInfo}
       />
       <BottomMainBox>
         <PositionDetails />

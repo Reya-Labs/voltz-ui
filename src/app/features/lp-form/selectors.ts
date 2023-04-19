@@ -225,12 +225,12 @@ export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState
 
 // ------------ Variable Rate Delta ------------
 export const selectVariableRate24hDelta = (state: RootState) => {
-  return state.lpForm.variableRate24hAgo.status === 'success' &&
-    state.lpForm.variableRate.status === 'success'
-    ? stringToBigFloat(
-        formatNumber(state.lpForm.variableRate.value - state.lpForm.variableRate24hAgo.value, 0, 3),
-      )
-    : undefined;
+  if (!state.lpForm.amm) {
+    return undefined;
+  }
+  return stringToBigFloat(
+    formatNumber(state.lpForm.amm.variableApy - state.lpForm.amm.variableApy24Ago, 0, 3),
+  );
 };
 
 // ------------ Submit button text ------------
@@ -295,19 +295,15 @@ export const selectPositionMarginFormatted = (state: RootState) => {
   }
   return formCompactFormat(state.lpForm.selectedPosition.margin);
 };
-export const selectFixedRateInfo = (state: RootState) => state.lpForm.fixedRate;
-export const selectVariableRateInfo = (state: RootState) => state.lpForm.variableRate;
+export const selectFixedRateInfo = (state: RootState) => state.lpForm.amm?.fixedApr;
+export const selectVariableRateInfo = (state: RootState) => state.lpForm.amm?.variableApy;
 
 export const selectFixedRateValueFormatted = (state: RootState) => {
-  return state.lpForm.fixedRate.status !== 'success'
-    ? '--'
-    : formatNumber(state.lpForm.fixedRate.value);
+  return !state.lpForm.amm ? '--' : formatNumber(state.lpForm.amm.fixedApr);
 };
 
 export const selectVariableRateValueFormatted = (state: RootState) => {
-  return state.lpForm.variableRate.status !== 'success'
-    ? '--'
-    : formatNumber(state.lpForm.variableRate.value);
+  return !state.lpForm.amm ? '--' : formatNumber(state.lpForm.amm.variableApy);
 };
 
 export const selectUserInputFixedLower = (state: RootState) => {

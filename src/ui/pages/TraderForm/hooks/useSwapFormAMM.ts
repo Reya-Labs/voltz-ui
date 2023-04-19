@@ -4,12 +4,9 @@ import { useParams } from 'react-router-dom';
 
 import { selectChainId } from '../../../../app/features/network';
 import {
-  getFixedRateThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
-  getVariableRate24hAgoThunk,
-  getVariableRateThunk,
   getWalletBalanceThunk,
   selectPoolSwapInfoStatus,
   selectSwapFormAMM,
@@ -76,9 +73,6 @@ export const useSwapFormAMM = (): UseAMMsResult => {
       return;
     }
 
-    void dispatch(getFixedRateThunk());
-    void dispatch(getVariableRateThunk());
-    void dispatch(getVariableRate24hAgoThunk());
     void dispatch(getPoolSwapInfoThunk());
   }, [dispatch, aMM]);
 

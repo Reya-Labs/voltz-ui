@@ -3,12 +3,9 @@ import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import {
-  getFixedRateThunk,
   getInfoPostLpThunk,
   getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
-  getVariableRate24hAgoThunk,
-  getVariableRateThunk,
   getWalletBalanceThunk,
   selectLpFormAMM,
   selectLpFormPositionsFetchingStatus,
@@ -81,16 +78,6 @@ export const useLPFormAMM = (): UseAMMsResult => {
     );
     setLoading(false);
   }, [aMM, dispatch, ammId, poolId, idle, aMMs, aMMsLoading, error]);
-
-  useEffect(() => {
-    if (!aMM) {
-      return;
-    }
-
-    void dispatch(getFixedRateThunk());
-    void dispatch(getVariableRateThunk());
-    void dispatch(getVariableRate24hAgoThunk());
-  }, [dispatch, aMM]);
 
   useEffect(() => {
     if (!aMM) {

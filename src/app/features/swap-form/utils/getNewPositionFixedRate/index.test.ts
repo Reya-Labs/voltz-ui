@@ -10,10 +10,7 @@ describe('getNewPositionFixedRate', () => {
         },
       },
     },
-    fixedRate: {
-      status: 'idle',
-      value: 0,
-    },
+    amm: null,
   };
 
   beforeEach(() => {
@@ -26,10 +23,11 @@ describe('getNewPositionFixedRate', () => {
         status: 'pending',
       },
     };
-    state.fixedRate = { status: 'pending', value: 0 };
+    state.amm = null;
   });
 
   it('should return the average fixed rate from state.prospectiveSwap.infoPostSwap when status is success', () => {
+    state.amm = { fixedApr: 0.25 } as never;
     state.prospectiveSwap.infoPostSwap.status = 'success';
     state.prospectiveSwap.infoPostSwap.value = { averageFixedRate: 0.5 };
 
@@ -37,8 +35,7 @@ describe('getNewPositionFixedRate', () => {
   });
 
   it('should return the fixed rate from state.fixedRate when status is success', () => {
-    state.fixedRate.status = 'success';
-    state.fixedRate.value = 0.25;
+    state.amm = { fixedApr: 0.25 } as never;
 
     expect(getNewPositionFixedRate(state as never)).toBe(0.25);
   });
