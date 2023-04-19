@@ -8,7 +8,7 @@ import { formatPOSIXTimestamp } from '../../../utilities/date';
 import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { selectChainId } from '../network';
-import { FILTER_LABELS, SORT_LABELS } from './constants';
+import { FILTER_CONFIG, SORT_CONFIG } from './constants';
 import { sortPools } from './helpers/sortPools';
 import { PoolFilterId, PoolSortDirection, PoolSortId, PoolUI } from './types';
 
@@ -176,11 +176,13 @@ export const selectPoolFilterOptions = (
     return [];
   }
   const filters = state.aMMs.filters[chainId];
-  return Object.keys(filters).map((filterKey) => ({
-    id: filterKey as PoolFilterId,
-    label: FILTER_LABELS[filterKey as PoolFilterId],
-    isActive: filters[filterKey as PoolFilterId],
-  }));
+  return Object.keys(filters)
+    .filter((filterKey) => !FILTER_CONFIG[filterKey as PoolFilterId].hidden)
+    .map((filterKey) => ({
+      id: filterKey as PoolFilterId,
+      label: FILTER_CONFIG[filterKey as PoolFilterId].label,
+      isActive: filters[filterKey as PoolFilterId],
+    }));
 };
 
 export const selectPoolSortOptions = (
@@ -190,6 +192,7 @@ export const selectPoolSortOptions = (
   text: string;
   subtext?: string;
   direction: PoolSortDirection;
+  disabled: boolean;
 }[] => {
   const chainId = selectChainId(state);
   if (!chainId) {
@@ -198,9 +201,10 @@ export const selectPoolSortOptions = (
   const sortingDirection = state.aMMs.sortingDirection[chainId];
   return Object.keys(sortingDirection).map((sortKey) => ({
     id: sortKey as PoolSortId,
-    text: SORT_LABELS[sortKey as PoolSortId].text,
-    subtext: SORT_LABELS[sortKey as PoolSortId].subtext,
+    text: SORT_CONFIG[sortKey as PoolSortId].text,
+    subtext: SORT_CONFIG[sortKey as PoolSortId].subtext,
     direction: sortingDirection[sortKey as PoolSortId],
+    disabled: SORT_CONFIG[sortKey as PoolSortId].disabled,
   }));
 };
 

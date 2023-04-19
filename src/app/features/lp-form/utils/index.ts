@@ -8,7 +8,6 @@ export * from './getProspectiveLpMargin';
 export * from './getProspectiveLpNotional';
 export * from './getRealizedPnLFromSwaps';
 export * from './getSelectedPositionNotional';
-export * from './getUnrealizedPnLFromSwaps';
 export * from './hasExistingPosition';
 export * from './isUserInputMarginError';
 export * from './isUserInputNotionalError';

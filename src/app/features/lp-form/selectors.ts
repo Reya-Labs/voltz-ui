@@ -16,7 +16,6 @@ import {
   getProspectiveLpNotional,
   getRealizedPnLFromSwaps,
   getSelectedPositionNotional,
-  getUnrealizedPnLFromSwaps,
   hasExistingPosition,
 } from './utils';
 
@@ -161,11 +160,6 @@ export const selectEditLpPositionRealizedPnLFromFeesFormatted = (state: RootStat
 export const selectEditLpPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
   const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.lpForm);
   return realizedPnLFromSwaps === null ? '--' : formFormatNumber(realizedPnLFromSwaps);
-};
-
-export const selectEditLpPositionUnrealizedPnLFromSwapsFormatted = (state: RootState) => {
-  const unrealizedPnLFromSwaps = getUnrealizedPnLFromSwaps(state.lpForm);
-  return unrealizedPnLFromSwaps === null ? '--' : formFormatNumber(unrealizedPnLFromSwaps);
 };
 
 export const selectExistingPositionFixedLower = (state: RootState) => {

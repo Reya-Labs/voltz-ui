@@ -26,6 +26,7 @@ export const PoolsHeader: React.FunctionComponent = () => {
         {poolsSortOption ? (
           <PoolSortHeader
             direction={poolsSortOption.direction}
+            disabled={poolsSortOption.disabled}
             id={poolsSortOption.id}
             subtext={poolsSortOption.subtext}
             text={poolsSortOption.text}
@@ -37,6 +38,7 @@ export const PoolsHeader: React.FunctionComponent = () => {
           {fixedAPRSortOption ? (
             <PoolSortHeader
               direction={fixedAPRSortOption.direction}
+              disabled={fixedAPRSortOption.disabled}
               id={fixedAPRSortOption.id}
               subtext={fixedAPRSortOption.subtext}
               text={fixedAPRSortOption.text}
@@ -47,6 +49,7 @@ export const PoolsHeader: React.FunctionComponent = () => {
           {variableAPYSortOption ? (
             <PoolSortHeader
               direction={variableAPYSortOption.direction}
+              disabled={variableAPYSortOption.disabled}
               id={variableAPYSortOption.id}
               subtext={variableAPYSortOption.subtext}
               text={variableAPYSortOption.text}
@@ -57,6 +60,7 @@ export const PoolsHeader: React.FunctionComponent = () => {
           {maturitySortOption ? (
             <PoolSortHeader
               direction={maturitySortOption.direction}
+              disabled={maturitySortOption.disabled}
               id={maturitySortOption.id}
               subtext={maturitySortOption.subtext}
               text={maturitySortOption.text}

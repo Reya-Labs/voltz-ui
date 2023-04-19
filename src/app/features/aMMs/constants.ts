@@ -18,31 +18,51 @@ export const initialSortingDirection: PoolSorting = {
   pools: 'ascending',
 };
 
-export const FILTER_LABELS: Record<PoolFilterId, string> = {
-  borrow: 'Borrow',
-  v2: 'v2',
-  yield: 'Yield',
+export const FILTER_CONFIG: Record<
+  PoolFilterId,
+  {
+    label: string;
+    hidden: boolean;
+  }
+> = {
+  borrow: {
+    label: 'Borrow',
+    hidden: false,
+  },
+  v2: {
+    label: 'v2',
+    hidden: true,
+  },
+  yield: {
+    label: 'Yield',
+    hidden: false,
+  },
 };
 
-export const SORT_LABELS: Record<
+export const SORT_CONFIG: Record<
   PoolSortId,
   {
     text: string;
     subtext?: string;
+    disabled: boolean;
   }
 > = {
   pools: {
     text: 'Pools',
+    disabled: false,
   },
   fixedAPR: {
     text: 'Fixed APR',
+    disabled: false,
   },
   variableAPY: {
     text: 'Variable APY',
     subtext: '24h Change',
+    disabled: false,
   },
   maturity: {
     text: 'Maturity',
+    disabled: true,
   },
 };
 
