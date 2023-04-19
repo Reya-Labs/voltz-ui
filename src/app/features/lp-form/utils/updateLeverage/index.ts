@@ -5,9 +5,12 @@ import { SliceState } from '../../reducer';
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
 
 export const updateLeverage = (state: Draft<SliceState>): void => {
-  if (getProspectiveLpNotional(state) > 0 && state.userInput.marginAmount.value > 0) {
-    state.userInput.leverage = getProspectiveLpNotional(state) / state.userInput.marginAmount.value;
-  }
+  const prospectiveLpNotional = getProspectiveLpNotional(state);
+  const marginAmount = state.userInput.marginAmount.value;
+  const hasPositiveNotionalAndMargin = prospectiveLpNotional > 0 && marginAmount > 0;
 
+  state.userInput.leverage = hasPositiveNotionalAndMargin
+    ? prospectiveLpNotional / marginAmount
+    : 0;
   state.showLowLeverageNotification = checkLowLeverageNotification(state);
 };
