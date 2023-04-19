@@ -67,29 +67,3 @@ export const ProceedButton = styled(Button)`
   color: ${colors.skyBlueCrayola.base};
   flex: 1;
 `;
-
-const TransactionStatusTextTypography = styled(Typography)`
-  font-family: 'PixelOperatorMono', monospace;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-`;
-
-export const IdleTransactionStatusTextTypography = styled(TransactionStatusTextTypography)`
-  /* Lavender Web 2 */
-  color: #a49ebf;
-`;
-
-export const SuccessTransactionStatusTextTypography = styled(TransactionStatusTextTypography)`
-  color: ${colors.skyBlueCrayola.base};
-`;
-
-export const PendingTransactionStatusTextTypography = styled(TransactionStatusTextTypography)`
-  /* Lavender Web 2 */
-  color: #a49ebf;
-`;
-
-export const ErrorTransactionStatusTextTypography = styled(TransactionStatusTextTypography)`
-  color: ${colors.wildStrawberry.base};
-`;

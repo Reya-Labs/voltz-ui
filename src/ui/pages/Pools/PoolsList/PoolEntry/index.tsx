@@ -61,7 +61,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
       ? 'secondaryBodyLargeRegular'
       : 'secondaryBodyMediumRegular';
 
-    const handleOnMakeClick = () => {
+    const handleOnLPClick = () => {
       const path = generatePath(routes.LP_FORM, {
         form: 'liquidity',
         ammId: routeAmmId,
@@ -137,9 +137,9 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
           <ButtonStyled
             typographyToken="primaryBodySmallBold"
             variant="secondary"
-            onClick={handleOnMakeClick}
+            onClick={handleOnLPClick}
           >
-            Make
+            LP
           </ButtonStyled>
         </RightBox>
       </PoolEntryBox>
