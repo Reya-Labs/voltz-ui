@@ -180,7 +180,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
         </PayingBox>
         <CashFlowBox>
           <LabelTokenTypography
-            colorToken="wildStrawberry"
+            colorToken={realizedPnLTotal.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'}
             label="Realised PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
@@ -198,7 +198,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
         </CashFlowBox>
         <CashFlowBox>
           <LabelTokenTypography
-            colorToken="skyBlueCrayola"
+            colorToken={
+              unrealizedPnLFromSwaps.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'
+            }
             label="Unrealised PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}

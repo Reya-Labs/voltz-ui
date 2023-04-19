@@ -115,7 +115,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
         </BorderedBox>
         <BorderedBox>
           <LabelTokenTypography
-            colorToken="wildStrawberry"
+            colorToken={realizedPnLTotal.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'}
             label="Realised PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
