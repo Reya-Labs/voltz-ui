@@ -4,7 +4,11 @@ import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../utilities/amm';
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
-import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../common-form/utils';
+import {
+  checkLowLeverageNotification,
+  formLimitAndFormatNumber,
+  isUserInputMarginError,
+} from '../common-form/utils';
 import { pushEstimatedApyChangeEvent, pushLeverageChangeEvent } from './analytics';
 import {
   approveUnderlyingTokenThunk,
@@ -27,7 +31,6 @@ import {
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
   hasExistingPosition,
-  isUserInputMarginError,
   updateLeverage,
   validateUserInput,
 } from './utils';
@@ -406,7 +409,6 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   }
 
   if (
-    !isUserInputMarginError(state) &&
     !isUserInputMarginError(state) &&
     isProspectiveSwapNotionalValid &&
     isProspectiveSwapMarginValid &&

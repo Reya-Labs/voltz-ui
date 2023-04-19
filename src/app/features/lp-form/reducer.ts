@@ -3,7 +3,11 @@ import { AMM, InfoPostLp, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
-import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../common-form/utils';
+import {
+  checkLowLeverageNotification,
+  formLimitAndFormatNumber,
+  isUserInputMarginError,
+} from '../common-form/utils';
 import {
   approveUnderlyingTokenThunk,
   confirmLpThunk,
@@ -22,7 +26,6 @@ import {
   getProspectiveLpMargin,
   getProspectiveLpNotional,
   hasExistingPosition,
-  isUserInputMarginError,
   resetNotionalAndMarginEditMode,
   updateLeverage,
   updateSelectedPosition,
@@ -364,7 +367,6 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
   }
 
   if (
-    !isUserInputMarginError(state) &&
     !isUserInputMarginError(state) &&
     isProspectiveLpNotionalValid &&
     isProspectiveLpMarginValid &&

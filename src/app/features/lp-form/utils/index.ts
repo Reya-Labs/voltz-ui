@@ -9,7 +9,6 @@ export * from './getProspectiveLpNotional';
 export * from './getRealizedPnLFromSwaps';
 export * from './getSelectedPositionNotional';
 export * from './hasExistingPosition';
-export * from './isUserInputMarginError';
 export * from './isUserInputNotionalError';
 export * from './resetNotionalAndMarginEditMode';
 export * from './updateLeverage';

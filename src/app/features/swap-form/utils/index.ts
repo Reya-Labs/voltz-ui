@@ -18,7 +18,6 @@ export * from './getRealizedPnLFromSwaps';
 export * from './getUnrealizedPnLFromSwaps';
 export * from './getVariableRate';
 export * from './hasExistingPosition';
-export * from './isUserInputMarginError';
 export * from './isUserInputNotionalError';
 export * from './updateLeverage';
 export * from './validateUserInput';
