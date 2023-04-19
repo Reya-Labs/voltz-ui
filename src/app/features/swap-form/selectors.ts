@@ -265,12 +265,6 @@ export const selectAccruedCashflowExistingPositionFormatted = (state: RootState)
     state.swapForm.prospectiveSwap.cashflowInfo.accruedCashflowExistingPosition,
   );
 };
-export const selectAccruedCashflowEditPositionFormatted = (state: RootState) => {
-  if (state.swapForm.prospectiveSwap.cashflowInfo.status === 'pending') {
-    return '--';
-  }
-  return formFormatNumber(state.swapForm.prospectiveSwap.cashflowInfo.accruedCashflowEditPosition);
-};
 export const selectAdditionalCashflow = (state: RootState) => {
   if (state.swapForm.prospectiveSwap.cashflowInfo.status !== 'success') {
     return null;

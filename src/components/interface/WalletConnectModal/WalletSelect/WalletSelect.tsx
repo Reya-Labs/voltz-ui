@@ -17,13 +17,13 @@ type WalletOption = {
   name: WalletName;
 };
 
-export type WalletSelectProps = {
+type WalletSelectProps = {
   wallet: Wallet;
   onSelectWallet: (name: WalletName) => void;
   onClose: () => void;
 };
 
-export const walletOptions: WalletOption[] = [
+const walletOptions: WalletOption[] = [
   { title: 'Metamask', name: 'metamask' },
   { title: 'WalletConnect', name: 'walletConnect' },
 ];

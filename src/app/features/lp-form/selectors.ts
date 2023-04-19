@@ -23,7 +23,6 @@ import {
 // ------------ General Lp Form State Info ------------
 export const selectSubmitButtonInfo = (state: RootState) => state.lpForm.submitButton;
 export const selectLpFormAMM = (state: RootState) => state.lpForm.amm;
-export const selectLpFormPositions = (state: RootState) => state.lpForm.positions.value;
 export const selectLpFormPositionsFetchingStatus = (state: RootState) =>
   state.lpForm.positions.status;
 export const selectWalletBalance = (state: RootState) => {
