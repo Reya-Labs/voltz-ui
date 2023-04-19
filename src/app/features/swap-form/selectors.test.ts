@@ -8,7 +8,6 @@ import {
   formLimitAndFormatNumber,
 } from '../common-form/utils';
 import {
-  selectAccruedCashflowExistingPositionFormatted,
   selectAdditionalCashflow,
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
@@ -1420,51 +1419,6 @@ describe('swap-form.selectors', () => {
       };
       const result = selectCashflowInfoStatus(mockState as never);
       expect(result).toEqual('success');
-    });
-  });
-
-  describe('selectAccruedCashflowExistingPositionFormatted', () => {
-    beforeEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it('should call formFormatNumber with the accrued cashflow value when cashflowInfo status is success', () => {
-      const mockState = {
-        swapForm: {
-          userInput: {},
-          prospectiveSwap: {
-            cashflowInfo: {
-              status: 'success',
-              accruedCashflowExistingPosition: 1234.5678,
-            },
-          },
-        },
-      };
-      (formFormatNumber as jest.Mock).mockReturnValueOnce('1,234.57');
-
-      const result = selectAccruedCashflowExistingPositionFormatted(mockState as never);
-      expect(formFormatNumber).toHaveBeenCalledWith(1234.5678);
-      expect(result).toEqual('1,234.57');
-    });
-
-    it('should return "--" when cashflowInfo status is pending', () => {
-      const mockState = {
-        swapForm: {
-          userInput: {},
-          prospectiveSwap: {
-            cashflowInfo: {
-              status: 'pending',
-              accruedCashflowExistingPosition: 0,
-            },
-          },
-        },
-      } as never;
-
-      (formFormatNumber as jest.Mock).mockReturnValueOnce('1,234.57');
-
-      const result = selectAccruedCashflowExistingPositionFormatted(mockState);
-      expect(formFormatNumber).not.toHaveBeenCalled();
-      expect(result).toEqual('--');
     });
   });
 
