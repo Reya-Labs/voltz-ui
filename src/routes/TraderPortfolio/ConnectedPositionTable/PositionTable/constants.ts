@@ -1,6 +1,6 @@
 import { PositionTableFields } from './types';
 
-export const PositionTableLabels: Record<PositionTableFields, string> = {
+const PositionTableLabels: Record<PositionTableFields, string> = {
   pool: 'Pool',
   rateRange: 'Lower x Upper',
   notional: 'Notional',
@@ -9,14 +9,6 @@ export const PositionTableLabels: Record<PositionTableFields, string> = {
   fixedApr: 'Fixed APR',
   maturity: 'Maturity',
 };
-
-export const lpLabels: [PositionTableFields, string][] = [
-  ['pool', PositionTableLabels.pool],
-  ['notional', PositionTableLabels.notional],
-  ['margin', PositionTableLabels.margin],
-  ['rateRange', PositionTableLabels.rateRange],
-  ['maturity', PositionTableLabels.maturity],
-];
 
 export const traderLabels: [PositionTableFields, string][] = [
   ['pool', PositionTableLabels.pool],

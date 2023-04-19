@@ -1,7 +1,5 @@
-import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/material/styles';
 
 import { Typography } from '../../../../../components/atomic/Typography/Typography';
@@ -46,32 +44,6 @@ export const DescriptionTypography = styled(Typography)`
   color: #a49ebf;
 `;
 
-export const GasCostBox = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  column-gap: ${({ theme }) => theme.spacing(2)};
-  align-items: center;
-`;
-
-const BaseGasCostTypography = styled(Typography)`
-  font-family: 'PixelOperatorMono', monospace;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 160%;
-  display: inline-block;
-`;
-
-export const GasCostTypography = styled(BaseGasCostTypography)`
-  /* Lavender Web 3 */
-  color: #e1ddf7;
-`;
-
-export const GasCostTokenTypography = styled(BaseGasCostTypography)`
-  /* Lavender Web 3 */
-  color: #a49ebf;
-`;
-
 export const ButtonBox = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -80,20 +52,6 @@ export const ButtonBox = styled(Box)`
   gap: 24px;
   width: 100%;
   box-sizing: border-box;
-`;
-
-export const DepositButton = styled(Button)`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: ${({ theme }) => theme.spacing(4, 6)};
-  gap: ${({ theme }) => theme.spacing(2.5)};
-
-  background: #00556d;
-  border-radius: 4px;
-
-  color: ${colors.skyBlueCrayola.base};
-  flex: 1;
 `;
 
 export const CancelButton = styled(Button)`
@@ -109,13 +67,6 @@ export const CancelButton = styled(Button)`
 
   color: ${colors.skyBlueCrayola.base};
   flex: 1;
-`;
-
-export const GasIcon = styled(LocalGasStationIcon)`
-  color: #e1ddf7;
-
-  font-size: 16px;
-  line-height: 160%;
 `;
 
 export const DepositFeeContentBox = styled(Box)`
@@ -162,9 +113,4 @@ export const DepositBudgetUnderlyingTypography = styled(DepositFeeText)`
 
 export const DepositBudgetTextTypography = styled(DepositFeeText)`
   color: #a49ebf;
-`;
-
-export const GasCostInputLabel = styled(InputLabel)`
-  position: relative;
-  margin: 0;
 `;

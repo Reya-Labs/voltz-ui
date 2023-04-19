@@ -12,7 +12,7 @@ export const HeaderBox = styled(Box)`
   padding: 0px 24px 0px 38px;
 `;
 
-export const HeaderTypography = styled(Typography)`
+const HeaderTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;
   font-weight: 400;

@@ -10,7 +10,7 @@ import { TraderPositionTransaction, TraderTransactionType } from './types';
  * @param fixedTokenDeltaUnbalanced
  * @param variableTokenDelta
  */
-export const getAvgFix = (fixedTokenDeltaUnbalanced: number, variableTokenDelta: number) => {
+const getAvgFix = (fixedTokenDeltaUnbalanced: number, variableTokenDelta: number) => {
   return Math.abs(fixedTokenDeltaUnbalanced / variableTokenDelta);
 };
 

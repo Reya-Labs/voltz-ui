@@ -1,4 +1,3 @@
-import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -87,13 +86,6 @@ export const BatchBudgetContentBox = styled(Box)`
   /* Liberty 5 */
   background: #1e1933;
   border-radius: 4px;
-`;
-
-export const GasIcon = styled(LocalGasStationIcon)`
-  color: #a49ebf;
-
-  font-size: 12px;
-  line-height: 160%;
 `;
 
 const BatchBudgetText = styled(Typography)`

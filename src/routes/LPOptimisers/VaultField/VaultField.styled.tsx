@@ -50,13 +50,3 @@ export const VaultApyTypography = styled(CustomTypography)`
 
   color: ${colors.wildStrawberry.base};
 `;
-
-export const VaultMaturityTypography = styled(CustomTypography)`
-  font-family: 'DM Sans', sans-serif;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 120%;
-
-  color: ${colors.lavenderWeb.base};
-`;
