@@ -27,6 +27,7 @@ import {
   PositionDetailsLeftBox,
   PositionDetailsRightBox,
   ReceivingBox,
+  TooltipBox,
 } from './PositionDetails.styled';
 
 type EditPositionDetailsUIProps = {
@@ -181,7 +182,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
         <CashFlowBox>
           <LabelTokenTypography
             colorToken={realizedPnLTotal.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'}
-            label="Realised PnL"
+            label="Realized PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
@@ -201,11 +202,20 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             colorToken={
               unrealizedPnLFromSwaps.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'
             }
-            label="Unrealised PnL"
+            label="Unrealized PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
-            tooltip="Profit or loss you would earn by closing your position now"
+            tooltip={
+              <TooltipBox>
+                The additional PnL you’d generate should you close your position now.
+                <br />
+                <br />
+                To close your position you must enter an opposite sided swap, meaning your uPnL is
+                generated from any difference in the fixed rate from when you entered to when you
+                exit.
+              </TooltipBox>
+            }
             typographyToken={typographyToken}
             value={unrealizedPnLFromSwaps}
           />

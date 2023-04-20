@@ -17,13 +17,12 @@ export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
   return (
     <PnLDetailsBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-        Profit or loss already captured from fees as well as the position after closing it or
-        accrued cashflows while it is active
+        Cashflow from Swaps - Fees
       </Typography>
       <RowsBox>
         <RowBox>
           <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-            Swaps
+            Cashflow
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
