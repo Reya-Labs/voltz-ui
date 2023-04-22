@@ -42,6 +42,8 @@ export type PositionTableHeadProps = {
   healthFactor?: number;
   isBothTraderAndLP: boolean;
   settlementCashflowInUSD: number;
+  unrealizedPnL: number;
+  underlyingTokenName: string;
 };
 
 const containerStyles: SystemStyleObject<Theme> = {
@@ -64,6 +66,8 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   healthFactor,
   isBothTraderAndLP,
   settlementCashflowInUSD,
+  unrealizedPnL,
+  underlyingTokenName
 }) => {
   const handleEditNotional = () => {
     onSelect && onSelect('notional');
@@ -79,6 +83,14 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
       </Box>
 
       <Box sx={{ display: 'flex' }}>
+        {beforeMaturity && (
+  
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <FeesTypography>
+                Unrealized PnL: {formatNumber(unrealizedPnL)} {underlyingTokenName}&nbsp;
+              </FeesTypography>
+          </Box>
+        )}
         {beforeMaturity && !isUndefined(healthFactor) && (
           <Box
             sx={{
