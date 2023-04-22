@@ -37,6 +37,8 @@ export type PositionTableHeadProps = {
   fees: number;
   isBothTraderAndLP: boolean;
   settlementCashflowInUSD: number;
+  realizedPnL: number;
+  underlyingTokenName: string;
 };
 
 const containerStyles: SystemStyleObject<Theme> = {
@@ -61,6 +63,8 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   fees,
   isBothTraderAndLP,
   settlementCashflowInUSD,
+  realizedPnL,
+  underlyingTokenName
 }) => {
   const FeesValueTypography = feesPositive
     ? PositiveFeesValueTypography
@@ -90,6 +94,18 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
       </Box>
 
       <ActionsBox>
+        
+
+        {beforeMaturity === true && (
+          <>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <FeesTypography>
+                Swaps Cashflow: {formatNumber(realizedPnL)} {underlyingTokenName}&nbsp;
+              </FeesTypography>
+            </Box>
+          </>
+        )}
+
         {beforeMaturity && (
           <InfoBox>
             CURRENT FIXED:&nbsp;
