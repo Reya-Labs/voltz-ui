@@ -64,7 +64,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   isBothTraderAndLP,
   settlementCashflowInUSD,
   realizedPnL,
-  underlyingTokenName
+  underlyingTokenName,
 }) => {
   const FeesValueTypography = feesPositive
     ? PositiveFeesValueTypography
@@ -94,11 +94,9 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
       </Box>
 
       <ActionsBox>
-        
-
         {beforeMaturity && (
           <>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <FeesTypography>
                 Swaps Cashflow: {formatNumber(realizedPnL)} {underlyingTokenName}&nbsp;
               </FeesTypography>

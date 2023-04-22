@@ -67,7 +67,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   isBothTraderAndLP,
   settlementCashflowInUSD,
   unrealizedPnL,
-  underlyingTokenName
+  underlyingTokenName,
 }) => {
   const handleEditNotional = () => {
     onSelect && onSelect('notional');
@@ -84,11 +84,10 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
 
       <Box sx={{ display: 'flex' }}>
         {beforeMaturity && (
-  
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <FeesTypography>
-                Unrealized PnL: {formatNumber(unrealizedPnL)} {underlyingTokenName}&nbsp;
-              </FeesTypography>
+            <FeesTypography>
+              Unrealized PnL: {formatNumber(unrealizedPnL)} {underlyingTokenName}&nbsp;
+            </FeesTypography>
           </Box>
         )}
         {beforeMaturity && !isUndefined(healthFactor) && (
