@@ -70,8 +70,8 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 settlementCashflowInUSD={position.settlementCashflowInUSD}
                 onRollover={() => handleSelectRow(position, 'rollover')}
                 onSettle={() => onSettle(position)}
-                realizedPnL={position.realizedPnLFromSwaps}
-                underlyingTokenName={position.amm.underlyingToken.name || ''}
+                realizedPnL={position.realizedPnLFromSwapsInUSD}
+                underlyingTokenName={'USD'}
               />
 
               <AMMProvider amm={position.amm}>
