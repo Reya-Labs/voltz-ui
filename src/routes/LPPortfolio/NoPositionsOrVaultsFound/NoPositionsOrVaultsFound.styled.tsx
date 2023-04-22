@@ -6,7 +6,6 @@ import { Typography } from '../../../components/atomic/Typography/Typography';
 import { colors } from '../../../theme';
 
 export const MainContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;

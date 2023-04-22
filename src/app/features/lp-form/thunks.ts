@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AMM, getPositions, InfoPostLp, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { getPositions, InfoPostLp, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPositionsLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
+import { isUserInputNotionalError } from '../common-form/utils';
 import {
   getDefaultLpFixedHigh,
   getDefaultLpFixedLow,
@@ -11,7 +12,6 @@ import {
   getProspectiveLpFixedLow,
   getProspectiveLpMargin,
   getProspectiveLpNotional,
-  isUserInputNotionalError,
 } from './utils';
 
 const rejectThunkWithError = (
@@ -76,59 +76,6 @@ export const approveUnderlyingTokenThunk = createAsyncThunk<
     }
 
     return await amm.approveUnderlyingTokenForPeripheryV1();
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
-export const getFixedRateThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('lpForm/getFixedRate', async (_, thunkAPI) => {
-  try {
-    const amm = thunkAPI.getState().lpForm.amm;
-    if (!amm) {
-      return;
-    }
-
-    return await amm.getFixedApr();
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
-export const getVariableRateThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('lpForm/getVariableRate', async (_, thunkAPI) => {
-  try {
-    const amm = thunkAPI.getState().lpForm.amm;
-    if (!amm) {
-      return;
-    }
-
-    const variableRate = await amm.getInstantApy();
-    return variableRate * 100;
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
-export const getVariableRate24hAgoThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('lpForm/getVariableRate24hAgo', async (_, thunkAPI) => {
-  try {
-    const amm: AMM | null = thunkAPI.getState().lpForm.amm;
-    if (!amm) {
-      return;
-    }
-    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-    const variableRate = await amm.getInstantApy(Date.now() - oneDayInMilliseconds);
-    return variableRate * 100;
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

@@ -2,7 +2,12 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatNumber, stringToBigFloat } from '../../../utilities/number';
 import {
-  selectAccruedCashflowExistingPositionFormatted,
+  formCompactFormat,
+  formCompactFormatToParts,
+  formFormatNumber,
+  formLimitAndFormatNumber,
+} from '../common-form/utils';
+import {
   selectAdditionalCashflow,
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
@@ -76,10 +81,6 @@ import {
   getProspectiveSwapNotional,
   getVariableRate,
   hasExistingPosition,
-  swapFormCompactFormat,
-  swapFormCompactFormatToParts,
-  swapFormFormatNumber,
-  swapFormLimitAndFormatNumber,
 } from './utils';
 
 // Mock @voltz-protocol/v1-sdk
@@ -93,15 +94,20 @@ jest.mock('../../../utilities/number', () => ({
   stringToBigFloat: jest.fn(),
 }));
 
+// Mock common utils
+jest.mock('../common-form/utils', () => ({
+  formCompactFormat: jest.fn(),
+  formFormatNumber: jest.fn(),
+  formLimitAndFormatNumber: jest.fn(),
+  formCompactFormatToParts: jest.fn(),
+}));
+
 // Mock utils
 jest.mock('./utils', () => ({
-  swapFormCompactFormat: jest.fn(),
   hasExistingPosition: jest.fn(),
   getProspectiveSwapMode: jest.fn(),
   getProspectiveSwapNotional: jest.fn(),
   getProspectiveSwapMargin: jest.fn(),
-  swapFormFormatNumber: jest.fn(),
-  swapFormLimitAndFormatNumber: jest.fn(),
   getAvailableMargin: jest.fn(),
   getAvailableNotional: jest.fn(),
   getNewPositionFixedRate: jest.fn(),
@@ -109,7 +115,6 @@ jest.mock('./utils', () => ({
   getExistingPositionMode: jest.fn(),
   getExistingPositionFixedRate: jest.fn(),
   getExistingPositionVariableRate: jest.fn(),
-  swapFormCompactFormatToParts: jest.fn(),
   getEditPositionMode: jest.fn(),
   getEditPositionFixedRate: jest.fn(),
   getEditPositionVariableRate: jest.fn(),
@@ -204,7 +209,7 @@ describe('swap-form.selectors', () => {
   });
 
   describe('selectWalletBalance', () => {
-    afterEach(() => {
+    beforeEach(() => {
       // Clear mock call history after each test
       jest.clearAllMocks();
     });
@@ -222,7 +227,7 @@ describe('swap-form.selectors', () => {
       expect(selectWalletBalance(state)).toEqual('--');
     });
 
-    it('calls swapFormCompactFormat with wallet balance value if status is "success"', () => {
+    it('calls formCompactFormat with wallet balance value if status is "success"', () => {
       const state = {
         swapForm: {
           walletBalance: {
@@ -235,8 +240,8 @@ describe('swap-form.selectors', () => {
       // Call selectWalletBalance function
       selectWalletBalance(state);
 
-      // Assert that swapFormCompactFormat is called with wallet balance value
-      expect(swapFormCompactFormat).toHaveBeenCalledWith(1000);
+      // Assert that formCompactFormat is called with wallet balance value
+      expect(formCompactFormat).toHaveBeenCalledWith(1000);
     });
 
     it('returns formatted wallet balance if status is "success"', () => {
@@ -249,8 +254,8 @@ describe('swap-form.selectors', () => {
         },
       } as never;
 
-      // Mock return value of swapFormCompactFormat
-      (swapFormCompactFormat as jest.Mock).mockReturnValue('$1,000');
+      // Mock return value of formCompactFormat
+      (formCompactFormat as jest.Mock).mockReturnValue('$1,000');
 
       expect(selectWalletBalance(state)).toEqual('$1,000');
     });
@@ -260,17 +265,13 @@ describe('swap-form.selectors', () => {
     it('returns the fixed rate info from the swap form slice of state', () => {
       const state = {
         swapForm: {
-          fixedRate: {
-            value: 0.5,
-            status: 'success',
+          amm: {
+            fixedApr: 0.5,
           },
         },
       } as never;
       const fixedRateInfo = selectFixedRateInfo(state);
-      expect(fixedRateInfo).toEqual({
-        value: 0.5,
-        status: 'success',
-      });
+      expect(fixedRateInfo).toEqual(0.5);
     });
   });
 
@@ -278,17 +279,13 @@ describe('swap-form.selectors', () => {
     it('returns the variable rate info from the swap form slice of state', () => {
       const state = {
         swapForm: {
-          variableRate: {
-            value: 0.5,
-            status: 'success',
+          amm: {
+            variableApy: 0.5,
           },
         },
       } as never;
       const variableInfo = selectVariableRateInfo(state);
-      expect(variableInfo).toEqual({
-        value: 0.5,
-        status: 'success',
-      });
+      expect(variableInfo).toEqual(0.5);
     });
   });
 
@@ -529,19 +526,19 @@ describe('swap-form.selectors', () => {
       expect(getProspectiveSwapNotional).toHaveBeenCalledWith(mockState.swapForm);
     });
 
-    it('calls swapFormCompactFormat with the correct arguments', () => {
+    it('calls formCompactFormat with the correct arguments', () => {
       const mockNotional = 'test';
       (getProspectiveSwapNotional as jest.Mock).mockReturnValue(mockNotional);
 
       selectProspectiveSwapNotionalFormatted(mockState as never);
 
-      expect(swapFormCompactFormat).toHaveBeenCalledTimes(1);
-      expect(swapFormCompactFormat).toHaveBeenCalledWith(mockNotional);
+      expect(formCompactFormat).toHaveBeenCalledTimes(1);
+      expect(formCompactFormat).toHaveBeenCalledWith(mockNotional);
     });
 
     it('returns the correctly formatted prospective swap notional', () => {
       const mockFormattedNotional = 'test';
-      (swapFormCompactFormat as jest.Mock).mockReturnValue(mockFormattedNotional);
+      (formCompactFormat as jest.Mock).mockReturnValue(mockFormattedNotional);
 
       const result = selectProspectiveSwapNotionalFormatted(mockState as never);
       expect(result).toBe(mockFormattedNotional);
@@ -572,7 +569,7 @@ describe('swap-form.selectors', () => {
       (
         getProspectiveSwapMargin as jest.MockedFunction<typeof getProspectiveSwapMargin>
       ).mockReturnValue(prospectiveMargin);
-      (swapFormCompactFormat as jest.MockedFunction<typeof swapFormCompactFormat>).mockReturnValue(
+      (formCompactFormat as jest.MockedFunction<typeof formCompactFormat>).mockReturnValue(
         formattedMargin,
       );
 
@@ -580,7 +577,7 @@ describe('swap-form.selectors', () => {
 
       expect(result).toEqual(formattedMargin);
       expect(getProspectiveSwapMargin).toHaveBeenCalledWith(mockState.swapForm);
-      expect(swapFormCompactFormat).toHaveBeenCalledWith(
+      expect(formCompactFormat).toHaveBeenCalledWith(
         prospectiveMargin - mockState.swapForm.prospectiveSwap.infoPostSwap.value.fee,
       );
     });
@@ -591,7 +588,7 @@ describe('swap-form.selectors', () => {
       (
         getProspectiveSwapMargin as jest.MockedFunction<typeof getProspectiveSwapMargin>
       ).mockReturnValue(prospectiveMargin);
-      (swapFormCompactFormat as jest.MockedFunction<typeof swapFormCompactFormat>).mockReturnValue(
+      (formCompactFormat as jest.MockedFunction<typeof formCompactFormat>).mockReturnValue(
         formattedMargin,
       );
 
@@ -599,12 +596,12 @@ describe('swap-form.selectors', () => {
 
       expect(result).toEqual(formattedMargin);
       expect(getProspectiveSwapMargin).toHaveBeenCalledWith(mockState.swapForm);
-      expect(swapFormCompactFormat).toHaveBeenCalledWith(prospectiveMargin - 10);
+      expect(formCompactFormat).toHaveBeenCalledWith(prospectiveMargin - 10);
     });
   });
 
   describe('selectProspectiveSwapFeeFormatted', () => {
-    afterEach(() => {
+    beforeEach(() => {
       jest.resetAllMocks();
     });
 
@@ -626,11 +623,11 @@ describe('swap-form.selectors', () => {
           },
         },
       };
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('10.00');
+      (formFormatNumber as jest.Mock).mockReturnValueOnce('10.00');
 
       const result = selectProspectiveSwapFeeFormatted(mockRootState as never);
       expect(result).toEqual('10.00');
-      expect(swapFormFormatNumber).toHaveBeenCalledWith(10);
+      expect(formFormatNumber).toHaveBeenCalledWith(10);
     });
 
     it('returns "--" when the infoPostSwap status is not "success"', () => {
@@ -651,7 +648,7 @@ describe('swap-form.selectors', () => {
 
       const result = selectProspectiveSwapFeeFormatted(mockRootState as never);
       expect(result).toEqual('--');
-      expect(swapFormFormatNumber).not.toHaveBeenCalled();
+      expect(formFormatNumber).not.toHaveBeenCalled();
     });
   });
 
@@ -754,7 +751,7 @@ describe('swap-form.selectors', () => {
 
   describe('selectBottomRightMarginNumber', () => {
     beforeEach(() => {
-      (swapFormLimitAndFormatNumber as jest.Mock).mockImplementationOnce(
+      (formLimitAndFormatNumber as jest.Mock).mockImplementationOnce(
         (value: number, mode: string) => {
           return mode === 'floor' ? Math.floor(value) : Math.ceil(value);
         },
@@ -765,7 +762,7 @@ describe('swap-form.selectors', () => {
         },
       );
     });
-    afterEach(() => {
+    beforeEach(() => {
       // Clear mock call history after each test
       jest.clearAllMocks();
     });
@@ -785,7 +782,7 @@ describe('swap-form.selectors', () => {
       const result = selectBottomRightMarginNumber(state);
 
       expect(result).toBe(1234);
-      expect(swapFormLimitAndFormatNumber).toHaveBeenCalledWith(1234.5678, 'floor');
+      expect(formLimitAndFormatNumber).toHaveBeenCalledWith(1234.5678, 'floor');
       expect(getAvailableMargin).toHaveBeenCalledWith({
         userInput: {
           marginAmount: {
@@ -818,7 +815,7 @@ describe('swap-form.selectors', () => {
       const result = selectBottomRightMarginNumber(state);
 
       expect(result).toBe(5679); // ceil of 5678.1234
-      expect(swapFormLimitAndFormatNumber).toHaveBeenCalledWith(5678.1234, 'ceil');
+      expect(formLimitAndFormatNumber).toHaveBeenCalledWith(5678.1234, 'ceil');
       expect(getAvailableMargin).not.toHaveBeenCalled(); // should not be called in this case
     });
 
@@ -841,7 +838,7 @@ describe('swap-form.selectors', () => {
       const result = selectBottomRightMarginNumber(state);
 
       expect(result).toBeNull();
-      expect(swapFormLimitAndFormatNumber).not.toHaveBeenCalled(); // should not be called in this case
+      expect(formLimitAndFormatNumber).not.toHaveBeenCalled(); // should not be called in this case
       expect(getAvailableMargin).not.toHaveBeenCalled(); // should not be called in this case
     });
   });
@@ -861,7 +858,7 @@ describe('swap-form.selectors', () => {
         },
       );
     });
-    afterEach(() => {
+    beforeEach(() => {
       // Clear mock call history after each test
       jest.clearAllMocks();
     });
@@ -914,7 +911,7 @@ describe('swap-form.selectors', () => {
         },
       );
     });
-    afterEach(() => {
+    beforeEach(() => {
       // Clear mock call history after each test
       jest.clearAllMocks();
     });
@@ -985,7 +982,7 @@ describe('swap-form.selectors', () => {
         },
       );
     });
-    afterEach(() => {
+    beforeEach(() => {
       // Clear mock call history after each test
       jest.clearAllMocks();
     });
@@ -1027,7 +1024,7 @@ describe('swap-form.selectors', () => {
   });
 
   describe('selectExistingPositionMode', () => {
-    afterEach(() => {
+    beforeEach(() => {
       // Clear mock call history after each test
       jest.clearAllMocks();
     });
@@ -1051,7 +1048,7 @@ describe('swap-form.selectors', () => {
     const state = {
       swapForm: jest.fn(),
     };
-    afterEach(() => {
+    beforeEach(() => {
       // Clear mock call history after each test
       jest.clearAllMocks();
     });
@@ -1059,26 +1056,26 @@ describe('swap-form.selectors', () => {
     it('returns the formatted receiving rate for an existing fixed position', () => {
       (getExistingPositionMode as jest.Mock).mockReturnValueOnce('fixed');
       (getExistingPositionFixedRate as jest.Mock).mockReturnValueOnce(1.5);
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.50');
+      (formFormatNumber as jest.Mock).mockReturnValueOnce('1.50');
 
       const result = selectExistingPositionReceivingRateFormatted(state as never);
 
       expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getExistingPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
-      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.5);
+      expect(formFormatNumber).toHaveBeenCalledWith(1.5);
       expect(result).toEqual('1.50');
     });
 
     it('returns the formatted receiving rate for an existing variable position', () => {
       (getExistingPositionMode as jest.Mock).mockReturnValueOnce('variable');
       (getExistingPositionVariableRate as jest.Mock).mockReturnValueOnce(1.2);
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.20');
+      (formFormatNumber as jest.Mock).mockReturnValueOnce('1.20');
 
       const result = selectExistingPositionReceivingRateFormatted(state as never);
 
       expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getExistingPositionVariableRate).toHaveBeenCalledWith(state.swapForm);
-      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.2);
+      expect(formFormatNumber).toHaveBeenCalledWith(1.2);
       expect(result).toEqual('1.20');
     });
 
@@ -1098,7 +1095,7 @@ describe('swap-form.selectors', () => {
     const state = {
       swapForm: jest.fn(),
     };
-    afterEach(() => {
+    beforeEach(() => {
       // Clear mock call history after each test
       jest.clearAllMocks();
     });
@@ -1106,26 +1103,26 @@ describe('swap-form.selectors', () => {
     it('returns the formatted paying rate for an existing fixed position', () => {
       (getExistingPositionMode as jest.Mock).mockReturnValueOnce('fixed');
       (getExistingPositionVariableRate as jest.Mock).mockReturnValueOnce(1.5);
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.50');
+      (formFormatNumber as jest.Mock).mockReturnValueOnce('1.50');
 
       const result = selectExistingPositionPayingRateFormatted(state as never);
 
       expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getExistingPositionVariableRate).toHaveBeenCalledWith(state.swapForm);
-      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.5);
+      expect(formFormatNumber).toHaveBeenCalledWith(1.5);
       expect(result).toEqual('1.50');
     });
 
     it('returns the formatted paying rate for an existing variable position', () => {
       (getExistingPositionMode as jest.Mock).mockReturnValueOnce('variable');
       (getExistingPositionFixedRate as jest.Mock).mockReturnValueOnce(1.2);
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.20');
+      (formFormatNumber as jest.Mock).mockReturnValueOnce('1.20');
 
       const result = selectExistingPositionPayingRateFormatted(state as never);
 
       expect(getExistingPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getExistingPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
-      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.2);
+      expect(formFormatNumber).toHaveBeenCalledWith(1.2);
       expect(result).toEqual('1.20');
     });
 
@@ -1188,14 +1185,14 @@ describe('swap-form.selectors', () => {
         },
       } as never;
 
-      (swapFormCompactFormatToParts as jest.Mock).mockReturnValueOnce({
+      (formCompactFormatToParts as jest.Mock).mockReturnValueOnce({
         compactSuffix: 'ETH',
         compactNumber: '1',
       });
 
       const result = selectExistingPositionCompactNotional(state);
 
-      expect(swapFormCompactFormatToParts as jest.Mock).toHaveBeenCalledWith('1000000000000000000');
+      expect(formCompactFormatToParts as jest.Mock).toHaveBeenCalledWith('1000000000000000000');
       expect(result).toEqual({
         compactNotionalSuffix: 'ETH',
         compactNotionalNumber: '1',
@@ -1263,7 +1260,7 @@ describe('swap-form.selectors', () => {
     const state = {
       swapForm: jest.fn(),
     };
-    afterEach(() => {
+    beforeEach(() => {
       // Clear mock call history after each test
       jest.clearAllMocks();
     });
@@ -1271,26 +1268,26 @@ describe('swap-form.selectors', () => {
     it('returns the formatted receiving rate for an editing fixed position', () => {
       (getEditPositionMode as jest.Mock).mockReturnValueOnce('fixed');
       (getEditPositionFixedRate as jest.Mock).mockReturnValueOnce(1.5);
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.50');
+      (formFormatNumber as jest.Mock).mockReturnValueOnce('1.50');
 
       const result = selectEditPositionReceivingRateFormatted(state as never);
 
       expect(getEditPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getEditPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
-      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.5);
+      expect(formFormatNumber).toHaveBeenCalledWith(1.5);
       expect(result).toEqual('1.50');
     });
 
     it('returns the formatted receiving rate for an editing variable position', () => {
       (getEditPositionMode as jest.Mock).mockReturnValueOnce('variable');
       (getEditPositionVariableRate as jest.Mock).mockReturnValueOnce(1.2);
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.20');
+      (formFormatNumber as jest.Mock).mockReturnValueOnce('1.20');
 
       const result = selectEditPositionReceivingRateFormatted(state as never);
 
       expect(getEditPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getEditPositionVariableRate).toHaveBeenCalledWith(state.swapForm);
-      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.2);
+      expect(formFormatNumber).toHaveBeenCalledWith(1.2);
       expect(result).toEqual('1.20');
     });
 
@@ -1310,7 +1307,7 @@ describe('swap-form.selectors', () => {
     const state = {
       swapForm: jest.fn(),
     };
-    afterEach(() => {
+    beforeEach(() => {
       // Clear mock call history after each test
       jest.clearAllMocks();
     });
@@ -1318,26 +1315,26 @@ describe('swap-form.selectors', () => {
     it('returns the formatted paying rate for an editing fixed position', () => {
       (getEditPositionMode as jest.Mock).mockReturnValueOnce('fixed');
       (getEditPositionVariableRate as jest.Mock).mockReturnValueOnce(1.5);
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.50');
+      (formFormatNumber as jest.Mock).mockReturnValueOnce('1.50');
 
       const result = selectEditPositionPayingRateFormatted(state as never);
 
       expect(getEditPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getEditPositionVariableRate).toHaveBeenCalledWith(state.swapForm);
-      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.5);
+      expect(formFormatNumber).toHaveBeenCalledWith(1.5);
       expect(result).toEqual('1.50');
     });
 
     it('returns the formatted paying rate for an editing variable position', () => {
       (getEditPositionMode as jest.Mock).mockReturnValueOnce('variable');
       (getEditPositionFixedRate as jest.Mock).mockReturnValueOnce(1.2);
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1.20');
+      (formFormatNumber as jest.Mock).mockReturnValueOnce('1.20');
 
       const result = selectEditPositionPayingRateFormatted(state as never);
 
       expect(getEditPositionMode).toHaveBeenCalledWith(state.swapForm);
       expect(getEditPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
-      expect(swapFormFormatNumber).toHaveBeenCalledWith(1.2);
+      expect(formFormatNumber).toHaveBeenCalledWith(1.2);
       expect(result).toEqual('1.20');
     });
 
@@ -1364,14 +1361,14 @@ describe('swap-form.selectors', () => {
       } as never;
       (getEditPositionNotional as jest.Mock).mockReturnValueOnce(1000000000000000000);
 
-      (swapFormCompactFormatToParts as jest.Mock).mockReturnValueOnce({
+      (formCompactFormatToParts as jest.Mock).mockReturnValueOnce({
         compactSuffix: 'ETH',
         compactNumber: '1',
       });
 
       const result = selectEditPositionCompactNotional(state);
 
-      expect(swapFormCompactFormatToParts as jest.Mock).toHaveBeenCalledWith(1000000000000000000);
+      expect(formCompactFormatToParts as jest.Mock).toHaveBeenCalledWith(1000000000000000000);
       expect(result).toEqual({
         compactNotionalSuffix: 'ETH',
         compactNotionalNumber: '1',
@@ -1414,51 +1411,6 @@ describe('swap-form.selectors', () => {
       };
       const result = selectCashflowInfoStatus(mockState as never);
       expect(result).toEqual('success');
-    });
-  });
-
-  describe('selectAccruedCashflowExistingPositionFormatted', () => {
-    beforeEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it('should call swapFormFormatNumber with the accrued cashflow value when cashflowInfo status is success', () => {
-      const mockState = {
-        swapForm: {
-          userInput: {},
-          prospectiveSwap: {
-            cashflowInfo: {
-              status: 'success',
-              accruedCashflowExistingPosition: 1234.5678,
-            },
-          },
-        },
-      };
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1,234.57');
-
-      const result = selectAccruedCashflowExistingPositionFormatted(mockState as never);
-      expect(swapFormFormatNumber).toHaveBeenCalledWith(1234.5678);
-      expect(result).toEqual('1,234.57');
-    });
-
-    it('should return "--" when cashflowInfo status is pending', () => {
-      const mockState = {
-        swapForm: {
-          userInput: {},
-          prospectiveSwap: {
-            cashflowInfo: {
-              status: 'pending',
-              accruedCashflowExistingPosition: 0,
-            },
-          },
-        },
-      } as never;
-
-      (swapFormFormatNumber as jest.Mock).mockReturnValueOnce('1,234.57');
-
-      const result = selectAccruedCashflowExistingPositionFormatted(mockState);
-      expect(swapFormFormatNumber).not.toHaveBeenCalled();
-      expect(result).toEqual('--');
     });
   });
 
@@ -1593,9 +1545,8 @@ describe('swap-form.selectors', () => {
     it('should return a formatted slippage value', () => {
       const mockState = {
         swapForm: {
-          fixedRate: {
-            status: 'success',
-            value: 0.1,
+          amm: {
+            fixedApr: 0.1,
           },
           prospectiveSwap: {
             infoPostSwap: {
@@ -1607,7 +1558,7 @@ describe('swap-form.selectors', () => {
           },
         },
       };
-      (swapFormFormatNumber as jest.Mock).mockImplementationOnce((n: number) => n.toFixed(3));
+      (formFormatNumber as jest.Mock).mockImplementationOnce((n: number) => n.toFixed(3));
       const result = selectSlippageFormatted(mockState as never);
       expect(result).toBe('0.092');
     });
@@ -1615,9 +1566,8 @@ describe('swap-form.selectors', () => {
     it('should return 0 if info post swap has 0 notional', () => {
       const mockState = {
         swapForm: {
-          fixedRate: {
-            status: 'success',
-            value: 0.1,
+          amm: {
+            fixedApr: 0.1,
           },
           prospectiveSwap: {
             infoPostSwap: {
@@ -1629,7 +1579,7 @@ describe('swap-form.selectors', () => {
           },
         },
       };
-      (swapFormFormatNumber as jest.Mock).mockImplementationOnce((n: number) => n.toFixed());
+      (formFormatNumber as jest.Mock).mockImplementationOnce((n: number) => n.toFixed());
       const result = selectSlippageFormatted(mockState as never);
       expect(result).toBe('0');
     });
@@ -1681,412 +1631,381 @@ describe('swap-form.selectors', () => {
       expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
       expect(result).toEqual('https://etherscan.io/tx/0xabc123');
     });
+  });
 
-    describe('selectMarginUpdateConfirmationFlowStep', () => {
-      it('returns the correct step', () => {
-        const state = {
-          swapForm: {
-            marginUpdateConfirmationFlow: {
-              step: 'confirmSwap',
-            },
+  describe('selectMarginUpdateConfirmationFlowStep', () => {
+    it('returns the correct step', () => {
+      const state = {
+        swapForm: {
+          marginUpdateConfirmationFlow: {
+            step: 'confirmSwap',
           },
-        };
-
-        expect(selectMarginUpdateConfirmationFlowStep(state as never)).toEqual('confirmSwap');
-      });
-    });
-
-    describe('selectMarginUpdateConfirmationFlowError', () => {
-      it('returns the correct step', () => {
-        const state = {
-          swapForm: {
-            marginUpdateConfirmationFlow: {
-              error: 'error',
-            },
-          },
-        };
-
-        expect(selectMarginUpdateConfirmationFlowError(state as never)).toEqual('error');
-      });
-    });
-
-    describe('selectMarginUpdateConfirmationFlowEtherscanLink', () => {
-      it('returns the correct link', () => {
-        (getViewOnEtherScanLink as jest.Mock).mockReturnValueOnce(
-          'https://etherscan.io/tx/0xabc123',
-        );
-
-        const state = {
-          network: {
-            chainId: 1,
-          },
-          swapForm: {
-            marginUpdateConfirmationFlow: {
-              txHash: '0xabc123',
-            },
-          },
-        };
-        const result = selectMarginUpdateConfirmationFlowEtherscanLink(state as never);
-        expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
-        expect(result).toEqual('https://etherscan.io/tx/0xabc123');
-      });
-    });
-
-    describe('selectVariableRate24hDelta', () => {
-      beforeEach(() => {
-        jest.resetAllMocks();
-      });
-
-      it('calls formatNumber and stringToBigFloat with the correct arguments', () => {
-        const state = {
-          swapForm: {
-            variableRate24hAgo: {
-              status: 'success',
-              value: 100,
-            },
-            variableRate: {
-              status: 'success',
-              value: 150,
-            },
-          },
-        };
-        (formatNumber as jest.Mock).mockReturnValueOnce('50');
-        selectVariableRate24hDelta(state as never);
-
-        expect(formatNumber).toHaveBeenCalledWith(50, 0, 3);
-        expect(stringToBigFloat).toHaveBeenCalledWith('50');
-      });
-
-      it('returns undefined if either variableRate24hAgo or variableRate has a status other than success', () => {
-        const state1 = {
-          swapForm: {
-            variableRate24hAgo: {
-              status: 'failure',
-              value: null,
-            },
-            variableRate: {
-              status: 'success',
-              value: 150,
-            },
-          },
-        };
-
-        const state2 = {
-          swapForm: {
-            variableRate24hAgo: {
-              status: 'success',
-              value: 100,
-            },
-            variableRate: {
-              status: 'failure',
-              value: null,
-            },
-          },
-        };
-
-        expect(selectVariableRate24hDelta(state1 as never)).toBeUndefined();
-        expect(selectVariableRate24hDelta(state2 as never)).toBeUndefined();
-      });
-
-      it('returns the correct value', () => {
-        (formatNumber as jest.Mock).mockReturnValueOnce('50');
-        (stringToBigFloat as jest.Mock).mockReturnValueOnce(50);
-
-        const state = {
-          swapForm: {
-            variableRate24hAgo: {
-              status: 'success',
-              value: 100,
-            },
-            variableRate: {
-              status: 'success',
-              value: 150,
-            },
-          },
-        };
-
-        expect(selectVariableRate24hDelta(state as never)).toEqual(50);
-      });
-    });
-
-    describe('selectSubmitButtonText', () => {
-      it('returns the correct text for the "swap" state', () => {
-        const state = {
-          swapForm: {
-            submitButton: {
-              state: 'swap',
-            },
-          },
-        };
-        expect(selectSubmitButtonText(state as never)).toBe('Swap');
-      });
-
-      it('returns the correct text for the "margin-update" state', () => {
-        const state = {
-          swapForm: {
-            submitButton: {
-              state: 'margin-update',
-            },
-          },
-        };
-        expect(selectSubmitButtonText(state as never)).toBe('Update margin');
-      });
-
-      it('returns the correct text for the "not-enough-balance" state', () => {
-        const state = {
-          swapForm: {
-            submitButton: {
-              state: 'not-enough-balance',
-            },
-          },
-        };
-        expect(selectSubmitButtonText(state as never)).toBe('Not enough balance');
-      });
-
-      it('returns the correct text for the "approve" state', () => {
-        const state = {
-          swapForm: {
-            submitButton: {
-              state: 'approve',
-            },
-            amm: {
-              underlyingToken: {
-                name: 'token',
-              },
-            },
-          },
-        };
-        expect(selectSubmitButtonText(state as never)).toBe('Approve TOKEN');
-      });
-
-      it('returns the correct text for the "approving" state', () => {
-        const state = {
-          swapForm: {
-            submitButton: {
-              state: 'approving',
-            },
-          },
-        };
-        expect(selectSubmitButtonText(state as never)).toBe('Approving...');
-      });
-
-      it('returns the correct text for the "connect-wallet" state', () => {
-        const state = {
-          swapForm: {
-            submitButton: {
-              state: 'connect-wallet',
-            },
-          },
-        };
-        expect(selectSubmitButtonText(state as never)).toBe('Connect Your Wallet to Start Trading');
-      });
-    });
-
-    describe('selectIsLeverageDisabled', () => {
-      const mockState = {
-        swapForm: jest.fn(),
+        },
       };
 
-      it('returns true if getProspectiveSwapNotional returns 0', () => {
-        (getProspectiveSwapNotional as jest.Mock).mockReturnValue(0);
-
-        const result = selectIsLeverageDisabled(mockState as never);
-
-        expect(result).toBe(true);
-        expect(getProspectiveSwapNotional).toHaveBeenCalledWith(mockState.swapForm);
-      });
-
-      it('returns false if getProspectiveSwapNotional returns a non-zero value', () => {
-        (getProspectiveSwapNotional as jest.Mock).mockReturnValue(100);
-
-        const result = selectIsLeverageDisabled(mockState as never);
-
-        expect(result).toBe(false);
-        expect(getProspectiveSwapNotional).toHaveBeenCalledWith(mockState.swapForm);
-      });
+      expect(selectMarginUpdateConfirmationFlowStep(state as never)).toEqual('confirmSwap');
     });
+  });
 
-    describe('selectShowLeverageNotification', () => {
-      it('returns the value of showLowLeverageNotification from state', () => {
-        const state = {
-          swapForm: {
-            showLowLeverageNotification: true,
+  describe('selectMarginUpdateConfirmationFlowError', () => {
+    it('returns the correct step', () => {
+      const state = {
+        swapForm: {
+          marginUpdateConfirmationFlow: {
+            error: 'error',
           },
-        };
+        },
+      };
 
-        const result = selectShowLeverageNotification(state as never);
-        expect(result).toEqual(true);
-      });
+      expect(selectMarginUpdateConfirmationFlowError(state as never)).toEqual('error');
+    });
+  });
+
+  describe('selectMarginUpdateConfirmationFlowEtherscanLink', () => {
+    it('returns the correct link', () => {
+      (getViewOnEtherScanLink as jest.Mock).mockReturnValueOnce('https://etherscan.io/tx/0xabc123');
+
+      const state = {
+        network: {
+          chainId: 1,
+        },
+        swapForm: {
+          marginUpdateConfirmationFlow: {
+            txHash: '0xabc123',
+          },
+        },
+      };
+      const result = selectMarginUpdateConfirmationFlowEtherscanLink(state as never);
+      expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
+      expect(result).toEqual('https://etherscan.io/tx/0xabc123');
+    });
+  });
+
+  describe('selectVariableRate24hDelta', () => {
+    beforeEach(() => {
+      jest.resetAllMocks();
     });
 
-    describe('selectLeverageOptions', () => {
-      it('should return the correct leverage options', () => {
-        const state = {
-          swapForm: {
-            prospectiveSwap: {
-              leverage: {
-                maxLeverage: 5,
-                options: [2, 3, 4, 5],
+    it('calls formatNumber and stringToBigFloat with the correct arguments', () => {
+      const state = {
+        swapForm: {
+          amm: {
+            variableApy: 150,
+            variableApy24Ago: 100,
+          },
+        },
+      };
+      (formatNumber as jest.Mock).mockReturnValueOnce('50');
+      selectVariableRate24hDelta(state as never);
+
+      expect(formatNumber).toHaveBeenCalledWith(50, 0, 3);
+      expect(stringToBigFloat).toHaveBeenCalledWith('50');
+    });
+
+    it('returns undefined if amm is null', () => {
+      const state = {
+        swapForm: {
+          amm: null,
+        },
+      };
+
+      expect(selectVariableRate24hDelta(state as never)).toBeUndefined();
+    });
+
+    it('returns the correct value', () => {
+      (formatNumber as jest.Mock).mockReturnValueOnce('50');
+      (stringToBigFloat as jest.Mock).mockReturnValueOnce(50);
+
+      const state = {
+        swapForm: {
+          amm: {
+            variableApy: 150,
+            variableApy24Ago: 100,
+          },
+        },
+      };
+
+      expect(selectVariableRate24hDelta(state as never)).toEqual(50);
+    });
+  });
+
+  describe('selectSubmitButtonText', () => {
+    it('returns the correct text for the "swap" state', () => {
+      const state = {
+        swapForm: {
+          submitButton: {
+            state: 'swap',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Swap');
+    });
+
+    it('returns the correct text for the "margin-update" state', () => {
+      const state = {
+        swapForm: {
+          submitButton: {
+            state: 'margin-update',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Update margin');
+    });
+
+    it('returns the correct text for the "not-enough-balance" state', () => {
+      const state = {
+        swapForm: {
+          submitButton: {
+            state: 'not-enough-balance',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Not enough balance');
+    });
+
+    it('returns the correct text for the "approve" state', () => {
+      const state = {
+        swapForm: {
+          submitButton: {
+            state: 'approve',
+          },
+          amm: {
+            underlyingToken: {
+              name: 'token',
+            },
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Approve TOKEN');
+    });
+
+    it('returns the correct text for the "approving" state', () => {
+      const state = {
+        swapForm: {
+          submitButton: {
+            state: 'approving',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Approving...');
+    });
+
+    it('returns the correct text for the "connect-wallet" state', () => {
+      const state = {
+        swapForm: {
+          submitButton: {
+            state: 'connect-wallet',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Connect Your Wallet to Start Trading');
+    });
+  });
+
+  describe('selectIsLeverageDisabled', () => {
+    const mockState = {
+      swapForm: jest.fn(),
+    };
+
+    it('returns true if getProspectiveSwapNotional returns 0', () => {
+      (getProspectiveSwapNotional as jest.Mock).mockReturnValue(0);
+
+      const result = selectIsLeverageDisabled(mockState as never);
+
+      expect(result).toBe(true);
+      expect(getProspectiveSwapNotional).toHaveBeenCalledWith(mockState.swapForm);
+    });
+
+    it('returns false if getProspectiveSwapNotional returns a non-zero value', () => {
+      (getProspectiveSwapNotional as jest.Mock).mockReturnValue(100);
+
+      const result = selectIsLeverageDisabled(mockState as never);
+
+      expect(result).toBe(false);
+      expect(getProspectiveSwapNotional).toHaveBeenCalledWith(mockState.swapForm);
+    });
+  });
+
+  describe('selectShowLeverageNotification', () => {
+    it('returns the value of showLowLeverageNotification from state', () => {
+      const state = {
+        swapForm: {
+          showLowLeverageNotification: true,
+        },
+      };
+
+      const result = selectShowLeverageNotification(state as never);
+      expect(result).toEqual(true);
+    });
+  });
+
+  describe('selectLeverageOptions', () => {
+    it('should return the correct leverage options', () => {
+      const state = {
+        swapForm: {
+          prospectiveSwap: {
+            leverage: {
+              maxLeverage: 5,
+              options: [2, 3, 4, 5],
+            },
+          },
+        },
+      };
+
+      const result = selectLeverageOptions(state as never);
+
+      expect(result).toEqual({
+        maxLeverage: 5,
+        leverageOptions: ['2', '3', '4', '5'],
+      });
+    });
+  });
+
+  describe('selectIsGetInfoPostSwapLoading', () => {
+    it('returns true when infoPostSwap status is "pending"', () => {
+      const state = {
+        swapForm: {
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'pending',
+            },
+          },
+        },
+      };
+
+      const result = selectIsGetInfoPostSwapLoading(state as never);
+      expect(result).toBe(true);
+    });
+
+    it('returns false when infoPostSwap status is not "pending"', () => {
+      const state = {
+        swapForm: {
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'success',
+            },
+          },
+        },
+      };
+
+      const result = selectIsGetInfoPostSwapLoading(state as never);
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('selectPositionMarginFormatted', () => {
+    it('should return -- when position value is not available', () => {
+      const state = { swapForm: { position: { value: null } } };
+      const result = selectPositionMarginFormatted(state as never);
+      expect(result).toBe('--');
+    });
+
+    it('should return the formatted margin value when position value is available', () => {
+      const margin = 1234567.89;
+      const state = { swapForm: { position: { value: { margin } } } };
+      const formattedMargin = '1,234,567.89';
+      (formCompactFormat as jest.Mock).mockReturnValueOnce(formattedMargin);
+      const result = selectPositionMarginFormatted(state as never);
+      expect(result).toBe(formattedMargin);
+      expect(formCompactFormat).toHaveBeenCalledWith(margin);
+    });
+  });
+
+  describe('selectFixedRateValueFormatted', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should return "--" if amm is null', () => {
+      const state = {
+        swapForm: {
+          amm: null,
+        },
+      };
+      const result = selectFixedRateValueFormatted(state as never);
+      expect(result).toBe('--');
+    });
+
+    it('should return formatted fixed rate value', () => {
+      const state = {
+        swapForm: {
+          amm: { fixedApr: 123.456 },
+        },
+      };
+      (formatNumber as jest.Mock).mockImplementationOnce((value: number) => `formatted_${value}`);
+      const result = selectFixedRateValueFormatted(state as never);
+      expect(result).toBe('formatted_123.456');
+      expect(formatNumber).toHaveBeenCalledWith(123.456);
+    });
+  });
+
+  describe('selectVariableRateValueFormatted', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should return "--" if amm is null', () => {
+      const state = {
+        swapForm: {
+          amm: null,
+        },
+      };
+      const result = selectVariableRateValueFormatted(state as never);
+      expect(result).toBe('--');
+    });
+
+    it('should return formatted variable rate value', () => {
+      const state = {
+        swapForm: {
+          amm: { variableApy: 123.456 },
+        },
+      };
+      (formatNumber as jest.Mock).mockImplementationOnce((value: number) => `formatted_${value}`);
+      const result = selectVariableRateValueFormatted(state as never);
+      expect(result).toBe('formatted_123.456');
+      expect(formatNumber).toHaveBeenCalledWith(123.456);
+    });
+  });
+
+  describe('selectMarginRequirementFormatted', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should return formatted margin requirement when infoPostSwap status is success', () => {
+      const state = {
+        swapForm: {
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'success',
+              value: {
+                marginRequirement: 0.05,
               },
             },
           },
-        };
+        },
+      };
+      (formatNumber as jest.Mock).mockImplementationOnce((value: number) => String(value));
 
-        const result = selectLeverageOptions(state as never);
+      const result = selectMarginRequirementFormatted(state as never);
 
-        expect(result).toEqual({
-          maxLeverage: 5,
-          leverageOptions: ['2', '3', '4', '5'],
-        });
-      });
+      expect(result).toEqual('0.05');
+      expect(formatNumber).toHaveBeenCalledWith(0.05, 2, 4);
     });
 
-    describe('selectIsGetInfoPostSwapLoading', () => {
-      it('returns true when infoPostSwap status is "pending"', () => {
-        const state = {
-          swapForm: {
-            prospectiveSwap: {
-              infoPostSwap: {
-                status: 'pending',
-              },
+    it('should return -- when infoPostSwap status is not success', () => {
+      const state = {
+        swapForm: {
+          prospectiveSwap: {
+            infoPostSwap: {
+              status: 'pending',
             },
           },
-        };
+        },
+      };
 
-        const result = selectIsGetInfoPostSwapLoading(state as never);
-        expect(result).toBe(true);
-      });
-
-      it('returns false when infoPostSwap status is not "pending"', () => {
-        const state = {
-          swapForm: {
-            prospectiveSwap: {
-              infoPostSwap: {
-                status: 'success',
-              },
-            },
-          },
-        };
-
-        const result = selectIsGetInfoPostSwapLoading(state as never);
-        expect(result).toBe(false);
-      });
-    });
-
-    describe('selectPositionMarginFormatted', () => {
-      it('should return -- when position value is not available', () => {
-        const state = { swapForm: { position: { value: null } } };
-        const result = selectPositionMarginFormatted(state as never);
-        expect(result).toBe('--');
-      });
-
-      it('should return the formatted margin value when position value is available', () => {
-        const margin = 1234567.89;
-        const state = { swapForm: { position: { value: { margin } } } };
-        const formattedMargin = '1,234,567.89';
-        (swapFormCompactFormat as jest.Mock).mockReturnValueOnce(formattedMargin);
-        const result = selectPositionMarginFormatted(state as never);
-        expect(result).toBe(formattedMargin);
-        expect(swapFormCompactFormat).toHaveBeenCalledWith(margin);
-      });
-    });
-
-    describe('selectFixedRateValueFormatted', () => {
-      beforeEach(() => {
-        jest.clearAllMocks();
-      });
-
-      it('should return "--" if fixed rate status is not "success"', () => {
-        const state = {
-          swapForm: {
-            fixedRate: { status: 'pending' },
-          },
-        };
-        const result = selectFixedRateValueFormatted(state as never);
-        expect(result).toBe('--');
-      });
-
-      it('should return formatted fixed rate value', () => {
-        const state = {
-          swapForm: {
-            fixedRate: { status: 'success', value: 123.456 },
-          },
-        };
-        (formatNumber as jest.Mock).mockImplementationOnce((value: number) => `formatted_${value}`);
-        const result = selectFixedRateValueFormatted(state as never);
-        expect(result).toBe('formatted_123.456');
-        expect(formatNumber).toHaveBeenCalledWith(123.456);
-      });
-    });
-
-    describe('selectVariableRateValueFormatted', () => {
-      beforeEach(() => {
-        jest.clearAllMocks();
-      });
-
-      it('should return "--" if variable rate status is not "success"', () => {
-        const state = {
-          swapForm: {
-            variableRate: { status: 'pending' },
-          },
-        };
-        const result = selectVariableRateValueFormatted(state as never);
-        expect(result).toBe('--');
-      });
-
-      it('should return formatted variable rate value', () => {
-        const state = {
-          swapForm: {
-            variableRate: { status: 'success', value: 123.456 },
-          },
-        };
-        (formatNumber as jest.Mock).mockImplementationOnce((value: number) => `formatted_${value}`);
-        const result = selectVariableRateValueFormatted(state as never);
-        expect(result).toBe('formatted_123.456');
-        expect(formatNumber).toHaveBeenCalledWith(123.456);
-      });
-    });
-
-    describe('selectMarginRequirementFormatted', () => {
-      beforeEach(() => {
-        jest.clearAllMocks();
-      });
-
-      it('should return formatted margin requirement when infoPostSwap status is success', () => {
-        const state = {
-          swapForm: {
-            prospectiveSwap: {
-              infoPostSwap: {
-                status: 'success',
-                value: {
-                  marginRequirement: 0.05,
-                },
-              },
-            },
-          },
-        };
-        (formatNumber as jest.Mock).mockImplementationOnce((value: number) => String(value));
-
-        const result = selectMarginRequirementFormatted(state as never);
-
-        expect(result).toEqual('0.05');
-        expect(formatNumber).toHaveBeenCalledWith(0.05, 2, 4);
-      });
-
-      it('should return -- when infoPostSwap status is not success', () => {
-        const state = {
-          swapForm: {
-            prospectiveSwap: {
-              infoPostSwap: {
-                status: 'pending',
-              },
-            },
-          },
-        };
-
-        const result = selectMarginRequirementFormatted(state as never);
-        expect(result).toEqual('--');
-      });
+      const result = selectMarginRequirementFormatted(state as never);
+      expect(result).toEqual('--');
     });
   });
 });

@@ -21,8 +21,8 @@ import {
 type HistoricalRatesChartProps = {
   aMMId: string;
   aMMRateOracleId: string;
-  fixedRate: number | null;
-  variableRate: number | null;
+  fixedRate: number;
+  variableRate: number;
 };
 
 const filterOptions: ChartFiltersProps['filterOptions'] = [

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { getSentryTracker } from '../utilities/sentry';
 
-export enum ApprovalType {
+enum ApprovalType {
   UTOKEN_PERIPHERY = 'UnderlyingTokenPeriphery',
 }
 

@@ -54,20 +54,6 @@ export const ButtonBox = styled(Box)`
   box-sizing: border-box;
 `;
 
-export const DepositButton = styled(Button)`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: ${({ theme }) => theme.spacing(4, 6)};
-  gap: ${({ theme }) => theme.spacing(2.5)};
-
-  background: #00556d;
-  border-radius: 4px;
-
-  color: ${colors.skyBlueCrayola.base};
-  flex: 1;
-`;
-
 export const CancelButton = styled(Button)`
   display: flex;
   flex-direction: row;
@@ -84,7 +70,6 @@ export const CancelButton = styled(Button)`
 `;
 
 export const BatchFeeContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: center;

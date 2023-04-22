@@ -3,7 +3,6 @@ import { colors } from 'brokoli-ui';
 
 export const FormBox = styled('div')`
   box-sizing: border-box;
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -33,7 +32,6 @@ export const MarginAccountBox = styled('div')`
 
 export const FormOuterBox = styled('div')`
   box-sizing: border-box;
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   width: 100%;

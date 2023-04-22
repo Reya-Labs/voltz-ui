@@ -22,6 +22,7 @@ type PoolSortHeaderProps = {
   text: string;
   subtext?: string;
   direction: PoolSortDirection;
+  disabled: boolean;
 };
 
 export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
@@ -29,6 +30,7 @@ export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
   subtext,
   id,
   direction,
+  disabled,
 }) => {
   const dispatch = useAppDispatch();
   const chainId = useAppSelector(selectChainId);
@@ -53,7 +55,7 @@ export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
   return (
     <RowsBox
       onClick={() => {
-        if (loading) {
+        if (loading || disabled) {
           return;
         }
         dispatch(
@@ -65,8 +67,13 @@ export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
       }}
     >
       <TypographyWithIcon colorToken="lavenderWeb3" typographyToken={typographyToken}>
-        {text}&nbsp;
-        <DirectionIcon />
+        {text}
+        {disabled ? null : (
+          <React.Fragment>
+            &nbsp;
+            <DirectionIcon />
+          </React.Fragment>
+        )}
       </TypographyWithIcon>
       {subtext ? (
         <Typography colorToken="lavenderWeb5" typographyToken={typographyToken}>

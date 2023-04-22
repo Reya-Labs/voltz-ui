@@ -3,12 +3,9 @@ import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import {
-  getFixedRateThunk,
   getInfoPostLpThunk,
   getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
-  getVariableRate24hAgoThunk,
-  getVariableRateThunk,
   getWalletBalanceThunk,
   selectLpFormAMM,
   selectLpFormPositionsFetchingStatus,
@@ -86,20 +83,13 @@ export const useLPFormAMM = (): UseAMMsResult => {
     if (!aMM) {
       return;
     }
-
-    void dispatch(getFixedRateThunk());
-    void dispatch(getVariableRateThunk());
-    void dispatch(getVariableRate24hAgoThunk());
-  }, [dispatch, aMM]);
-
-  useEffect(() => {
-    if (!aMM) {
-      return;
-    }
     void dispatch(getPoolLpInfoThunk());
   }, [dispatch, aMM, fixedRateLower, fixedRateUpper]);
 
   useEffect(() => {
+    if (!aMM?.id) {
+      return;
+    }
     if (!chainId) {
       return;
     }
@@ -115,7 +105,7 @@ export const useLPFormAMM = (): UseAMMsResult => {
         chainId,
       }),
     );
-  }, [dispatch, aMMsLoading, error, chainId, signer]);
+  }, [aMM?.id, dispatch, aMMsLoading, error, chainId, signer]);
 
   useEffect(() => {
     if (positionsFetchingStatus !== 'success') {

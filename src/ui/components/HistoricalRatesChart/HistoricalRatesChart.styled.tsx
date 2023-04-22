@@ -4,7 +4,6 @@ import { colors } from 'brokoli-ui';
 export const ChartBox = styled('div')`
   position: relative;
   box-sizing: border-box;
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: center;

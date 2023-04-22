@@ -1,10 +1,8 @@
 import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import {
-  LpFormNumberLimits,
-  selectUserInputNotionalInfo,
-} from '../../../../../app/features/lp-form';
+import { FormNumberLimits } from '../../../../../app/features/common-form';
+import { selectUserInputNotionalInfo } from '../../../../../app/features/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 
@@ -37,11 +35,11 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
         bottomRightTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         // bottomRightTextValue={formatNumber(notionalAvailable)}
-        decimalsLimit={LpFormNumberLimits.decimalLimit}
+        decimalsLimit={FormNumberLimits.decimalLimit}
         error={notionalInfo.error !== null}
         label="Notional Amount"
         labelTypographyToken={labelTypographyToken}
-        maxLength={LpFormNumberLimits.digitLimit}
+        maxLength={FormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When providing liquidity, your profit or loss, generated from fees and funding rate cashflow, is calculated as a percentage of the notional value you choose."
         value={localNotional !== null ? localNotional : undefined}

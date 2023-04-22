@@ -15,7 +15,7 @@ export type WalletSelectProps = {
   onClose: () => void;
 };
 
-export const walletOptions: WalletOption[] = [
+const walletOptions: WalletOption[] = [
   { title: 'Metamask', name: 'metamask' },
   { title: 'WalletConnect', name: 'walletConnect' },
 ];

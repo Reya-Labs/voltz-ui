@@ -1,14 +1,11 @@
-import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/material/styles';
 
 import { Typography } from '../../../../../components/atomic/Typography/Typography';
 import colors from '../../../../../theme/colors';
 
 export const ContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -30,7 +27,6 @@ export const DescriptionTypography = styled(Typography)`
 `;
 
 export const ActionBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -46,14 +42,12 @@ export const ActionBox = styled(Box)`
 `;
 
 export const ActionLeftContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
 `;
 export const ActionRightContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -61,7 +55,6 @@ export const ActionRightContentBox = styled(Box)`
 `;
 
 export const BatchButton = styled(Button)`
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -85,7 +78,6 @@ export const BatchButton = styled(Button)`
 `;
 
 export const BatchBudgetContentBox = styled(Box)`
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -94,13 +86,6 @@ export const BatchBudgetContentBox = styled(Box)`
   /* Liberty 5 */
   background: #1e1933;
   border-radius: 4px;
-`;
-
-export const GasIcon = styled(LocalGasStationIcon)`
-  color: #a49ebf;
-
-  font-size: 12px;
-  line-height: 160%;
 `;
 
 const BatchBudgetText = styled(Typography)`
@@ -134,35 +119,4 @@ export const BatchBudgetUSDCurrencyTypography = styled(BatchBudgetText)`
 
 export const BatchBudgetUnderlyingTypography = styled(BatchBudgetText)`
   color: #4de5ff;
-`;
-
-export const GasCostInputLabel = styled(InputLabel)`
-  position: relative;
-  margin: 0;
-`;
-
-export const GasCostBox = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  column-gap: ${({ theme }) => theme.spacing(2)};
-  align-items: center;
-`;
-
-const BaseGasCostTypography = styled(Typography)`
-  font-family: 'PixelOperatorMono', monospace;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 160%;
-  display: inline-block;
-`;
-
-export const GasCostTypography = styled(BaseGasCostTypography)`
-  /* Lavender Web 3 */
-  color: #e1ddf7;
-`;
-
-export const GasCostTokenTypography = styled(BaseGasCostTypography)`
-  /* Lavender Web 3 */
-  color: #a49ebf;
 `;

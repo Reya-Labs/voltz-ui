@@ -2,12 +2,14 @@ import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'br
 import React from 'react';
 
 import {
-  selectAccruedCashflowEditPositionFormatted,
-  selectAccruedCashflowExistingPositionFormatted,
   selectEditPositionCompactNotional,
   selectEditPositionMode,
   selectEditPositionPayingRateFormatted,
+  selectEditPositionRealizedPnLFromFeesFormatted,
+  selectEditPositionRealizedPnLFromSwapsFormatted,
+  selectEditPositionRealizedPnLTotalFormatted,
   selectEditPositionReceivingRateFormatted,
+  selectEditPositionUnrealizedPnLFromSwapsFormatted,
   selectExistingPositionCompactNotional,
   selectExistingPositionMode,
   selectExistingPositionPayingRateFormatted,
@@ -16,6 +18,7 @@ import {
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MODE_COLOR_TOKEN_MAP, MODE_TEXT_MAP } from '../../helpers';
+import { PnLDetails } from './PnLDetails';
 import {
   CashFlowBox,
   NotionalBox,
@@ -24,6 +27,7 @@ import {
   PositionDetailsLeftBox,
   PositionDetailsRightBox,
   ReceivingBox,
+  TooltipBox,
 } from './PositionDetails.styled';
 
 type EditPositionDetailsUIProps = {
@@ -49,10 +53,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
   const editPositionMode = useAppSelector(selectEditPositionMode);
   const receivingRateTo = useAppSelector(selectEditPositionReceivingRateFormatted);
   const payingRateTo = useAppSelector(selectEditPositionPayingRateFormatted);
-  const editPositionCompactNotional = useAppSelector(selectEditPositionCompactNotional);
 
-  const accruedCashflowFrom = useAppSelector(selectAccruedCashflowExistingPositionFormatted);
-  const accruedCashflowTo = useAppSelector(selectAccruedCashflowEditPositionFormatted);
+  const realizedPnLTotal = useAppSelector(selectEditPositionRealizedPnLTotalFormatted);
+  const realizedPnLFromFees = useAppSelector(selectEditPositionRealizedPnLFromFeesFormatted);
+  const realizedPnLFromSwaps = useAppSelector(selectEditPositionRealizedPnLFromSwapsFormatted);
+  const unrealizedPnLFromSwaps = useAppSelector(selectEditPositionUnrealizedPnLFromSwapsFormatted);
+
+  const editPositionCompactNotional = useAppSelector(selectEditPositionCompactNotional);
 
   const existingPosition = useAppSelector(selectSwapFormPosition);
   if (!existingPosition) {
@@ -173,30 +180,45 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           )}
         </PayingBox>
         <CashFlowBox>
-          {accruedCashflowFrom === accruedCashflowTo ? (
-            <LabelTokenTypography
-              colorToken="lavenderWeb"
-              label="Cash Flow"
-              labelColorToken="lavenderWeb3"
-              labelTypographyToken={labelTypographyToken}
-              token={` ${underlyingTokenName.toUpperCase()}`}
-              typographyToken={typographyToken}
-              value={accruedCashflowTo}
-            />
-          ) : (
-            <FromToTokenTypography
-              fromColorToken="lavenderWeb"
-              fromToken=""
-              fromValue={accruedCashflowFrom}
-              label="Cash Flow"
-              labelColorToken="lavenderWeb3"
-              labelTypographyToken={labelTypographyToken}
-              toColorToken="lavenderWeb"
-              toToken={` ${underlyingTokenName.toUpperCase()}`}
-              toValue={accruedCashflowTo}
-              typographyToken={typographyToken}
-            />
-          )}
+          <LabelTokenTypography
+            colorToken={realizedPnLTotal.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'}
+            label="Realized PnL"
+            labelColorToken="lavenderWeb3"
+            labelTypographyToken={labelTypographyToken}
+            token={` ${underlyingTokenName.toUpperCase()}`}
+            tooltip={
+              <PnLDetails
+                pnlFromFees={realizedPnLFromFees}
+                pnlFromSwaps={realizedPnLFromSwaps}
+                underlyingTokenName={underlyingTokenName}
+              />
+            }
+            typographyToken={typographyToken}
+            value={realizedPnLTotal}
+          />
+        </CashFlowBox>
+        <CashFlowBox>
+          <LabelTokenTypography
+            colorToken={
+              unrealizedPnLFromSwaps.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'
+            }
+            label="Unrealized PnL"
+            labelColorToken="lavenderWeb3"
+            labelTypographyToken={labelTypographyToken}
+            token={` ${underlyingTokenName.toUpperCase()}`}
+            tooltip={
+              <TooltipBox>
+                The additional PnL you’d generate should you close your position now.
+                <br />
+                <br />
+                To close your position you must enter an opposite sided swap, meaning your uPnL is
+                generated from any difference in the fixed rate from when you entered to when you
+                exit.
+              </TooltipBox>
+            }
+            typographyToken={typographyToken}
+            value={unrealizedPnLFromSwaps}
+          />
         </CashFlowBox>
       </PositionDetailsRightBox>
     </PositionDetailsBox>

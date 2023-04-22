@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 
 import { colors } from '../../../../../theme';
 
-export const ActionButton = styled(Button)<{ disabled: boolean }>`
+const ActionButton = styled(Button)<{ disabled: boolean }>`
   display: flex;
   flex-direction: row;
   justify-content: center;

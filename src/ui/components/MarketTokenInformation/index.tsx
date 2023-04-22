@@ -1,7 +1,7 @@
-import { MarketToken, MarketTokenProps, Pill, PillProps } from 'brokoli-ui';
+import { MarketToken, MarketTokenProps, Pill, PillProps, ToggleCaret } from 'brokoli-ui';
 import React from 'react';
 
-import { MarketTokenBox } from './MarketTokenInformation.styled';
+import { MarketTokenBox, ToggleCaretBox } from './MarketTokenInformation.styled';
 
 export type MarketTokenInformationProps = {
   market: MarketTokenProps['market'];
@@ -13,6 +13,9 @@ export type MarketTokenInformationProps = {
   colorToken: MarketTokenProps['colorToken'];
   iconSize: MarketTokenProps['iconSize'];
   typographyToken: MarketTokenProps['typographyToken'];
+  showToggleCaret?: boolean;
+  isToggleCaretOpen?: boolean;
+  onToggleCaretClick?: () => void;
 };
 
 export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformationProps> = ({
@@ -25,6 +28,9 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
   colorToken,
   iconSize,
   pillVariant,
+  showToggleCaret,
+  onToggleCaretClick,
+  isToggleCaretOpen,
 }) => {
   return (
     <MarketTokenBox data-testid="MarketTokenInformation-MarketTokenBox">
@@ -36,6 +42,11 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
         token={token}
         typographyToken={typographyToken}
       />
+      {showToggleCaret ? (
+        <ToggleCaretBox onClick={onToggleCaretClick}>
+          <ToggleCaret isOpen={Boolean(isToggleCaretOpen)} />
+        </ToggleCaretBox>
+      ) : null}
       {isBorrowing ? (
         <Pill
           colorToken="wildStrawberry"

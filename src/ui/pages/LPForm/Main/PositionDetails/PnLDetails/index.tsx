@@ -3,45 +3,43 @@ import React from 'react';
 
 import { PnLDetailsBox, RowBox, RowsBox } from './PnLDetails.styled';
 
-export const PnLDetails: React.FunctionComponent = () => {
+type PnLDetailsProps = {
+  underlyingTokenName: string;
+  pnlFromSwaps: string;
+  pnlFromFees: string;
+};
+
+export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
+  underlyingTokenName,
+  pnlFromSwaps,
+  pnlFromFees,
+}) => {
   return (
     <PnLDetailsBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-        Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia
-        consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
+        Cashflow from Swaps + Fees
       </Typography>
       <RowsBox>
+        <RowBox>
+          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+            Cashflow
+          </Typography>
+          <TokenTypography
+            colorToken="lavenderWeb"
+            token={` ${underlyingTokenName.toUpperCase()}`}
+            typographyToken="primaryBodySmallRegular"
+            value={pnlFromSwaps}
+          />
+        </RowBox>
         <RowBox>
           <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
             Fees
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            token=" USDC"
+            token={` ${underlyingTokenName.toUpperCase()}`}
             typographyToken="primaryBodySmallRegular"
-            value="100k"
-          />
-        </RowBox>
-        <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-            Margin
-          </Typography>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            token=" USDC"
-            typographyToken="primaryBodySmallRegular"
-            value="1k"
-          />
-        </RowBox>
-        <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-            Maturity
-          </Typography>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            token=""
-            typographyToken="primaryBodySmallRegular"
-            value="03 May 2023"
+            value={pnlFromFees}
           />
         </RowBox>
       </RowsBox>

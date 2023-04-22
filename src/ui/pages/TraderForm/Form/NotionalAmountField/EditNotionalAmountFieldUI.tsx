@@ -2,10 +2,10 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { FormNumberLimits } from '../../../../../app/features/common-form';
 import {
   selectAvailableNotional,
   selectUserInputNotionalInfo,
-  SwapFormNumberLimits,
 } from '../../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
@@ -52,11 +52,11 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         bottomRightTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={formatNumber(notionalAvailable)}
-        decimalsLimit={SwapFormNumberLimits.decimalLimit}
+        decimalsLimit={FormNumberLimits.decimalLimit}
         error={notionalAmount.error !== null}
         label="Notional Amount"
         labelTypographyToken={labelTypographyToken}
-        maxLength={SwapFormNumberLimits.digitLimit}
+        maxLength={FormNumberLimits.digitLimit}
         switchOffText={'Remove'}
         switchOffValue={'remove'}
         switchOnText={'Add'}

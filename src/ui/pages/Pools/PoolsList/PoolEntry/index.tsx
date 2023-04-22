@@ -30,6 +30,7 @@ type PoolEntryProps = {
   variableRateFormatted: string;
   aMMMaturity: string;
   backgroundColorToken: ColorTokens;
+  borderColorToken: ColorTokens | 'transparent';
   routeAmmId: string;
   routePoolId: string;
 };
@@ -49,6 +50,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
       routePoolId,
       routeAmmId,
       isV2,
+      borderColorToken,
     },
     ref,
   ) => {
@@ -59,7 +61,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
       ? 'secondaryBodyLargeRegular'
       : 'secondaryBodyMediumRegular';
 
-    const handleOnMakeClick = () => {
+    const handleOnLPClick = () => {
       const path = generatePath(routes.LP_FORM, {
         form: 'liquidity',
         ammId: routeAmmId,
@@ -78,7 +80,11 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     };
 
     return (
-      <PoolEntryBox ref={ref} backgroundColorToken={backgroundColorToken}>
+      <PoolEntryBox
+        ref={ref}
+        backgroundColorToken={backgroundColorToken}
+        borderColorToken={borderColorToken}
+      >
         <LeftBox>
           <MarketTokenInformation
             colorToken="lavenderWeb"
@@ -131,7 +137,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
           <ButtonStyled
             typographyToken="primaryBodySmallBold"
             variant="secondary"
-            onClick={handleOnMakeClick}
+            onClick={handleOnLPClick}
           >
             LP
           </ButtonStyled>

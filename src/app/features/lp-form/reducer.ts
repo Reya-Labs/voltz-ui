@@ -4,26 +4,25 @@ import { ContractReceipt } from 'ethers';
 
 import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../utilities/number';
 import {
+  checkLowLeverageNotification,
+  formLimitAndFormatNumber,
+  isUserInputMarginError,
+} from '../common-form/utils';
+import {
   approveUnderlyingTokenThunk,
   confirmLpThunk,
   confirmMarginUpdateThunk,
-  getFixedRateThunk,
   getInfoPostLpThunk,
   getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
-  getVariableRate24hAgoThunk,
-  getVariableRateThunk,
   getWalletBalanceThunk,
   setSignerAndPositionsForAMMThunk,
   SetSignerAndPositionsForAMMThunkSuccess,
 } from './thunks';
 import {
-  checkLowLeverageNotification,
   getProspectiveLpMargin,
   getProspectiveLpNotional,
   hasExistingPosition,
-  isUserInputMarginError,
-  lpFormLimitAndFormatNumber,
   resetNotionalAndMarginEditMode,
   updateLeverage,
   updateSelectedPosition,
@@ -60,18 +59,6 @@ export type SliceState = {
     status: ThunkStatus;
   };
   walletTokenAllowance: {
-    value: number;
-    status: ThunkStatus;
-  };
-  fixedRate: {
-    value: number;
-    status: ThunkStatus;
-  };
-  variableRate: {
-    value: number;
-    status: ThunkStatus;
-  };
-  variableRate24hAgo: {
     value: number;
     status: ThunkStatus;
   };
@@ -163,18 +150,6 @@ const initialState: SliceState = {
     status: 'idle',
   },
   walletTokenAllowance: {
-    value: 0,
-    status: 'idle',
-  },
-  fixedRate: {
-    value: 0,
-    status: 'idle',
-  },
-  variableRate: {
-    value: 0,
-    status: 'idle',
-  },
-  variableRate24hAgo: {
     value: 0,
     status: 'idle',
   },
@@ -366,7 +341,6 @@ const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void 
 
   if (
     !isUserInputMarginError(state) &&
-    !isUserInputMarginError(state) &&
     isProspectiveLpNotionalValid &&
     isProspectiveLpMarginValid &&
     isProspectiveLpNotionalMarginValid &&
@@ -531,7 +505,7 @@ const slice = createSlice({
 
       state.userInput.leverage = value;
       state.userInput.marginAmount.value = stringToBigFloat(
-        lpFormLimitAndFormatNumber(getProspectiveLpNotional(state) / value, 'ceil'),
+        formLimitAndFormatNumber(getProspectiveLpNotional(state) / value, 'ceil'),
       );
 
       validateUserInputAndUpdateSubmitButton(state);
@@ -614,60 +588,6 @@ const slice = createSlice({
           status: 'success',
         };
         validateUserInputAndUpdateSubmitButton(state);
-      })
-      .addCase(getFixedRateThunk.pending, (state) => {
-        state.fixedRate = {
-          value: 0,
-          status: 'pending',
-        };
-      })
-      .addCase(getFixedRateThunk.rejected, (state) => {
-        state.fixedRate = {
-          value: 0,
-          status: 'error',
-        };
-      })
-      .addCase(getFixedRateThunk.fulfilled, (state, { payload }) => {
-        state.fixedRate = {
-          value: payload as number,
-          status: 'success',
-        };
-      })
-      .addCase(getVariableRateThunk.pending, (state) => {
-        state.variableRate = {
-          value: 0,
-          status: 'pending',
-        };
-      })
-      .addCase(getVariableRateThunk.rejected, (state) => {
-        state.variableRate = {
-          value: 0,
-          status: 'error',
-        };
-      })
-      .addCase(getVariableRateThunk.fulfilled, (state, { payload }) => {
-        state.variableRate = {
-          value: payload as number,
-          status: 'success',
-        };
-      })
-      .addCase(getVariableRate24hAgoThunk.pending, (state) => {
-        state.variableRate24hAgo = {
-          value: 0,
-          status: 'pending',
-        };
-      })
-      .addCase(getVariableRate24hAgoThunk.rejected, (state) => {
-        state.variableRate24hAgo = {
-          value: 0,
-          status: 'error',
-        };
-      })
-      .addCase(getVariableRate24hAgoThunk.fulfilled, (state, { payload }) => {
-        state.variableRate24hAgo = {
-          value: payload as number,
-          status: 'success',
-        };
       })
       .addCase(getPoolLpInfoThunk.pending, (state) => {
         state.poolLpInfo = {

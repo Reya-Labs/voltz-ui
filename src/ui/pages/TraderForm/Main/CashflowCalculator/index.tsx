@@ -64,11 +64,11 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
   }, [estimatedApy]);
 
   useEffect(() => {
-    if (variableRateInfo.status !== 'success') {
+    if (variableRateInfo === undefined) {
       return;
     }
-    debouncedChangePredictedApy(parseFloat(variableRateInfo.value.toFixed(2)));
-  }, [variableRateInfo.status]);
+    debouncedChangePredictedApy(parseFloat(variableRateInfo.toFixed(2)));
+  }, [variableRateInfo]);
 
   useEffect(() => {
     if (!aMM || infoPostSwap.status !== 'success') {

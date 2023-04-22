@@ -1,8 +1,8 @@
 import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { FormNumberLimits } from '../../../../../app/features/common-form';
 import {
-  LpFormNumberLimits,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
   selectMarginRequirementFormatted,
@@ -49,11 +49,11 @@ export const NewMarginAmountFieldUI: React.FunctionComponent<NewMarginAmountFiel
         bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={marginRequirementFormatted}
-        decimalsLimit={LpFormNumberLimits.decimalLimit}
+        decimalsLimit={FormNumberLimits.decimalLimit}
         error={isMarginRequiredError || isWalletMarginError}
         label="Chosen Margin"
         labelTypographyToken={labelTypographyToken}
-        maxLength={LpFormNumberLimits.digitLimit}
+        maxLength={FormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="The protocol requires every LP position to have enough margin to support trades against their liquidity. Adding more than the minimum reduces liquidation risk."
         topRightText={`Wallet: ${`${walletBalance} ${underlyingTokenName.toUpperCase()}`}`}

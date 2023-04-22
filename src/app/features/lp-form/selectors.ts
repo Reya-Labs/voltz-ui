@@ -4,21 +4,24 @@ import { formatTimestamp } from '../../../utilities/date';
 import { formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 import {
+  formCompactFormat,
+  formCompactFormatToParts,
+  formFormatNumber,
+  formLimitAndFormatNumber,
+} from '../common-form/utils';
+import {
   getAvailableMargin,
   getEditPositionNotional,
   getProspectiveLpMargin,
   getProspectiveLpNotional,
+  getRealizedPnLFromSwaps,
   getSelectedPositionNotional,
   hasExistingPosition,
-  lpFormCompactFormat,
-  lpFormCompactFormatToParts,
-  lpFormLimitAndFormatNumber,
 } from './utils';
 
 // ------------ General Lp Form State Info ------------
 export const selectSubmitButtonInfo = (state: RootState) => state.lpForm.submitButton;
 export const selectLpFormAMM = (state: RootState) => state.lpForm.amm;
-export const selectLpFormPositions = (state: RootState) => state.lpForm.positions.value;
 export const selectLpFormPositionsFetchingStatus = (state: RootState) =>
   state.lpForm.positions.status;
 export const selectWalletBalance = (state: RootState) => {
@@ -26,7 +29,7 @@ export const selectWalletBalance = (state: RootState) => {
     return '--';
   }
 
-  return lpFormCompactFormat(state.lpForm.walletBalance.value);
+  return formCompactFormat(state.lpForm.walletBalance.value);
 };
 export const selectPoolLpInfoStatus = (state: RootState) => state.lpForm.poolLpInfo.status;
 export const selectLpFormMode = (state: RootState): 'new' | 'edit' => {
@@ -68,13 +71,13 @@ export const selectUserInputMarginInfo = (state: RootState) => state.lpForm.user
 
 // ------------ Prospective Lp ------------
 export const selectProspectiveLpNotionalFormatted = (state: RootState) => {
-  return lpFormCompactFormat(getProspectiveLpNotional(state.lpForm));
+  return formCompactFormat(getProspectiveLpNotional(state.lpForm));
 };
 export const selectProspectiveLpMarginFormatted = (state: RootState) => {
   if (state.lpForm.userInput.marginAmount.editMode === 'add') {
-    return lpFormCompactFormat(getProspectiveLpMargin(state.lpForm));
+    return formCompactFormat(getProspectiveLpMargin(state.lpForm));
   }
-  return lpFormCompactFormat(getProspectiveLpMargin(state.lpForm));
+  return formCompactFormat(getProspectiveLpMargin(state.lpForm));
 };
 
 export const selectLeverage = (state: RootState) => state.lpForm.userInput.leverage;
@@ -96,11 +99,11 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
     if (margin === null) {
       return null;
     }
-    return lpFormLimitAndFormatNumber(margin, 'floor');
+    return formLimitAndFormatNumber(margin, 'floor');
   }
 
   if (lpFormState.prospectiveLp.infoPostLp.status === 'success') {
-    return lpFormLimitAndFormatNumber(
+    return formLimitAndFormatNumber(
       lpFormState.prospectiveLp.infoPostLp.value.marginRequirement,
       'ceil',
     );
@@ -112,7 +115,7 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.lpForm.userInput.notionalAmount.error) return null;
 
-  const compactParts = lpFormCompactFormatToParts(getProspectiveLpNotional(state.lpForm));
+  const compactParts = formCompactFormatToParts(getProspectiveLpNotional(state.lpForm));
 
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
@@ -125,11 +128,38 @@ export const selectExistingPositionCompactNotional = (state: RootState) => {
     return null;
   }
 
-  const compactParts = lpFormCompactFormatToParts(state.lpForm.selectedPosition.notional);
+  const compactParts = formCompactFormatToParts(state.lpForm.selectedPosition.notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
   };
+};
+
+export const selectEditLpPositionRealizedPnLTotalFormatted = (state: RootState) => {
+  let realizedPnLTotal = null;
+  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.lpForm);
+
+  if (state.lpForm.selectedPosition !== null && realizedPnLFromSwaps !== null) {
+    const realizedPnLFromFees = state.lpForm.selectedPosition.fees;
+    realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
+  }
+
+  return realizedPnLTotal === null ? '--' : formFormatNumber(realizedPnLTotal);
+};
+
+export const selectEditLpPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
+  let realizedPnLFromFees = null;
+
+  if (state.lpForm.selectedPosition !== null) {
+    realizedPnLFromFees = state.lpForm.selectedPosition.fees;
+  }
+
+  return realizedPnLFromFees === null ? '--' : formFormatNumber(realizedPnLFromFees);
+};
+
+export const selectEditLpPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
+  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.lpForm);
+  return realizedPnLFromSwaps === null ? '--' : formFormatNumber(realizedPnLFromSwaps);
 };
 
 export const selectExistingPositionFixedLower = (state: RootState) => {
@@ -150,7 +180,7 @@ export const selectExistingPositionFixedUpper = (state: RootState) => {
 export const selectSelectedPositionCompactNotional = (state: RootState) => {
   const notional = getSelectedPositionNotional(state.lpForm);
 
-  const compactParts = lpFormCompactFormatToParts(notional);
+  const compactParts = formCompactFormatToParts(notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -160,7 +190,7 @@ export const selectSelectedPositionCompactNotional = (state: RootState) => {
 export const selectEditPositionCompactNotional = (state: RootState) => {
   const notional = getEditPositionNotional(state.lpForm);
 
-  const compactParts = lpFormCompactFormatToParts(notional);
+  const compactParts = formCompactFormatToParts(notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -195,12 +225,12 @@ export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState
 
 // ------------ Variable Rate Delta ------------
 export const selectVariableRate24hDelta = (state: RootState) => {
-  return state.lpForm.variableRate24hAgo.status === 'success' &&
-    state.lpForm.variableRate.status === 'success'
-    ? stringToBigFloat(
-        formatNumber(state.lpForm.variableRate.value - state.lpForm.variableRate24hAgo.value, 0, 3),
-      )
-    : undefined;
+  if (!state.lpForm.amm) {
+    return undefined;
+  }
+  return stringToBigFloat(
+    formatNumber(state.lpForm.amm.variableApy - state.lpForm.amm.variableApy24Ago, 0, 3),
+  );
 };
 
 // ------------ Submit button text ------------
@@ -263,21 +293,17 @@ export const selectPositionMarginFormatted = (state: RootState) => {
   if (!state.lpForm.selectedPosition) {
     return '--';
   }
-  return lpFormCompactFormat(state.lpForm.selectedPosition.margin);
+  return formCompactFormat(state.lpForm.selectedPosition.margin);
 };
-export const selectFixedRateInfo = (state: RootState) => state.lpForm.fixedRate;
-export const selectVariableRateInfo = (state: RootState) => state.lpForm.variableRate;
+export const selectFixedRateInfo = (state: RootState) => state.lpForm.amm?.fixedApr;
+export const selectVariableRateInfo = (state: RootState) => state.lpForm.amm?.variableApy;
 
 export const selectFixedRateValueFormatted = (state: RootState) => {
-  return state.lpForm.fixedRate.status !== 'success'
-    ? '--'
-    : formatNumber(state.lpForm.fixedRate.value);
+  return !state.lpForm.amm ? '--' : formatNumber(state.lpForm.amm.fixedApr);
 };
 
 export const selectVariableRateValueFormatted = (state: RootState) => {
-  return state.lpForm.variableRate.status !== 'success'
-    ? '--'
-    : formatNumber(state.lpForm.variableRate.value);
+  return !state.lpForm.amm ? '--' : formatNumber(state.lpForm.amm.variableApy);
 };
 
 export const selectUserInputFixedLower = (state: RootState) => {

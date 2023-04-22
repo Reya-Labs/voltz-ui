@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import { getColorFromToken, Skeleton } from 'brokoli-ui';
+import FlipMove from 'react-flip-move';
 
-export const PoolsListBox = styled('div')`
+export const PoolsListBox = styled(FlipMove)`
   display: flex;
   flex-direction: column;
   gap: 8px;

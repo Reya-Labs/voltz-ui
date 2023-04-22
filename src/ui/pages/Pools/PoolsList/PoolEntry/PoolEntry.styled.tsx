@@ -2,9 +2,10 @@ import styled from '@emotion/styled';
 import { Button, ColorTokens, getColorFromToken } from 'brokoli-ui';
 
 export const PoolEntryBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'backgroundColorToken',
+  shouldForwardProp: (prop) => prop !== 'backgroundColorToken' && prop !== 'borderColorToken',
 })<{
   backgroundColorToken: ColorTokens;
+  borderColorToken: ColorTokens | 'transparent';
 }>`
   box-sizing: border-box;
   display: flex;
@@ -12,6 +13,9 @@ export const PoolEntryBox = styled('div', {
   align-items: center;
   padding: 10px 8px;
   background-color: ${({ backgroundColorToken }) => getColorFromToken(backgroundColorToken)};
+  border: 1px solid
+    ${({ borderColorToken }) =>
+      borderColorToken !== 'transparent' ? getColorFromToken(borderColorToken) : 'transparent'};
   border-radius: 8px;
 `;
 

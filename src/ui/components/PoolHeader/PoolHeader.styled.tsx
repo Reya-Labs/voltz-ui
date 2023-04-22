@@ -3,7 +3,6 @@ import { colors } from 'brokoli-ui';
 
 export const PoolHeaderBox = styled('div')`
   box-sizing: border-box;
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   align-items: center;
