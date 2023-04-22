@@ -131,6 +131,8 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 positionType={pos.positionType}
                 rolloverAvailable={rolloverAvailable}
                 settlementCashflowInUSD={pos.settlementCashflowInUSD}
+                underlyingTokenName={pos.amm.underlyingToken.name || ''}
+                unrealizedPnL={pos.unrealizedPnLFromSwaps}
                 onRollover={() => handleSelectRow(index, 'rollover')}
                 onSelect={
                   closeToMaturity
@@ -146,8 +148,6 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                       }
                 }
                 onSettle={() => onSettle(pos)}
-                unrealizedPnL={pos.unrealizedPnLFromSwaps}
-                underlyingTokenName={pos.amm.underlyingToken.name || ''}
               />
 
               <TableContainer
