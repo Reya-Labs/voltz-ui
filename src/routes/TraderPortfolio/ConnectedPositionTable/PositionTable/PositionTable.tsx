@@ -146,6 +146,8 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                       }
                 }
                 onSettle={() => onSettle(pos)}
+                unrealizedPnL={pos.unrealizedPnLFromSwaps}
+                underlyingTokenName={pos.amm.underlyingToken.name || ''}
               />
 
               <TableContainer

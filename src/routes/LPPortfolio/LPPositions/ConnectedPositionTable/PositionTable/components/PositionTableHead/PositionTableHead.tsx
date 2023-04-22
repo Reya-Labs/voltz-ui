@@ -96,7 +96,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
       <ActionsBox>
         
 
-        {beforeMaturity === true && (
+        {beforeMaturity && (
           <>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <FeesTypography>
