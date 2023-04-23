@@ -1,3 +1,4 @@
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import { CurrencyField, LabelTokenTypography, Typography, TypographyToken } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -5,15 +6,15 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   getExpectedCashflowInfoThunk,
   selectAdditionalCashflow,
-  selectAMMTokenFormatted,
+  selectCashflowAMM,
+  selectCashflowAMMTokenFormatted,
   selectCashflowInfoStatus,
   selectEstimatedApy,
-  selectInfoPostSwap,
-  selectSwapFormAMM,
   selectTotalCashflow,
   selectVariableRateInfo,
+  setCashflowAMMAction,
   setEstimatedApyAction,
-} from '../../../app/features/swap-form';
+} from '../../../app/features/cashflow-calculator';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import { useWallet } from '../../../hooks/useWallet';
@@ -27,14 +28,25 @@ import {
   TotalCashFlowBox,
 } from './CashflowCalculator.styled';
 
-type CashFlowCalculatorProps = {};
+type CashFlowCalculatorProps = {
+  position: Position | null;
+  aMM: AMM;
+  averageFixedRate: number | null;
+  variableTokenDeltaBalance: number | null;
+  mode: 'fixed' | 'variable';
+};
 
-export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps> = () => {
+export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps> = ({
+  aMM,
+  position,
+  averageFixedRate,
+  variableTokenDeltaBalance,
+  mode,
+}) => {
   const dispatch = useAppDispatch();
-  const aMM = useAppSelector(selectSwapFormAMM);
-  const token = useAppSelector(selectAMMTokenFormatted);
+  const cashflowAMM = useAppSelector(selectCashflowAMM);
+  const token = useAppSelector(selectCashflowAMMTokenFormatted);
   const { isLargeDesktopDevice } = useResponsiveQuery();
-  const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const estimatedApy = useAppSelector(selectEstimatedApy);
   const { account } = useWallet();
@@ -53,11 +65,20 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
           setEstimatedApyAction({
             value,
             account: account || '',
+            mode,
           }),
         );
       }, 300),
-    [dispatch, account],
+    [dispatch, mode, account],
   );
+
+  useEffect(() => {
+    dispatch(
+      setCashflowAMMAction({
+        amm: aMM,
+      }),
+    );
+  }, [dispatch, aMM]);
 
   useEffect(() => {
     setLocalEstimatedApy(estimatedApy.toString());
@@ -68,14 +89,23 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
       return;
     }
     debouncedChangePredictedApy(parseFloat(variableRateInfo.toFixed(2)));
-  }, [variableRateInfo]);
+  }, [debouncedChangePredictedApy, variableRateInfo]);
 
   useEffect(() => {
-    if (!aMM || infoPostSwap.status !== 'success') {
+    if (!cashflowAMM) {
       return;
     }
-    void dispatch(getExpectedCashflowInfoThunk());
-  }, [dispatch, aMM, infoPostSwap.status, infoPostSwap.value.variableTokenDeltaBalance]);
+    if (averageFixedRate === null || variableTokenDeltaBalance === null) {
+      return;
+    }
+    void dispatch(
+      getExpectedCashflowInfoThunk({
+        position,
+        averageFixedRate,
+        variableTokenDeltaBalance,
+      }),
+    );
+  }, [dispatch, cashflowAMM, position, averageFixedRate, variableTokenDeltaBalance]);
 
   const handleOnChange = useCallback(
     (value?: string) => {
@@ -95,7 +125,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
     };
   }, []);
 
-  if (!aMM) {
+  if (!cashflowAMM) {
     return null;
   }
 

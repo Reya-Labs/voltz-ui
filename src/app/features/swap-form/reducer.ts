@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, ExpectedCashflowInfo, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
+import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../utilities/amm';
@@ -9,12 +9,11 @@ import {
   formLimitAndFormatNumber,
   isUserInputMarginError,
 } from '../common-form/utils';
-import { pushEstimatedApyChangeEvent, pushLeverageChangeEvent } from './analytics';
+import { pushLeverageChangeEvent } from './analytics';
 import {
   approveUnderlyingTokenThunk,
   confirmMarginUpdateThunk,
   confirmSwapThunk,
-  getExpectedCashflowInfoThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
@@ -84,7 +83,6 @@ export type SliceState = {
       error: string | null;
     };
     leverage: number | null;
-    estimatedApy: number;
   };
   // State of prospective swap
   prospectiveSwap: {
@@ -112,14 +110,6 @@ export type SliceState = {
         slippage: number;
         gasFeeETH: number;
       };
-      status: ThunkStatus;
-    };
-    cashflowInfo: {
-      averageFixedRate: number;
-      accruedCashflowExistingPosition: number;
-      accruedCashflowEditPosition: number;
-      estimatedAdditionalCashflow: (estimatedApy: number) => number;
-      estimatedTotalCashflow: (estimatedApy: number) => number;
       status: ThunkStatus;
     };
   };
@@ -186,7 +176,6 @@ const initialState: SliceState = {
       error: null,
     },
     leverage: null,
-    estimatedApy: 0,
   },
   prospectiveSwap: {
     leverage: {
@@ -205,14 +194,6 @@ const initialState: SliceState = {
         slippage: 0,
         gasFeeETH: 0,
       },
-      status: 'idle',
-    },
-    cashflowInfo: {
-      averageFixedRate: 0,
-      accruedCashflowExistingPosition: 0,
-      accruedCashflowEditPosition: 0,
-      estimatedAdditionalCashflow: () => 0,
-      estimatedTotalCashflow: () => 0,
       status: 'idle',
     },
   },
@@ -536,25 +517,6 @@ const slice = createSlice({
       validateUserInputAndUpdateSubmitButton(state);
       state.showLowLeverageNotification = checkLowLeverageNotification(state);
     },
-    setEstimatedApyAction: (
-      state,
-      {
-        payload: { value, account },
-      }: PayloadAction<{
-        value: number;
-        account: string;
-      }>,
-    ) => {
-      if (!isNaN(value)) {
-        pushEstimatedApyChangeEvent({
-          estimatedApy: value,
-          account,
-          pool: getAmmProtocol(state.amm as AMM),
-          isFT: getProspectiveSwapMode(state) === 'fixed',
-        });
-      }
-      state.userInput.estimatedApy = value;
-    },
     setSwapFormAMMAction: (
       state,
       {
@@ -829,23 +791,6 @@ const slice = createSlice({
           error: null,
           txHash: (payload as ContractReceipt).transactionHash,
         };
-      })
-      .addCase(getExpectedCashflowInfoThunk.pending, (state) => {
-        state.prospectiveSwap.cashflowInfo.status = 'pending';
-      })
-      .addCase(getExpectedCashflowInfoThunk.rejected, (state, {}) => {
-        state.prospectiveSwap.cashflowInfo.status = 'error';
-      })
-      .addCase(getExpectedCashflowInfoThunk.fulfilled, (state, { payload }) => {
-        const expectedCashflowInfo = payload as ExpectedCashflowInfo;
-        state.prospectiveSwap.cashflowInfo = {
-          averageFixedRate: expectedCashflowInfo.averageFixedRate,
-          accruedCashflowExistingPosition: expectedCashflowInfo.accruedCashflowExistingPosition,
-          accruedCashflowEditPosition: expectedCashflowInfo.accruedCashflowEditPosition,
-          estimatedAdditionalCashflow: expectedCashflowInfo.estimatedAdditionalCashflow,
-          estimatedTotalCashflow: expectedCashflowInfo.estimatedTotalCashflow,
-          status: 'success',
-        };
       });
   },
 });
@@ -856,7 +801,6 @@ export const {
   setNotionalAmountAction,
   setMarginAmountAction,
   setLeverageAction,
-  setEstimatedApyAction,
   openSwapConfirmationFlowAction,
   closeSwapConfirmationFlowAction,
   openMarginUpdateConfirmationFlowAction,

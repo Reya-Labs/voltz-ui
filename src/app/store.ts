@@ -3,6 +3,7 @@ import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 
 import { aMMsReducer } from './features/aMMs';
+import { cashflowCalculatorReducer } from './features/cashflow-calculator';
 import { historicalRatesReducer } from './features/historical-rates';
 import { lpFormReducer } from './features/lp-form';
 import { lpOptimisersReducer } from './features/lp-optimisers';
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   historicalRates: historicalRatesReducer,
   tradingLeague: tradingLeagueReducer,
   lpForm: lpFormReducer,
+  cashflowCalculator: cashflowCalculatorReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

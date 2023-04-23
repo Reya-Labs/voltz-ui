@@ -8,17 +8,14 @@ import {
   formLimitAndFormatNumber,
 } from '../common-form/utils';
 import {
-  selectAdditionalCashflow,
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
   selectAvailableNotional,
   selectBottomRightMarginNumber,
-  selectCashflowInfoStatus,
   selectEditPositionCompactNotional,
   selectEditPositionMode,
   selectEditPositionPayingRateFormatted,
   selectEditPositionReceivingRateFormatted,
-  selectEstimatedApy,
   selectExistingPositionCompactNotional,
   selectExistingPositionMode,
   selectExistingPositionPayingRateFormatted,
@@ -56,7 +53,6 @@ import {
   selectSwapFormMode,
   selectSwapFormPosition,
   selectSwapFormPositionFetchingStatus,
-  selectTotalCashflow,
   selectUserInputMarginInfo,
   selectUserInputMode,
   selectUserInputNotionalInfo,
@@ -1259,6 +1255,7 @@ describe('swap-form.selectors', () => {
   describe('selectEditPositionReceivingRateFormatted', () => {
     const state = {
       swapForm: jest.fn(),
+      cashflowCalculator: jest.fn(),
     };
     beforeEach(() => {
       // Clear mock call history after each test
@@ -1273,7 +1270,10 @@ describe('swap-form.selectors', () => {
       const result = selectEditPositionReceivingRateFormatted(state as never);
 
       expect(getEditPositionMode).toHaveBeenCalledWith(state.swapForm);
-      expect(getEditPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
+      expect(getEditPositionFixedRate).toHaveBeenCalledWith(
+        state.cashflowCalculator,
+        state.swapForm,
+      );
       expect(formFormatNumber).toHaveBeenCalledWith(1.5);
       expect(result).toEqual('1.50');
     });
@@ -1298,7 +1298,10 @@ describe('swap-form.selectors', () => {
       const result = selectEditPositionReceivingRateFormatted(state as never);
 
       expect(getEditPositionMode).toHaveBeenCalledWith(state.swapForm);
-      expect(getEditPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
+      expect(getEditPositionFixedRate).toHaveBeenCalledWith(
+        state.cashflowCalculator,
+        state.swapForm,
+      );
       expect(result).toEqual('--');
     });
   });
@@ -1306,6 +1309,7 @@ describe('swap-form.selectors', () => {
   describe('selectEditPositionPayingRateFormatted', () => {
     const state = {
       swapForm: jest.fn(),
+      cashflowCalculator: jest.fn(),
     };
     beforeEach(() => {
       // Clear mock call history after each test
@@ -1333,7 +1337,10 @@ describe('swap-form.selectors', () => {
       const result = selectEditPositionPayingRateFormatted(state as never);
 
       expect(getEditPositionMode).toHaveBeenCalledWith(state.swapForm);
-      expect(getEditPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
+      expect(getEditPositionFixedRate).toHaveBeenCalledWith(
+        state.cashflowCalculator,
+        state.swapForm,
+      );
       expect(formFormatNumber).toHaveBeenCalledWith(1.2);
       expect(result).toEqual('1.20');
     });
@@ -1373,127 +1380,6 @@ describe('swap-form.selectors', () => {
         compactNotionalSuffix: 'ETH',
         compactNotionalNumber: '1',
       });
-    });
-  });
-
-  describe('selectEstimatedApy', () => {
-    it('should return the estimated APY value from the state', () => {
-      const mockState = {
-        swapForm: {
-          userInput: {
-            estimatedApy: 0.05,
-          },
-          prospectiveSwap: {
-            cashflowInfo: {
-              status: 'success',
-            },
-          },
-        },
-      };
-      const result = selectEstimatedApy(mockState as never);
-      expect(result).toEqual(0.05);
-    });
-  });
-
-  describe('selectCashflowInfoStatus', () => {
-    it('should return the estimated APY value from the state', () => {
-      const mockState = {
-        swapForm: {
-          userInput: {
-            estimatedApy: 0.05,
-          },
-          prospectiveSwap: {
-            cashflowInfo: {
-              status: 'success',
-            },
-          },
-        },
-      };
-      const result = selectCashflowInfoStatus(mockState as never);
-      expect(result).toEqual('success');
-    });
-  });
-
-  describe('selectAdditionalCashflow', () => {
-    it('should return null if cashflowInfo status is not success', () => {
-      const mockState = {
-        swapForm: {
-          userInput: {
-            estimatedApy: 0.05,
-          },
-          prospectiveSwap: {
-            cashflowInfo: {
-              status: 'pending',
-              estimatedAdditionalCashflow: jest.fn(),
-            },
-          },
-        },
-      };
-      const result = selectAdditionalCashflow(mockState as never);
-      expect(result).toBeNull();
-    });
-
-    it('should call estimatedAdditionalCashflow with the estimatedApy value from userInput', () => {
-      const mockState = {
-        swapForm: {
-          userInput: {
-            estimatedApy: 0.05,
-          },
-          prospectiveSwap: {
-            cashflowInfo: {
-              status: 'success',
-              estimatedAdditionalCashflow: jest.fn().mockReturnValue(1234.56),
-            },
-          },
-        },
-      };
-      const result = selectAdditionalCashflow(mockState as never);
-      expect(
-        mockState.swapForm.prospectiveSwap.cashflowInfo.estimatedAdditionalCashflow,
-      ).toHaveBeenCalledWith(0.05);
-      expect(result).toEqual(1234.56);
-    });
-  });
-
-  describe('selectTotalCashflow', () => {
-    it('should return null if cashflowInfo status is not success', () => {
-      const mockState = {
-        swapForm: {
-          userInput: {
-            estimatedApy: 0.05,
-          },
-          prospectiveSwap: {
-            cashflowInfo: {
-              status: 'pending',
-              estimatedTotalCashflow: jest.fn(),
-            },
-          },
-        },
-      };
-      const result = selectTotalCashflow(mockState as never);
-      expect(result).toBeNull();
-    });
-
-    it('should call estimatedTotalCashflow with the estimatedApy value from userInput', () => {
-      const mockState = {
-        swapForm: {
-          userInput: {
-            estimatedApy: 0.05,
-          },
-          prospectiveSwap: {
-            cashflowInfo: {
-              status: 'success',
-              estimatedTotalCashflow: jest.fn().mockReturnValue(5678.9),
-            },
-          },
-        },
-      };
-
-      const result = selectTotalCashflow(mockState as never);
-      expect(
-        mockState.swapForm.prospectiveSwap.cashflowInfo.estimatedTotalCashflow,
-      ).toHaveBeenCalledWith(0.05);
-      expect(result).toEqual(5678.9);
     });
   });
 
