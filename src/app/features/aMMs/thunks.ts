@@ -2,18 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getAMMs, getChainLevelInformation, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { getAlchemyKeyForChain } from '../../../utilities/network/get-alchemy-key-for-chain';
-
-const rejectThunkWithError = (
-  thunkAPI: {
-    rejectWithValue: (value: string | undefined) => unknown;
-  },
-  err: unknown,
-) => {
-  if (typeof err === 'string') {
-    return thunkAPI.rejectWithValue(err);
-  }
-  return thunkAPI.rejectWithValue((err as Error)?.message);
-};
+import { rejectThunkWithError } from '../helpers/reject-thunk-with-error';
 
 export const initialiseAMMsThunk = createAsyncThunk<
   Awaited<ReturnType<typeof getAMMs> | ReturnType<typeof rejectThunkWithError>>,

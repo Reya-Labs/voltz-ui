@@ -4,18 +4,7 @@ import { providers } from 'ethers';
 
 import { Season } from '../../../hooks/season/types';
 import { getCommunitySbt } from '../../../ui/pages/Profile/helpers';
-
-const rejectThunkWithError = (
-  thunkAPI: {
-    rejectWithValue: (value: string | undefined) => unknown;
-  },
-  err: unknown,
-) => {
-  if (typeof err === 'string') {
-    return thunkAPI.rejectWithValue(err);
-  }
-  return thunkAPI.rejectWithValue((err as Error)?.message);
-};
+import { rejectThunkWithError } from '../helpers/reject-thunk-with-error';
 
 export const fetchRankingsThunk = createAsyncThunk<
   Awaited<RankType[] | ReturnType<typeof rejectThunkWithError>>,

@@ -5,6 +5,7 @@ import { ContractReceipt, providers } from 'ethers';
 import { findCurrentPositionsLp } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import { isUserInputNotionalError } from '../common-form/utils';
+import { rejectThunkWithError } from '../helpers/reject-thunk-with-error';
 import {
   getDefaultLpFixedHigh,
   getDefaultLpFixedLow,
@@ -13,18 +14,6 @@ import {
   getProspectiveLpMargin,
   getProspectiveLpNotional,
 } from './utils';
-
-const rejectThunkWithError = (
-  thunkAPI: {
-    rejectWithValue: (value: string | undefined) => unknown;
-  },
-  err: unknown,
-) => {
-  if (typeof err === 'string') {
-    return thunkAPI.rejectWithValue(err);
-  }
-  return thunkAPI.rejectWithValue((err as Error)?.message);
-};
 
 export const getWalletBalanceThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,

@@ -7,18 +7,7 @@ import {
 } from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../store';
-
-const rejectThunkWithError = (
-  thunkAPI: {
-    rejectWithValue: (value: string | undefined) => unknown;
-  },
-  err: unknown,
-) => {
-  if (typeof err === 'string') {
-    return thunkAPI.rejectWithValue(err);
-  }
-  return thunkAPI.rejectWithValue((err as Error)?.message);
-};
+import { rejectThunkWithError } from '../helpers/reject-thunk-with-error';
 
 type FetchHistoricalRatesThunk = {
   chainId: SupportedChainId;
