@@ -6,6 +6,8 @@ import { findCurrentPosition, getAmmProtocol } from '../../../utilities/amm';
 import { isBorrowingPosition } from '../../../utilities/borrowAmm';
 import { RootState } from '../../store';
 import { isUserInputNotionalError } from '../common-form/utils';
+import { extractError } from '../helpers/extract-error';
+import { rejectThunkWithError } from '../helpers/reject-thunk-with-error';
 import {
   pushPageViewEvent,
   pushSwapTransactionFailedEvent,
@@ -18,22 +20,6 @@ import {
   getProspectiveSwapNotional,
   hasExistingPosition,
 } from './utils';
-
-const extractError = (err: unknown): string => {
-  if (typeof err === 'string') {
-    return err;
-  }
-  return (err as Error)?.message;
-};
-
-const rejectThunkWithError = (
-  thunkAPI: {
-    rejectWithValue: (value: string | undefined) => unknown;
-  },
-  err: unknown,
-) => {
-  return thunkAPI.rejectWithValue(extractError(err));
-};
 
 export const getWalletBalanceThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
