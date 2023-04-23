@@ -2,7 +2,11 @@ import React from 'react';
 
 import {
   selectFixedRateInfo,
+  selectInfoPostSwapAverageFixedRate,
+  selectInfoPostSwapVariableTokenDeltaBalance,
+  selectProspectiveSwapMode,
   selectSwapFormAMM,
+  selectSwapFormPosition,
   selectVariableRateInfo,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
@@ -16,6 +20,10 @@ export const Main: React.FunctionComponent = () => {
   const aMM = useAppSelector(selectSwapFormAMM);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
+  const averageFixedRate = useAppSelector(selectInfoPostSwapAverageFixedRate);
+  const variableTokenDeltaBalance = useAppSelector(selectInfoPostSwapVariableTokenDeltaBalance);
+  const position = useAppSelector(selectSwapFormPosition);
+  const mode = useAppSelector(selectProspectiveSwapMode);
   if (!aMM || fixedRateInfo === undefined || variableRateInfo === undefined) {
     return null;
   }
@@ -31,7 +39,13 @@ export const Main: React.FunctionComponent = () => {
       />
       <BottomMainBox>
         <PositionDetails />
-        <CashFlowCalculator />
+        <CashFlowCalculator
+          aMM={aMM}
+          averageFixedRate={averageFixedRate}
+          mode={mode}
+          position={position}
+          variableTokenDeltaBalance={variableTokenDeltaBalance}
+        />
       </BottomMainBox>
     </MainBox>
   );

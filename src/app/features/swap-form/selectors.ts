@@ -106,6 +106,15 @@ export const selectProspectiveSwapFeeFormatted = (state: RootState) => {
 
 export const selectLeverage = (state: RootState) => state.swapForm.userInput.leverage;
 export const selectInfoPostSwap = (state: RootState) => state.swapForm.prospectiveSwap.infoPostSwap;
+export const selectInfoPostSwapAverageFixedRate = (state: RootState) =>
+  state.swapForm.prospectiveSwap.infoPostSwap.status !== 'success'
+    ? null
+    : state.swapForm.prospectiveSwap.infoPostSwap.value.averageFixedRate;
+export const selectInfoPostSwapVariableTokenDeltaBalance = (state: RootState) =>
+  state.swapForm.prospectiveSwap.infoPostSwap.status !== 'success'
+    ? null
+    : state.swapForm.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance;
+
 export const selectIsMarginRequiredError = (state: RootState) => {
   return (
     state.swapForm.userInput.marginAmount.error !== null &&
@@ -198,7 +207,7 @@ export const selectEditPositionMode = (state: RootState) => {
 export const selectEditPositionReceivingRateFormatted = (state: RootState) => {
   const receivingRate =
     getEditPositionMode(state.swapForm) === 'fixed'
-      ? getEditPositionFixedRate(state.swapForm)
+      ? getEditPositionFixedRate(state.cashflowCalculator, state.swapForm)
       : getEditPositionVariableRate(state.swapForm);
 
   return receivingRate === null ? '--' : formFormatNumber(receivingRate);
@@ -238,7 +247,7 @@ export const selectEditPositionPayingRateFormatted = (state: RootState) => {
   const payingRate =
     getEditPositionMode(state.swapForm) === 'fixed'
       ? getEditPositionVariableRate(state.swapForm)
-      : getEditPositionFixedRate(state.swapForm);
+      : getEditPositionFixedRate(state.cashflowCalculator, state.swapForm);
 
   return payingRate === null ? '--' : formFormatNumber(payingRate);
 };
@@ -251,30 +260,6 @@ export const selectEditPositionCompactNotional = (state: RootState) => {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
   };
-};
-
-// ------------ Cashflow Info Selectors ------------
-export const selectEstimatedApy = (state: RootState) => state.swapForm.userInput.estimatedApy;
-export const selectCashflowInfoStatus = (state: RootState) =>
-  state.swapForm.prospectiveSwap.cashflowInfo.status;
-export const selectAdditionalCashflow = (state: RootState) => {
-  if (state.swapForm.prospectiveSwap.cashflowInfo.status !== 'success') {
-    return null;
-  }
-
-  return state.swapForm.prospectiveSwap.cashflowInfo.estimatedAdditionalCashflow(
-    state.swapForm.userInput.estimatedApy,
-  );
-};
-
-export const selectTotalCashflow = (state: RootState) => {
-  if (state.swapForm.prospectiveSwap.cashflowInfo.status !== 'success') {
-    return null;
-  }
-
-  return state.swapForm.prospectiveSwap.cashflowInfo.estimatedTotalCashflow(
-    state.swapForm.userInput.estimatedApy,
-  );
 };
 
 export const selectSlippageFormatted = (state: RootState) => {

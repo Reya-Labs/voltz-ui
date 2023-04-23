@@ -1,15 +1,19 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { SliceState } from '../../reducer';
+import { SliceState as CashflowCalculatorState } from '../../../cashflow-calculator/reducer';
+import { SliceState as SwapFormState } from '../../reducer';
 import { getEditPositionNotional } from '../getEditPositionNotional';
 
-export const getEditPositionFixedRate = (state: Draft<SliceState>) => {
-  if (state.prospectiveSwap.cashflowInfo.status === 'success') {
-    if (getEditPositionNotional(state) === 0) {
+export const getEditPositionFixedRate = (
+  cashflowCalculatorState: Draft<CashflowCalculatorState>,
+  swapFormState: Draft<SwapFormState>,
+) => {
+  if (cashflowCalculatorState.cashflowInfo.status === 'success') {
+    if (getEditPositionNotional(swapFormState) === 0) {
       return null;
     }
 
-    return state.prospectiveSwap.cashflowInfo.averageFixedRate;
+    return cashflowCalculatorState.cashflowInfo.averageFixedRate;
   }
 
   return null;

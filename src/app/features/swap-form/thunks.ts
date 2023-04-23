@@ -1,11 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  ExpectedCashflowInfo,
-  getPositions,
-  InfoPostSwapV1,
-  Position,
-  SupportedChainId,
-} from '@voltz-protocol/v1-sdk';
+import { getPositions, InfoPostSwapV1, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt, providers } from 'ethers';
 
 import { findCurrentPosition, getAmmProtocol } from '../../../utilities/amm';
@@ -296,30 +290,6 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
       fixedLow: 1,
       fixedHigh: 999,
       marginDelta: getProspectiveSwapMargin(swapFormState),
-    });
-  } catch (err) {
-    return rejectThunkWithError(thunkAPI, err);
-  }
-});
-
-export const getExpectedCashflowInfoThunk = createAsyncThunk<
-  Awaited<ExpectedCashflowInfo | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('swapForm/getExpectedCashflowInfo', async (_, thunkAPI) => {
-  try {
-    const swapFormState = thunkAPI.getState().swapForm;
-    const amm = swapFormState.amm;
-    if (!amm) {
-      return;
-    }
-
-    return await amm.getExpectedCashflowInfo({
-      position: swapFormState.position.value ?? undefined,
-      prospectiveSwapAvgFixedRate:
-        swapFormState.prospectiveSwap.infoPostSwap.value.averageFixedRate / 100,
-      prospectiveSwapNotional:
-        swapFormState.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance,
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
