@@ -6,8 +6,8 @@ import {
   selectVariableRateInfo,
 } from '../../../../app/features/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
+import { CashFlowCalculator } from '../../../components/CashflowCalculator';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
-import { CashFlowCalculator } from './CashflowCalculator';
 import { BottomMainBox, MainBox } from './Main.styled';
 import { PoolHeader } from './PoolHeader';
 import { PositionDetails } from './PositionDetails';
