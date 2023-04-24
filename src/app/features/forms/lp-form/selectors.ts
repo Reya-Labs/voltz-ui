@@ -41,6 +41,7 @@ export const selectLpFormSelectedPosition = (state: RootState) => {
   return state.lpForm.selectedPosition;
 };
 
+// todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
   const aMM = selectLpFormAMM(state);
   if (!aMM) {
