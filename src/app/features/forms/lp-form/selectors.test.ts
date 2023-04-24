@@ -5,13 +5,14 @@ import {
   selectLpFormAMM,
   selectLpFormMode,
   selectMarginAccountName,
+  selectProspectiveLpMarginFormatted,
   selectProspectiveLpNotionalFormatted,
   selectSubmitButtonInfo,
   selectUserInputMarginInfo,
   selectUserInputNotionalInfo,
   selectWalletBalance,
 } from '../lp-form';
-import { getProspectiveLpNotional, hasExistingPosition } from './utils';
+import { getProspectiveLpMargin, getProspectiveLpNotional, hasExistingPosition } from './utils';
 
 // Mock common utils
 jest.mock('../common/utils', () => ({
@@ -22,6 +23,7 @@ jest.mock('../common/utils', () => ({
 jest.mock('./utils', () => ({
   hasExistingPosition: jest.fn(),
   getProspectiveLpNotional: jest.fn(),
+  getProspectiveLpMargin: jest.fn(),
 }));
 
 describe('lp-form.selectors', () => {
@@ -322,6 +324,59 @@ describe('lp-form.selectors', () => {
 
       const result = selectProspectiveLpNotionalFormatted(mockState as never);
       expect(result).toBe(mockFormattedNotional);
+    });
+  });
+
+  describe('selectProspectiveLpMarginFormatted', () => {
+    const mockState = {
+      lpForm: {
+        userInput: {
+          marginAmount: {
+            editMode: 'add',
+          },
+        },
+        prospectiveLp: {
+          infoPostLp: {
+            value: {
+              fee: 10,
+            },
+          },
+        },
+      },
+    };
+
+    it('returns formatted prospective swap margin when editMode is not "add"', () => {
+      const prospectiveMargin = 100;
+      const formattedMargin = '100.00';
+      (
+        getProspectiveLpMargin as jest.MockedFunction<typeof getProspectiveLpMargin>
+      ).mockReturnValue(prospectiveMargin);
+      (formCompactFormat as jest.MockedFunction<typeof formCompactFormat>).mockReturnValue(
+        formattedMargin,
+      );
+
+      const result = selectProspectiveLpMarginFormatted(mockState as never);
+
+      expect(result).toEqual(formattedMargin);
+      expect(getProspectiveLpMargin).toHaveBeenCalledWith(mockState.lpForm);
+      expect(formCompactFormat).toHaveBeenCalledWith(prospectiveMargin);
+    });
+
+    it('returns formatted prospective swap margin minus fee when editMode is "add"', () => {
+      const prospectiveMargin = 100;
+      const formattedMargin = '90.00';
+      (
+        getProspectiveLpMargin as jest.MockedFunction<typeof getProspectiveLpMargin>
+      ).mockReturnValue(prospectiveMargin);
+      (formCompactFormat as jest.MockedFunction<typeof formCompactFormat>).mockReturnValue(
+        formattedMargin,
+      );
+
+      const result = selectProspectiveLpMarginFormatted(mockState as never);
+
+      expect(result).toEqual(formattedMargin);
+      expect(getProspectiveLpMargin).toHaveBeenCalledWith(mockState.lpForm);
+      expect(formCompactFormat).toHaveBeenCalledWith(prospectiveMargin);
     });
   });
 });
