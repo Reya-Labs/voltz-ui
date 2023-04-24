@@ -1,9 +1,20 @@
 import { formCompactFormat } from '../common/utils';
-import { selectLpFormAMM, selectSubmitButtonInfo, selectWalletBalance } from '../lp-form';
+import {
+  selectLpFormAMM,
+  selectLpFormMode,
+  selectSubmitButtonInfo,
+  selectWalletBalance,
+} from '../lp-form';
+import { hasExistingPosition } from './utils';
 
 // Mock common utils
 jest.mock('../common/utils', () => ({
   formCompactFormat: jest.fn(),
+}));
+
+// Mock utils
+jest.mock('./utils', () => ({
+  hasExistingPosition: jest.fn(),
 }));
 
 describe('lp-form.selectors', () => {
@@ -111,6 +122,38 @@ describe('lp-form.selectors', () => {
       (formCompactFormat as jest.Mock).mockReturnValue('$1,000');
 
       expect(selectWalletBalance(state)).toEqual('$1,000');
+    });
+  });
+
+  describe('selectLpFormMode', () => {
+    const mockState = {
+      lpForm: {
+        position: {
+          value: {},
+        },
+      },
+    };
+
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('returns "edit" when hasExistingPosition returns true', () => {
+      (hasExistingPosition as jest.Mock).mockReturnValueOnce(true);
+
+      const result = selectLpFormMode(mockState as never);
+
+      expect(hasExistingPosition).toHaveBeenCalledWith(mockState.lpForm);
+      expect(result).toBe('edit');
+    });
+
+    it('returns "new" when hasExistingPosition returns false', () => {
+      (hasExistingPosition as jest.Mock).mockReturnValueOnce(false);
+
+      const result = selectLpFormMode(mockState as never);
+
+      expect(hasExistingPosition).toHaveBeenCalledWith(mockState.lpForm);
+      expect(result).toBe('new');
     });
   });
 });
