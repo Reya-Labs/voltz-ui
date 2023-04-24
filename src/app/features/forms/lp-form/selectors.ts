@@ -24,6 +24,7 @@ export const selectSubmitButtonInfo = (state: RootState) => state.lpForm.submitB
 export const selectLpFormAMM = (state: RootState) => state.lpForm.amm;
 export const selectLpFormPositionsFetchingStatus = (state: RootState) =>
   state.lpForm.positions.status;
+// todo: FB duplicate logic same as swap-form, move to common
 export const selectWalletBalance = (state: RootState) => {
   if (state.lpForm.walletBalance.status !== 'success') {
     return '--';

@@ -1,4 +1,10 @@
-import { selectLpFormAMM, selectSubmitButtonInfo } from '../lp-form';
+import { formCompactFormat } from '../common/utils';
+import { selectLpFormAMM, selectSubmitButtonInfo, selectWalletBalance } from '../lp-form';
+
+// Mock common utils
+jest.mock('../common/utils', () => ({
+  formCompactFormat: jest.fn(),
+}));
 
 describe('lp-form.selectors', () => {
   describe('selectSubmitButtonInfo', () => {
@@ -52,6 +58,59 @@ describe('lp-form.selectors', () => {
         address: '0x123456789abcdef',
         name: 'Test AMM',
       });
+    });
+  });
+
+  describe('selectWalletBalance', () => {
+    beforeEach(() => {
+      // Clear mock call history after each test
+      jest.clearAllMocks();
+    });
+
+    it('returns "--" if wallet balance status is not "success"', () => {
+      const state = {
+        lpForm: {
+          walletBalance: {
+            status: 'failure',
+            value: 0,
+          },
+        },
+      } as never;
+
+      expect(selectWalletBalance(state)).toEqual('--');
+    });
+
+    it('calls formCompactFormat with wallet balance value if status is "success"', () => {
+      const state = {
+        lpForm: {
+          walletBalance: {
+            status: 'success',
+            value: 1000,
+          },
+        },
+      } as never;
+
+      // Call selectWalletBalance function
+      selectWalletBalance(state);
+
+      // Assert that formCompactFormat is called with wallet balance value
+      expect(formCompactFormat).toHaveBeenCalledWith(1000);
+    });
+
+    it('returns formatted wallet balance if status is "success"', () => {
+      const state = {
+        lpForm: {
+          walletBalance: {
+            status: 'success',
+            value: 1000,
+          },
+        },
+      } as never;
+
+      // Mock return value of formCompactFormat
+      (formCompactFormat as jest.Mock).mockReturnValue('$1,000');
+
+      expect(selectWalletBalance(state)).toEqual('$1,000');
     });
   });
 });
