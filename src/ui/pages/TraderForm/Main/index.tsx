@@ -8,7 +8,7 @@ import {
   selectSwapFormAMM,
   selectSwapFormPosition,
   selectVariableRateInfo,
-} from '../../../../app/features/swap-form';
+} from '../../../../app/features/forms/swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { CashFlowCalculator } from '../../../components/CashflowCalculator';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';

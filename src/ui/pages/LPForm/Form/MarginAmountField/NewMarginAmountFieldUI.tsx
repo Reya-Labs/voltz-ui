@@ -1,14 +1,14 @@
 import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { FormNumberLimits } from '../../../../../app/features/common-form';
+import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import {
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
   selectMarginRequirementFormatted,
   selectUserInputMarginInfo,
   selectWalletBalance,
-} from '../../../../../app/features/lp-form';
+} from '../../../../../app/features/forms/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 

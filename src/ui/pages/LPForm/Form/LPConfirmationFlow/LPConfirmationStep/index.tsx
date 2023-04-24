@@ -6,7 +6,7 @@ import {
   confirmLpThunk,
   selectLpConfirmationFlowError,
   selectLpFormAMM,
-} from '../../../../../../app/features/lp-form';
+} from '../../../../../../app/features/forms/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
   MarketTokenInformation,

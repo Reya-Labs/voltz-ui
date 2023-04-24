@@ -10,7 +10,7 @@ import {
   selectExistingPositionFixedLower,
   selectExistingPositionFixedUpper,
   selectLpFormSelectedPosition,
-} from '../../../../../app/features/lp-form';
+} from '../../../../../app/features/forms/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
 import { PnLDetails } from './PnLDetails';

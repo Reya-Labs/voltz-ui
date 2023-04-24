@@ -2,11 +2,11 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { FormNumberLimits } from '../../../../../app/features/common-form';
+import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import {
   selectAvailableNotional,
   selectUserInputNotionalInfo,
-} from '../../../../../app/features/swap-form';
+} from '../../../../../app/features/forms/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';

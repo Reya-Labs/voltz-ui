@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { resetStateAction } from '../../../app/features/swap-form';
+import { resetStateAction } from '../../../app/features/forms/swap-form';
 import { useAppDispatch } from '../../../app/hooks';
 import { routes } from '../../../routes/paths';
 import { AMMFetchingError } from '../../components/AMMFetchingError';

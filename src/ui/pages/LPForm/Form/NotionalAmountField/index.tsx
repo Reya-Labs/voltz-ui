@@ -8,7 +8,7 @@ import {
   selectLpFormSelectedPosition,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
-} from '../../../../../app/features/lp-form';
+} from '../../../../../app/features/forms/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';

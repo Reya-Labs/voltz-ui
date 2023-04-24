@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   closeLpConfirmationFlowAction,
   selectLpConfirmationFlowEtherscanLink,
-} from '../../../../../../app/features/lp-form';
+} from '../../../../../../app/features/forms/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
 import { LPDetails } from '../LPDetails';
