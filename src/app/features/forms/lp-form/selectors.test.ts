@@ -2,6 +2,8 @@ import { formCompactFormat } from '../common/utils';
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
+  selectInfoPostLp,
+  selectLeverage,
   selectLpFormAMM,
   selectLpFormMode,
   selectMarginAccountName,
@@ -377,6 +379,32 @@ describe('lp-form.selectors', () => {
       expect(result).toEqual(formattedMargin);
       expect(getProspectiveLpMargin).toHaveBeenCalledWith(mockState.lpForm);
       expect(formCompactFormat).toHaveBeenCalledWith(prospectiveMargin);
+    });
+  });
+
+  describe('selectLeverage', () => {
+    it('should select leverage from state', () => {
+      const state = {
+        swapForm: {
+          userInput: {
+            leverage: 5,
+          },
+        },
+      } as never;
+      expect(selectLeverage(state)).toEqual(5);
+    });
+  });
+
+  describe('selectInfoPostLp', () => {
+    it('should select infoPostLp from state', () => {
+      const state = {
+        lpForm: {
+          prospectiveLp: {
+            infoPostLp: { foo: 'bar' },
+          },
+        },
+      } as never;
+      expect(selectInfoPostLp(state)).toEqual({ foo: 'bar' });
     });
   });
 });
