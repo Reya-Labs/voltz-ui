@@ -78,9 +78,6 @@ export const selectProspectiveLpNotionalFormatted = (state: RootState) => {
   return formCompactFormat(getProspectiveLpNotional(state.lpForm));
 };
 export const selectProspectiveLpMarginFormatted = (state: RootState) => {
-  if (state.lpForm.userInput.marginAmount.editMode === 'add') {
-    return formCompactFormat(getProspectiveLpMargin(state.lpForm));
-  }
   return formCompactFormat(getProspectiveLpMargin(state.lpForm));
 };
 
