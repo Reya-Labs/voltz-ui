@@ -83,15 +83,18 @@ export const selectProspectiveLpMarginFormatted = (state: RootState) => {
 
 export const selectLeverage = (state: RootState) => state.lpForm.userInput.leverage;
 export const selectInfoPostLp = (state: RootState) => state.lpForm.prospectiveLp.infoPostLp;
+// todo: FB duplicate as in swap form
 export const selectIsMarginRequiredError = (state: RootState) => {
   return (
     state.lpForm.userInput.marginAmount.error !== null &&
     state.lpForm.userInput.marginAmount.error !== 'WLT'
   );
 };
+// todo: FB duplicate as in swap form
 export const selectIsWalletMarginError = (state: RootState) => {
   return state.lpForm.userInput.marginAmount.error === 'WLT';
 };
+// todo: FB duplicate as in swap form
 export const selectBottomRightMarginNumber = (state: RootState) => {
   const lpFormState = state.lpForm;
 
