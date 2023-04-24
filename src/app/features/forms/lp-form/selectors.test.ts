@@ -6,6 +6,7 @@ import {
   selectLpFormMode,
   selectMarginAccountName,
   selectSubmitButtonInfo,
+  selectUserInputNotionalInfo,
   selectWalletBalance,
 } from '../lp-form';
 import { hasExistingPosition } from './utils';
@@ -244,6 +245,26 @@ describe('lp-form.selectors', () => {
       const result = selectMarginAccountName(emptyState);
 
       expect(result).toBe('');
+    });
+  });
+
+  describe('selectUserInputNotionalInfo', () => {
+    const mockState = {
+      lpForm: {
+        userInput: {
+          notionalAmount: {
+            value: 100,
+          },
+        },
+      },
+    } as never;
+
+    it('returns the correct user input notional amount', () => {
+      const result = selectUserInputNotionalInfo(mockState);
+
+      expect(result).toEqual({
+        value: 100,
+      });
     });
   });
 });
