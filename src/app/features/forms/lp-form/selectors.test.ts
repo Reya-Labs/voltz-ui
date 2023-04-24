@@ -1,5 +1,6 @@
 import { formCompactFormat } from '../common/utils';
 import {
+  selectAMMTokenFormatted,
   selectLpFormAMM,
   selectLpFormMode,
   selectSubmitButtonInfo,
@@ -154,6 +155,36 @@ describe('lp-form.selectors', () => {
 
       expect(hasExistingPosition).toHaveBeenCalledWith(mockState.lpForm);
       expect(result).toBe('new');
+    });
+  });
+
+  describe('selectAMMTokenFormatted', () => {
+    const mockState = {
+      lpForm: {
+        amm: {
+          id: '1',
+          underlyingToken: {
+            name: 'usdc',
+          },
+        },
+      },
+    } as never;
+
+    it('returns the formatted AMM token name when aMM is defined', () => {
+      const result = selectAMMTokenFormatted(mockState);
+      expect(result).toBe(' USDC');
+    });
+
+    it('returns an empty string when aMM is not defined', () => {
+      const emptyState = {
+        lpForm: {
+          aMM: undefined,
+        },
+      } as never;
+
+      const result = selectAMMTokenFormatted(emptyState);
+
+      expect(result).toBe('');
     });
   });
 });
