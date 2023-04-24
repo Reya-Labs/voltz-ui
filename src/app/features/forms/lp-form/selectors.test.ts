@@ -1,8 +1,11 @@
-import { formCompactFormat } from '../common/utils';
+import { formCompactFormat, formLimitAndFormatNumber } from '../common/utils';
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
+  selectBottomRightMarginNumber,
   selectInfoPostLp,
+  selectIsMarginRequiredError,
+  selectIsWalletMarginError,
   selectLeverage,
   selectLpFormAMM,
   selectLpFormMode,
@@ -14,11 +17,17 @@ import {
   selectUserInputNotionalInfo,
   selectWalletBalance,
 } from '../lp-form';
-import { getProspectiveLpMargin, getProspectiveLpNotional, hasExistingPosition } from './utils';
+import {
+  getAvailableMargin,
+  getProspectiveLpMargin,
+  getProspectiveLpNotional,
+  hasExistingPosition,
+} from './utils';
 
 // Mock common utils
 jest.mock('../common/utils', () => ({
   formCompactFormat: jest.fn(),
+  formLimitAndFormatNumber: jest.fn(),
 }));
 
 // Mock utils
@@ -26,6 +35,7 @@ jest.mock('./utils', () => ({
   hasExistingPosition: jest.fn(),
   getProspectiveLpNotional: jest.fn(),
   getProspectiveLpMargin: jest.fn(),
+  getAvailableMargin: jest.fn(),
 }));
 
 describe('lp-form.selectors', () => {
@@ -385,7 +395,7 @@ describe('lp-form.selectors', () => {
   describe('selectLeverage', () => {
     it('should select leverage from state', () => {
       const state = {
-        swapForm: {
+        lpForm: {
           userInput: {
             leverage: 5,
           },
@@ -405,6 +415,171 @@ describe('lp-form.selectors', () => {
         },
       } as never;
       expect(selectInfoPostLp(state)).toEqual({ foo: 'bar' });
+    });
+  });
+
+  describe('selectIsMarginRequiredError', () => {
+    it('should return true if there is a margin amount error other than WLT', () => {
+      const state = {
+        lpForm: {
+          userInput: {
+            marginAmount: {
+              error: 'some error message',
+            },
+          },
+        },
+      } as never;
+      expect(selectIsMarginRequiredError(state)).toBe(true);
+    });
+
+    it('should return false if there is no margin amount error', () => {
+      const state = {
+        lpForm: {
+          userInput: {
+            marginAmount: {
+              error: null,
+            },
+          },
+        },
+      } as never;
+      expect(selectIsMarginRequiredError(state)).toBe(false);
+    });
+
+    it('should return false if the margin amount error is "WLT"', () => {
+      const state = {
+        lpForm: {
+          userInput: {
+            marginAmount: {
+              error: 'WLT',
+            },
+          },
+        },
+      } as never;
+      expect(selectIsMarginRequiredError(state)).toBe(false);
+    });
+  });
+
+  describe('selectIsWalletMarginError', () => {
+    it('should return true if the margin amount error is "WLT"', () => {
+      const state = {
+        lpForm: {
+          userInput: {
+            marginAmount: {
+              error: 'WLT',
+            },
+          },
+        },
+      } as never;
+
+      expect(selectIsWalletMarginError(state)).toBe(true);
+    });
+
+    it('should return false if the margin amount error is not "WLT"', () => {
+      const state = {
+        lpForm: {
+          userInput: {
+            marginAmount: {
+              error: 'some other error message',
+            },
+          },
+        },
+      } as never;
+
+      expect(selectIsWalletMarginError(state)).toBe(false);
+    });
+  });
+
+  describe('selectBottomRightMarginNumber', () => {
+    beforeEach(() => {
+      (formLimitAndFormatNumber as jest.Mock).mockImplementationOnce(
+        (value: number, mode: string) => {
+          return mode === 'floor' ? Math.floor(value) : Math.ceil(value);
+        },
+      );
+      (getAvailableMargin as jest.Mock).mockImplementationOnce(
+        (state: { availableMargin: number }) => {
+          return state.availableMargin;
+        },
+      );
+    });
+    beforeEach(() => {
+      // Clear mock call history after each test
+      jest.clearAllMocks();
+    });
+
+    it('should return a formatted available margin if margin amount edit mode is "remove"', () => {
+      const state = {
+        lpForm: {
+          userInput: {
+            marginAmount: {
+              editMode: 'remove',
+            },
+          },
+          availableMargin: 1234.5678,
+        },
+      } as never;
+
+      const result = selectBottomRightMarginNumber(state);
+
+      expect(result).toBe(1234);
+      expect(formLimitAndFormatNumber).toHaveBeenCalledWith(1234.5678, 'floor');
+      expect(getAvailableMargin).toHaveBeenCalledWith({
+        userInput: {
+          marginAmount: {
+            editMode: 'remove',
+          },
+        },
+        availableMargin: 1234.5678,
+      });
+    });
+
+    it('should return a formatted margin requirement if the swap was successful', () => {
+      const state = {
+        lpForm: {
+          userInput: {
+            marginAmount: {
+              editMode: 'add',
+            },
+          },
+          prospectiveLp: {
+            infoPostLp: {
+              status: 'success',
+              value: {
+                marginRequirement: 5678.1234,
+              },
+            },
+          },
+        },
+      } as never;
+
+      const result = selectBottomRightMarginNumber(state);
+
+      expect(result).toBe(5679); // ceil of 5678.1234
+      expect(formLimitAndFormatNumber).toHaveBeenCalledWith(5678.1234, 'ceil');
+      expect(getAvailableMargin).not.toHaveBeenCalled(); // should not be called in this case
+    });
+
+    it('should return null if neither condition is met', () => {
+      const state = {
+        lpForm: {
+          userInput: {
+            marginAmount: {
+              editMode: 'add',
+            },
+          },
+          prospectiveLp: {
+            infoPostLp: {
+              status: 'failure',
+            },
+          },
+        },
+      } as never;
+
+      const result = selectBottomRightMarginNumber(state);
+
+      expect(result).toBeNull();
+      expect(formLimitAndFormatNumber).not.toHaveBeenCalled(); // should not be called in this case
+      expect(getAvailableMargin).not.toHaveBeenCalled(); // should not be called in this case
     });
   });
 });
