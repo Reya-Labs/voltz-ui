@@ -2,7 +2,6 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { selectChainId } from '../../../../app/features/network';
 import {
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
@@ -14,7 +13,8 @@ import {
   selectSwapFormPositionFetchingStatus,
   setSignerAndPositionForAMMThunk,
   setSwapFormAMMAction,
-} from '../../../../app/features/swap-form';
+} from '../../../../app/features/forms/swap-form';
+import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { useWallet } from '../../../../hooks/useWallet';

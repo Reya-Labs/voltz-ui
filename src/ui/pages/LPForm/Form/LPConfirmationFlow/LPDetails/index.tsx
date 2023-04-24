@@ -8,7 +8,7 @@ import {
   selectProspectiveLpNotionalFormatted,
   selectUserInputFixedLower,
   selectUserInputFixedUpper,
-} from '../../../../../../app/features/lp-form';
+} from '../../../../../../app/features/forms/lp-form';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { DetailBox, DetailsBox } from './LPDetails.styled';
 

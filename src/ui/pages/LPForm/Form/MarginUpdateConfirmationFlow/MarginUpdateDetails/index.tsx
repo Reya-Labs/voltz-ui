@@ -7,7 +7,7 @@ import {
   selectProspectiveLpMarginFormatted,
   selectUserInputFixedLower,
   selectUserInputFixedUpper,
-} from '../../../../../../app/features/lp-form';
+} from '../../../../../../app/features/forms/lp-form';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { MarginUpdateDetailBox, MarginUpdateDetailsBox } from './MarginUpdateDetails.styled';
 

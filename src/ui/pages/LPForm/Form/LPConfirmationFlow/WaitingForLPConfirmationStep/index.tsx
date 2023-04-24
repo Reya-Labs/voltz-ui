@@ -1,7 +1,7 @@
 import { RainbowLoader, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectUserInputNotionalAmountEditMode } from '../../../../../../app/features/lp-form';
+import { selectUserInputNotionalAmountEditMode } from '../../../../../../app/features/forms/lp-form';
 import { useAppSelector } from '../../../../../../app/hooks';
 import {
   RainbowLoaderBox,

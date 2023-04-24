@@ -2,7 +2,7 @@ import { CurrencyField, TypographyToken } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { FormNumberLimits } from '../../../../../app/features/common-form';
+import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import {
   getInfoPostLpThunk,
   selectLpFormAMM,
@@ -12,7 +12,7 @@ import {
   selectUserInputFixedUpper,
   setUserInputFixedLowerAction,
   setUserInputFixedUpperAction,
-} from '../../../../../app/features/lp-form';
+} from '../../../../../app/features/forms/lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';

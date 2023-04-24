@@ -4,7 +4,7 @@ import {
   selectAMMTokenFormatted,
   selectMarginAccountName,
   selectPositionMarginFormatted,
-} from '../../../../../app/features/lp-form';
+} from '../../../../../app/features/forms/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAccount as MarginAccountComponent } from '../../../../components/MarginAccount';
 

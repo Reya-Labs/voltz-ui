@@ -4,11 +4,11 @@ import createSagaMiddleware from 'redux-saga';
 
 import { aMMsReducer } from './features/aMMs';
 import { cashflowCalculatorReducer } from './features/cashflow-calculator';
+import { lpFormReducer } from './features/forms/lp-form';
+import { swapFormReducer } from './features/forms/swap-form';
 import { historicalRatesReducer } from './features/historical-rates';
-import { lpFormReducer } from './features/lp-form';
 import { lpOptimisersReducer } from './features/lp-optimisers';
 import { networkReducer } from './features/network';
-import { swapFormReducer } from './features/swap-form';
 import { tradingLeagueReducer } from './features/trading-league';
 import { saga, transactionsReducer } from './features/transactions';
 
