@@ -6,6 +6,7 @@ import {
   selectLpFormMode,
   selectMarginAccountName,
   selectSubmitButtonInfo,
+  selectUserInputMarginInfo,
   selectUserInputNotionalInfo,
   selectWalletBalance,
 } from '../lp-form';
@@ -264,6 +265,25 @@ describe('lp-form.selectors', () => {
 
       expect(result).toEqual({
         value: 100,
+      });
+    });
+  });
+
+  describe('selectUserInputMarginInfo', () => {
+    const mockState = {
+      lpForm: {
+        userInput: {
+          marginAmount: {
+            value: 50,
+          },
+        },
+      },
+    } as never;
+
+    it('returns the correct user input margin amount', () => {
+      const result = selectUserInputMarginInfo(mockState);
+      expect(result).toStrictEqual({
+        value: 50,
       });
     });
   });
