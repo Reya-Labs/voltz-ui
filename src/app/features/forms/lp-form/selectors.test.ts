@@ -5,12 +5,13 @@ import {
   selectLpFormAMM,
   selectLpFormMode,
   selectMarginAccountName,
+  selectProspectiveLpNotionalFormatted,
   selectSubmitButtonInfo,
   selectUserInputMarginInfo,
   selectUserInputNotionalInfo,
   selectWalletBalance,
 } from '../lp-form';
-import { hasExistingPosition } from './utils';
+import { getProspectiveLpNotional, hasExistingPosition } from './utils';
 
 // Mock common utils
 jest.mock('../common/utils', () => ({
@@ -20,6 +21,7 @@ jest.mock('../common/utils', () => ({
 // Mock utils
 jest.mock('./utils', () => ({
   hasExistingPosition: jest.fn(),
+  getProspectiveLpNotional: jest.fn(),
 }));
 
 describe('lp-form.selectors', () => {
@@ -285,6 +287,41 @@ describe('lp-form.selectors', () => {
       expect(result).toStrictEqual({
         value: 50,
       });
+    });
+  });
+
+  describe('selectProspectiveLpNotionalFormatted', () => {
+    const mockState = {
+      lpForm: {},
+    };
+
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('calls getProspectiveLpNotional with the correct arguments', () => {
+      selectProspectiveLpNotionalFormatted(mockState as never);
+
+      expect(getProspectiveLpNotional).toHaveBeenCalledTimes(1);
+      expect(getProspectiveLpNotional).toHaveBeenCalledWith(mockState.lpForm);
+    });
+
+    it('calls formCompactFormat with the correct arguments', () => {
+      const mockNotional = 'test';
+      (getProspectiveLpNotional as jest.Mock).mockReturnValue(mockNotional);
+
+      selectProspectiveLpNotionalFormatted(mockState as never);
+
+      expect(formCompactFormat).toHaveBeenCalledTimes(1);
+      expect(formCompactFormat).toHaveBeenCalledWith(mockNotional);
+    });
+
+    it('returns the correctly formatted prospective swap notional', () => {
+      const mockFormattedNotional = 'test';
+      (formCompactFormat as jest.Mock).mockReturnValue(mockFormattedNotional);
+
+      const result = selectProspectiveLpNotionalFormatted(mockState as never);
+      expect(result).toBe(mockFormattedNotional);
     });
   });
 });
