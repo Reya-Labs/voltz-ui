@@ -50,6 +50,7 @@ export const selectAMMTokenFormatted = (state: RootState) => {
   return ` ${aMM.underlyingToken.name.toUpperCase()}`;
 };
 
+// todo: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
   const aMM = selectLpFormAMM(state);
   if (!aMM) {
