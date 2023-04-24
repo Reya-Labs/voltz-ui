@@ -4,6 +4,7 @@ import {
   selectAMMTokenFormatted,
   selectLpFormAMM,
   selectLpFormMode,
+  selectMarginAccountName,
   selectSubmitButtonInfo,
   selectWalletBalance,
 } from '../lp-form';
@@ -212,6 +213,35 @@ describe('lp-form.selectors', () => {
       } as never;
 
       const result = selectAMMMaturityFormatted(emptyState);
+
+      expect(result).toBe('');
+    });
+  });
+
+  describe('selectMarginAccountName', () => {
+    const mockState = {
+      lpForm: {
+        amm: {
+          id: '1',
+          termEndTimestampInMS: 1614667200000,
+          protocol: 'PROTOCOL_A',
+        },
+      },
+    } as never;
+
+    it('returns the formatted margin account name when aMM is defined', () => {
+      const result = selectMarginAccountName(mockState);
+      expect(result).toBe('PROTOCOL_A 02 Mar 2021');
+    });
+
+    it('returns an empty string when aMM is not defined', () => {
+      const emptyState = {
+        lpForm: {
+          aMM: undefined,
+        },
+      } as never;
+
+      const result = selectMarginAccountName(emptyState);
 
       expect(result).toBe('');
     });

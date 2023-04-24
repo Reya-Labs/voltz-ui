@@ -59,6 +59,7 @@ export const selectAMMMaturityFormatted = (state: RootState) => {
   return formatTimestamp(aMM.termEndTimestampInMS);
 };
 
+// todo: FB duplicate as in swap form
 export const selectMarginAccountName = (state: RootState) => {
   const aMM = selectLpFormAMM(state);
   if (!aMM) {
