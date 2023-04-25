@@ -11,5 +11,8 @@ export * from './getSelectedPositionNotional';
 export * from './hasExistingPosition';
 export * from './resetNotionalAndMarginEditMode';
 export * from './updateLeverage';
+export * from './updateLeverageOptionsAfterGetInfoPostLp';
+export * from './updateLeverageOptionsAfterGetPoolLpInfo';
 export * from './updateSelectedPosition';
 export * from './validateUserInput';
+export * from './validateUserInputAndUpdateSubmitButton';
