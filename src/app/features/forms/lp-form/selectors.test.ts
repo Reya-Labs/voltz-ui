@@ -1,3 +1,4 @@
+import { formatNumber, stringToBigFloat } from '../../../../utilities/number';
 import {
   formCompactFormat,
   formCompactFormatToParts,
@@ -19,8 +20,10 @@ import {
   selectProspectiveLpMarginFormatted,
   selectProspectiveLpNotionalFormatted,
   selectSubmitButtonInfo,
+  selectSubmitButtonText,
   selectUserInputMarginInfo,
   selectUserInputNotionalInfo,
+  selectVariableRate24hDelta,
   selectWalletBalance,
 } from '../lp-form';
 import {
@@ -29,6 +32,12 @@ import {
   getProspectiveLpNotional,
   hasExistingPosition,
 } from './utils';
+
+// Mock number utils
+jest.mock('../../../../utilities/number', () => ({
+  formatNumber: jest.fn(),
+  stringToBigFloat: jest.fn(),
+}));
 
 // Mock common utils
 jest.mock('../common/utils', () => ({
@@ -684,6 +693,158 @@ describe('lp-form.selectors', () => {
         compactNotionalSuffix: 'ETH',
         compactNotionalNumber: '1',
       });
+    });
+  });
+
+  describe('selectVariableRate24hDelta', () => {
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('calls formatNumber and stringToBigFloat with the correct arguments', () => {
+      const state = {
+        lpForm: {
+          amm: {
+            variableApy: 150,
+            variableApy24Ago: 100,
+          },
+        },
+      };
+      (formatNumber as jest.Mock).mockReturnValueOnce('50');
+      selectVariableRate24hDelta(state as never);
+
+      expect(formatNumber).toHaveBeenCalledWith(50, 0, 3);
+      expect(stringToBigFloat).toHaveBeenCalledWith('50');
+    });
+
+    it('returns undefined if amm is null', () => {
+      const state = {
+        lpForm: {
+          amm: null,
+        },
+      };
+
+      expect(selectVariableRate24hDelta(state as never)).toBeUndefined();
+    });
+
+    it('returns the correct value', () => {
+      (formatNumber as jest.Mock).mockReturnValueOnce('50');
+      (stringToBigFloat as jest.Mock).mockReturnValueOnce(50);
+
+      const state = {
+        lpForm: {
+          amm: {
+            variableApy: 150,
+            variableApy24Ago: 100,
+          },
+        },
+      };
+
+      expect(selectVariableRate24hDelta(state as never)).toEqual(50);
+    });
+  });
+
+  describe('selectSubmitButtonText', () => {
+    it('returns the correct text for the "lp" state', () => {
+      expect(
+        selectSubmitButtonText({
+          lpForm: {
+            submitButton: {
+              state: 'lp',
+            },
+            userInput: {
+              notionalAmount: {
+                editMode: 'add',
+              },
+            },
+          },
+        } as never),
+      ).toBe('Add Liquidity');
+      expect(
+        selectSubmitButtonText({
+          lpForm: {
+            submitButton: {
+              state: 'lp',
+            },
+            userInput: {
+              notionalAmount: {
+                editMode: 'remove',
+              },
+            },
+          },
+        } as never),
+      ).toBe('Remove Liquidity');
+    });
+
+    it('returns the correct text for the "margin-update" state', () => {
+      const state = {
+        lpForm: {
+          submitButton: {
+            state: 'margin-update',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Update margin');
+    });
+
+    it('returns the correct text for the "not-enough-balance" state', () => {
+      const state = {
+        lpForm: {
+          submitButton: {
+            state: 'not-enough-balance',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Not enough balance');
+    });
+
+    it('returns the correct text for the "approve" state', () => {
+      const state = {
+        lpForm: {
+          submitButton: {
+            state: 'approve',
+          },
+          amm: {
+            underlyingToken: {
+              name: 'token',
+            },
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Approve TOKEN');
+    });
+
+    it('returns the correct text for the "approving" state', () => {
+      const state = {
+        lpForm: {
+          submitButton: {
+            state: 'approving',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Approving...');
+    });
+
+    it('returns the correct text for the "connect-wallet" state', () => {
+      const state = {
+        lpForm: {
+          submitButton: {
+            state: 'connect-wallet',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Connect Your Wallet to Start Trading');
+    });
+
+    it('returns the correct text for the "fixed-range-error" state', () => {
+      const state = {
+        lpForm: {
+          submitButton: {
+            state: 'fixed-range-error',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Invalid Fixed Range');
     });
   });
 });
