@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 import { getEditPositionNotional } from '../getEditPositionNotional';
 import { getVariableRate } from '../getVariableRate';
 

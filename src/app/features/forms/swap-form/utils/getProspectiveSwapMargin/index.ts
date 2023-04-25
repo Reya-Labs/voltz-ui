@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 
 export const getProspectiveSwapMargin = (state: Draft<SliceState>): number => {
   if (state.userInput.marginAmount.editMode === 'add') {
