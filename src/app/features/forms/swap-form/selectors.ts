@@ -30,7 +30,6 @@ import {
   hasExistingPosition,
 } from './utils';
 
-// ------------ General Swap Form State Info ------------
 export const selectSubmitButtonInfo = (state: RootState) => state.swapForm.submitButton;
 export const selectSwapFormAMM = (state: RootState) => state.swapForm.amm;
 export const selectSwapFormPosition = (state: RootState) => state.swapForm.position.value;
@@ -81,7 +80,6 @@ export const selectUserInputNotionalInfo = (state: RootState) =>
 export const selectUserInputMarginInfo = (state: RootState) =>
   state.swapForm.userInput.marginAmount;
 
-// ------------ Prospective Swap ------------
 export const selectProspectiveSwapMode = (state: RootState) =>
   getProspectiveSwapMode(state.swapForm);
 export const selectProspectiveSwapNotionalFormatted = (state: RootState) => {
@@ -279,7 +277,6 @@ export const selectSlippageFormatted = (state: RootState) => {
   return formFormatNumber(slippage);
 };
 
-// ------------ Swap Confirmation Flow Selectors ------------
 export const selectSwapConfirmationFlowStep = (state: RootState) =>
   state.swapForm.swapConfirmationFlow.step;
 export const selectSwapConfirmationFlowError = (state: RootState) =>
@@ -291,7 +288,6 @@ export const selectSwapConfirmationFlowEtherscanLink = (state: RootState) => {
   );
 };
 
-// ------------ Margin Update Confirmation Flow Selectors ------------
 export const selectMarginUpdateConfirmationFlowStep = (state: RootState) =>
   state.swapForm.marginUpdateConfirmationFlow.step;
 export const selectMarginUpdateConfirmationFlowError = (state: RootState) =>
@@ -303,7 +299,6 @@ export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState
   );
 };
 
-// ------------ Variable Rate Delta ------------
 export const selectVariableRate24hDelta = (state: RootState) => {
   if (!state.swapForm.amm) {
     return undefined;
@@ -314,7 +309,6 @@ export const selectVariableRate24hDelta = (state: RootState) => {
   );
 };
 
-// ------------ Submit button text ------------
 export const selectSubmitButtonText = (state: RootState) => {
   switch (state.swapForm.submitButton.state) {
     case 'swap':
@@ -334,7 +328,6 @@ export const selectSubmitButtonText = (state: RootState) => {
   }
 };
 
-// ------------ Leverage ------------
 export const selectIsLeverageDisabled = (state: RootState) => {
   return getProspectiveSwapNotional(state.swapForm) === 0;
 };
