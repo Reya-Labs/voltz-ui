@@ -7,6 +7,7 @@ import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
   selectBottomRightMarginNumber,
+  selectExistingPositionCompactNotional,
   selectInfoPostLp,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
@@ -642,6 +643,47 @@ describe('lp-form.selectors', () => {
       });
       expect(getProspectiveLpNotional).toHaveBeenCalledWith(mockedState.lpForm);
       expect(formCompactFormatToParts).toHaveBeenCalledWith(1000000);
+    });
+  });
+
+  describe('selectExistingPositionCompactNotional', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should return null when position value is falsy', () => {
+      const state = {
+        lpForm: {
+          selectedPosition: null,
+        },
+      } as never;
+
+      const result = selectExistingPositionCompactNotional(state);
+
+      expect(result).toBeNull();
+    });
+
+    it('should return an object with the correct properties when position status is "success" and position value is truthy', () => {
+      const state = {
+        lpForm: {
+          selectedPosition: {
+            notional: '1000000000000000000',
+          },
+        },
+      } as never;
+
+      (formCompactFormatToParts as jest.Mock).mockReturnValueOnce({
+        compactSuffix: 'ETH',
+        compactNumber: '1',
+      });
+
+      const result = selectExistingPositionCompactNotional(state);
+
+      expect(formCompactFormatToParts as jest.Mock).toHaveBeenCalledWith('1000000000000000000');
+      expect(result).toEqual({
+        compactNotionalSuffix: 'ETH',
+        compactNotionalNumber: '1',
+      });
     });
   });
 });

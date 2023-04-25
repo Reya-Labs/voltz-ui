@@ -128,6 +128,7 @@ export const selectNewPositionCompactNotional = (state: RootState) => {
   };
 };
 
+// todo: FB duplicate as in swap form
 export const selectExistingPositionCompactNotional = (state: RootState) => {
   if (state.lpForm.selectedPosition === null) {
     return null;
