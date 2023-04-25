@@ -31,6 +31,7 @@ import {
   updateLeverage,
   validateUserInput,
 } from './utils';
+import { updateLeverageOptionsAfterGetPoolSwapInfo } from './utils/updateLeverageOptionsAfterGetPoolSwapInfo';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
@@ -209,16 +210,6 @@ const initialState: SliceState = {
     txHash: null,
   },
   showLowLeverageNotification: false,
-};
-
-const updateLeverageOptionsAfterGetPoolSwapInfo = (state: Draft<SliceState>): void => {
-  const maxLeverage = formatNumber(
-    Math.floor(state.poolSwapInfo.maxLeverage[getProspectiveSwapMode(state)]),
-    0,
-    0,
-  );
-  state.prospectiveSwap.leverage.maxLeverage = maxLeverage;
-  state.prospectiveSwap.leverage.options = calculateLeverageOptions(maxLeverage);
 };
 
 const updateLeverageOptionsAfterGetInfoPostSwap = (state: Draft<SliceState>): void => {
