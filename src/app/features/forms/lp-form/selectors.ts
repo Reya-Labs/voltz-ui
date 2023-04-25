@@ -19,7 +19,6 @@ import {
   hasExistingPosition,
 } from './utils';
 
-// ------------ General Lp Form State Info ------------
 export const selectSubmitButtonInfo = (state: RootState) => state.lpForm.submitButton;
 export const selectLpFormAMM = (state: RootState) => state.lpForm.amm;
 export const selectLpFormPositionsFetchingStatus = (state: RootState) =>
@@ -73,7 +72,6 @@ export const selectUserInputNotionalInfo = (state: RootState) =>
   state.lpForm.userInput.notionalAmount;
 export const selectUserInputMarginInfo = (state: RootState) => state.lpForm.userInput.marginAmount;
 
-// ------------ Prospective Lp ------------
 export const selectProspectiveLpNotionalFormatted = (state: RootState) => {
   return formCompactFormat(getProspectiveLpNotional(state.lpForm));
 };
@@ -203,9 +201,6 @@ export const selectEditPositionCompactNotional = (state: RootState) => {
   };
 };
 
-// ------------ Realized & Unrealized PnL Selectors ------------
-
-// ------------ Lp Confirmation Flow Selectors ------------
 export const selectLpConfirmationFlowStep = (state: RootState) =>
   state.lpForm.lpConfirmationFlow.step;
 export const selectLpConfirmationFlowError = (state: RootState) =>
@@ -217,7 +212,6 @@ export const selectLpConfirmationFlowEtherscanLink = (state: RootState) => {
   );
 };
 
-// ------------ Margin Update Confirmation Flow Selectors ------------
 export const selectMarginUpdateConfirmationFlowStep = (state: RootState) =>
   state.lpForm.marginUpdateConfirmationFlow.step;
 export const selectMarginUpdateConfirmationFlowError = (state: RootState) =>
@@ -229,7 +223,6 @@ export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState
   );
 };
 
-// ------------ Variable Rate Delta ------------
 export const selectVariableRate24hDelta = (state: RootState) => {
   if (!state.lpForm.amm) {
     return undefined;
@@ -239,7 +232,6 @@ export const selectVariableRate24hDelta = (state: RootState) => {
   );
 };
 
-// ------------ Submit button text ------------
 export const selectSubmitButtonText = (state: RootState) => {
   switch (state.lpForm.submitButton.state) {
     case 'lp':
@@ -263,7 +255,6 @@ export const selectSubmitButtonText = (state: RootState) => {
   }
 };
 
-// ------------ Leverage ------------
 export const selectIsLeverageDisabled = (state: RootState) => {
   const prospectiveNotional: number = getProspectiveLpNotional(state.lpForm);
   const isMarginAddMode: boolean = state.lpForm.userInput.marginAmount.editMode === 'add';
