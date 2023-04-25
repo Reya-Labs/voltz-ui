@@ -1,7 +1,7 @@
 import { Draft } from '@reduxjs/toolkit';
 
 import { SliceState as CashflowCalculatorState } from '../../../../cashflow-calculator/reducer';
-import { SliceState as SwapFormState } from '../../reducer';
+import { SliceState as SwapFormState } from '../../state';
 import { getEditPositionNotional } from '../getEditPositionNotional';
 
 export const getEditPositionFixedRate = (

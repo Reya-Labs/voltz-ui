@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 import { getExistingPositionMode } from '../getExistingPositionMode';
 
 export const getProspectiveSwapMode = (state: Draft<SliceState>): 'fixed' | 'variable' => {
