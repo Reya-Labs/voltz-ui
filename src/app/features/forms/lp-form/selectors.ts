@@ -223,6 +223,7 @@ export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState
   );
 };
 
+// todo: FB duplicate as in swap form
 export const selectVariableRate24hDelta = (state: RootState) => {
   if (!state.lpForm.amm) {
     return undefined;
