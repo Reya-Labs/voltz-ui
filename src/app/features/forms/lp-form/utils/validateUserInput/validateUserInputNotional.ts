@@ -1,7 +1,7 @@
 import { Draft } from '@reduxjs/toolkit';
 import { Position } from '@voltz-protocol/v1-sdk';
 
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 import { hasExistingPosition } from '../hasExistingPosition';
 
 export const validateUserInputNotional = (state: Draft<SliceState>): void => {

@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 
 export const getEditPositionNotional = (state: Draft<SliceState>) => {
   let editPositionNotional = 0;

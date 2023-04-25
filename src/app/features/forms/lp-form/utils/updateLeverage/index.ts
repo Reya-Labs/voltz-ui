@@ -1,7 +1,7 @@
 import { Draft } from '@reduxjs/toolkit';
 
 import { checkLowLeverageNotification } from '../../../common/utils';
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
 
 export const updateLeverage = (state: Draft<SliceState>): void => {

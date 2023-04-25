@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 
 export const updateSelectedPosition = (state: Draft<SliceState>): void => {
   const positions = state.positions;
