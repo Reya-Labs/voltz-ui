@@ -3,8 +3,9 @@ import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../../utilities/amm';
-import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../../utilities/number';
+import { formatNumber, stringToBigFloat } from '../../../../utilities/number';
 import {
+  calculateLeverageOptions,
   checkLowLeverageNotification,
   formLimitAndFormatNumber,
   isUserInputMarginError,
@@ -208,27 +209,6 @@ const initialState: SliceState = {
     txHash: null,
   },
   showLowLeverageNotification: false,
-};
-
-const calculateLeverageOptions = (maxLeverage: string) => {
-  if (maxLeverage === '--') {
-    return [0, 0, 0];
-  }
-  let maxLeverageOption = stringToBigFloat(maxLeverage);
-  maxLeverageOption = roundIntegerNumber(
-    maxLeverageOption,
-    Math.max(
-      0,
-      Math.floor(maxLeverageOption.toString().length / 2) -
-        1 +
-        (maxLeverageOption.toString().length % 2),
-    ),
-  );
-  return [
-    Math.floor(maxLeverageOption / 4),
-    Math.floor(maxLeverageOption / 2),
-    Math.floor(maxLeverageOption),
-  ];
 };
 
 const updateLeverageOptionsAfterGetPoolSwapInfo = (state: Draft<SliceState>): void => {

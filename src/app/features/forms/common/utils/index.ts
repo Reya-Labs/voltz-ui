@@ -1,3 +1,4 @@
+export * from './calculateLeverageOptions';
 export * from './checkLowLeverageNotification';
 export * from './formCompactFormat';
 export * from './formCompactFormatToParts';
