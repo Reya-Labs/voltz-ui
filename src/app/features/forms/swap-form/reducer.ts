@@ -3,9 +3,8 @@ import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../../utilities/amm';
-import { formatNumber, stringToBigFloat } from '../../../../utilities/number';
+import { stringToBigFloat } from '../../../../utilities/number';
 import {
-  calculateLeverageOptions,
   checkLowLeverageNotification,
   formLimitAndFormatNumber,
   isUserInputMarginError,
@@ -29,9 +28,10 @@ import {
   getProspectiveSwapNotional,
   hasExistingPosition,
   updateLeverage,
+  updateLeverageOptionsAfterGetInfoPostSwap,
+  updateLeverageOptionsAfterGetPoolSwapInfo,
   validateUserInput,
 } from './utils';
-import { updateLeverageOptionsAfterGetPoolSwapInfo } from './utils/updateLeverageOptionsAfterGetPoolSwapInfo';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
@@ -210,34 +210,6 @@ const initialState: SliceState = {
     txHash: null,
   },
   showLowLeverageNotification: false,
-};
-
-const updateLeverageOptionsAfterGetInfoPostSwap = (state: Draft<SliceState>): void => {
-  let maxLeverage = '--';
-  if (
-    !state.userInput.notionalAmount.error &&
-    state.prospectiveSwap.infoPostSwap.status === 'success'
-  ) {
-    if (state.prospectiveSwap.infoPostSwap.value.marginRequirement > 0) {
-      maxLeverage = formatNumber(
-        Math.floor(
-          getProspectiveSwapNotional(state) /
-            state.prospectiveSwap.infoPostSwap.value.marginRequirement,
-        ),
-        0,
-        0,
-      );
-    } else {
-      maxLeverage = formatNumber(
-        Math.floor(state.poolSwapInfo.maxLeverage[getProspectiveSwapMode(state)]),
-        0,
-        0,
-      );
-    }
-  }
-
-  state.prospectiveSwap.leverage.maxLeverage = maxLeverage;
-  state.prospectiveSwap.leverage.options = calculateLeverageOptions(maxLeverage);
 };
 
 const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void => {

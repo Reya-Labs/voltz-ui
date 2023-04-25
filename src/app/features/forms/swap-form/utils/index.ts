@@ -19,5 +19,6 @@ export * from './getUnrealizedPnLFromSwaps';
 export * from './getVariableRate';
 export * from './hasExistingPosition';
 export * from './updateLeverage';
+export * from './updateLeverageOptionsAfterGetInfoPostSwap';
 export * from './updateLeverageOptionsAfterGetPoolSwapInfo';
 export * from './validateUserInput';
