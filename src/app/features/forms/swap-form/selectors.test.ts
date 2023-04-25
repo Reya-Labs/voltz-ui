@@ -34,6 +34,7 @@ import {
   selectMarginUpdateConfirmationFlowError,
   selectMarginUpdateConfirmationFlowEtherscanLink,
   selectMarginUpdateConfirmationFlowStep,
+  selectNewPositionCompactNotional,
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
   selectPoolSwapInfoStatus,
@@ -1016,6 +1017,62 @@ describe('swap-form.selectors', () => {
       expect(getProspectiveSwapMode).toHaveBeenCalledWith(state.swapForm);
       expect(getNewPositionFixedRate).toHaveBeenCalledWith(state.swapForm);
       expect(getVariableRate).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('selectNewPositionCompactNotional', () => {
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('should return null if notional amount has an error', () => {
+      const stateWithNotionalAmountError = {
+        swapForm: {
+          userInput: {
+            notionalAmount: {
+              error: 'Invalid notional amount',
+              value: '',
+            },
+          },
+        },
+      };
+
+      const result = selectNewPositionCompactNotional(stateWithNotionalAmountError as never);
+
+      expect(result).toBeNull();
+    });
+
+    it('should return compact notional suffix and number if notional amount is valid', () => {
+      const mockCompactParts = {
+        compactSuffix: 'M',
+        compactNumber: '1.23',
+      };
+
+      const mockedState = {
+        swapForm: {
+          userInput: {
+            notionalAmount: {
+              error: '',
+            },
+          },
+        },
+      };
+
+      (
+        getProspectiveSwapNotional as jest.MockedFunction<typeof getProspectiveSwapNotional>
+      ).mockReturnValue(1000000);
+      (
+        formCompactFormatToParts as jest.MockedFunction<typeof formCompactFormatToParts>
+      ).mockReturnValue(mockCompactParts);
+
+      const result = selectNewPositionCompactNotional(mockedState as never);
+
+      expect(result).toEqual({
+        compactNotionalSuffix: 'M',
+        compactNotionalNumber: '1.23',
+      });
+      expect(getProspectiveSwapNotional).toHaveBeenCalledWith(mockedState.swapForm);
+      expect(formCompactFormatToParts).toHaveBeenCalledWith(1000000);
     });
   });
 

@@ -1,4 +1,8 @@
-import { formCompactFormat, formLimitAndFormatNumber } from '../common/utils';
+import {
+  formCompactFormat,
+  formCompactFormatToParts,
+  formLimitAndFormatNumber,
+} from '../common/utils';
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
@@ -10,6 +14,7 @@ import {
   selectLpFormAMM,
   selectLpFormMode,
   selectMarginAccountName,
+  selectNewPositionCompactNotional,
   selectProspectiveLpMarginFormatted,
   selectProspectiveLpNotionalFormatted,
   selectSubmitButtonInfo,
@@ -28,6 +33,7 @@ import {
 jest.mock('../common/utils', () => ({
   formCompactFormat: jest.fn(),
   formLimitAndFormatNumber: jest.fn(),
+  formCompactFormatToParts: jest.fn(),
 }));
 
 // Mock utils
@@ -580,6 +586,62 @@ describe('lp-form.selectors', () => {
       expect(result).toBeNull();
       expect(formLimitAndFormatNumber).not.toHaveBeenCalled(); // should not be called in this case
       expect(getAvailableMargin).not.toHaveBeenCalled(); // should not be called in this case
+    });
+  });
+
+  describe('selectNewPositionCompactNotional', () => {
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('should return null if notional amount has an error', () => {
+      const stateWithNotionalAmountError = {
+        lpForm: {
+          userInput: {
+            notionalAmount: {
+              error: 'Invalid notional amount',
+              value: '',
+            },
+          },
+        },
+      };
+
+      const result = selectNewPositionCompactNotional(stateWithNotionalAmountError as never);
+
+      expect(result).toBeNull();
+    });
+
+    it('should return compact notional suffix and number if notional amount is valid', () => {
+      const mockCompactParts = {
+        compactSuffix: 'M',
+        compactNumber: '1.23',
+      };
+
+      const mockedState = {
+        lpForm: {
+          userInput: {
+            notionalAmount: {
+              error: '',
+            },
+          },
+        },
+      };
+
+      (
+        getProspectiveLpNotional as jest.MockedFunction<typeof getProspectiveLpNotional>
+      ).mockReturnValue(1000000);
+      (
+        formCompactFormatToParts as jest.MockedFunction<typeof formCompactFormatToParts>
+      ).mockReturnValue(mockCompactParts);
+
+      const result = selectNewPositionCompactNotional(mockedState as never);
+
+      expect(result).toEqual({
+        compactNotionalSuffix: 'M',
+        compactNotionalNumber: '1.23',
+      });
+      expect(getProspectiveLpNotional).toHaveBeenCalledWith(mockedState.lpForm);
+      expect(formCompactFormatToParts).toHaveBeenCalledWith(1000000);
     });
   });
 });
