@@ -116,6 +116,7 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
   return null;
 };
 
+// todo: FB duplicate as in swap form
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.lpForm.userInput.notionalAmount.error) return null;
 
