@@ -2,7 +2,7 @@ import { Draft } from '@reduxjs/toolkit';
 
 import { formatNumber } from '../../../../../../utilities/number';
 import { calculateLeverageOptions } from '../../../common/utils';
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
 
 export const updateLeverageOptionsAfterGetInfoPostLp = (state: Draft<SliceState>): void => {

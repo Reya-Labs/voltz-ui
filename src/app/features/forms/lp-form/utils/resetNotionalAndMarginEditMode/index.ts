@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 
 export const resetNotionalAndMarginEditMode = (state: Draft<SliceState>): void => {
   state.userInput.notionalAmount.editMode = 'add';

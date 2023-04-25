@@ -1,7 +1,7 @@
 import { Draft } from '@reduxjs/toolkit';
 
 import { isUserInputMarginError } from '../../../common/utils';
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 import { getProspectiveLpMargin } from '../getProspectiveLpMargin';
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
 import { hasExistingPosition } from '../hasExistingPosition';

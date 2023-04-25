@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { SliceState } from '../../reducer';
+import { SliceState } from '../../state';
 import { validateUserInputFixedRange } from './validateUserInputFixedRange';
 import { validateUserInputMargin } from './validateUserInputMargin';
 import { validateUserInputNotional } from './validateUserInputNotional';
