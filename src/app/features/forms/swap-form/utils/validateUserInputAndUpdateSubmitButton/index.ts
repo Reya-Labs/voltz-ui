@@ -11,17 +11,23 @@ import { validateUserInput } from '../validateUserInput';
 export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void => {
   validateUserInput(state);
 
-  const isProspectiveSwapNotionalValid =
-    hasExistingPosition(state) || getProspectiveSwapNotional(state) > 0;
-  const isProspectiveSwapMarginValid =
-    hasExistingPosition(state) || getProspectiveSwapMargin(state) > 0;
+  const existingPosition = hasExistingPosition(state);
+  const prospectiveSwapNotional = getProspectiveSwapNotional(state);
+  const prospectiveSwapMargin = getProspectiveSwapMargin(state);
+  const marginAmountEditMode = state.userInput.marginAmount.editMode;
+  const userInputMarginAmount = state.userInput.marginAmount.value;
+  const fee = state.prospectiveSwap.infoPostSwap.value.fee;
+  const marginError = isUserInputMarginError(state);
+
+  const isProspectiveSwapNotionalValid = existingPosition || prospectiveSwapNotional > 0;
+  const isProspectiveSwapMarginValid = existingPosition || prospectiveSwapMargin > 0;
   const isProspectiveSwapNotionalMarginValid =
-    getProspectiveSwapNotional(state) !== 0 || getProspectiveSwapMargin(state) !== 0;
+    prospectiveSwapNotional !== 0 || prospectiveSwapMargin !== 0;
   const isInfoPostSwapLoaded =
     state.prospectiveSwap.infoPostSwap.status === 'success' &&
     state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance *
       (getProspectiveSwapMode(state) === 'fixed' ? -1 : 1) ===
-      getProspectiveSwapNotional(state);
+      prospectiveSwapNotional;
   const isWalletBalanceLoaded = state.walletBalance.status === 'success';
   const isWalletTokenAllowanceLoaded = state.walletTokenAllowance.status === 'success';
 
@@ -37,33 +43,28 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     return;
   }
 
-  if (
-    !isUserInputMarginError(state) &&
-    isWalletTokenAllowanceLoaded &&
-    state.userInput.marginAmount.editMode === 'add'
-  ) {
-    if (state.walletTokenAllowance.value < state.userInput.marginAmount.value) {
+  const ammToken = state.amm.underlyingToken.name.toUpperCase();
+
+  if (!marginError && isWalletTokenAllowanceLoaded && marginAmountEditMode === 'add') {
+    const walletTokenAllowance = state.walletTokenAllowance.value;
+    if (walletTokenAllowance < userInputMarginAmount) {
       state.submitButton = {
         state: 'approve',
         disabled: false,
         message: {
-          text: `Please approve ${state.amm.underlyingToken.name.toUpperCase()}`,
+          text: `Please approve ${ammToken}`,
           isError: false,
         },
       };
       return;
     }
 
-    if (
-      isInfoPostSwapLoaded &&
-      state.walletTokenAllowance.value <
-        state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee
-    ) {
+    if (isInfoPostSwapLoaded && walletTokenAllowance < userInputMarginAmount + fee) {
       state.submitButton = {
         state: 'approve',
         disabled: false,
         message: {
-          text: `Please approve ${state.amm.underlyingToken.name.toUpperCase()}. Approval amount must cover for both the margin and the fees.`,
+          text: `Please approve ${ammToken}. Approval amount must cover for both the margin and the fees.`,
           isError: false,
         },
       };
@@ -71,8 +72,9 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     }
   }
 
-  if (isWalletBalanceLoaded && state.userInput.marginAmount.editMode === 'add') {
-    if (state.userInput.marginAmount.value > state.walletBalance.value) {
+  if (isWalletBalanceLoaded && marginAmountEditMode === 'add') {
+    const walletBalance = state.walletBalance.value;
+    if (userInputMarginAmount > walletBalance) {
       state.submitButton = {
         state: 'not-enough-balance',
         disabled: true,
@@ -84,16 +86,12 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       return;
     }
 
-    if (
-      isInfoPostSwapLoaded &&
-      state.userInput.marginAmount.value + state.prospectiveSwap.infoPostSwap.value.fee >
-        state.walletBalance.value
-    ) {
+    if (isInfoPostSwapLoaded && userInputMarginAmount + fee > walletBalance) {
       state.submitButton = {
         state: 'not-enough-balance',
         disabled: true,
         message: {
-          text: `Insufficient ${state.amm.underlyingToken.name.toUpperCase()} balance to cover for both the margin and the fees.`,
+          text: `Insufficient ${ammToken} balance to cover for both the margin and the fees.`,
           isError: true,
         },
       };
@@ -102,7 +100,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   }
 
   if (
-    !isUserInputMarginError(state) &&
+    !marginError &&
     isProspectiveSwapNotionalValid &&
     isProspectiveSwapMarginValid &&
     isProspectiveSwapNotionalMarginValid &&
@@ -111,7 +109,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     isWalletTokenAllowanceLoaded
   ) {
     state.submitButton = {
-      state: getProspectiveSwapNotional(state) !== 0 ? 'swap' : 'margin-update',
+      state: prospectiveSwapNotional !== 0 ? 'swap' : 'margin-update',
       disabled: false,
       message: {
         text: "Token approved, let's trade",
