@@ -22,3 +22,4 @@ export * from './updateLeverage';
 export * from './updateLeverageOptionsAfterGetInfoPostSwap';
 export * from './updateLeverageOptionsAfterGetPoolSwapInfo';
 export * from './validateUserInput';
+export * from './validateUserInputAndUpdateSubmitButton';
