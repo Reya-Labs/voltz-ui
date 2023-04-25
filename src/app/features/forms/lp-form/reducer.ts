@@ -2,8 +2,9 @@ import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, InfoPostLp, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
-import { formatNumber, roundIntegerNumber, stringToBigFloat } from '../../../../utilities/number';
+import { formatNumber, stringToBigFloat } from '../../../../utilities/number';
 import {
+  calculateLeverageOptions,
   checkLowLeverageNotification,
   formLimitAndFormatNumber,
   isUserInputMarginError,
@@ -28,6 +29,7 @@ import {
   updateSelectedPosition,
   validateUserInput,
 } from './utils';
+import { updateLeverageOptionsAfterGetPoolLpInfo } from './utils/updateLeverageOptionsAfterGetPoolLpInfo';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
@@ -201,33 +203,6 @@ const initialState: SliceState = {
     txHash: null,
   },
   showLowLeverageNotification: false,
-};
-
-const calculateLeverageOptions = (maxLeverage: string) => {
-  if (maxLeverage === '--') {
-    return [0, 0, 0];
-  }
-  let maxLeverageOption = stringToBigFloat(maxLeverage);
-  maxLeverageOption = roundIntegerNumber(
-    maxLeverageOption,
-    Math.max(
-      0,
-      Math.floor(maxLeverageOption.toString().length / 2) -
-        1 +
-        (maxLeverageOption.toString().length % 2),
-    ),
-  );
-  return [
-    Math.floor(maxLeverageOption / 4),
-    Math.floor(maxLeverageOption / 2),
-    Math.floor(maxLeverageOption),
-  ];
-};
-
-const updateLeverageOptionsAfterGetPoolLpInfo = (state: Draft<SliceState>): void => {
-  const maxLeverage = formatNumber(Math.floor(state.poolLpInfo.maxLeverage), 0, 0);
-  state.prospectiveLp.leverage.maxLeverage = maxLeverage;
-  state.prospectiveLp.leverage.options = calculateLeverageOptions(maxLeverage);
 };
 
 const updateLeverageOptionsAfterGetInfoPostLp = (state: Draft<SliceState>): void => {
