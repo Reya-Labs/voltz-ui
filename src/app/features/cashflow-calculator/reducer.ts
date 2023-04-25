@@ -3,35 +3,8 @@ import { AMM, ExpectedCashflowInfo } from '@voltz-protocol/v1-sdk';
 
 import { getAmmProtocol } from '../../../utilities/amm';
 import { pushEstimatedApyChangeEvent } from './analytics';
+import { initialState } from './state';
 import { getExpectedCashflowInfoThunk } from './thunks';
-
-type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
-
-export type SliceState = {
-  aMM: AMM | null;
-  estimatedApy: number;
-  cashflowInfo: {
-    averageFixedRate: number;
-    accruedCashflowExistingPosition: number;
-    accruedCashflowEditPosition: number;
-    estimatedAdditionalCashflow: (estimatedApy: number) => number;
-    estimatedTotalCashflow: (estimatedApy: number) => number;
-    status: ThunkStatus;
-  };
-};
-
-const initialState: SliceState = {
-  aMM: null,
-  estimatedApy: 0,
-  cashflowInfo: {
-    averageFixedRate: 0,
-    accruedCashflowExistingPosition: 0,
-    accruedCashflowEditPosition: 0,
-    estimatedAdditionalCashflow: () => 0,
-    estimatedTotalCashflow: () => 0,
-    status: 'idle',
-  },
-};
 
 const slice = createSlice({
   name: 'historicalRates',
