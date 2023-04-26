@@ -2,7 +2,7 @@ import { approveToken, depositAndRegister, isTokenApproved } from '@voltz-protoc
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
-import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/lp-optimisers';
+import { OptimiserInfo, updateOptimiserStateAction } from '../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
@@ -96,7 +96,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
 
           if (newOptimiserState) {
             void dispatch(
-              updateOptimiserState({
+              updateOptimiserStateAction({
                 optimiserId: vault.optimiserId,
                 newOptimiserState,
                 chainId,
