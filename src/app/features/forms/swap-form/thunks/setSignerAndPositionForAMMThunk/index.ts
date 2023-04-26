@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { getPositions, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
@@ -12,11 +12,12 @@ export type SetSignerAndPositionForAMMThunkSuccess = {
   position: Position | null;
   signer: providers.JsonRpcSigner | null;
 };
-export const setSignerAndPositionForAMMThunk = createAsyncThunk<
+
+export const setSignerAndPositionForAMMThunkHandler: AsyncThunkPayloadCreator<
   Awaited<SetSignerAndPositionForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
   { signer: providers.JsonRpcSigner | null; chainId: SupportedChainId },
   { state: RootState }
->('swapForm/setSignerAndPositionForAMM', async ({ signer, chainId }, thunkAPI) => {
+> = async ({ signer, chainId }, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().swapForm.amm;
     if (!amm) {
@@ -62,4 +63,10 @@ export const setSignerAndPositionForAMMThunk = createAsyncThunk<
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
-});
+};
+
+export const setSignerAndPositionForAMMThunk = createAsyncThunk<
+  Awaited<SetSignerAndPositionForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
+  { signer: providers.JsonRpcSigner | null; chainId: SupportedChainId },
+  { state: RootState }
+>('swapForm/setSignerAndPositionForAMM', setSignerAndPositionForAMMThunkHandler);
