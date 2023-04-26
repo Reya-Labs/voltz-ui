@@ -4,7 +4,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { initialiseOptimisersThunk } from './thunks';
 import { OptimiserInfo } from './types';
 
-type SliceState = {
+export type SliceState = {
   optimisersLoadedState: Record<SupportedChainId, 'idle' | 'pending' | 'succeeded' | 'failed'>;
   optimisers: Record<SupportedChainId, OptimiserInfo[]>;
 };
@@ -28,7 +28,7 @@ const slice = createSlice({
   name: 'lp-optimisers',
   initialState,
   reducers: {
-    updateOptimiserState: (
+    updateOptimiserStateAction: (
       state,
       {
         payload: { optimiserId, chainId, newOptimiserState },
@@ -62,5 +62,5 @@ const slice = createSlice({
   },
 });
 
-export const { updateOptimiserState } = slice.actions;
+export const { updateOptimiserStateAction } = slice.actions;
 export const lpOptimisersReducer = slice.reducer;

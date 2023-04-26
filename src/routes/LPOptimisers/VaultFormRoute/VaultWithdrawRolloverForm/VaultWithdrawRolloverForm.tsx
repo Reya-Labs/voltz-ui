@@ -1,7 +1,7 @@
 import { rollover as executeRollover, withdraw as executeWithdraw } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
-import { OptimiserInfo, updateOptimiserState } from '../../../../app/features/lp-optimisers';
+import { OptimiserInfo, updateOptimiserStateAction } from '../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
@@ -71,7 +71,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
           void dispatch(
-            updateOptimiserState({
+            updateOptimiserStateAction({
               optimiserId: vault.optimiserId,
               newOptimiserState,
               chainId,
@@ -109,7 +109,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
           void dispatch(
-            updateOptimiserState({
+            updateOptimiserStateAction({
               optimiserId: vault.optimiserId,
               newOptimiserState,
               chainId,

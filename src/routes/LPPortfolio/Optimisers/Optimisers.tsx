@@ -1,7 +1,7 @@
 import { registerForAutoRollover } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
-import { updateOptimiserState } from '../../../app/features/lp-optimisers';
+import { updateOptimiserStateAction } from '../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Loading } from '../../../components/atomic/Loading/Loading';
@@ -68,7 +68,7 @@ export const Optimisers: React.FunctionComponent = () => {
       }).then(({ newOptimiserState }) => {
         if (newOptimiserState) {
           void dispatch(
-            updateOptimiserState({
+            updateOptimiserStateAction({
               optimiserId: vault.optimiserId,
               newOptimiserState,
               chainId,

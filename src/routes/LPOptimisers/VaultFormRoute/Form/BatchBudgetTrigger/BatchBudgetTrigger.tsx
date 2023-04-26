@@ -1,7 +1,10 @@
 import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useReducer, useState } from 'react';
 
-import { OptimiserInfo, updateOptimiserState } from '../../../../../app/features/lp-optimisers';
+import {
+  OptimiserInfo,
+  updateOptimiserStateAction,
+} from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
@@ -74,7 +77,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
         });
         if (newOptimiserState) {
           void appDispatch(
-            updateOptimiserState({
+            updateOptimiserStateAction({
               optimiserId: lpVault.optimiserId,
               newOptimiserState,
               chainId,
