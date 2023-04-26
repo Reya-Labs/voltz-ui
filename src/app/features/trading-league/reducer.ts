@@ -3,7 +3,7 @@ import { RankType, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { fetchRankingsThunk } from './thunks';
 
-type SliceState = {
+export type SliceState = {
   status: Record<SupportedChainId, 'idle' | 'pending' | 'succeeded' | 'failed'>;
   rankings: Record<SupportedChainId, RankType[]>;
 };
