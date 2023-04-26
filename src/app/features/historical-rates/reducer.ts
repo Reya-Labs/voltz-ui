@@ -3,7 +3,7 @@ import { HistoricalRates, RatesData } from '@voltz-protocol/v1-sdk';
 
 import { fetchHistoricalRatesThunk } from './thunks';
 
-type SliceState = {
+export type SliceState = {
   historicalRates: HistoricalRates[];
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
 };
