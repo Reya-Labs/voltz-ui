@@ -3,7 +3,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { setChainIdThunk } from './thunks';
 
-type SliceState = {
+export type SliceState = {
   chainId: SupportedChainId | null;
   isSupportedChain: boolean;
   chainChangeState: 'idle' | 'pending' | 'error' | 'success';
