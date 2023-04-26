@@ -1,13 +1,13 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { RootState } from '../../../../../store';
 import { rejectThunkWithError } from '../../../../helpers/reject-thunk-with-error';
 
-export const approveUnderlyingTokenThunk = createAsyncThunk<
+export const approveUnderlyingTokenThunkHandler: AsyncThunkPayloadCreator<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/approveUnderlyingToken', async (_, thunkAPI) => {
+> = async (_, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().swapForm.amm;
     if (!amm || !amm.signer) {
@@ -18,4 +18,10 @@ export const approveUnderlyingTokenThunk = createAsyncThunk<
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
-});
+};
+
+export const approveUnderlyingTokenThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/approveUnderlyingToken', approveUnderlyingTokenThunkHandler);
