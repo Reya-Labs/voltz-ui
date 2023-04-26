@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 
-import { selectChainId } from './app/features/network';
-import { setChainIdThunk } from './app/features/network/thunks';
+import { selectChainId, setChainIdThunk } from './app/features/network';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { getDefaultChainId } from './components/interface/NetworkSelector/get-default-chain-id';

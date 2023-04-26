@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getChainInfo, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { rejectThunkWithError } from '../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
 
 export const setChainIdThunk = createAsyncThunk<
   Awaited<ReturnType<typeof rejectThunkWithError>>,

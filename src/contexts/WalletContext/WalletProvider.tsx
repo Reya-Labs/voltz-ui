@@ -1,8 +1,7 @@
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { selectChainId } from '../../app/features/network';
-import { setChainIdThunk } from '../../app/features/network/thunks';
+import { selectChainId, setChainIdThunk } from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
