@@ -5,8 +5,8 @@ import {
   selectChainChangeState,
   selectChainId,
   selectIsSupportedChain,
+  setChainIdThunk,
 } from '../../../app/features/network';
-import { setChainIdThunk } from '../../../app/features/network/thunks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
 import { setChainId } from '../../../utilities/network/chain-store';
