@@ -3,10 +3,10 @@ import { LineChart, RainbowLoader } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
 import {
+  fetchHistoricalRatesThunk,
   selectHistoricalRates,
   selectHistoricalRatesStatus,
 } from '../../../app/features/historical-rates';
-import { fetchHistoricalRatesThunk } from '../../../app/features/historical-rates/thunks';
 import { selectChainId } from '../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';

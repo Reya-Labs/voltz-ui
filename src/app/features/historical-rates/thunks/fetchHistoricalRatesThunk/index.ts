@@ -4,10 +4,10 @@ import {
   Granularity,
   RatesData,
   SupportedChainId,
-} from '@voltz-protocol/v1-sdk';
+} from '@voltz-protocol/v1-sdk/dist/types';
 
-import { RootState } from '../../store';
-import { rejectThunkWithError } from '../helpers/reject-thunk-with-error';
+import { RootState } from '../../../../store';
+import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
 
 type FetchHistoricalRatesThunk = {
   chainId: SupportedChainId;
@@ -17,7 +17,6 @@ type FetchHistoricalRatesThunk = {
   timeframeMs: number;
   granularity: Granularity;
 };
-
 const getCacheId = ({
   chainId,
   isFixed,
@@ -28,7 +27,6 @@ const getCacheId = ({
 }: FetchHistoricalRatesThunk) =>
   `${chainId}-${isFixed.toString()}-${aMMRateOracleId}-${aMMId}-${timeframeMs}-${granularity.toString()}`;
 const CACHE: Record<string, RatesData> = {};
-
 export const fetchHistoricalRatesThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   {
