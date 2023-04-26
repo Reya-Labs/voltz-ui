@@ -4,7 +4,7 @@ import {
   Granularity,
   RatesData,
   SupportedChainId,
-} from '@voltz-protocol/v1-sdk/dist/types';
+} from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../../../store';
 import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
