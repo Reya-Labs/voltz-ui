@@ -8,6 +8,7 @@ import {
   generateAmmIdForRoute,
   generatePoolId,
   getAmmProtocol,
+  getProtocolName,
 } from './index';
 
 jest.mock('../../hooks/voltz-config/config', () => ({
@@ -340,6 +341,48 @@ describe('utilities/amm', () => {
       const expectedAmmIdForRoute = 'cdef';
       const actualAmmIdForRoute = generateAmmIdForRoute(mockAMM);
       expect(actualAmmIdForRoute).toEqual(expectedAmmIdForRoute);
+    });
+  });
+
+  describe('getProtocolName', () => {
+    it('should return "aave" for protocol id 1', () => {
+      expect(getProtocolName(1)).toEqual('aave');
+    });
+
+    it('should return "compound" for protocol id 2', () => {
+      expect(getProtocolName(2)).toEqual('compound');
+    });
+
+    it('should return "lido" for protocol id 3', () => {
+      expect(getProtocolName(3)).toEqual('lido');
+    });
+
+    it('should return "rocket" for protocol id 4', () => {
+      expect(getProtocolName(4)).toEqual('rocket');
+    });
+
+    it('should return "aaveBorrowing" for protocol id 5', () => {
+      expect(getProtocolName(5)).toEqual('aaveBorrowing');
+    });
+
+    it('should return "compoundBorrowing" for protocol id 6', () => {
+      expect(getProtocolName(6)).toEqual('compoundBorrowing');
+    });
+
+    it('should return "aaveV3" for protocol id 7', () => {
+      expect(getProtocolName(7)).toEqual('aaveV3');
+    });
+
+    it('should return "gmxGlp" for protocol id 8', () => {
+      expect(getProtocolName(8)).toEqual('gmxGlp');
+    });
+
+    it('should return "aaveV3Borrowing" for protocol id 9', () => {
+      expect(getProtocolName(9)).toEqual('aaveV3Borrowing');
+    });
+
+    it('should throw an error for an unsupported protocol id', () => {
+      expect(() => getProtocolName(10)).toThrow('Not supported protocolId');
     });
   });
 });

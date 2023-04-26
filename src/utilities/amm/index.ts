@@ -68,7 +68,7 @@ export const getAmmProtocol = (amm: AMM) => {
   return amm.protocol + (amm.market.tags.isBorrowing ? '_borrow' : '');
 };
 
-const getProtocolName = (protocolId: number): string => {
+export const getProtocolName = (protocolId: number): string => {
   switch (protocolId) {
     case 1: {
       return 'aave';
