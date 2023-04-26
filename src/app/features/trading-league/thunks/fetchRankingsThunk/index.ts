@@ -2,9 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RankType, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { Season } from '../../../hooks/season/types';
-import { getCommunitySbt } from '../../../ui/pages/Profile/helpers';
-import { rejectThunkWithError } from '../helpers/reject-thunk-with-error';
+import { Season } from '../../../../../hooks/season/types';
+import { getCommunitySbt } from '../../../../../ui/pages/Profile/helpers';
+import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
 
 export const fetchRankingsThunk = createAsyncThunk<
   Awaited<RankType[] | ReturnType<typeof rejectThunkWithError>>,
