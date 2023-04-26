@@ -2,9 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getAllMellowProducts, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 
-import { getAlchemyKeyForChain } from '../../../utilities/network/get-alchemy-key-for-chain';
-import { rejectThunkWithError } from '../helpers/reject-thunk-with-error';
-import { OptimiserInfo } from './types';
+import { getAlchemyKeyForChain } from '../../../../../utilities/network/get-alchemy-key-for-chain';
+import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { OptimiserInfo } from '../../types';
 
 export const initialiseOptimisersThunk = createAsyncThunk<
   OptimiserInfo | Awaited<ReturnType<typeof rejectThunkWithError>>,
