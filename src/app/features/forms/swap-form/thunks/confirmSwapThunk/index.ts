@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../../../../utilities/amm';
@@ -17,11 +17,11 @@ import {
   hasExistingPosition,
 } from '../../utils';
 
-export const confirmSwapThunk = createAsyncThunk<
+export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
   Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/confirmSwap', async (_, thunkAPI) => {
+> = async (_, thunkAPI) => {
   const swapFormState = thunkAPI.getState().swapForm;
   const amm = swapFormState.amm;
   if (!amm || !amm.signer) {
@@ -29,21 +29,25 @@ export const confirmSwapThunk = createAsyncThunk<
   }
 
   const account = await amm.signer.getAddress();
+  const prospectiveSwapNotional = getProspectiveSwapNotional(swapFormState);
+  const prospectiveSwapMargin = getProspectiveSwapMargin(swapFormState);
+  const existingPosition = hasExistingPosition(swapFormState);
+  const prospectiveSwapMode = getProspectiveSwapMode(swapFormState);
   const eventParams = {
     account,
-    notional: getProspectiveSwapNotional(swapFormState),
-    margin: getProspectiveSwapMargin(swapFormState),
-    isEdit: hasExistingPosition(swapFormState),
+    notional: prospectiveSwapNotional,
+    margin: prospectiveSwapMargin,
+    isEdit: existingPosition,
     pool: getAmmProtocol(amm),
-    isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
+    isFT: prospectiveSwapMode === 'fixed',
   };
 
   try {
     pushSwapTransactionSubmittedEvent(eventParams);
     const result = await amm.swap({
-      isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
-      notional: getProspectiveSwapNotional(swapFormState),
-      margin: getProspectiveSwapMargin(swapFormState),
+      isFT: prospectiveSwapMode === 'fixed',
+      notional: prospectiveSwapNotional,
+      margin: prospectiveSwapMargin,
       fixedLow: 1,
       fixedHigh: 999,
     });
@@ -56,4 +60,10 @@ export const confirmSwapThunk = createAsyncThunk<
     });
     return rejectThunkWithError(thunkAPI, err);
   }
-});
+};
+
+export const confirmSwapThunk = createAsyncThunk<
+  Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
+  void,
+  { state: RootState }
+>('swapForm/confirmSwap', confirmSwapThunkHandler);
