@@ -1,14 +1,14 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../../../../store';
 import { rejectThunkWithError } from '../../../../helpers/reject-thunk-with-error';
 
-export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
+export const getUnderlyingTokenAllowanceThunkHandler: AsyncThunkPayloadCreator<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   { chainId: SupportedChainId; alchemyApiKey: string },
   { state: RootState }
->('swapForm/getUnderlyingTokenAllowance', async ({ chainId, alchemyApiKey }, thunkAPI) => {
+> = async ({ chainId, alchemyApiKey }, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().swapForm.amm;
     if (!amm || !amm.signer) {
@@ -23,4 +23,9 @@ export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
-});
+};
+export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
+  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  { chainId: SupportedChainId; alchemyApiKey: string },
+  { state: RootState }
+>('swapForm/getUnderlyingTokenAllowance', getUnderlyingTokenAllowanceThunkHandler);
