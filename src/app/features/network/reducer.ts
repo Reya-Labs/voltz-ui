@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { setChainIdThunk } from './thunks/setChainIdThunk';
+import { setChainIdThunk } from './thunks';
 
 type SliceState = {
   chainId: SupportedChainId | null;
