@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { InfoPostSwapV1 } from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../../../../store';
@@ -6,7 +6,7 @@ import { rejectThunkWithError } from '../../../../helpers/reject-thunk-with-erro
 import { isUserInputNotionalError } from '../../../common/utils';
 import { getProspectiveSwapMode, getProspectiveSwapNotional } from '../../utils';
 
-export const getInfoPostSwapThunk = createAsyncThunk<
+export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
   Awaited<
     | {
         notionalAmount: number;
@@ -18,23 +18,25 @@ export const getInfoPostSwapThunk = createAsyncThunk<
   >,
   void,
   { state: RootState }
->('swapForm/getInfoPostSwap', async (_, thunkAPI) => {
+> = async (_, thunkAPI) => {
   try {
     const swapFormState = thunkAPI.getState().swapForm;
     const amm = swapFormState.amm;
+    const prospectiveSwapMode = getProspectiveSwapMode(swapFormState);
+    const prospectiveSwapNotional = getProspectiveSwapNotional(swapFormState);
     if (!amm || isUserInputNotionalError(swapFormState)) {
       return {
         notionalAmount: NaN,
-        swapMode: getProspectiveSwapMode(swapFormState),
+        swapMode: prospectiveSwapMode,
         infoPostSwap: {},
         earlyReturn: true,
       };
     }
 
-    if (getProspectiveSwapNotional(swapFormState) === 0) {
+    if (prospectiveSwapNotional === 0) {
       return {
         notionalAmount: 0,
-        swapMode: getProspectiveSwapMode(swapFormState),
+        swapMode: prospectiveSwapMode,
         infoPostSwap: {
           marginRequirement: 0,
           maxMarginWithdrawable: 0,
@@ -50,9 +52,9 @@ export const getInfoPostSwapThunk = createAsyncThunk<
       };
     }
 
-    const notionalAmount = getProspectiveSwapNotional(swapFormState);
+    const notionalAmount = prospectiveSwapNotional;
     const infoPostSwapV1 = await amm.getInfoPostSwapV1({
-      isFT: getProspectiveSwapMode(swapFormState) === 'fixed',
+      isFT: prospectiveSwapMode === 'fixed',
       notional: notionalAmount,
       fixedLow: 1,
       fixedHigh: 999,
@@ -67,11 +69,25 @@ export const getInfoPostSwapThunk = createAsyncThunk<
 
     return {
       notionalAmount,
-      swapMode: getProspectiveSwapMode(swapFormState),
+      swapMode: prospectiveSwapMode,
       infoPostSwap: infoPostSwapV1,
       earlyReturn: false,
     };
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
-});
+};
+
+export const getInfoPostSwapThunk = createAsyncThunk<
+  Awaited<
+    | {
+        notionalAmount: number;
+        swapMode: 'fixed' | 'variable';
+        infoPostSwapV1: InfoPostSwapV1;
+        earlyReturn: boolean;
+      }
+    | ReturnType<typeof rejectThunkWithError>
+  >,
+  void,
+  { state: RootState }
+>('swapForm/getInfoPostSwap', getInfoPostSwapThunkHandler);
