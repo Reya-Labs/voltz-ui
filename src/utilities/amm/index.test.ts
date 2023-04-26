@@ -5,6 +5,8 @@ import {
   findCurrentAmm,
   findCurrentPosition,
   findCurrentPositionsLp,
+  generateAmmIdForRoute,
+  generatePoolId,
   getAmmProtocol,
 } from './index';
 
@@ -296,6 +298,48 @@ describe('utilities/amm', () => {
           },
         } as AMM),
       ).toBe('balancer_borrow');
+    });
+  });
+
+  describe('generatePoolId', () => {
+    const mockAMM = {
+      id: '0x123',
+      underlyingToken: {
+        name: 'Token1',
+        symbol: 'TK1',
+      },
+      termEndTimestampInMS: 1656097920000,
+      rateOracle: {
+        protocolId: 1,
+        asset: '0x456',
+      },
+    } as never;
+
+    it('should generate the correct pool id', () => {
+      const expectedPoolId = `aave-Token1-2022-06-24`;
+      const actualPoolId = generatePoolId(mockAMM);
+      expect(actualPoolId).toEqual(expectedPoolId);
+    });
+  });
+
+  describe('generateAmmIdForRoute', () => {
+    const mockAMM: AMM = {
+      id: '0x1234567890abcdef',
+      underlyingToken: {
+        name: 'Token1',
+        symbol: 'TK1',
+      },
+      termEndTimestampInMS: 1656097920000,
+      rateOracle: {
+        protocolId: 1,
+        asset: '0x456',
+      },
+    } as never;
+
+    it('should generate the correct AMM id for route', () => {
+      const expectedAmmIdForRoute = 'cdef';
+      const actualAmmIdForRoute = generateAmmIdForRoute(mockAMM);
+      expect(actualAmmIdForRoute).toEqual(expectedAmmIdForRoute);
     });
   });
 });
