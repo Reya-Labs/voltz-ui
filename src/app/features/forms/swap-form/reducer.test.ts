@@ -2,7 +2,12 @@ import { getAmmProtocol } from '../../../../utilities/amm';
 import { stringToBigFloat } from '../../../../utilities/number';
 import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../common/utils';
 import { pushLeverageChangeEvent } from './analytics';
-import { setLeverageAction, setSwapFormAMMAction, swapFormReducer } from './reducer';
+import {
+  setLeverageAction,
+  setMarginAmountAction,
+  setSwapFormAMMAction,
+  swapFormReducer,
+} from './reducer';
 import { initialState, SliceState } from './state';
 import {
   approveUnderlyingTokenThunk,
@@ -18,6 +23,7 @@ import {
   getExistingPositionMode,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
+  updateLeverage,
   updateLeverageOptionsAfterGetInfoPostSwap,
   updateLeverageOptionsAfterGetPoolSwapInfo,
   validateUserInputAndUpdateSubmitButton,
@@ -43,6 +49,7 @@ jest.mock('./utils', () => ({
   validateUserInputAndUpdateSubmitButton: jest.fn(),
   updateLeverageOptionsAfterGetPoolSwapInfo: jest.fn(),
   updateLeverageOptionsAfterGetInfoPostSwap: jest.fn(),
+  updateLeverage: jest.fn(),
   getExistingPositionMode: jest.fn(),
   getProspectiveSwapNotional: jest.fn(),
   getProspectiveSwapMode: jest.fn(),
@@ -58,6 +65,30 @@ describe('swapFormReducer', () => {
   });
 
   describe('actions', () => {
+    describe('setMarginAmountAction', () => {
+      test.each([
+        [
+          { value: 1, editMode: 'add' },
+          { value: undefined, editMode: 'remove' },
+          { value: 1, editMode: undefined },
+          { value: undefined, editMode: undefined },
+        ],
+      ])(
+        'provided %p as payload, it should set marginAmount.value and marginAmount.editMode properly',
+        (payload) => {
+          const nextState = swapFormReducer(
+            testsInitialState,
+            setMarginAmountAction(payload as never),
+          );
+
+          expect(nextState.userInput.marginAmount.value).toEqual(payload.value);
+          expect(nextState.userInput.marginAmount.editMode).toEqual(payload.editMode);
+          expect(updateLeverage).toHaveBeenCalledTimes(1);
+          expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
+        },
+      );
+    });
+
     describe('setLeverageAction', () => {
       test.each([
         [
