@@ -1,6 +1,10 @@
 import { swapFormReducer } from './reducer';
 import { initialState, SliceState } from './state';
-import { getUnderlyingTokenAllowanceThunk, getWalletBalanceThunk } from './thunks';
+import {
+  approveUnderlyingTokenThunk,
+  getUnderlyingTokenAllowanceThunk,
+  getWalletBalanceThunk,
+} from './thunks';
 import { validateUserInputAndUpdateSubmitButton } from './utils';
 
 jest.mock('./utils', () => ({
@@ -63,6 +67,48 @@ describe('swapFormReducer', () => {
     it('should update walletTokenAllowance and status to "success" when getUnderlyingTokenAllowanceThunk is fulfilled, also make sure validateUserInputAndUpdateSubmitButton is called', () => {
       const nextState = swapFormReducer(testsInitialState, {
         type: getUnderlyingTokenAllowanceThunk.fulfilled.type,
+        payload: 10,
+      });
+
+      expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
+      expect(nextState.walletTokenAllowance.status).toEqual('success');
+      expect(nextState.walletTokenAllowance.value).toEqual(10);
+    });
+  });
+
+  describe('approveUnderlyingTokenThunk', () => {
+    it('should update submitButton to "approving" when approveUnderlyingTokenThunk is pending', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: approveUnderlyingTokenThunk.pending.type,
+      });
+      expect(nextState.submitButton).toEqual({
+        state: 'approving',
+        disabled: true,
+        message: {
+          text: 'Waiting for confirmation...',
+          isError: false,
+        },
+      });
+    });
+
+    it('should update submitButton to "error" to error state when approveUnderlyingTokenThunk is rejected', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: approveUnderlyingTokenThunk.rejected.type,
+        payload: 'Error happened',
+      });
+      expect(nextState.submitButton).toEqual({
+        state: 'approve',
+        disabled: false,
+        message: {
+          text: 'Error happened',
+          isError: true,
+        },
+      });
+    });
+
+    it('should update walletTokenAllowance and status to "success" when approveUnderlyingTokenThunk is fulfilled, also make sure validateUserInputAndUpdateSubmitButton is called', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: approveUnderlyingTokenThunk.fulfilled.type,
         payload: 10,
       });
 
