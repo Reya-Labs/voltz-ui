@@ -129,7 +129,8 @@ const slice = createSlice({
         changeType: 'button' | 'input';
       }>,
     ) => {
-      if (getProspectiveSwapNotional(state) === 0 || isNaN(value) || value === 0) {
+      const prospectiveSwapNotional = getProspectiveSwapNotional(state);
+      if (prospectiveSwapNotional === 0 || isNaN(value) || value === 0) {
         state.userInput.leverage = null;
         state.userInput.marginAmount.value = 0;
         validateUserInputAndUpdateSubmitButton(state);
@@ -147,7 +148,7 @@ const slice = createSlice({
         });
       }
       state.userInput.marginAmount.value = stringToBigFloat(
-        formLimitAndFormatNumber(getProspectiveSwapNotional(state) / value, 'ceil'),
+        formLimitAndFormatNumber(prospectiveSwapNotional / value, 'ceil'),
       );
 
       validateUserInputAndUpdateSubmitButton(state);
