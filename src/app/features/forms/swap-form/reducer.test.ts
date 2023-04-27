@@ -2,6 +2,7 @@ import { swapFormReducer } from './reducer';
 import { initialState, SliceState } from './state';
 import {
   approveUnderlyingTokenThunk,
+  confirmSwapThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
@@ -370,6 +371,44 @@ describe('swapFormReducer', () => {
       expect(nextState.position.status).toEqual('success');
       expect(nextState.amm?.signer).toEqual(mockedSigner);
       expect(nextState.userInput.mode).toEqual('variable');
+    });
+  });
+
+  describe('confirmSwapThunk', () => {
+    it('should update swapConfirmationFlow to "waitingForSwapConfirmation" when confirmSwapThunk is pending', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: confirmSwapThunk.pending.type,
+      });
+      expect(nextState.swapConfirmationFlow).toEqual({
+        step: 'waitingForSwapConfirmation',
+        error: null,
+        txHash: null,
+      });
+    });
+
+    it('should update swapConfirmationFlow to error state when confirmSwapThunk is rejected', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: confirmSwapThunk.rejected.type,
+        payload: 'Error happened',
+      });
+      expect(nextState.swapConfirmationFlow).toEqual({
+        step: 'swapConfirmation',
+        error: 'Error happened',
+        txHash: null,
+      });
+    });
+
+    it('should update swapConfirmationFlow and status to "swapCompleted" when confirmSwapThunk is fulfilled', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: confirmSwapThunk.fulfilled.type,
+        payload: { transactionHash: 'transactionHash' },
+      });
+
+      expect(nextState.swapConfirmationFlow).toEqual({
+        step: 'swapCompleted',
+        error: null,
+        txHash: 'transactionHash',
+      });
     });
   });
 });
