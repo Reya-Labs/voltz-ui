@@ -21,13 +21,8 @@ export const selectAMMs = (state: RootState): AMM[] => {
   if (!config) {
     return [];
   }
-  const generalPoolIds = config.apply
-    ? config.pools.filter((pool) => pool.show.general).map((pool) => pool.id.toLowerCase())
-    : [];
-  if (generalPoolIds.length === 0) {
-    return state.aMMs.aMMs[chainId];
-  }
-  return state.aMMs.aMMs[chainId].filter((amm) => generalPoolIds.includes(amm.id.toLowerCase()));
+
+  return state.aMMs.aMMs[chainId];
 };
 
 export const selectPools = (state: RootState): PoolUI[] => {
