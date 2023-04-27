@@ -3,6 +3,7 @@ import { stringToBigFloat } from '../../../../utilities/number';
 import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../common/utils';
 import { pushLeverageChangeEvent } from './analytics';
 import {
+  closeMarginUpdateConfirmationFlowAction,
   setLeverageAction,
   setMarginAmountAction,
   setNotionalAmountAction,
@@ -67,6 +68,21 @@ describe('swapFormReducer', () => {
   });
 
   describe('actions', () => {
+    describe('closeMarginUpdateConfirmationFlowAction', () => {
+      it('should set reset marginUpdateConfirmationFlow', () => {
+        const nextState = swapFormReducer(
+          testsInitialState,
+          closeMarginUpdateConfirmationFlowAction(),
+        );
+
+        expect(nextState.marginUpdateConfirmationFlow).toEqual({
+          step: null,
+          error: null,
+          txHash: null,
+        });
+      });
+    });
+
     describe('setUserInputModeAction', () => {
       it('should set userInput.mode properly and reset infoPostSwap', () => {
         const nextState = swapFormReducer(
