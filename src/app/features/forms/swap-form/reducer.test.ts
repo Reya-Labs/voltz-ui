@@ -7,6 +7,7 @@ import {
   setMarginAmountAction,
   setNotionalAmountAction,
   setSwapFormAMMAction,
+  setUserInputModeAction,
   swapFormReducer,
 } from './reducer';
 import { initialState, SliceState } from './state';
@@ -66,6 +67,34 @@ describe('swapFormReducer', () => {
   });
 
   describe('actions', () => {
+    describe('setUserInputModeAction', () => {
+      it('should set userInput.mode properly and reset infoPostSwap', () => {
+        const nextState = swapFormReducer(
+          testsInitialState,
+          setUserInputModeAction({
+            value: 'variable',
+          }),
+        );
+
+        expect(nextState.userInput.mode).toEqual('variable');
+        expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
+          value: {
+            marginRequirement: 0,
+            maxMarginWithdrawable: 0,
+            averageFixedRate: 0,
+            fixedTokenDeltaBalance: 0,
+            variableTokenDeltaBalance: 0,
+            fixedTokenDeltaUnbalanced: 0,
+            fee: 0,
+            slippage: 0,
+            gasFeeETH: 0,
+          },
+          status: 'idle',
+        });
+        expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
+      });
+    });
+
     describe('setNotionalAmountAction', () => {
       test.each([
         [
