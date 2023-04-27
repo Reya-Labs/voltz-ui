@@ -5,6 +5,7 @@ import { pushLeverageChangeEvent } from './analytics';
 import {
   setLeverageAction,
   setMarginAmountAction,
+  setNotionalAmountAction,
   setSwapFormAMMAction,
   swapFormReducer,
 } from './reducer';
@@ -65,6 +66,30 @@ describe('swapFormReducer', () => {
   });
 
   describe('actions', () => {
+    describe('setNotionalAmountAction', () => {
+      test.each([
+        [
+          { value: 1, editMode: 'add' },
+          { value: undefined, editMode: 'remove' },
+          { value: 1, editMode: undefined },
+          { value: undefined, editMode: undefined },
+        ],
+      ])(
+        'provided %p as payload, it should set notionalAmount.value and notionalAmount.editMode properly',
+        (payload) => {
+          const nextState = swapFormReducer(
+            testsInitialState,
+            setNotionalAmountAction(payload as never),
+          );
+
+          expect(nextState.userInput.notionalAmount.value).toEqual(payload.value);
+          expect(nextState.userInput.notionalAmount.editMode).toEqual(payload.editMode);
+          expect(updateLeverage).toHaveBeenCalledTimes(1);
+          expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
+        },
+      );
+    });
+
     describe('setMarginAmountAction', () => {
       test.each([
         [
