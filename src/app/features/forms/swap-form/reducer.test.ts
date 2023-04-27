@@ -2,6 +2,7 @@ import { swapFormReducer } from './reducer';
 import { initialState, SliceState } from './state';
 import {
   approveUnderlyingTokenThunk,
+  confirmMarginUpdateThunk,
   confirmSwapThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
@@ -406,6 +407,44 @@ describe('swapFormReducer', () => {
 
       expect(nextState.swapConfirmationFlow).toEqual({
         step: 'swapCompleted',
+        error: null,
+        txHash: 'transactionHash',
+      });
+    });
+  });
+
+  describe('confirmMarginUpdateThunk', () => {
+    it('should update marginUpdateConfirmationFlow to "waitingForSwapConfirmation" when confirmMarginUpdateThunk is pending', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: confirmMarginUpdateThunk.pending.type,
+      });
+      expect(nextState.marginUpdateConfirmationFlow).toEqual({
+        step: 'waitingForMarginUpdateConfirmation',
+        error: null,
+        txHash: null,
+      });
+    });
+
+    it('should update marginUpdateConfirmationFlow to error state when confirmMarginUpdateThunk is rejected', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: confirmMarginUpdateThunk.rejected.type,
+        payload: 'Error happened',
+      });
+      expect(nextState.marginUpdateConfirmationFlow).toEqual({
+        step: 'marginUpdateConfirmation',
+        error: 'Error happened',
+        txHash: null,
+      });
+    });
+
+    it('should update marginUpdateConfirmationFlow and status to "swapCompleted" when confirmMarginUpdateThunk is fulfilled', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: confirmMarginUpdateThunk.fulfilled.type,
+        payload: { transactionHash: 'transactionHash' },
+      });
+
+      expect(nextState.marginUpdateConfirmationFlow).toEqual({
+        step: 'marginUpdateCompleted',
         error: null,
         txHash: 'transactionHash',
       });
