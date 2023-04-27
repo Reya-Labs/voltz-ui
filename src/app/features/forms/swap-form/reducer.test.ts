@@ -6,8 +6,10 @@ import {
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
+  setSignerAndPositionForAMMThunk,
 } from './thunks';
 import {
+  getExistingPositionMode,
   updateLeverageOptionsAfterGetInfoPostSwap,
   updateLeverageOptionsAfterGetPoolSwapInfo,
   validateUserInputAndUpdateSubmitButton,
@@ -17,6 +19,7 @@ jest.mock('./utils', () => ({
   validateUserInputAndUpdateSubmitButton: jest.fn(),
   updateLeverageOptionsAfterGetPoolSwapInfo: jest.fn(),
   updateLeverageOptionsAfterGetInfoPostSwap: jest.fn(),
+  getExistingPositionMode: jest.fn(),
 }));
 
 // Define the mock state
@@ -296,6 +299,77 @@ describe('swapFormReducer', () => {
         },
         status: 'idle',
       });
+    });
+  });
+
+  describe('setSignerAndPositionForAMMThunk', () => {
+    it('should update position to null and status to "pending", amm.signer to null when setSignerAndPositionForAMMThunk is pending', () => {
+      const nextState = swapFormReducer(
+        {
+          ...testsInitialState,
+          amm: { signer: {} } as never,
+        },
+        {
+          type: setSignerAndPositionForAMMThunk.pending.type,
+        },
+      );
+      expect(nextState.position.status).toEqual('pending');
+      expect(nextState.position.value).toEqual(null);
+      expect(nextState.amm?.signer).toEqual(null);
+
+      const nextState2 = swapFormReducer(testsInitialState, {
+        type: setSignerAndPositionForAMMThunk.pending.type,
+      });
+      expect(nextState2.position.status).toEqual('pending');
+      expect(nextState2.position.value).toEqual(null);
+    });
+
+    it('should update position to null and status to "pending", amm.signer to null when setSignerAndPositionForAMMThunk is rejected', () => {
+      const nextState = swapFormReducer(
+        {
+          ...testsInitialState,
+          amm: { signer: {} } as never,
+        },
+        {
+          type: setSignerAndPositionForAMMThunk.rejected.type,
+        },
+      );
+      expect(nextState.position.status).toEqual('error');
+      expect(nextState.position.value).toEqual(null);
+      expect(nextState.amm?.signer).toEqual(null);
+
+      const nextState2 = swapFormReducer(testsInitialState, {
+        type: setSignerAndPositionForAMMThunk.rejected.type,
+      });
+      expect(nextState2.position.status).toEqual('error');
+      expect(nextState2.position.value).toEqual(null);
+    });
+
+    it('should update position and amm.signer when setSignerAndPositionForAMMThunk is fulfilled, also make sure validateUserInputAndUpdateSubmitButton is called', () => {
+      (getExistingPositionMode as jest.Mock).mockReturnValueOnce('variable');
+      const mockedPosition = jest.fn();
+      const mockedSigner = jest.fn();
+      const nextState = swapFormReducer(
+        {
+          ...testsInitialState,
+          amm: {
+            signer: {},
+          },
+        } as never,
+        {
+          type: setSignerAndPositionForAMMThunk.fulfilled.type,
+          payload: {
+            position: mockedPosition,
+            signer: mockedSigner,
+          },
+        },
+      );
+
+      expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
+      expect(nextState.position.value).toEqual(mockedPosition);
+      expect(nextState.position.status).toEqual('success');
+      expect(nextState.amm?.signer).toEqual(mockedSigner);
+      expect(nextState.userInput.mode).toEqual('variable');
     });
   });
 });
