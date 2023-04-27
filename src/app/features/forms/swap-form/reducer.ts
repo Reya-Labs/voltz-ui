@@ -317,7 +317,7 @@ const slice = createSlice({
           notionalAmount: number;
           swapMode: 'fixed' | 'variable';
           infoPostSwap: InfoPostSwapV1;
-          earlyReturn: boolean; //TODO Alex: maybe refactor this
+          earlyReturn: boolean;
         };
 
         if (earlyReturn) {
