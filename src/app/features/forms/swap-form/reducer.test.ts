@@ -1,4 +1,8 @@
-import { setSwapFormAMMAction, swapFormReducer } from './reducer';
+import { getAmmProtocol } from '../../../../utilities/amm';
+import { stringToBigFloat } from '../../../../utilities/number';
+import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../common/utils';
+import { pushLeverageChangeEvent } from './analytics';
+import { setLeverageAction, setSwapFormAMMAction, swapFormReducer } from './reducer';
 import { initialState, SliceState } from './state';
 import {
   approveUnderlyingTokenThunk,
@@ -12,16 +16,36 @@ import {
 } from './thunks';
 import {
   getExistingPositionMode,
+  getProspectiveSwapMode,
+  getProspectiveSwapNotional,
   updateLeverageOptionsAfterGetInfoPostSwap,
   updateLeverageOptionsAfterGetPoolSwapInfo,
   validateUserInputAndUpdateSubmitButton,
 } from './utils';
+
+jest.mock('../../../../utilities/number', () => ({
+  stringToBigFloat: jest.fn(),
+}));
+jest.mock('../../../../utilities/amm', () => ({
+  getAmmProtocol: jest.fn(),
+}));
+
+jest.mock('./analytics', () => ({
+  pushLeverageChangeEvent: jest.fn(),
+}));
+
+jest.mock('../common/utils', () => ({
+  checkLowLeverageNotification: jest.fn(),
+  formLimitAndFormatNumber: jest.fn(),
+}));
 
 jest.mock('./utils', () => ({
   validateUserInputAndUpdateSubmitButton: jest.fn(),
   updateLeverageOptionsAfterGetPoolSwapInfo: jest.fn(),
   updateLeverageOptionsAfterGetInfoPostSwap: jest.fn(),
   getExistingPositionMode: jest.fn(),
+  getProspectiveSwapNotional: jest.fn(),
+  getProspectiveSwapMode: jest.fn(),
 }));
 
 // Define the mock state
@@ -34,6 +58,88 @@ describe('swapFormReducer', () => {
   });
 
   describe('actions', () => {
+    describe('setLeverageAction', () => {
+      test.each([
+        [
+          {
+            value: 123,
+            account: '0x123',
+            changeType: 'input',
+          },
+          0,
+        ],
+        [
+          {
+            value: 0,
+            account: '0x123',
+            changeType: 'input',
+          },
+          10,
+        ],
+        [
+          {
+            value: NaN,
+            account: '0x123',
+            changeType: 'input',
+          },
+          10,
+        ],
+      ])(
+        'given %p as payload, mocking getProspectiveSwapNotional with %p, should set leverage to null, marginAmount to null and call validateUserInputAndUpdateSubmitButton if invalid input provided or prospectiveSwapNotional is 0',
+        (setLeverageActionPayload, mockGetProspectiveSwapNotionalValue) => {
+          (getProspectiveSwapNotional as jest.Mock).mockReturnValueOnce(
+            mockGetProspectiveSwapNotionalValue,
+          );
+          const nextState = swapFormReducer(
+            {
+              ...testsInitialState,
+              userInput: {
+                ...testsInitialState.userInput,
+                leverage: 10,
+                marginAmount: {
+                  ...testsInitialState.userInput.marginAmount,
+                  value: 10,
+                },
+              },
+            },
+            setLeverageAction(setLeverageActionPayload as never),
+          );
+          expect(nextState.userInput.leverage).toEqual(null);
+          expect(nextState.userInput.marginAmount.value).toEqual(0);
+          expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
+        },
+      );
+
+      it('should set leverage to correct value, track event and call checkLowLeverageNotification', () => {
+        (getProspectiveSwapNotional as jest.Mock).mockReturnValueOnce(10);
+        (stringToBigFloat as jest.Mock).mockReturnValueOnce(10.0);
+        const mockedCheckLowLeverageNotificationValue = false;
+        (checkLowLeverageNotification as jest.Mock).mockReturnValueOnce(
+          mockedCheckLowLeverageNotificationValue,
+        );
+        const nextState = swapFormReducer(
+          testsInitialState,
+          setLeverageAction({
+            value: 456,
+            account: '0x123',
+            changeType: 'input',
+          }),
+        );
+        expect(nextState.userInput.leverage).toEqual(456);
+        expect(nextState.userInput.marginAmount.value).toEqual(10.0);
+        expect(nextState.showLowLeverageNotification).toEqual(
+          mockedCheckLowLeverageNotificationValue,
+        );
+        expect(stringToBigFloat).toHaveBeenCalledTimes(1);
+        expect(formLimitAndFormatNumber).toHaveBeenCalledTimes(1);
+        expect(getAmmProtocol).toHaveBeenCalledTimes(1);
+        expect(getProspectiveSwapMode).toHaveBeenCalledTimes(1);
+        expect(pushLeverageChangeEvent).toHaveBeenCalledTimes(1);
+        expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
+        expect(checkLowLeverageNotification).toHaveBeenCalledTimes(1);
+      });
+    });
+
     describe('setSwapFormAMMAction', () => {
       it('should set amm to state', () => {
         const mockedAmm = jest.fn();
