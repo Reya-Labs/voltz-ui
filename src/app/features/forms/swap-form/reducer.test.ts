@@ -4,6 +4,7 @@ import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../commo
 import { pushLeverageChangeEvent } from './analytics';
 import {
   closeMarginUpdateConfirmationFlowAction,
+  openMarginUpdateConfirmationFlowAction,
   setLeverageAction,
   setMarginAmountAction,
   setNotionalAmountAction,
@@ -68,6 +69,17 @@ describe('swapFormReducer', () => {
   });
 
   describe('actions', () => {
+    describe('openMarginUpdateConfirmationFlowAction', () => {
+      it('should set set marginUpdateConfirmationFlow.step', () => {
+        const nextState = swapFormReducer(
+          testsInitialState,
+          openMarginUpdateConfirmationFlowAction(),
+        );
+
+        expect(nextState.marginUpdateConfirmationFlow.step).toEqual('marginUpdateConfirmation');
+      });
+    });
+
     describe('closeMarginUpdateConfirmationFlowAction', () => {
       it('should set reset marginUpdateConfirmationFlow', () => {
         const nextState = swapFormReducer(
