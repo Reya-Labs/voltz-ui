@@ -2,11 +2,13 @@ import { swapFormReducer } from './reducer';
 import { initialState, SliceState } from './state';
 import {
   approveUnderlyingTokenThunk,
+  getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
 } from './thunks';
 import {
+  updateLeverageOptionsAfterGetInfoPostSwap,
   updateLeverageOptionsAfterGetPoolSwapInfo,
   validateUserInputAndUpdateSubmitButton,
 } from './utils';
@@ -14,6 +16,7 @@ import {
 jest.mock('./utils', () => ({
   validateUserInputAndUpdateSubmitButton: jest.fn(),
   updateLeverageOptionsAfterGetPoolSwapInfo: jest.fn(),
+  updateLeverageOptionsAfterGetInfoPostSwap: jest.fn(),
 }));
 
 // Define the mock state
@@ -181,6 +184,117 @@ describe('swapFormReducer', () => {
           variable: 4,
         },
         status: 'success',
+      });
+    });
+  });
+
+  describe('getInfoPostSwapThunk', () => {
+    it('should update poolSwapInfo to "approving" when getInfoPostSwapThunk is pending', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: getInfoPostSwapThunk.pending.type,
+      });
+      expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
+        value: {
+          marginRequirement: 0,
+          maxMarginWithdrawable: 0,
+          averageFixedRate: 0,
+          fixedTokenDeltaBalance: 0,
+          variableTokenDeltaBalance: 0,
+          fixedTokenDeltaUnbalanced: 0,
+          fee: 0,
+          slippage: 0,
+          gasFeeETH: 0,
+        },
+        status: 'pending',
+      });
+    });
+
+    it('should update poolSwapInfo to error state when getInfoPostSwapThunk is rejected', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: getInfoPostSwapThunk.rejected.type,
+      });
+      expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
+        value: {
+          marginRequirement: 0,
+          maxMarginWithdrawable: 0,
+          averageFixedRate: 0,
+          fixedTokenDeltaBalance: 0,
+          variableTokenDeltaBalance: 0,
+          fixedTokenDeltaUnbalanced: 0,
+          fee: 0,
+          slippage: 0,
+          gasFeeETH: 0,
+        },
+        status: 'error',
+      });
+    });
+
+    it('should update prospectiveSwap.infoPostSwap and poolSwapInfo.availableNotional and status to "success" when getInfoPostSwapThunk is fulfilled & early return is false, also make sure validateUserInputAndUpdateSubmitButton and updateLeverageOptionsAfterGetInfoPostSwap is called', () => {
+      const mockedInfoPostSwap = {
+        marginRequirement: 1,
+        maxMarginWithdrawable: 2,
+        availableNotional: 3,
+        fee: 4,
+        slippage: 5,
+        averageFixedRate: 6,
+        fixedTokenDeltaBalance: 7,
+        variableTokenDeltaBalance: 8,
+        fixedTokenDeltaUnbalanced: 9,
+        gasFeeETH: 10,
+      };
+
+      const nextState = swapFormReducer(testsInitialState, {
+        type: getInfoPostSwapThunk.fulfilled.type,
+        payload: {
+          notionalAmount: 11,
+          swapMode: 'fixed',
+          infoPostSwap: mockedInfoPostSwap,
+          earlyReturn: false,
+        },
+      });
+
+      expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
+      expect(updateLeverageOptionsAfterGetInfoPostSwap).toHaveBeenCalledTimes(1);
+      expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
+        value: {
+          marginRequirement: mockedInfoPostSwap.marginRequirement,
+          maxMarginWithdrawable: mockedInfoPostSwap.maxMarginWithdrawable,
+          averageFixedRate: mockedInfoPostSwap.averageFixedRate,
+          fixedTokenDeltaBalance: mockedInfoPostSwap.fixedTokenDeltaBalance,
+          variableTokenDeltaBalance: mockedInfoPostSwap.variableTokenDeltaBalance,
+          fixedTokenDeltaUnbalanced: mockedInfoPostSwap.fixedTokenDeltaUnbalanced,
+          fee: mockedInfoPostSwap.fee,
+          slippage: mockedInfoPostSwap.slippage,
+          gasFeeETH: mockedInfoPostSwap.gasFeeETH,
+        },
+        status: 'success',
+      });
+      expect(nextState.poolSwapInfo.availableNotional['fixed']).toEqual(3);
+    });
+
+    it('should update prospectiveSwap.infoPostSwap status to "success" when getInfoPostSwapThunk is fulfilled & early return is true, also make sure validateUserInputAndUpdateSubmitButton and updateLeverageOptionsAfterGetInfoPostSwap are not called', () => {
+      const nextState = swapFormReducer(testsInitialState, {
+        type: getInfoPostSwapThunk.fulfilled.type,
+        payload: {
+          earlyReturn: true,
+        },
+      });
+
+      expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(0);
+      expect(updateLeverageOptionsAfterGetInfoPostSwap).toHaveBeenCalledTimes(0);
+      expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
+        value: {
+          marginRequirement: 0,
+          maxMarginWithdrawable: 0,
+          averageFixedRate: 0,
+          fixedTokenDeltaBalance: 0,
+          variableTokenDeltaBalance: 0,
+          fixedTokenDeltaUnbalanced: 0,
+          fee: 0,
+          slippage: 0,
+          gasFeeETH: 0,
+        },
+        status: 'idle',
       });
     });
   });
