@@ -6,6 +6,7 @@ import {
   closeMarginUpdateConfirmationFlowAction,
   closeSwapConfirmationFlowAction,
   openMarginUpdateConfirmationFlowAction,
+  openSwapConfirmationFlowAction,
   setLeverageAction,
   setMarginAmountAction,
   setNotionalAmountAction,
@@ -70,6 +71,14 @@ describe('swapFormReducer', () => {
   });
 
   describe('actions', () => {
+    describe('openSwapConfirmationFlowAction', () => {
+      it('should set set swapConfirmationFlow.step', () => {
+        const nextState = swapFormReducer(testsInitialState, openSwapConfirmationFlowAction());
+
+        expect(nextState.swapConfirmationFlow.step).toEqual('swapConfirmation');
+      });
+    });
+
     describe('closeSwapConfirmationFlowAction', () => {
       it('should set reset swapConfirmationFlow', () => {
         const nextState = swapFormReducer(testsInitialState, closeSwapConfirmationFlowAction());
