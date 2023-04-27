@@ -1,5 +1,5 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
-import { PoolSwapInfo } from '@voltz-protocol/v1-sdk/src/entities/amm/types';
+import { PoolSwapInfo } from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../../../../store';
 import { rejectThunkWithError } from '../../../../helpers/reject-thunk-with-error';
