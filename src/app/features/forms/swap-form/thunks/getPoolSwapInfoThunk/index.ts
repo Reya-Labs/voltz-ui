@@ -1,10 +1,11 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { PoolSwapInfo } from '@voltz-protocol/v1-sdk/src/entities/amm/types';
 
 import { RootState } from '../../../../../store';
 import { rejectThunkWithError } from '../../../../helpers/reject-thunk-with-error';
 
 export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  Awaited<PoolSwapInfo | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
 > = async (_, thunkAPI) => {
@@ -21,7 +22,7 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
 };
 
 export const getPoolSwapInfoThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  Awaited<PoolSwapInfo | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
 >('swapForm/getPoolSwapInfo', getPoolSwapInfoThunkHandler);
