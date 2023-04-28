@@ -194,6 +194,7 @@
     "@svgr/webpack": "5.5.0",
     "@testing-library/jest-dom": "5.16.1",
     "@testing-library/react": "12.1.2",
+    "@testing-library/react-hooks": "8.0.1",
     "@testing-library/user-event": "13.5.0",
     "@types/chroma-js": "2.1.3",
     "@types/isomorphic-fetch": "0.0.36",

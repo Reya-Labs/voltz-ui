@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
-import TagManager from 'react-gtm-module';
-import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { selectChainId, setChainIdThunk } from './app/features/network';
-import { useAppDispatch, useAppSelector } from './app/hooks';
+import { selectChainId } from './app/features/network';
+import { useAppSelector } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
-import { getDefaultChainId } from './components/interface/NetworkSelector/get-default-chain-id';
 import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
+import { useChainChange } from './hooks/useChainChange';
+import { useInitializeGoogleTagManager } from './hooks/useInitializeGoogleTagManager';
+import { useReferrer } from './hooks/useReferrer';
 import { VaultFormRoute } from './routes/LPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
 import { LPPortfolio } from './routes/LPPortfolio/LPPortfolio';
@@ -18,98 +18,14 @@ import { PoolsPage } from './ui/pages/Pools';
 import { ProfilePage } from './ui/pages/Profile';
 import { TraderFormPage } from './ui/pages/TraderForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
-import { deleteChainId, getChainId, setChainId } from './utilities/network/chain-store';
-import { detectIfNetworkSupported } from './utilities/network/detect-if-network-supported';
 import { isArbitrumChain } from './utilities/network/is-arbitrum-chain';
-import {
-  deleteReferrer,
-  isRefererStored,
-  isValidReferrerStored,
-  isValidReferrerValue,
-  setReferrer,
-} from './utilities/referrer-store';
-import { REFERRER_QUERY_PARAM_KEY } from './utilities/referrer-store/constants';
 
 export const AppRoutes = () => {
-  const [searchParams] = useSearchParams();
-  const searchParamsReferrer = searchParams.get(REFERRER_QUERY_PARAM_KEY);
-  const dispatch = useAppDispatch();
   const chainId = useAppSelector(selectChainId);
 
-  useEffect(() => {
-    if (process.env.REACT_APP_GTM_CODE) {
-      TagManager.initialize({ gtmId: process.env.REACT_APP_GTM_CODE });
-    }
-  }, []);
-
-  const handlePageReloadAfterChainChanged = async () => {
-    const storedChainId = getChainId();
-    if (!storedChainId) {
-      const defaultChainId = getDefaultChainId();
-      await dispatch(
-        setChainIdThunk({
-          chainId: defaultChainId,
-          isSupportedChain: Boolean(defaultChainId),
-          triggerApprovalFlow: false,
-        }),
-      );
-      return;
-    }
-
-    const networkValidation = detectIfNetworkSupported(storedChainId);
-    if (!networkValidation.isSupported || !networkValidation.chainId) {
-      await dispatch(
-        setChainIdThunk({
-          chainId: getDefaultChainId(),
-          isSupportedChain: false,
-          triggerApprovalFlow: false,
-        }),
-      );
-    } else {
-      await dispatch(
-        setChainIdThunk({
-          chainId: networkValidation.chainId,
-          isSupportedChain: true,
-          triggerApprovalFlow: false,
-        }),
-      );
-    }
-    deleteChainId();
-  };
-
-  useEffect(() => {
-    void handlePageReloadAfterChainChanged();
-    (
-      window.ethereum as {
-        on: (event: string, cb: (chainId: string) => void) => void;
-      }
-    )?.on('chainChanged', (newChainId: string) => {
-      // Handle the new chain.
-      // Correctly handling chain changes can be complicated.
-      // We recommend reloading the page unless you have good reason not to.
-      setChainId(parseInt(newChainId.replace('0x', ''), 16).toString());
-      window.location.reload();
-    });
-  }, []);
-
-  // referrer logic - run everytime params change for ${REFERRER_QUERY_PARAM_KEY}
-  useEffect(() => {
-    // Earlier, pre-release keys may have used more than 8 characters, but we overwrite these
-    if (!isValidReferrerStored()) {
-      deleteReferrer();
-    }
-
-    const isValidReferrer = isValidReferrerValue(searchParamsReferrer);
-    if (!isValidReferrer) {
-      return;
-    }
-
-    // Referrer is set in URL and has not already been saved in storage; save to storage now
-    // We do deliberately do not overwrite any existing value because we want to credit the first referral link that was followed
-    if (!isRefererStored()) {
-      setReferrer(searchParamsReferrer!);
-    }
-  }, [searchParamsReferrer]);
+  useInitializeGoogleTagManager();
+  useChainChange();
+  useReferrer();
 
   return (
     <Routes>
