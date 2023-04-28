@@ -5,7 +5,7 @@ import { MaturityInformation } from '../../../../../../../components/composite/M
 import { useAMMContext } from '../../../../../../../contexts/AMMContext/AMMContext';
 import { useAppNavigate } from '../../../../../../../hooks/useAppNavigate';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../../../../utilities/amm';
-import { MATURITY_WINDOW } from '../../../../../../../utilities/constants';
+import { getMaturityWindow } from '../../../../../../../utilities/maturityWindow';
 import { AccruedRates } from './components/AccruedRates/AccruedRates';
 import { Margin } from './components/Margin/Margin';
 import { Notional } from './components/Notional/Notional';
@@ -48,7 +48,7 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
 
   // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
   const underlyingTokenName = position.amm.underlyingToken.name;
-  const hideEdit = position.amm.endDateTime.toMillis() <= Date.now().valueOf() + MATURITY_WINDOW;
+  const hideEdit = position.amm.endDateTime.toMillis() <= Date.now().valueOf() + getMaturityWindow(position.amm.rateOracle.protocolId);
 
   return (
     <RowBox>
