@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
 
 import { resetStateAction } from '../../../app/features/forms/swap-form';
 import { useAppDispatch } from '../../../app/hooks';
@@ -12,10 +11,9 @@ import { Form } from './Form';
 import { useSwapFormAMM } from './hooks/useSwapFormAMM';
 import { Main } from './Main';
 
-export const TraderFormPage: React.FunctionComponent = () => {
+export const SwapFormPage: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
-  const { form } = useParams();
   const { noAMMFound, loading, error } = useSwapFormAMM();
 
   React.useEffect(() => {
@@ -24,13 +22,11 @@ export const TraderFormPage: React.FunctionComponent = () => {
     };
   }, []);
 
-  const pageNotFound = form !== 'swap' || noAMMFound;
-
   return (
     <VoltzPage
       errorSlot={error ? <AMMFetchingError to={`/${routes.POOLS}`} /> : undefined}
       mainSlot={<Main />}
-      notFoundSlot={pageNotFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
+      notFoundSlot={noAMMFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
       pageLoadingSlot={loading ? <PageLoading /> : undefined}
       rightSlot={<Form />}
     />

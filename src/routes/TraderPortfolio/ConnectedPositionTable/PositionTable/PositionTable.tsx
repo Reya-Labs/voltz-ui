@@ -5,19 +5,18 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import { Position } from '@voltz-protocol/v1-sdk';
 import React from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
 
 import { selectChainId } from '../../../../app/features/network';
 import { useAppSelector } from '../../../../app/hooks';
 import { Panel } from '../../../../components/atomic/Panel/Panel';
 import { AMMProvider } from '../../../../contexts/AMMContext/AMMContext';
 import { useAMMs } from '../../../../hooks/useAMMs';
+import { useAppNavigate } from '../../../../hooks/useAppNavigate';
 import { getConfig } from '../../../../hooks/voltz-config/config';
 import { colors, SystemStyleObject, Theme } from '../../../../theme';
 import { findCurrentAmm, generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
 import { MATURITY_WINDOW } from '../../../../utilities/constants';
 import { getRowButtonId } from '../../../../utilities/googleAnalytics/helpers';
-import { routes } from '../../../paths';
 import { PositionTableHead, PositionTableRow } from './components';
 import { TransactionList } from './TransactionList/TransactionList';
 
@@ -32,7 +31,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSelectItem,
   onSettle,
 }) => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const chainId = useAppSelector(selectChainId);
   const { aMMs } = useAMMs();
 
@@ -138,13 +137,10 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                   closeToMaturity
                     ? undefined
                     : (mode: 'margin' | 'liquidity' | 'notional') => {
-                        const path = generatePath(routes.TRADER_FORM, {
-                          form: 'swap',
+                        navigate.toSwapFormPage({
                           ammId: generateAmmIdForRoute(pos.amm),
                           poolId: generatePoolId(pos.amm),
                         });
-                        navigate(`/${path}`);
-                        return;
                       }
                 }
                 onSettle={() => onSettle(pos)}

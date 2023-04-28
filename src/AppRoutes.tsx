@@ -16,7 +16,8 @@ import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltz
 import { LPFormPage } from './ui/pages/LPForm';
 import { PoolsPage } from './ui/pages/Pools';
 import { ProfilePage } from './ui/pages/Profile';
-import { TraderFormPage } from './ui/pages/TraderForm';
+import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
+import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { isArbitrumChain } from './utilities/network/is-arbitrum-chain';
 
@@ -79,10 +80,18 @@ export const AppRoutes = () => {
         <Route
           element={
             <NetworkProtectedVoltzPage>
-              <TraderFormPage />
+              <SwapFormPage />
             </NetworkProtectedVoltzPage>
           }
-          path={routes.TRADER_FORM}
+          path={routes.TRADER_SWAP_FORM}
+        />
+        <Route
+          element={
+            <NetworkProtectedVoltzPage>
+              <RolloverSwapFormPage />
+            </NetworkProtectedVoltzPage>
+          }
+          path={routes.TRADER_ROLLOVER_SWAP_FORM}
         />
         <Route
           element={

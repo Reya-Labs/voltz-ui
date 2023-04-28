@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { useParams } from 'react-router-dom';
 
-import { resetStateAction } from '../../../app/features/forms/lp-form';
+import { resetStateAction } from '../../../app/features/forms/rollover-swap-form';
 import { useAppDispatch } from '../../../app/hooks';
 import { routes } from '../../../routes/paths';
 import { AMMFetchingError } from '../../components/AMMFetchingError';
@@ -8,12 +9,14 @@ import { NoAMMFound } from '../../components/NoAMMFound';
 import { PageLoading } from '../../components/PageLoading';
 import { VoltzPage } from '../../components/VoltzPage';
 import { Form } from './Form';
-import { useLPFormAMM } from './hooks/useLPFormAMM';
+import { useRolloverSwapFormAMM } from './hooks/useRolloverSwapFormAMM';
 import { Main } from './Main';
 
-export const LPFormPage: React.FunctionComponent = () => {
+export const RolloverSwapFormPage: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const { noAMMFound, loading, error } = useLPFormAMM();
+
+  const { form } = useParams();
+  const { noAMMFound, loading, error } = useRolloverSwapFormAMM();
 
   React.useEffect(() => {
     return () => {
@@ -21,11 +24,13 @@ export const LPFormPage: React.FunctionComponent = () => {
     };
   }, []);
 
+  const pageNotFound = form !== 'rollover' || noAMMFound;
+
   return (
     <VoltzPage
       errorSlot={error ? <AMMFetchingError to={`/${routes.POOLS}`} /> : undefined}
       mainSlot={<Main />}
-      notFoundSlot={noAMMFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
+      notFoundSlot={pageNotFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
       pageLoadingSlot={loading ? <PageLoading /> : undefined}
       rightSlot={<Form />}
     />

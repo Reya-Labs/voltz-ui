@@ -1,5 +1,4 @@
 import React from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
 
 import { selectPools } from '../../../../../app/features/aMMs';
 import { PoolUI } from '../../../../../app/features/aMMs/types';
@@ -12,7 +11,7 @@ import {
   selectVariableRateValueFormatted,
 } from '../../../../../app/features/forms/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { routes } from '../../../../../routes/paths';
+import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
 import { MarketTokenInformationProps } from '../../../../components/MarketTokenInformation';
 import { PoolHeader as PoolHeaderComponent } from '../../../../components/PoolHeader';
 
@@ -24,7 +23,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
   const fixedRateFormatted = useAppSelector(selectFixedRateValueFormatted);
   const variableRateFormatted = useAppSelector(selectVariableRateValueFormatted);
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const dispatch = useAppDispatch();
   const pools = useAppSelector(selectPools);
 
@@ -39,12 +38,10 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
 
   const handleOnPoolItemClick = ({ routePoolId, routeAmmId }: PoolUI) => {
     dispatch(resetStateAction());
-    const path = generatePath(routes.TRADER_FORM, {
-      form: 'swap',
+    navigate.toSwapFormPage({
       ammId: routeAmmId,
       poolId: routePoolId,
     });
-    navigate(`/${path}`);
   };
   return (
     <PoolHeaderComponent

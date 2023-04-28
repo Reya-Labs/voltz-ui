@@ -1,9 +1,8 @@
 import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
 
+import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
-import { routes } from '../../../../../routes/paths';
 import {
   MarketTokenInformation,
   MarketTokenInformationProps,
@@ -55,28 +54,24 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     ref,
   ) => {
     const { isLargeDesktopDevice } = useResponsiveQuery();
-    const navigate = useNavigate();
+    const navigate = useAppNavigate();
 
     const typographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyLargeRegular'
       : 'secondaryBodyMediumRegular';
 
     const handleOnLPClick = () => {
-      const path = generatePath(routes.LP_FORM, {
-        form: 'liquidity',
+      navigate.toLPFormPage({
         ammId: routeAmmId,
         poolId: routePoolId,
       });
-      navigate(`/${path}`);
     };
 
     const handleOnTradeClick = () => {
-      const path = generatePath(routes.TRADER_FORM, {
-        form: 'swap',
+      navigate.toSwapFormPage({
         ammId: routeAmmId,
         poolId: routePoolId,
       });
-      navigate(`/${path}`);
     };
 
     return (
