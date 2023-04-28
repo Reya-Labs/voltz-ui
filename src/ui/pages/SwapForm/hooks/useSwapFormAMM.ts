@@ -21,14 +21,14 @@ import { useWallet } from '../../../../hooks/useWallet';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
 import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 
-type UseAMMsResult = {
+type UseSwapFormAMMResult = {
   aMM: AMM | null;
   loading: boolean;
   error: boolean;
   noAMMFound: boolean;
 };
 
-export const useSwapFormAMM = (): UseAMMsResult => {
+export const useSwapFormAMM = (): UseSwapFormAMMResult => {
   const dispatch = useAppDispatch();
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();

@@ -1,27 +1,24 @@
 import React, { useEffect } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
 
 import { OptimiserInfo } from '../../../app/features/lp-optimisers';
+import { useAppNavigate } from '../../../hooks/useAppNavigate';
 import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
-import { routes } from '../../paths';
 import { useLPVaults } from '../useLPVaults';
 import { VaultsBox } from './Vaults.styled';
 import { VaultsTable } from './VaultsTable/VaultsTable';
 
 export const Vaults: React.FunctionComponent = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const { signer, setRequired } = useWallet();
   const { lpVaults, vaultsLoaded } = useLPVaults('active');
   const handleSelectMellowLpVault = (selectedVault: OptimiserInfo) => {
     if (!signer) {
       setRequired(true);
     } else {
-      const path = generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
-        actions: 'deposit',
+      navigate.toLPOptimisersDepositForm({
         vaultId: selectedVault.optimiserId,
       });
-      navigate(`/${path}`);
     }
   };
 
