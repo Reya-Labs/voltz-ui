@@ -3,7 +3,7 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { getConfig } from '../../../hooks/voltz-config/config';
 import { MarketTokenInformationProps } from '../../../ui/components/MarketTokenInformation';
 import { generateAmmIdForRoute, generatePoolId } from '../../../utilities/amm';
-import { MATURITY_WINDOW } from '../../../utilities/constants';
+import { getMaturityWindow } from '../../../utilities/maturityWindow';
 import { formatPOSIXTimestamp } from '../../../utilities/date';
 import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
@@ -37,10 +37,9 @@ export const selectPools = (state: RootState): PoolUI[] => {
   if (!appliedFilters || !appliedSortingDirection) {
     return [];
   }
-  const maturityEndMilliseconds = Date.now().valueOf() + MATURITY_WINDOW;
 
   const pools = aMMs
-    .filter((amm) => maturityEndMilliseconds < amm.endDateTime.toMillis())
+    .filter((amm) => Date.now().valueOf() + getMaturityWindow(amm.rateOracle.protocolId) < amm.endDateTime.toMillis())
     .filter((amm) => {
       if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
         return true;
