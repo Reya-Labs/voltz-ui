@@ -48,7 +48,9 @@ export const PositionTableRow: React.FunctionComponent<PositionTableRowProps> = 
 
   // Introduced this so margin and notional show the correct underlying token unit e.g. Eth not stEth, USDC not aUSDC
   const underlyingTokenName = position.amm.underlyingToken.name;
-  const hideEdit = position.amm.endDateTime.toMillis() <= Date.now().valueOf() + getMaturityWindow(position.amm.rateOracle.protocolId);
+  const hideEdit =
+    position.amm.endDateTime.toMillis() <=
+    Date.now().valueOf() + getMaturityWindow(position.amm.rateOracle.protocolId);
 
   return (
     <RowBox>
