@@ -15,8 +15,8 @@ import { useAppNavigate } from '../../../../hooks/useAppNavigate';
 import { getConfig } from '../../../../hooks/voltz-config/config';
 import { colors, SystemStyleObject, Theme } from '../../../../theme';
 import { findCurrentAmm, generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
-import { getMaturityWindow } from '../../../../utilities/maturityWindow';
 import { getRowButtonId } from '../../../../utilities/googleAnalytics/helpers';
+import { getMaturityWindow } from '../../../../utilities/maturityWindow';
 import { PositionTableHead, PositionTableRow } from './components';
 import { TransactionList } from './TransactionList/TransactionList';
 
@@ -106,7 +106,8 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
         const rolloverAmm = findCurrentAmm(aMMs, pools, pos);
         const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== pos.amm.id : false;
         const closeToMaturity =
-          Date.now().valueOf() + getMaturityWindow(pos.amm.rateOracle.protocolId) > pos.amm.endDateTime.toMillis();
+          Date.now().valueOf() + getMaturityWindow(pos.amm.rateOracle.protocolId) >
+          pos.amm.endDateTime.toMillis();
 
         return (
           <ListItem key={pos.id} sx={listItemStyles}>
