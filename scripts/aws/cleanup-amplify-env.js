@@ -50,10 +50,12 @@ const emptyBucket = async (name) => {
   }
 };
 
-// Buckets that we need for main and develop to continue to work
+// Buckets that we need for main, develop, feat/* and release/* to continue to work
 const BUCKETS_TO_IGNORE = {
   'amplify-viktor-developui-122522-deployment': true,
   'amplify-viktor-mainui-125046-deployment': true,
+  'amplify-voltzuifeatfixchorer-backendenv-141933-deployment': true,
+  'amplify-voltzuireleasecandid-backendenv-125209-deployment': true,
 };
 
 const run = async () => {

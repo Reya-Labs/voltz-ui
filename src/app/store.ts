@@ -32,7 +32,11 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
   const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(logger).concat(sagaMiddleware),
+      getDefaultMiddleware({
+        serializableCheck: false,
+      })
+        .concat(logger)
+        .concat(sagaMiddleware),
     preloadedState,
   });
   sagaMiddleware.run(saga);

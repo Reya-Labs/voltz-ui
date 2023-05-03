@@ -8,10 +8,11 @@ export type PanelProps = {
   borderRadius?: 'small' | 'large';
   padding?: 'small' | 'large' | 'container';
   sx?: SystemStyleObject<Theme>;
+  noMinWidth?: boolean;
 };
 
 export const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
-  ({ variant, borderRadius = 'small', padding = 'large', sx, children }, ref) => {
+  ({ noMinWidth, variant, borderRadius = 'small', padding = 'large', sx, children }, ref) => {
     const commonOverrides: SystemStyleObject<Theme> = {
       border: 1,
       borderColor: 'transparent',
@@ -50,7 +51,7 @@ export const Panel: React.FunctionComponent<PanelProps> = React.forwardRef(
           return {
             borderRadius: 1,
             padding: (theme) => `${theme.spacing(3)} ${theme.spacing(4)}`,
-            maxWidth: 200,
+            maxWidth: noMinWidth ? undefined : 200,
             backgroundColor: '#0F0C1D',
             borderColor: '#383545',
             borderStyle: 'solid',

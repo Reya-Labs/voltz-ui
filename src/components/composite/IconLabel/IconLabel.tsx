@@ -14,6 +14,7 @@ export type IconLabelProps = {
   info?: ReactNode;
   removeIcon?: boolean;
   iconSx?: SystemStyleObject<Theme>;
+  noMinWidth?: boolean;
 };
 
 export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
@@ -22,6 +23,7 @@ export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
   info,
   removeIcon,
   iconSx = {},
+  noMinWidth = false,
 }) => {
   const [anchor, setAnchor] = useState<SVGElement | null>(null);
   const handlePopoverOpen = (event: React.MouseEvent<SVGElement>) => {
@@ -84,7 +86,7 @@ export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
           disableRestoreFocus
           onClose={handlePopoverClose}
         >
-          <Panel variant="iconLabel">
+          <Panel noMinWidth={noMinWidth} variant="iconLabel">
             <Typography
               sx={{
                 fontFamily: 'DM Sans',

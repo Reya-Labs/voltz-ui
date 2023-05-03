@@ -2,18 +2,20 @@ import Box from '@mui/material/Box';
 import { HealthFactorStatus } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
+import { formFormatNumber } from '../../../../../../../app/features/forms/common/utils';
 import { PositionBadge } from '../../../../../../../components/atomic/PositionBadge/PositionBadge';
+import { IconLabel } from '../../../../../../../components/composite/IconLabel/IconLabel';
 import { SystemStyleObject, Theme } from '../../../../../../../theme';
-import { formatCurrency, formatNumber } from '../../../../../../../utilities/number';
+import { PnLDetails } from '../../../../../../../ui/pages/LPForm/Main/PositionDetails/PnLDetails';
+import { formatNumber } from '../../../../../../../utilities/number';
 import { HealthFactorText } from './HealthFactorText/HealthFactorText';
 import {
   ActionsBox,
-  FeesBox,
   FeesTypography,
   InfoBox,
-  NegativeFeesValueTypography,
   NegativeTypography,
-  PositiveFeesValueTypography,
+  PNLNegativeTypography,
+  PNLPositiveTypography,
   PositiveTypography,
   RolloverButton,
   SettleButton,
@@ -22,9 +24,6 @@ import {
 } from './PositionTableHead.styled';
 
 export type PositionTableHeadProps = {
-  currencyCode: string;
-  currencySymbol: string;
-  feesPositive: boolean;
   isSettled: boolean;
   onRollover: () => void;
   onSettle: () => void;
@@ -34,11 +33,11 @@ export type PositionTableHeadProps = {
   healthFactor: HealthFactorStatus;
   fixedRateHealthFactor: HealthFactorStatus;
   fixedApr: number;
-  fees: number;
   isBothTraderAndLP: boolean;
   settlementCashflowInUSD: number;
-  realizedPnL: number;
   underlyingTokenName: string;
+  realizedPnLFromFees: number;
+  realizedPnLFromSwaps: number;
 };
 
 const containerStyles: SystemStyleObject<Theme> = {
@@ -48,9 +47,6 @@ const containerStyles: SystemStyleObject<Theme> = {
 };
 
 export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> = ({
-  currencyCode = '',
-  currencySymbol = '',
-  feesPositive = true,
   isSettled,
   onRollover,
   onSettle,
@@ -60,15 +56,14 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   healthFactor,
   fixedRateHealthFactor,
   fixedApr,
-  fees,
   isBothTraderAndLP,
   settlementCashflowInUSD,
-  realizedPnL,
   underlyingTokenName,
+  realizedPnLFromFees,
+  realizedPnLFromSwaps,
 }) => {
-  const FeesValueTypography = feesPositive
-    ? PositiveFeesValueTypography
-    : NegativeFeesValueTypography;
+  const realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
+  const PNLValueTypography = realizedPnLTotal ? PNLPositiveTypography : PNLNegativeTypography;
 
   const CurrentFixedRateTypography =
     fixedRateHealthFactor === HealthFactorStatus.DANGER
@@ -81,26 +76,33 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
     <Box sx={containerStyles}>
       <Box sx={{ display: 'flex' }}>
         <PositionBadge isBothTraderAndLP={isBothTraderAndLP} variant="LP" />
-        {!isSettled && (
-          <FeesBox>
-            <FeesTypography>FEES:&nbsp;</FeesTypography>
-            <FeesValueTypography>
-              {!feesPositive && '-'}
-              {currencySymbol}
-              {formatCurrency(Math.abs(fees))} {currencyCode}
-            </FeesValueTypography>
-          </FeesBox>
-        )}
       </Box>
 
       <ActionsBox>
         {beforeMaturity && (
           <>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <FeesTypography>
-                Swaps Cashflow: {formatNumber(realizedPnL)} {underlyingTokenName}&nbsp;
-              </FeesTypography>
-            </Box>
+            <InfoBox>
+              <IconLabel
+                icon="information-circle"
+                info={
+                  <PnLDetails
+                    pnlFromFees={formFormatNumber(realizedPnLFromFees)}
+                    pnlFromSwaps={formFormatNumber(realizedPnLFromSwaps)}
+                    pnlTotal={formFormatNumber(realizedPnLTotal)}
+                    underlyingTokenName={underlyingTokenName}
+                  />
+                }
+                label={
+                  <React.Fragment>
+                    REALIZED PnL:&nbsp;
+                    <PNLValueTypography>
+                      {formFormatNumber(realizedPnLTotal)} {underlyingTokenName}
+                    </PNLValueTypography>
+                  </React.Fragment>
+                }
+                noMinWidth={true}
+              />
+            </InfoBox>
           </>
         )}
 

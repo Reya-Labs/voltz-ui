@@ -64,16 +64,6 @@ export const NegativeFeesValueTypography = styled(FeesValueTypography)`
   color: ${colors.wildStrawberry.base};
 `;
 
-export const FeesBox = styled(Box)`
-  display: flex;
-
-  padding: 4px 8px;
-  /* Lavender Web 4 */
-  border: 1px solid #2d2b3d;
-  border-radius: 4px;
-  margin-left: 16px;
-`;
-
 export const InfoBox = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -119,4 +109,22 @@ export const ActionsBox = styled(Box)`
   display: flex;
   flex-direction: row;
   gap: 8px;
+`;
+
+export const PNLTypography = styled(Typography)`
+  font-family: 'PixelOperatorMono', monospace;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+
+  color: ${colors.lavenderWeb.base};
+`;
+
+export const PNLPositiveTypography = styled(PNLTypography)`
+  color: ${colors.skyBlueCrayola.base};
+`;
+
+export const PNLNegativeTypography = styled(PNLTypography)`
+  color: ${colors.wildStrawberry.base};
 `;
