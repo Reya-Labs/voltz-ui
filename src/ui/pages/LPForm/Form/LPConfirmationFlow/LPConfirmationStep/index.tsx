@@ -1,4 +1,4 @@
-import { Button, CloseButton, Typography } from 'brokoli-ui';
+import { Button, CloseButton, HorizontalLine, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
@@ -15,7 +15,6 @@ import {
 import { TransactionDetails } from '../../TransactionDetails';
 import { LPDetails } from '../LPDetails';
 import {
-  HorizontalLine,
   LpConfirmationStepBox,
   LpDetailsBox,
   LpFeeDetailsBox,

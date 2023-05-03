@@ -52,10 +52,6 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
             <PositionsListTopBox>
               <PositionTableHead
                 beforeMaturity={!position.isPoolMatured}
-                currencyCode="USD"
-                currencySymbol="$"
-                fees={position.feesInUSD}
-                feesPositive={true}
                 fixedApr={position.poolAPR}
                 fixedRateHealthFactor={position.fixedRateHealthFactor}
                 gaButtonId={getRowButtonId(
@@ -66,7 +62,8 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 healthFactor={position.healthFactor}
                 isBothTraderAndLP={position.isBothTraderAndLP ?? false}
                 isSettled={position.isSettled}
-                realizedPnL={position.realizedPnLFromSwapsInUSD}
+                realizedPnLFromFees={position.fees}
+                realizedPnLFromSwaps={position.realizedPnLFromSwaps}
                 rolloverAvailable={rolloverAvailable}
                 settlementCashflowInUSD={position.settlementCashflowInUSD}
                 underlyingTokenName={'USD'}
