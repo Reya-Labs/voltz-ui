@@ -3,9 +3,7 @@ import { stringToBigFloat } from '../../../../utilities/number';
 import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../common/utils';
 import { pushLeverageChangeEvent } from './analytics';
 import {
-  closeMarginUpdateConfirmationFlowAction,
   closeSwapConfirmationFlowAction,
-  openMarginUpdateConfirmationFlowAction,
   openSwapConfirmationFlowAction,
   resetStateAction,
   rolloverSwapFormReducer,
@@ -18,7 +16,6 @@ import {
 import { initialState, SliceState } from './state';
 import {
   approveUnderlyingTokenThunk,
-  confirmMarginUpdateThunk,
   confirmSwapThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
@@ -99,32 +96,6 @@ describe('rolloverSwapFormReducer', () => {
         );
 
         expect(nextState.swapConfirmationFlow).toEqual({
-          step: null,
-          error: null,
-          txHash: null,
-        });
-      });
-    });
-
-    describe('openMarginUpdateConfirmationFlowAction', () => {
-      it('should set marginUpdateConfirmationFlow.step', () => {
-        const nextState = rolloverSwapFormReducer(
-          testsInitialState,
-          openMarginUpdateConfirmationFlowAction(),
-        );
-
-        expect(nextState.marginUpdateConfirmationFlow.step).toEqual('marginUpdateConfirmation');
-      });
-    });
-
-    describe('closeMarginUpdateConfirmationFlowAction', () => {
-      it('should set reset marginUpdateConfirmationFlow', () => {
-        const nextState = rolloverSwapFormReducer(
-          testsInitialState,
-          closeMarginUpdateConfirmationFlowAction(),
-        );
-
-        expect(nextState.marginUpdateConfirmationFlow).toEqual({
           step: null,
           error: null,
           txHash: null,
@@ -680,44 +651,6 @@ describe('rolloverSwapFormReducer', () => {
 
         expect(nextState.swapConfirmationFlow).toEqual({
           step: 'swapCompleted',
-          error: null,
-          txHash: 'transactionHash',
-        });
-      });
-    });
-
-    describe('confirmMarginUpdateThunk', () => {
-      it('should update marginUpdateConfirmationFlow to "waitingForSwapConfirmation" when confirmMarginUpdateThunk is pending', () => {
-        const nextState = rolloverSwapFormReducer(testsInitialState, {
-          type: confirmMarginUpdateThunk.pending.type,
-        });
-        expect(nextState.marginUpdateConfirmationFlow).toEqual({
-          step: 'waitingForMarginUpdateConfirmation',
-          error: null,
-          txHash: null,
-        });
-      });
-
-      it('should update marginUpdateConfirmationFlow to error state when confirmMarginUpdateThunk is rejected', () => {
-        const nextState = rolloverSwapFormReducer(testsInitialState, {
-          type: confirmMarginUpdateThunk.rejected.type,
-          payload: 'Error happened',
-        });
-        expect(nextState.marginUpdateConfirmationFlow).toEqual({
-          step: 'marginUpdateConfirmation',
-          error: 'Error happened',
-          txHash: null,
-        });
-      });
-
-      it('should update marginUpdateConfirmationFlow and status to "swapCompleted" when confirmMarginUpdateThunk is fulfilled', () => {
-        const nextState = rolloverSwapFormReducer(testsInitialState, {
-          type: confirmMarginUpdateThunk.fulfilled.type,
-          payload: { transactionHash: 'transactionHash' },
-        });
-
-        expect(nextState.marginUpdateConfirmationFlow).toEqual({
-          step: 'marginUpdateCompleted',
           error: null,
           txHash: 'transactionHash',
         });

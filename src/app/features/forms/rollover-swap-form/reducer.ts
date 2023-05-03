@@ -9,7 +9,6 @@ import { pushLeverageChangeEvent } from './analytics';
 import { initialState } from './state';
 import {
   approveUnderlyingTokenThunk,
-  confirmMarginUpdateThunk,
   confirmSwapThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
@@ -38,16 +37,6 @@ const slice = createSlice({
     },
     closeSwapConfirmationFlowAction: (state) => {
       state.swapConfirmationFlow = {
-        step: null,
-        error: null,
-        txHash: null,
-      };
-    },
-    openMarginUpdateConfirmationFlowAction: (state) => {
-      state.marginUpdateConfirmationFlow.step = 'marginUpdateConfirmation';
-    },
-    closeMarginUpdateConfirmationFlowAction: (state) => {
-      state.marginUpdateConfirmationFlow = {
         step: null,
         error: null,
         txHash: null,
@@ -407,27 +396,6 @@ const slice = createSlice({
           error: null,
           txHash: (payload as ContractReceipt).transactionHash,
         };
-      })
-      .addCase(confirmMarginUpdateThunk.pending, (state) => {
-        state.marginUpdateConfirmationFlow = {
-          step: 'waitingForMarginUpdateConfirmation',
-          error: null,
-          txHash: null,
-        };
-      })
-      .addCase(confirmMarginUpdateThunk.rejected, (state, { payload }) => {
-        state.marginUpdateConfirmationFlow = {
-          step: 'marginUpdateConfirmation',
-          error: payload as string,
-          txHash: null,
-        };
-      })
-      .addCase(confirmMarginUpdateThunk.fulfilled, (state, { payload }) => {
-        state.marginUpdateConfirmationFlow = {
-          step: 'marginUpdateCompleted',
-          error: null,
-          txHash: (payload as ContractReceipt).transactionHash,
-        };
       });
   },
 });
@@ -440,7 +408,5 @@ export const {
   setLeverageAction,
   openSwapConfirmationFlowAction,
   closeSwapConfirmationFlowAction,
-  openMarginUpdateConfirmationFlowAction,
-  closeMarginUpdateConfirmationFlowAction,
 } = slice.actions;
 export const rolloverSwapFormReducer = slice.reducer;

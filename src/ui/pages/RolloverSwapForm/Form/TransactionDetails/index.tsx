@@ -6,7 +6,6 @@ import {
   selectInfoPostSwap,
   selectProspectiveSwapFeeFormatted,
   selectSlippageFormatted,
-  selectSubmitButtonInfo,
 } from '../../../../../app/features/forms/rollover-swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
@@ -18,41 +17,33 @@ type TransactionDetailsProps = {};
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const token = useAppSelector(selectAMMTokenFormatted);
-  const submitButtonInfo = useAppSelector(selectSubmitButtonInfo);
   const slippageFormatted = useAppSelector(selectSlippageFormatted);
   const feeFormatted = useAppSelector(selectProspectiveSwapFeeFormatted);
 
-  const hideFees = submitButtonInfo.state === 'margin-update';
-  const hideSlippage = submitButtonInfo.state === 'margin-update';
-
   return (
     <React.Fragment>
-      {hideFees ? null : (
-        <TransactionDetailBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-            Fees
-          </Typography>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            token={token}
-            typographyToken="secondaryBodySmallRegular"
-            value={feeFormatted}
-          ></TokenTypography>
-        </TransactionDetailBox>
-      )}
-      {hideSlippage ? null : (
-        <TransactionDetailBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-            Estimated Slippage
-          </Typography>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            token="%"
-            typographyToken="secondaryBodySmallRegular"
-            value={slippageFormatted}
-          ></TokenTypography>
-        </TransactionDetailBox>
-      )}
+      <TransactionDetailBox>
+        <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          Fees
+        </Typography>
+        <TokenTypography
+          colorToken="lavenderWeb"
+          token={token}
+          typographyToken="secondaryBodySmallRegular"
+          value={feeFormatted}
+        ></TokenTypography>
+      </TransactionDetailBox>
+      <TransactionDetailBox>
+        <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          Estimated Slippage
+        </Typography>
+        <TokenTypography
+          colorToken="lavenderWeb"
+          token="%"
+          typographyToken="secondaryBodySmallRegular"
+          value={slippageFormatted}
+        ></TokenTypography>
+      </TransactionDetailBox>
       <TransactionDetailBox>
         <IconTextWrapper>
           <GasIcon />

@@ -4,13 +4,7 @@ type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
 export type SliceState = {
   submitButton: {
-    state:
-      | 'swap'
-      | 'margin-update'
-      | 'not-enough-balance'
-      | 'connect-wallet'
-      | 'approve'
-      | 'approving';
+    state: 'swap' | 'not-enough-balance' | 'connect-wallet' | 'approve' | 'approving';
     disabled: boolean;
     message: {
       text: string | null;
@@ -87,15 +81,6 @@ export type SliceState = {
     error: string | null;
     txHash: string | null;
   };
-  marginUpdateConfirmationFlow: {
-    step:
-      | 'marginUpdateConfirmation'
-      | 'waitingForMarginUpdateConfirmation'
-      | 'marginUpdateCompleted'
-      | null;
-    error: string | null;
-    txHash: string | null;
-  };
   showLowLeverageNotification: boolean;
 };
 
@@ -167,11 +152,6 @@ export const initialState: SliceState = {
     },
   },
   swapConfirmationFlow: {
-    step: null,
-    error: null,
-    txHash: null,
-  },
-  marginUpdateConfirmationFlow: {
     step: null,
     error: null,
     txHash: null,

@@ -1,4 +1,4 @@
-import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkPayloadCreator } from '@reduxjs/toolkit';
 import { ContractReceipt } from 'ethers';
 
 import { RootState } from '../../../../../store';
@@ -26,9 +26,3 @@ export const confirmMarginUpdateThunkHandler: AsyncThunkPayloadCreator<
     return rejectThunkWithError(thunkAPI, err);
   }
 };
-
-export const confirmMarginUpdateThunk = createAsyncThunk<
-  Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
-  void,
-  { state: RootState }
->('rolloverSwapForm/confirmMarginUpdate', confirmMarginUpdateThunkHandler);

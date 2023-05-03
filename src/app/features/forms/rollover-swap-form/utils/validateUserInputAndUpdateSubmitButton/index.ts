@@ -109,7 +109,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     isWalletTokenAllowanceLoaded
   ) {
     state.submitButton = {
-      state: prospectiveSwapNotional !== 0 ? 'swap' : 'margin-update',
+      state: 'swap',
       disabled: false,
       message: {
         text: "Token approved, let's trade",

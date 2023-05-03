@@ -31,9 +31,6 @@ import {
   selectLeverageOptions,
   selectMarginAccountName,
   selectMarginRequirementFormatted,
-  selectMarginUpdateConfirmationFlowError,
-  selectMarginUpdateConfirmationFlowEtherscanLink,
-  selectMarginUpdateConfirmationFlowStep,
   selectNewPositionCompactNotional,
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
@@ -1576,54 +1573,6 @@ describe('swap-form.selectors', () => {
     });
   });
 
-  describe('selectMarginUpdateConfirmationFlowStep', () => {
-    it('returns the correct step', () => {
-      const state = {
-        rolloverSwapForm: {
-          marginUpdateConfirmationFlow: {
-            step: 'confirmSwap',
-          },
-        },
-      };
-
-      expect(selectMarginUpdateConfirmationFlowStep(state as never)).toEqual('confirmSwap');
-    });
-  });
-
-  describe('selectMarginUpdateConfirmationFlowError', () => {
-    it('returns the correct step', () => {
-      const state = {
-        rolloverSwapForm: {
-          marginUpdateConfirmationFlow: {
-            error: 'error',
-          },
-        },
-      };
-
-      expect(selectMarginUpdateConfirmationFlowError(state as never)).toEqual('error');
-    });
-  });
-
-  describe('selectMarginUpdateConfirmationFlowEtherscanLink', () => {
-    it('returns the correct link', () => {
-      (getViewOnEtherScanLink as jest.Mock).mockReturnValueOnce('https://etherscan.io/tx/0xabc123');
-
-      const state = {
-        network: {
-          chainId: 1,
-        },
-        rolloverSwapForm: {
-          marginUpdateConfirmationFlow: {
-            txHash: '0xabc123',
-          },
-        },
-      };
-      const result = selectMarginUpdateConfirmationFlowEtherscanLink(state as never);
-      expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
-      expect(result).toEqual('https://etherscan.io/tx/0xabc123');
-    });
-  });
-
   describe('selectVariableRate24hDelta', () => {
     beforeEach(() => {
       jest.resetAllMocks();
@@ -1682,17 +1631,6 @@ describe('swap-form.selectors', () => {
         },
       };
       expect(selectSubmitButtonText(state as never)).toBe('Swap');
-    });
-
-    it('returns the correct text for the "margin-update" state', () => {
-      const state = {
-        rolloverSwapForm: {
-          submitButton: {
-            state: 'margin-update',
-          },
-        },
-      };
-      expect(selectSubmitButtonText(state as never)).toBe('Update margin');
     });
 
     it('returns the correct text for the "not-enough-balance" state', () => {

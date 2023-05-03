@@ -296,17 +296,6 @@ export const selectSwapConfirmationFlowEtherscanLink = (state: RootState) => {
   );
 };
 
-export const selectMarginUpdateConfirmationFlowStep = (state: RootState) =>
-  state.rolloverSwapForm.marginUpdateConfirmationFlow.step;
-export const selectMarginUpdateConfirmationFlowError = (state: RootState) =>
-  state.rolloverSwapForm.marginUpdateConfirmationFlow.error;
-export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState) => {
-  return getViewOnEtherScanLink(
-    state.network.chainId,
-    state.rolloverSwapForm.marginUpdateConfirmationFlow.txHash || '',
-  );
-};
-
 export const selectVariableRate24hDelta = (state: RootState) => {
   if (!state.rolloverSwapForm.amm) {
     return undefined;
@@ -325,8 +314,6 @@ export const selectSubmitButtonText = (state: RootState) => {
   switch (state.rolloverSwapForm.submitButton.state) {
     case 'swap':
       return 'Swap';
-    case 'margin-update':
-      return 'Update margin';
     case 'not-enough-balance':
       return 'Not enough balance';
     case 'approve':
