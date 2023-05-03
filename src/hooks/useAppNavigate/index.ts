@@ -2,19 +2,25 @@ import { generatePath, useNavigate } from 'react-router-dom';
 
 import { routes } from '../../routes/paths';
 
-export const useAppNavigate = () => {
-  const navigate = useNavigate();
-
-  const toLPFormPage = ({
-    ammId,
-    poolId,
-    fixedUpper,
-    fixedLower,
-  }: {
+type UseAppNavigateResult = {
+  toLPFormPage: (params: {
     ammId: string;
     poolId: string;
     fixedUpper?: number;
     fixedLower?: number;
+  }) => void;
+  toSwapFormPage: (params: { ammId: string; poolId: string }) => void;
+  toRolloverSwapFormPage: (params: { ammId: string; poolId: string; positionId: string }) => void;
+  toLPOptimisersDepositForm: (params: { vaultId: string }) => void;
+};
+export const useAppNavigate = (): UseAppNavigateResult => {
+  const navigate = useNavigate();
+
+  const toLPFormPage: UseAppNavigateResult['toLPFormPage'] = ({
+    ammId,
+    poolId,
+    fixedUpper,
+    fixedLower,
   }) => {
     const path = generatePath(routes.LP_FORM, {
       ammId,
@@ -27,7 +33,7 @@ export const useAppNavigate = () => {
     navigate(`/${path}`);
   };
 
-  const toSwapFormPage = ({ ammId, poolId }: { ammId: string; poolId: string }) => {
+  const toSwapFormPage: UseAppNavigateResult['toSwapFormPage'] = ({ ammId, poolId }) => {
     const path = generatePath(routes.TRADER_SWAP_FORM, {
       ammId,
       poolId,
@@ -35,15 +41,22 @@ export const useAppNavigate = () => {
     navigate(`/${path}`);
   };
 
-  const toRolloverSwapFormPage = ({ ammId, poolId }: { ammId: string; poolId: string }) => {
+  const toRolloverSwapFormPage: UseAppNavigateResult['toRolloverSwapFormPage'] = ({
+    ammId,
+    poolId,
+    positionId,
+  }) => {
     const path = generatePath(routes.TRADER_ROLLOVER_SWAP_FORM, {
       ammId,
       poolId,
+      positionId,
     });
     navigate(`/${path}`);
   };
 
-  const toLPOptimisersDepositForm = ({ vaultId }: { vaultId: string }) => {
+  const toLPOptimisersDepositForm: UseAppNavigateResult['toLPOptimisersDepositForm'] = ({
+    vaultId,
+  }) => {
     const path = generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
       actions: 'deposit',
       vaultId,

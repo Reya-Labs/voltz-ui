@@ -79,16 +79,19 @@ describe('useAppNavigate', () => {
     const params = {
       ammId: 'abc',
       poolId: 'def',
+      positionId: 'ghj',
     };
 
     (generatePath as jest.Mock).mockReturnValueOnce(
-      `trader/rollover/${params.ammId}/${params.poolId}`,
+      `trader/rollover/${params.ammId}/${params.poolId}/${params.positionId}`,
     );
 
     result.current.toRolloverSwapFormPage(params);
 
     expect(generatePath).toHaveBeenCalledWith(routes.TRADER_ROLLOVER_SWAP_FORM, params);
-    expect(navigateMock).toHaveBeenCalledWith(`/trader/rollover/${params.ammId}/${params.poolId}`);
+    expect(navigateMock).toHaveBeenCalledWith(
+      `/trader/rollover/${params.ammId}/${params.poolId}/${params.positionId}`,
+    );
   });
 
   it('should navigate to LP optimisers deposit form page', () => {

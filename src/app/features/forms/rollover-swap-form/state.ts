@@ -11,11 +11,15 @@ export type SliceState = {
       isError: boolean;
     };
   };
+  // matured/previous AMM
   amm: AMM | null;
+  // matured/previous position
   position: {
     value: Position | null;
     status: ThunkStatus;
   };
+  // targeted AMM with the rollover
+  targetAmm: AMM | null;
   walletBalance: {
     value: number;
     status: ThunkStatus;
@@ -94,6 +98,7 @@ export const initialState: SliceState = {
     },
   },
   amm: null,
+  targetAmm: null,
   position: {
     value: null,
     status: 'idle',

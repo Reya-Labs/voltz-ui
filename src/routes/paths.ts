@@ -12,7 +12,7 @@ export const routes = {
   LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM: 'lp-optimisers/:actions/:vaultId/:vaultIndex',
   // new trader experience
   TRADER_SWAP_FORM: 'trader/swap/:ammId/:poolId',
-  TRADER_ROLLOVER_SWAP_FORM: 'trader/rollover/:ammId/:poolId',
+  TRADER_ROLLOVER_SWAP_FORM: 'trader/rollover/:ammId/:positionId/:poolId',
   LP_FORM: 'lp/liquidity/:ammId/:poolId?',
   // old route for lp-optimisers, redirects to lp-optimisers
   DEPRECATED_PRODUCTS: 'products',

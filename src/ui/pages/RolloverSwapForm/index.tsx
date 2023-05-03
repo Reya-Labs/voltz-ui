@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
 
 import { resetStateAction } from '../../../app/features/forms/rollover-swap-form';
 import { useAppDispatch } from '../../../app/hooks';
@@ -15,7 +14,6 @@ import { Main } from './Main';
 export const RolloverSwapFormPage: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
-  const { form } = useParams();
   const { noAMMFound, loading, error } = useRolloverSwapFormAMM();
 
   React.useEffect(() => {
@@ -24,13 +22,11 @@ export const RolloverSwapFormPage: React.FunctionComponent = () => {
     };
   }, []);
 
-  const pageNotFound = form !== 'rollover' || noAMMFound;
-
   return (
     <VoltzPage
       errorSlot={error ? <AMMFetchingError to={`/${routes.POOLS}`} /> : undefined}
       mainSlot={<Main />}
-      notFoundSlot={pageNotFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
+      notFoundSlot={noAMMFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
       pageLoadingSlot={loading ? <PageLoading /> : undefined}
       rightSlot={<Form />}
     />

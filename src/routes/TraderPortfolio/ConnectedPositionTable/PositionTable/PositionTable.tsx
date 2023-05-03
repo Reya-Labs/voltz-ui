@@ -14,8 +14,14 @@ import { useAMMs } from '../../../../hooks/useAMMs';
 import { useAppNavigate } from '../../../../hooks/useAppNavigate';
 import { getConfig } from '../../../../hooks/voltz-config/config';
 import { colors, SystemStyleObject, Theme } from '../../../../theme';
-import { findCurrentAmm, generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
+import {
+  findCurrentAmm,
+  generateAmmIdForRoute,
+  generatePoolId,
+  generatePositionIdForRoute,
+} from '../../../../utilities/amm';
 import { getRowButtonId } from '../../../../utilities/googleAnalytics/helpers';
+import { isTraderRolloverExperienceFlowEnabled } from '../../../../utilities/isEnvVarProvided/is-trader-rollover-experience-flow-enabled';
 import { getMaturityWindow } from '../../../../utilities/maturityWindow';
 import { PositionTableHead, PositionTableRow } from './components';
 import { TransactionList } from './TransactionList/TransactionList';
@@ -133,7 +139,17 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 settlementCashflowInUSD={pos.settlementCashflowInUSD}
                 underlyingTokenName={pos.amm.underlyingToken.name || ''}
                 unrealizedPnL={pos.unrealizedPnLFromSwaps}
-                onRollover={() => handleSelectRow(index, 'rollover')}
+                onRollover={() => {
+                  if (isTraderRolloverExperienceFlowEnabled()) {
+                    navigate.toRolloverSwapFormPage({
+                      ammId: generateAmmIdForRoute(pos.amm),
+                      poolId: generatePoolId(pos.amm),
+                      positionId: generatePositionIdForRoute(pos),
+                    });
+                    return;
+                  }
+                  handleSelectRow(index, 'rollover');
+                }}
                 onSelect={
                   closeToMaturity
                     ? undefined
