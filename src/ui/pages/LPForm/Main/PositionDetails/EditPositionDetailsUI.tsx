@@ -124,6 +124,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               <PnLDetails
                 pnlFromFees={realizedPnLFromFees}
                 pnlFromSwaps={realizedPnLFromSwaps}
+                pnlTotal={realizedPnLTotal}
                 underlyingTokenName={underlyingTokenName}
               />
             }
