@@ -5,6 +5,7 @@ import { selectSwapFormAMM } from '../../../../../app/features/forms/rollover-sw
 import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';
+import { PreviousPositionDetailsUI } from './PreviousPositionDetailsUI';
 
 type PositionDetailsProps = {};
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
@@ -32,12 +33,21 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
   }
 
   return (
-    <NewPositionDetailsUI
-      actionLabelTypographyToken={actionLabelTypographyToken}
-      actionTypographyToken={actionTypographyToken}
-      labelTypographyToken={labelTypographyToken}
-      typographyToken={typographyToken}
-      underlyingTokenName={aMM.underlyingToken.name}
-    />
+    <React.Fragment>
+      <PreviousPositionDetailsUI
+        actionLabelTypographyToken={actionLabelTypographyToken}
+        actionTypographyToken={actionTypographyToken}
+        labelTypographyToken={labelTypographyToken}
+        typographyToken={typographyToken}
+        underlyingTokenName={aMM.underlyingToken.name}
+      />
+      <NewPositionDetailsUI
+        actionLabelTypographyToken={actionLabelTypographyToken}
+        actionTypographyToken={actionTypographyToken}
+        labelTypographyToken={labelTypographyToken}
+        typographyToken={typographyToken}
+        underlyingTokenName={aMM.underlyingToken.name}
+      />
+    </React.Fragment>
   );
 };

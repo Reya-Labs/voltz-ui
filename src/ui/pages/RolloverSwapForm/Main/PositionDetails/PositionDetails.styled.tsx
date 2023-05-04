@@ -41,7 +41,9 @@ const BorderedBox = styled('div')`
 
 export const ReceivingBox = styled(BorderedBox)``;
 export const PayingBox = styled(BorderedBox)``;
+export const RealisedPNLBox = styled(BorderedBox)``;
 export const CashFlowBox = styled(BorderedBox)``;
+export const DepositedMarginBox = styled(BorderedBox)``;
 
 export const TooltipBox = styled('div')`
   width: 300px;

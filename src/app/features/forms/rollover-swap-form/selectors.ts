@@ -67,6 +67,13 @@ export const selectUserInputMarginInfo = (state: RootState) =>
 
 export const selectProspectiveSwapMode = (state: RootState) =>
   getProspectiveSwapMode(state.rolloverSwapForm);
+export const selectPreviousPositionSwapMode = (state: RootState) => {
+  if (!state.rolloverSwapForm.previousPosition) {
+    return 'fixed';
+  }
+  return state.rolloverSwapForm.previousPosition.positionType === 1 ? 'fixed' : 'variable';
+};
+
 export const selectProspectiveSwapNotionalFormatted = (state: RootState) => {
   return formCompactFormat(getProspectiveSwapNotional(state.rolloverSwapForm));
 };
@@ -130,16 +137,65 @@ export const selectNewPositionReceivingRate = (state: RootState) => {
     : getVariableRate(state.rolloverSwapForm);
 };
 
+export const selectPreviousPositionDepositedMargin = (state: RootState) => {
+  if (!state.rolloverSwapForm.previousPosition) {
+    return null;
+  }
+  const compactParts = formCompactFormatToParts(state.rolloverSwapForm.previousPosition.margin);
+
+  return {
+    compactDepositedMarginSuffix: compactParts.compactSuffix,
+    compactDepositedMarginNumber: compactParts.compactNumber,
+  };
+};
+
+export const selectPreviousPositionNetBalance = (state: RootState) => {
+  const position = state.rolloverSwapForm.previousPosition;
+  if (!position) {
+    return null;
+  }
+  const netBalance =
+    position.margin + position.realizedPnLFromSwaps + position.realizedPnLFromFeesPaid;
+  const compactParts = formCompactFormatToParts(netBalance);
+
+  return {
+    compactNetBalanceSuffix: compactParts.compactSuffix,
+    compactNetBalanceNumber: compactParts.compactNumber,
+  };
+};
+
 export const selectNewPositionPayingRate = (state: RootState) => {
   return getProspectiveSwapMode(state.rolloverSwapForm) === 'fixed'
     ? getVariableRate(state.rolloverSwapForm)
     : getNewPositionFixedRate(state.rolloverSwapForm);
 };
 
+export const selectPreviousPositionRealizedPNL = (state: RootState) => {
+  if (!state.rolloverSwapForm.previousPosition) {
+    return null;
+  }
+  return (
+    state.rolloverSwapForm.previousPosition.realizedPnLFromSwaps +
+    state.rolloverSwapForm.previousPosition.realizedPnLFromFeesPaid
+  );
+};
+
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.rolloverSwapForm.userInput.notionalAmount.error) return null;
 
   const compactParts = formCompactFormatToParts(getProspectiveSwapNotional(state.rolloverSwapForm));
+
+  return {
+    compactNotionalSuffix: compactParts.compactSuffix,
+    compactNotionalNumber: compactParts.compactNumber,
+  };
+};
+
+export const selectPreviousPositionCompactNotional = (state: RootState) => {
+  if (!state.rolloverSwapForm.previousPosition) {
+    return null;
+  }
+  const compactParts = formCompactFormatToParts(state.rolloverSwapForm.previousPosition.notional);
 
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
