@@ -186,6 +186,9 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
     (getProspectiveSwapMode as jest.Mock).mockReturnValue('fixed');
     (validateUserInput as jest.Mock).mockReturnValue(undefined);
     const state = {
+      previousPosition: {
+        settlementCashflow: 100,
+      },
       amm: {
         underlyingToken: {
           name: 'usdc',
@@ -302,6 +305,9 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
     (getProspectiveSwapMode as jest.Mock).mockReturnValue('variable');
     (validateUserInput as jest.Mock).mockReturnValue(undefined);
     const state = {
+      previousPosition: {
+        settlementCashflow: 100,
+      },
       amm: {
         underlyingToken: {
           name: 'usdc',

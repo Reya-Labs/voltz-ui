@@ -69,9 +69,10 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     }
   }
 
-  if (isWalletBalanceLoaded) {
+  if (isWalletBalanceLoaded && state.previousPosition !== null) {
     const walletBalance = state.walletBalance.value;
-    if (userInputMarginAmount > walletBalance) {
+    const settlementCashflow = state.previousPosition.settlementCashflow;
+    if (userInputMarginAmount > walletBalance + settlementCashflow) {
       state.submitButton = {
         state: 'not-enough-balance',
         disabled: true,
@@ -83,7 +84,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       return;
     }
 
-    if (isInfoPostSwapLoaded && userInputMarginAmount + fee > walletBalance) {
+    if (isInfoPostSwapLoaded && userInputMarginAmount + fee > walletBalance + settlementCashflow) {
       state.submitButton = {
         state: 'not-enough-balance',
         disabled: true,
