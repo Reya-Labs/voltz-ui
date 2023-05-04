@@ -8,7 +8,5 @@ export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
     return null;
   }
 
-  return walletBalance.status === 'success'
-    ? walletBalance.value + previousPosition.settlementCashflow
-    : null;
+  return walletBalance.value + previousPosition.settlementCashflow;
 };
