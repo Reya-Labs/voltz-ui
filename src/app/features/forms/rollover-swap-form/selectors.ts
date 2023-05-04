@@ -15,12 +15,13 @@ import {
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
+  getRealizedPnLFromFees,
+  getRealizedPnLFromSwaps,
   getVariableRate,
 } from './utils';
 
 export const selectSubmitButtonInfo = (state: RootState) => state.rolloverSwapForm.submitButton;
 export const selectRolloverSwapFormAMM = (state: RootState) => state.rolloverSwapForm.amm;
-export const selectRolloverSwapFormPosition = (state: RootState) => state.rolloverSwapForm.position;
 export const selectRolloverSwapFormPreviousAMM = (state: RootState) =>
   state.rolloverSwapForm.previousAMM;
 export const selectRolloverSwapFormPreviousPosition = (state: RootState) =>
@@ -174,16 +175,6 @@ export const selectNewPositionPayingRate = (state: RootState) => {
     : getNewPositionFixedRate(state.rolloverSwapForm);
 };
 
-export const selectPreviousPositionRealizedPNL = (state: RootState) => {
-  if (!state.rolloverSwapForm.previousPosition) {
-    return null;
-  }
-  return (
-    state.rolloverSwapForm.previousPosition.realizedPnLFromSwaps +
-    state.rolloverSwapForm.previousPosition.realizedPnLFromFeesPaid
-  );
-};
-
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.rolloverSwapForm.userInput.notionalAmount.error) return null;
 
@@ -291,7 +282,7 @@ export const selectIsGetInfoPostSwapLoading = (state: RootState) => {
   return state.rolloverSwapForm.prospectiveSwap.infoPostSwap.status === 'pending';
 };
 
-export const selectPositionMarginFormatted = (state: RootState) => {
+export const selectPositionMarginFormatted = () => {
   return '--';
 };
 
@@ -311,4 +302,28 @@ export const selectMarginRequirementFormatted = (state: RootState) => {
         4,
       )
     : '--';
+};
+
+export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState) => {
+  const realizedPnLFromFees = getRealizedPnLFromFees(state.rolloverSwapForm);
+  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverSwapForm);
+  let realizedPnLTotal = null;
+
+  if (realizedPnLFromFees && realizedPnLFromSwaps) {
+    realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
+  }
+
+  return realizedPnLTotal === null ? '--' : formFormatNumber(realizedPnLTotal);
+};
+
+export const selectPreviousPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
+  const realizedPnLFromFees = getRealizedPnLFromFees(state.rolloverSwapForm);
+
+  return realizedPnLFromFees === null ? '--' : formFormatNumber(realizedPnLFromFees);
+};
+
+export const selectPreviousPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
+  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverSwapForm);
+
+  return realizedPnLFromSwaps === null ? '--' : formFormatNumber(realizedPnLFromSwaps);
 };

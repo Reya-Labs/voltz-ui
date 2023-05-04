@@ -1,15 +1,17 @@
 import { LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { formFormatNumber } from '../../../../../app/features/forms/common/utils';
 import {
   selectPreviousPositionCompactNotional,
   selectPreviousPositionDepositedMargin,
   selectPreviousPositionNetBalance,
-  selectPreviousPositionRealizedPNL,
+  selectPreviousPositionRealizedPnLFromFeesFormatted,
+  selectPreviousPositionRealizedPnLFromSwapsFormatted,
+  selectPreviousPositionRealizedPnLTotalFormatted,
   selectPreviousPositionSwapMode,
 } from '../../../../../app/features/forms/rollover-swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
+import { PnLDetails } from '../../../SwapForm/Main/PositionDetails/PnLDetails';
 import { MODE_COLOR_TOKEN_MAP } from '../../helpers';
 import {
   CashFlowBox,
@@ -36,11 +38,13 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
   labelTypographyToken,
   typographyToken,
 }) => {
-  const realizedPNL = useAppSelector(selectPreviousPositionRealizedPNL);
   const compactNotional = useAppSelector(selectPreviousPositionCompactNotional);
   const mode = useAppSelector(selectPreviousPositionSwapMode);
   const compactDepositedMargin = useAppSelector(selectPreviousPositionDepositedMargin);
   const compactNetBalance = useAppSelector(selectPreviousPositionNetBalance);
+  const realizedPnLTotal = useAppSelector(selectPreviousPositionRealizedPnLTotalFormatted);
+  const realizedPnLFromFees = useAppSelector(selectPreviousPositionRealizedPnLFromFeesFormatted);
+  const realizedPnLFromSwaps = useAppSelector(selectPreviousPositionRealizedPnLFromSwapsFormatted);
 
   return (
     <PositionDetailsBox>
@@ -91,15 +95,22 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
           />
         </DepositedMarginBox>
         <RealisedPNLBox>
-          {/*todo: FB make it same as in swap form*/}
+          {/*todo: FB duplicate to be moved to common component*/}
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken={realizedPnLTotal.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'}
             label="Realized PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
+            tooltip={
+              <PnLDetails
+                pnlFromFees={realizedPnLFromFees}
+                pnlFromSwaps={realizedPnLFromSwaps}
+                underlyingTokenName={underlyingTokenName}
+              />
+            }
             typographyToken={typographyToken}
-            value={realizedPNL !== null ? formFormatNumber(realizedPNL) : '--'}
+            value={realizedPnLTotal}
           />
         </RealisedPNLBox>
         <CashFlowBox>

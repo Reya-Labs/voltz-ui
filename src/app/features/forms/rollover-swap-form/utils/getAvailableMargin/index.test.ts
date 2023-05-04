@@ -26,10 +26,6 @@ describe('getAvailableMargin', () => {
           value: null,
         },
       },
-      position: {
-        status: 'idle',
-        value: null,
-      },
       walletBalance: {
         status: 'success',
         value: 1000,
@@ -51,10 +47,6 @@ describe('getAvailableMargin', () => {
           status: 'idle',
           value: null,
         },
-      },
-      position: {
-        status: 'idle',
-        value: null,
       },
       walletBalance: {
         status: 'loading',

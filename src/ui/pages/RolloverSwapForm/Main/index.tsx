@@ -6,7 +6,6 @@ import {
   selectInfoPostSwapVariableTokenDeltaBalance,
   selectProspectiveSwapMode,
   selectRolloverSwapFormAMM,
-  selectRolloverSwapFormPosition,
   selectVariableRateInfo,
 } from '../../../../app/features/forms/rollover-swap-form';
 import { useAppSelector } from '../../../../app/hooks';
@@ -22,7 +21,6 @@ export const Main: React.FunctionComponent = () => {
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const averageFixedRate = useAppSelector(selectInfoPostSwapAverageFixedRate);
   const variableTokenDeltaBalance = useAppSelector(selectInfoPostSwapVariableTokenDeltaBalance);
-  const position = useAppSelector(selectRolloverSwapFormPosition);
   const mode = useAppSelector(selectProspectiveSwapMode);
   if (!aMM || fixedRateInfo === undefined || variableRateInfo === undefined) {
     return null;
@@ -43,7 +41,7 @@ export const Main: React.FunctionComponent = () => {
           aMM={aMM}
           averageFixedRate={averageFixedRate}
           mode={mode}
-          position={position}
+          position={null}
           variableTokenDeltaBalance={variableTokenDeltaBalance}
         />
       </BottomMainBox>

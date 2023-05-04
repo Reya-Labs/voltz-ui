@@ -2,14 +2,8 @@ import { getProspectiveSwapMode } from './index';
 
 describe('getProspectiveSwapMode', () => {
   const mockState = {
-    position: {
-      value: 'some value',
-    },
     userInput: {
       mode: 'variable',
-      notionalAmount: {
-        value: 10,
-      },
     },
   };
 

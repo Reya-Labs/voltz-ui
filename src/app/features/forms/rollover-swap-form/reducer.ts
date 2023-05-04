@@ -343,7 +343,6 @@ const slice = createSlice({
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(initializeAMMsAndPositionsForRolloverThunk.pending, (state) => {
-        state.position = null;
         state.previousPosition = null;
         if (state.amm) {
           state.amm.signer = null;
@@ -353,7 +352,6 @@ const slice = createSlice({
         }
       })
       .addCase(initializeAMMsAndPositionsForRolloverThunk.rejected, (state) => {
-        state.position = null;
         state.previousPosition = null;
         if (state.amm) {
           state.amm.signer = null;

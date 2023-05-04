@@ -13,9 +13,6 @@ export type SliceState = {
   };
   // target/next AMM
   amm: AMM | null;
-  // TODO: FB remove this state prop
-  // target/next position
-  position: Position | null;
   // matured/previous AMM
   previousAMM: AMM | null;
   // matured/previous position
@@ -96,7 +93,6 @@ export const initialState: SliceState = {
     },
   },
   amm: null,
-  position: null,
   previousAMM: null,
   previousPosition: null,
   walletBalance: {

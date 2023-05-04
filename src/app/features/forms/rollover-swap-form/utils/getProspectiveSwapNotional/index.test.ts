@@ -11,9 +11,6 @@ describe('getProspectiveSwapNotional', () => {
       },
       mode: 'some mode',
     },
-    position: {
-      value: 123,
-    },
   };
 
   beforeEach(() => {
@@ -23,9 +20,6 @@ describe('getProspectiveSwapNotional', () => {
           value: 100,
         },
         mode: 'variable',
-      },
-      position: {
-        value: 123,
       },
     };
     jest.clearAllMocks();

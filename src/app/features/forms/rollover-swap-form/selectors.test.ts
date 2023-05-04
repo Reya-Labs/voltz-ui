@@ -28,7 +28,6 @@ import {
   selectProspectiveSwapNotionalFormatted,
   selectRolloverConfirmationFlowEtherscanLink,
   selectRolloverSwapFormAMM,
-  selectRolloverSwapFormPosition,
   selectShowLeverageNotification,
   selectSlippageFormatted,
   selectSubmitButtonInfo,
@@ -73,7 +72,6 @@ jest.mock('../common/utils', () => ({
 
 // Mock utils
 jest.mock('./utils', () => ({
-  hasExistingPosition: jest.fn(),
   getProspectiveSwapMode: jest.fn(),
   getProspectiveSwapNotional: jest.fn(),
   getProspectiveSwapMargin: jest.fn(),
@@ -142,20 +140,6 @@ describe('swap-form.selectors', () => {
         address: '0x123456789abcdef',
         name: 'Test AMM',
       });
-    });
-  });
-
-  describe('selectSwapFormPosition', () => {
-    it('returns the position value from rolloverSwapForm', () => {
-      const state = {
-        rolloverSwapForm: {
-          position: 'long',
-        },
-      } as never;
-
-      const position = selectRolloverSwapFormPosition(state);
-
-      expect(position).toEqual('long');
     });
   });
 
@@ -1243,8 +1227,7 @@ describe('swap-form.selectors', () => {
 
   describe('selectPositionMarginFormatted', () => {
     it('should return --', () => {
-      const state = { rolloverSwapForm: { position: { value: null } } };
-      const result = selectPositionMarginFormatted(state as never);
+      const result = selectPositionMarginFormatted();
       expect(result).toBe('--');
     });
   });
