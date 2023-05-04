@@ -10,7 +10,6 @@ import {
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
-  hasExistingPosition,
 } from '../../utils';
 import { confirmSwapThunkHandler } from './';
 
@@ -32,7 +31,6 @@ jest.mock('../../utils', () => ({
   getProspectiveSwapMargin: jest.fn(),
   getProspectiveSwapMode: jest.fn(),
   getProspectiveSwapNotional: jest.fn(),
-  hasExistingPosition: jest.fn(),
 }));
 
 jest.mock('../../../../helpers/extract-error', () => ({
@@ -61,7 +59,7 @@ describe('confirmSwapThunkHandler', () => {
   it('should call amm.swap and pushSwapTransactionSubmittedEvent with correct event params', async () => {
     const mockNotional = 123;
     const mockMargin = 456;
-    const mockIsEdit = true;
+    const mockIsEdit = false;
     const mockPool = 'Mock Pool';
     const mockIsFT = true;
     const mockAccount = '0x123';
@@ -75,7 +73,6 @@ describe('confirmSwapThunkHandler', () => {
     };
     (getProspectiveSwapNotional as jest.Mock).mockReturnValue(mockNotional);
     (getProspectiveSwapMargin as jest.Mock).mockReturnValue(mockMargin);
-    (hasExistingPosition as jest.Mock).mockReturnValue(mockIsEdit);
     (getProspectiveSwapMode as jest.Mock).mockReturnValue('fixed');
     (getAmmProtocol as jest.Mock).mockReturnValue(mockPool);
     mockState.rolloverSwapForm.amm.signer.getAddress.mockResolvedValue(mockAccount);
@@ -98,7 +95,6 @@ describe('confirmSwapThunkHandler', () => {
     const mockError = new Error('Mock error');
     (getProspectiveSwapNotional as jest.Mock).mockReturnValue(123);
     (getProspectiveSwapMargin as jest.Mock).mockReturnValue(456);
-    (hasExistingPosition as jest.Mock).mockReturnValue(true);
     (getProspectiveSwapMode as jest.Mock).mockReturnValue('fixed');
     (getAmmProtocol as jest.Mock).mockReturnValue('Mock Pool');
     mockState.rolloverSwapForm.amm.signer.getAddress.mockResolvedValue('0x123');
@@ -110,7 +106,7 @@ describe('confirmSwapThunkHandler', () => {
       account: '0x123',
       notional: 123,
       margin: 456,
-      isEdit: true,
+      isEdit: false,
       pool: 'Mock Pool',
       isFT: true,
       errorMessage: mockErrorMessage,
@@ -122,7 +118,6 @@ describe('confirmSwapThunkHandler', () => {
     const mockError = new Error('Mock error');
     (getProspectiveSwapNotional as jest.Mock).mockReturnValue(123);
     (getProspectiveSwapMargin as jest.Mock).mockReturnValue(456);
-    (hasExistingPosition as jest.Mock).mockReturnValue(true);
     (getProspectiveSwapMode as jest.Mock).mockReturnValue('fixed');
     (getAmmProtocol as jest.Mock).mockReturnValue('Mock Pool');
     (mockState.rolloverSwapForm.amm.swap as jest.Mock).mockRejectedValue(mockError);

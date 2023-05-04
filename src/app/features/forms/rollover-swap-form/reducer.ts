@@ -18,7 +18,6 @@ import {
   SetSignerAndPositionForAMMThunkSuccess,
 } from './thunks';
 import {
-  getExistingPositionMode,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
   updateLeverage,
@@ -71,18 +70,13 @@ const slice = createSlice({
     setNotionalAmountAction: (
       state,
       {
-        payload: { value, editMode },
+        payload: { value },
       }: PayloadAction<{
         value?: number;
-        editMode?: 'add' | 'remove';
       }>,
     ) => {
       if (value !== undefined) {
         state.userInput.notionalAmount.value = value;
-      }
-
-      if (editMode !== undefined) {
-        state.userInput.notionalAmount.editMode = editMode;
       }
 
       updateLeverage(state);
@@ -91,18 +85,13 @@ const slice = createSlice({
     setMarginAmountAction: (
       state,
       {
-        payload: { value, editMode },
+        payload: { value },
       }: PayloadAction<{
         value?: number;
-        editMode?: 'add' | 'remove';
       }>,
     ) => {
       if (value !== undefined) {
         state.userInput.marginAmount.value = value;
-      }
-
-      if (editMode !== undefined) {
-        state.userInput.marginAmount.editMode = editMode;
       }
 
       updateLeverage(state);
@@ -349,31 +338,26 @@ const slice = createSlice({
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
-        state.position.value = null;
-        state.position.status = 'pending';
+        state.position = null;
         if (!state.amm) {
           return;
         }
         state.amm.signer = null;
       })
       .addCase(setSignerAndPositionForAMMThunk.rejected, (state) => {
-        state.position.value = null;
-        state.position.status = 'error';
+        state.position = null;
         if (!state.amm) {
           return;
         }
         state.amm.signer = null;
       })
       .addCase(setSignerAndPositionForAMMThunk.fulfilled, (state, { payload }) => {
-        state.position.value = (payload as SetSignerAndPositionForAMMThunkSuccess).position;
-        state.position.status = 'success';
+        state.position = (payload as SetSignerAndPositionForAMMThunkSuccess).position;
         if (!state.amm) {
           return;
         }
         state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
-        if (state.position.value) {
-          state.userInput.mode = getExistingPositionMode(state) as 'fixed' | 'variable';
-        }
+
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(confirmSwapThunk.pending, (state) => {

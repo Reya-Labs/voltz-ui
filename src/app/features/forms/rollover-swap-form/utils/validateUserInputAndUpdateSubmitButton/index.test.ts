@@ -2,14 +2,10 @@ import { isUserInputMarginError } from '../../../common/utils';
 import { getProspectiveSwapMargin } from '../getProspectiveSwapMargin';
 import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
-import { hasExistingPosition } from '../hasExistingPosition';
 import { validateUserInput } from '../validateUserInput';
 import { validateUserInputAndUpdateSubmitButton } from '.';
 
 // Mock the dependencies
-jest.mock('../hasExistingPosition', () => ({
-  hasExistingPosition: jest.fn(),
-}));
 jest.mock('../validateUserInput', () => ({
   validateUserInput: jest.fn(),
 }));
@@ -53,7 +49,6 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       },
       userInput: {
         marginAmount: {
-          editMode: 'add',
           value: 600,
         },
       },
@@ -102,7 +97,6 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       },
       userInput: {
         marginAmount: {
-          editMode: 'add',
           value: 600,
         },
       },
@@ -129,7 +123,6 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
 
   it('should update the submit button state to approve if margin amount needs approval', () => {
     (isUserInputMarginError as jest.Mock).mockReturnValue(false);
-    (hasExistingPosition as jest.Mock).mockReturnValue(false);
     (getProspectiveSwapNotional as jest.Mock).mockReturnValue(100);
     (getProspectiveSwapMargin as jest.Mock).mockReturnValue(200);
     (getProspectiveSwapMode as jest.Mock).mockReturnValue('variable');
@@ -161,7 +154,6 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       },
       userInput: {
         marginAmount: {
-          editMode: 'add',
           value: 600,
         },
       },
@@ -189,7 +181,6 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
 
   it('should update the submit button state to not-enough-balance if there is insufficient balance', () => {
     (isUserInputMarginError as jest.Mock).mockReturnValue(false);
-    (hasExistingPosition as jest.Mock).mockReturnValue(false);
     (getProspectiveSwapNotional as jest.Mock).mockReturnValue(0);
     (getProspectiveSwapMargin as jest.Mock).mockReturnValue(200);
     (getProspectiveSwapMode as jest.Mock).mockReturnValue('fixed');
@@ -221,7 +212,6 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       },
       userInput: {
         marginAmount: {
-          editMode: 'add',
           value: 1500,
         },
       },
@@ -249,7 +239,6 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
 
   it('should update the submit button state to approve with a message about the required approval amount', () => {
     (isUserInputMarginError as jest.Mock).mockReturnValue(false);
-    (hasExistingPosition as jest.Mock).mockReturnValue(false);
     (getProspectiveSwapNotional as jest.Mock).mockReturnValue(100);
     (getProspectiveSwapMargin as jest.Mock).mockReturnValue(200);
     (getProspectiveSwapMode as jest.Mock).mockReturnValue('variable');
@@ -281,7 +270,6 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       },
       userInput: {
         marginAmount: {
-          editMode: 'add',
           value: 400,
         },
       },
@@ -309,7 +297,6 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
 
   it('should update the submit button state to swap if all conditions are true', () => {
     (isUserInputMarginError as jest.Mock).mockReturnValue(false);
-    (hasExistingPosition as jest.Mock).mockReturnValue(false);
     (getProspectiveSwapNotional as jest.Mock).mockReturnValue(100);
     (getProspectiveSwapMargin as jest.Mock).mockReturnValue(200);
     (getProspectiveSwapMode as jest.Mock).mockReturnValue('variable');
@@ -341,7 +328,6 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       },
       userInput: {
         marginAmount: {
-          editMode: 'add',
           value: 300,
         },
       },

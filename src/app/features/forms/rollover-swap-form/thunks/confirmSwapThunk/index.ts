@@ -14,7 +14,6 @@ import {
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
-  hasExistingPosition,
 } from '../../utils';
 
 export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
@@ -31,13 +30,12 @@ export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
   const account = await amm.signer.getAddress();
   const prospectiveSwapNotional = getProspectiveSwapNotional(state);
   const prospectiveSwapMargin = getProspectiveSwapMargin(state);
-  const existingPosition = hasExistingPosition(state);
   const prospectiveSwapMode = getProspectiveSwapMode(state);
   const eventParams = {
     account,
     notional: prospectiveSwapNotional,
     margin: prospectiveSwapMargin,
-    isEdit: existingPosition,
+    isEdit: false,
     pool: getAmmProtocol(amm),
     isFT: prospectiveSwapMode === 'fixed',
   };

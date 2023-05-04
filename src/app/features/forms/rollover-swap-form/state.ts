@@ -11,15 +11,14 @@ export type SliceState = {
       isError: boolean;
     };
   };
-  // matured/previous AMM
+  // target/next AMM
   amm: AMM | null;
+  // target/next position
+  position: Position | null;
+  // matured/previous AMM
+  previousAMM: AMM | null;
   // matured/previous position
-  position: {
-    value: Position | null;
-    status: ThunkStatus;
-  };
-  // targeted AMM with the rollover
-  targetAmm: AMM | null;
+  previousPosition: Position | null;
   walletBalance: {
     value: number;
     status: ThunkStatus;
@@ -40,13 +39,11 @@ export type SliceState = {
     // User-inputted notional amount
     notionalAmount: {
       value: number;
-      editMode: 'add' | 'remove';
       error: string | null;
     };
     // User-inputted margin amount
     marginAmount: {
       value: number;
-      editMode: 'add' | 'remove';
       error: string | null;
     };
     leverage: number | null;
@@ -98,11 +95,9 @@ export const initialState: SliceState = {
     },
   },
   amm: null,
-  targetAmm: null,
-  position: {
-    value: null,
-    status: 'idle',
-  },
+  position: null,
+  previousAMM: null,
+  previousPosition: null,
   walletBalance: {
     value: 0,
     status: 'idle',
@@ -126,12 +121,10 @@ export const initialState: SliceState = {
     mode: 'fixed',
     notionalAmount: {
       value: 0,
-      editMode: 'add',
       error: null,
     },
     marginAmount: {
       value: 0,
-      editMode: 'add',
       error: null,
     },
     leverage: null,

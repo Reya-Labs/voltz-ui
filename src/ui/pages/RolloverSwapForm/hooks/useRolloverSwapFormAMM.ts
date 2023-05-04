@@ -10,7 +10,6 @@ import {
   selectPoolSwapInfoStatus,
   selectSwapFormAMM,
   selectSwapFormPosition,
-  selectSwapFormPositionFetchingStatus,
   setSignerAndPositionForAMMThunk,
   setSwapFormAMMAction,
 } from '../../../../app/features/forms/rollover-swap-form';
@@ -34,7 +33,6 @@ export const useRolloverSwapFormAMM = (): UseRolloverSwapFormAMMResult => {
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
   const aMM = useAppSelector(selectSwapFormAMM);
   const position = useAppSelector(selectSwapFormPosition);
-  const positionFetchingStatus = useAppSelector(selectSwapFormPositionFetchingStatus);
   const poolSwapInfoStatus = useAppSelector(selectPoolSwapInfoStatus);
   const chainId = useAppSelector(selectChainId);
   const [loading, setLoading] = useState(true);
@@ -119,14 +117,8 @@ export const useRolloverSwapFormAMM = (): UseRolloverSwapFormAMMResult => {
 
   return {
     aMM,
-    loading:
-      idle ||
-      positionFetchingStatus === 'idle' ||
-      poolSwapInfoStatus === 'idle' ||
-      loading ||
-      positionFetchingStatus === 'pending' ||
-      poolSwapInfoStatus === 'pending',
+    loading: idle || poolSwapInfoStatus === 'idle' || loading || poolSwapInfoStatus === 'pending',
     noAMMFound: !aMM && !loading,
-    error: error || positionFetchingStatus === 'error' || poolSwapInfoStatus === 'error',
+    error: error || poolSwapInfoStatus === 'error',
   };
 };

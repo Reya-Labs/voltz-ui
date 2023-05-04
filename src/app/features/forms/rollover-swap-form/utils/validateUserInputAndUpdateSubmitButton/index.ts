@@ -5,22 +5,19 @@ import { SliceState } from '../../state';
 import { getProspectiveSwapMargin } from '../getProspectiveSwapMargin';
 import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
-import { hasExistingPosition } from '../hasExistingPosition';
 import { validateUserInput } from '../validateUserInput';
 
 export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void => {
   validateUserInput(state);
 
-  const existingPosition = hasExistingPosition(state);
   const prospectiveSwapNotional = getProspectiveSwapNotional(state);
   const prospectiveSwapMargin = getProspectiveSwapMargin(state);
-  const marginAmountEditMode = state.userInput.marginAmount.editMode;
   const userInputMarginAmount = state.userInput.marginAmount.value;
   const fee = state.prospectiveSwap.infoPostSwap.value.fee;
   const marginError = isUserInputMarginError(state);
 
-  const isProspectiveSwapNotionalValid = existingPosition || prospectiveSwapNotional > 0;
-  const isProspectiveSwapMarginValid = existingPosition || prospectiveSwapMargin > 0;
+  const isProspectiveSwapNotionalValid = prospectiveSwapNotional > 0;
+  const isProspectiveSwapMarginValid = prospectiveSwapMargin > 0;
   const isProspectiveSwapNotionalMarginValid =
     prospectiveSwapNotional !== 0 || prospectiveSwapMargin !== 0;
   const isInfoPostSwapLoaded =
@@ -45,7 +42,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
 
   const ammToken = state.amm.underlyingToken.name.toUpperCase();
 
-  if (!marginError && isWalletTokenAllowanceLoaded && marginAmountEditMode === 'add') {
+  if (!marginError && isWalletTokenAllowanceLoaded) {
     const walletTokenAllowance = state.walletTokenAllowance.value;
     if (walletTokenAllowance < userInputMarginAmount) {
       state.submitButton = {
@@ -72,7 +69,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     }
   }
 
-  if (isWalletBalanceLoaded && marginAmountEditMode === 'add') {
+  if (isWalletBalanceLoaded) {
     const walletBalance = state.walletBalance.value;
     if (userInputMarginAmount > walletBalance) {
       state.submitButton = {

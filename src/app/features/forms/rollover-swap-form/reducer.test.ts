@@ -24,7 +24,6 @@ import {
   setSignerAndPositionForAMMThunk,
 } from './thunks';
 import {
-  getExistingPositionMode,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
   updateLeverage,
@@ -132,15 +131,8 @@ describe('rolloverSwapFormReducer', () => {
     });
 
     describe('setNotionalAmountAction', () => {
-      test.each([
-        [
-          { value: 1, editMode: 'add' },
-          { value: undefined, editMode: 'remove' },
-          { value: 1, editMode: undefined },
-          { value: undefined, editMode: undefined },
-        ],
-      ])(
-        'provided %p as payload, it should set notionalAmount.value and notionalAmount.editMode properly',
+      test.each([[{ value: 1 }, { value: undefined }]])(
+        'provided %p as payload, it should set notionalAmount.value properly',
         (payload) => {
           const nextState = rolloverSwapFormReducer(
             testsInitialState,
@@ -148,7 +140,6 @@ describe('rolloverSwapFormReducer', () => {
           );
 
           expect(nextState.userInput.notionalAmount.value).toEqual(payload.value);
-          expect(nextState.userInput.notionalAmount.editMode).toEqual(payload.editMode);
           expect(updateLeverage).toHaveBeenCalledTimes(1);
           expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
         },
@@ -156,15 +147,8 @@ describe('rolloverSwapFormReducer', () => {
     });
 
     describe('setMarginAmountAction', () => {
-      test.each([
-        [
-          { value: 1, editMode: 'add' },
-          { value: undefined, editMode: 'remove' },
-          { value: 1, editMode: undefined },
-          { value: undefined, editMode: undefined },
-        ],
-      ])(
-        'provided %p as payload, it should set marginAmount.value and marginAmount.editMode properly',
+      test.each([[{ value: 1 }, { value: undefined }]])(
+        'provided %p as payload, it should set marginAmount.value properly',
         (payload) => {
           const nextState = rolloverSwapFormReducer(
             testsInitialState,
@@ -172,7 +156,6 @@ describe('rolloverSwapFormReducer', () => {
           );
 
           expect(nextState.userInput.marginAmount.value).toEqual(payload.value);
-          expect(nextState.userInput.marginAmount.editMode).toEqual(payload.editMode);
           expect(updateLeverage).toHaveBeenCalledTimes(1);
           expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
         },
@@ -559,15 +542,13 @@ describe('rolloverSwapFormReducer', () => {
             type: setSignerAndPositionForAMMThunk.pending.type,
           },
         );
-        expect(nextState.position.status).toEqual('pending');
-        expect(nextState.position.value).toEqual(null);
+        expect(nextState.position).toEqual(null);
         expect(nextState.amm?.signer).toEqual(null);
 
         const nextState2 = rolloverSwapFormReducer(testsInitialState, {
           type: setSignerAndPositionForAMMThunk.pending.type,
         });
-        expect(nextState2.position.status).toEqual('pending');
-        expect(nextState2.position.value).toEqual(null);
+        expect(nextState2.position).toEqual(null);
       });
 
       it('should update position to null and status to "pending", amm.signer to null when setSignerAndPositionForAMMThunk is rejected', () => {
@@ -580,19 +561,16 @@ describe('rolloverSwapFormReducer', () => {
             type: setSignerAndPositionForAMMThunk.rejected.type,
           },
         );
-        expect(nextState.position.status).toEqual('error');
-        expect(nextState.position.value).toEqual(null);
+        expect(nextState.position).toEqual(null);
         expect(nextState.amm?.signer).toEqual(null);
 
         const nextState2 = rolloverSwapFormReducer(testsInitialState, {
           type: setSignerAndPositionForAMMThunk.rejected.type,
         });
-        expect(nextState2.position.status).toEqual('error');
-        expect(nextState2.position.value).toEqual(null);
+        expect(nextState2.position).toEqual(null);
       });
 
       it('should update position and amm.signer when setSignerAndPositionForAMMThunk is fulfilled, also make sure validateUserInputAndUpdateSubmitButton is called', () => {
-        (getExistingPositionMode as jest.Mock).mockReturnValueOnce('variable');
         const mockedPosition = jest.fn();
         const mockedSigner = jest.fn();
         const nextState = rolloverSwapFormReducer(
@@ -612,10 +590,9 @@ describe('rolloverSwapFormReducer', () => {
         );
 
         expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
-        expect(nextState.position.value).toEqual(mockedPosition);
-        expect(nextState.position.status).toEqual('success');
+        expect(nextState.position).toEqual(mockedPosition);
         expect(nextState.amm?.signer).toEqual(mockedSigner);
-        expect(nextState.userInput.mode).toEqual('variable');
+        expect(nextState.userInput.mode).toEqual('fixed');
       });
     });
 

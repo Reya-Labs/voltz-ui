@@ -10,31 +10,18 @@ import {
   formLimitAndFormatNumber,
 } from '../common/utils';
 import {
-  getAvailableMargin,
   getAvailableNotional,
-  getEditPositionFixedRate,
-  getEditPositionMode,
-  getEditPositionNotional,
-  getEditPositionVariableRate,
-  getExistingPositionFixedRate,
-  getExistingPositionMode,
-  getExistingPositionVariableRate,
   getNewPositionFixedRate,
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
-  getRealizedPnLFromFees,
-  getRealizedPnLFromSwaps,
-  getUnrealizedPnLFromSwaps,
   getVariableRate,
-  hasExistingPosition,
 } from './utils';
 
 export const selectSubmitButtonInfo = (state: RootState) => state.rolloverSwapForm.submitButton;
 export const selectSwapFormAMM = (state: RootState) => state.rolloverSwapForm.amm;
-export const selectSwapFormPosition = (state: RootState) => state.rolloverSwapForm.position.value;
-export const selectSwapFormPositionFetchingStatus = (state: RootState) =>
-  state.rolloverSwapForm.position.status;
+export const selectSwapFormPosition = (state: RootState) => state.rolloverSwapForm.position;
+
 export const selectWalletBalance = (state: RootState) => {
   if (state.rolloverSwapForm.walletBalance.status !== 'success') {
     return '--';
@@ -46,9 +33,6 @@ export const selectFixedRateInfo = (state: RootState) => state.rolloverSwapForm.
 export const selectVariableRateInfo = (state: RootState) => state.rolloverSwapForm.amm?.variableApy;
 export const selectPoolSwapInfoStatus = (state: RootState) =>
   state.rolloverSwapForm.poolSwapInfo.status;
-export const selectSwapFormMode = (state: RootState): 'new' | 'edit' => {
-  return hasExistingPosition(state.rolloverSwapForm) ? 'edit' : 'new';
-};
 
 export const selectAMMTokenFormatted = (state: RootState) => {
   const aMM = selectSwapFormAMM(state);
@@ -87,13 +71,10 @@ export const selectProspectiveSwapNotionalFormatted = (state: RootState) => {
   return formCompactFormat(getProspectiveSwapNotional(state.rolloverSwapForm));
 };
 export const selectProspectiveSwapMarginFormatted = (state: RootState) => {
-  if (state.rolloverSwapForm.userInput.marginAmount.editMode === 'add') {
-    return formCompactFormat(
-      getProspectiveSwapMargin(state.rolloverSwapForm) -
-        state.rolloverSwapForm.prospectiveSwap.infoPostSwap.value.fee,
-    );
-  }
-  return formCompactFormat(getProspectiveSwapMargin(state.rolloverSwapForm));
+  return formCompactFormat(
+    getProspectiveSwapMargin(state.rolloverSwapForm) -
+      state.rolloverSwapForm.prospectiveSwap.infoPostSwap.value.fee,
+  );
 };
 export const selectProspectiveSwapFeeFormatted = (state: RootState) => {
   if (state.rolloverSwapForm.prospectiveSwap.infoPostSwap.status === 'success') {
@@ -121,19 +102,13 @@ export const selectIsMarginRequiredError = (state: RootState) => {
     state.rolloverSwapForm.userInput.marginAmount.error !== 'WLT'
   );
 };
+
 export const selectIsWalletMarginError = (state: RootState) => {
   return state.rolloverSwapForm.userInput.marginAmount.error === 'WLT';
 };
+
 export const selectBottomRightMarginNumber = (state: RootState) => {
   const rolloverSwapForm = state.rolloverSwapForm;
-
-  if (rolloverSwapForm.userInput.marginAmount.editMode === 'remove') {
-    const margin = getAvailableMargin(rolloverSwapForm);
-    if (margin === null) {
-      return null;
-    }
-    return formLimitAndFormatNumber(margin, 'floor');
-  }
 
   if (rolloverSwapForm.prospectiveSwap.infoPostSwap.status === 'success') {
     return formLimitAndFormatNumber(
@@ -154,111 +129,18 @@ export const selectNewPositionReceivingRate = (state: RootState) => {
     ? getNewPositionFixedRate(state.rolloverSwapForm)
     : getVariableRate(state.rolloverSwapForm);
 };
+
 export const selectNewPositionPayingRate = (state: RootState) => {
   return getProspectiveSwapMode(state.rolloverSwapForm) === 'fixed'
     ? getVariableRate(state.rolloverSwapForm)
     : getNewPositionFixedRate(state.rolloverSwapForm);
 };
+
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.rolloverSwapForm.userInput.notionalAmount.error) return null;
 
   const compactParts = formCompactFormatToParts(getProspectiveSwapNotional(state.rolloverSwapForm));
 
-  return {
-    compactNotionalSuffix: compactParts.compactSuffix,
-    compactNotionalNumber: compactParts.compactNumber,
-  };
-};
-
-export const selectExistingPositionMode = (state: RootState) => {
-  return getExistingPositionMode(state.rolloverSwapForm);
-};
-export const selectExistingPositionReceivingRateFormatted = (state: RootState) => {
-  const receivingRate =
-    getExistingPositionMode(state.rolloverSwapForm) === 'fixed'
-      ? getExistingPositionFixedRate(state.rolloverSwapForm)
-      : getExistingPositionVariableRate(state.rolloverSwapForm);
-
-  return receivingRate === null ? '--' : formFormatNumber(receivingRate);
-};
-export const selectExistingPositionPayingRateFormatted = (state: RootState) => {
-  const payingRate =
-    getExistingPositionMode(state.rolloverSwapForm) === 'fixed'
-      ? getExistingPositionVariableRate(state.rolloverSwapForm)
-      : getExistingPositionFixedRate(state.rolloverSwapForm);
-
-  return payingRate === null ? '--' : formFormatNumber(payingRate);
-};
-export const selectExistingPositionCompactNotional = (state: RootState) => {
-  if (
-    state.rolloverSwapForm.position.status !== 'success' ||
-    !state.rolloverSwapForm.position.value
-  ) {
-    return null;
-  }
-
-  const compactParts = formCompactFormatToParts(state.rolloverSwapForm.position.value.notional);
-  return {
-    compactNotionalSuffix: compactParts.compactSuffix,
-    compactNotionalNumber: compactParts.compactNumber,
-  };
-};
-
-export const selectEditPositionMode = (state: RootState) => {
-  return getEditPositionMode(state.rolloverSwapForm);
-};
-export const selectEditPositionReceivingRateFormatted = (state: RootState) => {
-  const receivingRate =
-    getEditPositionMode(state.rolloverSwapForm) === 'fixed'
-      ? getEditPositionFixedRate(state.cashflowCalculator, state.rolloverSwapForm)
-      : getEditPositionVariableRate(state.rolloverSwapForm);
-
-  return receivingRate === null ? '--' : formFormatNumber(receivingRate);
-};
-
-export const selectEditPositionRealizedPnLTotalFormatted = (state: RootState) => {
-  const realizedPnLFromFees = getRealizedPnLFromFees(state.rolloverSwapForm);
-  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverSwapForm);
-  let realizedPnLTotal = null;
-
-  if (realizedPnLFromFees && realizedPnLFromSwaps) {
-    realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
-  }
-
-  return realizedPnLTotal === null ? '--' : formFormatNumber(realizedPnLTotal);
-};
-
-export const selectEditPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
-  const realizedPnLFromFees = getRealizedPnLFromFees(state.rolloverSwapForm);
-
-  return realizedPnLFromFees === null ? '--' : formFormatNumber(realizedPnLFromFees);
-};
-
-export const selectEditPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
-  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverSwapForm);
-
-  return realizedPnLFromSwaps === null ? '--' : formFormatNumber(realizedPnLFromSwaps);
-};
-
-export const selectEditPositionUnrealizedPnLFromSwapsFormatted = (state: RootState) => {
-  const unrealizedPnLFromSwaps = getUnrealizedPnLFromSwaps(state.rolloverSwapForm);
-
-  return unrealizedPnLFromSwaps === null ? '--' : formFormatNumber(unrealizedPnLFromSwaps);
-};
-
-export const selectEditPositionPayingRateFormatted = (state: RootState) => {
-  const payingRate =
-    getEditPositionMode(state.rolloverSwapForm) === 'fixed'
-      ? getEditPositionVariableRate(state.rolloverSwapForm)
-      : getEditPositionFixedRate(state.cashflowCalculator, state.rolloverSwapForm);
-
-  return payingRate === null ? '--' : formFormatNumber(payingRate);
-};
-
-export const selectEditPositionCompactNotional = (state: RootState) => {
-  const notional = getEditPositionNotional(state.rolloverSwapForm);
-
-  const compactParts = formCompactFormatToParts(notional);
   return {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
@@ -349,11 +231,9 @@ export const selectIsGetInfoPostSwapLoading = (state: RootState) => {
   return state.rolloverSwapForm.prospectiveSwap.infoPostSwap.status === 'pending';
 };
 
+// TODO: AB what should this return?
 export const selectPositionMarginFormatted = (state: RootState) => {
-  if (!state.rolloverSwapForm.position.value) {
-    return '--';
-  }
-  return formCompactFormat(state.rolloverSwapForm.position.value.margin);
+  return '--';
 };
 
 export const selectFixedRateValueFormatted = (state: RootState) => {
