@@ -106,7 +106,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     isWalletTokenAllowanceLoaded
   ) {
     state.submitButton = {
-      state: 'swap',
+      state: 'rollover',
       disabled: false,
       message: {
         text: "Token approved, let's trade",
@@ -117,7 +117,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   }
 
   state.submitButton = {
-    state: 'swap',
+    state: 'rollover',
     disabled: true,
     message: {
       text: 'Almost ready',

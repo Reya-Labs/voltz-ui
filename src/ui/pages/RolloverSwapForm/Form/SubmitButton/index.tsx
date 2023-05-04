@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import {
   approveUnderlyingTokenThunk,
-  openSwapConfirmationFlowAction,
+  openRolloverConfirmationFlowAction,
   selectInfoPostSwap,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
@@ -23,8 +23,8 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
       case 'approve':
         void dispatch(approveUnderlyingTokenThunk());
         break;
-      case 'swap':
-        void dispatch(openSwapConfirmationFlowAction());
+      case 'rollover':
+        void dispatch(openRolloverConfirmationFlowAction());
         break;
       default:
         break;

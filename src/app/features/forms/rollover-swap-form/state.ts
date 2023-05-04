@@ -4,7 +4,7 @@ type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
 export type SliceState = {
   submitButton: {
-    state: 'swap' | 'not-enough-balance' | 'connect-wallet' | 'approve' | 'approving';
+    state: 'rollover' | 'not-enough-balance' | 'connect-wallet' | 'approve' | 'approving';
     disabled: boolean;
     message: {
       text: string | null;
@@ -13,6 +13,7 @@ export type SliceState = {
   };
   // target/next AMM
   amm: AMM | null;
+  // TODO: FB remove this state prop
   // target/next position
   position: Position | null;
   // matured/previous AMM
@@ -78,7 +79,7 @@ export type SliceState = {
     };
   };
   swapConfirmationFlow: {
-    step: 'swapConfirmation' | 'waitingForSwapConfirmation' | 'swapCompleted' | null;
+    step: 'rolloverConfirmation' | 'waitingForRolloverConfirmation' | 'rolloverCompleted' | null;
     error: string | null;
     txHash: string | null;
   };

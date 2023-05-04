@@ -19,8 +19,12 @@ import {
 } from './utils';
 
 export const selectSubmitButtonInfo = (state: RootState) => state.rolloverSwapForm.submitButton;
-export const selectSwapFormAMM = (state: RootState) => state.rolloverSwapForm.amm;
-export const selectSwapFormPosition = (state: RootState) => state.rolloverSwapForm.position;
+export const selectRolloverSwapFormAMM = (state: RootState) => state.rolloverSwapForm.amm;
+export const selectRolloverSwapFormPosition = (state: RootState) => state.rolloverSwapForm.position;
+export const selectRolloverSwapFormPreviousAMM = (state: RootState) =>
+  state.rolloverSwapForm.previousAMM;
+export const selectRolloverSwapFormPreviousPosition = (state: RootState) =>
+  state.rolloverSwapForm.previousPosition;
 
 export const selectWalletBalance = (state: RootState) => {
   if (state.rolloverSwapForm.walletBalance.status !== 'success') {
@@ -35,7 +39,7 @@ export const selectPoolSwapInfoStatus = (state: RootState) =>
   state.rolloverSwapForm.poolSwapInfo.status;
 
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = selectSwapFormAMM(state);
+  const aMM = selectRolloverSwapFormAMM(state);
   if (!aMM) {
     return '';
   }
@@ -43,7 +47,7 @@ export const selectAMMTokenFormatted = (state: RootState) => {
 };
 
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = selectSwapFormAMM(state);
+  const aMM = selectRolloverSwapFormAMM(state);
   if (!aMM) {
     return '';
   }
@@ -51,7 +55,7 @@ export const selectAMMMaturityFormatted = (state: RootState) => {
 };
 
 export const selectMarginAccountName = (state: RootState) => {
-  const aMM = selectSwapFormAMM(state);
+  const aMM = selectRolloverSwapFormAMM(state);
   if (!aMM) {
     return '';
   }
@@ -227,7 +231,7 @@ export const selectSwapConfirmationFlowStep = (state: RootState) =>
   state.rolloverSwapForm.swapConfirmationFlow.step;
 export const selectSwapConfirmationFlowError = (state: RootState) =>
   state.rolloverSwapForm.swapConfirmationFlow.error;
-export const selectSwapConfirmationFlowEtherscanLink = (state: RootState) => {
+export const selectRolloverConfirmationFlowEtherscanLink = (state: RootState) => {
   return getViewOnEtherScanLink(
     state.network.chainId,
     state.rolloverSwapForm.swapConfirmationFlow.txHash || '',
@@ -250,8 +254,8 @@ export const selectVariableRate24hDelta = (state: RootState) => {
 
 export const selectSubmitButtonText = (state: RootState) => {
   switch (state.rolloverSwapForm.submitButton.state) {
-    case 'swap':
-      return 'Swap';
+    case 'rollover':
+      return 'Rollover';
     case 'not-enough-balance':
       return 'Not enough balance';
     case 'approve':
@@ -287,7 +291,6 @@ export const selectIsGetInfoPostSwapLoading = (state: RootState) => {
   return state.rolloverSwapForm.prospectiveSwap.infoPostSwap.status === 'pending';
 };
 
-// TODO: AB what should this return?
 export const selectPositionMarginFormatted = (state: RootState) => {
   return '--';
 };

@@ -2,9 +2,9 @@ import { pushEvent } from '../../../../../utilities/googleAnalytics';
 import {
   pushLeverageChangeEvent,
   pushPageViewEvent,
-  pushSwapTransactionFailedEvent,
-  pushSwapTransactionSubmittedEvent,
-  pushSwapTransactionSuccessEvent,
+  pushRolloverFailedEvent,
+  pushRolloverSubmittedEvent,
+  pushRolloverSuccessEvent,
 } from './index';
 
 jest.mock('../../../../../utilities/googleAnalytics', () => ({
@@ -19,31 +19,28 @@ describe('analyticsEvents', () => {
   describe('pushPageViewEvent', () => {
     it('should call pushEvent with the correct arguments', () => {
       const mockAccount = 'account123';
-      const mockIsEdit = true;
 
-      pushPageViewEvent({ account: mockAccount, isEdit: mockIsEdit });
+      pushPageViewEvent({ account: mockAccount });
 
       expect(pushEvent).toHaveBeenCalledTimes(1);
       expect(pushEvent).toHaveBeenCalledWith(mockAccount, {
         event: 'title_change',
-        eventValue: 'New Trader Position',
+        eventValue: 'Trader Rollover Position',
       });
     });
   });
 
-  describe('pushSwapTransactionSubmittedEvent', () => {
+  describe('pushRolloverSubmittedEvent', () => {
     it('should call pushEvent with the correct arguments', () => {
       const mockNotional = 1000;
       const mockMargin = 0.1;
-      const mockIsEdit = true;
       const mockPool = 'pool123';
       const mockIsFT = false;
       const mockAccount = 'account123';
 
-      pushSwapTransactionSubmittedEvent({
+      pushRolloverSubmittedEvent({
         notional: mockNotional,
         margin: mockMargin,
-        isEdit: mockIsEdit,
         pool: mockPool,
         isFT: mockIsFT,
         account: mockAccount,
@@ -55,7 +52,7 @@ describe('analyticsEvents', () => {
         eventValue: {
           notional: mockNotional,
           margin: mockMargin,
-          action: 'edit',
+          action: 'new',
         },
         pool: mockPool,
         agent: 'Variable Trader',
@@ -63,19 +60,17 @@ describe('analyticsEvents', () => {
     });
   });
 
-  describe('pushSwapTransactionSuccessEvent', () => {
+  describe('pushRolloverSuccessEvent', () => {
     it('should call pushEvent with the correct arguments', () => {
       const mockNotional = 1000;
       const mockMargin = 0.1;
-      const mockIsEdit = true;
       const mockPool = 'pool123';
       const mockIsFT = false;
       const mockAccount = 'account123';
 
-      pushSwapTransactionSuccessEvent({
+      pushRolloverSuccessEvent({
         notional: mockNotional,
         margin: mockMargin,
-        isEdit: mockIsEdit,
         pool: mockPool,
         isFT: mockIsFT,
         account: mockAccount,
@@ -87,7 +82,7 @@ describe('analyticsEvents', () => {
         eventValue: {
           notional: mockNotional,
           margin: mockMargin,
-          action: 'edit',
+          action: 'new',
         },
         pool: mockPool,
         agent: 'Variable Trader',
@@ -95,20 +90,18 @@ describe('analyticsEvents', () => {
     });
   });
 
-  describe('pushSwapTransactionFailedEvent', () => {
+  describe('pushRolloverFailedEvent', () => {
     it('should call pushEvent with the correct arguments', () => {
       const mockNotional = 1000;
       const mockMargin = 0.1;
-      const mockIsEdit = true;
       const mockPool = 'pool123';
       const mockIsFT = false;
       const mockAccount = 'account123';
       const mockErrorMessage = 'error message';
 
-      pushSwapTransactionFailedEvent({
+      pushRolloverFailedEvent({
         notional: mockNotional,
         margin: mockMargin,
-        isEdit: mockIsEdit,
         pool: mockPool,
         isFT: mockIsFT,
         account: mockAccount,
@@ -121,7 +114,7 @@ describe('analyticsEvents', () => {
         eventValue: {
           notional: mockNotional,
           margin: mockMargin,
-          action: 'edit',
+          action: 'new',
           failMessage: mockErrorMessage,
         },
         pool: mockPool,

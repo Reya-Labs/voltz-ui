@@ -26,15 +26,15 @@ import {
   selectProspectiveSwapMarginFormatted,
   selectProspectiveSwapMode,
   selectProspectiveSwapNotionalFormatted,
+  selectRolloverConfirmationFlowEtherscanLink,
+  selectRolloverSwapFormAMM,
+  selectRolloverSwapFormPosition,
   selectShowLeverageNotification,
   selectSlippageFormatted,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
   selectSwapConfirmationFlowError,
-  selectSwapConfirmationFlowEtherscanLink,
   selectSwapConfirmationFlowStep,
-  selectSwapFormAMM,
-  selectSwapFormPosition,
   selectUserInputMarginInfo,
   selectUserInputMode,
   selectUserInputNotionalInfo,
@@ -136,7 +136,7 @@ describe('swap-form.selectors', () => {
         },
       } as never;
 
-      const result = selectSwapFormAMM(mockState);
+      const result = selectRolloverSwapFormAMM(mockState);
 
       expect(result).toEqual({
         address: '0x123456789abcdef',
@@ -153,7 +153,7 @@ describe('swap-form.selectors', () => {
         },
       } as never;
 
-      const position = selectSwapFormPosition(state);
+      const position = selectRolloverSwapFormPosition(state);
 
       expect(position).toEqual('long');
     });
@@ -1020,7 +1020,7 @@ describe('swap-form.selectors', () => {
     });
   });
 
-  describe('selectSwapConfirmationFlowEtherscanLink', () => {
+  describe('selectRolloverConfirmationFlowEtherscanLink', () => {
     it('returns the correct link', () => {
       (getViewOnEtherScanLink as jest.Mock).mockReturnValueOnce('https://etherscan.io/tx/0xabc123');
 
@@ -1034,7 +1034,7 @@ describe('swap-form.selectors', () => {
           },
         },
       };
-      const result = selectSwapConfirmationFlowEtherscanLink(state as never);
+      const result = selectRolloverConfirmationFlowEtherscanLink(state as never);
       expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
       expect(result).toEqual('https://etherscan.io/tx/0xabc123');
     });
@@ -1093,11 +1093,11 @@ describe('swap-form.selectors', () => {
       const state = {
         rolloverSwapForm: {
           submitButton: {
-            state: 'swap',
+            state: 'rollover',
           },
         },
       };
-      expect(selectSubmitButtonText(state as never)).toBe('Swap');
+      expect(selectSubmitButtonText(state as never)).toBe('Rollover');
     });
 
     it('returns the correct text for the "not-enough-balance" state', () => {

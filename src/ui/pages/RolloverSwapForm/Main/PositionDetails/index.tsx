@@ -1,7 +1,7 @@
 import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { selectSwapFormAMM } from '../../../../../app/features/forms/rollover-swap-form';
+import { selectRolloverSwapFormAMM } from '../../../../../app/features/forms/rollover-swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';
@@ -9,7 +9,7 @@ import { PreviousPositionDetailsUI } from './PreviousPositionDetailsUI';
 
 type PositionDetailsProps = {};
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const aMM = useAppSelector(selectRolloverSwapFormAMM);
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const actionLabelTypographyToken: TypographyToken = isLargeDesktopDevice

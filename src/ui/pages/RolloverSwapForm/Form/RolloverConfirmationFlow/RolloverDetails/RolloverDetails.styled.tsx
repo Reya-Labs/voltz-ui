@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const SwapDetailsBox = styled('div')`
+export const RolloverDetailsBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
 
@@ -11,7 +11,7 @@ export const SwapDetailsBox = styled('div')`
   gap: 4px;
 `;
 
-export const SwapDetailBox = styled('div')`
+export const RolloverDetailBox = styled('div')`
   box-sizing: border-box;
 
   display: flex;

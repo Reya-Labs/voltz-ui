@@ -344,7 +344,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
     validateUserInputAndUpdateSubmitButton(state as never);
 
     expect(state.submitButton).toEqual({
-      state: 'swap',
+      state: 'rollover',
       disabled: false,
       message: {
         text: "Token approved, let's trade",

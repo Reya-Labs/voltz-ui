@@ -3,21 +3,21 @@ import React from 'react';
 
 import {
   RainbowLoaderBox,
-  WaitingForSwapConfirmationStepBox,
-} from './WaitingForSwapConfirmationStep.styled';
+  WaitingForRolloverConfirmationStepBox,
+} from './WaitingForRolloverConfirmationStep.styled';
 
-export const WaitingForSwapConfirmationStep: React.FunctionComponent = () => {
+export const WaitingForRolloverConfirmationStep: React.FunctionComponent = () => {
   return (
-    <WaitingForSwapConfirmationStepBox>
+    <WaitingForRolloverConfirmationStepBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
         Waiting for confirmation
       </Typography>
       <RainbowLoaderBox>
-        <RainbowLoader height={2} text="Swapping Rates..." />
+        <RainbowLoader height={2} text="Rolling over..." />
       </RainbowLoaderBox>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
         Confirm this transaction in your wallet
       </Typography>
-    </WaitingForSwapConfirmationStepBox>
+    </WaitingForRolloverConfirmationStepBox>
   );
 };

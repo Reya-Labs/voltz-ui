@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, InfoPostSwapV1 } from '@voltz-protocol/v1-sdk';
-import { ContractReceipt } from 'ethers';
+import { ContractReceipt, providers } from 'ethers';
 
 import { getAmmProtocol } from '../../../../utilities/amm';
 import { stringToBigFloat } from '../../../../utilities/number';
@@ -9,13 +9,13 @@ import { pushLeverageChangeEvent } from './analytics';
 import { initialState } from './state';
 import {
   approveUnderlyingTokenThunk,
-  confirmSwapThunk,
+  confirmRolloverThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
-  setSignerAndPositionForAMMThunk,
-  SetSignerAndPositionForAMMThunkSuccess,
+  initializeAMMsAndPositionsForRolloverThunk,
+  InitializeAMMsAndPositionsForRolloverThunkSuccess,
 } from './thunks';
 import {
   getProspectiveSwapMode,
@@ -31,10 +31,25 @@ const slice = createSlice({
   initialState,
   reducers: {
     resetStateAction: () => initialState,
-    openSwapConfirmationFlowAction: (state) => {
-      state.swapConfirmationFlow.step = 'swapConfirmation';
+    setSignerForRolloverSwapFormAction: (
+      state,
+      {
+        payload: { signer },
+      }: PayloadAction<{
+        signer: providers.JsonRpcSigner | null;
+      }>,
+    ) => {
+      if (state.amm) {
+        state.amm.signer = signer;
+      }
+      if (state.previousAMM) {
+        state.previousAMM.signer = signer;
+      }
     },
-    closeSwapConfirmationFlowAction: (state) => {
+    openRolloverConfirmationFlowAction: (state) => {
+      state.swapConfirmationFlow.step = 'rolloverConfirmation';
+    },
+    closeRolloverConfirmationFlowAction: (state) => {
       state.swapConfirmationFlow = {
         step: null,
         error: null,
@@ -131,16 +146,6 @@ const slice = createSlice({
 
       validateUserInputAndUpdateSubmitButton(state);
       state.showLowLeverageNotification = checkLowLeverageNotification(state);
-    },
-    setSwapFormAMMAction: (
-      state,
-      {
-        payload: { amm },
-      }: PayloadAction<{
-        amm: AMM | null;
-      }>,
-    ) => {
-      state.amm = amm;
     },
   },
   extraReducers: (builder) => {
@@ -337,46 +342,61 @@ const slice = createSlice({
         updateLeverageOptionsAfterGetInfoPostSwap(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(setSignerAndPositionForAMMThunk.pending, (state) => {
+      .addCase(initializeAMMsAndPositionsForRolloverThunk.pending, (state) => {
         state.position = null;
-        if (!state.amm) {
-          return;
+        state.previousPosition = null;
+        if (state.amm) {
+          state.amm.signer = null;
         }
-        state.amm.signer = null;
+        if (state.previousAMM) {
+          state.previousAMM.signer = null;
+        }
       })
-      .addCase(setSignerAndPositionForAMMThunk.rejected, (state) => {
+      .addCase(initializeAMMsAndPositionsForRolloverThunk.rejected, (state) => {
         state.position = null;
-        if (!state.amm) {
-          return;
+        state.previousPosition = null;
+        if (state.amm) {
+          state.amm.signer = null;
         }
-        state.amm.signer = null;
+        if (state.previousAMM) {
+          state.previousAMM.signer = null;
+        }
       })
-      .addCase(setSignerAndPositionForAMMThunk.fulfilled, (state, { payload }) => {
-        state.position = (payload as SetSignerAndPositionForAMMThunkSuccess).position;
-        if (!state.amm) {
-          return;
+      .addCase(initializeAMMsAndPositionsForRolloverThunk.fulfilled, (state, { payload }) => {
+        state.amm = (payload as InitializeAMMsAndPositionsForRolloverThunkSuccess).aMM;
+        state.previousAMM = (
+          payload as InitializeAMMsAndPositionsForRolloverThunkSuccess
+        ).previousAMM;
+        state.previousPosition = (
+          payload as InitializeAMMsAndPositionsForRolloverThunkSuccess
+        ).previousPosition;
+        if (state.amm) {
+          state.amm.signer = (payload as InitializeAMMsAndPositionsForRolloverThunkSuccess).signer;
         }
-        state.amm.signer = (payload as SetSignerAndPositionForAMMThunkSuccess).signer;
-
+        if (state.previousAMM) {
+          state.previousAMM.signer = (
+            payload as InitializeAMMsAndPositionsForRolloverThunkSuccess
+          ).signer;
+        }
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(confirmSwapThunk.pending, (state) => {
+      .addCase(confirmRolloverThunk.pending, (state) => {
         state.swapConfirmationFlow = {
-          step: 'waitingForSwapConfirmation',
+          step: 'waitingForRolloverConfirmation',
           error: null,
           txHash: null,
         };
       })
-      .addCase(confirmSwapThunk.rejected, (state, { payload }) => {
+      .addCase(confirmRolloverThunk.rejected, (state, { payload }) => {
         state.swapConfirmationFlow = {
-          step: 'swapConfirmation',
+          step: 'rolloverConfirmation',
           error: payload as string,
           txHash: null,
         };
       })
-      .addCase(confirmSwapThunk.fulfilled, (state, { payload }) => {
+      .addCase(confirmRolloverThunk.fulfilled, (state, { payload }) => {
         state.swapConfirmationFlow = {
-          step: 'swapCompleted',
+          step: 'rolloverCompleted',
           error: null,
           txHash: (payload as ContractReceipt).transactionHash,
         };
@@ -386,11 +406,11 @@ const slice = createSlice({
 export const {
   resetStateAction,
   setUserInputModeAction,
-  setSwapFormAMMAction,
   setNotionalAmountAction,
   setMarginAmountAction,
   setLeverageAction,
-  openSwapConfirmationFlowAction,
-  closeSwapConfirmationFlowAction,
+  openRolloverConfirmationFlowAction,
+  closeRolloverConfirmationFlowAction,
+  setSignerForRolloverSwapFormAction,
 } = slice.actions;
 export const rolloverSwapFormReducer = slice.reducer;

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const SwapConfirmationStepBox = styled('div')`
+export const RolloverConfirmationStepBox = styled('div')`
   display: flex;
   box-sizing: border-box;
   width: 100%;
@@ -20,7 +20,7 @@ export const TitleBox = styled('div')`
   padding: 0px;
 `;
 
-export const SwapDetailsBox = styled('div')`
+export const RolloverDetailsBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
   display: flex;
@@ -30,7 +30,7 @@ export const SwapDetailsBox = styled('div')`
   gap: 16px;
 `;
 
-export const SwapFeeDetailsBox = styled('div')`
+export const RolloverFeeDetailsBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
   display: flex;

@@ -2,10 +2,10 @@ import { Button, CloseButton, HorizontalLine, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
-  closeSwapConfirmationFlowAction,
-  confirmSwapThunk,
+  closeRolloverConfirmationFlowAction,
+  confirmRolloverThunk,
+  selectRolloverSwapFormAMM,
   selectSwapConfirmationFlowError,
-  selectSwapFormAMM,
 } from '../../../../../../app/features/forms/rollover-swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
@@ -13,37 +13,37 @@ import {
   MarketTokenInformationProps,
 } from '../../../../../components/MarketTokenInformation';
 import { TransactionDetails } from '../../TransactionDetails';
-import { SwapDetails } from '../SwapDetails';
+import { RolloverDetails } from '../RolloverDetails';
 import {
-  SwapConfirmationStepBox,
-  SwapDetailsBox,
-  SwapFeeDetailsBox,
+  RolloverConfirmationStepBox,
+  RolloverDetailsBox,
+  RolloverFeeDetailsBox,
   TitleBox,
-} from './SwapConfirmationStep.styled';
+} from './RolloverConfirmationStep.styled';
 
-export const SwapConfirmationStep: React.FunctionComponent = () => {
-  const aMM = useAppSelector(selectSwapFormAMM);
+export const RolloverConfirmationStep: React.FunctionComponent = () => {
+  const aMM = useAppSelector(selectRolloverSwapFormAMM);
   const dispatch = useAppDispatch();
-  const handleConfirmSwap = useCallback(() => {
-    void dispatch(confirmSwapThunk());
+  const handleConfirmRollover = useCallback(() => {
+    void dispatch(confirmRolloverThunk());
   }, [dispatch]);
   const error = useAppSelector(selectSwapConfirmationFlowError);
   const handleCloseButtonClick = useCallback(() => {
-    dispatch(closeSwapConfirmationFlowAction());
+    dispatch(closeRolloverConfirmationFlowAction());
   }, [dispatch]);
   if (!aMM) {
     return null;
   }
 
   return (
-    <SwapConfirmationStepBox>
+    <RolloverConfirmationStepBox>
       <TitleBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          Confirm Swap
+          Confirm Rollover
         </Typography>
         <CloseButton onClick={handleCloseButtonClick} />
       </TitleBox>
-      <SwapDetailsBox>
+      <RolloverDetailsBox>
         <MarketTokenInformation
           colorToken="lavenderWeb"
           iconSize={30}
@@ -55,21 +55,21 @@ export const SwapConfirmationStep: React.FunctionComponent = () => {
           token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
           typographyToken="primaryHeader2Black"
         />
-        <SwapDetails />
-      </SwapDetailsBox>
+        <RolloverDetails />
+      </RolloverDetailsBox>
       <HorizontalLine />
-      <SwapFeeDetailsBox>
+      <RolloverFeeDetailsBox>
         <TransactionDetails />
-      </SwapFeeDetailsBox>
+      </RolloverFeeDetailsBox>
       <Button
         bottomLeftText={error ? error : ''}
         bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
         variant="primary"
-        onClick={handleConfirmSwap}
+        onClick={handleConfirmRollover}
       >
-        Confirm Swap
+        Confirm Rollover
       </Button>
-    </SwapConfirmationStepBox>
+    </RolloverConfirmationStepBox>
   );
 };

@@ -12,11 +12,9 @@ import {
 } from '../../../../../../app/features/forms/rollover-swap-form';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { formatNumber } from '../../../../../../utilities/number';
-import { SwapDetailBox, SwapDetailsBox } from './SwapDetails.styled';
+import { RolloverDetailBox, RolloverDetailsBox } from './RolloverDetails.styled';
 
-type SwapDetailsProps = {};
-
-export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
+export const RolloverDetails: React.FunctionComponent = () => {
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const mode = useAppSelector(selectProspectiveSwapMode);
@@ -31,8 +29,8 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const token = useAppSelector(selectAMMTokenFormatted);
 
   return (
-    <SwapDetailsBox>
-      <SwapDetailBox>
+    <RolloverDetailsBox>
+      <RolloverDetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           {mode === 'fixed' ? 'Fixed' : 'Variable'} Rate Receiving
         </Typography>
@@ -42,8 +40,8 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           typographyToken="secondaryBodySmallRegular"
           value={receivingRate}
         />
-      </SwapDetailBox>
-      <SwapDetailBox>
+      </RolloverDetailBox>
+      <RolloverDetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           {mode === 'fixed' ? 'Variable' : 'Fixed'} Rate Paying
         </Typography>
@@ -53,8 +51,8 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           typographyToken="secondaryBodySmallRegular"
           value={payingRate}
         />
-      </SwapDetailBox>
-      <SwapDetailBox>
+      </RolloverDetailBox>
+      <RolloverDetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           Notional
         </Typography>
@@ -64,8 +62,8 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           typographyToken="secondaryBodySmallRegular"
           value={prospectiveSwapNotionalFormatted}
         />
-      </SwapDetailBox>
-      <SwapDetailBox>
+      </RolloverDetailBox>
+      <RolloverDetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           Margin
         </Typography>
@@ -75,8 +73,8 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           typographyToken="secondaryBodySmallRegular"
           value={prospectiveSwapMarginFormatted}
         />
-      </SwapDetailBox>
-      <SwapDetailBox>
+      </RolloverDetailBox>
+      <RolloverDetailBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
@@ -86,7 +84,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
           typographyToken="secondaryBodySmallRegular"
           value={aMMMaturity}
         />
-      </SwapDetailBox>
-    </SwapDetailsBox>
+      </RolloverDetailBox>
+    </RolloverDetailsBox>
   );
 };

@@ -3,25 +3,23 @@ import { stringToBigFloat } from '../../../../utilities/number';
 import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../common/utils';
 import { pushLeverageChangeEvent } from './analytics';
 import {
-  closeSwapConfirmationFlowAction,
-  openSwapConfirmationFlowAction,
+  closeRolloverConfirmationFlowAction,
+  openRolloverConfirmationFlowAction,
   resetStateAction,
   rolloverSwapFormReducer,
   setLeverageAction,
   setMarginAmountAction,
   setNotionalAmountAction,
-  setSwapFormAMMAction,
   setUserInputModeAction,
 } from './reducer';
 import { initialState, SliceState } from './state';
 import {
   approveUnderlyingTokenThunk,
-  confirmSwapThunk,
+  confirmRolloverThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
-  setSignerAndPositionForAMMThunk,
 } from './thunks';
 import {
   getProspectiveSwapMode,
@@ -76,22 +74,22 @@ describe('rolloverSwapFormReducer', () => {
       });
     });
 
-    describe('openSwapConfirmationFlowAction', () => {
+    describe('openRolloverConfirmationFlowAction', () => {
       it('should set swapConfirmationFlow.step', () => {
         const nextState = rolloverSwapFormReducer(
           testsInitialState,
-          openSwapConfirmationFlowAction(),
+          openRolloverConfirmationFlowAction(),
         );
 
-        expect(nextState.swapConfirmationFlow.step).toEqual('swapConfirmation');
+        expect(nextState.swapConfirmationFlow.step).toEqual('rolloverConfirmation');
       });
     });
 
-    describe('closeSwapConfirmationFlowAction', () => {
+    describe('closeRolloverConfirmationFlowAction', () => {
       it('should set reset swapConfirmationFlow', () => {
         const nextState = rolloverSwapFormReducer(
           testsInitialState,
-          closeSwapConfirmationFlowAction(),
+          closeRolloverConfirmationFlowAction(),
         );
 
         expect(nextState.swapConfirmationFlow).toEqual({
@@ -241,20 +239,6 @@ describe('rolloverSwapFormReducer', () => {
         expect(pushLeverageChangeEvent).toHaveBeenCalledTimes(1);
         expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
         expect(checkLowLeverageNotification).toHaveBeenCalledTimes(1);
-      });
-    });
-
-    describe('setSwapFormAMMAction', () => {
-      it('should set amm to state', () => {
-        const mockedAmm = jest.fn();
-        const nextState = rolloverSwapFormReducer(
-          testsInitialState,
-          setSwapFormAMMAction({
-            amm: mockedAmm,
-          } as never),
-        );
-
-        expect(nextState.amm).toEqual(mockedAmm);
       });
     });
   });
@@ -531,78 +515,13 @@ describe('rolloverSwapFormReducer', () => {
       });
     });
 
-    describe('setSignerAndPositionForAMMThunk', () => {
-      it('should update position to null and status to "pending", amm.signer to null when setSignerAndPositionForAMMThunk is pending', () => {
-        const nextState = rolloverSwapFormReducer(
-          {
-            ...testsInitialState,
-            amm: { signer: {} } as never,
-          },
-          {
-            type: setSignerAndPositionForAMMThunk.pending.type,
-          },
-        );
-        expect(nextState.position).toEqual(null);
-        expect(nextState.amm?.signer).toEqual(null);
-
-        const nextState2 = rolloverSwapFormReducer(testsInitialState, {
-          type: setSignerAndPositionForAMMThunk.pending.type,
-        });
-        expect(nextState2.position).toEqual(null);
-      });
-
-      it('should update position to null and status to "pending", amm.signer to null when setSignerAndPositionForAMMThunk is rejected', () => {
-        const nextState = rolloverSwapFormReducer(
-          {
-            ...testsInitialState,
-            amm: { signer: {} } as never,
-          },
-          {
-            type: setSignerAndPositionForAMMThunk.rejected.type,
-          },
-        );
-        expect(nextState.position).toEqual(null);
-        expect(nextState.amm?.signer).toEqual(null);
-
-        const nextState2 = rolloverSwapFormReducer(testsInitialState, {
-          type: setSignerAndPositionForAMMThunk.rejected.type,
-        });
-        expect(nextState2.position).toEqual(null);
-      });
-
-      it('should update position and amm.signer when setSignerAndPositionForAMMThunk is fulfilled, also make sure validateUserInputAndUpdateSubmitButton is called', () => {
-        const mockedPosition = jest.fn();
-        const mockedSigner = jest.fn();
-        const nextState = rolloverSwapFormReducer(
-          {
-            ...testsInitialState,
-            amm: {
-              signer: {},
-            },
-          } as never,
-          {
-            type: setSignerAndPositionForAMMThunk.fulfilled.type,
-            payload: {
-              position: mockedPosition,
-              signer: mockedSigner,
-            },
-          },
-        );
-
-        expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
-        expect(nextState.position).toEqual(mockedPosition);
-        expect(nextState.amm?.signer).toEqual(mockedSigner);
-        expect(nextState.userInput.mode).toEqual('fixed');
-      });
-    });
-
     describe('confirmSwapThunk', () => {
       it('should update swapConfirmationFlow to "waitingForSwapConfirmation" when confirmSwapThunk is pending', () => {
         const nextState = rolloverSwapFormReducer(testsInitialState, {
-          type: confirmSwapThunk.pending.type,
+          type: confirmRolloverThunk.pending.type,
         });
         expect(nextState.swapConfirmationFlow).toEqual({
-          step: 'waitingForSwapConfirmation',
+          step: 'waitingForRolloverConfirmation',
           error: null,
           txHash: null,
         });
@@ -610,11 +529,11 @@ describe('rolloverSwapFormReducer', () => {
 
       it('should update swapConfirmationFlow to error state when confirmSwapThunk is rejected', () => {
         const nextState = rolloverSwapFormReducer(testsInitialState, {
-          type: confirmSwapThunk.rejected.type,
+          type: confirmRolloverThunk.rejected.type,
           payload: 'Error happened',
         });
         expect(nextState.swapConfirmationFlow).toEqual({
-          step: 'swapConfirmation',
+          step: 'rolloverConfirmation',
           error: 'Error happened',
           txHash: null,
         });
@@ -622,12 +541,12 @@ describe('rolloverSwapFormReducer', () => {
 
       it('should update swapConfirmationFlow and status to "swapCompleted" when confirmSwapThunk is fulfilled', () => {
         const nextState = rolloverSwapFormReducer(testsInitialState, {
-          type: confirmSwapThunk.fulfilled.type,
+          type: confirmRolloverThunk.fulfilled.type,
           payload: { transactionHash: 'transactionHash' },
         });
 
         expect(nextState.swapConfirmationFlow).toEqual({
-          step: 'swapCompleted',
+          step: 'rolloverCompleted',
           error: null,
           txHash: 'transactionHash',
         });

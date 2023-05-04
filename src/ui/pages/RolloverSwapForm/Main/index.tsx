@@ -5,8 +5,8 @@ import {
   selectInfoPostSwapAverageFixedRate,
   selectInfoPostSwapVariableTokenDeltaBalance,
   selectProspectiveSwapMode,
-  selectSwapFormAMM,
-  selectSwapFormPosition,
+  selectRolloverSwapFormAMM,
+  selectRolloverSwapFormPosition,
   selectVariableRateInfo,
 } from '../../../../app/features/forms/rollover-swap-form';
 import { useAppSelector } from '../../../../app/hooks';
@@ -17,12 +17,12 @@ import { PoolHeader } from './PoolHeader';
 import { PositionDetails } from './PositionDetails';
 
 export const Main: React.FunctionComponent = () => {
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const aMM = useAppSelector(selectRolloverSwapFormAMM);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const averageFixedRate = useAppSelector(selectInfoPostSwapAverageFixedRate);
   const variableTokenDeltaBalance = useAppSelector(selectInfoPostSwapVariableTokenDeltaBalance);
-  const position = useAppSelector(selectSwapFormPosition);
+  const position = useAppSelector(selectRolloverSwapFormPosition);
   const mode = useAppSelector(selectProspectiveSwapMode);
   if (!aMM || fixedRateInfo === undefined || variableRateInfo === undefined) {
     return null;

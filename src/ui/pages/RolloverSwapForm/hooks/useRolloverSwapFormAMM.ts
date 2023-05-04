@@ -3,21 +3,25 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
-  getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
+  initializeAMMsAndPositionsForRolloverThunk,
   selectPoolSwapInfoStatus,
-  selectSwapFormAMM,
-  selectSwapFormPosition,
-  setSignerAndPositionForAMMThunk,
-  setSwapFormAMMAction,
+  selectRolloverSwapFormAMM,
+  selectRolloverSwapFormPreviousAMM,
+  selectRolloverSwapFormPreviousPosition,
+  setSignerForRolloverSwapFormAction,
 } from '../../../../app/features/forms/rollover-swap-form';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { useWallet } from '../../../../hooks/useWallet';
-import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
+import {
+  generateAmmIdForRoute,
+  generatePoolId,
+  generatePositionIdForRoute,
+} from '../../../../utilities/amm';
 import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 
 type UseRolloverSwapFormAMMResult = {
@@ -29,10 +33,11 @@ type UseRolloverSwapFormAMMResult = {
 
 export const useRolloverSwapFormAMM = (): UseRolloverSwapFormAMMResult => {
   const dispatch = useAppDispatch();
-  const { ammId, poolId } = useParams();
+  const { ammId, poolId, positionId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
-  const aMM = useAppSelector(selectSwapFormAMM);
-  const position = useAppSelector(selectSwapFormPosition);
+  const aMM = useAppSelector(selectRolloverSwapFormAMM);
+  const previousAMM = useAppSelector(selectRolloverSwapFormPreviousAMM);
+  const previousPosition = useAppSelector(selectRolloverSwapFormPreviousPosition);
   const poolSwapInfoStatus = useAppSelector(selectPoolSwapInfoStatus);
   const chainId = useAppSelector(selectChainId);
   const [loading, setLoading] = useState(true);
@@ -40,7 +45,10 @@ export const useRolloverSwapFormAMM = (): UseRolloverSwapFormAMMResult => {
   const { signer } = useWallet();
 
   useEffect(() => {
-    if (!ammId || !poolId) {
+    if (!chainId) {
+      return;
+    }
+    if (!ammId || !poolId || !positionId) {
       return;
     }
     if (error) {
@@ -50,21 +58,41 @@ export const useRolloverSwapFormAMM = (): UseRolloverSwapFormAMMResult => {
     if (aMMsLoading || idle) {
       return;
     }
-    const foundAMM = aMMs.find(
-      (a) => ammId === generateAmmIdForRoute(a) && poolId === generatePoolId(a),
-    );
-    if (aMM && foundAMM && aMM.id === foundAMM.id) {
+    if (
+      previousAMM &&
+      previousPosition &&
+      generatePoolId(previousAMM) === poolId &&
+      generateAmmIdForRoute(previousAMM) === ammId &&
+      generatePositionIdForRoute(previousPosition) === positionId
+    ) {
       setLoading(false);
       return;
     }
 
-    dispatch(
-      setSwapFormAMMAction({
-        amm: foundAMM ? foundAMM : null,
+    setLoading(true);
+    void dispatch(
+      initializeAMMsAndPositionsForRolloverThunk({
+        routePoolId: poolId,
+        routeAmmId: ammId,
+        routePositionId: positionId,
+        signer,
+        chainId,
       }),
     );
-    setLoading(false);
-  }, [aMM, dispatch, ammId, poolId, idle, aMMs, aMMsLoading, error]);
+  }, [
+    signer,
+    chainId,
+    positionId,
+    dispatch,
+    ammId,
+    poolId,
+    idle,
+    aMMs,
+    aMMsLoading,
+    error,
+    previousAMM,
+    previousPosition,
+  ]);
 
   useEffect(() => {
     if (!aMM) {
@@ -75,26 +103,22 @@ export const useRolloverSwapFormAMM = (): UseRolloverSwapFormAMMResult => {
   }, [dispatch, aMM]);
 
   useEffect(() => {
-    if (!aMM?.id) {
-      return;
-    }
-    if (!chainId) {
-      return;
-    }
     if (error) {
       return;
     }
     if (aMMsLoading) {
       return;
     }
+    if (!aMM?.id || !previousAMM?.id) {
+      return;
+    }
 
     void dispatch(
-      setSignerAndPositionForAMMThunk({
+      setSignerForRolloverSwapFormAction({
         signer,
-        chainId,
       }),
     );
-  }, [aMM?.id, dispatch, aMMsLoading, error, chainId, signer]);
+  }, [previousAMM?.id, aMM?.id, dispatch, aMMsLoading, error, signer]);
 
   useEffect(() => {
     if (!aMM || !aMM.signer || !chainId) {
@@ -106,14 +130,6 @@ export const useRolloverSwapFormAMM = (): UseRolloverSwapFormAMMResult => {
       getUnderlyingTokenAllowanceThunk({ chainId, alchemyApiKey: getAlchemyKeyForChain(chainId) }),
     );
   }, [dispatch, aMM, aMM?.signer, chainId]);
-
-  useEffect(() => {
-    if (!position) {
-      return;
-    }
-
-    void dispatch(getInfoPostSwapThunk());
-  }, [dispatch, position]);
 
   return {
     aMM,

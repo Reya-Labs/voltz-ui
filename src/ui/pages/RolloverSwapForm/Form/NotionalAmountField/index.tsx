@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostSwapThunk,
-  selectSwapFormAMM,
+  selectRolloverSwapFormAMM,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
 } from '../../../../../app/features/forms/rollover-swap-form';
@@ -22,7 +22,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const dispatch = useAppDispatch();
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const aMM = useAppSelector(selectRolloverSwapFormAMM);
 
   useEffect(() => {
     setLocalNotional(notionalAmount.value.toString());

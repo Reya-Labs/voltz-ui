@@ -3,31 +3,31 @@ import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  closeSwapConfirmationFlowAction,
-  selectSwapConfirmationFlowEtherscanLink,
+  closeRolloverConfirmationFlowAction,
+  selectRolloverConfirmationFlowEtherscanLink,
 } from '../../../../../../app/features/forms/rollover-swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
-import { SwapDetails } from '../SwapDetails';
-import { SwapCompletedStepBox } from './SwapCompletedStep.styled';
+import { RolloverDetails } from '../RolloverDetails';
+import { RolloverCompletedStepBox } from './RolloverCompletedStep.styled';
 
-export const SwapCompletedStep: React.FunctionComponent = () => {
+export const RolloverCompletedStep: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const etherscanLink = useAppSelector(selectSwapConfirmationFlowEtherscanLink);
+  const etherscanLink = useAppSelector(selectRolloverConfirmationFlowEtherscanLink);
 
   const handleVisitPortfolio = useCallback(() => {
-    dispatch(closeSwapConfirmationFlowAction());
+    dispatch(closeRolloverConfirmationFlowAction());
     navigate(`/${routes.TRADER_PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
-    <SwapCompletedStepBox>
+    <RolloverCompletedStepBox>
       <Confetti>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          Swap Completed
+          Rollover Completed
         </Typography>
       </Confetti>
-      <SwapDetails />
+      <RolloverDetails />
       <Confetti>
         <ExternalLink
           colorToken="lavenderWeb"
@@ -45,6 +45,6 @@ export const SwapCompletedStep: React.FunctionComponent = () => {
           Visit Your Portfolio
         </Button>
       </Confetti>
-    </SwapCompletedStepBox>
+    </RolloverCompletedStepBox>
   );
 };

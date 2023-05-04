@@ -6,9 +6,9 @@ import { RootState } from '../../../../../store';
 import { extractError } from '../../../../helpers/extract-error';
 import { rejectThunkWithError } from '../../../../helpers/reject-thunk-with-error';
 import {
-  pushSwapTransactionFailedEvent,
-  pushSwapTransactionSubmittedEvent,
-  pushSwapTransactionSuccessEvent,
+  pushRolloverFailedEvent,
+  pushRolloverSubmittedEvent,
+  pushRolloverSuccessEvent,
 } from '../../analytics';
 import {
   getProspectiveSwapMargin,
@@ -16,14 +16,16 @@ import {
   getProspectiveSwapNotional,
 } from '../../utils';
 
-export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
+export const confirmRolloverThunkHandler: AsyncThunkPayloadCreator<
   Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
 > = async (_, thunkAPI) => {
   const state = thunkAPI.getState().rolloverSwapForm;
   const amm = state.amm;
-  if (!amm || !amm.signer) {
+  const previousAMM = state.previousAMM;
+  const previousPosition = state.previousPosition;
+  if (!amm || !previousAMM || !amm.signer || !previousPosition) {
     return;
   }
 
@@ -31,28 +33,34 @@ export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
   const prospectiveSwapNotional = getProspectiveSwapNotional(state);
   const prospectiveSwapMargin = getProspectiveSwapMargin(state);
   const prospectiveSwapMode = getProspectiveSwapMode(state);
+  const isFT = prospectiveSwapMode === 'fixed';
   const eventParams = {
     account,
     notional: prospectiveSwapNotional,
     margin: prospectiveSwapMargin,
-    isEdit: false,
     pool: getAmmProtocol(amm),
-    isFT: prospectiveSwapMode === 'fixed',
+    isFT,
   };
 
   try {
-    pushSwapTransactionSubmittedEvent(eventParams);
-    const result = await amm.swap({
-      isFT: prospectiveSwapMode === 'fixed',
+    pushRolloverSubmittedEvent(eventParams);
+    const result = await previousAMM.rolloverWithSwap({
+      isFT,
       notional: prospectiveSwapNotional,
       margin: prospectiveSwapMargin,
       fixedLow: 1,
       fixedHigh: 999,
+      newMarginEngine: amm.marginEngineAddress,
+      rolloverPosition: {
+        tickLower: previousPosition.tickLower,
+        tickUpper: previousPosition.tickUpper,
+        settlementBalance: previousPosition.settlementBalance,
+      },
     });
-    pushSwapTransactionSuccessEvent(eventParams);
+    pushRolloverSuccessEvent(eventParams);
     return result;
   } catch (err) {
-    pushSwapTransactionFailedEvent({
+    pushRolloverFailedEvent({
       ...eventParams,
       errorMessage: extractError(err),
     });
@@ -60,8 +68,8 @@ export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
   }
 };
 
-export const confirmSwapThunk = createAsyncThunk<
+export const confirmRolloverThunk = createAsyncThunk<
   Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('rolloverSwapForm/confirmSwap', confirmSwapThunkHandler);
+>('rolloverSwapForm/confirmRollover', confirmRolloverThunkHandler);

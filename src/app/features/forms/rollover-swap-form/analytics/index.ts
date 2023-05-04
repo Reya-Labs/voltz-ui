@@ -2,82 +2,77 @@ import { pushEvent } from '../../../../../utilities/googleAnalytics';
 
 type PageViewEventParams = {
   account: string;
-  isEdit: boolean;
 };
-export const pushPageViewEvent = ({ account, isEdit }: PageViewEventParams) => {
+export const pushPageViewEvent = ({ account }: PageViewEventParams) => {
   pushEvent(account || '', {
     event: 'title_change',
-    eventValue: isEdit ? 'New Trader Position' : 'Edit Trader Position',
+    eventValue: 'Trader Rollover Position',
   });
 };
 
-type SwapEventParams = {
+type RolloverEventParams = {
   notional: number;
   margin: number;
-  isEdit: boolean;
   pool: string;
   isFT: boolean;
   account: string;
 };
 
-export const pushSwapTransactionSubmittedEvent = ({
+export const pushRolloverSubmittedEvent = ({
   notional,
   margin,
-  isEdit,
   pool,
   isFT,
   account,
-}: SwapEventParams) => {
+}: RolloverEventParams) => {
   pushEvent(account, {
     event: 'tx_submitted',
     eventValue: {
       notional,
       margin,
-      action: isEdit ? 'edit' : 'new',
+      action: 'new',
     },
     pool,
     agent: isFT ? 'Fixed Trader' : 'Variable Trader',
   });
 };
 
-export const pushSwapTransactionSuccessEvent = ({
+export const pushRolloverSuccessEvent = ({
   notional,
   margin,
-  isEdit,
   pool,
   isFT,
   account,
-}: SwapEventParams) => {
+}: RolloverEventParams) => {
   pushEvent(account, {
     event: 'successful_tx',
     eventValue: {
       notional,
       margin,
-      action: isEdit ? 'edit' : 'new',
+      action: 'new',
     },
     pool,
     agent: isFT ? 'Fixed Trader' : 'Variable Trader',
   });
 };
 
-type FailedSwapEventParams = SwapEventParams & {
+type FailedRolloverEventParams = RolloverEventParams & {
   errorMessage: string;
 };
-export const pushSwapTransactionFailedEvent = ({
+export const pushRolloverFailedEvent = ({
   notional,
   margin,
-  isEdit,
   pool,
   isFT,
   account,
   errorMessage,
-}: FailedSwapEventParams) => {
+}: FailedRolloverEventParams) => {
   pushEvent(account, {
     event: 'failed_tx',
     eventValue: {
       notional,
       margin,
-      action: isEdit ? 'edit' : 'new',
+      action: 'new',
       failMessage: errorMessage,
     },
     pool,

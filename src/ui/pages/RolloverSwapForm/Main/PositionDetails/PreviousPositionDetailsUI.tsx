@@ -62,7 +62,11 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
             label="Notional"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
-            token={compactNotional ? compactNotional.compactNotionalSuffix : ''}
+            token={
+              compactNotional
+                ? `${compactNotional.compactNotionalSuffix} ${underlyingTokenName.toUpperCase()}`
+                : ` ${underlyingTokenName.toUpperCase()}`
+            }
             typographyToken={typographyToken}
             value={compactNotional ? compactNotional.compactNotionalNumber : '--'}
           />
@@ -74,7 +78,11 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={
-              compactDepositedMargin ? compactDepositedMargin.compactDepositedMarginSuffix : ''
+              compactDepositedMargin
+                ? `${
+                    compactDepositedMargin.compactDepositedMarginSuffix
+                  } ${underlyingTokenName.toUpperCase()}`
+                : ` ${underlyingTokenName.toUpperCase()}`
             }
             typographyToken={typographyToken}
             value={
@@ -83,9 +91,10 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
           />
         </DepositedMarginBox>
         <RealisedPNLBox>
+          {/*todo: FB make it same as in swap form*/}
           <LabelTokenTypography
             colorToken="lavenderWeb"
-            label="Realised PnL"
+            label="Realized PnL"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
@@ -99,7 +108,13 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
             label="Net Balance"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
-            token={compactNetBalance ? compactNetBalance.compactNetBalanceSuffix : ''}
+            token={
+              compactNetBalance
+                ? `${
+                    compactNetBalance.compactNetBalanceSuffix
+                  } ${underlyingTokenName.toUpperCase()}`
+                : ` ${underlyingTokenName.toUpperCase()}`
+            }
             typographyToken={typographyToken}
             value={compactNetBalance ? compactNetBalance.compactNetBalanceNumber : '--'}
           />
