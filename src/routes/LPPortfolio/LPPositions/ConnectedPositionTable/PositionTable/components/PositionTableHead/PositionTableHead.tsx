@@ -63,7 +63,8 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   realizedPnLFromSwapsInUSD,
 }) => {
   const realizedPnLTotalInUSD = realizedPnLFromFeesInUSD + realizedPnLFromSwapsInUSD;
-  const PNLValueTypography = realizedPnLTotalInUSD ? PNLPositiveTypography : PNLNegativeTypography;
+  const PNLValueTypography =
+    realizedPnLTotalInUSD > 0 ? PNLPositiveTypography : PNLNegativeTypography;
 
   const CurrentFixedRateTypography =
     fixedRateHealthFactor === HealthFactorStatus.DANGER
