@@ -36,8 +36,8 @@ export type PositionTableHeadProps = {
   isBothTraderAndLP: boolean;
   settlementCashflowInUSD: number;
   underlyingTokenName: string;
-  realizedPnLFromFees: number;
-  realizedPnLFromSwaps: number;
+  realizedPnLFromFeesInUSD: number;
+  realizedPnLFromSwapsInUSD: number;
 };
 
 const containerStyles: SystemStyleObject<Theme> = {
@@ -59,11 +59,11 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
   isBothTraderAndLP,
   settlementCashflowInUSD,
   underlyingTokenName,
-  realizedPnLFromFees,
-  realizedPnLFromSwaps,
+  realizedPnLFromFeesInUSD,
+  realizedPnLFromSwapsInUSD,
 }) => {
-  const realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
-  const PNLValueTypography = realizedPnLTotal ? PNLPositiveTypography : PNLNegativeTypography;
+  const realizedPnLTotalInUSD = realizedPnLFromFeesInUSD + realizedPnLFromSwapsInUSD;
+  const PNLValueTypography = realizedPnLTotalInUSD ? PNLPositiveTypography : PNLNegativeTypography;
 
   const CurrentFixedRateTypography =
     fixedRateHealthFactor === HealthFactorStatus.DANGER
@@ -86,9 +86,9 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
                 icon="information-circle"
                 info={
                   <PnLDetails
-                    pnlFromFees={formFormatNumber(realizedPnLFromFees)}
-                    pnlFromSwaps={formFormatNumber(realizedPnLFromSwaps)}
-                    pnlTotal={formFormatNumber(realizedPnLTotal)}
+                    pnlFromFees={formFormatNumber(realizedPnLFromFeesInUSD)}
+                    pnlFromSwaps={formFormatNumber(realizedPnLFromSwapsInUSD)}
+                    pnlTotal={formFormatNumber(realizedPnLTotalInUSD)}
                     underlyingTokenName={underlyingTokenName}
                   />
                 }
@@ -96,7 +96,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
                   <React.Fragment>
                     REALIZED PnL:&nbsp;
                     <PNLValueTypography>
-                      {formFormatNumber(realizedPnLTotal)} {underlyingTokenName}
+                      {formFormatNumber(realizedPnLTotalInUSD)} {underlyingTokenName}
                     </PNLValueTypography>
                   </React.Fragment>
                 }
