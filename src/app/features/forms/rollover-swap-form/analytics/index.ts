@@ -30,7 +30,7 @@ export const pushRolloverSubmittedEvent = ({
     eventValue: {
       notional,
       margin,
-      action: 'new',
+      action: 'rollover',
     },
     pool,
     agent: isFT ? 'Fixed Trader' : 'Variable Trader',
@@ -49,7 +49,7 @@ export const pushRolloverSuccessEvent = ({
     eventValue: {
       notional,
       margin,
-      action: 'new',
+      action: 'rollover',
     },
     pool,
     agent: isFT ? 'Fixed Trader' : 'Variable Trader',
@@ -72,7 +72,7 @@ export const pushRolloverFailedEvent = ({
     eventValue: {
       notional,
       margin,
-      action: 'new',
+      action: 'rollover',
       failMessage: errorMessage,
     },
     pool,

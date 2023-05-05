@@ -52,7 +52,7 @@ describe('analyticsEvents', () => {
         eventValue: {
           notional: mockNotional,
           margin: mockMargin,
-          action: 'new',
+          action: 'rollover',
         },
         pool: mockPool,
         agent: 'Variable Trader',
@@ -82,7 +82,7 @@ describe('analyticsEvents', () => {
         eventValue: {
           notional: mockNotional,
           margin: mockMargin,
-          action: 'new',
+          action: 'rollover',
         },
         pool: mockPool,
         agent: 'Variable Trader',
@@ -114,7 +114,7 @@ describe('analyticsEvents', () => {
         eventValue: {
           notional: mockNotional,
           margin: mockMargin,
-          action: 'new',
+          action: 'rollover',
           failMessage: mockErrorMessage,
         },
         pool: mockPool,
