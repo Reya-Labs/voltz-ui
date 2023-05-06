@@ -153,7 +153,10 @@ export const selectPreviousPositionDepositedMargin = (state: RootState) => {
   if (!state.rolloverSwapForm.previousPosition) {
     return null;
   }
-  const compactParts = formCompactFormatToParts(state.rolloverSwapForm.previousPosition.margin);
+  const depositedMargin =
+    state.rolloverSwapForm.previousPosition.margin -
+    state.rolloverSwapForm.previousPosition.realizedPnLFromFeesPaid;
+  const compactParts = formCompactFormatToParts(depositedMargin);
 
   return {
     compactDepositedMarginSuffix: compactParts.compactSuffix,
@@ -166,8 +169,7 @@ export const selectPreviousPositionNetBalance = (state: RootState) => {
   if (!position) {
     return null;
   }
-  const netBalance =
-    position.margin + position.realizedPnLFromSwaps + position.realizedPnLFromFeesPaid;
+  const netBalance = position.margin + position.realizedPnLFromSwaps;
   const compactParts = formCompactFormatToParts(netBalance);
 
   return {

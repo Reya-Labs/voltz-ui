@@ -11,7 +11,7 @@ import {
   selectPreviousPositionSwapMode,
 } from '../../../../../app/features/forms/rollover-swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { PnLDetails } from '../../../SwapForm/Main/PositionDetails/PnLDetails';
+import { PnLDetailsWithTooltip } from '../../../../components/PnLDetailsWithTooltip';
 import { MODE_COLOR_TOKEN_MAP } from '../../helpers';
 import {
   CashFlowBox,
@@ -95,22 +95,13 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
           />
         </DepositedMarginBox>
         <RealisedPNLBox>
-          {/*todo: FB duplicate to be moved to common component*/}
-          <LabelTokenTypography
-            colorToken={realizedPnLTotal.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'}
-            label="Realized PnL"
-            labelColorToken="lavenderWeb3"
+          <PnLDetailsWithTooltip
             labelTypographyToken={labelTypographyToken}
-            token={` ${underlyingTokenName.toUpperCase()}`}
-            tooltip={
-              <PnLDetails
-                pnlFromFees={realizedPnLFromFees}
-                pnlFromSwaps={realizedPnLFromSwaps}
-                underlyingTokenName={underlyingTokenName}
-              />
-            }
+            realizedPnLFromFees={realizedPnLFromFees}
+            realizedPnLFromSwaps={realizedPnLFromSwaps}
+            realizedPnLTotal={realizedPnLTotal}
             typographyToken={typographyToken}
-            value={realizedPnLTotal}
+            underlyingTokenName={underlyingTokenName}
           />
         </RealisedPNLBox>
         <CashFlowBox>
