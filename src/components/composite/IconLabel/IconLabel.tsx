@@ -52,7 +52,7 @@ export const IconLabel: React.FunctionComponent<IconLabelProps> = ({
           width: 10,
           position: 'relative',
           top: 1,
-          marginLeft: (theme) => theme.spacing(2),
+          marginLeft: (theme) => (noMinWidth ? 0 : theme.spacing(2)),
           display: _display,
           ...iconSx,
         }}

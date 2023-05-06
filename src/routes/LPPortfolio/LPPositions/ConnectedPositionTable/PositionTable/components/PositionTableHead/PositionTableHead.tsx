@@ -80,32 +80,28 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
       </Box>
 
       <ActionsBox>
-        {beforeMaturity && (
-          <>
-            <InfoBox>
-              <IconLabel
-                icon="information-circle"
-                info={
-                  <PnLDetails
-                    pnlFromFees={formFormatNumber(realizedPnLFromFeesInUSD)}
-                    pnlFromSwaps={formFormatNumber(realizedPnLFromSwapsInUSD)}
-                    pnlTotal={formFormatNumber(realizedPnLTotalInUSD)}
-                    underlyingTokenName={underlyingTokenName}
-                  />
-                }
-                label={
-                  <React.Fragment>
-                    REALIZED PnL:&nbsp;
-                    <PNLValueTypography>
-                      {formFormatNumber(realizedPnLTotalInUSD)} {underlyingTokenName}
-                    </PNLValueTypography>
-                  </React.Fragment>
-                }
-                noMinWidth={true}
+        <InfoBox>
+          <IconLabel
+            icon="information-circle"
+            info={
+              <PnLDetails
+                pnlFromFees={formFormatNumber(realizedPnLFromFeesInUSD)}
+                pnlFromSwaps={formFormatNumber(realizedPnLFromSwapsInUSD)}
+                pnlTotal={formFormatNumber(realizedPnLTotalInUSD)}
+                underlyingTokenName={underlyingTokenName}
               />
-            </InfoBox>
-          </>
-        )}
+            }
+            label={
+              <React.Fragment>
+                REALIZED PnL:&nbsp;
+                <PNLValueTypography>
+                  {formFormatNumber(realizedPnLTotalInUSD)} {underlyingTokenName}
+                </PNLValueTypography>
+              </React.Fragment>
+            }
+            noMinWidth={true}
+          />
+        </InfoBox>
 
         {beforeMaturity && (
           <InfoBox>
