@@ -6,7 +6,7 @@ import {
   selectInfoPostSwap,
   selectProspectiveSwapFeeFormatted,
   selectSlippageFormatted,
-} from '../../../../../app/features/forms/rollover-swap-form';
+} from '../../../../../app/features/forms/trader/rollover-swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
 import { ReactComponent as GasIcon } from './gas-icon.svg';

@@ -12,7 +12,7 @@ import {
   selectRolloverSwapFormPreviousAMM,
   selectRolloverSwapFormPreviousPosition,
   setSignerForRolloverSwapFormAction,
-} from '../../../../app/features/forms/rollover-swap-form';
+} from '../../../../app/features/forms/trader/rollover-swap-form';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';

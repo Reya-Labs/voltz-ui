@@ -1,7 +1,7 @@
 import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { selectRolloverSwapFormAMM } from '../../../../../app/features/forms/rollover-swap-form';
+import { selectRolloverSwapFormAMM } from '../../../../../app/features/forms/trader/rollover-swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';

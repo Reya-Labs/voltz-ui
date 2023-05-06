@@ -7,7 +7,7 @@ import {
   selectProspectiveSwapMode,
   selectRolloverSwapFormAMM,
   selectVariableRateInfo,
-} from '../../../../app/features/forms/rollover-swap-form';
+} from '../../../../app/features/forms/trader/rollover-swap-form';
 import { useAppSelector } from '../../../../app/hooks';
 import { CashFlowCalculator } from '../../../components/CashflowCalculator';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';

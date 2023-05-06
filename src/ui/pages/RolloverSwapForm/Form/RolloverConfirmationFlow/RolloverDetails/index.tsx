@@ -9,7 +9,7 @@ import {
   selectProspectiveSwapMode,
   selectProspectiveSwapNotionalFormatted,
   selectVariableRateInfo,
-} from '../../../../../../app/features/forms/rollover-swap-form';
+} from '../../../../../../app/features/forms/trader/rollover-swap-form';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { formatNumber } from '../../../../../../utilities/number';
 import { RolloverDetailBox, RolloverDetailsBox } from './RolloverDetails.styled';

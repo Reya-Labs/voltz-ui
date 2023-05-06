@@ -9,7 +9,7 @@ import {
   selectInfoPostSwap,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
-} from '../../../../../app/features/forms/swap-form';
+} from '../../../../../app/features/forms/trader/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { FormSubmitButton } from '../../../../components/FormSubmitButton';
 
