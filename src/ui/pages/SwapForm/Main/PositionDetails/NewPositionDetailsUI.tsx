@@ -6,10 +6,10 @@ import {
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
   selectProspectiveSwapMode,
-} from '../../../../../app/features/forms/swap-form';
+} from '../../../../../app/features/forms/trader/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
-import { MODE_COLOR_TOKEN_MAP } from '../../helpers';
+import { MODE_COLOR_TOKEN_MAP, MODE_TEXT_MAP } from '../../helpers';
 import {
   CashFlowBox,
   NotionalBox,
@@ -50,7 +50,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
           labelTypographyToken={actionLabelTypographyToken}
           token=""
           typographyToken={actionTypographyToken}
-          value={mode === 'fixed' ? 'Fixed Taker' : 'Variable Taker'}
+          value={MODE_TEXT_MAP[mode]}
         />
       </PositionDetailsLeftBox>
       <PositionDetailsRightBox>
@@ -60,7 +60,11 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             label="Notional"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
-            token={compactNotional ? compactNotional.compactNotionalSuffix : ''}
+            token={
+              compactNotional
+                ? `${compactNotional.compactNotionalSuffix} ${underlyingTokenName.toUpperCase()}`
+                : ` ${underlyingTokenName.toUpperCase()}`
+            }
             typographyToken={typographyToken}
             value={compactNotional ? compactNotional.compactNotionalNumber : '--'}
           />

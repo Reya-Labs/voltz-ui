@@ -7,7 +7,7 @@ import {
   selectSwapFormPosition,
   selectUserInputMarginInfo,
   setMarginAmountAction,
-} from '../../../../../app/features/forms/swap-form';
+} from '../../../../../app/features/forms/trader/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';

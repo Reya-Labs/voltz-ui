@@ -9,7 +9,7 @@ import {
   selectSwapFormAMM,
   selectVariableRate24hDelta,
   selectVariableRateValueFormatted,
-} from '../../../../../app/features/forms/swap-form';
+} from '../../../../../app/features/forms/trader/swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
 import { MarketTokenInformationProps } from '../../../../components/MarketTokenInformation';

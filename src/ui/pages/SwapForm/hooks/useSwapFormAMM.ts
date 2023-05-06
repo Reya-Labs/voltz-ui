@@ -13,7 +13,7 @@ import {
   selectSwapFormPositionFetchingStatus,
   setSignerAndPositionForAMMThunk,
   setSwapFormAMMAction,
-} from '../../../../app/features/forms/swap-form';
+} from '../../../../app/features/forms/trader/swap-form';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';

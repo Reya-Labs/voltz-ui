@@ -1,19 +1,15 @@
 import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import {
-  selectSwapFormAMM,
-  selectSwapFormMode,
-} from '../../../../../app/features/forms/rollover-swap-form';
+import { selectRolloverSwapFormAMM } from '../../../../../app/features/forms/trader/rollover-swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
-import { EditPositionDetailsUI } from './EditPositionDetailsUI';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';
+import { PreviousPositionDetailsUI } from './PreviousPositionDetailsUI';
 
 type PositionDetailsProps = {};
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
-  const swapForMode = useAppSelector(selectSwapFormMode);
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const aMM = useAppSelector(selectRolloverSwapFormAMM);
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const actionLabelTypographyToken: TypographyToken = isLargeDesktopDevice
@@ -36,21 +32,22 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
     return null;
   }
 
-  return swapForMode === 'new' ? (
-    <NewPositionDetailsUI
-      actionLabelTypographyToken={actionLabelTypographyToken}
-      actionTypographyToken={actionTypographyToken}
-      labelTypographyToken={labelTypographyToken}
-      typographyToken={typographyToken}
-      underlyingTokenName={aMM.underlyingToken.name}
-    />
-  ) : (
-    <EditPositionDetailsUI
-      actionLabelTypographyToken={actionLabelTypographyToken}
-      actionTypographyToken={actionTypographyToken}
-      labelTypographyToken={labelTypographyToken}
-      typographyToken={typographyToken}
-      underlyingTokenName={aMM.underlyingToken.name}
-    />
+  return (
+    <React.Fragment>
+      <PreviousPositionDetailsUI
+        actionLabelTypographyToken={actionLabelTypographyToken}
+        actionTypographyToken={actionTypographyToken}
+        labelTypographyToken={labelTypographyToken}
+        typographyToken={typographyToken}
+        underlyingTokenName={aMM.underlyingToken.name}
+      />
+      <NewPositionDetailsUI
+        actionLabelTypographyToken={actionLabelTypographyToken}
+        actionTypographyToken={actionTypographyToken}
+        labelTypographyToken={labelTypographyToken}
+        typographyToken={typographyToken}
+        underlyingTokenName={aMM.underlyingToken.name}
+      />
+    </React.Fragment>
   );
 };

@@ -6,10 +6,10 @@ import {
   resetStateAction,
   selectAMMMaturityFormatted,
   selectFixedRateValueFormatted,
-  selectSwapFormAMM,
+  selectRolloverSwapFormAMM,
   selectVariableRate24hDelta,
   selectVariableRateValueFormatted,
-} from '../../../../../app/features/forms/rollover-swap-form';
+} from '../../../../../app/features/forms/trader/rollover-swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
 import { MarketTokenInformationProps } from '../../../../components/MarketTokenInformation';
@@ -18,7 +18,7 @@ import { PoolHeader as PoolHeaderComponent } from '../../../../components/PoolHe
 type PoolHeaderProps = {};
 
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const aMM = useAppSelector(selectRolloverSwapFormAMM);
   const variableRate24hDelta = useAppSelector(selectVariableRate24hDelta);
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
   const fixedRateFormatted = useAppSelector(selectFixedRateValueFormatted);
@@ -38,7 +38,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
 
   const handleOnPoolItemClick = ({ routePoolId, routeAmmId }: PoolUI) => {
     dispatch(resetStateAction());
-    navigate.toRolloverSwapFormPage({
+    navigate.toSwapFormPage({
       ammId: routeAmmId,
       poolId: routePoolId,
     });

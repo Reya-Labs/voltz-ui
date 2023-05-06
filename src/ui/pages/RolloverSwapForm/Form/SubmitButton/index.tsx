@@ -2,14 +2,11 @@ import React, { useCallback } from 'react';
 
 import {
   approveUnderlyingTokenThunk,
-  closeMarginUpdateConfirmationFlowAction,
-  closeSwapConfirmationFlowAction,
-  openMarginUpdateConfirmationFlowAction,
-  openSwapConfirmationFlowAction,
+  openRolloverConfirmationFlowAction,
   selectInfoPostSwap,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
-} from '../../../../../app/features/forms/rollover-swap-form';
+} from '../../../../../app/features/forms/trader/rollover-swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { FormSubmitButton } from '../../../../components/FormSubmitButton';
 
@@ -26,13 +23,8 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
       case 'approve':
         void dispatch(approveUnderlyingTokenThunk());
         break;
-      case 'swap':
-        void dispatch(closeMarginUpdateConfirmationFlowAction());
-        void dispatch(openSwapConfirmationFlowAction());
-        break;
-      case 'margin-update':
-        void dispatch(closeSwapConfirmationFlowAction());
-        void dispatch(openMarginUpdateConfirmationFlowAction());
+      case 'rollover':
+        void dispatch(openRolloverConfirmationFlowAction());
         break;
       default:
         break;

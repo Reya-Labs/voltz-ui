@@ -4,29 +4,25 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostSwapThunk,
-  selectSwapFormAMM,
-  selectSwapFormPosition,
+  selectRolloverSwapFormAMM,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
-} from '../../../../../app/features/forms/rollover-swap-form';
+} from '../../../../../app/features/forms/trader/rollover-swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { EditNotionalAmountFieldUI } from './EditNotionalAmountFieldUI';
 import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 
 type NotionalAmountProps = {};
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
-  const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
   const [localNotional, setLocalNotional] = useState<string | null>(
     notionalAmount.value.toString(),
   );
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const dispatch = useAppDispatch();
-  const aMM = useAppSelector(selectSwapFormAMM);
-  const position = useAppSelector(selectSwapFormPosition);
+  const aMM = useAppSelector(selectRolloverSwapFormAMM);
 
   useEffect(() => {
     setLocalNotional(notionalAmount.value.toString());
@@ -34,11 +30,10 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const debouncedGetInfoPostSwap = useMemo(
     () =>
-      debounce((value: number | null | undefined, editMode: 'add' | 'remove' | undefined) => {
+      debounce((value: number | null | undefined) => {
         dispatch(
           setNotionalAmountAction({
             value: value === undefined ? undefined : value ?? 0,
-            editMode: editMode,
           }),
         );
         void dispatch(getInfoPostSwapThunk());
@@ -51,19 +46,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       setLocalNotional(value ?? null);
 
       const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
-      debouncedGetInfoPostSwap(valueAsNumber, undefined);
-    },
-    [debouncedGetInfoPostSwap],
-  );
-
-  const handleOnSwitchChange = useCallback(
-    (value: string) => {
-      if (value !== 'add' && value !== 'remove') {
-        return;
-      }
-
-      setLocalEditMode(value);
-      debouncedGetInfoPostSwap(undefined, value);
+      debouncedGetInfoPostSwap(valueAsNumber);
     },
     [debouncedGetInfoPostSwap],
   );
@@ -92,25 +75,13 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     ? 'primaryBodySmallRegular'
     : 'primaryBodyXSmallRegular';
 
-  return !position ? (
+  return (
     <NewNotionalAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
       handleOnNotionalChange={handleOnNotionalChange}
       labelTypographyToken={labelTypographyToken}
       localNotional={localNotional}
-      underlyingTokenName={aMM.underlyingToken.name}
-    />
-  ) : (
-    <EditNotionalAmountFieldUI
-      bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
-      bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-      handleOnNotionalChange={handleOnNotionalChange}
-      handleOnSwitchChange={handleOnSwitchChange}
-      labelTypographyToken={labelTypographyToken}
-      localEditMode={localEditMode}
-      localNotional={localNotional}
-      position={position}
       underlyingTokenName={aMM.underlyingToken.name}
     />
   );

@@ -8,7 +8,7 @@ import {
   selectLeverageOptions,
   selectShowLeverageNotification,
   setLeverageAction,
-} from '../../../../../app/features/forms/rollover-swap-form';
+} from '../../../../../app/features/forms/trader/rollover-swap-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { stringToBigFloat } from '../../../../../utilities/number';

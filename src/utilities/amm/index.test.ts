@@ -7,6 +7,7 @@ import {
   findCurrentPositionsLp,
   generateAmmIdForRoute,
   generatePoolId,
+  generatePositionIdForRoute,
   getAmmProtocol,
   getProtocolName,
 } from './index';
@@ -340,6 +341,18 @@ describe('utilities/amm', () => {
     it('should generate the correct AMM id for route', () => {
       const expectedAmmIdForRoute = 'cdef';
       const actualAmmIdForRoute = generateAmmIdForRoute(mockAMM);
+      expect(actualAmmIdForRoute).toEqual(expectedAmmIdForRoute);
+    });
+  });
+
+  describe('generatePositionIdForRoute', () => {
+    const mockPosition: Position = {
+      id: '0x1234567890abcdef',
+    } as never;
+
+    it('should generate the correct Position id for route', () => {
+      const expectedAmmIdForRoute = 'cdef';
+      const actualAmmIdForRoute = generatePositionIdForRoute(mockPosition);
       expect(actualAmmIdForRoute).toEqual(expectedAmmIdForRoute);
     });
   });

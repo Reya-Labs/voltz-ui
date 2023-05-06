@@ -15,10 +15,10 @@ import {
   selectExistingPositionPayingRateFormatted,
   selectExistingPositionReceivingRateFormatted,
   selectSwapFormPosition,
-} from '../../../../../app/features/forms/swap-form';
+} from '../../../../../app/features/forms/trader/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
+import { PnLDetailsWithTooltip } from '../../../../components/PnLDetailsWithTooltip';
 import { MODE_COLOR_TOKEN_MAP, MODE_TEXT_MAP } from '../../helpers';
-import { PnLDetails } from './PnLDetails';
 import {
   CashFlowBox,
   NotionalBox,
@@ -108,7 +108,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               label="Notional"
               labelColorToken="lavenderWeb3"
               labelTypographyToken={labelTypographyToken}
-              token={editPositionCompactNotional.compactNotionalSuffix}
+              token={
+                editPositionCompactNotional
+                  ? `${
+                      editPositionCompactNotional.compactNotionalSuffix
+                    } ${underlyingTokenName.toUpperCase()}`
+                  : ` ${underlyingTokenName.toUpperCase()}`
+              }
               typographyToken={typographyToken}
               value={editPositionCompactNotional.compactNotionalNumber}
             />
@@ -180,27 +186,23 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           )}
         </PayingBox>
         <CashFlowBox>
-          <LabelTokenTypography
-            colorToken={realizedPnLTotal.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'}
-            label="Realized PnL"
-            labelColorToken="lavenderWeb3"
+          <PnLDetailsWithTooltip
             labelTypographyToken={labelTypographyToken}
-            token={` ${underlyingTokenName.toUpperCase()}`}
-            tooltip={
-              <PnLDetails
-                pnlFromFees={realizedPnLFromFees}
-                pnlFromSwaps={realizedPnLFromSwaps}
-                underlyingTokenName={underlyingTokenName}
-              />
-            }
+            realizedPnLFromFees={realizedPnLFromFees}
+            realizedPnLFromSwaps={realizedPnLFromSwaps}
+            realizedPnLTotal={realizedPnLTotal}
             typographyToken={typographyToken}
-            value={realizedPnLTotal}
+            underlyingTokenName={underlyingTokenName}
           />
         </CashFlowBox>
         <CashFlowBox>
           <LabelTokenTypography
             colorToken={
-              unrealizedPnLFromSwaps.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'
+              unrealizedPnLFromSwaps === '--'
+                ? 'lavenderWeb'
+                : unrealizedPnLFromSwaps.indexOf('-') !== -1
+                ? 'wildStrawberry'
+                : 'skyBlueCrayola'
             }
             label="Unrealized PnL"
             labelColorToken="lavenderWeb3"

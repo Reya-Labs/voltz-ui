@@ -111,3 +111,7 @@ export const generatePoolId = (amm: AMM) => {
 export const generateAmmIdForRoute = (amm: AMM) => {
   return amm.id.substring(amm.id.length - 4);
 };
+
+export const generatePositionIdForRoute = (position: Position) => {
+  return position.id.substring(position.id.length - 4).replace('#', '_');
+};

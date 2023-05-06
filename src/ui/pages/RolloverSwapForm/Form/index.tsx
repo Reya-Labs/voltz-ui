@@ -11,18 +11,16 @@ import {
 import { LeverageField } from './LeverageField';
 import { MarginAccount } from './MarginAccount';
 import { MarginAmountField } from './MarginAmountField';
-import { MarginUpdateConfirmationFlow } from './MarginUpdateConfirmationFlow';
 import { NotionalAmountField } from './NotionalAmountField';
 import { NotionalSwap } from './NotionalSwap';
+import { RolloverConfirmationFlow } from './RolloverConfirmationFlow';
 import { SubmitButton } from './SubmitButton';
-import { SwapConfirmationFlow } from './SwapConfirmationFlow';
 import { TransactionDetails } from './TransactionDetails';
 
 export const Form: React.FunctionComponent = () => {
   return (
     <React.Fragment>
-      <SwapConfirmationFlow />
-      <MarginUpdateConfirmationFlow />
+      <RolloverConfirmationFlow />
       <FormOuterBox>
         <MarginAccountBox>
           <MarginAccount />

@@ -1,7 +1,10 @@
 import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { selectSwapFormAMM, selectSwapFormMode } from '../../../../../app/features/forms/swap-form';
+import {
+  selectSwapFormAMM,
+  selectSwapFormMode,
+} from '../../../../../app/features/forms/trader/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { EditPositionDetailsUI } from './EditPositionDetailsUI';

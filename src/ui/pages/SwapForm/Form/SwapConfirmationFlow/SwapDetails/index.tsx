@@ -9,7 +9,7 @@ import {
   selectProspectiveSwapMode,
   selectProspectiveSwapNotionalFormatted,
   selectVariableRateInfo,
-} from '../../../../../../app/features/forms/swap-form';
+} from '../../../../../../app/features/forms/trader/swap-form';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { formatNumber } from '../../../../../../utilities/number';
 import { SwapDetailBox, SwapDetailsBox } from './SwapDetails.styled';
