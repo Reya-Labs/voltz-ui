@@ -1,23 +1,25 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { getChainInfo, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
 
-export const setChainIdThunk = createAsyncThunk<
+export type WindowEthereumType = {
+  request: (param: { params?: { chainId: string }[]; method: string }) => Promise<string>;
+};
+
+export const setChainIdThunkHandler: AsyncThunkPayloadCreator<
   Awaited<ReturnType<typeof rejectThunkWithError>>,
   {
     chainId: SupportedChainId;
     isSupportedChain: boolean;
     triggerApprovalFlow: boolean;
   }
->('network/setChainId', async ({ triggerApprovalFlow, chainId, isSupportedChain }, thunkAPI) => {
+> = async ({ triggerApprovalFlow, chainId, isSupportedChain }, thunkAPI) => {
   if (!triggerApprovalFlow) {
     return;
   }
   if (isSupportedChain) {
-    const provider = window.ethereum as {
-      request: (param: { params?: { chainId: string }[]; method: string }) => Promise<string>;
-    };
+    const provider = window.ethereum as WindowEthereumType;
     if (!provider) {
       return;
     }
@@ -59,4 +61,13 @@ export const setChainIdThunk = createAsyncThunk<
       }
     }
   }
-});
+};
+
+export const setChainIdThunk = createAsyncThunk<
+  Awaited<ReturnType<typeof rejectThunkWithError>>,
+  {
+    chainId: SupportedChainId;
+    isSupportedChain: boolean;
+    triggerApprovalFlow: boolean;
+  }
+>('network/setChainId', setChainIdThunkHandler);
