@@ -8,7 +8,6 @@ type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
 export type SliceState = {
   position: Position | null;
-  variant: null | 'trader' | 'lp';
   step: 'confirmation' | 'waitingForConfirmation' | 'completed' | null;
   error: string | null;
   txHash: string | null;
@@ -22,7 +21,6 @@ export type SliceState = {
 
 const initialState: SliceState = {
   position: null,
-  variant: null,
   step: null,
   error: null,
   txHash: null,
@@ -41,16 +39,14 @@ const slice = createSlice({
     initializeSettleFlowAction: (
       state,
       {
-        payload: { variant, position },
+        payload: { position },
       }: PayloadAction<{
         position: Position;
-        variant: 'lp' | 'trader';
       }>,
     ) => {
       state.step = 'confirmation';
       state.error = null;
       state.txHash = null;
-      state.variant = variant;
       state.position = position;
     },
     closeSettleFlowAction: () => initialState,

@@ -7,7 +7,12 @@ import { formCompactFormatToParts } from '../forms/common/utils';
 
 export const selectSettleAMM = (state: RootState) => state.settleFlow.position?.amm;
 export const selectSettlePosition = (state: RootState) => state.settleFlow.position;
-export const selectSettleVariant = (state: RootState) => state.settleFlow.variant;
+export const selectSettleVariant = (state: RootState) => {
+  if (!state.settleFlow.position) {
+    return null;
+  }
+  return state.settleFlow.position.positionType === 3 ? 'lp' : 'trader';
+};
 export const selectSettleError = (state: RootState) => state.settleFlow.error;
 export const selectSettleStep = (state: RootState) => state.settleFlow.step;
 export const selectConfirmationFlowEtherscanLink = (state: RootState) => {
@@ -73,20 +78,20 @@ export const selectCompactNotional = (state: RootState) => {
   };
 };
 
-export const selectCompactMargin = (state: RootState) => {
+export const selectCompactDepositedMargin = (state: RootState) => {
   const position = selectSettlePosition(state);
   if (position === null) {
     return {
-      compactMarginSuffix: '',
-      compactMarginNumber: '--',
+      compactDepositedMarginSuffix: '',
+      compactDepositedMarginNumber: '--',
     };
   }
-  const margin = position.margin;
+  const depositedMargin = position.margin - position.realizedPnLFromFeesPaid;
 
-  const compactParts = formCompactFormatToParts(margin);
+  const compactParts = formCompactFormatToParts(depositedMargin);
   return {
-    compactMarginSuffix: compactParts.compactSuffix,
-    compactMarginNumber: compactParts.compactNumber,
+    compactDepositedMarginSuffix: compactParts.compactSuffix,
+    compactDepositedMarginNumber: compactParts.compactNumber,
   };
 };
 
@@ -98,7 +103,7 @@ export const selectCompactNetBalance = (state: RootState) => {
       compactNetBalanceNumber: '--',
     };
   }
-  const netBalance = position.margin + position.settlementCashflow;
+  const netBalance = position.margin + position.settlementCashflow + position.fees;
 
   const compactParts = formCompactFormatToParts(netBalance);
   return {
@@ -115,7 +120,8 @@ export const selectCompactRealizedPnL = (state: RootState) => {
       compactRealizedPnLNumber: '--',
     };
   }
-  const realizedPnL = position.settlementCashflow;
+  const realizedPnL =
+    position.settlementCashflow + position.fees + position.realizedPnLFromFeesPaid;
 
   const compactParts = formCompactFormatToParts(realizedPnL);
   return {

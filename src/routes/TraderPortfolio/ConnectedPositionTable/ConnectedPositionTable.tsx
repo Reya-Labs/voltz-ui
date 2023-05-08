@@ -49,7 +49,6 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
         dispatch(
           initializeSettleFlowAction({
             position,
-            variant: 'trader',
           }),
         );
         return;

@@ -4,7 +4,7 @@ import React from 'react';
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
-  selectCompactMargin,
+  selectCompactDepositedMargin,
   selectCompactNetBalance,
   selectCompactNotional,
   selectCompactRealizedPnL,
@@ -17,7 +17,7 @@ import { DetailBox, DetailsBox } from './SettleDetails.styled';
 
 export const SettleDetails: React.FunctionComponent = () => {
   const compactNotional = useAppSelector(selectCompactNotional);
-  const compactMargin = useAppSelector(selectCompactMargin);
+  const compactDepositedMargin = useAppSelector(selectCompactDepositedMargin);
   const compactNetBalance = useAppSelector(selectCompactNetBalance);
   const compactRealizedPnL = useAppSelector(selectCompactRealizedPnL);
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
@@ -75,9 +75,9 @@ export const SettleDetails: React.FunctionComponent = () => {
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={`${compactMargin.compactMarginSuffix}${token}`}
+          token={`${compactDepositedMargin.compactDepositedMarginSuffix}${token}`}
           typographyToken="secondaryBodySmallRegular"
-          value={compactMargin.compactMarginNumber}
+          value={compactDepositedMargin.compactDepositedMarginNumber}
         />
       </DetailBox>
       <DetailBox>
