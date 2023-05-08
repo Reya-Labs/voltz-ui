@@ -3,6 +3,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useState } from 'react';
 
 import { actions, selectors } from '../../../app';
+import { initializeSettleFlowAction } from '../../../app/features/settle-flow';
 import { closeTransactionAction } from '../../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { Loading } from '../../../components/atomic/Loading/Loading';
@@ -13,6 +14,8 @@ import { PendingTransaction } from '../../../components/interface/PendingTransac
 import { Agents } from '../../../contexts/AgentContext/types';
 import { useWallet } from '../../../hooks/useWallet';
 import { colors } from '../../../theme';
+import { SettleFlow } from '../../../ui/components/SettleFlow';
+import { isSettleFlowEnabled } from '../../../utilities/isEnvVarProvided/is-settle-flow-enabled';
 import { routes } from '../../paths';
 import { PortfolioHeader } from './PortfolioHeader/PortfolioHeader';
 import { PositionTable } from './PositionTable/PositionTable';
@@ -42,6 +45,16 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
   const handleSettle = useCallback(
     (position: Position) => {
+      if (isSettleFlowEnabled()) {
+        dispatch(
+          initializeSettleFlowAction({
+            position,
+            variant: 'trader',
+          }),
+        );
+        return;
+      }
+
       const positionAmm = position.amm;
       const transaction = {
         notional: 0,
@@ -121,6 +134,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   const renderPositionTable = () => {
     return (
       <>
+        <SettleFlow />
         <PortfolioHeader positions={positions} />
         <Box sx={{ marginTop: (theme) => theme.spacing(14) }}>
           <PositionTable
