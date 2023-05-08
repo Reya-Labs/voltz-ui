@@ -28,7 +28,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
           value={
             infoPostLp.status === 'success' ? formatNumber(infoPostLp.value.gasFeeETH, 2, 4) : '--'
           }
-        ></TokenTypography>
+        />
       </TransactionDetailBox>
     </React.Fragment>
   );

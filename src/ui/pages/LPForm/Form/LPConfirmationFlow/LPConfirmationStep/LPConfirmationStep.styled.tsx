@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const LpConfirmationStepBox = styled('div')`
   display: flex;
@@ -29,12 +28,6 @@ export const LpDetailsBox = styled('div')`
   align-items: flex-start;
   padding: 0px;
   gap: 16px;
-`;
-
-export const HorizontalLine = styled('div')`
-  box-sizing: border-box;
-  width: 100%;
-  border: 1px solid ${colors.lavenderWeb5};
 `;
 
 export const LpFeeDetailsBox = styled('div')`

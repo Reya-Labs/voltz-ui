@@ -31,7 +31,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
           token={token}
           typographyToken="secondaryBodySmallRegular"
           value={feeFormatted}
-        ></TokenTypography>
+        />
       </TransactionDetailBox>
       <TransactionDetailBox>
         <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
@@ -42,7 +42,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={slippageFormatted}
-        ></TokenTypography>
+        />
       </TransactionDetailBox>
       <TransactionDetailBox>
         <IconTextWrapper>
@@ -60,7 +60,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
               ? formatNumber(infoPostSwap.value.gasFeeETH, 2, 4)
               : '--'
           }
-        ></TokenTypography>
+        />
       </TransactionDetailBox>
     </React.Fragment>
   );

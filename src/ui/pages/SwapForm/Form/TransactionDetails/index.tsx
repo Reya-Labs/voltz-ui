@@ -37,7 +37,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
             token={token}
             typographyToken="secondaryBodySmallRegular"
             value={feeFormatted}
-          ></TokenTypography>
+          />
         </TransactionDetailBox>
       )}
       {hideSlippage ? null : (
@@ -50,7 +50,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
             token="%"
             typographyToken="secondaryBodySmallRegular"
             value={slippageFormatted}
-          ></TokenTypography>
+          />
         </TransactionDetailBox>
       )}
       <TransactionDetailBox>
@@ -69,7 +69,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
               ? formatNumber(infoPostSwap.value.gasFeeETH, 2, 4)
               : '--'
           }
-        ></TokenTypography>
+        />
       </TransactionDetailBox>
     </React.Fragment>
   );
