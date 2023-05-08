@@ -98,7 +98,7 @@ export const selectCompactNetBalance = (state: RootState) => {
       compactNetBalanceNumber: '--',
     };
   }
-  const netBalance = position.margin + position.realizedPnLFromSwaps;
+  const netBalance = position.margin + position.settlementCashflow;
 
   const compactParts = formCompactFormatToParts(netBalance);
   return {
@@ -115,7 +115,7 @@ export const selectCompactRealizedPnL = (state: RootState) => {
       compactRealizedPnLNumber: '--',
     };
   }
-  const realizedPnL = position.realizedPnLFromSwaps + position.realizedPnLFromFeesPaid;
+  const realizedPnL = position.settlementCashflow;
 
   const compactParts = formCompactFormatToParts(realizedPnL);
   return {
