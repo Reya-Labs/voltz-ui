@@ -34,7 +34,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   loadingPositions,
   handleCompletedSettling,
 }) => {
-  const { status } = useWallet();
+  const { status, account } = useWallet();
   const [positionStatus, setPositionStatus] = useState<PositionStatus>('open');
 
   const [positionToSettle, setPositionToSettle] = useState<
@@ -49,6 +49,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
         dispatch(
           initializeSettleFlowAction({
             position,
+            account,
           }),
         );
         return;

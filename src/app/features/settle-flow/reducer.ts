@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { InfoPostSettlePosition, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
+import { pushPageViewEvent } from './analytics';
 import { confirmSettleThunk, getInfoPostSettlePositionThunk } from './thunks';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
@@ -39,11 +40,16 @@ const slice = createSlice({
     initializeSettleFlowAction: (
       state,
       {
-        payload: { position },
+        payload: { position, account },
       }: PayloadAction<{
         position: Position;
+        account: null | string;
       }>,
     ) => {
+      pushPageViewEvent({
+        account: account || '',
+        isTrader: position.positionType !== 3,
+      });
       state.step = 'confirmation';
       state.error = null;
       state.txHash = null;
