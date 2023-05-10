@@ -102,6 +102,15 @@ export const selectProspectiveSwapFeeFormatted = (state: RootState) => {
   return '--';
 };
 
+export const selectGasFeeETHFormatted = (state: RootState) => {
+  const infoPostSwap = state.swapForm.prospectiveSwap.infoPostSwap;
+  if (infoPostSwap.status === 'success') {
+    return formatNumber(infoPostSwap.value.gasFeeETH, 2, 4);
+  }
+
+  return '--';
+};
+
 export const selectLeverage = (state: RootState) => state.swapForm.userInput.leverage;
 export const selectInfoPostSwap = (state: RootState) => state.swapForm.prospectiveSwap.infoPostSwap;
 export const selectInfoPostSwapAverageFixedRate = (state: RootState) =>

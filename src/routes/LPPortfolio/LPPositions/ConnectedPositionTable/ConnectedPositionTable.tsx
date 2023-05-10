@@ -3,6 +3,7 @@ import { Position } from '@voltz-protocol/v1-sdk';
 import React, { ReactNode, useCallback, useState } from 'react';
 
 import { actions, selectors } from '../../../../app';
+import { initializeSettleFlowAction } from '../../../../app/features/settle-flow';
 import { closeTransactionAction } from '../../../../app/features/transactions';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Loading } from '../../../../components/atomic/Loading/Loading';
@@ -11,6 +12,8 @@ import { RouteLink } from '../../../../components/atomic/RouteLink/RouteLink';
 import { PendingTransaction } from '../../../../components/interface/PendingTransaction/PendingTransaction';
 import { Agents } from '../../../../contexts/AgentContext/types';
 import { useWallet } from '../../../../hooks/useWallet';
+import { SettleFlow } from '../../../../ui/components/SettleFlow';
+import { isSettleFlowEnabled } from '../../../../utilities/isEnvVarProvided/is-settle-flow-enabled';
 import { routes } from '../../../paths';
 import { NoPositionsOrVaultsFound } from '../../NoPositionsOrVaultsFound/NoPositionsOrVaultsFound';
 import { PortfolioHeader } from './PortfolioHeader/PortfolioHeader';
@@ -31,7 +34,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
   loadingPositions,
   handleCompletedSettling,
 }) => {
-  const { status } = useWallet();
+  const { status, account } = useWallet();
   const [positionStatus, setPositionStatus] = useState<PositionStatus>('open');
 
   const [positionToSettle, setPositionToSettle] = useState<
@@ -42,6 +45,15 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
   const handleSettle = useCallback(
     (position: Position) => {
+      if (isSettleFlowEnabled()) {
+        dispatch(
+          initializeSettleFlowAction({
+            position,
+            account,
+          }),
+        );
+        return;
+      }
       const positionAmm = position.amm;
       const transaction = {
         notional: 0,
@@ -118,6 +130,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
 
     return (
       <>
+        <SettleFlow />
         <PortfolioHeader positions={positions} />
         <PositionStatusToggle status={positionStatus} onChange={setPositionStatus} />
         <Box sx={{ marginTop: (theme) => theme.spacing(6) }}>

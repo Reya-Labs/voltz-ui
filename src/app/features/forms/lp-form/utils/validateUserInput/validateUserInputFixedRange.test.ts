@@ -15,7 +15,7 @@ describe('validateUserInputFixedRange', () => {
     validateUserInputFixedRange(state as never);
 
     expect(state.userInput.fixedRange.error).toEqual(
-      'Fixed lower cannot be equal or higher than fixed upper',
+      'Fixed rate lower cannot be equal or higher than fixed upper',
     );
   });
 
@@ -33,7 +33,7 @@ describe('validateUserInputFixedRange', () => {
     validateUserInputFixedRange(state as never);
 
     expect(state.userInput.fixedRange.error).toEqual(
-      'Fixed lower cannot be equal or higher than fixed upper',
+      'Fixed rate lower cannot be equal or higher than fixed upper',
     );
   });
 

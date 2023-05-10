@@ -10,6 +10,7 @@ import { swapFormReducer } from './features/forms/trader/swap-form';
 import { historicalRatesReducer } from './features/historical-rates';
 import { lpOptimisersReducer } from './features/lp-optimisers';
 import { networkReducer } from './features/network';
+import { settleFlowReducer } from './features/settle-flow';
 import { tradingLeagueReducer } from './features/trading-league';
 import { saga, transactionsReducer } from './features/transactions';
 
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   lpForm: lpFormReducer,
   cashflowCalculator: cashflowCalculatorReducer,
   rolloverSwapForm: rolloverSwapFormReducer,
+  settleFlow: settleFlowReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

@@ -193,6 +193,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             realizedPnLTotal={realizedPnLTotal}
             typographyToken={typographyToken}
             underlyingTokenName={underlyingTokenName}
+            variant="trader"
           />
         </CashFlowBox>
         <CashFlowBox>

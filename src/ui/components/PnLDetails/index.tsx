@@ -3,11 +3,12 @@ import React from 'react';
 
 import { PnLDetailsBox, RowBox, RowsBox } from './PnLDetails.styled';
 
-type PnLDetailsProps = {
+export type PnLDetailsProps = {
   underlyingTokenName: string;
   pnlFromSwaps: string;
   pnlFromFees: string;
   pnlTotal: string;
+  variant: 'lp' | 'trader';
 };
 
 export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
@@ -15,11 +16,12 @@ export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
   pnlFromSwaps,
   pnlFromFees,
   pnlTotal,
+  variant,
 }) => {
   return (
     <PnLDetailsBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-        Realized PnL = Cashflow from Swaps + Fees
+        Realized PnL = Cashflow from Swaps {variant === 'lp' ? '+' : '-'} Fees
       </Typography>
       <RowsBox>
         <RowBox>

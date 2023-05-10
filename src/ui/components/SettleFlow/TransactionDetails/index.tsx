@@ -1,16 +1,15 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectInfoPostLp } from '../../../../../app/features/forms/lp-form';
-import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
+import { selectSettleGasFeeETH } from '../../../../app/features/settle-flow';
+import { useAppSelector } from '../../../../app/hooks';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 
 type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
-  const infoPostLp = useAppSelector(selectInfoPostLp);
+  const gasFeeETH = useAppSelector(selectSettleGasFeeETH);
 
   return (
     <React.Fragment>
@@ -18,16 +17,14 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         <IconTextWrapper>
           <GasIcon />
           <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-            Gas Fees
+            Gas Fee To Settle
           </Typography>
         </IconTextWrapper>
         <TokenTypography
           colorToken="lavenderWeb"
           token=" ETH"
           typographyToken="secondaryBodySmallRegular"
-          value={
-            infoPostLp.status === 'success' ? formatNumber(infoPostLp.value.gasFeeETH, 2, 4) : '--'
-          }
+          value={gasFeeETH}
         />
       </TransactionDetailBox>
     </React.Fragment>

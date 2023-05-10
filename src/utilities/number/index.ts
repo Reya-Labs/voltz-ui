@@ -114,12 +114,12 @@ export const compactFormat = (
   minimumFractionDigits: number = 0,
   maximumFractionDigits: number = 2,
 ): string => {
-  const formatter = Intl.NumberFormat(navigator.language, {
-    notation: 'compact',
-    maximumFractionDigits,
+  const { compactNumber, compactSuffix } = compactFormatToParts(
+    value,
     minimumFractionDigits,
-  });
-  return formatter.format(value);
+    maximumFractionDigits,
+  );
+  return `${compactNumber}${compactSuffix}`;
 };
 
 /**
@@ -142,21 +142,51 @@ export const compactFormatToParts = (
   compactNumber: string;
   compactSuffix: string;
 } => {
-  const formatter = Intl.NumberFormat(navigator.language, {
+  // Create formatter instances for the 'en-US' locale and the user's locale
+  const enUsFormatter = new Intl.NumberFormat('en-US', {
     notation: 'compact',
     maximumFractionDigits,
     minimumFractionDigits,
   });
-  const parts = formatter.formatToParts(number);
+  const localeFormatter = new Intl.NumberFormat(navigator.language, {
+    notation: 'compact',
+    maximumFractionDigits,
+    minimumFractionDigits,
+  });
+
+  // Get the parts of the formatted number for both locales
+  const enUsNumberParts = enUsFormatter.formatToParts(number);
+  const localeNumberParts = localeFormatter.formatToParts(number);
+
+  // Extract the non-compact parts of the formatted numbers for both locales
+  const enUsNumberValue = enUsNumberParts
+    .filter((part) => part.type !== 'compact')
+    .map(({ value }) => value)
+    .join('')
+    .trim();
+  const localeNumberValue = localeNumberParts
+    .filter((part) => part.type !== 'compact')
+    .map(({ value }) => value)
+    .join('')
+    .trim();
+
+  // Determine which formatted number to use based on the user's locale
+  const compactNumber =
+    enUsNumberValue === localeNumberValue
+      ? enUsNumberValue
+      : enUsNumberValue.indexOf('.') === localeNumberValue.indexOf(',')
+      ? localeNumberValue
+      : enUsNumberValue;
+
+  // Get the compact suffix for the formatted number
+  const compactSuffix = enUsNumberParts
+    .filter((part) => part.type === 'compact')
+    .map(({ value }) => value)
+    .join('');
+
   return {
-    compactNumber: parts
-      .filter((part) => part.type !== 'compact')
-      .map(({ value }) => value)
-      .join(''),
-    compactSuffix: parts
-      .filter((part) => part.type === 'compact')
-      .map(({ value }) => value)
-      .join(''),
+    compactNumber,
+    compactSuffix,
   };
 };
 

@@ -13,7 +13,7 @@ import {
 } from '../../../../../app/features/forms/lp-form';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
-import { PnLDetails } from './PnLDetails';
+import { PnLDetailsWithTooltip } from '../../../../components/PnLDetailsWithTooltip';
 import {
   BorderedBox,
   NotionalBox,
@@ -114,22 +114,14 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           />
         </BorderedBox>
         <BorderedBox>
-          <LabelTokenTypography
-            colorToken={realizedPnLTotal.indexOf('-') !== -1 ? 'wildStrawberry' : 'skyBlueCrayola'}
-            label="Realized PnL"
-            labelColorToken="lavenderWeb3"
+          <PnLDetailsWithTooltip
             labelTypographyToken={labelTypographyToken}
-            token={` ${underlyingTokenName.toUpperCase()}`}
-            tooltip={
-              <PnLDetails
-                pnlFromFees={realizedPnLFromFees}
-                pnlFromSwaps={realizedPnLFromSwaps}
-                pnlTotal={realizedPnLTotal}
-                underlyingTokenName={underlyingTokenName}
-              />
-            }
+            realizedPnLFromFees={realizedPnLFromFees}
+            realizedPnLFromSwaps={realizedPnLFromSwaps}
+            realizedPnLTotal={realizedPnLTotal}
             typographyToken={typographyToken}
-            value={realizedPnLTotal}
+            underlyingTokenName={underlyingTokenName}
+            variant="lp"
           />
         </BorderedBox>
       </PositionDetailsRightBox>

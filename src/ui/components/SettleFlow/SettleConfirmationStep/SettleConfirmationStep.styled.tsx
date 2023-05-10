@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const LpConfirmationStepBox = styled('div')`
+export const ConfirmationStepBox = styled('div')`
   display: flex;
   box-sizing: border-box;
   width: 100%;
@@ -20,7 +20,7 @@ export const TitleBox = styled('div')`
   padding: 0px;
 `;
 
-export const LpDetailsBox = styled('div')`
+export const DetailsBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
   display: flex;
@@ -30,7 +30,7 @@ export const LpDetailsBox = styled('div')`
   gap: 16px;
 `;
 
-export const LpFeeDetailsBox = styled('div')`
+export const FeeDetailsBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
   display: flex;

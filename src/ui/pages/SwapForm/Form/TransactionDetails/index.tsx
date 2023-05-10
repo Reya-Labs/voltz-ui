@@ -3,24 +3,23 @@ import React from 'react';
 
 import {
   selectAMMTokenFormatted,
-  selectInfoPostSwap,
+  selectGasFeeETHFormatted,
   selectProspectiveSwapFeeFormatted,
   selectSlippageFormatted,
   selectSubmitButtonInfo,
 } from '../../../../../app/features/forms/trader/swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 
 type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
-  const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const token = useAppSelector(selectAMMTokenFormatted);
   const submitButtonInfo = useAppSelector(selectSubmitButtonInfo);
   const slippageFormatted = useAppSelector(selectSlippageFormatted);
   const feeFormatted = useAppSelector(selectProspectiveSwapFeeFormatted);
+  const gasFeeETHFormatted = useAppSelector(selectGasFeeETHFormatted);
 
   const hideFees = submitButtonInfo.state === 'margin-update';
   const hideSlippage = submitButtonInfo.state === 'margin-update';
@@ -37,7 +36,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
             token={token}
             typographyToken="secondaryBodySmallRegular"
             value={feeFormatted}
-          ></TokenTypography>
+          />
         </TransactionDetailBox>
       )}
       {hideSlippage ? null : (
@@ -50,7 +49,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
             token="%"
             typographyToken="secondaryBodySmallRegular"
             value={slippageFormatted}
-          ></TokenTypography>
+          />
         </TransactionDetailBox>
       )}
       <TransactionDetailBox>
@@ -64,12 +63,8 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
           colorToken="lavenderWeb"
           token=" ETH"
           typographyToken="secondaryBodySmallRegular"
-          value={
-            infoPostSwap.status === 'success'
-              ? formatNumber(infoPostSwap.value.gasFeeETH, 2, 4)
-              : '--'
-          }
-        ></TokenTypography>
+          value={gasFeeETHFormatted}
+        />
       </TransactionDetailBox>
     </React.Fragment>
   );
