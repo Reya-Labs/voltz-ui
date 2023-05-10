@@ -50,7 +50,7 @@ export const SettleDetails: React.FunctionComponent = () => {
         <React.Fragment>
           <DetailBox>
             <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-              Fixed Low
+              Fixed Rate Low
             </Typography>
             <TokenTypography
               colorToken="lavenderWeb"
@@ -61,7 +61,7 @@ export const SettleDetails: React.FunctionComponent = () => {
           </DetailBox>
           <DetailBox>
             <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-              Fixed High
+              Fixed Rate High
             </Typography>
             <TokenTypography
               colorToken="lavenderWeb"
