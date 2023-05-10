@@ -1,4 +1,4 @@
-import { TokenTypography, Typography } from 'brokoli-ui';
+import { TokenTypography, Typography, TypographyWithTooltip } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -10,9 +10,11 @@ import {
   selectCompactRealizedPnL,
   selectFixedLower,
   selectFixedUpper,
+  selectSettleAMM,
   selectSettleVariant,
 } from '../../../../app/features/settle-flow';
 import { useAppSelector } from '../../../../app/hooks';
+import { PnLDetails } from '../../PnLDetails';
 import { DetailBox, DetailsBox } from './SettleDetails.styled';
 
 export const SettleDetails: React.FunctionComponent = () => {
@@ -25,8 +27,9 @@ export const SettleDetails: React.FunctionComponent = () => {
   const fixedLower = useAppSelector(selectFixedLower);
   const fixedUpper = useAppSelector(selectFixedUpper);
   const variant = useAppSelector(selectSettleVariant);
+  const aMM = useAppSelector(selectSettleAMM);
 
-  if (!variant) {
+  if (!variant || !aMM) {
     return null;
   }
 
@@ -70,9 +73,14 @@ export const SettleDetails: React.FunctionComponent = () => {
         </React.Fragment>
       ) : null}
       <DetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          Margin
-        </Typography>
+        <TypographyWithTooltip
+          colorToken="lavenderWeb"
+          tooltip="Deposited Margin = Margin Provided at any time - Margin Removed at any time"
+          tooltipColorToken="lavenderWeb2"
+          typographyToken="primaryBodySmallRegular"
+        >
+          Deposited Margin
+        </TypographyWithTooltip>
         <TokenTypography
           colorToken="lavenderWeb"
           token={`${compactDepositedMargin.compactDepositedMarginSuffix}${token}`}
@@ -81,26 +89,44 @@ export const SettleDetails: React.FunctionComponent = () => {
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <TypographyWithTooltip
+          colorToken="lavenderWeb"
+          tooltip={
+            <PnLDetails
+              pnlFromFees={compactRealizedPnL.compactRealizedPnLFees}
+              pnlFromSwaps={compactRealizedPnL.compactRealizedPnLSwaps}
+              pnlTotal={`${compactRealizedPnL.compactRealizedPnLTotal} ${compactRealizedPnL.compactRealizedPnLSuffix}`}
+              underlyingTokenName={aMM.underlyingToken.name}
+              variant={variant}
+            />
+          }
+          tooltipColorToken="lavenderWeb2"
+          typographyToken="primaryBodySmallRegular"
+        >
           Realized PnL
-        </Typography>
+        </TypographyWithTooltip>
         <TokenTypography
           colorToken={
-            compactRealizedPnL.compactRealizedPnLNumber === '--'
+            compactRealizedPnL.compactRealizedPnLTotal === '--'
               ? 'lavenderWeb'
-              : compactRealizedPnL.compactRealizedPnLNumber.indexOf('-') !== -1
+              : compactRealizedPnL.compactRealizedPnLTotal.indexOf('-') !== -1
               ? 'wildStrawberry'
               : 'skyBlueCrayola'
           }
           token={`${compactRealizedPnL.compactRealizedPnLSuffix}${token}`}
           typographyToken="secondaryBodySmallRegular"
-          value={compactRealizedPnL.compactRealizedPnLNumber}
+          value={compactRealizedPnL.compactRealizedPnLTotal}
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          Net Balance
-        </Typography>
+        <TypographyWithTooltip
+          colorToken="lavenderWeb"
+          tooltip="Settling Balance = Deposited Margin + Realized PnL"
+          tooltipColorToken="lavenderWeb2"
+          typographyToken="primaryBodySmallRegular"
+        >
+          Settling Balance
+        </TypographyWithTooltip>
         <TokenTypography
           colorToken={
             compactNetBalance.compactNetBalanceNumber === '--'

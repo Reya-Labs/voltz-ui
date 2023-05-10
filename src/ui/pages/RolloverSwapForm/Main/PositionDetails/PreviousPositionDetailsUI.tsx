@@ -4,10 +4,10 @@ import React from 'react';
 import {
   selectPreviousPositionCompactNotional,
   selectPreviousPositionDepositedMargin,
-  selectPreviousPositionNetBalance,
   selectPreviousPositionRealizedPnLFromFeesFormatted,
   selectPreviousPositionRealizedPnLFromSwapsFormatted,
   selectPreviousPositionRealizedPnLTotalFormatted,
+  selectPreviousPositionSettlingBalance,
   selectPreviousPositionSwapMode,
 } from '../../../../../app/features/forms/trader/rollover-swap-form';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -41,10 +41,11 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
   const compactNotional = useAppSelector(selectPreviousPositionCompactNotional);
   const mode = useAppSelector(selectPreviousPositionSwapMode);
   const compactDepositedMargin = useAppSelector(selectPreviousPositionDepositedMargin);
-  const compactNetBalance = useAppSelector(selectPreviousPositionNetBalance);
+  const compactSettlingBalance = useAppSelector(selectPreviousPositionSettlingBalance);
   const realizedPnLTotal = useAppSelector(selectPreviousPositionRealizedPnLTotalFormatted);
   const realizedPnLFromFees = useAppSelector(selectPreviousPositionRealizedPnLFromFeesFormatted);
   const realizedPnLFromSwaps = useAppSelector(selectPreviousPositionRealizedPnLFromSwapsFormatted);
+  const token = ` ${underlyingTokenName.toUpperCase()}`;
 
   return (
     <PositionDetailsBox>
@@ -66,11 +67,7 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
             label="Notional"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
-            token={
-              compactNotional
-                ? `${compactNotional.compactNotionalSuffix} ${underlyingTokenName.toUpperCase()}`
-                : ` ${underlyingTokenName.toUpperCase()}`
-            }
+            token={compactNotional ? `${compactNotional.compactNotionalSuffix}${token}` : token}
             typographyToken={typographyToken}
             value={compactNotional ? compactNotional.compactNotionalNumber : '--'}
           />
@@ -83,11 +80,11 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
             labelTypographyToken={labelTypographyToken}
             token={
               compactDepositedMargin
-                ? `${
-                    compactDepositedMargin.compactDepositedMarginSuffix
-                  } ${underlyingTokenName.toUpperCase()}`
-                : ` ${underlyingTokenName.toUpperCase()}`
+                ? `${compactDepositedMargin.compactDepositedMarginSuffix}${token}`
+                : token
             }
+            tooltip="Deposited Margin = Margin Provided at any time - Margin Removed at any time"
+            tooltipColorToken="lavenderWeb2"
             typographyToken={typographyToken}
             value={
               compactDepositedMargin ? compactDepositedMargin.compactDepositedMarginNumber : '--'
@@ -102,23 +99,22 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
             realizedPnLTotal={realizedPnLTotal}
             typographyToken={typographyToken}
             underlyingTokenName={underlyingTokenName}
+            variant="lp"
           />
         </RealisedPNLBox>
         <CashFlowBox>
           <LabelTokenTypography
             colorToken="lavenderWeb"
-            label="Net Balance"
+            label="Settling Balance"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={
-              compactNetBalance
-                ? `${
-                    compactNetBalance.compactNetBalanceSuffix
-                  } ${underlyingTokenName.toUpperCase()}`
-                : ` ${underlyingTokenName.toUpperCase()}`
+              compactSettlingBalance ? `${compactSettlingBalance.compactSuffix}${token}` : token
             }
+            tooltip="Settling Balance = Deposited Margin + Realized PnL"
+            tooltipColorToken="lavenderWeb2"
             typographyToken={typographyToken}
-            value={compactNetBalance ? compactNetBalance.compactNetBalanceNumber : '--'}
+            value={compactSettlingBalance ? compactSettlingBalance.compactNumber : '--'}
           />
         </CashFlowBox>
       </PositionDetailsRightBox>

@@ -6,7 +6,7 @@ import { formFormatNumber } from '../../../../../../../app/features/forms/common
 import { PositionBadge } from '../../../../../../../components/atomic/PositionBadge/PositionBadge';
 import { IconLabel } from '../../../../../../../components/composite/IconLabel/IconLabel';
 import { SystemStyleObject, Theme } from '../../../../../../../theme';
-import { PnLDetails } from '../../../../../../../ui/pages/LPForm/Main/PositionDetails/PnLDetails';
+import { PnLDetails } from '../../../../../../../ui/components/PnLDetails';
 import { formatNumber } from '../../../../../../../utilities/number';
 import { HealthFactorText } from './HealthFactorText/HealthFactorText';
 import {
@@ -89,6 +89,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
                 pnlFromSwaps={formFormatNumber(realizedPnLFromSwapsInUSD)}
                 pnlTotal={formFormatNumber(realizedPnLTotalInUSD)}
                 underlyingTokenName={underlyingTokenName}
+                variant="lp"
               />
             }
             label={

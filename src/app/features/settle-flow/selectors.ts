@@ -117,15 +117,23 @@ export const selectCompactRealizedPnL = (state: RootState) => {
   if (position === null) {
     return {
       compactRealizedPnLSuffix: '',
-      compactRealizedPnLNumber: '--',
+      compactRealizedPnLTotal: '--',
+      compactRealizedPnLFees: '--',
+      compactRealizedPnLSwaps: '--',
     };
   }
-  const realizedPnL =
-    position.settlementCashflow + position.fees + position.realizedPnLFromFeesPaid;
+  const fees = position.fees + position.realizedPnLFromFeesPaid;
+  const realizedPnL = position.settlementCashflow + fees;
 
-  const compactParts = formCompactFormatToParts(realizedPnL);
+  const compactPartsTotal = formCompactFormatToParts(realizedPnL);
+  const compactPartsFees = formCompactFormatToParts(
+    position.fees + position.realizedPnLFromFeesPaid,
+  );
+  const compactPartsSwaps = formCompactFormatToParts(position.settlementCashflow);
   return {
-    compactRealizedPnLSuffix: compactParts.compactSuffix,
-    compactRealizedPnLNumber: compactParts.compactNumber,
+    compactRealizedPnLSuffix: compactPartsTotal.compactSuffix,
+    compactRealizedPnLTotal: compactPartsTotal.compactNumber,
+    compactRealizedPnLFees: `${compactPartsFees.compactNumber}${compactPartsFees.compactSuffix}`,
+    compactRealizedPnLSwaps: `${compactPartsSwaps.compactNumber}${compactPartsFees.compactSuffix}`,
   };
 };

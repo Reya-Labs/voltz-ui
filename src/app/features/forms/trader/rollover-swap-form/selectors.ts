@@ -164,17 +164,17 @@ export const selectPreviousPositionDepositedMargin = (state: RootState) => {
   };
 };
 
-export const selectPreviousPositionNetBalance = (state: RootState) => {
+export const selectPreviousPositionSettlingBalance = (state: RootState) => {
   const position = state.rolloverSwapForm.previousPosition;
   if (!position) {
     return null;
   }
-  const netBalance = position.margin + position.realizedPnLFromSwaps;
-  const compactParts = formCompactFormatToParts(netBalance);
+  const settlingBalance = position.margin + position.realizedPnLFromSwaps;
+  const compactParts = formCompactFormatToParts(settlingBalance);
 
   return {
-    compactNetBalanceSuffix: compactParts.compactSuffix,
-    compactNetBalanceNumber: compactParts.compactNumber,
+    compactSuffix: compactParts.compactSuffix,
+    compactNumber: compactParts.compactNumber,
   };
 };
 
