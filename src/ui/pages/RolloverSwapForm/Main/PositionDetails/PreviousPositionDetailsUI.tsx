@@ -75,7 +75,7 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
         <DepositedMarginBox>
           <LabelTokenTypography
             colorToken="lavenderWeb"
-            label="Deposited margin"
+            label="Deposited Margin"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={
