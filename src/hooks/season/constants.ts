@@ -86,4 +86,5 @@ export const SEASONS: Record<SupportedChainId, Season[]> = {
   [SupportedChainId.arbitrumGoerli]: arbitrumSeasons,
   [SupportedChainId.goerli]: ethSeasons,
   [SupportedChainId.mainnet]: ethSeasons,
+  [SupportedChainId.avalanche]: [],
 };

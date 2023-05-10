@@ -54,6 +54,11 @@ export const ArbitrumIcon = styled(Arbitrum)`
   height: 24px;
 `;
 
+export const AvalancheIcon = styled(Ethereum)`
+  width: 24px;
+  height: 24px;
+`;
+
 export const NetworkTypography = styled(Typography)`
   font-family: 'PixelOperatorMono', monospace;
   font-style: normal;

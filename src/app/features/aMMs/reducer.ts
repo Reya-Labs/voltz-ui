@@ -36,36 +36,42 @@ const initialState: SliceState = {
     [SupportedChainId.goerli]: 'idle',
     [SupportedChainId.arbitrum]: 'idle',
     [SupportedChainId.arbitrumGoerli]: 'idle',
+    [SupportedChainId.avalanche]: 'idle',
   },
   aMMs: {
     [SupportedChainId.mainnet]: [],
     [SupportedChainId.goerli]: [],
     [SupportedChainId.arbitrum]: [],
     [SupportedChainId.arbitrumGoerli]: [],
+    [SupportedChainId.avalanche]: [],
   },
   filters: {
     [SupportedChainId.mainnet]: { ...initialFilters },
     [SupportedChainId.goerli]: { ...initialFilters },
     [SupportedChainId.arbitrum]: { ...initialFilters },
     [SupportedChainId.arbitrumGoerli]: { ...initialFilters },
+    [SupportedChainId.avalanche]: { ...initialFilters },
   },
   sortingDirection: {
     [SupportedChainId.mainnet]: { ...initialSortingDirection },
     [SupportedChainId.goerli]: { ...initialSortingDirection },
     [SupportedChainId.arbitrum]: { ...initialSortingDirection },
     [SupportedChainId.arbitrumGoerli]: { ...initialSortingDirection },
+    [SupportedChainId.avalanche]: { ...initialSortingDirection },
   },
   poolsInformationLoadedState: {
     [SupportedChainId.mainnet]: 'idle',
     [SupportedChainId.goerli]: 'idle',
     [SupportedChainId.arbitrum]: 'idle',
     [SupportedChainId.arbitrumGoerli]: 'idle',
+    [SupportedChainId.avalanche]: 'idle',
   },
   poolsInformation: {
     [SupportedChainId.mainnet]: { ...initialPoolsInformation },
     [SupportedChainId.goerli]: { ...initialPoolsInformation },
     [SupportedChainId.arbitrum]: { ...initialPoolsInformation },
     [SupportedChainId.arbitrumGoerli]: { ...initialPoolsInformation },
+    [SupportedChainId.avalanche]: { ...initialPoolsInformation },
   },
 };
 

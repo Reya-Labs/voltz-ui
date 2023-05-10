@@ -1,7 +1,7 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
-import { ArbitrumIcon, EthereumIcon } from './NetworkSelector.styled';
+import { ArbitrumIcon, AvalancheIcon, EthereumIcon } from './NetworkSelector.styled';
 
 export const chainOptionsConfiguration: Record<
   number,
@@ -25,5 +25,9 @@ export const chainOptionsConfiguration: Record<
   [SupportedChainId.arbitrumGoerli]: {
     name: 'Görli Arbitrum',
     Icon: ArbitrumIcon,
+  },
+  [SupportedChainId.avalanche]: {
+    name: 'Avalanche',
+    Icon: AvalancheIcon,
   },
 };

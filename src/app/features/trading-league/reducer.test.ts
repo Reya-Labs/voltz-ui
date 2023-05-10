@@ -10,12 +10,14 @@ const mockState: SliceState = {
     [SupportedChainId.goerli]: 'idle',
     [SupportedChainId.arbitrum]: 'idle',
     [SupportedChainId.arbitrumGoerli]: 'idle',
+    [SupportedChainId.avalanche]: 'idle',
   },
   rankings: {
     [SupportedChainId.mainnet]: [],
     [SupportedChainId.goerli]: [],
     [SupportedChainId.arbitrum]: [],
     [SupportedChainId.arbitrumGoerli]: [],
+    [SupportedChainId.avalanche]: [],
   },
 };
 
