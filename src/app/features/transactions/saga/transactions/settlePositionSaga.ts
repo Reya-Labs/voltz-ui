@@ -1,25 +1,22 @@
-import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt, providers } from 'ethers';
 import isUndefined from 'lodash.isundefined';
 import { DateTime } from 'luxon';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 
 import { getErrorMessage } from '../../../../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../../../../utilities/sentry';
 import { SettlePositionAction } from '../../../../types';
-import { selectChainId } from '../../../network';
 import { updateTransactionAction } from '../../actions';
 import { deserializeAmm, getSigner } from '../../utilities';
 
 export function* settlePositionSaga(action: SettlePositionAction) {
   const signer: providers.JsonRpcSigner | null = getSigner();
-  const chainId = (yield select(selectChainId)) as SupportedChainId;
 
-  if (!signer || !chainId) {
+  if (!signer) {
     return;
   }
 
-  const amm = deserializeAmm(action.payload.amm, signer, chainId);
+  const amm = deserializeAmm(action.payload.amm, signer);
 
   if (!amm || !amm.signer) {
     return;

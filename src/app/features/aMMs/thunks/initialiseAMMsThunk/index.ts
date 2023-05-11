@@ -7,13 +7,17 @@ import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
 export const initialiseAMMsThunk = createAsyncThunk<
   Awaited<ReturnType<typeof getAMMs> | ReturnType<typeof rejectThunkWithError>>,
   {
-    chainId: SupportedChainId;
+    chainIds: SupportedChainId[];
   }
->('aMMs/initialiseAMMs', async ({ chainId }, thunkAPI) => {
+>('aMMs/initialiseAMMs', async ({ chainIds }, thunkAPI) => {
+  if (chainIds.length === 0) {
+    return [];
+  }
+
   try {
     const { amms, error } = await getAMMs({
-      chainId,
-      alchemyApiKey: getAlchemyKeyForChain(chainId),
+      chainIds,
+      alchemyApiKey: getAlchemyKeyForChain(chainIds[0]),
     });
     if (error) {
       return rejectThunkWithError(thunkAPI, error);

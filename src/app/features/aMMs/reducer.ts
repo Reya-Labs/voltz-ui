@@ -19,60 +19,21 @@ import {
 } from './types';
 
 type SliceState = {
-  aMMsLoadedState: Record<SupportedChainId, 'idle' | 'pending' | 'succeeded' | 'failed'>;
-  aMMs: Record<SupportedChainId, AMM[]>;
-  filters: Record<SupportedChainId, PoolFilters>;
-  sortingDirection: Record<SupportedChainId, PoolSorting>;
-  poolsInformationLoadedState: Record<
-    SupportedChainId,
-    'idle' | 'pending' | 'succeeded' | 'failed'
-  >;
-  poolsInformation: Record<SupportedChainId, PoolsInformation>;
+  aMMsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  aMMs: AMM[];
+  filters: PoolFilters;
+  sortingDirection: PoolSorting;
+  poolsInformationLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  poolsInformation: PoolsInformation;
 };
 
 const initialState: SliceState = {
-  aMMsLoadedState: {
-    [SupportedChainId.mainnet]: 'idle',
-    [SupportedChainId.goerli]: 'idle',
-    [SupportedChainId.arbitrum]: 'idle',
-    [SupportedChainId.arbitrumGoerli]: 'idle',
-    [SupportedChainId.avalanche]: 'idle',
-  },
-  aMMs: {
-    [SupportedChainId.mainnet]: [],
-    [SupportedChainId.goerli]: [],
-    [SupportedChainId.arbitrum]: [],
-    [SupportedChainId.arbitrumGoerli]: [],
-    [SupportedChainId.avalanche]: [],
-  },
-  filters: {
-    [SupportedChainId.mainnet]: { ...initialFilters },
-    [SupportedChainId.goerli]: { ...initialFilters },
-    [SupportedChainId.arbitrum]: { ...initialFilters },
-    [SupportedChainId.arbitrumGoerli]: { ...initialFilters },
-    [SupportedChainId.avalanche]: { ...initialFilters },
-  },
-  sortingDirection: {
-    [SupportedChainId.mainnet]: { ...initialSortingDirection },
-    [SupportedChainId.goerli]: { ...initialSortingDirection },
-    [SupportedChainId.arbitrum]: { ...initialSortingDirection },
-    [SupportedChainId.arbitrumGoerli]: { ...initialSortingDirection },
-    [SupportedChainId.avalanche]: { ...initialSortingDirection },
-  },
-  poolsInformationLoadedState: {
-    [SupportedChainId.mainnet]: 'idle',
-    [SupportedChainId.goerli]: 'idle',
-    [SupportedChainId.arbitrum]: 'idle',
-    [SupportedChainId.arbitrumGoerli]: 'idle',
-    [SupportedChainId.avalanche]: 'idle',
-  },
-  poolsInformation: {
-    [SupportedChainId.mainnet]: { ...initialPoolsInformation },
-    [SupportedChainId.goerli]: { ...initialPoolsInformation },
-    [SupportedChainId.arbitrum]: { ...initialPoolsInformation },
-    [SupportedChainId.arbitrumGoerli]: { ...initialPoolsInformation },
-    [SupportedChainId.avalanche]: { ...initialPoolsInformation },
-  },
+  aMMsLoadedState: 'idle',
+  aMMs: [],
+  filters: { ...initialFilters },
+  sortingDirection: { ...initialSortingDirection },
+  poolsInformationLoadedState: 'idle',
+  poolsInformation: { ...initialPoolsInformation },
 };
 
 const slice = createSlice({
@@ -88,7 +49,7 @@ const slice = createSlice({
         chainId: SupportedChainId;
       }>,
     ) => {
-      state.aMMs[chainId].forEach((aMM) => (aMM.signer = signer));
+      state.aMMs.forEach((aMM) => aMM.signer = (aMM.chainId === chainId) ? signer : null);
     },
     togglePoolFilterAction: (
       state,
@@ -99,7 +60,7 @@ const slice = createSlice({
         filterId: PoolFilterId;
       }>,
     ) => {
-      state.filters[chainId][filterId] = !state.filters[chainId][filterId];
+      state.filters[filterId] = !state.filters[filterId];
     },
     togglePoolSortingDirectionAction: (
       state,
@@ -111,7 +72,7 @@ const slice = createSlice({
       }>,
     ) => {
       let nextSort: PoolSortDirection = 'noSort';
-      const currentSort = state.sortingDirection[chainId][sortId];
+      const currentSort = state.sortingDirection[sortId];
       if (currentSort === 'noSort') {
         nextSort = 'ascending';
       }
@@ -122,7 +83,7 @@ const slice = createSlice({
         nextSort = 'ascending';
       }
 
-      state.sortingDirection[chainId] = {
+      state.sortingDirection = {
         ...resetSortingDirection,
         [sortId]: nextSort,
       };
@@ -130,29 +91,29 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(initialiseAMMsThunk.pending, (state, { meta }) => {
-        state.aMMsLoadedState[meta.arg.chainId] = 'pending';
+      .addCase(initialiseAMMsThunk.pending, (state) => {
+        state.aMMsLoadedState = 'pending';
       })
-      .addCase(initialiseAMMsThunk.rejected, (state, { meta }) => {
-        state.aMMsLoadedState[meta.arg.chainId] = 'failed';
-        state.aMMs[meta.arg.chainId] = [];
+      .addCase(initialiseAMMsThunk.rejected, (state) => {
+        state.aMMsLoadedState = 'failed';
+        state.aMMs = [];
       })
-      .addCase(initialiseAMMsThunk.fulfilled, (state, { payload, meta }) => {
-        state.aMMsLoadedState[meta.arg.chainId] = 'succeeded';
-        state.aMMs[meta.arg.chainId] = payload as Awaited<ReturnType<typeof getAMMs>>['amms'];
+      .addCase(initialiseAMMsThunk.fulfilled, (state, { payload }) => {
+        state.aMMsLoadedState = 'succeeded';
+        state.aMMs = payload as Awaited<ReturnType<typeof getAMMs>>['amms'];
       })
-      .addCase(fetchPoolsInformationThunk.pending, (state, { meta }) => {
-        state.poolsInformationLoadedState[meta.arg.chainId] = 'pending';
+      .addCase(fetchPoolsInformationThunk.pending, (state) => {
+        state.poolsInformationLoadedState = 'pending';
       })
-      .addCase(fetchPoolsInformationThunk.rejected, (state, { meta }) => {
-        state.poolsInformationLoadedState[meta.arg.chainId] = 'failed';
-        state.poolsInformation[meta.arg.chainId] = {
+      .addCase(fetchPoolsInformationThunk.rejected, (state) => {
+        state.poolsInformationLoadedState = 'failed';
+        state.poolsInformation = {
           ...initialPoolsInformation,
         };
       })
-      .addCase(fetchPoolsInformationThunk.fulfilled, (state, { payload, meta }) => {
-        state.poolsInformationLoadedState[meta.arg.chainId] = 'succeeded';
-        state.poolsInformation[meta.arg.chainId] = payload as PoolsInformation;
+      .addCase(fetchPoolsInformationThunk.fulfilled, (state, { payload }) => {
+        state.poolsInformationLoadedState = 'succeeded';
+        state.poolsInformation = payload as PoolsInformation;
       });
   },
 });
