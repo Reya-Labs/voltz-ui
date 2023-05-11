@@ -34,7 +34,8 @@ export const usePoolsInformation = (): UsePoolsInformationResult => {
     }
     void dispatch(
       fetchPoolsInformationThunk({
-        chainId,
+        // todo: populate with proper chain ids
+        chainIds: [1, 42161],
       }),
     );
   }, [chainId, poolsInformationLoadedState, dispatch]);

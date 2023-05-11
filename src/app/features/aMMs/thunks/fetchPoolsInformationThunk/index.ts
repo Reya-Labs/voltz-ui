@@ -6,11 +6,11 @@ import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
 export const fetchPoolsInformationThunk = createAsyncThunk<
   Awaited<ReturnType<typeof getChainLevelInformation> | ReturnType<typeof rejectThunkWithError>>,
   {
-    chainId: SupportedChainId;
+    chainIds: SupportedChainId[];
   }
->('aMMs/fetchPoolsInformation', async ({ chainId }, thunkAPI) => {
+>('aMMs/fetchPoolsInformation', async ({ chainIds }, thunkAPI) => {
   try {
-    return await getChainLevelInformation(chainId);
+    return await getChainLevelInformation(chainIds);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

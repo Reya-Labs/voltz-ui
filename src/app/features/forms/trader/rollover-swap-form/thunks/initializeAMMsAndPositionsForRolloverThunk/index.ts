@@ -39,8 +39,8 @@ export const initializeAMMsAndPositionsForRolloverThunkHandler: AsyncThunkPayloa
       account,
     });
 
-    const aMMs = thunkAPI.getState().aMMs.aMMs[chainId];
-    const aMMsLoadingState = thunkAPI.getState().aMMs.aMMsLoadedState[chainId];
+    const aMMs = thunkAPI.getState().aMMs.aMMs;
+    const aMMsLoadingState = thunkAPI.getState().aMMs.aMMsLoadedState;
     if (!aMMs || aMMs.length === 0 || aMMsLoadingState !== 'succeeded') {
       return {
         aMM: null,

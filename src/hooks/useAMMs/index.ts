@@ -30,19 +30,17 @@ export const useAMMs = (): UseAMMsResult => {
   const traderAMMs = useAppSelector(selectTraderAMMs);
 
   useEffect(() => {
-    if (!chainId) {
-      return;
-    }
     // only fetch aMMs once per network
     if (aMMsLoadedState !== 'idle') {
       return;
     }
     void dispatch(
       initialiseAMMsThunk({
-        chainId,
+        // todo: add proper chain ids
+        chainIds: [1, 42161],
       }),
     );
-  }, [chainId, aMMsLoadedState, dispatch]);
+  }, [aMMsLoadedState, dispatch]);
 
   useEffect(() => {
     if (!chainId) {
