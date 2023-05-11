@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Typography } from 'brokoli-ui';
 import React from 'react';
 
@@ -46,6 +47,7 @@ export const PoolsList: React.FunctionComponent = () => {
                   aMMMaturity={pool.aMMMaturity}
                   backgroundColorToken={index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8'}
                   borderColorToken={index % 2 !== 0 ? 'lavenderWeb8' : 'transparent'}
+                  chainId={SupportedChainId.avalanche}
                   fixedRateFormatted={pool.fixedAPRRateFormatted}
                   isAaveV3={pool.isAaveV3}
                   isBorrowing={pool.isBorrowing}

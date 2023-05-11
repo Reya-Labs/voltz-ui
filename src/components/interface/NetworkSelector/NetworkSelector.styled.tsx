@@ -5,6 +5,7 @@ import { colors } from '../../../theme';
 import { Typography } from '../../atomic/Typography/Typography';
 import { ReactComponent as Arbitrum } from './icons/arbitrum.svg';
 import { ReactComponent as Arrow } from './icons/arrow.svg';
+import { ReactComponent as Avalanche } from './icons/avalanche.svg';
 import { ReactComponent as Ethereum } from './icons/ethereum.svg';
 import { ReactComponent as Warning } from './icons/warning.svg';
 
@@ -54,7 +55,7 @@ export const ArbitrumIcon = styled(Arbitrum)`
   height: 24px;
 `;
 
-export const AvalancheIcon = styled(Ethereum)`
+export const AvalancheIcon = styled(Avalanche)`
   width: 24px;
   height: 24px;
 `;

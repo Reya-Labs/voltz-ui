@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
@@ -8,12 +9,16 @@ import {
   MarketTokenInformationProps,
 } from '../../../../components/MarketTokenInformation';
 import {
+  ArbitrumIcon,
+  AvalancheIcon,
   ButtonStyled,
+  ChainIconContainer,
   FixedAPRBox,
   LeftBox,
   MaturityBox,
   MiddleBox,
   PoolEntryBox,
+  PoolEntryBoxWrapper,
   RightBox,
   VariableAPYBox,
 } from './PoolEntry.styled';
@@ -32,11 +37,19 @@ type PoolEntryProps = {
   borderColorToken: ColorTokens | 'transparent';
   routeAmmId: string;
   routePoolId: string;
+  chainId: SupportedChainId;
 };
-
+const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
+  [SupportedChainId.mainnet]: null,
+  [SupportedChainId.goerli]: null,
+  [SupportedChainId.arbitrum]: ArbitrumIcon,
+  [SupportedChainId.arbitrumGoerli]: ArbitrumIcon,
+  [SupportedChainId.avalanche]: AvalancheIcon,
+};
 export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
   (
     {
+      chainId,
       isAaveV3,
       isBorrowing,
       market,
@@ -55,7 +68,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
   ) => {
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const navigate = useAppNavigate();
-
+    const ChainIcon = ChainIconMap[chainId];
     const typographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyLargeRegular'
       : 'secondaryBodyMediumRegular';
@@ -75,69 +88,75 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     };
 
     return (
-      <PoolEntryBox
-        ref={ref}
-        backgroundColorToken={backgroundColorToken}
-        borderColorToken={borderColorToken}
-      >
-        <LeftBox>
-          <MarketTokenInformation
-            colorToken="lavenderWeb"
-            iconSize={24}
-            isAaveV3={isAaveV3}
-            isBorrowing={isBorrowing}
-            isV2={isV2}
-            market={market}
-            pillVariant="compact"
-            token={token}
-            typographyToken="primaryBodyLargeBold"
-          />
-        </LeftBox>
-        <MiddleBox>
-          <FixedAPRBox>
-            <TokenTypography
+      <PoolEntryBoxWrapper ref={ref}>
+        {ChainIcon ? (
+          <ChainIconContainer>
+            <ChainIcon />
+          </ChainIconContainer>
+        ) : null}
+        <PoolEntryBox
+          backgroundColorToken={backgroundColorToken}
+          borderColorToken={borderColorToken}
+        >
+          <LeftBox>
+            <MarketTokenInformation
               colorToken="lavenderWeb"
-              token="%"
-              typographyToken={typographyToken}
-              value={fixedRateFormatted}
+              iconSize={24}
+              isAaveV3={isAaveV3}
+              isBorrowing={isBorrowing}
+              isV2={isV2}
+              market={market}
+              pillVariant="compact"
+              token={token}
+              typographyToken="primaryBodyLargeBold"
             />
-          </FixedAPRBox>
-          <VariableAPYBox>
-            <TokenTypography
-              colorToken="lavenderWeb"
-              differenceToken="%"
-              differenceValue={variableRate24hDelta}
-              token="%"
-              typographyToken={typographyToken}
-              value={variableRateFormatted}
-            />
-          </VariableAPYBox>
-          <MaturityBox>
-            <TokenTypography
-              colorToken="lavenderWeb"
-              token=""
-              typographyToken={typographyToken}
-              value={aMMMaturity}
-            />
-          </MaturityBox>
-        </MiddleBox>
-        <RightBox>
-          <ButtonStyled
-            typographyToken="primaryBodySmallBold"
-            variant="primary"
-            onClick={handleOnTradeClick}
-          >
-            Trade
-          </ButtonStyled>
-          <ButtonStyled
-            typographyToken="primaryBodySmallBold"
-            variant="secondary"
-            onClick={handleOnLPClick}
-          >
-            LP
-          </ButtonStyled>
-        </RightBox>
-      </PoolEntryBox>
+          </LeftBox>
+          <MiddleBox>
+            <FixedAPRBox>
+              <TokenTypography
+                colorToken="lavenderWeb"
+                token="%"
+                typographyToken={typographyToken}
+                value={fixedRateFormatted}
+              />
+            </FixedAPRBox>
+            <VariableAPYBox>
+              <TokenTypography
+                colorToken="lavenderWeb"
+                differenceToken="%"
+                differenceValue={variableRate24hDelta}
+                token="%"
+                typographyToken={typographyToken}
+                value={variableRateFormatted}
+              />
+            </VariableAPYBox>
+            <MaturityBox>
+              <TokenTypography
+                colorToken="lavenderWeb"
+                token=""
+                typographyToken={typographyToken}
+                value={aMMMaturity}
+              />
+            </MaturityBox>
+          </MiddleBox>
+          <RightBox>
+            <ButtonStyled
+              typographyToken="primaryBodySmallBold"
+              variant="primary"
+              onClick={handleOnTradeClick}
+            >
+              Trade
+            </ButtonStyled>
+            <ButtonStyled
+              typographyToken="primaryBodySmallBold"
+              variant="secondary"
+              onClick={handleOnLPClick}
+            >
+              LP
+            </ButtonStyled>
+          </RightBox>
+        </PoolEntryBox>
+      </PoolEntryBoxWrapper>
     );
   },
 );
