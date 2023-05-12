@@ -6,7 +6,6 @@ import {
   selectTotalLiquidityFormatted,
   selectVolume30DaysFormatted,
 } from '../../app/features/aMMs';
-import { selectChainId } from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 export type UsePoolsInformationResult = {
@@ -19,26 +18,17 @@ export type UsePoolsInformationResult = {
 
 export const usePoolsInformation = (): UsePoolsInformationResult => {
   const dispatch = useAppDispatch();
-  const chainId = useAppSelector(selectChainId);
   const poolsInformationLoadedState = useAppSelector(selectPoolsInformationLoadedState);
   const volume30DaysFormatted = useAppSelector(selectVolume30DaysFormatted);
   const totalLiquidityFormatted = useAppSelector(selectTotalLiquidityFormatted);
 
   useEffect(() => {
-    if (!chainId) {
-      return;
-    }
     // only fetch aMMs once per network
     if (poolsInformationLoadedState !== 'idle') {
       return;
     }
-    void dispatch(
-      fetchPoolsInformationThunk({
-        // todo: populate with proper chain ids
-        chainIds: [1, 42161],
-      }),
-    );
-  }, [chainId, poolsInformationLoadedState, dispatch]);
+    void dispatch(fetchPoolsInformationThunk());
+  }, [poolsInformationLoadedState, dispatch]);
 
   return {
     volume30DaysFormatted,
