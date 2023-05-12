@@ -24,7 +24,7 @@ export const AMMsProvider: React.FunctionComponent<AMMsProviderProps> = ({ child
           return variableApys.current[amm.id];
         }
         if (amm) {
-          const apy = await amm?.getInstantApy();
+          const apy = (await amm?.getInstantApy()).currentApy;
           variableApys.current[amm.id] = apy;
           return apy;
         }

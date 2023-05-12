@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { selectPools } from '../../../../../app/features/aMMs';
+import { selectPoolsOnCurrentChain } from '../../../../../app/features/aMMs';
 import { PoolUI } from '../../../../../app/features/aMMs/types';
 import {
   resetStateAction,
@@ -25,7 +25,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const variableRateFormatted = useAppSelector(selectVariableRateValueFormatted);
   const navigate = useAppNavigate();
   const dispatch = useAppDispatch();
-  const pools = useAppSelector(selectPools);
+  const pools = useAppSelector(selectPoolsOnCurrentChain);
 
   if (!aMM) {
     return null;

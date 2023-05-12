@@ -21,4 +21,7 @@ export const serializeAmm = (amm: AMM): SerializedAMM => ({
   },
   wethAddress: amm.wethAddress,
   minLeverageAllowed: amm.minLeverageAllowed,
+  chainId: amm.chainId,
+  traderVisible: amm.traderVisible,
+  traderWithdrawable: amm.traderWithdrawable,
 });

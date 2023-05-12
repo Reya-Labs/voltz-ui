@@ -162,6 +162,7 @@ export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<SupportedChainId, BadgeTypeBad
   [SupportedChainId.goerli]: ethereumBadgeTypeBadgeVariantMap,
   [SupportedChainId.arbitrum]: arbitrumTypeBadgeVariantMap,
   [SupportedChainId.arbitrumGoerli]: arbitrumTypeBadgeVariantMap,
+  [SupportedChainId.avalanche]: {},
 };
 
 export const NON_PROGRAMMATIC_BADGES_DISCORD: NonProgrammaticBadges[] = [
@@ -293,4 +294,12 @@ export const CHAIN_SEASON_BADGE_VARIANTS: Record<SupportedChainId, SeasonBadgeVa
   [SupportedChainId.goerli]: etherumChainSeasonBadgeVariants,
   [SupportedChainId.arbitrum]: arbitrumChainSeasonBadgeVariants,
   [SupportedChainId.arbitrumGoerli]: arbitrumChainSeasonBadgeVariants,
+  [SupportedChainId.avalanche]: {
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+  },
 };

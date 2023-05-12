@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../../hooks/useWallet';
 import { pushEvent } from '../../../../utilities/googleAnalytics';
-import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
+import { getAlchemyKey } from '../../../../utilities/network/get-alchemy-key';
 import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
@@ -79,7 +79,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
           : undefined,
         signer,
         chainId,
-        alchemyApiKey: getAlchemyKeyForChain(chainId),
+        alchemyApiKey: getAlchemyKey(),
       }).then(
         ({ receipt, newOptimiserState }) => {
           pushEvent(account ?? '', {
@@ -159,7 +159,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       threshold: selectedDeposit + vault.feePerDeposit,
       userAddress: account,
       chainId,
-      alchemyApiKey: getAlchemyKeyForChain(chainId),
+      alchemyApiKey: getAlchemyKey(),
     }).then(
       (resp) => {
         if (resp) {
@@ -189,7 +189,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       registration: hasUserOptedInOutAutoRollover ? automaticRolloverState === 'active' : undefined,
       signer,
       chainId,
-      alchemyApiKey: getAlchemyKeyForChain(chainId),
+      alchemyApiKey: getAlchemyKey(),
     })
       .then(({ gasEstimateUsd }) => {
         setDepositGasCost(gasEstimateUsd);

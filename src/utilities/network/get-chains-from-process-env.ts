@@ -2,7 +2,6 @@ import { isEnvVarProvided } from '../isEnvVarProvided';
 
 type NetworkConfigFromProcessENV = {
   network: string;
-  alchemyKey: string;
 };
 const cachedNetworkConfigs: Record<string, NetworkConfigFromProcessENV[] | undefined> = {};
 /**
@@ -15,7 +14,6 @@ export const getChainsFromProcessEnv = (
   networkConfigurationString = process.env.REACT_APP_NETWORK_SELECTOR_NETWORKS,
 ): {
   network: string;
-  alchemyKey: string;
 }[] => {
   if (!networkConfigurationString || !isEnvVarProvided(networkConfigurationString)) {
     return [];
@@ -28,10 +26,9 @@ export const getChainsFromProcessEnv = (
     .split(',')
     .filter((s) => s.trim())
     .map((s) => ({
-      network: s.split('/')[0].trim(),
-      alchemyKey: s.split('/')[1].trim(),
+      network: s,
     }))
-    .filter(({ network, alchemyKey }) => network && alchemyKey);
+    .filter(({ network }) => network);
 
   return cachedNetworkConfigs[networkConfigurationString]!;
 };

@@ -1,13 +1,12 @@
-import { AMM, getProvider, RateOracle, SupportedChainId, Token } from '@voltz-protocol/v1-sdk';
+import { AMM, getProvider, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
+import { getAlchemyKey } from '../../../../utilities/network/get-alchemy-key';
 import { SerializedAMM } from '../../../types';
 
 export const deserializeAmm = (
   serializedAmm: SerializedAMM,
   signer: providers.JsonRpcSigner,
-  chainId: SupportedChainId,
 ): AMM => {
   const {
     id,
@@ -24,12 +23,15 @@ export const deserializeAmm = (
     },
     wethAddress,
     minLeverageAllowed,
+    chainId,
+    traderVisible,
+    traderWithdrawable,
   } = serializedAmm;
 
   return new AMM({
     id,
     signer,
-    provider: getProvider(chainId, getAlchemyKeyForChain(chainId)),
+    provider: getProvider(chainId, getAlchemyKey()),
     termStartTimestampInMS: parseInt(termStartTimestampInMS, 10),
     termEndTimestampInMS: parseInt(termEndTimestampInMS, 10),
     tickSpacing: parseInt(tickSpacing, 10),
@@ -44,5 +46,8 @@ export const deserializeAmm = (
     }),
     wethAddress,
     minLeverageAllowed,
+    chainId,
+    traderVisible,
+    traderWithdrawable,
   });
 };

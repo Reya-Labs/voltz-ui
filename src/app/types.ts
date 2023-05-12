@@ -48,6 +48,7 @@ export type State = {
 };
 
 export type SerializedAMM = {
+  chainId: number;
   id: string;
   peripheryAddress: string;
   factoryAddress: string;
@@ -62,6 +63,8 @@ export type SerializedAMM = {
   };
   wethAddress: string;
   minLeverageAllowed: number;
+  traderVisible: boolean;
+  traderWithdrawable: boolean;
 };
 
 type ActionType =

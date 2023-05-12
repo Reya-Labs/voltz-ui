@@ -21,10 +21,9 @@ describe('getUnderlyingTokenAllowanceThunkHandler', () => {
 
   it('should return early if amm or signer is falsy', async () => {
     // Call function and assert
-    const result = await getUnderlyingTokenAllowanceThunkHandler(
-      { chainId: 1, alchemyApiKey: '' },
-      { getState } as never,
-    );
+    const result = await getUnderlyingTokenAllowanceThunkHandler({ chainId: 1 }, {
+      getState,
+    } as never);
     expect(result).toBeUndefined();
   });
 
@@ -37,18 +36,15 @@ describe('getUnderlyingTokenAllowanceThunkHandler', () => {
     };
 
     // Call function and assert
-    const result = await getUnderlyingTokenAllowanceThunkHandler(
-      { chainId: 1, alchemyApiKey: 'alchemyApiKey' },
-      {
-        getState: () => ({
-          swapForm: { amm },
-        }),
-      } as never,
-    );
+    const result = await getUnderlyingTokenAllowanceThunkHandler({ chainId: 1 }, {
+      getState: () => ({
+        swapForm: { amm },
+      }),
+    } as never);
     expect(amm.getUnderlyingTokenAllowance).toHaveBeenCalledWith({
       forceErc20Check: false,
       chainId: 1,
-      alchemyApiKey: 'alchemyApiKey',
+      alchemyApiKey: '',
     });
     expect(result).toBe(getUnderlyingTokenAllowanceResult);
   });
@@ -71,7 +67,7 @@ describe('getUnderlyingTokenAllowanceThunkHandler', () => {
 
     // Call function and assert
     const result = await getUnderlyingTokenAllowanceThunkHandler(
-      { chainId: 1, alchemyApiKey: '' },
+      { chainId: 1 },
       thunkApiMock as never,
     );
     expect(rejectThunkWithError).toHaveBeenCalledWith(thunkApiMock, error);

@@ -1,3 +1,5 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
+
 export type PoolUI = {
   market: 'Aave' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP';
   token?: 'eth' | 'usdc' | 'usdt' | 'dai';
@@ -8,6 +10,7 @@ export type PoolUI = {
   fixedAPRRateFormatted: string;
   fixedAPRRate: number;
   aMMMaturity: string;
+  chainId: SupportedChainId;
   id: string;
   variableAPYRate24hDelta: number;
   variableAPYRateFormatted: string;
@@ -17,7 +20,7 @@ export type PoolUI = {
   maturityTimestampInMS: number;
 };
 
-export type PoolFilterId = 'borrow' | 'v2' | 'yield';
+export type PoolFilterId = 'borrow' | 'v2' | 'yield' | 'ethereum' | 'arbitrum' | 'avalanche';
 export type PoolSortId = 'pools' | 'fixedAPR' | 'variableAPY' | 'maturity';
 export type PoolFilters = Record<PoolFilterId, boolean>;
 export type PoolSortDirection = 'noSort' | 'ascending' | 'descending';

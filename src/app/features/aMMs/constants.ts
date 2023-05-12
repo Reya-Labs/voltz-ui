@@ -4,6 +4,9 @@ export const initialFilters: PoolFilters = {
   borrow: true,
   v2: true,
   yield: true,
+  ethereum: true,
+  arbitrum: true,
+  avalanche: true,
 };
 
 export const resetSortingDirection: PoolSorting = {
@@ -36,6 +39,18 @@ export const FILTER_CONFIG: Record<
   yield: {
     label: 'Yield',
     hidden: false,
+  },
+  ethereum: {
+    label: 'Ethereum',
+    hidden: false,
+  },
+  arbitrum: {
+    label: 'Arbitrum',
+    hidden: false,
+  },
+  avalanche: {
+    label: 'Avalanche',
+    hidden: true,
   },
 };
 

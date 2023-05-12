@@ -5,7 +5,7 @@ import { OptimiserInfo, updateOptimiserStateAction } from '../../../../app/featu
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
-import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
+import { getAlchemyKey } from '../../../../utilities/network/get-alchemy-key';
 import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { FormProps } from '../Form/DepositForm/DepositForm';
 import { WithdrawRolloverForm } from '../Form/WithdrawRolloverForm/WithdrawRolloverForm';
@@ -66,7 +66,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       vaultId: subvault.vaultId,
       signer,
       chainId,
-      alchemyApiKey: getAlchemyKeyForChain(chainId),
+      alchemyApiKey: getAlchemyKey(),
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
@@ -104,7 +104,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       spareWeights,
       signer,
       chainId,
-      alchemyApiKey: getAlchemyKeyForChain(chainId),
+      alchemyApiKey: getAlchemyKey(),
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {

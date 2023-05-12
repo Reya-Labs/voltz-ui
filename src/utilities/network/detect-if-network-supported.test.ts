@@ -18,7 +18,7 @@ describe('detectIfNetworkSupported', () => {
       chainId: SupportedChainId.mainnet,
     });
 
-    const result = detectIfNetworkSupported(1, 'mainnet/alchemy-key-1');
+    const result = detectIfNetworkSupported(1, 'mainnet');
     expect(result).toEqual({
       isSupported: true,
       chainId: SupportedChainId.mainnet,
@@ -32,7 +32,7 @@ describe('detectIfNetworkSupported', () => {
       chainId: null,
     });
 
-    const result = detectIfNetworkSupported(5, 'mainnet/alchemy-key-1');
+    const result = detectIfNetworkSupported(5, 'mainnet');
     expect(result).toEqual({
       isSupported: false,
       chainId: null,

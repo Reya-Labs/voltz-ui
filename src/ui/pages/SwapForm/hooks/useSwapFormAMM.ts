@@ -19,7 +19,6 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { useWallet } from '../../../../hooks/useWallet';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
-import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 
 type UseSwapFormAMMResult = {
   aMM: AMM | null;
@@ -104,9 +103,7 @@ export const useSwapFormAMM = (): UseSwapFormAMMResult => {
     }
 
     void dispatch(getWalletBalanceThunk());
-    void dispatch(
-      getUnderlyingTokenAllowanceThunk({ chainId, alchemyApiKey: getAlchemyKeyForChain(chainId) }),
-    );
+    void dispatch(getUnderlyingTokenAllowanceThunk({ chainId }));
   }, [dispatch, aMM, aMM?.signer, chainId]);
 
   useEffect(() => {
