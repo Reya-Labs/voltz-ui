@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { doNothing } from '../../../../../utilities/doNothing';
-import { getAlchemyKeyForChain } from '../../../../../utilities/network/get-alchemy-key-for-chain';
+import { getAlchemyKey } from '../../../../../utilities/network/get-alchemy-key';
 import { formatCurrency } from '../../../../../utilities/number';
 import { GasCost } from '../GasCost/GasCost';
 import { batchBudgetReducer, initialState } from './batchBudgetReducer';
@@ -69,7 +69,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       optimiserId: lpVault.optimiserId,
       signer,
       chainId,
-      alchemyApiKey: getAlchemyKeyForChain(chainId),
+      alchemyApiKey: getAlchemyKey(),
     })
       .then(({ newOptimiserState }) => {
         void dispatch({
@@ -104,7 +104,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       optimiserId: lpVault.optimiserId,
       signer,
       chainId,
-      alchemyApiKey: getAlchemyKeyForChain(chainId),
+      alchemyApiKey: getAlchemyKey(),
     })
       .then(({ gasEstimateUsd }) => {
         setGasCost(gasEstimateUsd);

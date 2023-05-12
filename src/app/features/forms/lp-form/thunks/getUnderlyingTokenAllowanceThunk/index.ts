@@ -1,14 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
+import { getAlchemyKey } from '../../../../../../utilities/network/get-alchemy-key';
 import { RootState } from '../../../../../store';
 import { rejectThunkWithError } from '../../../../helpers/reject-thunk-with-error';
 
 export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  { chainId: SupportedChainId; alchemyApiKey: string },
+  { chainId: SupportedChainId },
   { state: RootState }
->('lpForm/getUnderlyingTokenAllowance', async ({ chainId, alchemyApiKey }, thunkAPI) => {
+>('lpForm/getUnderlyingTokenAllowance', async ({ chainId }, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().lpForm.amm;
     if (!amm || !amm.signer) {
@@ -18,7 +19,7 @@ export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
     return await amm.getUnderlyingTokenAllowance({
       forceErc20Check: false,
       chainId,
-      alchemyApiKey,
+      alchemyApiKey: getAlchemyKey(),
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

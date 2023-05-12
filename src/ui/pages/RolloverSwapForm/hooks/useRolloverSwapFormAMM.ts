@@ -22,7 +22,6 @@ import {
   generatePoolId,
   generatePositionIdForRoute,
 } from '../../../../utilities/amm';
-import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 
 type UseRolloverSwapFormAMMResult = {
   aMM: AMM | null;
@@ -126,9 +125,7 @@ export const useRolloverSwapFormAMM = (): UseRolloverSwapFormAMMResult => {
     }
 
     void dispatch(getWalletBalanceThunk());
-    void dispatch(
-      getUnderlyingTokenAllowanceThunk({ chainId, alchemyApiKey: getAlchemyKeyForChain(chainId) }),
-    );
+    void dispatch(getUnderlyingTokenAllowanceThunk({ chainId }));
   }, [dispatch, aMM, aMM?.signer, chainId]);
 
   return {
