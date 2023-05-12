@@ -54,9 +54,8 @@ const slice = createSlice({
     togglePoolFilterAction: (
       state,
       {
-        payload: { chainId, filterId },
+        payload: { filterId },
       }: PayloadAction<{
-        chainId: SupportedChainId;
         filterId: PoolFilterId;
       }>,
     ) => {
@@ -65,9 +64,8 @@ const slice = createSlice({
     togglePoolSortingDirectionAction: (
       state,
       {
-        payload: { chainId, sortId },
+        payload: { sortId },
       }: PayloadAction<{
-        chainId: SupportedChainId;
         sortId: PoolSortId;
       }>,
     ) => {

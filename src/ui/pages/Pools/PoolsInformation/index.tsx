@@ -6,7 +6,6 @@ import {
   selectPoolsSize,
   togglePoolFilterAction,
 } from '../../../../app/features/aMMs';
-import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { usePoolsInformation } from '../../../../hooks/usePoolsInformation';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
@@ -21,7 +20,6 @@ import {
 
 export const PoolsInformation: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const chainId = useAppSelector(selectChainId);
   const poolsSize = useAppSelector(selectPoolsSize);
   const { volume30DaysFormatted, totalLiquidityFormatted } = usePoolsInformation();
   const filterOptions = useAppSelector(selectPoolFilterOptions);
@@ -34,10 +32,6 @@ export const PoolsInformation: React.FunctionComponent = () => {
   const typographyToken: TypographyToken = isLargeDesktopDevice
     ? 'secondaryBodyLargeBold'
     : 'secondaryBodyMediumBold';
-
-  if (!chainId) {
-    return null;
-  }
 
   return (
     <PoolsInformationBox>
@@ -96,7 +90,6 @@ export const PoolsInformation: React.FunctionComponent = () => {
               onClick={() => {
                 dispatch(
                   togglePoolFilterAction({
-                    chainId,
                     filterId: filter.id,
                   }),
                 );

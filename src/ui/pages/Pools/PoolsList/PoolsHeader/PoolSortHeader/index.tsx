@@ -6,7 +6,6 @@ import {
   togglePoolSortingDirectionAction,
 } from '../../../../../../app/features/aMMs';
 import { PoolSortDirection, PoolSortId } from '../../../../../../app/features/aMMs/types';
-import { selectChainId } from '../../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../../hooks/useResponsiveQuery';
 import {
@@ -33,7 +32,6 @@ export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
   disabled,
 }) => {
   const dispatch = useAppDispatch();
-  const chainId = useAppSelector(selectChainId);
   const { isLargeDesktopDevice } = useResponsiveQuery();
   const loading = useAppSelector(selectPoolsLoading);
 
@@ -48,10 +46,6 @@ export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
       ? AscendingSortIcon
       : DescendingSortIcon;
 
-  if (!chainId) {
-    return null;
-  }
-
   return (
     <RowsBox
       onClick={() => {
@@ -61,7 +55,6 @@ export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
         dispatch(
           togglePoolSortingDirectionAction({
             sortId: id,
-            chainId,
           }),
         );
       }}

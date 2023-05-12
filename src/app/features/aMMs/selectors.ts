@@ -1,4 +1,4 @@
-import { AMM } from '@voltz-protocol/v1-sdk';
+import { AMM, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { MarketTokenInformationProps } from '../../../ui/components/MarketTokenInformation';
 import { generateAmmIdForRoute, generatePoolId } from '../../../utilities/amm';
@@ -26,8 +26,8 @@ export const selectPoolsOnCurrentChain = (state: RootState): PoolUI[] => {
 
 export const selectPools = (state: RootState): PoolUI[] => {
   const aMMs = selectAMMs(state);
-  const appliedFilters = selectPoolFilters(state);
-  const appliedSortingDirection = selectPoolSortingDirection(state);
+  const appliedFilters = state.aMMs.filters;
+  const appliedSortingDirection = state.aMMs.sortingDirection;
   if (!appliedFilters || !appliedSortingDirection) {
     return [];
   }
@@ -38,6 +38,25 @@ export const selectPools = (state: RootState): PoolUI[] => {
         Date.now().valueOf() + getMaturityWindow(amm.rateOracle.protocolId) <
         amm.endDateTime.toMillis(),
     )
+    .filter((amm) => {
+      if (
+        appliedFilters['ethereum'] &&
+        (amm.chainId === SupportedChainId.mainnet || amm.chainId === SupportedChainId.goerli)
+      ) {
+        return true;
+      }
+      if (
+        appliedFilters['arbitrum'] &&
+        (amm.chainId === SupportedChainId.arbitrum ||
+          amm.chainId === SupportedChainId.arbitrumGoerli)
+      ) {
+        return true;
+      }
+      if (appliedFilters['avalanche'] && amm.chainId === SupportedChainId.avalanche) {
+        return true;
+      }
+      return false;
+    })
     .filter((amm) => {
       if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
         return true;
@@ -138,14 +157,6 @@ export const selectTotalLiquidityFormatted = (
     compactNumber: `$${compactFormat.compactNumber}`,
     compactSuffix: compactFormat.compactSuffix,
   };
-};
-
-const selectPoolFilters = (state: RootState) => {
-  return state.aMMs.filters;
-};
-
-const selectPoolSortingDirection = (state: RootState) => {
-  return state.aMMs.sortingDirection;
 };
 
 export const selectPoolFilterOptions = (

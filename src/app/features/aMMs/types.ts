@@ -20,7 +20,7 @@ export type PoolUI = {
   maturityTimestampInMS: number;
 };
 
-export type PoolFilterId = 'borrow' | 'v2' | 'yield';
+export type PoolFilterId = 'borrow' | 'v2' | 'yield' | 'ethereum' | 'arbitrum' | 'avalanche';
 export type PoolSortId = 'pools' | 'fixedAPR' | 'variableAPY' | 'maturity';
 export type PoolFilters = Record<PoolFilterId, boolean>;
 export type PoolSortDirection = 'noSort' | 'ascending' | 'descending';

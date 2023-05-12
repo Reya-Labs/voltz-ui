@@ -21,7 +21,7 @@ export const PoolEntryBox = styled('div', {
   flex-direction: row;
   align-items: center;
   padding: 10px 8px;
-  box-shadow: -4px 0px 20px 0px ${colors.liberty8};
+  box-shadow: -2px 0px 8px 0px ${colors.liberty8};
   background-color: ${({ backgroundColorToken }) => getColorFromToken(backgroundColorToken)};
   border: 1px solid
     ${({ borderColorToken }) =>
