@@ -77,7 +77,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
       null | 'lpForm' | 'swapForm'
     >(null);
     const chainId = useAppSelector(selectChainId);
-    const chainStateChangeError = useAppSelector(selectChainChangeState);
+    const chainStateChangeError = useAppSelector(selectChainChangeState) === 'error';
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const navigate = useAppNavigate();
     const ChainIcon = ChainIconMap[poolChainId];
