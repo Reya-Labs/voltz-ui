@@ -5,11 +5,11 @@ import {
   selectChainChangeState,
   selectChainId,
   selectIsSupportedChain,
+  setChainId,
   setChainIdThunk,
 } from '../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
-import { setChainId } from '../../../utilities/network/chain-store';
 import { Ellipsis } from '../../atomic/Ellipsis/Ellipsis';
 import { getNetworkOptions } from './get-network-options';
 import {

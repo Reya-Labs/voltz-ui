@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 
+import { setChainId } from '../../app/features/network';
 import { useAppDispatch } from '../../app/hooks';
-import { setChainId } from '../../utilities/network/chain-store';
 import { useChainChange } from '.';
 import { handlePageReloadAfterChainChanged } from './handle-page-reload-after-chain-changed';
 
@@ -10,7 +10,7 @@ jest.mock('./handle-page-reload-after-chain-changed', () => ({
   handlePageReloadAfterChainChanged: jest.fn(),
 }));
 
-jest.mock('../../utilities/network/chain-store', () => ({
+jest.mock('../../app/features/network', () => ({
   setChainId: jest.fn(),
 }));
 

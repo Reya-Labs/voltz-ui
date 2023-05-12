@@ -8,7 +8,7 @@ import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
 import { AutomaticRolloverToggleProps } from '../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../hooks/useWallet';
-import { getAlchemyKey } from '../../../utilities/network/get-alchemy-key';
+import { getAlchemyKey } from '../../../utilities/getAlchemyKey';
 import { useLPVaults } from '../../LPOptimisers/useLPVaults';
 import { routes } from '../../paths';
 import { NoPositionsOrVaultsFound } from '../NoPositionsOrVaultsFound/NoPositionsOrVaultsFound';

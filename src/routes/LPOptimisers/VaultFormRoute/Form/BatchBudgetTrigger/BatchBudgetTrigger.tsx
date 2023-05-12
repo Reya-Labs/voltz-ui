@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { doNothing } from '../../../../../utilities/doNothing';
-import { getAlchemyKey } from '../../../../../utilities/network/get-alchemy-key';
+import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { formatCurrency } from '../../../../../utilities/number';
 import { GasCost } from '../GasCost/GasCost';
 import { batchBudgetReducer, initialState } from './batchBudgetReducer';

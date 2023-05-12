@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 
 import { selectors } from '../../app';
-import { selectChainId } from '../../app/features/network';
+import { isArbitrumChain, selectChainId } from '../../app/features/network';
 import { useAppSelector } from '../../app/hooks';
 import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
 import { MintBurnFormModes } from '../../contexts/MintBurnFormContext/MintBurnFormContext';
 import { useWallet } from '../../hooks/useWallet';
-import { isArbitrumChain } from '../../utilities/network/is-arbitrum-chain';
 import { ContentBox, LPPortfolioBox, Split } from './LPPortfolio.styled';
 import { LPPositions } from './LPPositions/LPPositions';
 import { Optimisers } from './Optimisers/Optimisers';

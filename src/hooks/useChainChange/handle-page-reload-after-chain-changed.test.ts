@@ -1,13 +1,19 @@
-import { setChainIdThunk } from '../../app/features/network';
+import {
+  deleteChainId,
+  detectIfNetworkSupported,
+  getChainId,
+  setChainIdThunk,
+} from '../../app/features/network';
 import { useAppDispatch } from '../../app/hooks';
 import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
-import { deleteChainId, getChainId } from '../../utilities/network/chain-store';
-import { detectIfNetworkSupported } from '../../utilities/network/detect-if-network-supported';
 import { handlePageReloadAfterChainChanged } from './handle-page-reload-after-chain-changed';
 
 // Mock setChainIdThunk
 jest.mock('../../app/features/network', () => ({
   setChainIdThunk: jest.fn(),
+  getChainId: jest.fn(),
+  deleteChainId: jest.fn(),
+  detectIfNetworkSupported: jest.fn(),
 }));
 
 // Mock useAppDispatch
@@ -15,20 +21,9 @@ jest.mock('../../app/hooks', () => ({
   useAppDispatch: jest.fn(),
 }));
 
-// Mock getChainId and deleteChainId
-jest.mock('../../utilities/network/chain-store', () => ({
-  getChainId: jest.fn(),
-  deleteChainId: jest.fn(),
-}));
-
 // Mock getDefaultChainId
 jest.mock('../../components/interface/NetworkSelector/get-default-chain-id', () => ({
   getDefaultChainId: jest.fn(),
-}));
-
-// Mock detectIfNetworkSupported
-jest.mock('../../utilities/network/detect-if-network-supported', () => ({
-  detectIfNetworkSupported: jest.fn(),
 }));
 
 describe('handlePageReloadAfterChainChanged', () => {

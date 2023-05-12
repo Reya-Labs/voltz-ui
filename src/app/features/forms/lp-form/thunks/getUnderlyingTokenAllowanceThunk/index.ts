@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { getAlchemyKey } from '../../../../../../utilities/network/get-alchemy-key';
+import { getAlchemyKey } from '../../../../../../utilities/getAlchemyKey';
 import { RootState } from '../../../../../store';
 import { rejectThunkWithError } from '../../../../helpers/reject-thunk-with-error';
 
