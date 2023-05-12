@@ -8,7 +8,7 @@ import { Loading } from '../../../components/atomic/Loading/Loading';
 import { Panel } from '../../../components/atomic/Panel/Panel';
 import { AutomaticRolloverToggleProps } from '../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../hooks/useWallet';
-import { getAlchemyKeyForChain } from '../../../utilities/network/get-alchemy-key-for-chain';
+import { getAlchemyKey } from '../../../utilities/network/get-alchemy-key';
 import { useLPVaults } from '../../LPOptimisers/useLPVaults';
 import { routes } from '../../paths';
 import { NoPositionsOrVaultsFound } from '../NoPositionsOrVaultsFound/NoPositionsOrVaultsFound';
@@ -64,7 +64,7 @@ export const Optimisers: React.FunctionComponent = () => {
         registration,
         signer,
         chainId,
-        alchemyApiKey: getAlchemyKeyForChain(chainId),
+        alchemyApiKey: getAlchemyKey(),
       }).then(({ newOptimiserState }) => {
         if (newOptimiserState) {
           void dispatch(

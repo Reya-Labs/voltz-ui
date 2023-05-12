@@ -23,7 +23,6 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { useWallet } from '../../../../hooks/useWallet';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
-import { getAlchemyKeyForChain } from '../../../../utilities/network/get-alchemy-key-for-chain';
 
 export type UseLPFormAMMResult = {
   aMM: AMM | null;
@@ -137,9 +136,7 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
     if (!chainId) {
       return;
     }
-    void dispatch(
-      getUnderlyingTokenAllowanceThunk({ chainId, alchemyApiKey: getAlchemyKeyForChain(chainId) }),
-    );
+    void dispatch(getUnderlyingTokenAllowanceThunk({ chainId }));
   }, [dispatch, aMM, aMM?.signer, chainId]);
 
   useEffect(() => {
