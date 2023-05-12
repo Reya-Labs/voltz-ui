@@ -34,12 +34,7 @@ export const useAMMs = (): UseAMMsResult => {
     if (aMMsLoadedState !== 'idle') {
       return;
     }
-    void dispatch(
-      initialiseAMMsThunk({
-        // todo: add proper chain ids
-        chainIds: [1, 42161],
-      }),
-    );
+    void dispatch(initialiseAMMsThunk());
   }, [aMMsLoadedState, dispatch]);
 
   useEffect(() => {

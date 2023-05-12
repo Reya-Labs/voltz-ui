@@ -49,7 +49,7 @@ const slice = createSlice({
         chainId: SupportedChainId;
       }>,
     ) => {
-      state.aMMs.forEach((aMM) => aMM.signer = (aMM.chainId === chainId) ? signer : null);
+      state.aMMs.filter((aMM) => aMM.chainId === chainId).forEach((aMM) => (aMM.signer = signer));
     },
     togglePoolFilterAction: (
       state,

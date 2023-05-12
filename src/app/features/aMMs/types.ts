@@ -1,3 +1,5 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
+
 export type PoolUI = {
   market: 'Aave' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP';
   token?: 'eth' | 'usdc' | 'usdt' | 'dai';
@@ -8,6 +10,7 @@ export type PoolUI = {
   fixedAPRRateFormatted: string;
   fixedAPRRate: number;
   aMMMaturity: string;
+  chainId: SupportedChainId;
   id: string;
   variableAPYRate24hDelta: number;
   variableAPYRateFormatted: string;

@@ -18,7 +18,13 @@ export type useAMMReturnType = {
     number | void
   >;
   swapInfo: UseAsyncFunctionResult<SwapInfoPayload, InfoPostSwap | void>;
-  variableApy: UseAsyncFunctionResult<unknown, number | void>;
+  variableApy: UseAsyncFunctionResult<
+    unknown,
+    {
+      currentApy: number;
+      pastApys: number[];
+    } | void
+  >;
   expectedApyInfo: UseAsyncFunctionResult<ExpectedInfoPayload, ExpectedApyInfo | void>;
 };
 

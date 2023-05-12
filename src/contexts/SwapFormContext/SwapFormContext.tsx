@@ -158,7 +158,7 @@ export const SwapFormProvider: React.FunctionComponent<SwapFormProviderProps> = 
   useEffect(() => {
     if (isUndefined(userSimulatedVariableApy)) {
       if (ammCtx.variableApy.result) {
-        updateUserSimulatedVariableApy(ammCtx.variableApy.result * 100);
+        updateUserSimulatedVariableApy(ammCtx.variableApy.result.currentApy * 100);
       } else {
         setUserSimulatedVariableApy(undefined);
         setUserSimulatedVariableApyUpdated(true);

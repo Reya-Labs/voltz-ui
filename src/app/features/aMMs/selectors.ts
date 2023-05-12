@@ -6,12 +6,22 @@ import { formatPOSIXTimestamp } from '../../../utilities/date';
 import { getMaturityWindow } from '../../../utilities/maturityWindow';
 import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
+import { selectChainId } from '../network';
 import { FILTER_CONFIG, SORT_CONFIG } from './constants';
 import { sortPools } from './helpers/sortPools';
 import { PoolFilterId, PoolSortDirection, PoolSortId, PoolUI } from './types';
 
 export const selectAMMs = (state: RootState): AMM[] => {
   return state.aMMs.aMMs;
+};
+
+export const selectPoolsOnCurrentChain = (state: RootState): PoolUI[] => {
+  const chainId = selectChainId(state);
+  if (!chainId) {
+    return [];
+  }
+  const pools = selectPools(state);
+  return pools.filter((p) => p.chainId === chainId);
 };
 
 export const selectPools = (state: RootState): PoolUI[] => {
@@ -22,7 +32,7 @@ export const selectPools = (state: RootState): PoolUI[] => {
     return [];
   }
 
-  const pools = aMMs
+  const pools: PoolUI[] = aMMs
     .filter(
       (amm) =>
         Date.now().valueOf() + getMaturityWindow(amm.rateOracle.protocolId) <
@@ -64,6 +74,7 @@ export const selectPools = (state: RootState): PoolUI[] => {
         variableAPYRate24hDelta: stringToBigFloat(
           formatNumber(variableAPYRate - variableApy24Ago, 0, 3),
         ),
+        chainId: aMM.chainId,
         variableAPYRateFormatted: formatNumber(variableAPYRate),
         variableAPYRate,
         routeAmmId: generateAmmIdForRoute(aMM),
