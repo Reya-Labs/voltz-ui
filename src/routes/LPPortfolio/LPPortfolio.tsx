@@ -33,18 +33,21 @@ export const LPPortfolio: React.FunctionComponent = () => {
       <ContentBox data-testid="LPPortfolio-LPPositions-ContentBox">
         <LPPositions formMode={formMode} setFormMode={setFormMode} />
       </ContentBox>
-      <ContentBox>
-        <Split />
-      </ContentBox>
+
       {isArbitrumChain(chainId) ? null : (
-        <ContentBox
-          data-testid="LPPortfolio-Optimisers-ContentBox"
-          sx={{
-            display: Boolean(formMode) || hasActiveTransactions ? 'none' : undefined,
-          }}
-        >
-          <Optimisers />
-        </ContentBox>
+        <React.Fragment>
+          <ContentBox>
+            <Split />
+          </ContentBox>
+          <ContentBox
+            data-testid="LPPortfolio-Optimisers-ContentBox"
+            sx={{
+              display: Boolean(formMode) || hasActiveTransactions ? 'none' : undefined,
+            }}
+          >
+            <Optimisers />
+          </ContentBox>
+        </React.Fragment>
       )}
     </LPPortfolioBox>
   );
