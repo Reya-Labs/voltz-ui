@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   closeRolloverConfirmationFlowAction,
   selectRolloverConfirmationFlowEtherscanLink,
-} from '../../../../../../app/features/forms/rollover-lp-form';
+} from '../../../../../../app/features/forms/lps/rollover-lp';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
 import { RolloverDetails } from '../RolloverDetails';

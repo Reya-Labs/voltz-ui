@@ -6,7 +6,7 @@ import {
   confirmSwapRolloverThunk,
   selectRolloverSwapFormAMM,
   selectSwapConfirmationFlowError,
-} from '../../../../../../app/features/forms/trader/rollover-swap-form';
+} from '../../../../../../app/features/forms/trader/rollover-swap';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
   MarketTokenInformation,

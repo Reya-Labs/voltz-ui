@@ -5,7 +5,7 @@ import {
   selectNewPositionCompactNotional,
   selectUserInputFixedLower,
   selectUserInputFixedUpper,
-} from '../../../../../app/features/forms/lp-form';
+} from '../../../../../app/features/forms/lps/lp';
 import { useAppSelector } from '../../../../../app/hooks';
 import {
   BorderedBox,

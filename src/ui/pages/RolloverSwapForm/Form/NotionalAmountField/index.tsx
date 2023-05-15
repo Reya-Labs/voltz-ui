@@ -7,7 +7,7 @@ import {
   selectRolloverSwapFormAMM,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
-} from '../../../../../app/features/forms/trader/rollover-swap-form';
+} from '../../../../../app/features/forms/trader/rollover-swap';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';

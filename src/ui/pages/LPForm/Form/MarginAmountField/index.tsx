@@ -7,7 +7,7 @@ import {
   selectLpFormSelectedPosition,
   selectUserInputMarginInfo,
   setMarginAmountAction,
-} from '../../../../../app/features/forms/lp-form';
+} from '../../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';

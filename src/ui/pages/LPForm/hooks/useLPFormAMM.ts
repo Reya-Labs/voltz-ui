@@ -17,7 +17,7 @@ import {
   setSignerAndPositionsForAMMThunk,
   setUserInputFixedLowerAction,
   setUserInputFixedUpperAction,
-} from '../../../../app/features/forms/lp-form';
+} from '../../../../app/features/forms/lps/lp';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';

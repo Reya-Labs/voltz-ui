@@ -6,7 +6,7 @@ import {
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
   selectProspectiveSwapMode,
-} from '../../../../../app/features/forms/trader/rollover-swap-form';
+} from '../../../../../app/features/forms/trader/rollover-swap';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
 import { MODE_TEXT_MAP } from '../../../SwapForm/helpers';

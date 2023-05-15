@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { resetStateAction } from '../../../app/features/forms/rollover-lp-form';
+import { resetStateAction } from '../../../app/features/forms/lps/rollover-lp';
 import { useAppDispatch } from '../../../app/hooks';
 import { routes } from '../../../routes/paths';
 import { AMMFetchingError } from '../../components/AMMFetchingError';

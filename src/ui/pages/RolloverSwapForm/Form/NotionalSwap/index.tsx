@@ -9,7 +9,7 @@ import {
   selectUserInputMode,
   selectVariableRateInfo,
   setUserInputModeAction,
-} from '../../../../../app/features/forms/trader/rollover-swap-form';
+} from '../../../../../app/features/forms/trader/rollover-swap';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { formatNumber } from '../../../../../utilities/number';

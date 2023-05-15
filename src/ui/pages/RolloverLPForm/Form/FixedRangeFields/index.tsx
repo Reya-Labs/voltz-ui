@@ -12,7 +12,7 @@ import {
   selectUserInputFixedUpper,
   setUserInputFixedLowerAction,
   setUserInputFixedUpperAction,
-} from '../../../../../app/features/forms/rollover-lp-form';
+} from '../../../../../app/features/forms/lps/rollover-lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';

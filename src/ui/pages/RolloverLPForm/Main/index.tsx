@@ -4,7 +4,7 @@ import {
   selectFixedRateInfo,
   selectRolloverLpFormAMM,
   selectVariableRateInfo,
-} from '../../../../app/features/forms/rollover-lp-form';
+} from '../../../../app/features/forms/lps/rollover-lp';
 import { useAppSelector } from '../../../../app/hooks';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
 import { BottomMainBox, MainBox } from './Main.styled';

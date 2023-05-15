@@ -4,7 +4,7 @@ import {
   selectFixedRateInfo,
   selectLpFormAMM,
   selectVariableRateInfo,
-} from '../../../../app/features/forms/lp-form';
+} from '../../../../app/features/forms/lps/lp';
 import { useAppSelector } from '../../../../app/hooks';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
 import { BottomMainBox, MainBox } from './Main.styled';

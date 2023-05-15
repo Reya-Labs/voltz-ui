@@ -6,7 +6,7 @@ import {
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
   selectProspectiveSwapMode,
-} from '../../../../../app/features/forms/trader/swap-form';
+} from '../../../../../app/features/forms/trader/swap';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
 import { MODE_COLOR_TOKEN_MAP, MODE_TEXT_MAP } from '../../helpers';

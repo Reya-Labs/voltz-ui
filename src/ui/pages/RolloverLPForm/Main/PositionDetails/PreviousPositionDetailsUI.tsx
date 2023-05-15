@@ -10,7 +10,7 @@ import {
   selectPreviousPositionRealizedPnLFromSwapsFormatted,
   selectPreviousPositionRealizedPnLTotalFormatted,
   selectPreviousPositionSettlingBalance,
-} from '../../../../../app/features/forms/rollover-lp-form';
+} from '../../../../../app/features/forms/lps/rollover-lp';
 import { useAppSelector } from '../../../../../app/hooks';
 import { PnLDetailsWithTooltip } from '../../../../components/PnLDetailsWithTooltip';
 import {

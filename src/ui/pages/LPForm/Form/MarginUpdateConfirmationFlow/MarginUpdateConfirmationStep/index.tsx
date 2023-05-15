@@ -6,7 +6,7 @@ import {
   confirmMarginUpdateThunk,
   selectLpFormAMM,
   selectMarginUpdateConfirmationFlowError,
-} from '../../../../../../app/features/forms/lp-form';
+} from '../../../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
   MarketTokenInformation,
