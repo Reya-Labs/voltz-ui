@@ -6,7 +6,7 @@ import {
   resetStateAction,
   selectAMMMaturityFormatted,
   selectFixedRateValueFormatted,
-  selectLpFormAMM,
+  selectRolloverLpFormAMM,
   selectVariableRate24hDelta,
   selectVariableRateValueFormatted,
 } from '../../../../../app/features/forms/rollover-lp-form';
@@ -18,7 +18,7 @@ import { PoolHeader as PoolHeaderComponent } from '../../../../components/PoolHe
 type PoolHeaderProps = {};
 
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
-  const aMM = useAppSelector(selectLpFormAMM);
+  const aMM = useAppSelector(selectRolloverLpFormAMM);
   const variableRate24hDelta = useAppSelector(selectVariableRate24hDelta);
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
   const fixedRateFormatted = useAppSelector(selectFixedRateValueFormatted);

@@ -15,19 +15,20 @@ export const getPoolLpInfoThunk = createAsyncThunk<
   { state: RootState }
 >('rolloverLpForm/getPoolLpInfo', async (_, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().rolloverLpForm.amm;
-    if (!amm) {
+    const state = thunkAPI.getState().rolloverLpForm;
+    const amm = state.amm;
+    const previousAmm = state.previousAMM;
+    const previousPosition = state.previousPosition;
+    if (!amm || !previousAmm || !previousPosition) {
       return;
     }
 
-    const lpFormState = thunkAPI.getState().rolloverLpForm;
-
-    let fixedLow: number | null = getProspectiveLpFixedLow(lpFormState);
-    let fixedHigh: number | null = getProspectiveLpFixedHigh(lpFormState);
+    let fixedLow: number | null = getProspectiveLpFixedLow(state);
+    let fixedHigh: number | null = getProspectiveLpFixedHigh(state);
 
     if (fixedLow === null || fixedHigh === null) {
-      fixedLow = getDefaultLpFixedLow(lpFormState);
-      fixedHigh = getDefaultLpFixedHigh(lpFormState);
+      fixedLow = getDefaultLpFixedLow(state);
+      fixedHigh = getDefaultLpFixedHigh(state);
     }
 
     return await amm.getPoolLpInfo(fixedLow, fixedHigh);

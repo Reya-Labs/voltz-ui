@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 
 import {
   closeRolloverConfirmationFlowAction,
-  confirmRolloverThunk,
+  confirmSwapRolloverThunk,
   selectRolloverSwapFormAMM,
   selectSwapConfirmationFlowError,
 } from '../../../../../../app/features/forms/trader/rollover-swap-form';
@@ -25,7 +25,7 @@ export const RolloverConfirmationStep: React.FunctionComponent = () => {
   const aMM = useAppSelector(selectRolloverSwapFormAMM);
   const dispatch = useAppDispatch();
   const handleConfirmRollover = useCallback(() => {
-    void dispatch(confirmRolloverThunk());
+    void dispatch(confirmSwapRolloverThunk());
   }, [dispatch]);
   const error = useAppSelector(selectSwapConfirmationFlowError);
   const handleCloseButtonClick = useCallback(() => {

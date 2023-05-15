@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import {
   getInfoPostLpThunk,
-  selectLpFormAMM,
+  selectRolloverLpFormAMM,
   selectUserInputFixedError,
   selectUserInputFixedLower,
   selectUserInputFixedUpdateCount,
@@ -20,7 +20,7 @@ import { FixedRangeFieldsBox } from './FixedRangeFields.styled';
 type NotionalAmountProps = {};
 
 export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = () => {
-  const aMM = useAppSelector(selectLpFormAMM);
+  const aMM = useAppSelector(selectRolloverLpFormAMM);
   const dispatch = useAppDispatch();
 
   const fixedLower = useAppSelector(selectUserInputFixedLower);

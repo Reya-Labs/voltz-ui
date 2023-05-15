@@ -16,6 +16,7 @@ import {
 } from './PositionDetails.styled';
 
 type NewPositionDetailsUIProps = {
+  underlyingTokenName: string;
   actionLabelTypographyToken: TypographyToken;
   actionTypographyToken: TypographyToken;
   labelTypographyToken: TypographyToken;
@@ -27,10 +28,12 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
   actionTypographyToken,
   labelTypographyToken,
   typographyToken,
+  underlyingTokenName,
 }) => {
   const compactNotional = useAppSelector(selectNewPositionCompactNotional);
   const fixedLower = useAppSelector(selectUserInputFixedLower);
   const fixedUpper = useAppSelector(selectUserInputFixedUpper);
+  const token = ` ${underlyingTokenName.toUpperCase()}`;
 
   return (
     <PositionDetailsBox>
@@ -52,7 +55,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             label="Notional"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
-            token={compactNotional ? compactNotional.compactNotionalSuffix : ''}
+            token={compactNotional ? `${compactNotional.compactNotionalSuffix}${token}` : token}
             typographyToken={typographyToken}
             value={compactNotional ? compactNotional.compactNotionalNumber : '--'}
           />

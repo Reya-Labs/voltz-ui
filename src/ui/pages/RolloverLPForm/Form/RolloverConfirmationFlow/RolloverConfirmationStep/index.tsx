@@ -4,8 +4,8 @@ import React, { useCallback } from 'react';
 import {
   closeRolloverConfirmationFlowAction,
   confirmLpRolloverThunk,
-  selectLpFormAMM,
   selectRolloverConfirmationFlowError,
+  selectRolloverLpFormAMM,
 } from '../../../../../../app/features/forms/rollover-lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
@@ -22,7 +22,7 @@ import {
 } from './RolloverConfirmationStep.styled';
 
 export const RolloverConfirmationStep: React.FunctionComponent = () => {
-  const aMM = useAppSelector(selectLpFormAMM);
+  const aMM = useAppSelector(selectRolloverLpFormAMM);
   const dispatch = useAppDispatch();
   const handleConfirmLp = useCallback(() => {
     void dispatch(confirmLpRolloverThunk());

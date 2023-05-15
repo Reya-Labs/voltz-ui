@@ -115,6 +115,9 @@ describe('rollover-lp-form.selectors', () => {
             status: 'failure',
             value: 0,
           },
+          previousPosition: {
+            settlementCashflow: 100,
+          },
         },
       } as never;
 
@@ -128,6 +131,9 @@ describe('rollover-lp-form.selectors', () => {
             status: 'success',
             value: 1000,
           },
+          previousPosition: {
+            settlementCashflow: 100,
+          },
         },
       } as never;
 
@@ -135,7 +141,7 @@ describe('rollover-lp-form.selectors', () => {
       selectWalletBalance(state);
 
       // Assert that formCompactFormat is called with wallet balance value
-      expect(formCompactFormat).toHaveBeenCalledWith(1000);
+      expect(formCompactFormat).toHaveBeenCalledWith(1100);
     });
 
     it('returns formatted wallet balance if status is "success"', () => {
@@ -145,13 +151,16 @@ describe('rollover-lp-form.selectors', () => {
             status: 'success',
             value: 1000,
           },
+          previousPosition: {
+            settlementCashflow: 100,
+          },
         },
       } as never;
 
       // Mock return value of formCompactFormat
-      (formCompactFormat as jest.Mock).mockReturnValue('$1,000');
+      (formCompactFormat as jest.Mock).mockReturnValue('$1,100');
 
-      expect(selectWalletBalance(state)).toEqual('$1,000');
+      expect(selectWalletBalance(state)).toEqual('$1,100');
     });
   });
 

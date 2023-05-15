@@ -95,11 +95,11 @@ export const useRolloverLPFormAMM = (): UseRolloverLPFormAMMResult => {
   ]);
 
   useEffect(() => {
-    if (!aMM) {
+    if (!aMM || !previousAMM || !previousPosition) {
       return;
     }
     void dispatch(getPoolLpInfoThunk());
-  }, [dispatch, aMM]);
+  }, [dispatch, previousAMM, previousPosition, aMM]);
 
   useEffect(() => {
     if (error) {

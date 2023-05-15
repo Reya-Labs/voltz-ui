@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  selectLpFormAMM,
+  selectRolloverLpFormAMM,
   selectUserInputMarginInfo,
   setMarginAmountAction,
 } from '../../../../../app/features/forms/rollover-lp-form';
@@ -16,7 +16,7 @@ type NotionalAmountProps = {};
 export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const dispatch = useAppDispatch();
   const marginAmount = useAppSelector(selectUserInputMarginInfo);
-  const aMM = useAppSelector(selectLpFormAMM);
+  const aMM = useAppSelector(selectRolloverLpFormAMM);
 
   const [localMargin, setLocalMargin] = useState<string | null>(marginAmount.value.toString());
   const { isLargeDesktopDevice } = useResponsiveQuery();
