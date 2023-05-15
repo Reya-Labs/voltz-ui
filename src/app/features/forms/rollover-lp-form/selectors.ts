@@ -6,7 +6,10 @@ import { RootState } from '../../../store';
 import {
   formCompactFormat,
   formCompactFormatToParts,
+  formFormatNumber,
   formLimitAndFormatNumber,
+  getRealizedPnLFromFees,
+  getRealizedPnLFromSwaps,
 } from '../common/utils';
 import { getProspectiveLpMargin, getProspectiveLpNotional } from './utils';
 
@@ -213,4 +216,91 @@ export const selectMarginRequirementFormatted = (state: RootState) => {
   return state.rolloverLpForm.prospectiveLp.infoPostLp.status === 'success'
     ? formatNumber(state.rolloverLpForm.prospectiveLp.infoPostLp.value.marginRequirement, 2, 4)
     : '--';
+};
+
+// todo: FB duplicate in rollover-swap
+export const selectPreviousPositionCompactNotional = (state: RootState) => {
+  if (!state.rolloverLpForm.previousPosition) {
+    return null;
+  }
+  const compactParts = formCompactFormatToParts(state.rolloverLpForm.previousPosition.notional);
+
+  return {
+    compactNotionalSuffix: compactParts.compactSuffix,
+    compactNotionalNumber: compactParts.compactNumber,
+  };
+};
+
+// todo: FB duplicate in rollover-swap
+export const selectPreviousPositionDepositedMargin = (state: RootState) => {
+  if (!state.rolloverLpForm.previousPosition) {
+    return null;
+  }
+  const depositedMargin =
+    state.rolloverLpForm.previousPosition.margin -
+    state.rolloverLpForm.previousPosition.realizedPnLFromFeesPaid;
+  const compactParts = formCompactFormatToParts(depositedMargin);
+
+  return {
+    compactDepositedMarginSuffix: compactParts.compactSuffix,
+    compactDepositedMarginNumber: compactParts.compactNumber,
+  };
+};
+
+// todo: FB duplicate in rollover-swap
+export const selectPreviousPositionSettlingBalance = (state: RootState) => {
+  const position = state.rolloverLpForm.previousPosition;
+  if (!position) {
+    return null;
+  }
+  const settlingBalance = position.margin + position.realizedPnLFromSwaps;
+  const compactParts = formCompactFormatToParts(settlingBalance);
+
+  return {
+    compactSuffix: compactParts.compactSuffix,
+    compactNumber: compactParts.compactNumber,
+  };
+};
+
+// todo: FB duplicate in rollover-swap
+export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState) => {
+  const realizedPnLFromFees = getRealizedPnLFromFees(state.rolloverLpForm);
+  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverLpForm);
+  let realizedPnLTotal = null;
+
+  if (realizedPnLFromFees && realizedPnLFromSwaps) {
+    realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
+  }
+
+  return realizedPnLTotal === null ? '--' : formFormatNumber(realizedPnLTotal);
+};
+
+// todo: FB duplicate in rollover-swap
+export const selectPreviousPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
+  const realizedPnLFromFees = getRealizedPnLFromFees(state.rolloverLpForm);
+
+  return realizedPnLFromFees === null ? '--' : formFormatNumber(realizedPnLFromFees);
+};
+
+// todo: FB duplicate in rollover-swap
+export const selectPreviousPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
+  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverLpForm);
+
+  return realizedPnLFromSwaps === null ? '--' : formFormatNumber(realizedPnLFromSwaps);
+};
+
+export const selectPreviousPositionFixedLower = (state: RootState) => {
+  const position = state.rolloverLpForm.previousPosition;
+  if (!position) {
+    return '--';
+  }
+  return formFormatNumber(position.fixedRateLower.toNumber());
+};
+
+export const selectPreviousPositionFixedUpper = (state: RootState) => {
+  const position = state.rolloverLpForm.previousPosition;
+  if (!position) {
+    return '--';
+  }
+  return formFormatNumber(position.fixedRateUpper.toNumber());
 };

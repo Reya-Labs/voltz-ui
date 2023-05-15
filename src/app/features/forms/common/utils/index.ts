@@ -4,5 +4,7 @@ export * from './formCompactFormat';
 export * from './formCompactFormatToParts';
 export * from './formFormatNumber';
 export * from './formLimitAndFormatNumber';
+export * from './getRealizedPnLFromFees';
+export * from './getRealizedPnLFromSwaps';
 export * from './isUserInputMarginError';
 export * from './isUserInputNotionalError';

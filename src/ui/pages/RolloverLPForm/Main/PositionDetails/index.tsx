@@ -5,6 +5,7 @@ import { selectLpFormAMM } from '../../../../../app/features/forms/rollover-lp-f
 import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';
+import { PreviousPositionDetailsUI } from './PreviousPositionDetailsUI';
 
 type PositionDetailsProps = {};
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
@@ -32,11 +33,20 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
   }
 
   return (
-    <NewPositionDetailsUI
-      actionLabelTypographyToken={actionLabelTypographyToken}
-      actionTypographyToken={actionTypographyToken}
-      labelTypographyToken={labelTypographyToken}
-      typographyToken={typographyToken}
-    />
+    <React.Fragment>
+      <PreviousPositionDetailsUI
+        actionLabelTypographyToken={actionLabelTypographyToken}
+        actionTypographyToken={actionTypographyToken}
+        labelTypographyToken={labelTypographyToken}
+        typographyToken={typographyToken}
+        underlyingTokenName={aMM.underlyingToken.name}
+      />
+      <NewPositionDetailsUI
+        actionLabelTypographyToken={actionLabelTypographyToken}
+        actionTypographyToken={actionTypographyToken}
+        labelTypographyToken={labelTypographyToken}
+        typographyToken={typographyToken}
+      />
+    </React.Fragment>
   );
 };
