@@ -99,7 +99,7 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
             realizedPnLTotal={realizedPnLTotal}
             typographyToken={typographyToken}
             underlyingTokenName={underlyingTokenName}
-            variant="lp"
+            variant="trader"
           />
         </RealisedPNLBox>
         <CashFlowBox>
