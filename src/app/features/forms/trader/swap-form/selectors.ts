@@ -225,7 +225,7 @@ export const selectEditPositionRealizedPnLTotalFormatted = (state: RootState) =>
   const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.swapForm);
   let realizedPnLTotal = null;
 
-  if (realizedPnLFromFees && realizedPnLFromSwaps) {
+  if (realizedPnLFromFees !== null && realizedPnLFromSwaps !== null) {
     realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
   }
 

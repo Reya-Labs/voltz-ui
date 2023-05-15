@@ -2,12 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { RootState } from '../../../../../store';
 import { rejectThunkWithError } from '../../../../helpers/reject-thunk-with-error';
-import {
-  getDefaultLpFixedHigh,
-  getDefaultLpFixedLow,
-  getProspectiveLpFixedHigh,
-  getProspectiveLpFixedLow,
-} from '../../utils';
+import { getDefaultLpFixedHigh, getDefaultLpFixedLow } from '../../utils';
 
 export const getPoolLpInfoThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
@@ -23,15 +18,7 @@ export const getPoolLpInfoThunk = createAsyncThunk<
       return;
     }
 
-    let fixedLow: number | null = getProspectiveLpFixedLow(state);
-    let fixedHigh: number | null = getProspectiveLpFixedHigh(state);
-
-    if (fixedLow === null || fixedHigh === null) {
-      fixedLow = getDefaultLpFixedLow(state);
-      fixedHigh = getDefaultLpFixedHigh(state);
-    }
-
-    return await amm.getPoolLpInfo(fixedLow, fixedHigh);
+    return await amm.getPoolLpInfo(getDefaultLpFixedLow(state), getDefaultLpFixedHigh(state));
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

@@ -8,5 +8,7 @@ export const validateUserInputFixedRange = (state: Draft<SliceState>): void => {
   if (fixedLower !== null && fixedUpper !== null && fixedLower >= fixedUpper) {
     state.userInput.fixedRange.error =
       'Fixed rate lower cannot be equal or higher than fixed upper';
+  } else {
+    state.userInput.fixedRange.error = null;
   }
 };

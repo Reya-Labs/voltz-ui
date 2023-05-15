@@ -318,21 +318,24 @@ const slice = createSlice({
         }
       })
       .addCase(initializeAMMsAndPositionsForRolloverThunk.fulfilled, (state, { payload }) => {
-        state.amm = (payload as InitializeAMMsAndPositionsForRolloverThunkSuccess).aMM;
-        state.previousAMM = (
-          payload as InitializeAMMsAndPositionsForRolloverThunkSuccess
-        ).previousAMM;
-        state.previousPosition = (
-          payload as InitializeAMMsAndPositionsForRolloverThunkSuccess
-        ).previousPosition;
+        const { signer, aMM, previousPosition, previousAMM } =
+          payload as InitializeAMMsAndPositionsForRolloverThunkSuccess;
+        state.amm = aMM;
+        state.previousAMM = previousAMM;
+        state.previousPosition = previousPosition;
+
+        if (previousPosition) {
+          state.userInput.fixedRange.lower = previousPosition.fixedRateLower.toNumber();
+          state.userInput.fixedRange.upper = previousPosition.fixedRateUpper.toNumber();
+        }
+
         if (state.amm) {
-          state.amm.signer = (payload as InitializeAMMsAndPositionsForRolloverThunkSuccess).signer;
+          state.amm.signer = signer;
         }
         if (state.previousAMM) {
-          state.previousAMM.signer = (
-            payload as InitializeAMMsAndPositionsForRolloverThunkSuccess
-          ).signer;
+          state.previousAMM.signer = signer;
         }
+
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(confirmLpRolloverThunk.pending, (state) => {

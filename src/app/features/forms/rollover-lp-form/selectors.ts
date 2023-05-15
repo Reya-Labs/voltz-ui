@@ -279,7 +279,7 @@ export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState
   const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverLpForm);
   let realizedPnLTotal = null;
 
-  if (realizedPnLFromFees && realizedPnLFromSwaps) {
+  if (realizedPnLFromFees !== null && realizedPnLFromSwaps !== null) {
     realizedPnLTotal = realizedPnLFromFees + realizedPnLFromSwaps;
   }
 
