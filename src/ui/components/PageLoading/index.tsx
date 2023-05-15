@@ -1,7 +1,7 @@
 import { RainbowLoader } from 'brokoli-ui';
 import * as React from 'react';
 
-import { LoadingBox, RainbowLoadingBox } from '../../pages/LPForm/LPForm.styled';
+import { LoadingBox, RainbowLoadingBox } from './PageLoading.styled';
 
 export const PageLoading: React.FunctionComponent = React.memo(() => (
   <LoadingBox data-testid="PageLoading-LoadingBox">
