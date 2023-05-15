@@ -15,7 +15,7 @@ import {
 import { initialState, SliceState } from './state';
 import {
   approveUnderlyingTokenThunk,
-  confirmRolloverThunk,
+  confirmSwapRolloverThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
@@ -518,7 +518,7 @@ describe('rolloverSwapFormReducer', () => {
     describe('confirmSwapThunk', () => {
       it('should update swapConfirmationFlow to "waitingForSwapConfirmation" when confirmSwapThunk is pending', () => {
         const nextState = rolloverSwapFormReducer(testsInitialState, {
-          type: confirmRolloverThunk.pending.type,
+          type: confirmSwapRolloverThunk.pending.type,
         });
         expect(nextState.swapConfirmationFlow).toEqual({
           step: 'waitingForRolloverConfirmation',
@@ -529,7 +529,7 @@ describe('rolloverSwapFormReducer', () => {
 
       it('should update swapConfirmationFlow to error state when confirmSwapThunk is rejected', () => {
         const nextState = rolloverSwapFormReducer(testsInitialState, {
-          type: confirmRolloverThunk.rejected.type,
+          type: confirmSwapRolloverThunk.rejected.type,
           payload: 'Error happened',
         });
         expect(nextState.swapConfirmationFlow).toEqual({
@@ -541,7 +541,7 @@ describe('rolloverSwapFormReducer', () => {
 
       it('should update swapConfirmationFlow and status to "swapCompleted" when confirmSwapThunk is fulfilled', () => {
         const nextState = rolloverSwapFormReducer(testsInitialState, {
-          type: confirmRolloverThunk.fulfilled.type,
+          type: confirmSwapRolloverThunk.fulfilled.type,
           payload: { transactionHash: 'transactionHash' },
         });
 

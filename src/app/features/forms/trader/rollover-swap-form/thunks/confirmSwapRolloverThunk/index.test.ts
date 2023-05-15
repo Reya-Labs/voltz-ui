@@ -11,7 +11,7 @@ import {
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
 } from '../../utils';
-import { confirmRolloverThunkHandler } from './index';
+import { confirmSwapRolloverThunkHandler } from './index';
 
 jest.mock('../../../../../../../utilities/amm', () => ({
   getAmmProtocol: jest.fn(),
@@ -88,7 +88,7 @@ describe('confirmRolloverThunkHandler', () => {
     (getProspectiveSwapMode as jest.Mock).mockReturnValue('fixed');
     (getAmmProtocol as jest.Mock).mockReturnValue(mockPool);
     mockState.rolloverSwapForm.amm.signer.getAddress.mockResolvedValue(mockAccount);
-    const result = await confirmRolloverThunkHandler(null as never, mockThunkAPI as never);
+    const result = await confirmSwapRolloverThunkHandler(null as never, mockThunkAPI as never);
     expect(pushRolloverSubmittedEvent).toHaveBeenCalledWith(mockEventParams);
     expect(pushRolloverSuccessEvent).toHaveBeenCalledWith(mockEventParams);
     expect(mockState.rolloverSwapForm.previousAMM.rolloverWithSwap).toHaveBeenCalledWith({
@@ -121,7 +121,7 @@ describe('confirmRolloverThunkHandler', () => {
     );
     const mockErrorMessage = 'Mock error message';
     (extractError as jest.Mock).mockReturnValue(mockErrorMessage);
-    await confirmRolloverThunkHandler(null as never, mockThunkAPI as never);
+    await confirmSwapRolloverThunkHandler(null as never, mockThunkAPI as never);
     const expectedEventParams = {
       account: '0x123',
       notional: 123,
@@ -146,7 +146,7 @@ describe('confirmRolloverThunkHandler', () => {
     (extractError as jest.Mock).mockReturnValue('Mock error message');
     const mockRejectValue = 'Mock reject value';
     (rejectThunkWithError as jest.Mock).mockReturnValue(mockRejectValue);
-    const result = await confirmRolloverThunkHandler(null as never, mockThunkAPI as never);
+    const result = await confirmSwapRolloverThunkHandler(null as never, mockThunkAPI as never);
     expect(rejectThunkWithError).toHaveBeenCalledWith(mockThunkAPI, mockError);
     expect(result).toBe(mockRejectValue);
   });

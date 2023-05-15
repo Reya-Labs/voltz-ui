@@ -8,6 +8,8 @@ import {
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
+  getRealizedPnLFromFees,
+  getRealizedPnLFromSwaps,
 } from '../../common/utils';
 import {
   getAvailableNotional,
@@ -15,8 +17,6 @@ import {
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
-  getRealizedPnLFromFees,
-  getRealizedPnLFromSwaps,
   getVariableRate,
 } from './utils';
 

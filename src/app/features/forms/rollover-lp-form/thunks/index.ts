@@ -4,4 +4,4 @@ export * from './getInfoPostLpThunk';
 export * from './getPoolLpInfoThunk';
 export * from './getUnderlyingTokenAllowanceThunk';
 export * from './getWalletBalanceThunk';
-export * from './setSignerAndPositionsForAMMThunk';
+export * from './initializeAMMsAndPositionsForRolloverThunk';

@@ -13,11 +13,11 @@ import {
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
   selectLeverage,
-  selectLpFormAMM,
   selectMarginAccountName,
   selectNewPositionCompactNotional,
   selectProspectiveLpMarginFormatted,
   selectProspectiveLpNotionalFormatted,
+  selectRolloverLpFormAMM,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
   selectUserInputMarginInfo,
@@ -74,7 +74,7 @@ describe('rollover-lp-form.selectors', () => {
     });
   });
 
-  describe('selectLpFormAMM', () => {
+  describe('selectRolloverLpFormAMM', () => {
     it('should return the AMM object from the state', () => {
       const mockState = {
         rolloverLpForm: {
@@ -93,7 +93,7 @@ describe('rollover-lp-form.selectors', () => {
         },
       } as never;
 
-      const result = selectLpFormAMM(mockState);
+      const result = selectRolloverLpFormAMM(mockState);
 
       expect(result).toEqual({
         address: '0x123456789abcdef',

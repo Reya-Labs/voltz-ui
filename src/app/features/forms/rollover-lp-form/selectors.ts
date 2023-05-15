@@ -14,21 +14,32 @@ import {
 import { getProspectiveLpMargin, getProspectiveLpNotional } from './utils';
 
 export const selectSubmitButtonInfo = (state: RootState) => state.rolloverLpForm.submitButton;
-export const selectLpFormAMM = (state: RootState) => state.rolloverLpForm.amm;
+export const selectRolloverLpFormAMM = (state: RootState) => state.rolloverLpForm.amm;
+export const selectRolloverLpFormPreviousAMM = (state: RootState) =>
+  state.rolloverLpForm.previousAMM;
+export const selectRolloverLpFormPreviousPosition = (state: RootState) =>
+  state.rolloverLpForm.previousPosition;
 
-// todo: FB duplicate logic same as swap-form, move to common
+// todo: FB duplicate logic same as rollover-swap-form, move to common
 export const selectWalletBalance = (state: RootState) => {
   if (state.rolloverLpForm.walletBalance.status !== 'success') {
     return '--';
   }
 
-  return formCompactFormat(state.rolloverLpForm.walletBalance.value);
+  if (state.rolloverLpForm.previousPosition === null) {
+    return '--';
+  }
+
+  return formCompactFormat(
+    state.rolloverLpForm.walletBalance.value +
+      state.rolloverLpForm.previousPosition.settlementCashflow,
+  );
 };
 export const selectPoolLpInfoStatus = (state: RootState) => state.rolloverLpForm.poolLpInfo.status;
 
 // todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = selectLpFormAMM(state);
+  const aMM = selectRolloverLpFormAMM(state);
   if (!aMM) {
     return '';
   }
@@ -37,7 +48,7 @@ export const selectAMMTokenFormatted = (state: RootState) => {
 
 // todo: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = selectLpFormAMM(state);
+  const aMM = selectRolloverLpFormAMM(state);
   if (!aMM) {
     return '';
   }
@@ -46,7 +57,7 @@ export const selectAMMMaturityFormatted = (state: RootState) => {
 
 // todo: FB duplicate as in swap form
 export const selectMarginAccountName = (state: RootState) => {
-  const aMM = selectLpFormAMM(state);
+  const aMM = selectRolloverLpFormAMM(state);
   if (!aMM) {
     return '';
   }

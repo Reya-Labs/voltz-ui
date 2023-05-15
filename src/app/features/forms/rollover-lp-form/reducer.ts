@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, InfoPostLp } from '@voltz-protocol/v1-sdk';
-import { ContractReceipt } from 'ethers';
+import { InfoPostLp } from '@voltz-protocol/v1-sdk';
+import { ContractReceipt, providers } from 'ethers';
 
 import { stringToBigFloat } from '../../../../utilities/number';
 import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../common/utils';
@@ -12,8 +12,8 @@ import {
   getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
-  setSignerAndPositionsForAMMThunk,
-  SetSignerAndPositionsForAMMThunkSuccess,
+  initializeAMMsAndPositionsForRolloverThunk,
+  InitializeAMMsAndPositionsForRolloverThunkSuccess,
 } from './thunks';
 import {
   getProspectiveLpNotional,
@@ -28,6 +28,21 @@ const slice = createSlice({
   initialState,
   reducers: {
     resetStateAction: () => initialState,
+    setSignerForRolloverLpFormAction: (
+      state,
+      {
+        payload: { signer },
+      }: PayloadAction<{
+        signer: providers.JsonRpcSigner | null;
+      }>,
+    ) => {
+      if (state.amm) {
+        state.amm.signer = signer;
+      }
+      if (state.previousAMM) {
+        state.previousAMM.signer = signer;
+      }
+    },
     openRolloverConfirmationFlowAction: (state) => {
       state.lpConfirmationFlow.step = 'rolloverConfirmation';
     },
@@ -138,16 +153,6 @@ const slice = createSlice({
 
       validateUserInputAndUpdateSubmitButton(state);
       state.showLowLeverageNotification = checkLowLeverageNotification(state);
-    },
-    setLpFormAMMAction: (
-      state,
-      {
-        payload: { amm },
-      }: PayloadAction<{
-        amm: AMM | null;
-      }>,
-    ) => {
-      state.amm = amm;
     },
   },
   extraReducers: (builder) => {
@@ -294,23 +299,40 @@ const slice = createSlice({
         updateLeverageOptionsAfterGetInfoPostLp(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(setSignerAndPositionsForAMMThunk.pending, (state) => {
-        if (state.amm === null) {
-          return;
+      .addCase(initializeAMMsAndPositionsForRolloverThunk.pending, (state) => {
+        state.previousPosition = null;
+        if (state.amm) {
+          state.amm.signer = null;
         }
-        state.amm.signer = null;
+        if (state.previousAMM) {
+          state.previousAMM.signer = null;
+        }
       })
-      .addCase(setSignerAndPositionsForAMMThunk.rejected, (state) => {
-        if (state.amm === null) {
-          return;
+      .addCase(initializeAMMsAndPositionsForRolloverThunk.rejected, (state) => {
+        state.previousPosition = null;
+        if (state.amm) {
+          state.amm.signer = null;
         }
-        state.amm.signer = null;
+        if (state.previousAMM) {
+          state.previousAMM.signer = null;
+        }
       })
-      .addCase(setSignerAndPositionsForAMMThunk.fulfilled, (state, { payload }) => {
-        if (state.amm === null) {
-          return;
+      .addCase(initializeAMMsAndPositionsForRolloverThunk.fulfilled, (state, { payload }) => {
+        state.amm = (payload as InitializeAMMsAndPositionsForRolloverThunkSuccess).aMM;
+        state.previousAMM = (
+          payload as InitializeAMMsAndPositionsForRolloverThunkSuccess
+        ).previousAMM;
+        state.previousPosition = (
+          payload as InitializeAMMsAndPositionsForRolloverThunkSuccess
+        ).previousPosition;
+        if (state.amm) {
+          state.amm.signer = (payload as InitializeAMMsAndPositionsForRolloverThunkSuccess).signer;
         }
-        state.amm.signer = (payload as SetSignerAndPositionsForAMMThunkSuccess).signer;
+        if (state.previousAMM) {
+          state.previousAMM.signer = (
+            payload as InitializeAMMsAndPositionsForRolloverThunkSuccess
+          ).signer;
+        }
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(confirmLpRolloverThunk.pending, (state) => {
@@ -338,7 +360,6 @@ const slice = createSlice({
 });
 export const {
   resetStateAction,
-  setLpFormAMMAction,
   setNotionalAmountAction,
   setMarginAmountAction,
   setLeverageAction,
@@ -346,5 +367,6 @@ export const {
   setUserInputFixedUpperAction,
   openRolloverConfirmationFlowAction,
   closeRolloverConfirmationFlowAction,
+  setSignerForRolloverLpFormAction,
 } = slice.actions;
 export const rolloverLpFormReducer = slice.reducer;

@@ -9,7 +9,7 @@ import { pushLeverageChangeEvent } from './analytics';
 import { initialState } from './state';
 import {
   approveUnderlyingTokenThunk,
-  confirmRolloverThunk,
+  confirmSwapRolloverThunk,
   getInfoPostSwapThunk,
   getPoolSwapInfoThunk,
   getUnderlyingTokenAllowanceThunk,
@@ -378,21 +378,21 @@ const slice = createSlice({
         }
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(confirmRolloverThunk.pending, (state) => {
+      .addCase(confirmSwapRolloverThunk.pending, (state) => {
         state.swapConfirmationFlow = {
           step: 'waitingForRolloverConfirmation',
           error: null,
           txHash: null,
         };
       })
-      .addCase(confirmRolloverThunk.rejected, (state, { payload }) => {
+      .addCase(confirmSwapRolloverThunk.rejected, (state, { payload }) => {
         state.swapConfirmationFlow = {
           step: 'rolloverConfirmation',
           error: payload as string,
           txHash: null,
         };
       })
-      .addCase(confirmRolloverThunk.fulfilled, (state, { payload }) => {
+      .addCase(confirmSwapRolloverThunk.fulfilled, (state, { payload }) => {
         state.swapConfirmationFlow = {
           step: 'rolloverCompleted',
           error: null,

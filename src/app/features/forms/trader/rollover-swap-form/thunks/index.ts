@@ -1,5 +1,5 @@
 export * from './approveUnderlyingTokenThunk';
-export * from './confirmRolloverThunk';
+export * from './confirmSwapRolloverThunk';
 export * from './getInfoPostSwapThunk';
 export * from './getPoolSwapInfoThunk';
 export * from './getUnderlyingTokenAllowanceThunk';

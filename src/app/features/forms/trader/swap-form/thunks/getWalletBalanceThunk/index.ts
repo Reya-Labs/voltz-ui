@@ -11,7 +11,7 @@ export const getWalletBalanceThunkHandler: AsyncThunkPayloadCreator<
   try {
     const amm = thunkAPI.getState().swapForm.amm;
     if (!amm || !amm.signer) {
-      return;
+      return 0;
     }
 
     return await amm.underlyingTokens();

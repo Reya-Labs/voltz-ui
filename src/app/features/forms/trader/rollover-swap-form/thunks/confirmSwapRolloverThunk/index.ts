@@ -16,7 +16,7 @@ import {
   getProspectiveSwapNotional,
 } from '../../utils';
 
-export const confirmRolloverThunkHandler: AsyncThunkPayloadCreator<
+export const confirmSwapRolloverThunkHandler: AsyncThunkPayloadCreator<
   Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
@@ -68,8 +68,8 @@ export const confirmRolloverThunkHandler: AsyncThunkPayloadCreator<
   }
 };
 
-export const confirmRolloverThunk = createAsyncThunk<
+export const confirmSwapRolloverThunk = createAsyncThunk<
   Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('rolloverSwapForm/confirmRollover', confirmRolloverThunkHandler);
+>('rolloverSwapForm/confirmSwapRollover', confirmSwapRolloverThunkHandler);
