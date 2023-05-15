@@ -9,6 +9,7 @@ import {
   pushSwapTransactionFailedEvent,
   pushSwapTransactionSubmittedEvent,
   pushSwapTransactionSuccessEvent,
+  SwapEventParams,
 } from '../../analytics';
 import {
   getProspectiveSwapMargin,
@@ -33,7 +34,7 @@ export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
   const prospectiveSwapMargin = getProspectiveSwapMargin(swapFormState);
   const existingPosition = hasExistingPosition(swapFormState);
   const prospectiveSwapMode = getProspectiveSwapMode(swapFormState);
-  const eventParams = {
+  const eventParams: SwapEventParams = {
     account,
     notional: prospectiveSwapNotional,
     margin: prospectiveSwapMargin,

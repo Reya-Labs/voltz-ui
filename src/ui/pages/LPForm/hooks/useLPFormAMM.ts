@@ -17,6 +17,7 @@ import {
   setSignerAndPositionsForAMMThunk,
   setUserInputFixedLowerAction,
   setUserInputFixedUpperAction,
+  trackPageViewAction,
 } from '../../../../app/features/forms/lps/lp';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -49,7 +50,7 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
 
   const [loading, setLoading] = useState(true);
 
-  const { signer } = useWallet();
+  const { signer, account } = useWallet();
 
   useEffect(() => {
     if (!ammId || !poolId) {
@@ -116,9 +117,21 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
     const fixedLower = parseFloat(queryFixedLower);
     const fixedUpper = parseFloat(queryFixedUpper);
     if (isNaN(fixedLower) || isNaN(fixedUpper)) {
+      dispatch(
+        trackPageViewAction({
+          isEdit: false,
+          account: account || '',
+        }),
+      );
       return;
     }
 
+    dispatch(
+      trackPageViewAction({
+        isEdit: true,
+        account: account || '',
+      }),
+    );
     dispatch(
       setUserInputFixedLowerAction({
         value: fixedLower,

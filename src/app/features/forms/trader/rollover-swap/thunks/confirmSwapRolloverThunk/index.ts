@@ -9,6 +9,7 @@ import {
   pushRolloverFailedEvent,
   pushRolloverSubmittedEvent,
   pushRolloverSuccessEvent,
+  RolloverEventParams,
 } from '../../analytics';
 import {
   getProspectiveSwapMargin,
@@ -34,7 +35,7 @@ export const confirmSwapRolloverThunkHandler: AsyncThunkPayloadCreator<
   const prospectiveSwapMargin = getProspectiveSwapMargin(state);
   const prospectiveSwapMode = getProspectiveSwapMode(state);
   const isFT = prospectiveSwapMode === 'fixed';
-  const eventParams = {
+  const eventParams: RolloverEventParams = {
     account,
     notional: prospectiveSwapNotional,
     margin: prospectiveSwapMargin,

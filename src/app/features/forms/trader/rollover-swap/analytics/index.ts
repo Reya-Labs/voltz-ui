@@ -10,7 +10,7 @@ export const pushPageViewEvent = ({ account }: PageViewEventParams) => {
   });
 };
 
-type RolloverEventParams = {
+export type RolloverEventParams = {
   notional: number;
   margin: number;
   pool: string;

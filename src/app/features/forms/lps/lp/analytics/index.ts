@@ -4,73 +4,82 @@ type PageViewEventParams = {
   account: string;
   isEdit: boolean;
 };
+
 export const pushPageViewEvent = ({ account, isEdit }: PageViewEventParams) => {
   pushEvent(account || '', {
     event: 'title_change',
-    eventValue: isEdit ? 'New Trader Position' : 'Edit Trader Position',
+    eventValue: isEdit ? 'Edit Liquidity Provider Position' : 'New Liquidity Provider Position',
   });
 };
 
-export type SwapEventParams = {
+export type LPEventParams = {
   notional: number;
   margin: number;
   isEdit: boolean;
   pool: string;
-  isFT: boolean;
   account: string;
+  fixedLow: number;
+  fixedHigh: number;
 };
 
-export const pushSwapTransactionSubmittedEvent = ({
+export const pushLPTransactionSubmittedEvent = ({
   notional,
   margin,
   isEdit,
   pool,
-  isFT,
   account,
-}: SwapEventParams) => {
+  fixedHigh,
+  fixedLow,
+}: LPEventParams) => {
   pushEvent(account, {
     event: 'tx_submitted',
     eventValue: {
       notional,
       margin,
       action: isEdit ? 'edit' : 'new',
+      fixedHigh,
+      fixedLow,
     },
     pool,
-    agent: isFT ? 'Fixed Trader' : 'Variable Trader',
+    agent: 'Liquidity Provider',
   });
 };
 
-export const pushSwapTransactionSuccessEvent = ({
+export const pushLPTransactionSuccessEvent = ({
   notional,
   margin,
   isEdit,
   pool,
-  isFT,
   account,
-}: SwapEventParams) => {
+  fixedHigh,
+  fixedLow,
+}: LPEventParams) => {
   pushEvent(account, {
     event: 'successful_tx',
     eventValue: {
       notional,
       margin,
       action: isEdit ? 'edit' : 'new',
+      fixedHigh,
+      fixedLow,
     },
     pool,
-    agent: isFT ? 'Fixed Trader' : 'Variable Trader',
+    agent: 'Liquidity Provider',
   });
 };
 
-type FailedSwapEventParams = SwapEventParams & {
+type FailedSwapEventParams = LPEventParams & {
   errorMessage: string;
 };
-export const pushSwapTransactionFailedEvent = ({
+export const pushLPTransactionFailedEvent = ({
   notional,
   margin,
   isEdit,
   pool,
-  isFT,
   account,
   errorMessage,
+  fixedHigh,
+  fixedLow,
 }: FailedSwapEventParams) => {
   pushEvent(account, {
     event: 'failed_tx',
@@ -79,30 +88,10 @@ export const pushSwapTransactionFailedEvent = ({
       margin,
       action: isEdit ? 'edit' : 'new',
       failMessage: errorMessage,
+      fixedHigh,
+      fixedLow,
     },
     pool,
-    agent: isFT ? 'Fixed Trader' : 'Variable Trader',
-  });
-};
-
-type EstimatedLeverageChangeEventParams = {
-  leverage: number;
-  pool: string;
-  isFT: boolean;
-  account: string;
-  changeType: 'button' | 'input';
-};
-export const pushLeverageChangeEvent = ({
-  account,
-  leverage,
-  isFT,
-  pool,
-  changeType,
-}: EstimatedLeverageChangeEventParams) => {
-  pushEvent(account ?? '', {
-    event: changeType === 'input' ? 'leverage_change_input' : 'leverage_change_button',
-    eventValue: leverage,
-    pool,
-    agent: isFT ? 'Fixed Trader' : 'Variable Trader',
+    agent: 'Liquidity Provider',
   });
 };

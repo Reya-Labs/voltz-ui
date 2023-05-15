@@ -4,6 +4,7 @@ import { ContractReceipt } from 'ethers';
 
 import { stringToBigFloat } from '../../../../../utilities/number';
 import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common/utils';
+import { pushPageViewEvent } from './analytics';
 import { initialState } from './state';
 import {
   approveUnderlyingTokenThunk,
@@ -177,6 +178,17 @@ const slice = createSlice({
       }>,
     ) => {
       state.amm = amm;
+    },
+    trackPageViewAction: (
+      state,
+      {
+        payload: { isEdit, account },
+      }: PayloadAction<{
+        isEdit: boolean;
+        account: string;
+      }>,
+    ) => {
+      pushPageViewEvent({ account, isEdit });
     },
   },
   extraReducers: (builder) => {
@@ -404,5 +416,6 @@ export const {
   closeLpConfirmationFlowAction,
   openMarginUpdateConfirmationFlowAction,
   closeMarginUpdateConfirmationFlowAction,
+  trackPageViewAction,
 } = slice.actions;
 export const lpFormReducer = slice.reducer;

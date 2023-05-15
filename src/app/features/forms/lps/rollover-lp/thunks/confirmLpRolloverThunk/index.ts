@@ -9,6 +9,7 @@ import {
   pushRolloverFailedEvent,
   pushRolloverSubmittedEvent,
   pushRolloverSuccessEvent,
+  RolloverEventParams,
 } from '../../analytics';
 import {
   getProspectiveLpFixedHigh,
@@ -39,7 +40,7 @@ export const confirmLpRolloverThunk = createAsyncThunk<
   const account = await amm.signer.getAddress();
   const notional = getProspectiveLpNotional(state);
   const margin = getProspectiveLpMargin(state);
-  const eventParams = {
+  const eventParams: RolloverEventParams = {
     account,
     notional,
     margin,
