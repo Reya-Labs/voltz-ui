@@ -1,6 +1,6 @@
-import { getAlchemyKey } from './get-alchemy-key';
+import { getAlchemyKey } from './index';
 
-describe('getAlchemyKeyForChain', () => {
+describe('getAlchemyKey', () => {
   it('should return an empty string if the process environment variable is not provided', () => {
     expect(getAlchemyKey('')).toBe('');
     expect(getAlchemyKey(undefined)).toBe('');

@@ -1,4 +1,4 @@
-import { isEnvVarProvided } from '../isEnvVarProvided';
+import { isEnvVarProvided } from '../../../../utilities/isEnvVarProvided';
 
 type NetworkConfigFromProcessENV = {
   network: string;

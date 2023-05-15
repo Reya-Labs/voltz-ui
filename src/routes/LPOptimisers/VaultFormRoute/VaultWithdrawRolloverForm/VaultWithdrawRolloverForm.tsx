@@ -5,7 +5,7 @@ import { OptimiserInfo, updateOptimiserStateAction } from '../../../../app/featu
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
-import { getAlchemyKey } from '../../../../utilities/network/get-alchemy-key';
+import { getAlchemyKey } from '../../../../utilities/getAlchemyKey';
 import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { FormProps } from '../Form/DepositForm/DepositForm';
 import { WithdrawRolloverForm } from '../Form/WithdrawRolloverForm/WithdrawRolloverForm';

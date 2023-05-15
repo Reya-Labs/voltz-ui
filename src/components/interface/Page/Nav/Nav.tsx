@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { selectChainId } from '../../../../app/features/network';
+import { isArbitrumChain, selectChainId } from '../../../../app/features/network';
 import { useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
-import { isArbitrumChain } from '../../../../utilities/network/is-arbitrum-chain';
 import { NavBox, VoltzIcon, VoltzIconBox } from './Nav.styled';
 import { NavLink } from './NavLink/NavLink';
 

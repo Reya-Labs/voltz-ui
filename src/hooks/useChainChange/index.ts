@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
+import { setChainId } from '../../app/features/network';
 import { useAppDispatch } from '../../app/hooks';
-import { setChainId } from '../../utilities/network/chain-store';
 import { handlePageReloadAfterChainChanged } from './handle-page-reload-after-chain-changed';
 
 export const useChainChange = () => {

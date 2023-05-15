@@ -5,11 +5,11 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   selectChainChangeState,
   selectChainId,
+  setChainId,
   setChainIdThunk,
 } from '../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useWallet } from '../../../../../hooks/useWallet';
-import { setChainId } from '../../../../../utilities/network/chain-store';
 import { getChainOptions } from './get-chain-options';
 
 export const ChainSelector: React.FunctionComponent = () => {

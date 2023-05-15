@@ -1,7 +1,6 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { getChainId } from '../../../utilities/network/chain-store';
-import { getChainsFromProcessEnv } from '../../../utilities/network/get-chains-from-process-env';
+import { getChainId, getChainsFromProcessEnv } from '../../../app/features/network';
 import { chainOptionsConfiguration } from './chain-options-configuration';
 type SupportedChainIds = keyof typeof SupportedChainId;
 

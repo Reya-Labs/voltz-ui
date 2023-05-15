@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getAllMellowProducts, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ethers } from 'ethers';
 
-import { getAlchemyKey } from '../../../../../utilities/network/get-alchemy-key';
+import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
 import { OptimiserInfo } from '../../types';
 

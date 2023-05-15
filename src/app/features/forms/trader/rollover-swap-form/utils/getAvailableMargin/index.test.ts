@@ -1,9 +1,5 @@
 import { getAvailableMargin } from './index';
 
-jest.mock('../getProspectiveSwapNotional', () => ({
-  getProspectiveSwapNotional: jest.fn(),
-}));
-
 jest.mock('../../../../common/utils/formLimitAndFormatNumber', () => ({
   formLimitAndFormatNumber: jest.fn(),
 }));

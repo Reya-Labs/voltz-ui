@@ -1,11 +1,14 @@
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { selectChainId, setChainIdThunk } from '../../app/features/network';
+import {
+  detectIfNetworkSupported,
+  selectChainId,
+  setChainIdThunk,
+} from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
-import { detectIfNetworkSupported } from '../../utilities/network/detect-if-network-supported';
 import { getSentryTracker } from '../../utilities/sentry';
 import { checkForRiskyWallet, checkForTOSSignature, getWalletProvider } from './services';
 import { WalletName, WalletStatus } from './types';

@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { selectChainId } from './app/features/network';
+import { isArbitrumChain, selectChainId } from './app/features/network';
 import { useAppSelector } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
@@ -19,7 +19,6 @@ import { ProfilePage } from './ui/pages/Profile';
 import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
 import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
-import { isArbitrumChain } from './utilities/network/is-arbitrum-chain';
 
 export const AppRoutes = () => {
   const chainId = useAppSelector(selectChainId);

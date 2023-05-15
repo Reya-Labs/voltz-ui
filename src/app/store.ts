@@ -5,6 +5,7 @@ import createSagaMiddleware from 'redux-saga';
 import { aMMsReducer } from './features/aMMs';
 import { cashflowCalculatorReducer } from './features/cashflow-calculator';
 import { lpFormReducer } from './features/forms/lp-form';
+import { rolloverLpFormReducer } from './features/forms/rollover-lp-form';
 import { rolloverSwapFormReducer } from './features/forms/trader/rollover-swap-form';
 import { swapFormReducer } from './features/forms/trader/swap-form';
 import { historicalRatesReducer } from './features/historical-rates';
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   cashflowCalculator: cashflowCalculatorReducer,
   rolloverSwapForm: rolloverSwapFormReducer,
   settleFlow: settleFlowReducer,
+  rolloverLpForm: rolloverLpFormReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

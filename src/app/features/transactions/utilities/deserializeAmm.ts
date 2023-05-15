@@ -1,7 +1,7 @@
 import { AMM, getProvider, RateOracle, Token } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { getAlchemyKey } from '../../../../utilities/network/get-alchemy-key';
+import { getAlchemyKey } from '../../../../utilities/getAlchemyKey';
 import { SerializedAMM } from '../../../types';
 
 export const deserializeAmm = (
