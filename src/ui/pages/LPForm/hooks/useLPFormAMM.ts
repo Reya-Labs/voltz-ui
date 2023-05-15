@@ -132,10 +132,11 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
   }, [dispatch, positionsFetchingStatus, queryFixedLower, queryFixedUpper]);
 
   useEffect(() => {
-    void dispatch(getWalletBalanceThunk());
-    if (!chainId) {
+    if (!chainId || !aMM) {
       return;
     }
+
+    void dispatch(getWalletBalanceThunk());
     void dispatch(getUnderlyingTokenAllowanceThunk({ chainId }));
   }, [dispatch, aMM, aMM?.signer, chainId]);
 
