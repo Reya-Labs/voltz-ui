@@ -47,33 +47,36 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     };
     return;
   }
-
-  if (isWalletBalanceLoaded && state.userInput.marginAmount.value > state.walletBalance.value) {
-    state.submitButton = {
-      state: 'not-enough-balance',
-      disabled: true,
-      message: {
-        text: '',
-        isError: false,
-      },
-    };
-    return;
+  if (isWalletBalanceLoaded && state.previousPosition !== null) {
+    const walletBalance = state.walletBalance.value;
+    const settlementCashflow = state.previousPosition.settlementCashflow;
+    if (state.userInput.marginAmount.value > walletBalance + settlementCashflow) {
+      state.submitButton = {
+        state: 'not-enough-balance',
+        disabled: true,
+        message: {
+          text: '',
+          isError: false,
+        },
+      };
+      return;
+    }
   }
 
-  if (
-    isWalletBalanceLoaded &&
-    isInfoPostLpLoaded &&
-    state.userInput.marginAmount.value > state.walletBalance.value
-  ) {
-    state.submitButton = {
-      state: 'not-enough-balance',
-      disabled: true,
-      message: {
-        text: `Insufficient ${state.amm.underlyingToken.name.toUpperCase()} balance to cover for margin.`,
-        isError: true,
-      },
-    };
-    return;
+  if (isWalletBalanceLoaded && state.previousPosition !== null && isInfoPostLpLoaded) {
+    const walletBalance = state.walletBalance.value;
+    const settlementCashflow = state.previousPosition.settlementCashflow;
+    if (state.userInput.marginAmount.value > walletBalance + settlementCashflow) {
+      state.submitButton = {
+        state: 'not-enough-balance',
+        disabled: true,
+        message: {
+          text: `Insufficient ${state.amm.underlyingToken.name.toUpperCase()} balance to cover for margin.`,
+          isError: true,
+        },
+      };
+      return;
+    }
   }
 
   if (state.userInput.fixedRange.error) {
