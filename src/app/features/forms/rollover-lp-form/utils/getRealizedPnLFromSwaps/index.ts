@@ -1,12 +1,10 @@
 import { Draft } from '@reduxjs/toolkit';
-import { Position } from '@voltz-protocol/v1-sdk';
 
 import { SliceState } from '../../state';
-import { hasExistingPosition } from '../hasExistingPosition';
 
 export const getRealizedPnLFromSwaps = (state: Draft<SliceState>) => {
-  if (hasExistingPosition(state)) {
-    return (state.selectedPosition as Position).realizedPnLFromSwaps;
+  if (state.previousPosition !== null) {
+    return state.previousPosition.realizedPnLFromSwaps;
   }
   return null;
 };

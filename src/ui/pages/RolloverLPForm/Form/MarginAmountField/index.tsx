@@ -4,21 +4,18 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   selectLpFormAMM,
-  selectLpFormSelectedPosition,
   selectUserInputMarginInfo,
   setMarginAmountAction,
 } from '../../../../../app/features/forms/rollover-lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { EditMarginAmountFieldUI } from './EditMarginAmountFieldUI';
 import { NewMarginAmountFieldUI } from './NewMarginAmountFieldUI';
 type NotionalAmountProps = {};
 
 export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const dispatch = useAppDispatch();
   const marginAmount = useAppSelector(selectUserInputMarginInfo);
-  const selectedPosition = useAppSelector(selectLpFormSelectedPosition);
   const aMM = useAppSelector(selectLpFormAMM);
 
   const [localMargin, setLocalMargin] = useState<string | null>(marginAmount.value.toString());
@@ -46,11 +43,10 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
 
   const debouncedSetMarginAmount = useMemo(
     () =>
-      debounce((value?: number, editMode?: 'add' | 'remove') => {
+      debounce((value?: number) => {
         dispatch(
           setMarginAmountAction({
             value,
-            editMode,
           }),
         );
       }, 300),
@@ -62,18 +58,7 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
       setLocalMargin(value ?? null);
 
       const valueAsNumber = value !== undefined ? stringToBigFloat(value) : 0;
-      debouncedSetMarginAmount(valueAsNumber, undefined);
-    },
-    [debouncedSetMarginAmount],
-  );
-
-  const handleOnSwitchChange = useCallback(
-    (value: string) => {
-      if (value !== 'add' && value !== 'remove') {
-        return;
-      }
-
-      debouncedSetMarginAmount(undefined, value);
+      debouncedSetMarginAmount(valueAsNumber);
     },
     [debouncedSetMarginAmount],
   );
@@ -90,22 +75,11 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
     return null;
   }
 
-  return !selectedPosition ? (
+  return (
     <NewMarginAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
       handleOnMarginChange={handleOnMarginChange}
-      labelTypographyToken={labelTypographyToken}
-      localMargin={localMargin}
-      topRightTextTypographyToken={topRightTextTypographyToken}
-      underlyingTokenName={aMM.underlyingToken.name}
-    />
-  ) : (
-    <EditMarginAmountFieldUI
-      bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
-      bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-      handleOnMarginChange={handleOnMarginChange}
-      handleOnSwitchChange={handleOnSwitchChange}
       labelTypographyToken={labelTypographyToken}
       localMargin={localMargin}
       topRightTextTypographyToken={topRightTextTypographyToken}

@@ -5,8 +5,7 @@ type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 export type SliceState = {
   submitButton: {
     state:
-      | 'lp'
-      | 'margin-update'
+      | 'rollover'
       | 'not-enough-balance'
       | 'connect-wallet'
       | 'fixed-range-error'
@@ -18,13 +17,12 @@ export type SliceState = {
       isError: boolean;
     };
   };
+  // target/next AMM
   amm: AMM | null;
-  positions: {
-    value: Position[] | null;
-    status: ThunkStatus;
-  };
-  // position from the list of positions above that matches the fixed rate range selected by user
-  selectedPosition: Position | null;
+  // matured/previous AMM
+  previousAMM: AMM | null;
+  // matured/previous position
+  previousPosition: Position | null;
   walletBalance: {
     value: number;
     status: ThunkStatus;
@@ -38,19 +36,15 @@ export type SliceState = {
     maxLeverage: number;
     status: ThunkStatus;
   };
-  // the lp form is a slice of the redux store and userInput is a "slice of a slice", doesn't have actions
   userInput: {
     // User-inputted notional amount of liquidity they want to provide or remove from the vamm
     notionalAmount: {
       value: number;
-      // provide -> user is adding more liquidity into the vamm, remove means the user is removing liquidity from vamm
-      editMode: 'add' | 'remove';
       error: string | null;
     };
     // User-inputted margin amount (same as the swap form)
     marginAmount: {
       value: number;
-      editMode: 'add' | 'remove';
       error: string | null;
     };
     leverage: number | null;
@@ -84,7 +78,7 @@ export type SliceState = {
     };
   };
   lpConfirmationFlow: {
-    step: 'lpConfirmation' | 'waitingForLpConfirmation' | 'lpCompleted' | null;
+    step: 'rolloverConfirmation' | 'waitingForRolloverConfirmation' | 'rolloverCompleted' | null;
     error: string | null;
     txHash: string | null;
   };
@@ -101,11 +95,8 @@ export const initialState: SliceState = {
     },
   },
   amm: null,
-  selectedPosition: null,
-  positions: {
-    value: null,
-    status: 'idle',
-  },
+  previousAMM: null,
+  previousPosition: null,
   walletBalance: {
     value: 0,
     status: 'idle',
@@ -121,12 +112,10 @@ export const initialState: SliceState = {
   userInput: {
     notionalAmount: {
       value: 0,
-      editMode: 'add',
       error: null,
     },
     marginAmount: {
       value: 0,
-      editMode: 'add',
       error: null,
     },
     leverage: null,

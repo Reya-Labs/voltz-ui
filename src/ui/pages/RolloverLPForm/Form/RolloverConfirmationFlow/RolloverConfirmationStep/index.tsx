@@ -2,10 +2,10 @@ import { Button, CloseButton, HorizontalLine, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
-  closeMarginUpdateConfirmationFlowAction,
-  confirmMarginUpdateThunk,
+  closeRolloverConfirmationFlowAction,
+  confirmLpRolloverThunk,
   selectLpFormAMM,
-  selectMarginUpdateConfirmationFlowError,
+  selectRolloverConfirmationFlowError,
 } from '../../../../../../app/features/forms/rollover-lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
@@ -13,38 +13,37 @@ import {
   MarketTokenInformationProps,
 } from '../../../../../components/MarketTokenInformation';
 import { TransactionDetails } from '../../TransactionDetails';
-import { MarginUpdateDetails } from '../MarginUpdateDetails';
+import { RolloverDetails } from '../RolloverDetails';
 import {
-  MarginUpdateConfirmationStepBox,
-  MarginUpdateDetailsBox,
-  MarginUpdateFeeDetailsBox,
+  LpDetailsBox,
+  LpFeeDetailsBox,
+  RolloverConfirmationStepBox,
   TitleBox,
-} from './MarginUpdateConfirmationStep.styled';
+} from './RolloverConfirmationStep.styled';
 
-export const MarginUpdateConfirmationStep: React.FunctionComponent = () => {
+export const RolloverConfirmationStep: React.FunctionComponent = () => {
   const aMM = useAppSelector(selectLpFormAMM);
   const dispatch = useAppDispatch();
-  const handleConfirmMarginUpdate = useCallback(() => {
-    void dispatch(confirmMarginUpdateThunk());
+  const handleConfirmLp = useCallback(() => {
+    void dispatch(confirmLpRolloverThunk());
   }, [dispatch]);
-  const error = useAppSelector(selectMarginUpdateConfirmationFlowError);
+  const error = useAppSelector(selectRolloverConfirmationFlowError);
   const handleCloseButtonClick = useCallback(() => {
-    dispatch(closeMarginUpdateConfirmationFlowAction());
+    dispatch(closeRolloverConfirmationFlowAction());
   }, [dispatch]);
-
   if (!aMM) {
     return null;
   }
 
   return (
-    <MarginUpdateConfirmationStepBox>
+    <RolloverConfirmationStepBox>
       <TitleBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          Confirm Margin Update
+          Confirm
         </Typography>
         <CloseButton onClick={handleCloseButtonClick} />
       </TitleBox>
-      <MarginUpdateDetailsBox>
+      <LpDetailsBox>
         <MarketTokenInformation
           colorToken="lavenderWeb"
           iconSize={30}
@@ -56,21 +55,21 @@ export const MarginUpdateConfirmationStep: React.FunctionComponent = () => {
           token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
           typographyToken="primaryHeader2Black"
         />
-        <MarginUpdateDetails />
-      </MarginUpdateDetailsBox>
+        <RolloverDetails />
+      </LpDetailsBox>
       <HorizontalLine />
-      <MarginUpdateFeeDetailsBox>
+      <LpFeeDetailsBox>
         <TransactionDetails />
-      </MarginUpdateFeeDetailsBox>
+      </LpFeeDetailsBox>
       <Button
         bottomLeftText={error ? error : ''}
         bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
         variant="primary"
-        onClick={handleConfirmMarginUpdate}
+        onClick={handleConfirmLp}
       >
-        Confirm Margin Update
+        Confirm
       </Button>
-    </MarginUpdateConfirmationStepBox>
+    </RolloverConfirmationStepBox>
   );
 };

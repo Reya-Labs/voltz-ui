@@ -16,17 +16,14 @@ describe('updateLeverage', () => {
       leverage: 0,
       marginAmount: {
         value: 0,
-        editMode: 'add',
         error: null,
       },
       notionalAmount: {
         value: 0,
-        editMode: 'add',
         error: null,
       },
       fixedRange: {
         value: null,
-        editMode: 'add',
         error: null,
       },
     },
@@ -39,17 +36,14 @@ describe('updateLeverage', () => {
         leverage: 0,
         marginAmount: {
           value: 0,
-          editMode: 'add',
           error: null,
         },
         notionalAmount: {
           value: 0,
-          editMode: 'add',
           error: null,
         },
         fixedRange: {
           value: null,
-          editMode: 'add',
           error: null,
         },
       },

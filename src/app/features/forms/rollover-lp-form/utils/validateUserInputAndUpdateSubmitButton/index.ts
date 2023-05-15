@@ -4,18 +4,18 @@ import { isUserInputMarginError } from '../../../common/utils';
 import { SliceState } from '../../state';
 import { getProspectiveLpMargin } from '../getProspectiveLpMargin';
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
-import { hasExistingPosition } from '../hasExistingPosition';
 import { validateUserInput } from '../validateUserInput';
 
 export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void => {
   validateUserInput(state);
 
-  const isProspectiveLpNotionalValid =
-    hasExistingPosition(state) || getProspectiveLpNotional(state) > 0;
-  const isProspectiveLpMarginValid =
-    hasExistingPosition(state) || getProspectiveLpMargin(state) > 0;
+  const prospectiveLpNotional = getProspectiveLpNotional(state);
+  const isProspectiveLpNotionalValid = prospectiveLpNotional > 0;
+  const prospectiveLpMargin = getProspectiveLpMargin(state);
+  const marginError = isUserInputMarginError(state);
+  const isProspectiveLpMarginValid = prospectiveLpMargin > 0;
   const isProspectiveLpNotionalMarginValid =
-    getProspectiveLpNotional(state) !== 0 || getProspectiveLpMargin(state) !== 0;
+    prospectiveLpNotional !== 0 || prospectiveLpMargin !== 0;
   const isInfoPostLpLoaded = state.prospectiveLp.infoPostLp.status === 'success';
   const isWalletBalanceLoaded = state.walletBalance.status === 'success';
   const isWalletTokenAllowanceLoaded = state.walletTokenAllowance.status === 'success';
@@ -33,7 +33,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   }
 
   if (
-    !isUserInputMarginError(state) &&
+    !marginError &&
     isWalletTokenAllowanceLoaded &&
     state.walletTokenAllowance.value < state.userInput.marginAmount.value
   ) {
@@ -48,11 +48,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     return;
   }
 
-  if (
-    isWalletBalanceLoaded &&
-    state.userInput.marginAmount.editMode === 'add' &&
-    state.userInput.marginAmount.value > state.walletBalance.value
-  ) {
+  if (isWalletBalanceLoaded && state.userInput.marginAmount.value > state.walletBalance.value) {
     state.submitButton = {
       state: 'not-enough-balance',
       disabled: true,
@@ -67,7 +63,6 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   if (
     isWalletBalanceLoaded &&
     isInfoPostLpLoaded &&
-    state.userInput.marginAmount.editMode === 'add' &&
     state.userInput.marginAmount.value > state.walletBalance.value
   ) {
     state.submitButton = {
@@ -94,7 +89,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   }
 
   if (
-    !isUserInputMarginError(state) &&
+    !marginError &&
     isProspectiveLpNotionalValid &&
     isProspectiveLpMarginValid &&
     isProspectiveLpNotionalMarginValid &&
@@ -103,7 +98,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     isWalletTokenAllowanceLoaded
   ) {
     state.submitButton = {
-      state: getProspectiveLpNotional(state) !== 0 ? 'lp' : 'margin-update',
+      state: 'rollover',
       disabled: false,
       message: {
         text: 'Token approved',
@@ -114,7 +109,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   }
 
   state.submitButton = {
-    state: 'lp',
+    state: 'rollover',
     disabled: true,
     message: {
       text: 'Almost ready',

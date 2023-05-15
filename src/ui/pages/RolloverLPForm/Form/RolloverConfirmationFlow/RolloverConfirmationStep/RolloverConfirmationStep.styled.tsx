@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const LpConfirmationStepBox = styled('div')`
+export const RolloverConfirmationStepBox = styled('div')`
   display: flex;
   box-sizing: border-box;
   width: 100%;

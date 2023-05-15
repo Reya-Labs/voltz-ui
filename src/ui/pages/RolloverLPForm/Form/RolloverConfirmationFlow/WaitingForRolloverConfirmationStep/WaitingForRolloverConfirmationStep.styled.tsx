@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const WaitingForConfirmationStepBox = styled('div')`
+export const WaitingForRolloverConfirmationStepBox = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: flex-start;

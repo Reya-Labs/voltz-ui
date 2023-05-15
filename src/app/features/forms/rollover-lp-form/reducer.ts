@@ -7,7 +7,7 @@ import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../commo
 import { initialState } from './state';
 import {
   approveUnderlyingTokenThunk,
-  confirmLpThunk,
+  confirmLpRolloverThunk,
   getInfoPostLpThunk,
   getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
@@ -17,23 +17,21 @@ import {
 } from './thunks';
 import {
   getProspectiveLpNotional,
-  resetNotionalAndMarginEditMode,
   updateLeverage,
   updateLeverageOptionsAfterGetInfoPostLp,
   updateLeverageOptionsAfterGetPoolLpInfo,
-  updateSelectedPosition,
   validateUserInputAndUpdateSubmitButton,
 } from './utils';
 
 const slice = createSlice({
-  name: 'lpForm',
+  name: 'rolloverLpForm',
   initialState,
   reducers: {
     resetStateAction: () => initialState,
-    openLpConfirmationFlowAction: (state) => {
-      state.lpConfirmationFlow.step = 'lpConfirmation';
+    openRolloverConfirmationFlowAction: (state) => {
+      state.lpConfirmationFlow.step = 'rolloverConfirmation';
     },
-    closeLpConfirmationFlowAction: (state) => {
+    closeRolloverConfirmationFlowAction: (state) => {
       state.lpConfirmationFlow = {
         step: null,
         error: null,
@@ -41,7 +39,6 @@ const slice = createSlice({
       };
     },
     setUserInputFixedLowerAction: (
-      // the current state of the lp-form slice of the redux store (defined in this file) -> we extended the type
       state,
       {
         // what you send from the frontend world with type PayloadAction and the value can be a number
@@ -63,12 +60,9 @@ const slice = createSlice({
 
       state.userInput.fixedRange.lower = nextFixedRateLowerNumber;
       state.userInput.fixedRange.updateCount = state.userInput.fixedRange.updateCount + 1;
-      updateSelectedPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
-      resetNotionalAndMarginEditMode(state);
     },
     setUserInputFixedUpperAction: (
-      // the current state of the lp-form slice of the redux store (defined in this file) -> we extended the type
       state,
       {
         // what you send from the frontend world with type PayloadAction and the value can be a number
@@ -90,25 +84,18 @@ const slice = createSlice({
 
       state.userInput.fixedRange.upper = nextFixedRateUpperNumber;
       state.userInput.fixedRange.updateCount = state.userInput.fixedRange.updateCount + 1;
-      updateSelectedPosition(state);
       validateUserInputAndUpdateSubmitButton(state);
-      resetNotionalAndMarginEditMode(state);
     },
     setNotionalAmountAction: (
       state,
       {
-        payload: { value, editMode },
+        payload: { value },
       }: PayloadAction<{
         value?: number;
-        editMode?: 'add' | 'remove';
       }>,
     ) => {
       if (value !== undefined) {
         state.userInput.notionalAmount.value = value;
-      }
-
-      if (editMode !== undefined) {
-        state.userInput.notionalAmount.editMode = editMode;
       }
 
       updateLeverage(state);
@@ -117,18 +104,13 @@ const slice = createSlice({
     setMarginAmountAction: (
       state,
       {
-        payload: { value, editMode },
+        payload: { value },
       }: PayloadAction<{
         value?: number;
-        editMode?: 'add' | 'remove';
       }>,
     ) => {
       if (value !== undefined) {
         state.userInput.marginAmount.value = value;
-      }
-
-      if (editMode !== undefined) {
-        state.userInput.marginAmount.editMode = editMode;
       }
 
       updateLeverage(state);
@@ -316,44 +298,38 @@ const slice = createSlice({
         if (state.amm === null) {
           return;
         }
-        state.positions.value = null;
-        state.positions.status = 'pending';
         state.amm.signer = null;
       })
       .addCase(setSignerAndPositionsForAMMThunk.rejected, (state) => {
         if (state.amm === null) {
           return;
         }
-        state.positions.value = null;
-        state.positions.status = 'error';
         state.amm.signer = null;
       })
       .addCase(setSignerAndPositionsForAMMThunk.fulfilled, (state, { payload }) => {
         if (state.amm === null) {
           return;
         }
-        state.positions.value = (payload as SetSignerAndPositionsForAMMThunkSuccess).positions;
-        state.positions.status = 'success';
         state.amm.signer = (payload as SetSignerAndPositionsForAMMThunkSuccess).signer;
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(confirmLpThunk.pending, (state) => {
+      .addCase(confirmLpRolloverThunk.pending, (state) => {
         state.lpConfirmationFlow = {
-          step: 'waitingForLpConfirmation',
+          step: 'waitingForRolloverConfirmation',
           error: null,
           txHash: null,
         };
       })
-      .addCase(confirmLpThunk.rejected, (state, { payload }) => {
+      .addCase(confirmLpRolloverThunk.rejected, (state, { payload }) => {
         state.lpConfirmationFlow = {
-          step: 'lpConfirmation',
+          step: 'rolloverConfirmation',
           error: payload as string,
           txHash: null,
         };
       })
-      .addCase(confirmLpThunk.fulfilled, (state, { payload }) => {
+      .addCase(confirmLpRolloverThunk.fulfilled, (state, { payload }) => {
         state.lpConfirmationFlow = {
-          step: 'lpCompleted',
+          step: 'rolloverCompleted',
           error: null,
           txHash: (payload as ContractReceipt).transactionHash,
         };
@@ -368,7 +344,7 @@ export const {
   setLeverageAction,
   setUserInputFixedLowerAction,
   setUserInputFixedUpperAction,
-  openLpConfirmationFlowAction,
-  closeLpConfirmationFlowAction,
+  openRolloverConfirmationFlowAction,
+  closeRolloverConfirmationFlowAction,
 } = slice.actions;
 export const rolloverLpFormReducer = slice.reducer;

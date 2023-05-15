@@ -8,9 +8,5 @@ export const getProspectiveLpNotional = (state: Draft<SliceState>): number => {
     return 0;
   }
 
-  if (state.userInput.notionalAmount.editMode === 'add') {
-    return state.userInput.notionalAmount.value;
-  }
-
-  return -state.userInput.notionalAmount.value;
+  return state.userInput.notionalAmount.value;
 };

@@ -11,7 +11,7 @@ export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
   { state: RootState }
 >('rolloverLpForm/getUnderlyingTokenAllowance', async ({ chainId }, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().lpForm.amm;
+    const amm = thunkAPI.getState().rolloverLpForm.amm;
     if (!amm || !amm.signer) {
       return;
     }

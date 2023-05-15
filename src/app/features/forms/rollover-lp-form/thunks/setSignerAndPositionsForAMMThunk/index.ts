@@ -16,7 +16,7 @@ export const setSignerAndPositionsForAMMThunk = createAsyncThunk<
   { state: RootState }
 >('rolloverLpForm/setSignerAndPositionsForAMM', async ({ signer, chainId }, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().lpForm.amm;
+    const amm = thunkAPI.getState().rolloverLpForm.amm;
 
     if (!amm) {
       return {

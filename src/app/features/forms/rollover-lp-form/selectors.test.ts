@@ -4,17 +4,16 @@ import {
   formCompactFormatToParts,
   formLimitAndFormatNumber,
 } from '../common/utils';
+import { selectPositionMarginFormatted } from '../trader/rollover-swap-form';
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
   selectBottomRightMarginNumber,
-  selectExistingPositionCompactNotional,
   selectInfoPostLp,
   selectIsMarginRequiredError,
   selectIsWalletMarginError,
   selectLeverage,
   selectLpFormAMM,
-  selectLpFormMode,
   selectMarginAccountName,
   selectNewPositionCompactNotional,
   selectProspectiveLpMarginFormatted,
@@ -25,13 +24,8 @@ import {
   selectUserInputNotionalInfo,
   selectVariableRate24hDelta,
   selectWalletBalance,
-} from '../lp-form';
-import {
-  getAvailableMargin,
-  getProspectiveLpMargin,
-  getProspectiveLpNotional,
-  hasExistingPosition,
-} from './utils';
+} from '.';
+import { getAvailableMargin, getProspectiveLpMargin, getProspectiveLpNotional } from './utils';
 
 // Mock number utils
 jest.mock('../../../../utilities/number', () => ({
@@ -48,17 +42,16 @@ jest.mock('../common/utils', () => ({
 
 // Mock utils
 jest.mock('./utils', () => ({
-  hasExistingPosition: jest.fn(),
   getProspectiveLpNotional: jest.fn(),
   getProspectiveLpMargin: jest.fn(),
   getAvailableMargin: jest.fn(),
 }));
 
-describe('lp-form.selectors', () => {
+describe('rollover-lp-form.selectors', () => {
   describe('selectSubmitButtonInfo', () => {
     it('returns the submit button information from the state', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           submitButton: {
             state: 'lp',
             disabled: false,
@@ -84,7 +77,7 @@ describe('lp-form.selectors', () => {
   describe('selectLpFormAMM', () => {
     it('should return the AMM object from the state', () => {
       const mockState = {
-        lpForm: {
+        rolloverLpForm: {
           amm: {
             address: '0x123456789abcdef',
             name: 'Test AMM',
@@ -117,7 +110,7 @@ describe('lp-form.selectors', () => {
 
     it('returns "--" if wallet balance status is not "success"', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           walletBalance: {
             status: 'failure',
             value: 0,
@@ -130,7 +123,7 @@ describe('lp-form.selectors', () => {
 
     it('calls formCompactFormat with wallet balance value if status is "success"', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           walletBalance: {
             status: 'success',
             value: 1000,
@@ -147,7 +140,7 @@ describe('lp-form.selectors', () => {
 
     it('returns formatted wallet balance if status is "success"', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           walletBalance: {
             status: 'success',
             value: 1000,
@@ -162,41 +155,9 @@ describe('lp-form.selectors', () => {
     });
   });
 
-  describe('selectLpFormMode', () => {
-    const mockState = {
-      lpForm: {
-        position: {
-          value: {},
-        },
-      },
-    };
-
-    beforeEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it('returns "edit" when hasExistingPosition returns true', () => {
-      (hasExistingPosition as jest.Mock).mockReturnValueOnce(true);
-
-      const result = selectLpFormMode(mockState as never);
-
-      expect(hasExistingPosition).toHaveBeenCalledWith(mockState.lpForm);
-      expect(result).toBe('edit');
-    });
-
-    it('returns "new" when hasExistingPosition returns false', () => {
-      (hasExistingPosition as jest.Mock).mockReturnValueOnce(false);
-
-      const result = selectLpFormMode(mockState as never);
-
-      expect(hasExistingPosition).toHaveBeenCalledWith(mockState.lpForm);
-      expect(result).toBe('new');
-    });
-  });
-
   describe('selectAMMTokenFormatted', () => {
     const mockState = {
-      lpForm: {
+      rolloverLpForm: {
         amm: {
           id: '1',
           underlyingToken: {
@@ -213,7 +174,7 @@ describe('lp-form.selectors', () => {
 
     it('returns an empty string when aMM is not defined', () => {
       const emptyState = {
-        lpForm: {
+        rolloverLpForm: {
           aMM: undefined,
         },
       } as never;
@@ -226,7 +187,7 @@ describe('lp-form.selectors', () => {
 
   describe('selectAMMMaturityFormatted', () => {
     const mockState = {
-      lpForm: {
+      rolloverLpForm: {
         amm: {
           id: '1',
           termEndTimestampInMS: 1614667200000,
@@ -241,7 +202,7 @@ describe('lp-form.selectors', () => {
 
     it('returns an empty string when aMM is not defined', () => {
       const emptyState = {
-        lpForm: {
+        rolloverLpForm: {
           aMM: undefined,
         },
       } as never;
@@ -254,7 +215,7 @@ describe('lp-form.selectors', () => {
 
   describe('selectMarginAccountName', () => {
     const mockState = {
-      lpForm: {
+      rolloverLpForm: {
         amm: {
           id: '1',
           termEndTimestampInMS: 1614667200000,
@@ -270,7 +231,7 @@ describe('lp-form.selectors', () => {
 
     it('returns an empty string when aMM is not defined', () => {
       const emptyState = {
-        lpForm: {
+        rolloverLpForm: {
           aMM: undefined,
         },
       } as never;
@@ -283,7 +244,7 @@ describe('lp-form.selectors', () => {
 
   describe('selectUserInputNotionalInfo', () => {
     const mockState = {
-      lpForm: {
+      rolloverLpForm: {
         userInput: {
           notionalAmount: {
             value: 100,
@@ -303,7 +264,7 @@ describe('lp-form.selectors', () => {
 
   describe('selectUserInputMarginInfo', () => {
     const mockState = {
-      lpForm: {
+      rolloverLpForm: {
         userInput: {
           marginAmount: {
             value: 50,
@@ -322,7 +283,7 @@ describe('lp-form.selectors', () => {
 
   describe('selectProspectiveLpNotionalFormatted', () => {
     const mockState = {
-      lpForm: {},
+      rolloverLpForm: {},
     };
 
     beforeEach(() => {
@@ -333,7 +294,7 @@ describe('lp-form.selectors', () => {
       selectProspectiveLpNotionalFormatted(mockState as never);
 
       expect(getProspectiveLpNotional).toHaveBeenCalledTimes(1);
-      expect(getProspectiveLpNotional).toHaveBeenCalledWith(mockState.lpForm);
+      expect(getProspectiveLpNotional).toHaveBeenCalledWith(mockState.rolloverLpForm);
     });
 
     it('calls formCompactFormat with the correct arguments', () => {
@@ -355,12 +316,19 @@ describe('lp-form.selectors', () => {
     });
   });
 
+  describe('selectPositionMarginFormatted', () => {
+    it('should return --', () => {
+      const result = selectPositionMarginFormatted();
+      expect(result).toBe('--');
+    });
+  });
+
   describe('selectProspectiveLpMarginFormatted', () => {
     const mockState = {
-      lpForm: {
+      rolloverLpForm: {
         userInput: {
           marginAmount: {
-            editMode: 'add',
+            value: 10,
           },
         },
         prospectiveLp: {
@@ -373,24 +341,7 @@ describe('lp-form.selectors', () => {
       },
     };
 
-    it('returns formatted prospective swap margin when editMode is not "add"', () => {
-      const prospectiveMargin = 100;
-      const formattedMargin = '100.00';
-      (
-        getProspectiveLpMargin as jest.MockedFunction<typeof getProspectiveLpMargin>
-      ).mockReturnValue(prospectiveMargin);
-      (formCompactFormat as jest.MockedFunction<typeof formCompactFormat>).mockReturnValue(
-        formattedMargin,
-      );
-
-      const result = selectProspectiveLpMarginFormatted(mockState as never);
-
-      expect(result).toEqual(formattedMargin);
-      expect(getProspectiveLpMargin).toHaveBeenCalledWith(mockState.lpForm);
-      expect(formCompactFormat).toHaveBeenCalledWith(prospectiveMargin);
-    });
-
-    it('returns formatted prospective swap margin minus fee when editMode is "add"', () => {
+    it('returns formatted prospective swap margin minus fee', () => {
       const prospectiveMargin = 100;
       const formattedMargin = '90.00';
       (
@@ -403,7 +354,7 @@ describe('lp-form.selectors', () => {
       const result = selectProspectiveLpMarginFormatted(mockState as never);
 
       expect(result).toEqual(formattedMargin);
-      expect(getProspectiveLpMargin).toHaveBeenCalledWith(mockState.lpForm);
+      expect(getProspectiveLpMargin).toHaveBeenCalledWith(mockState.rolloverLpForm);
       expect(formCompactFormat).toHaveBeenCalledWith(prospectiveMargin);
     });
   });
@@ -411,7 +362,7 @@ describe('lp-form.selectors', () => {
   describe('selectLeverage', () => {
     it('should select leverage from state', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           userInput: {
             leverage: 5,
           },
@@ -424,7 +375,7 @@ describe('lp-form.selectors', () => {
   describe('selectInfoPostLp', () => {
     it('should select infoPostLp from state', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           prospectiveLp: {
             infoPostLp: { foo: 'bar' },
           },
@@ -437,7 +388,7 @@ describe('lp-form.selectors', () => {
   describe('selectIsMarginRequiredError', () => {
     it('should return true if there is a margin amount error other than WLT', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           userInput: {
             marginAmount: {
               error: 'some error message',
@@ -450,7 +401,7 @@ describe('lp-form.selectors', () => {
 
     it('should return false if there is no margin amount error', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           userInput: {
             marginAmount: {
               error: null,
@@ -463,7 +414,7 @@ describe('lp-form.selectors', () => {
 
     it('should return false if the margin amount error is "WLT"', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           userInput: {
             marginAmount: {
               error: 'WLT',
@@ -478,7 +429,7 @@ describe('lp-form.selectors', () => {
   describe('selectIsWalletMarginError', () => {
     it('should return true if the margin amount error is "WLT"', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           userInput: {
             marginAmount: {
               error: 'WLT',
@@ -492,7 +443,7 @@ describe('lp-form.selectors', () => {
 
     it('should return false if the margin amount error is not "WLT"', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           userInput: {
             marginAmount: {
               error: 'some other error message',
@@ -523,38 +474,12 @@ describe('lp-form.selectors', () => {
       jest.clearAllMocks();
     });
 
-    it('should return a formatted available margin if margin amount edit mode is "remove"', () => {
-      const state = {
-        lpForm: {
-          userInput: {
-            marginAmount: {
-              editMode: 'remove',
-            },
-          },
-          availableMargin: 1234.5678,
-        },
-      } as never;
-
-      const result = selectBottomRightMarginNumber(state);
-
-      expect(result).toBe(1234);
-      expect(formLimitAndFormatNumber).toHaveBeenCalledWith(1234.5678, 'floor');
-      expect(getAvailableMargin).toHaveBeenCalledWith({
-        userInput: {
-          marginAmount: {
-            editMode: 'remove',
-          },
-        },
-        availableMargin: 1234.5678,
-      });
-    });
-
     it('should return a formatted margin requirement if the swap was successful', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           userInput: {
             marginAmount: {
-              editMode: 'add',
+              value: 100,
             },
           },
           prospectiveLp: {
@@ -577,10 +502,10 @@ describe('lp-form.selectors', () => {
 
     it('should return null if neither condition is met', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           userInput: {
             marginAmount: {
-              editMode: 'add',
+              value: 100,
             },
           },
           prospectiveLp: {
@@ -606,7 +531,7 @@ describe('lp-form.selectors', () => {
 
     it('should return null if notional amount has an error', () => {
       const stateWithNotionalAmountError = {
-        lpForm: {
+        rolloverLpForm: {
           userInput: {
             notionalAmount: {
               error: 'Invalid notional amount',
@@ -628,7 +553,7 @@ describe('lp-form.selectors', () => {
       };
 
       const mockedState = {
-        lpForm: {
+        rolloverLpForm: {
           userInput: {
             notionalAmount: {
               error: '',
@@ -650,49 +575,8 @@ describe('lp-form.selectors', () => {
         compactNotionalSuffix: 'M',
         compactNotionalNumber: '1.23',
       });
-      expect(getProspectiveLpNotional).toHaveBeenCalledWith(mockedState.lpForm);
+      expect(getProspectiveLpNotional).toHaveBeenCalledWith(mockedState.rolloverLpForm);
       expect(formCompactFormatToParts).toHaveBeenCalledWith(1000000);
-    });
-  });
-
-  describe('selectExistingPositionCompactNotional', () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-
-    it('should return null when position value is falsy', () => {
-      const state = {
-        lpForm: {
-          selectedPosition: null,
-        },
-      } as never;
-
-      const result = selectExistingPositionCompactNotional(state);
-
-      expect(result).toBeNull();
-    });
-
-    it('should return an object with the correct properties when position status is "success" and position value is truthy', () => {
-      const state = {
-        lpForm: {
-          selectedPosition: {
-            notional: '1000000000000000000',
-          },
-        },
-      } as never;
-
-      (formCompactFormatToParts as jest.Mock).mockReturnValueOnce({
-        compactSuffix: 'ETH',
-        compactNumber: '1',
-      });
-
-      const result = selectExistingPositionCompactNotional(state);
-
-      expect(formCompactFormatToParts as jest.Mock).toHaveBeenCalledWith('1000000000000000000');
-      expect(result).toEqual({
-        compactNotionalSuffix: 'ETH',
-        compactNotionalNumber: '1',
-      });
     });
   });
 
@@ -703,7 +587,7 @@ describe('lp-form.selectors', () => {
 
     it('calls formatNumber and stringToBigFloat with the correct arguments', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           amm: {
             variableApy: 150,
             variableApy24Ago: 100,
@@ -719,7 +603,7 @@ describe('lp-form.selectors', () => {
 
     it('returns undefined if amm is null', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           amm: null,
         },
       };
@@ -732,7 +616,7 @@ describe('lp-form.selectors', () => {
       (stringToBigFloat as jest.Mock).mockReturnValueOnce(50);
 
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           amm: {
             variableApy: 150,
             variableApy24Ago: 100,
@@ -745,51 +629,26 @@ describe('lp-form.selectors', () => {
   });
 
   describe('selectSubmitButtonText', () => {
-    it('returns the correct text for the "lp" state', () => {
+    it('returns the correct text for the "rollover" state', () => {
       expect(
         selectSubmitButtonText({
-          lpForm: {
+          rolloverLpForm: {
             submitButton: {
-              state: 'lp',
+              state: 'rollover',
             },
             userInput: {
               notionalAmount: {
-                editMode: 'add',
+                value: 10,
               },
             },
           },
         } as never),
-      ).toBe('Add Liquidity');
-      expect(
-        selectSubmitButtonText({
-          lpForm: {
-            submitButton: {
-              state: 'lp',
-            },
-            userInput: {
-              notionalAmount: {
-                editMode: 'remove',
-              },
-            },
-          },
-        } as never),
-      ).toBe('Remove Liquidity');
-    });
-
-    it('returns the correct text for the "margin-update" state', () => {
-      const state = {
-        lpForm: {
-          submitButton: {
-            state: 'margin-update',
-          },
-        },
-      };
-      expect(selectSubmitButtonText(state as never)).toBe('Update margin');
+      ).toBe('Rollover');
     });
 
     it('returns the correct text for the "not-enough-balance" state', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           submitButton: {
             state: 'not-enough-balance',
           },
@@ -800,7 +659,7 @@ describe('lp-form.selectors', () => {
 
     it('returns the correct text for the "approve" state', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           submitButton: {
             state: 'approve',
           },
@@ -816,7 +675,7 @@ describe('lp-form.selectors', () => {
 
     it('returns the correct text for the "approving" state', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           submitButton: {
             state: 'approving',
           },
@@ -827,7 +686,7 @@ describe('lp-form.selectors', () => {
 
     it('returns the correct text for the "connect-wallet" state', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           submitButton: {
             state: 'connect-wallet',
           },
@@ -838,7 +697,7 @@ describe('lp-form.selectors', () => {
 
     it('returns the correct text for the "fixed-range-error" state', () => {
       const state = {
-        lpForm: {
+        rolloverLpForm: {
           submitButton: {
             state: 'fixed-range-error',
           },

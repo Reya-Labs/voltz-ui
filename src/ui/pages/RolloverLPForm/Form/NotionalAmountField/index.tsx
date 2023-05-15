@@ -5,14 +5,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   getInfoPostLpThunk,
   selectLpFormAMM,
-  selectLpFormSelectedPosition,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
 } from '../../../../../app/features/forms/rollover-lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { EditNotionalAmountFieldUI } from './EditNotionalAmountFieldUI';
 import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 
 type NotionalAmountProps = {};
@@ -25,7 +23,6 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const dispatch = useAppDispatch();
   const aMM = useAppSelector(selectLpFormAMM);
-  const selectedPosition = useAppSelector(selectLpFormSelectedPosition);
 
   useEffect(() => {
     setLocalNotional(notionalAmount.value.toString());
@@ -33,11 +30,10 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const debouncedGetInfoPostLp = useMemo(
     () =>
-      debounce((value: number | null | undefined, editMode: 'add' | 'remove' | undefined) => {
+      debounce((value: number | null | undefined) => {
         dispatch(
           setNotionalAmountAction({
             value: value === undefined ? undefined : value ?? 0,
-            editMode: editMode,
           }),
         );
         void dispatch(getInfoPostLpThunk());
@@ -50,18 +46,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       setLocalNotional(value ?? null);
 
       const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
-      debouncedGetInfoPostLp(valueAsNumber, undefined);
-    },
-    [debouncedGetInfoPostLp],
-  );
-
-  const handleOnSwitchChange = useCallback(
-    (value: string) => {
-      if (value !== 'add' && value !== 'remove') {
-        return;
-      }
-
-      debouncedGetInfoPostLp(undefined, value);
+      debouncedGetInfoPostLp(valueAsNumber);
     },
     [debouncedGetInfoPostLp],
   );
@@ -90,24 +75,13 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     ? 'primaryBodySmallRegular'
     : 'primaryBodyXSmallRegular';
 
-  return !selectedPosition ? (
+  return (
     <NewNotionalAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
       handleOnNotionalChange={handleOnNotionalChange}
       labelTypographyToken={labelTypographyToken}
       localNotional={localNotional}
-      underlyingTokenName={aMM.underlyingToken.name}
-    />
-  ) : (
-    <EditNotionalAmountFieldUI
-      bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
-      bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-      handleOnNotionalChange={handleOnNotionalChange}
-      handleOnSwitchChange={handleOnSwitchChange}
-      labelTypographyToken={labelTypographyToken}
-      localNotional={localNotional}
-      position={selectedPosition}
       underlyingTokenName={aMM.underlyingToken.name}
     />
   );

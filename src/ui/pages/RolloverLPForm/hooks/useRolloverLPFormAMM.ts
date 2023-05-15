@@ -8,8 +8,6 @@ import {
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
   selectLpFormAMM,
-  selectLpFormPositionsFetchingStatus,
-  selectLpFormSelectedPosition,
   selectPoolLpInfoStatus,
   selectUserInputFixedLower,
   selectUserInputFixedUpper,
@@ -31,14 +29,12 @@ export type UseLPFormAMMResult = {
   noAMMFound: boolean;
 };
 
-export const useLPFormAMM = (): UseLPFormAMMResult => {
+export const useRolloverLPFormAMM = (): UseLPFormAMMResult => {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
   const aMM = useAppSelector(selectLpFormAMM);
-  const selectedPosition = useAppSelector(selectLpFormSelectedPosition);
-  const positionsFetchingStatus = useAppSelector(selectLpFormPositionsFetchingStatus);
   const poolLpInfoStatus = useAppSelector(selectPoolLpInfoStatus);
   const chainId = useAppSelector(selectChainId);
   const queryFixedLower = searchParams.get('fixedLower');
@@ -107,9 +103,6 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
   }, [aMM?.id, dispatch, aMMsLoading, error, chainId, signer]);
 
   useEffect(() => {
-    if (positionsFetchingStatus !== 'success') {
-      return;
-    }
     if (!queryFixedLower || !queryFixedUpper) {
       return;
     }
@@ -129,7 +122,7 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
         value: fixedUpper,
       }),
     );
-  }, [dispatch, positionsFetchingStatus, queryFixedLower, queryFixedUpper]);
+  }, [dispatch, queryFixedLower, queryFixedUpper]);
 
   useEffect(() => {
     void dispatch(getWalletBalanceThunk());
@@ -141,16 +134,12 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
 
   useEffect(() => {
     void dispatch(getInfoPostLpThunk());
-  }, [dispatch, aMM, aMM?.signer, selectedPosition]);
+  }, [dispatch, aMM, aMM?.signer]);
 
   return {
     aMM,
-    loading:
-      idle ||
-      positionsFetchingStatus === 'idle' ||
-      loading ||
-      positionsFetchingStatus === 'pending',
+    loading: idle || loading,
     noAMMFound: !aMM && !loading,
-    error: error || positionsFetchingStatus === 'error' || poolLpInfoStatus === 'error',
+    error: error || poolLpInfoStatus === 'error',
   };
 };

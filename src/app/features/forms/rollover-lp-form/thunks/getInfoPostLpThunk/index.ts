@@ -20,7 +20,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
   { state: RootState }
 >('rolloverLpForm/getInfoPostLp', async (_, thunkAPI) => {
   try {
-    const lpFormState = thunkAPI.getState().lpForm;
+    const lpFormState = thunkAPI.getState().rolloverLpForm;
 
     const fixedLower = lpFormState.userInput.fixedRange.lower;
     const fixedUpper = lpFormState.userInput.fixedRange.upper;

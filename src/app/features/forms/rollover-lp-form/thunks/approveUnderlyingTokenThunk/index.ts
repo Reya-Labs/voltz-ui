@@ -9,7 +9,7 @@ export const approveUnderlyingTokenThunk = createAsyncThunk<
   { state: RootState }
 >('rolloverLpForm/approveUnderlyingToken', async (_, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().lpForm.amm;
+    const amm = thunkAPI.getState().rolloverLpForm.amm;
     if (!amm || !amm.signer) {
       return;
     }

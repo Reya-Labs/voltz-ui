@@ -9,7 +9,7 @@ export const getWalletBalanceThunk = createAsyncThunk<
   { state: RootState }
 >('rolloverLpForm/getWalletBalance', async (_, thunkAPI) => {
   try {
-    const amm = thunkAPI.getState().lpForm.amm;
+    const amm = thunkAPI.getState().rolloverLpForm.amm;
     if (!amm || !amm.signer) {
       return 0;
     }

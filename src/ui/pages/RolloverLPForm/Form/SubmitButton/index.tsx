@@ -2,10 +2,7 @@ import React, { useCallback } from 'react';
 
 import {
   approveUnderlyingTokenThunk,
-  closeLpConfirmationFlowAction,
-  closeMarginUpdateConfirmationFlowAction,
-  openLpConfirmationFlowAction,
-  openMarginUpdateConfirmationFlowAction,
+  openRolloverConfirmationFlowAction,
   selectInfoPostLp,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
@@ -26,13 +23,8 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
       case 'approve':
         void dispatch(approveUnderlyingTokenThunk());
         break;
-      case 'lp':
-        void dispatch(closeMarginUpdateConfirmationFlowAction());
-        void dispatch(openLpConfirmationFlowAction());
-        break;
-      case 'margin-update':
-        void dispatch(closeLpConfirmationFlowAction());
-        void dispatch(openMarginUpdateConfirmationFlowAction());
+      case 'rollover':
+        void dispatch(openRolloverConfirmationFlowAction());
         break;
       default:
         break;

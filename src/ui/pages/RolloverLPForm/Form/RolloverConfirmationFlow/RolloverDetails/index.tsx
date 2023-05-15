@@ -10,11 +10,9 @@ import {
   selectUserInputFixedUpper,
 } from '../../../../../../app/features/forms/rollover-lp-form';
 import { useAppSelector } from '../../../../../../app/hooks';
-import { DetailBox, DetailsBox } from './LPDetails.styled';
+import { DetailBox, DetailsBox } from './RolloverDetails.styled';
 
-type LPDetailsProps = {};
-
-export const LPDetails: React.FunctionComponent<LPDetailsProps> = () => {
+export const RolloverDetails: React.FunctionComponent = () => {
   const prospectiveLpNotionalFormatted = useAppSelector(selectProspectiveLpNotionalFormatted);
   const prospectiveLpMarginFormatted = useAppSelector(selectProspectiveLpMarginFormatted);
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);

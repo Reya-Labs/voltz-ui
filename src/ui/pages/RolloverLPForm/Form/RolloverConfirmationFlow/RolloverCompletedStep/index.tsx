@@ -3,31 +3,31 @@ import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  closeLpConfirmationFlowAction,
-  selectLpConfirmationFlowEtherscanLink,
+  closeRolloverConfirmationFlowAction,
+  selectRolloverConfirmationFlowEtherscanLink,
 } from '../../../../../../app/features/forms/rollover-lp-form';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
-import { LPDetails } from '../LPDetails';
-import { LPCompletedStepBox } from './LPCompletedStep.styled';
+import { RolloverDetails } from '../RolloverDetails';
+import { RolloverCompletedStepBox } from './RolloverCompletedStep.styled';
 
-export const LPCompletedStep: React.FunctionComponent = () => {
+export const RolloverCompletedStep: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const etherscanLink = useAppSelector(selectLpConfirmationFlowEtherscanLink);
+  const etherscanLink = useAppSelector(selectRolloverConfirmationFlowEtherscanLink);
 
   const handleVisitPortfolio = useCallback(() => {
-    dispatch(closeLpConfirmationFlowAction());
+    dispatch(closeRolloverConfirmationFlowAction());
     navigate(`/${routes.LP_PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
-    <LPCompletedStepBox>
+    <RolloverCompletedStepBox>
       <Confetti>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
           Lp Completed
         </Typography>
       </Confetti>
-      <LPDetails />
+      <RolloverDetails />
       <Confetti>
         <ExternalLink
           colorToken="lavenderWeb"
@@ -45,6 +45,6 @@ export const LPCompletedStep: React.FunctionComponent = () => {
           Visit Your Portfolio
         </Button>
       </Confetti>
-    </LPCompletedStepBox>
+    </RolloverCompletedStepBox>
   );
 };

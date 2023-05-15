@@ -1,6 +1,5 @@
 export * from './approveUnderlyingTokenThunk';
-export * from './confirmLpThunk';
-export * from './confirmMarginUpdateThunk';
+export * from './confirmLpRolloverThunk';
 export * from './getInfoPostLpThunk';
 export * from './getPoolLpInfoThunk';
 export * from './getUnderlyingTokenAllowanceThunk';

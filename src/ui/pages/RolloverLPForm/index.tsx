@@ -8,12 +8,12 @@ import { NoAMMFound } from '../../components/NoAMMFound';
 import { PageLoading } from '../../components/PageLoading';
 import { VoltzPage } from '../../components/VoltzPage';
 import { Form } from './Form';
-import { useLPFormAMM } from './hooks/useLPFormAMM';
+import { useRolloverLPFormAMM } from './hooks/useRolloverLPFormAMM';
 import { Main } from './Main';
 
 export const RolloverLPFormPage: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const { noAMMFound, loading, error } = useLPFormAMM();
+  const { noAMMFound, loading, error } = useRolloverLPFormAMM();
 
   React.useEffect(() => {
     return () => {

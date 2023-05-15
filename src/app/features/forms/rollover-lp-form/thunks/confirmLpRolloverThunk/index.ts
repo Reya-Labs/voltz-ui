@@ -10,13 +10,13 @@ import {
   getProspectiveLpNotional,
 } from '../../utils';
 
-export const confirmLpThunk = createAsyncThunk<
+export const confirmLpRolloverThunk = createAsyncThunk<
   Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('rolloverLpForm/confirmLp', async (_, thunkAPI) => {
+>('rolloverLpForm/confirmLpRollover', async (_, thunkAPI) => {
   try {
-    const lpFormState = thunkAPI.getState().lpForm;
+    const lpFormState = thunkAPI.getState().rolloverLpForm;
     const amm = lpFormState.amm;
     if (!amm) {
       return;
