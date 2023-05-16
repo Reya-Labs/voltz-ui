@@ -8,10 +8,13 @@ import {
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
-  getRealizedPnLFromFees,
-  getRealizedPnLFromSwaps,
 } from '../../common/utils';
-import { getProspectiveLpMargin, getProspectiveLpNotional } from './utils';
+import {
+  getPreviousPositionRealizedPnLFromFees,
+  getPreviousPositionRealizedPnLFromSwaps,
+  getProspectiveLpMargin,
+  getProspectiveLpNotional,
+} from './utils';
 
 export const selectSubmitButtonInfo = (state: RootState) => state.rolloverLpForm.submitButton;
 export const selectRolloverLpFormAMM = (state: RootState) => state.rolloverLpForm.amm;
@@ -273,10 +276,11 @@ export const selectPreviousPositionSettlingBalance = (state: RootState) => {
   };
 };
 
+// TODO: verify what we use in the portfolio
 // todo: FB duplicate in rollover-swap
 export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState) => {
-  const realizedPnLFromFees = getRealizedPnLFromFees(state.rolloverLpForm);
-  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverLpForm);
+  const realizedPnLFromFees = getPreviousPositionRealizedPnLFromFees(state.rolloverLpForm);
+  const realizedPnLFromSwaps = getPreviousPositionRealizedPnLFromSwaps(state.rolloverLpForm);
   let realizedPnLTotal = null;
 
   if (realizedPnLFromFees !== null && realizedPnLFromSwaps !== null) {
@@ -288,14 +292,14 @@ export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState
 
 // todo: FB duplicate in rollover-swap
 export const selectPreviousPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
-  const realizedPnLFromFees = getRealizedPnLFromFees(state.rolloverLpForm);
+  const realizedPnLFromFees = getPreviousPositionRealizedPnLFromFees(state.rolloverLpForm);
 
   return realizedPnLFromFees === null ? '--' : formFormatNumber(realizedPnLFromFees);
 };
 
 // todo: FB duplicate in rollover-swap
 export const selectPreviousPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
-  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverLpForm);
+  const realizedPnLFromSwaps = getPreviousPositionRealizedPnLFromSwaps(state.rolloverLpForm);
 
   return realizedPnLFromSwaps === null ? '--' : formFormatNumber(realizedPnLFromSwaps);
 };

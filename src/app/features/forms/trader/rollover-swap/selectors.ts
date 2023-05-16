@@ -8,12 +8,12 @@ import {
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
-  getRealizedPnLFromFees,
-  getRealizedPnLFromSwaps,
 } from '../../common/utils';
 import {
   getAvailableNotional,
   getNewPositionFixedRate,
+  getPreviousPositionRealizedPnLFromFees,
+  getPreviousPositionRealizedPnLFromSwaps,
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
@@ -314,8 +314,8 @@ export const selectMarginRequirementFormatted = (state: RootState) => {
 };
 
 export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState) => {
-  const realizedPnLFromFees = getRealizedPnLFromFees(state.rolloverSwapForm);
-  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverSwapForm);
+  const realizedPnLFromFees = getPreviousPositionRealizedPnLFromFees(state.rolloverSwapForm);
+  const realizedPnLFromSwaps = getPreviousPositionRealizedPnLFromSwaps(state.rolloverSwapForm);
   let realizedPnLTotal = null;
 
   if (realizedPnLFromFees !== null && realizedPnLFromSwaps !== null) {
@@ -326,13 +326,13 @@ export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState
 };
 
 export const selectPreviousPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
-  const realizedPnLFromFees = getRealizedPnLFromFees(state.rolloverSwapForm);
+  const realizedPnLFromFees = getPreviousPositionRealizedPnLFromFees(state.rolloverSwapForm);
 
   return realizedPnLFromFees === null ? '--' : formFormatNumber(realizedPnLFromFees);
 };
 
 export const selectPreviousPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
-  const realizedPnLFromSwaps = getRealizedPnLFromSwaps(state.rolloverSwapForm);
+  const realizedPnLFromSwaps = getPreviousPositionRealizedPnLFromSwaps(state.rolloverSwapForm);
 
   return realizedPnLFromSwaps === null ? '--' : formFormatNumber(realizedPnLFromSwaps);
 };

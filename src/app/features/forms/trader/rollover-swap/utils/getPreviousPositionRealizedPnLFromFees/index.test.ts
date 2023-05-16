@@ -1,12 +1,12 @@
-import { getRealizedPnLFromFees } from './index';
+import { getPreviousPositionRealizedPnLFromFees } from './index';
 
-describe('getRealizedPnLFromFees', () => {
+describe('getPreviousPositionRealizedPnLFromFees', () => {
   it('should return null when position value is null', () => {
     const mockState = {
       previousPosition: null,
     };
 
-    const result = getRealizedPnLFromFees(mockState as never);
+    const result = getPreviousPositionRealizedPnLFromFees(mockState as never);
 
     expect(result).toBeNull();
   });
@@ -19,7 +19,7 @@ describe('getRealizedPnLFromFees', () => {
       },
     };
 
-    const result = getRealizedPnLFromFees(mockState as never);
+    const result = getPreviousPositionRealizedPnLFromFees(mockState as never);
 
     expect(result).toEqual(mockRealizedPnLFromFeesPaid);
   });
