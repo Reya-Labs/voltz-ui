@@ -24,7 +24,7 @@ export const LPCompletedStep: React.FunctionComponent = () => {
     <LPCompletedStepBox>
       <Confetti>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          Lp Completed
+          LP Completed
         </Typography>
       </Confetti>
       <LPDetails />

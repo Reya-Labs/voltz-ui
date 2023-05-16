@@ -45,7 +45,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
           labelTypographyToken={actionLabelTypographyToken}
           token=""
           typographyToken={actionTypographyToken}
-          value="Liquidity provider"
+          value="Liquidity Provider"
         />
       </PositionDetailsLeftBox>
       <PositionDetailsRightBox>

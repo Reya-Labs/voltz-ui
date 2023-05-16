@@ -71,7 +71,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           labelTypographyToken={actionLabelTypographyToken}
           token=""
           typographyToken={actionTypographyToken}
-          value="Liquidity provider"
+          value="Liquidity Provider"
         />
       </PositionDetailsLeftBox>
       <PositionDetailsRightBox>

@@ -24,7 +24,7 @@ export const RolloverCompletedStep: React.FunctionComponent = () => {
     <RolloverCompletedStepBox>
       <Confetti>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          Lp Completed
+          Rollover Completed
         </Typography>
       </Confetti>
       <RolloverDetails />
