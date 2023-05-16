@@ -267,7 +267,7 @@ export const selectPreviousPositionSettlingBalance = (state: RootState) => {
   if (!position) {
     return null;
   }
-  const settlingBalance = position.margin + position.realizedPnLFromSwaps;
+  const settlingBalance = position.margin + position.realizedPnLFromSwaps + position.fees;
   const compactParts = formCompactFormatToParts(settlingBalance);
 
   return {
