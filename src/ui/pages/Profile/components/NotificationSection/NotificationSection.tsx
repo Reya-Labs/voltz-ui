@@ -1,9 +1,9 @@
 import React from 'react';
 
+import { ProfileNotification } from '../../../../components/ProfileNotification/ProfileNotification';
 import { ClaimButton, ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import { CopyLinkButton, CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';
 import { HighlightedText } from '../HighlightedText.styled';
-import { ProfileNotification } from '../ProfileNotification/ProfileNotification';
 import {
   ButtonBox,
   NotificationBox,
@@ -32,7 +32,11 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
   const copyLinkNotification = (
     <NotificationContainer>
       <NotificationBox>
-        <ProfileNotification pillText="Bonus" text="Earn badges by inviting others" />
+        <ProfileNotification
+          pillColorToken="wildStrawberry"
+          pillText="Bonus"
+          text="Earn badges by inviting others"
+        />
       </NotificationBox>
       <ButtonBox>
         <CopyLinkButton mode={copyLinkButtonMode} onClick={onCopyLinkButtonClick} />
@@ -46,7 +50,11 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
         {copyLinkNotification}
         <NotificationContainer>
           <NotificationBox>
-            <ProfileNotification pillText="Claim" text="Unavailable until the end of the season" />
+            <ProfileNotification
+              pillColorToken="wildStrawberry"
+              pillText="Claim"
+              text="Unavailable until the end of the season"
+            />
           </NotificationBox>
         </NotificationContainer>
       </NotificationsContainer>
@@ -60,6 +68,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
         <NotificationContainer>
           <NotificationBox>
             <ProfileNotification
+              pillColorToken="wildStrawberry"
               pillText="Claim"
               text="Unavailable at this moment. Keep an eye out for announcements"
             />
@@ -76,6 +85,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
           {notClaimedBadgesCount !== 0 ? (
             <>
               <ProfileNotification
+                pillColorToken="wildStrawberry"
                 pillText={claimButtonBulkMode === 'claimError' ? 'Error' : 'Bulk Claim'}
                 text={
                   claimButtonBulkMode === 'claimError' ? (
@@ -90,7 +100,11 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
               />
             </>
           ) : (
-            <ProfileNotification pillText="Keep trading" text="No new badges to claim yet" />
+            <ProfileNotification
+              pillColorToken="wildStrawberry"
+              pillText="Keep trading"
+              text="No new badges to claim yet"
+            />
           )}
         </NotificationBox>
         {notClaimedBadgesCount !== 0 ? (
