@@ -7,6 +7,7 @@ export const routes = {
   BORROW_POS: 'borrow-positions',
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
+  VOYAGE: 'voyage',
   LP_OPTIMISERS: 'lp-optimisers',
   LP_OPTIMISERS_DEPOSIT_FORM: 'lp-optimisers/:actions/:vaultId',
   LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM: 'lp-optimisers/:actions/:vaultId/:vaultIndex',

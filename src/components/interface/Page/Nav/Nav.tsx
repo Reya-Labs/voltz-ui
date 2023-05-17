@@ -3,6 +3,7 @@ import React from 'react';
 import { isArbitrumChain, selectChainId } from '../../../../app/features/network';
 import { useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
+import { isVoyageEnabled } from '../../../../utilities/isEnvVarProvided/is-voyage-enabled';
 import { NavBox, VoltzIcon, VoltzIconBox } from './Nav.styled';
 import { NavLink } from './NavLink/NavLink';
 
@@ -51,6 +52,9 @@ export const Nav: React.FunctionComponent = React.memo(() => {
       </NavLink>
       <NavLink hidden={false} isNew={false} link={`/${routes.PROFILE}`}>
         Profile
+      </NavLink>
+      <NavLink hidden={!isVoyageEnabled()} isNew={false} link={`/${routes.VOYAGE}`}>
+        Voyage
       </NavLink>
     </NavBox>
   );

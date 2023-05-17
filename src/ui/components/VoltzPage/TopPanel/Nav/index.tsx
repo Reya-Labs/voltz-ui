@@ -5,6 +5,7 @@ import React, { useMemo } from 'react';
 import { isArbitrumChain, selectChainId } from '../../../../../app/features/network';
 import { useAppSelector } from '../../../../../app/hooks';
 import { routes } from '../../../../../routes/paths';
+import { isVoyageEnabled } from '../../../../../utilities/isEnvVarProvided/is-voyage-enabled';
 
 const getLinks = (chainId?: SupportedChainId | null) =>
   !chainId
@@ -42,6 +43,12 @@ const getLinks = (chainId?: SupportedChainId | null) =>
           isHidden: false,
           text: 'Profile',
           link: `/${routes.PROFILE}`,
+        },
+        {
+          isHidden: !isVoyageEnabled(),
+          colorToken: 'rainbow',
+          text: 'Voyage',
+          link: `/${routes.VOYAGE}`,
         },
       ] as NavProps['links']);
 

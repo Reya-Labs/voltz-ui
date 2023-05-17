@@ -20,6 +20,7 @@ import { RolloverLPFormPage } from './ui/pages/RolloverLPForm';
 import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
 import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
+import { VoyagePage } from './ui/pages/Voyage';
 
 export const AppRoutes = () => {
   const chainId = useAppSelector(selectChainId);
@@ -124,6 +125,14 @@ export const AppRoutes = () => {
             </NetworkProtectedVoltzPage>
           }
           path={routes.PROFILE}
+        />
+        <Route
+          element={
+            <NetworkProtectedVoltzPage>
+              <VoyagePage />
+            </NetworkProtectedVoltzPage>
+          }
+          path={routes.VOYAGE}
         />
         <Route
           element={
