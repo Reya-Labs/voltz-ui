@@ -1,6 +1,15 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { formatEthereumAddress, Typography } from 'brokoli-ui';
-import React from 'react';
+import React, { useEffect } from 'react';
 
+import {
+  fetchVoyageBadgesThunk,
+  selectVoyageBadges,
+  selectVoyageBadgesStatus,
+} from '../../../app/features/voyage';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { routes } from '../../../routes/paths';
+import { GenericError } from '../../components/GenericError';
 import { NotificationSection } from './NotificationSection';
 import { VoyageBadge } from './VoyageBadge';
 import { VoyageBadgeEntry } from './VoyageBadgeEntry';
@@ -18,23 +27,36 @@ import {
 
 type VoyagePageWalletConnectedProps = {
   account: string;
+  chainId: SupportedChainId;
 };
 
 export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWalletConnectedProps> = ({
   account,
+  chainId,
 }) => {
-  const loading = false;
-  const achievedBadges = [
-    {
-      completed: true,
-      isClaimable: false,
-    },
-  ];
-  const badgesList = [
-    {
-      achievedAt: new Date().valueOf(),
-    },
-  ];
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    void dispatch(
+      fetchVoyageBadgesThunk({
+        chainId,
+        account,
+      }),
+    );
+  }, [dispatch, chainId, account]);
+
+  const status = useAppSelector(selectVoyageBadgesStatus(account));
+  const error = status === 'failed';
+  const loading = status !== 'succeeded';
+  const badges = useAppSelector(selectVoyageBadges(account));
+
+  if (error) {
+    return (
+      <ContainerBox>
+        <GenericError to={`/${routes.POOLS}`} />
+      </ContainerBox>
+    );
+  }
 
   return (
     <ContainerBox>
@@ -65,12 +87,12 @@ export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWallet
           <VoyageBadgesGrid itemsPerRow={1}>
             {loading && <VoyageBadge completed={false} isClaimable={false} loading={loading} />}
             {!loading &&
-              achievedBadges.length !== 0 &&
-              achievedBadges.map((badge, index) => (
+              badges.length !== 0 &&
+              badges.map(({ completed, isClaimable }, index) => (
                 <VoyageBadge
                   key={index}
-                  completed={badge.completed}
-                  isClaimable={badge.isClaimable}
+                  completed={completed}
+                  isClaimable={isClaimable}
                   loading={false}
                 />
               ))}
@@ -87,9 +109,16 @@ export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWallet
             Trade or LP on the protocol to earn unique Voyage badges.{' '}
           </BadgesListSubheading>
           <BadgesListGrid data-testid="Voyage-AchievedBadgesListGrid" itemsPerRow={1}>
-            {badgesList.map((badge, index) => (
-              <VoyageBadgeEntry key={index} achievedAt={badge.achievedAt} loading={loading} />
-            ))}
+            {loading
+              ? Array.from({ length: 3 }, (index) => index).map((_, index) => (
+                  <VoyageBadgeEntry key={index} achievedAt={undefined} loading={loading} />
+                ))
+              : null}
+            {!loading
+              ? badges.map(({ achievedAt }, index) => (
+                  <VoyageBadgeEntry key={index} achievedAt={achievedAt} loading={loading} />
+                ))
+              : null}
           </BadgesListGrid>
         </VoyageBadgesListBox>
       </BadgesBox>

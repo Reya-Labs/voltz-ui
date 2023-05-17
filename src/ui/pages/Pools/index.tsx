@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useAMMs } from '../../../hooks/useAMMs';
 import { routes } from '../../../routes/paths';
-import { AMMFetchingError } from '../../components/AMMFetchingError';
+import { GenericError } from '../../components/GenericError';
 import { VoltzPage } from '../../components/VoltzPage';
 import { Pools } from './Pools';
 
@@ -11,7 +11,7 @@ export const PoolsPage: React.FunctionComponent = () => {
 
   return (
     <VoltzPage
-      errorSlot={error ? <AMMFetchingError to={`/${routes.POOLS}`} /> : undefined}
+      errorSlot={error ? <GenericError to={`/${routes.POOLS}`} /> : undefined}
       mainSlot={<Pools />}
     />
   );

@@ -23,5 +23,5 @@ export const Voyage: React.FunctionComponent = () => {
     );
   }
 
-  return <VoyagePageWalletConnected account={wallet.account} />;
+  return <VoyagePageWalletConnected account={wallet.account} chainId={chainId} />;
 };

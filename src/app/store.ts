@@ -14,6 +14,7 @@ import { networkReducer } from './features/network';
 import { settleFlowReducer } from './features/settle-flow';
 import { tradingLeagueReducer } from './features/trading-league';
 import { saga, transactionsReducer } from './features/transactions';
+import { voyageReducer } from './features/voyage';
 
 const rootReducer = combineReducers({
   transactions: transactionsReducer,
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   rolloverSwapForm: rolloverSwapFormReducer,
   settleFlow: settleFlowReducer,
   rolloverLpForm: rolloverLpFormReducer,
+  voyage: voyageReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
