@@ -4,6 +4,7 @@ import { selectChainId } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
 import { ConnectWallet } from '../../components/ConnectWallet';
+import { VoyagePageWalletConnected } from './VoyagePageWalletConnected';
 
 export const Voyage: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -22,5 +23,5 @@ export const Voyage: React.FunctionComponent = () => {
     );
   }
 
-  return <div>hello</div>;
+  return <VoyagePageWalletConnected account={wallet.account} />;
 };
