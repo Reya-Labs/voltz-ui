@@ -1,0 +1,15 @@
+import { Draft } from '@reduxjs/toolkit';
+
+import { SliceState } from '../../state';
+
+// todo: FB same as in rollover form
+export const validateUserInputFixedRange = (state: Draft<SliceState>): void => {
+  const fixedLower = state.userInput.fixedRange.lower;
+  const fixedUpper = state.userInput.fixedRange.upper;
+  if (fixedLower !== null && fixedUpper !== null && fixedLower >= fixedUpper) {
+    state.userInput.fixedRange.error =
+      'Fixed rate lower cannot be equal or higher than fixed upper';
+  } else {
+    state.userInput.fixedRange.error = null;
+  }
+};

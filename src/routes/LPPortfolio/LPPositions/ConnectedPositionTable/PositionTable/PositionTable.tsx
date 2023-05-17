@@ -5,9 +5,16 @@ import { selectChainId } from '../../../../../app/features/network';
 import { useAppSelector } from '../../../../../app/hooks';
 import { AMMProvider } from '../../../../../contexts/AMMContext/AMMContext';
 import { useAMMs } from '../../../../../hooks/useAMMs';
+import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
 import { getConfig } from '../../../../../hooks/voltz-config/config';
-import { findCurrentAmm } from '../../../../../utilities/amm';
+import {
+  findCurrentAmm,
+  generateAmmIdForRoute,
+  generatePoolId,
+  generatePositionIdForRoute,
+} from '../../../../../utilities/amm';
 import { getRowButtonId } from '../../../../../utilities/googleAnalytics/helpers';
+import { isLPRolloverExperienceFlowEnabled } from '../../../../../utilities/isEnvVarProvided/is-lp-rollover-experience-flow-enabled';
 import { PositionTableHead } from './components/PositionTableHead/PositionTableHead';
 import { PositionTableRow } from './components/PositionTableRow/PositionTableRow';
 import { TransactionList } from './components/TransactionList/TransactionList';
@@ -27,6 +34,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
   onSelectItem,
   onSettle,
 }) => {
+  const navigate = useAppNavigate();
   const { aMMs } = useAMMs();
   const chainId = useAppSelector(selectChainId);
   const config = getConfig(chainId);
@@ -67,7 +75,17 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 rolloverAvailable={rolloverAvailable}
                 settlementCashflowInUSD={position.settlementCashflowInUSD}
                 underlyingTokenName={'USD'}
-                onRollover={() => handleSelectRow(position, 'rollover')}
+                onRollover={() => {
+                  if (isLPRolloverExperienceFlowEnabled()) {
+                    navigate.toRolloverLPFormPage({
+                      ammId: generateAmmIdForRoute(position.amm),
+                      poolId: generatePoolId(position.amm),
+                      positionId: generatePositionIdForRoute(position),
+                    });
+                    return;
+                  }
+                  handleSelectRow(position, 'rollover');
+                }}
                 onSettle={() => onSettle(position)}
               />
 

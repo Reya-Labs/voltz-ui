@@ -4,9 +4,9 @@ import React, { useCallback } from 'react';
 import {
   closeRolloverConfirmationFlowAction,
   confirmLpRolloverThunk,
-  selectLpFormAMM,
   selectRolloverConfirmationFlowError,
-} from '../../../../../../app/features/forms/rollover-lp-form';
+  selectRolloverLpFormAMM,
+} from '../../../../../../app/features/forms/lps/rollover-lp';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
   MarketTokenInformation,
@@ -22,7 +22,7 @@ import {
 } from './RolloverConfirmationStep.styled';
 
 export const RolloverConfirmationStep: React.FunctionComponent = () => {
-  const aMM = useAppSelector(selectLpFormAMM);
+  const aMM = useAppSelector(selectRolloverLpFormAMM);
   const dispatch = useAppDispatch();
   const handleConfirmLp = useCallback(() => {
     void dispatch(confirmLpRolloverThunk());

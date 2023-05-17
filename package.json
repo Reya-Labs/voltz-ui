@@ -1,6 +1,6 @@
 {
   "name": "voltz-ui",
-  "version": "1.163.0",
+  "version": "1.165.3",
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
@@ -13,8 +13,8 @@
     "ts:circular-check": "dpdm --no-output --no-tree --no-warning --exit-code circular:1 -T ./src/index.tsx",
     "lint:check": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
-    "prettier:check": "prettier --check './src/**/*.{ts,tsx}' './scripts/**/*.js' './.storybook/**/*.js'",
-    "prettier:fix": "prettier --write './src/**/*.{ts,tsx}' './scripts/**/*.js' './.storybook/**/*.js'",
+    "prettier:check": "prettier --loglevel silent --check './src/**/*.{ts,tsx}' './scripts/**/*.js' './.storybook/**/*.js'",
+    "prettier:fix": "prettier --loglevel silent --write './src/**/*.{ts,tsx}' './scripts/**/*.js' './.storybook/**/*.js'",
     "prepare": "is-ci || husky install",
     "release": "semantic-release",
     "start": "GENERATE_SOURCEMAP=false node scripts/start.js",
@@ -145,7 +145,7 @@
     "@walletconnect/ethereum-provider": "1.8.0",
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.44",
-    "brokoli-ui": "1.59.0",
+    "brokoli-ui": "1.59.7",
     "chroma-js": "2.1.2",
     "copy-to-clipboard": "3.3.3",
     "ethereumjs-abi": "0.6.8",

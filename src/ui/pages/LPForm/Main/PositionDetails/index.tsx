@@ -1,7 +1,7 @@
 import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { selectLpFormAMM, selectLpFormMode } from '../../../../../app/features/forms/lp-form';
+import { selectLpFormAMM, selectLpFormMode } from '../../../../../app/features/forms/lps/lp';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { EditPositionDetailsUI } from './EditPositionDetailsUI';
@@ -39,6 +39,7 @@ export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = ()
       actionTypographyToken={actionTypographyToken}
       labelTypographyToken={labelTypographyToken}
       typographyToken={typographyToken}
+      underlyingTokenName={aMM.underlyingToken.name}
     />
   ) : (
     <EditPositionDetailsUI

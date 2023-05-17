@@ -9,7 +9,7 @@ import {
   selectRolloverSwapFormAMM,
   selectVariableRate24hDelta,
   selectVariableRateValueFormatted,
-} from '../../../../../app/features/forms/trader/rollover-swap-form';
+} from '../../../../../app/features/forms/trader/rollover-swap';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
 import { MarketTokenInformationProps } from '../../../../components/MarketTokenInformation';

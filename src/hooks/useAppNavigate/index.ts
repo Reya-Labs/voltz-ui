@@ -11,6 +11,7 @@ type UseAppNavigateResult = {
   }) => void;
   toSwapFormPage: (params: { ammId: string; poolId: string }) => void;
   toRolloverSwapFormPage: (params: { ammId: string; poolId: string; positionId: string }) => void;
+  toRolloverLPFormPage: (params: { ammId: string; poolId: string; positionId: string }) => void;
   toLPOptimisersDepositForm: (params: { vaultId: string }) => void;
 };
 export const useAppNavigate = (): UseAppNavigateResult => {
@@ -54,6 +55,19 @@ export const useAppNavigate = (): UseAppNavigateResult => {
     navigate(`/${path}`);
   };
 
+  const toRolloverLPFormPage: UseAppNavigateResult['toRolloverLPFormPage'] = ({
+    ammId,
+    poolId,
+    positionId,
+  }) => {
+    const path = generatePath(routes.LP_ROLLOVER_FORM, {
+      ammId,
+      poolId,
+      positionId,
+    });
+    navigate(`/${path}`);
+  };
+
   const toLPOptimisersDepositForm: UseAppNavigateResult['toLPOptimisersDepositForm'] = ({
     vaultId,
   }) => {
@@ -68,6 +82,7 @@ export const useAppNavigate = (): UseAppNavigateResult => {
     toLPFormPage,
     toSwapFormPage,
     toRolloverSwapFormPage,
+    toRolloverLPFormPage,
     toLPOptimisersDepositForm,
   };
 };

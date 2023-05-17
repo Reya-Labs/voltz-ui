@@ -1,4 +1,4 @@
-import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'brokoli-ui';
+import { LabelFromToTokenTypography, LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -15,7 +15,7 @@ import {
   selectExistingPositionPayingRateFormatted,
   selectExistingPositionReceivingRateFormatted,
   selectSwapFormPosition,
-} from '../../../../../app/features/forms/trader/swap-form';
+} from '../../../../../app/features/forms/trader/swap';
 import { useAppSelector } from '../../../../../app/hooks';
 import { PnLDetailsWithTooltip } from '../../../../components/PnLDetailsWithTooltip';
 import { MODE_COLOR_TOKEN_MAP, MODE_TEXT_MAP } from '../../helpers';
@@ -88,7 +88,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             value={MODE_TEXT_MAP[editPositionMode]}
           />
         ) : (
-          <FromToTokenTypography
+          <LabelFromToTokenTypography
             fromColorToken={MODE_COLOR_TOKEN_MAP[existingPositionMode]}
             fromValue={MODE_TEXT_MAP[existingPositionMode]}
             label="Editing Position"
@@ -119,7 +119,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               value={editPositionCompactNotional.compactNotionalNumber}
             />
           ) : (
-            <FromToTokenTypography
+            <LabelFromToTokenTypography
               fromColorToken="lavenderWeb"
               fromToken={existingPositionCompactNotional.compactNotionalSuffix}
               fromValue={existingPositionCompactNotional.compactNotionalNumber}
@@ -145,7 +145,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               value={receivingRateTo}
             />
           ) : (
-            <FromToTokenTypography
+            <LabelFromToTokenTypography
               fromColorToken="lavenderWeb"
               fromToken="%"
               fromValue={receivingRateFrom}
@@ -171,7 +171,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               value={payingRateTo}
             />
           ) : (
-            <FromToTokenTypography
+            <LabelFromToTokenTypography
               fromColorToken="lavenderWeb"
               fromToken="%"
               fromValue={payingRateFrom}

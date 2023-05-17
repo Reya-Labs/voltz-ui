@@ -7,7 +7,7 @@ import {
   selectSelectedPositionCompactNotional,
   selectUserInputNotionalAmountEditMode,
   selectUserInputNotionalInfo,
-} from '../../../../../app/features/forms/lp-form';
+} from '../../../../../app/features/forms/lps/lp';
 import { useAppSelector } from '../../../../../app/hooks';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 

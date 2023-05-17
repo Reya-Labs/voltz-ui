@@ -4,7 +4,7 @@ import {
   selectAMMTokenFormatted,
   selectMarginAccountName,
   selectPositionMarginFormatted,
-} from '../../../../../app/features/forms/trader/rollover-swap-form';
+} from '../../../../../app/features/forms/trader/rollover-swap';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAccount as MarginAccountComponent } from '../../../../components/MarginAccount';
 

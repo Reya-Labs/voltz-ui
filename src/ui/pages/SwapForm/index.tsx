@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { resetStateAction } from '../../../app/features/forms/trader/swap-form';
+import { resetStateAction } from '../../../app/features/forms/trader/swap';
 import { useAppDispatch } from '../../../app/hooks';
 import { routes } from '../../../routes/paths';
 import { AMMFetchingError } from '../../components/AMMFetchingError';

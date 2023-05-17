@@ -1,54 +1,53 @@
 import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import {
-  getInfoPostLpThunk,
   getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
-  selectLpFormAMM,
+  initializeAMMsAndPositionsForRolloverThunk,
   selectPoolLpInfoStatus,
-  selectUserInputFixedLower,
-  selectUserInputFixedUpper,
-  setLpFormAMMAction,
-  setSignerAndPositionsForAMMThunk,
-  setUserInputFixedLowerAction,
-  setUserInputFixedUpperAction,
-} from '../../../../app/features/forms/rollover-lp-form';
+  selectRolloverLpFormAMM,
+  selectRolloverLpFormPreviousAMM,
+  selectRolloverLpFormPreviousPosition,
+  setSignerForRolloverLpFormAction,
+} from '../../../../app/features/forms/lps/rollover-lp';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { useWallet } from '../../../../hooks/useWallet';
-import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
+import {
+  generateAmmIdForRoute,
+  generatePoolId,
+  generatePositionIdForRoute,
+} from '../../../../utilities/amm';
 
-export type UseLPFormAMMResult = {
+export type UseRolloverLPFormAMMResult = {
   aMM: AMM | null;
   loading: boolean;
   error: boolean;
   noAMMFound: boolean;
 };
 
-export const useRolloverLPFormAMM = (): UseLPFormAMMResult => {
-  const [searchParams] = useSearchParams();
+export const useRolloverLPFormAMM = (): UseRolloverLPFormAMMResult => {
   const dispatch = useAppDispatch();
-  const { ammId, poolId } = useParams();
+  const { ammId, poolId, positionId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
-  const aMM = useAppSelector(selectLpFormAMM);
+  const aMM = useAppSelector(selectRolloverLpFormAMM);
+  const previousAMM = useAppSelector(selectRolloverLpFormPreviousAMM);
+  const previousPosition = useAppSelector(selectRolloverLpFormPreviousPosition);
   const poolLpInfoStatus = useAppSelector(selectPoolLpInfoStatus);
   const chainId = useAppSelector(selectChainId);
-  const queryFixedLower = searchParams.get('fixedLower');
-  const queryFixedUpper = searchParams.get('fixedUpper');
-
-  const fixedRateLower = useAppSelector(selectUserInputFixedLower);
-  const fixedRateUpper = useAppSelector(selectUserInputFixedUpper);
-
   const [loading, setLoading] = useState(true);
 
   const { signer } = useWallet();
 
   useEffect(() => {
-    if (!ammId || !poolId) {
+    if (!chainId) {
+      return;
+    }
+    if (!ammId || !poolId || !positionId) {
       return;
     }
     if (error) {
@@ -58,83 +57,76 @@ export const useRolloverLPFormAMM = (): UseLPFormAMMResult => {
     if (aMMsLoading || idle) {
       return;
     }
-    const foundAMM = aMMs.find(
-      (a) => ammId === generateAmmIdForRoute(a) && poolId === generatePoolId(a),
-    );
-    if (aMM && foundAMM && aMM.id === foundAMM.id) {
+
+    if (
+      previousAMM &&
+      previousPosition &&
+      generatePoolId(previousAMM) === poolId &&
+      generateAmmIdForRoute(previousAMM) === ammId &&
+      generatePositionIdForRoute(previousPosition) === positionId
+    ) {
       setLoading(false);
       return;
     }
 
-    dispatch(
-      setLpFormAMMAction({
-        amm: foundAMM ? foundAMM : null,
+    setLoading(true);
+    void dispatch(
+      initializeAMMsAndPositionsForRolloverThunk({
+        routePoolId: poolId,
+        routeAmmId: ammId,
+        routePositionId: positionId,
+        signer,
+        chainId,
       }),
     );
-    setLoading(false);
-  }, [aMM, dispatch, ammId, poolId, idle, aMMs, aMMsLoading, error]);
+  }, [
+    signer,
+    chainId,
+    positionId,
+    dispatch,
+    ammId,
+    poolId,
+    idle,
+    aMMs,
+    aMMsLoading,
+    error,
+    previousAMM,
+    previousPosition,
+  ]);
 
   useEffect(() => {
-    if (!aMM) {
+    if (!aMM || !previousAMM || !previousPosition) {
       return;
     }
     void dispatch(getPoolLpInfoThunk());
-  }, [dispatch, aMM, fixedRateLower, fixedRateUpper]);
+  }, [dispatch, previousAMM, previousPosition, aMM]);
 
   useEffect(() => {
-    if (!aMM?.id) {
-      return;
-    }
-    if (!chainId) {
-      return;
-    }
     if (error) {
       return;
     }
     if (aMMsLoading) {
       return;
     }
+    if (!aMM?.id || !previousAMM?.id) {
+      return;
+    }
+
     void dispatch(
-      setSignerAndPositionsForAMMThunk({
+      setSignerForRolloverLpFormAction({
         signer,
-        chainId,
       }),
     );
-  }, [aMM?.id, dispatch, aMMsLoading, error, chainId, signer]);
+  }, [previousAMM?.id, aMM?.id, dispatch, aMMsLoading, error, signer]);
 
   useEffect(() => {
-    if (!queryFixedLower || !queryFixedUpper) {
-      return;
-    }
-    const fixedLower = parseFloat(queryFixedLower);
-    const fixedUpper = parseFloat(queryFixedUpper);
-    if (isNaN(fixedLower) || isNaN(fixedUpper)) {
+    if (!aMM || !aMM.signer || !chainId) {
       return;
     }
 
-    dispatch(
-      setUserInputFixedLowerAction({
-        value: fixedLower,
-      }),
-    );
-    dispatch(
-      setUserInputFixedUpperAction({
-        value: fixedUpper,
-      }),
-    );
-  }, [dispatch, queryFixedLower, queryFixedUpper]);
-
-  useEffect(() => {
     void dispatch(getWalletBalanceThunk());
-    if (!chainId) {
-      return;
-    }
     void dispatch(getUnderlyingTokenAllowanceThunk({ chainId }));
   }, [dispatch, aMM, aMM?.signer, chainId]);
-
-  useEffect(() => {
-    void dispatch(getInfoPostLpThunk());
-  }, [dispatch, aMM, aMM?.signer]);
 
   return {
     aMM,

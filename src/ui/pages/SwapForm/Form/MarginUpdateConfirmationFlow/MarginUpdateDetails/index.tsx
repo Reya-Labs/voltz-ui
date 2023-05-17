@@ -5,7 +5,7 @@ import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
   selectProspectiveSwapMarginFormatted,
-} from '../../../../../../app/features/forms/trader/swap-form';
+} from '../../../../../../app/features/forms/trader/swap';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { MarginUpdateDetailBox, MarginUpdateDetailsBox } from './MarginUpdateDetails.styled';
 

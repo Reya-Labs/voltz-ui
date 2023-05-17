@@ -8,7 +8,7 @@ import {
   selectMarginRequirementFormatted,
   selectUserInputMarginInfo,
   selectWalletBalance,
-} from '../../../../../app/features/forms/lp-form';
+} from '../../../../../app/features/forms/lps/lp';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 

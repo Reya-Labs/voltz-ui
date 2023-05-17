@@ -1,7 +1,7 @@
 import { Dialog } from 'brokoli-ui';
 import React from 'react';
 
-import { selectSwapConfirmationFlowStep } from '../../../../../app/features/forms/trader/swap-form';
+import { selectSwapConfirmationFlowStep } from '../../../../../app/features/forms/trader/swap';
 import { useAppSelector } from '../../../../../app/hooks';
 import { SwapCompletedStep } from './SwapCompletedStep';
 import { SwapConfirmationStep } from './SwapConfirmationStep';

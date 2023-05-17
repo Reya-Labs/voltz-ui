@@ -7,6 +7,8 @@ type TxEventPayload = {
   margin: number | undefined;
   action: string;
   failMessage?: string;
+  fixedHigh?: number | undefined;
+  fixedLow?: number | undefined;
 };
 
 type DepositFormEventPayload = {

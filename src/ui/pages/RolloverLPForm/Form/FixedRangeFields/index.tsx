@@ -5,14 +5,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import {
   getInfoPostLpThunk,
-  selectLpFormAMM,
+  selectRolloverLpFormAMM,
   selectUserInputFixedError,
   selectUserInputFixedLower,
   selectUserInputFixedUpdateCount,
   selectUserInputFixedUpper,
   setUserInputFixedLowerAction,
   setUserInputFixedUpperAction,
-} from '../../../../../app/features/forms/rollover-lp-form';
+} from '../../../../../app/features/forms/lps/rollover-lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';
@@ -20,7 +20,7 @@ import { FixedRangeFieldsBox } from './FixedRangeFields.styled';
 type NotionalAmountProps = {};
 
 export const FixedRangeFields: React.FunctionComponent<NotionalAmountProps> = () => {
-  const aMM = useAppSelector(selectLpFormAMM);
+  const aMM = useAppSelector(selectRolloverLpFormAMM);
   const dispatch = useAppDispatch();
 
   const fixedLower = useAppSelector(selectUserInputFixedLower);

@@ -16,6 +16,7 @@ import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltz
 import { LPFormPage } from './ui/pages/LPForm';
 import { PoolsPage } from './ui/pages/Pools';
 import { ProfilePage } from './ui/pages/Profile';
+import { RolloverLPFormPage } from './ui/pages/RolloverLPForm';
 import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
 import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
@@ -99,6 +100,14 @@ export const AppRoutes = () => {
             </NetworkProtectedVoltzPage>
           }
           path={routes.LP_FORM}
+        />
+        <Route
+          element={
+            <NetworkProtectedVoltzPage>
+              <RolloverLPFormPage />
+            </NetworkProtectedVoltzPage>
+          }
+          path={routes.LP_ROLLOVER_FORM}
         />
         <Route
           element={

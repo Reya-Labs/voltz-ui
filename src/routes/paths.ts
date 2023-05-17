@@ -14,6 +14,7 @@ export const routes = {
   TRADER_SWAP_FORM: 'trader/swap/:ammId/:poolId',
   TRADER_ROLLOVER_SWAP_FORM: 'trader/rollover/:ammId/:positionId/:poolId',
   LP_FORM: 'lp/liquidity/:ammId/:poolId?',
+  LP_ROLLOVER_FORM: 'lp/rollover/:ammId/:positionId/:poolId',
   // old route for lp-optimisers, redirects to lp-optimisers
   DEPRECATED_PRODUCTS: 'products',
   DEPRECATED_LP_PORTFOLIO: 'lp-positions',

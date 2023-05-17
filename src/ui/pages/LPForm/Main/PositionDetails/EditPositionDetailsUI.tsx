@@ -1,4 +1,4 @@
-import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'brokoli-ui';
+import { LabelFromToTokenTypography, LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -10,7 +10,7 @@ import {
   selectExistingPositionFixedLower,
   selectExistingPositionFixedUpper,
   selectLpFormSelectedPosition,
-} from '../../../../../app/features/forms/lp-form';
+} from '../../../../../app/features/forms/lps/lp';
 import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
 import { PnLDetailsWithTooltip } from '../../../../components/PnLDetailsWithTooltip';
@@ -71,7 +71,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           labelTypographyToken={actionLabelTypographyToken}
           token=""
           typographyToken={actionTypographyToken}
-          value="Liquidity provider"
+          value="Liquidity Provider"
         />
       </PositionDetailsLeftBox>
       <PositionDetailsRightBox>
@@ -87,7 +87,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               value={editPositionCompactNotional.compactNotionalNumber}
             />
           ) : (
-            <FromToTokenTypography
+            <LabelFromToTokenTypography
               fromColorToken="lavenderWeb"
               fromToken={existingPositionCompactNotional.compactNotionalSuffix}
               fromValue={existingPositionCompactNotional.compactNotionalNumber}

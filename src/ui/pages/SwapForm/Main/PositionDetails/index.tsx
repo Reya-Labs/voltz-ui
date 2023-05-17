@@ -4,7 +4,7 @@ import React from 'react';
 import {
   selectSwapFormAMM,
   selectSwapFormMode,
-} from '../../../../../app/features/forms/trader/swap-form';
+} from '../../../../../app/features/forms/trader/swap';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { EditPositionDetailsUI } from './EditPositionDetailsUI';

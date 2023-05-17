@@ -111,4 +111,25 @@ describe('useAppNavigate', () => {
     });
     expect(navigateMock).toHaveBeenCalledWith(`/lp-optimisers/deposit/${params.vaultId}`);
   });
+
+  it('should navigate to rollover lp form page', () => {
+    const { result } = renderHook(() => useAppNavigate());
+
+    const params = {
+      ammId: 'abc',
+      poolId: 'def',
+      positionId: 'ghj',
+    };
+
+    (generatePath as jest.Mock).mockReturnValueOnce(
+      `lp/rollover/${params.ammId}/${params.poolId}/${params.positionId}`,
+    );
+
+    result.current.toRolloverLPFormPage(params);
+
+    expect(generatePath).toHaveBeenCalledWith(routes.LP_ROLLOVER_FORM, params);
+    expect(navigateMock).toHaveBeenCalledWith(
+      `/lp/rollover/${params.ammId}/${params.poolId}/${params.positionId}`,
+    );
+  });
 });

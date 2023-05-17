@@ -8,7 +8,7 @@ import {
   selectMarginRequirementFormatted,
   selectUserInputMarginInfo,
   selectWalletBalance,
-} from '../../../../../app/features/forms/rollover-lp-form';
+} from '../../../../../app/features/forms/lps/rollover-lp';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 

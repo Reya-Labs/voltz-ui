@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   closeLpConfirmationFlowAction,
   selectLpConfirmationFlowEtherscanLink,
-} from '../../../../../../app/features/forms/lp-form';
+} from '../../../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
 import { LPDetails } from '../LPDetails';
@@ -24,7 +24,7 @@ export const LPCompletedStep: React.FunctionComponent = () => {
     <LPCompletedStepBox>
       <Confetti>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          Lp Completed
+          LP Completed
         </Typography>
       </Confetti>
       <LPDetails />

@@ -6,7 +6,7 @@ import {
   selectInfoPostLp,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
-} from '../../../../../app/features/forms/rollover-lp-form';
+} from '../../../../../app/features/forms/lps/rollover-lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { FormSubmitButton } from '../../../../components/FormSubmitButton';
 

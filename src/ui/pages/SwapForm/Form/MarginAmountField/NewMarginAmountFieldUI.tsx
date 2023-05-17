@@ -8,7 +8,7 @@ import {
   selectMarginRequirementFormatted,
   selectUserInputMarginInfo,
   selectWalletBalance,
-} from '../../../../../app/features/forms/trader/swap-form';
+} from '../../../../../app/features/forms/trader/swap';
 import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 

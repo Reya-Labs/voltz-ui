@@ -38,3 +38,8 @@ export const BorderedBox = styled('div')`
   padding: 0px 16px;
   min-width: 100px;
 `;
+
+export const RealisedPNLBox = styled(BorderedBox)``;
+export const CashFlowBox = styled(BorderedBox)``;
+export const DepositedMarginBox = styled(BorderedBox)``;
+export const FixedLowerAndUpperBox = styled(BorderedBox)``;

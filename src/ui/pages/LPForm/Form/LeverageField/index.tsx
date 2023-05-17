@@ -8,7 +8,7 @@ import {
   selectLeverageOptions,
   selectShowLeverageNotification,
   setLeverageAction,
-} from '../../../../../app/features/forms/lp-form';
+} from '../../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { stringToBigFloat } from '../../../../../utilities/number';
 import { LeverageField as LeverageFieldComponent } from '../../../../components/LeverageField';

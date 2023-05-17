@@ -5,7 +5,7 @@ import {
   selectNewPositionCompactNotional,
   selectUserInputFixedLower,
   selectUserInputFixedUpper,
-} from '../../../../../app/features/forms/rollover-lp-form';
+} from '../../../../../app/features/forms/lps/rollover-lp';
 import { useAppSelector } from '../../../../../app/hooks';
 import {
   BorderedBox,
@@ -16,6 +16,7 @@ import {
 } from './PositionDetails.styled';
 
 type NewPositionDetailsUIProps = {
+  underlyingTokenName: string;
   actionLabelTypographyToken: TypographyToken;
   actionTypographyToken: TypographyToken;
   labelTypographyToken: TypographyToken;
@@ -27,10 +28,12 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
   actionTypographyToken,
   labelTypographyToken,
   typographyToken,
+  underlyingTokenName,
 }) => {
   const compactNotional = useAppSelector(selectNewPositionCompactNotional);
   const fixedLower = useAppSelector(selectUserInputFixedLower);
   const fixedUpper = useAppSelector(selectUserInputFixedUpper);
+  const token = ` ${underlyingTokenName.toUpperCase()}`;
 
   return (
     <PositionDetailsBox>
@@ -42,7 +45,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
           labelTypographyToken={actionLabelTypographyToken}
           token=""
           typographyToken={actionTypographyToken}
-          value="Liquidity provider"
+          value="Liquidity Provider"
         />
       </PositionDetailsLeftBox>
       <PositionDetailsRightBox>
@@ -52,7 +55,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
             label="Notional"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
-            token={compactNotional ? compactNotional.compactNotionalSuffix : ''}
+            token={compactNotional ? `${compactNotional.compactNotionalSuffix}${token}` : token}
             typographyToken={typographyToken}
             value={compactNotional ? compactNotional.compactNotionalNumber : '--'}
           />

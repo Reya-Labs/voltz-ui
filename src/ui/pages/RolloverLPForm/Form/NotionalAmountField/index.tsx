@@ -4,10 +4,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostLpThunk,
-  selectLpFormAMM,
+  selectRolloverLpFormAMM,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
-} from '../../../../../app/features/forms/rollover-lp-form';
+} from '../../../../../app/features/forms/lps/rollover-lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';
@@ -22,7 +22,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const dispatch = useAppDispatch();
-  const aMM = useAppSelector(selectLpFormAMM);
+  const aMM = useAppSelector(selectRolloverLpFormAMM);
 
   useEffect(() => {
     setLocalNotional(notionalAmount.value.toString());
