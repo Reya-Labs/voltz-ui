@@ -14,6 +14,7 @@ export type Wallet = {
   connect: (name: WalletName) => Promise<void>;
   disconnect: () => void;
   account: string | null;
+  accountENS: string | null;
   name: WalletName | null;
   provider: ethers.providers.JsonRpcProvider | null;
   signer: ethers.providers.JsonRpcSigner | null;

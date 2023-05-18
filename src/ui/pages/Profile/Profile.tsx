@@ -9,7 +9,6 @@ import { Season } from '../../../hooks/season/types';
 import { useCurrentSeason } from '../../../hooks/season/useCurrentSeason';
 import { usePastSeasons } from '../../../hooks/season/usePastSeasons';
 import { useWallet } from '../../../hooks/useWallet';
-import { getENSDetails } from '../../../utilities/getENSDetails';
 import { setPageTitle } from '../../../utilities/page';
 import { getSentryTracker } from '../../../utilities/sentry';
 import { ConnectWallet } from '../../components/ConnectWallet';
@@ -31,7 +30,6 @@ export const Profile: React.FunctionComponent = () => {
   const [collectionBadges, setCollectionBadges] = React.useState<GetProfileBadgesResponse>([]);
   const chainId = useAppSelector(selectChainId);
   const [loading, setLoading] = React.useState(true);
-  const [name, setName] = React.useState('');
   const currentActiveSeason = useCurrentSeason(chainId);
   const pastSeasons = usePastSeasons(chainId);
   const [season, setSeason] = React.useState<Season>(currentActiveSeason);
@@ -49,7 +47,6 @@ export const Profile: React.FunctionComponent = () => {
     if (!wallet.account) {
       return;
     }
-    void fetchEnsDetails(wallet.account);
     invalidateCache();
   }, [wallet.account]);
 
@@ -125,10 +122,6 @@ export const Profile: React.FunctionComponent = () => {
   };
   const isClaimingInProgress = () =>
     Object.values(claimButtonModes).some((bM) => bM === 'claiming');
-  const fetchEnsDetails = async (account: string) => {
-    const details = await getENSDetails(account);
-    setName(details?.name || account);
-  };
 
   async function handleOnClaimButtonClick(variant: BadgeVariant) {
     if (!chainId) {
@@ -273,7 +266,7 @@ export const Profile: React.FunctionComponent = () => {
 
   return (
     <ProfilePageWalletConnected
-      account={name}
+      account={wallet.accountENS || wallet.account}
       badges={collectionBadges}
       chainId={chainId}
       claimButtonBulkMode={claimButtonBulkMode}
