@@ -6,7 +6,7 @@ export const WalletSelectBox = styled('div')`
   align-items: flex-start;
   padding: 0px;
   gap: 24px;
-  width: 100%;
+  width: 316px;
   box-sizing: border-box;
 `;
 
