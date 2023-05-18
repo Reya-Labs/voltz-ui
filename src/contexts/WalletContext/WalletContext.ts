@@ -7,6 +7,7 @@ export const WalletContext = createContext<Wallet>({
   connect: () => Promise.resolve(),
   disconnect: () => {},
   account: null,
+  accountENS: null,
   name: null,
   provider: null,
   signer: null,

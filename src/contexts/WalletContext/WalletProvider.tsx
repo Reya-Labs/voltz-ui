@@ -8,6 +8,7 @@ import {
 } from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
+import { getENSDetails } from '../../utilities/getENSDetails';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';
 import { checkForRiskyWallet, checkForTOSSignature, getWalletProvider } from './services';
@@ -20,6 +21,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [walletError, setWalletError] = useState<string | null>(null);
   const [status, setStatus] = useState<WalletStatus>('initializing');
   const [account, setAccount] = useState<string | null>(null);
+  const [accountENS, setAccountENS] = useState<string | null>(null);
   const [name, setName] = useState<WalletName | null>(null);
   const [required, setRequired] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -33,6 +35,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       setName(null);
       localStorage.removeItem('connectedWalletName');
       setAccount(null);
+      setAccountENS(null);
       setStatus('notConnected');
       setWalletError(errorMessage);
     },
@@ -110,11 +113,15 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
             signer: newSigner,
           };
 
+          const walletAddressAccount = walletAddress.toLowerCase();
+          const details = await getENSDetails(walletAddressAccount);
+
           setProvider(newProvider);
           setSigner(newSigner);
           setName(walletName);
           localStorage.setItem('connectedWalletName', walletName);
-          setAccount(walletAddress.toLowerCase()); // metamask wallet data will not load unless walletAddress is all lower case - why?
+          setAccount(walletAddressAccount); // metamask wallet data will not load unless walletAddress is all lower case - why?
+          setAccountENS(details?.name || walletAddressAccount); // ENS details
           setStatus('connected');
           setWalletError(null);
         } else {
@@ -160,6 +167,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     connect,
     disconnect,
     account,
+    accountENS,
     name,
     signer,
     provider,

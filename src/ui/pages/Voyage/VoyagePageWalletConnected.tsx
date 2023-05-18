@@ -27,11 +27,13 @@ import {
 
 type VoyagePageWalletConnectedProps = {
   account: string;
+  accountENS: string;
   chainId: SupportedChainId;
 };
 
 export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWalletConnectedProps> = ({
   account,
+  accountENS,
   chainId,
 }) => {
   const dispatch = useAppDispatch();
@@ -61,7 +63,7 @@ export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWallet
   return (
     <ContainerBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Black">
-        {`Welcome to the Voyage ${formatEthereumAddress(account)}`}
+        {`Welcome to the Voyage ${formatEthereumAddress(accountENS)}`}
       </Typography>
       <Subheading
         colorToken="lavenderWeb2"
@@ -81,7 +83,7 @@ export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWallet
         <BadgeCollectionBox data-testid="Voyage-BadgeCollectionBox">
           <BadgeCollectionTypographyBox>
             <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
-              Voltz Voyage v2
+              Voltz v2 Voyage
             </Typography>
           </BadgeCollectionTypographyBox>
           <VoyageBadgesGrid itemsPerRow={1}>
