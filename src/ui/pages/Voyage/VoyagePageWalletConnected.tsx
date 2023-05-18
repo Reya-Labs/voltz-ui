@@ -43,9 +43,10 @@ export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWallet
   const closeLearnMoreModal = () => setIsLearnMoreOpen(false);
 
   useEffect(() => {
-    const localStorageViewed = false;
-    if (!localStorageViewed) {
+    const learnMoreOpenedBefore = localStorage.getItem('learnMoreOpenedBefore');
+    if (!learnMoreOpenedBefore) {
       openLearnMoreModal();
+      localStorage.setItem('learnMoreOpenedBefore', 'true');
     }
   }, []);
   useEffect(() => {
