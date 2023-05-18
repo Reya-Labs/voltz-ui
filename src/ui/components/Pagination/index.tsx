@@ -37,7 +37,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = ({
           disabled={previousDisabled}
           typographyToken="secondaryBodyXSmallRegular"
         >
-          {page === 0
+          {previousDisabled
             ? `Current ${(page + 1).toString().padStart(2, '0')}`
             : `< Previous ${page.toString().padStart(2, '0')}`}
         </ActionButton>
@@ -52,7 +52,9 @@ export const Pagination: React.FunctionComponent<PaginationProps> = ({
           disabled={nextDisabled}
           typographyToken="secondaryBodyXSmallRegular"
         >
-          {`${maxPages.toString().padStart(2, '0')} Next >`}
+          {nextDisabled
+            ? `${maxPages.toString().padStart(2, '0')} Last`
+            : `${maxPages.toString().padStart(2, '0')} Next >`}
         </ActionButton>
       </div>
     </PaginationBox>

@@ -4,7 +4,6 @@ import { colors, Typography } from 'brokoli-ui';
 export const PaginationBox = styled('div')`
   display: flex;
   justify-content: center;
-  margin-top: 16px;
   align-items: center;
 `;
 
