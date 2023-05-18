@@ -2,8 +2,7 @@ import styled from '@emotion/styled';
 
 export const SwapDetailsBox = styled('div')`
   box-sizing: border-box;
-  width: 100%;
-
+  width: 316px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

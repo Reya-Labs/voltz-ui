@@ -18,7 +18,7 @@ export const WaitingForLPConfirmationStep: React.FunctionComponent = () => {
       <RainbowLoaderBox>
         <RainbowLoader
           height={2}
-          text={mode === 'add' ? 'Adding Liquidity' : 'Removing Liquidity'}
+          text={mode === 'add' ? 'Adding Liquidity...' : 'Removing Liquidity...'}
         />
       </RainbowLoaderBox>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">

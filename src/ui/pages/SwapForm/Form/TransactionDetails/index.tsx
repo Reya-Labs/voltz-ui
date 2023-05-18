@@ -28,7 +28,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
     <React.Fragment>
       {hideFees ? null : (
         <TransactionDetailBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
             Fees
           </Typography>
           <TokenTypography
@@ -41,7 +41,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
       )}
       {hideSlippage ? null : (
         <TransactionDetailBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
             Estimated Slippage
           </Typography>
           <TokenTypography
@@ -55,7 +55,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
       <TransactionDetailBox>
         <IconTextWrapper>
           <GasIcon />
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>
         </IconTextWrapper>
