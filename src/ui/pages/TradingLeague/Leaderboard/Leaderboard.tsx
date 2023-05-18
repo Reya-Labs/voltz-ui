@@ -2,10 +2,10 @@ import { RankType } from '@voltz-protocol/v1-sdk';
 import { Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { Pagination } from '../../../components/Pagination';
 import { Entry, EntryProps } from '../Entry/Entry';
 import { Header } from '../Header/Header';
 import { LeaderboardHeader } from '../LeaderboardHeader/LeaderboardHeader';
-import { Pagination } from '../Pagination/Pagination';
 import { LeaderboardBox, LeaderboardGrid, LeaderboardGridBox } from './Leaderboard.styled';
 
 type RankingTableProps = {
@@ -96,8 +96,8 @@ export const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
           <Pagination
             maxPages={maxPages}
             page={page}
-            onNextPage={onNextPage}
-            onPrevPage={onPrevPage}
+            onNextPageClick={onNextPage}
+            onPreviousPageClick={onPrevPage}
           />
         )}
       </LeaderboardGridBox>
