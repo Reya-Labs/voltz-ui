@@ -4,4 +4,5 @@ export const ContainerBox = styled('div')`
   width: 800px;
   margin: 24px auto;
   background: transparent;
+  cursor: pointer;
 `;

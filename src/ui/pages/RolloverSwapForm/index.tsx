@@ -3,7 +3,7 @@ import * as React from 'react';
 import { resetStateAction } from '../../../app/features/forms/trader/rollover-swap';
 import { useAppDispatch } from '../../../app/hooks';
 import { routes } from '../../../routes/paths';
-import { AMMFetchingError } from '../../components/AMMFetchingError';
+import { GenericError } from '../../components/GenericError';
 import { NoAMMFound } from '../../components/NoAMMFound';
 import { PageLoading } from '../../components/PageLoading';
 import { VoltzPage } from '../../components/VoltzPage';
@@ -24,7 +24,7 @@ export const RolloverSwapFormPage: React.FunctionComponent = () => {
 
   return (
     <VoltzPage
-      errorSlot={error ? <AMMFetchingError to={`/${routes.POOLS}`} /> : undefined}
+      errorSlot={error ? <GenericError to={`/${routes.POOLS}`} /> : undefined}
       mainSlot={<Main />}
       notFoundSlot={noAMMFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
       pageLoadingSlot={loading ? <PageLoading /> : undefined}
