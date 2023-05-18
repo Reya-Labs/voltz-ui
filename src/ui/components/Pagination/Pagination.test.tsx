@@ -13,7 +13,7 @@ describe('<Pagination />', () => {
         onPreviousPageClick={() => {}}
       />,
     );
-    const prevButton = screen.getByText(/previous 01/i);
+    const prevButton = screen.getByText(/previous 02/i);
     const nextButton = screen.getByText(/05 next/i);
     expect(prevButton).toBeInTheDocument();
     expect(nextButton).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe('<Pagination />', () => {
         onPreviousPageClick={onPrevPageMock}
       />,
     );
-    const prevButton = screen.getByText(/previous 01/i);
+    const prevButton = screen.getByText(/previous 02/i);
     fireEvent.click(prevButton);
     expect(onPrevPageMock).toHaveBeenCalled();
   });
