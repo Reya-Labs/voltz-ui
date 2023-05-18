@@ -67,6 +67,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       signer,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
@@ -105,6 +106,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       signer,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {

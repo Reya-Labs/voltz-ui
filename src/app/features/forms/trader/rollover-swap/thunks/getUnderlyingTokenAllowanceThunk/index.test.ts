@@ -45,6 +45,7 @@ describe('getUnderlyingTokenAllowanceThunkHandler', () => {
       forceErc20Check: false,
       chainId: 1,
       alchemyApiKey: '',
+      infuraApiKey: '',
     });
     expect(result).toBe(getUnderlyingTokenAllowanceResult);
   });

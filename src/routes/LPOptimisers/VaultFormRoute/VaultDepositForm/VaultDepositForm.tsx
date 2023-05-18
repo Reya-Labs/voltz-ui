@@ -80,6 +80,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         signer,
         chainId,
         alchemyApiKey: getAlchemyKey(),
+        infuraApiKey: getInfuraKey(),
       }).then(
         ({ receipt, newOptimiserState }) => {
           pushEvent(account ?? '', {
@@ -160,6 +161,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       userAddress: account,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     }).then(
       (resp) => {
         if (resp) {
@@ -190,6 +192,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       signer,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     })
       .then(({ gasEstimateUsd }) => {
         setDepositGasCost(gasEstimateUsd);
