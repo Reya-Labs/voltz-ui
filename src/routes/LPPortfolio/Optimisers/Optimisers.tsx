@@ -65,6 +65,7 @@ export const Optimisers: React.FunctionComponent = () => {
         signer,
         chainId,
         alchemyApiKey: getAlchemyKey(),
+        infuraApiKey: getInfuraKey(),
       }).then(({ newOptimiserState }) => {
         if (newOptimiserState) {
           void dispatch(

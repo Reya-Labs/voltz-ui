@@ -20,6 +20,7 @@ export const getUnderlyingTokenAllowanceThunk = createAsyncThunk<
       forceErc20Check: false,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
