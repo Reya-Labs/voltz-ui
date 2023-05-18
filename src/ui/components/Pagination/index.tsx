@@ -3,35 +3,49 @@ import React from 'react';
 import { ActionButton, AnimatedBarBox, BarBox, PaginationBox } from './Pagination.styled';
 
 type PaginationProps = {
-  onPrevPage: () => void;
-  onNextPage: () => void;
+  onPreviousPageClick: () => void;
+  onNextPageClick: () => void;
   maxPages: number;
   page: number;
 };
 export const Pagination: React.FunctionComponent<PaginationProps> = ({
-  onPrevPage,
-  onNextPage,
+  onPreviousPageClick,
+  onNextPageClick,
   maxPages,
   page,
 }) => {
   const nextDisabled = page === maxPages - 1;
   const previousDisabled = page === 0;
+  const handleOnNextPageClick = () => {
+    if (nextDisabled) {
+      return;
+    }
+    onNextPageClick();
+  };
+  const handleOnPreviousPageClick = () => {
+    if (previousDisabled) {
+      return;
+    }
+    onPreviousPageClick();
+  };
   return (
     <PaginationBox data-testid="Pagination-PaginationBox">
-      <div onClick={onPrevPage}>
+      <div onClick={handleOnPreviousPageClick}>
         <ActionButton
           colorToken={previousDisabled ? 'lavenderWeb4' : 'lavenderWeb'}
           data-testid={`Pagination-PreviousActionButton-${previousDisabled ? 'disabled' : ''}`}
           disabled={previousDisabled}
           typographyToken="secondaryBodyXSmallRegular"
         >
-          {'< Previous 01'}
+          {page === 0
+            ? `Current ${(page + 1).toString().padStart(2, '0')}`
+            : `< Previous ${page.toString().padStart(2, '0')}`}
         </ActionButton>
       </div>
       <BarBox>
         <AnimatedBarBox width={Math.min(((page + 1) * 100) / maxPages, 100)} />
       </BarBox>
-      <div onClick={onNextPage}>
+      <div onClick={handleOnNextPageClick}>
         <ActionButton
           colorToken={nextDisabled ? 'lavenderWeb4' : 'lavenderWeb'}
           data-testid={`Pagination-NextActionButton-${nextDisabled ? 'disabled' : ''}`}
