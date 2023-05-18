@@ -90,7 +90,6 @@ describe('fetchHistoricalRatesThunkHandler', () => {
       },
       ammId: 'ammId1',
       rateOracleId: 'rateOracleId1',
-      historicalRatesApiKey: process.env.REACT_APP_RATES_API_KEY ?? '',
     });
     expect(rejectThunkWithError).not.toHaveBeenCalled();
     expect(CACHE['cacheId3600000604800000']).toEqual(expectedOutput);
@@ -125,7 +124,6 @@ describe('fetchHistoricalRatesThunkHandler', () => {
       },
       ammId: 'ammId1',
       rateOracleId: 'rateOracleId1',
-      historicalRatesApiKey: process.env.REACT_APP_RATES_API_KEY ?? '',
     });
     expect(rejectThunkWithError).toHaveBeenCalledWith(thunkAPI, error);
     expect(result).toBeInstanceOf(Error);
