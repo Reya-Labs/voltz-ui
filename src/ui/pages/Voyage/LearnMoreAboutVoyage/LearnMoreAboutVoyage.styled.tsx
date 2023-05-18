@@ -3,11 +3,11 @@ import styled from '@emotion/styled';
 export const LearnMoreAboutVoyageBox = styled('div')`
   display: flex;
   box-sizing: border-box;
-  width: 100%;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
   gap: 16px;
+  width: 474px;
 `;
 
 export const TitleBox = styled('div')`
@@ -21,13 +21,9 @@ export const TitleBox = styled('div')`
 `;
 
 export const StepBox = styled('div')`
-  width: 100%;
+  width: 474px;
+  height: 216px;
   border-radius: 4px;
-
-  & svg {
-    width: 100%;
-    height: 100%;
-  }
 `;
 
 export const TextBox = styled('div')`
