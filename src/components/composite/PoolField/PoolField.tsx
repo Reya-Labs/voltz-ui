@@ -31,24 +31,30 @@ export const PoolField = ({
   const protocolIcon = () => {
     // todo: this seems duplicated in other files as well
     // extract a component
-    const prefix = protocol[0];
+    let prefix = protocol[0];
+    if (prefix === 's') {
+      prefix = prefix.concat(protocol[1]);
+    }
     switch (prefix) {
       case 'c':
         return ['Compound', <Compound key="Compound" />];
       case 'a':
         return ['Aave', <Aave key="Aave" />];
-      case 's':
+      case 'st':
         return ['Lido', <Lido key="Lido" />];
       case 'r':
         return ['Rocket', <Rocket key="Rocket" />];
       case 'g':
         return ['GMX:GLP', <GLP key="GLP" />];
+      case 'so':
+        return ['SOFR', '']; //todo: filip
       default:
         return ['', ''];
     }
   };
 
   const tokenIcon = () => {
+    // todo: refactor this
     const token = protocol.substring(1);
     switch (token) {
       case 'DAI':
@@ -61,6 +67,10 @@ export const PoolField = ({
         return ['ETH', <ETH key="tETH" />];
       case 'USDT':
         return ['USDT', <USDT key="USDT" />];
+      case 'VUSD':
+        return ['VUSD', ''];
+      case 'ofrVUSD':
+        return ['VUSD', ''];
       default:
         return ['', ''];
     }
