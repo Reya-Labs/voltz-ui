@@ -51,6 +51,7 @@ const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
   [SupportedChainId.arbitrum]: ArbitrumIcon,
   [SupportedChainId.arbitrumGoerli]: ArbitrumIcon,
   [SupportedChainId.avalanche]: AvalancheIcon,
+  [SupportedChainId.avalancheFuji]: AvalancheIcon,
 };
 export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
   (

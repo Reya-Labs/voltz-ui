@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../../hooks/useWallet';
 import { getAlchemyKey } from '../../../../utilities/getAlchemyKey';
+import { getInfuraKey } from '../../../../utilities/getInfuraKey';
 import { pushEvent } from '../../../../utilities/googleAnalytics';
 import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';

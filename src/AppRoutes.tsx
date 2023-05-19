@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { isArbitrumChain, selectChainId } from './app/features/network';
+import { isArbitrumChain, isAvalancheChain, selectChainId } from './app/features/network';
 import { useAppSelector } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
@@ -64,7 +64,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
+            <NetworkProtectedPage hidden={isAvalancheChain(chainId) || isArbitrumChain(chainId)}>
               <Vaults />
             </NetworkProtectedPage>
           }
@@ -72,7 +72,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
+            <NetworkProtectedPage hidden={isAvalancheChain(chainId) || isArbitrumChain(chainId)}>
               <VaultFormRoute />
             </NetworkProtectedPage>
           }
@@ -112,7 +112,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage hidden={isArbitrumChain(chainId)}>
+            <NetworkProtectedPage hidden={isAvalancheChain(chainId) || isArbitrumChain(chainId)}>
               <VaultFormRoute />
             </NetworkProtectedPage>
           }
@@ -120,7 +120,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage>
+            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId)}>
               <ProfilePage />
             </NetworkProtectedVoltzPage>
           }
@@ -128,7 +128,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage>
+            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId)}>
               <VoyagePage />
             </NetworkProtectedVoltzPage>
           }
@@ -136,7 +136,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage>
+            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId)}>
               <TradingLeaguePage />
             </NetworkProtectedVoltzPage>
           }

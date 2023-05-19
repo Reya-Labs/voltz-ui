@@ -80,11 +80,12 @@ const arbitrumSeasons: Season[] = [
     claimingEnabled: false,
   },
 ];
-
+const avalancheSeasons: Season[] = [];
 export const SEASONS: Record<SupportedChainId, Season[]> = {
   [SupportedChainId.arbitrum]: arbitrumSeasons,
   [SupportedChainId.arbitrumGoerli]: arbitrumSeasons,
   [SupportedChainId.goerli]: ethSeasons,
   [SupportedChainId.mainnet]: ethSeasons,
-  [SupportedChainId.avalanche]: [],
+  [SupportedChainId.avalanche]: avalancheSeasons,
+  [SupportedChainId.avalancheFuji]: avalancheSeasons,
 };

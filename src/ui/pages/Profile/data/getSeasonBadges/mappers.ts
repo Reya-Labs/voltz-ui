@@ -157,12 +157,14 @@ const arbitrumTypeBadgeVariantMap: BadgeTypeBadgeVariant = {
   '-61': 'notionalInfluencer',
   '-62': 'whaleWhisperer',
 };
+const avalancheTypeBadgeVariantMap: BadgeTypeBadgeVariant = {};
 export const BADGE_TYPE_BADGE_VARIANT_MAP: Record<SupportedChainId, BadgeTypeBadgeVariant> = {
   [SupportedChainId.mainnet]: ethereumBadgeTypeBadgeVariantMap,
   [SupportedChainId.goerli]: ethereumBadgeTypeBadgeVariantMap,
   [SupportedChainId.arbitrum]: arbitrumTypeBadgeVariantMap,
   [SupportedChainId.arbitrumGoerli]: arbitrumTypeBadgeVariantMap,
-  [SupportedChainId.avalanche]: {},
+  [SupportedChainId.avalanche]: avalancheTypeBadgeVariantMap,
+  [SupportedChainId.avalancheFuji]: avalancheTypeBadgeVariantMap,
 };
 
 export const NON_PROGRAMMATIC_BADGES_DISCORD: NonProgrammaticBadges[] = [
@@ -289,17 +291,19 @@ const arbitrumChainSeasonBadgeVariants: SeasonBadgeVariants = {
   4: [],
   5: [],
 };
+const avalancheChainSeasonBadgeVariants: SeasonBadgeVariants = {
+  0: [],
+  1: [],
+  2: [],
+  3: [],
+  4: [],
+  5: [],
+};
 export const CHAIN_SEASON_BADGE_VARIANTS: Record<SupportedChainId, SeasonBadgeVariants> = {
   [SupportedChainId.mainnet]: etherumChainSeasonBadgeVariants,
   [SupportedChainId.goerli]: etherumChainSeasonBadgeVariants,
   [SupportedChainId.arbitrum]: arbitrumChainSeasonBadgeVariants,
   [SupportedChainId.arbitrumGoerli]: arbitrumChainSeasonBadgeVariants,
-  [SupportedChainId.avalanche]: {
-    0: [],
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-  },
+  [SupportedChainId.avalanche]: avalancheChainSeasonBadgeVariants,
+  [SupportedChainId.avalancheFuji]: avalancheChainSeasonBadgeVariants,
 };

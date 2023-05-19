@@ -9,6 +9,7 @@ import { Panel } from '../../../components/atomic/Panel/Panel';
 import { AutomaticRolloverToggleProps } from '../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../hooks/useWallet';
 import { getAlchemyKey } from '../../../utilities/getAlchemyKey';
+import { getInfuraKey } from '../../../utilities/getInfuraKey';
 import { useLPVaults } from '../../LPOptimisers/useLPVaults';
 import { routes } from '../../paths';
 import { NoPositionsOrVaultsFound } from '../NoPositionsOrVaultsFound/NoPositionsOrVaultsFound';
