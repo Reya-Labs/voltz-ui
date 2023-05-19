@@ -50,7 +50,7 @@ export const FILTER_CONFIG: Record<
   },
   avalanche: {
     label: 'Avalanche',
-    hidden: true,
+    hidden: false,
   },
 };
 

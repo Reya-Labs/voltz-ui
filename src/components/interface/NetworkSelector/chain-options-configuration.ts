@@ -4,7 +4,7 @@ import React from 'react';
 import { ArbitrumIcon, AvalancheIcon, EthereumIcon } from './NetworkSelector.styled';
 
 export const chainOptionsConfiguration: Record<
-  number,
+  SupportedChainId,
   {
     name: string;
     Icon: React.FunctionComponent;
@@ -28,6 +28,10 @@ export const chainOptionsConfiguration: Record<
   },
   [SupportedChainId.avalanche]: {
     name: 'Avalanche',
+    Icon: AvalancheIcon,
+  },
+  [SupportedChainId.avalancheFuji]: {
+    name: 'Avalanche Fuji',
     Icon: AvalancheIcon,
   },
 };

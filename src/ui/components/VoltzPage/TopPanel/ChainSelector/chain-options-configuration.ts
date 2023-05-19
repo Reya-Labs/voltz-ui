@@ -6,7 +6,7 @@ import { ReactComponent as AvalancheIcon } from './icons/avalanche.svg';
 import { ReactComponent as EthereumIcon } from './icons/ethereum.svg';
 
 export const chainOptionsConfiguration: Record<
-  number,
+  SupportedChainId,
   {
     name: string;
     Icon: React.FunctionComponent;
@@ -30,6 +30,10 @@ export const chainOptionsConfiguration: Record<
   },
   [SupportedChainId.avalanche]: {
     name: 'Avalanche',
+    Icon: AvalancheIcon,
+  },
+  [SupportedChainId.avalancheFuji]: {
+    name: 'Avalanche Fuji',
     Icon: AvalancheIcon,
   },
 };

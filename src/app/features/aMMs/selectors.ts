@@ -52,7 +52,11 @@ export const selectPools = (state: RootState): PoolUI[] => {
       ) {
         return true;
       }
-      if (appliedFilters['avalanche'] && amm.chainId === SupportedChainId.avalanche) {
+      if (
+        appliedFilters['avalanche'] &&
+        (amm.chainId === SupportedChainId.avalanche ||
+          amm.chainId === SupportedChainId.avalancheFuji)
+      ) {
         return true;
       }
       return false;

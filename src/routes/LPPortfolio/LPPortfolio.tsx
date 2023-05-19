@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { selectors } from '../../app';
-import { isArbitrumChain, selectChainId } from '../../app/features/network';
+import { isArbitrumChain, isAvalancheChain, selectChainId } from '../../app/features/network';
 import { useAppSelector } from '../../app/hooks';
 import { ConnectWallet } from '../../components/composite/ConnectWallet/ConnectWallet';
 import { MintBurnFormModes } from '../../contexts/MintBurnFormContext/MintBurnFormContext';
@@ -34,7 +34,7 @@ export const LPPortfolio: React.FunctionComponent = () => {
         <LPPositions formMode={formMode} setFormMode={setFormMode} />
       </ContentBox>
 
-      {isArbitrumChain(chainId) ? null : (
+      {isAvalancheChain(chainId) || isArbitrumChain(chainId) ? null : (
         <React.Fragment>
           <ContentBox>
             <Split />
