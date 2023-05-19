@@ -61,6 +61,8 @@ export const PoolField = ({
         return ['DAI', <DAI key="DAI" />];
       case 'USDC':
         return ['USDC', <USDC key="USDC" />];
+      case 'ofrUSDC':
+        return ['USDC', <USDC key="USDC" />];
       case 'ETH':
         return ['ETH', <ETH key="ETH" />];
       case 'tETH':
