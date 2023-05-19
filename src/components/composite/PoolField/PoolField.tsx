@@ -10,6 +10,7 @@ import { ReactComponent as ETH } from './eth-icon.svg';
 import { ReactComponent as GLP } from './glp-icon.svg';
 import { ReactComponent as Lido } from './lido-icon.svg';
 import { ReactComponent as Rocket } from './rocket-icon.svg';
+import { ReactComponent as SOFR } from './sofr.svg';
 import { ReactComponent as USDC } from './usdc-icon.svg';
 import { ReactComponent as USDT } from './usdt-icon.svg';
 
@@ -47,7 +48,7 @@ export const PoolField = ({
       case 'g':
         return ['GMX:GLP', <GLP key="GLP" />];
       case 'so':
-        return ['SOFR', '']; //todo: filip
+        return ['SOFR', <SOFR key="sofr" />];
       default:
         return ['', ''];
     }

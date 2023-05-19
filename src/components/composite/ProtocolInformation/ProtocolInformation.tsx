@@ -13,6 +13,7 @@ import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
 import { ReactComponent as GLP } from '../PoolField/glp-icon.svg';
 import { ReactComponent as Lido } from '../PoolField/lido-icon.svg';
 import { ReactComponent as Rocket } from '../PoolField/rocket-icon.svg';
+import { ReactComponent as SOFR } from '../PoolField/sofr.svg';
 import { ReactComponent as USDC } from '../PoolField/usdc-icon.svg';
 import { ReactComponent as USDT } from '../PoolField/usdt-icon.svg';
 import { FixedAPR, MaturityEndDate, VariableAPY } from './components';
@@ -76,7 +77,7 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
         case 'g':
           return ['GMX:GLP', <GLP key="GLP" height="38" width="38" />];
         case 'so':
-          return ['SOFR', '']; //todo: filip
+          return ['SOFR', <SOFR key="sofr" height="38" width="38" />];
         default:
           return ['', ''];
       }
