@@ -7,7 +7,7 @@ describe('getInfuraKey', () => {
     expect(getInfuraKey('UNPROVIDED')).toBe('');
   });
 
-  it('should return the alchemy key for the given chain ID', () => {
+  it('should return the infura key for the given chain ID', () => {
     const processEnvKeys = 'abc';
     expect(getInfuraKey(processEnvKeys)).toBe('abc');
   });
