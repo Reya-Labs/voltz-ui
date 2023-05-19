@@ -33,7 +33,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   return (
     <SwapDetailsBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           {mode === 'fixed' ? 'Fixed' : 'Variable'} Rate Receiving
         </Typography>
         <TokenTypography
@@ -44,7 +44,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           {mode === 'fixed' ? 'Variable' : 'Fixed'} Rate Paying
         </Typography>
         <TokenTypography
@@ -55,7 +55,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Notional
         </Typography>
         <TokenTypography
@@ -66,7 +66,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Margin
         </Typography>
         <TokenTypography
@@ -77,7 +77,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
         <TokenTypography

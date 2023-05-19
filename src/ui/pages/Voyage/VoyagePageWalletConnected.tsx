@@ -1,6 +1,6 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
-import { formatEthereumAddress, Typography } from 'brokoli-ui';
-import React, { useEffect } from 'react';
+import { Dialog, formatEthereumAddress, Typography } from 'brokoli-ui';
+import React, { useEffect, useState } from 'react';
 
 import {
   fetchVoyageBadgesThunk,
@@ -10,6 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { routes } from '../../../routes/paths';
 import { GenericError } from '../../components/GenericError';
+import { LearnMoreAboutVoyage } from './LearnMoreAboutVoyage';
 import { NotificationSection } from './NotificationSection';
 import { VoyageBadge } from './VoyageBadge';
 import { VoyageBadgeEntry } from './VoyageBadgeEntry';
@@ -27,15 +28,27 @@ import {
 
 type VoyagePageWalletConnectedProps = {
   account: string;
+  accountENS: string;
   chainId: SupportedChainId;
 };
 
 export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWalletConnectedProps> = ({
   account,
+  accountENS,
   chainId,
 }) => {
   const dispatch = useAppDispatch();
+  const [isLearnMoreOpen, setIsLearnMoreOpen] = useState(false);
+  const openLearnMoreModal = () => setIsLearnMoreOpen(true);
+  const closeLearnMoreModal = () => setIsLearnMoreOpen(false);
 
+  useEffect(() => {
+    const learnMoreOpenedBefore = localStorage.getItem('learnMoreOpenedBefore');
+    if (!learnMoreOpenedBefore) {
+      openLearnMoreModal();
+      localStorage.setItem('learnMoreOpenedBefore', 'true');
+    }
+  }, []);
   useEffect(() => {
     void dispatch(
       fetchVoyageBadgesThunk({
@@ -60,8 +73,11 @@ export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWallet
 
   return (
     <ContainerBox>
+      <Dialog open={isLearnMoreOpen}>
+        <LearnMoreAboutVoyage onCloseButtonClick={closeLearnMoreModal} />
+      </Dialog>
       <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Black">
-        {`Welcome to the Voyage ${formatEthereumAddress(account)}`}
+        {`Welcome to the Voyage ${formatEthereumAddress(accountENS)}`}
       </Typography>
       <Subheading
         colorToken="lavenderWeb2"
@@ -76,12 +92,12 @@ export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWallet
         These unique badges will have a number of mysterious benefits. Learn more below, and
         check-in to see whether you’ve met the criteria for active Voyages.
       </Subheading>
-      <NotificationSection />
+      <NotificationSection onLearnMoreClick={openLearnMoreModal} />
       <BadgesBox>
         <BadgeCollectionBox data-testid="Voyage-BadgeCollectionBox">
           <BadgeCollectionTypographyBox>
             <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
-              Voltz Voyage v2
+              Voltz v2 Voyage
             </Typography>
           </BadgeCollectionTypographyBox>
           <VoyageBadgesGrid itemsPerRow={1}>
@@ -106,7 +122,7 @@ export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWallet
             colorToken="lavenderWeb2"
             typographyToken="primaryBodyMediumRegular"
           >
-            Trade or LP on the protocol to earn unique Voyage badges.{' '}
+            Trade or LP on the protocol to earn unique Voyage badges.
           </BadgesListSubheading>
           <BadgesListGrid data-testid="Voyage-AchievedBadgesListGrid" itemsPerRow={1}>
             {loading

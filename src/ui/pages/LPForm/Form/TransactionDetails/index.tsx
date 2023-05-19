@@ -17,7 +17,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
       <TransactionDetailBox>
         <IconTextWrapper>
           <GasIcon />
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>
         </IconTextWrapper>

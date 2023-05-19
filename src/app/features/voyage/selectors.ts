@@ -51,7 +51,7 @@ export const selectVoyageBadges = (account: string) => (state: RootState) => {
   return badges.map((badge) => ({
     completed: Boolean(badge.timestamp),
     isClaimable: false,
-    achievedAt: badge.timestamp,
+    achievedAt: badge.timestamp ? badge.timestamp : undefined,
   })) as {
     completed: boolean;
     isClaimable: boolean;

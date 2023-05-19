@@ -9,24 +9,26 @@ import {
   NotificationsContainer,
 } from './NotificationSection.styled';
 
-export const NotificationSection: React.FunctionComponent = () => {
-  const handleOnLearnMoreClick = () => {};
-  return (
-    <NotificationsContainer>
-      <NotificationContainer>
-        <NotificationBox>
-          <ProfileNotification
-            pillColorToken="orangeYellow"
-            pillText="Voltz Voyage"
-            text="Time to go on a trip"
-          />
-        </NotificationBox>
-        <ButtonBox>
-          <LearnMoreButton variant="primary" onClick={handleOnLearnMoreClick}>
-            Learn More
-          </LearnMoreButton>
-        </ButtonBox>
-      </NotificationContainer>
-    </NotificationsContainer>
-  );
+type NotificationSectionProps = {
+  onLearnMoreClick: () => void;
 };
+export const NotificationSection: React.FunctionComponent<NotificationSectionProps> = ({
+  onLearnMoreClick,
+}) => (
+  <NotificationsContainer>
+    <NotificationContainer>
+      <NotificationBox>
+        <ProfileNotification
+          pillColorToken="orangeYellow"
+          pillText="Voltz v2 Voyage"
+          text="Time to go on a trip"
+        />
+      </NotificationBox>
+      <ButtonBox>
+        <LearnMoreButton variant="primary" onClick={onLearnMoreClick}>
+          Learn More
+        </LearnMoreButton>
+      </ButtonBox>
+    </NotificationContainer>
+  </NotificationsContainer>
+);

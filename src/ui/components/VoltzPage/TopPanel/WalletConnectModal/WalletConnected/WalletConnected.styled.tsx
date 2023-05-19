@@ -7,6 +7,7 @@ export const WalletConnectedBox = styled('div')`
   align-items: flex-start;
   padding: 0px;
   gap: 24px;
+  width: 316px;
 `;
 
 export const TitleBox = styled('div')`

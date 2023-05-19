@@ -36,7 +36,7 @@ export const SettleDetails: React.FunctionComponent = () => {
   return (
     <DetailsBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Notional
         </Typography>
         <TokenTypography
@@ -49,7 +49,7 @@ export const SettleDetails: React.FunctionComponent = () => {
       {variant === 'lp' ? (
         <React.Fragment>
           <DetailBox>
-            <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+            <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
               Fixed Rate Low
             </Typography>
             <TokenTypography
@@ -60,7 +60,7 @@ export const SettleDetails: React.FunctionComponent = () => {
             />
           </DetailBox>
           <DetailBox>
-            <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+            <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
               Fixed Rate High
             </Typography>
             <TokenTypography
@@ -74,7 +74,7 @@ export const SettleDetails: React.FunctionComponent = () => {
       ) : null}
       <DetailBox>
         <TypographyWithTooltip
-          colorToken="lavenderWeb"
+          colorToken="lavenderWeb3"
           tooltip="Deposited Margin = Margin Provided at any time - Margin Removed at any time"
           tooltipColorToken="lavenderWeb2"
           typographyToken="primaryBodySmallRegular"
@@ -90,7 +90,7 @@ export const SettleDetails: React.FunctionComponent = () => {
       </DetailBox>
       <DetailBox>
         <TypographyWithTooltip
-          colorToken="lavenderWeb"
+          colorToken="lavenderWeb3"
           tooltip={
             <PnLDetails
               pnlFromFees={compactRealizedPnL.compactRealizedPnLFees}
@@ -120,7 +120,7 @@ export const SettleDetails: React.FunctionComponent = () => {
       </DetailBox>
       <DetailBox>
         <TypographyWithTooltip
-          colorToken="lavenderWeb"
+          colorToken="lavenderWeb3"
           tooltip="Settling Balance = Deposited Margin + Realized PnL"
           tooltipColorToken="lavenderWeb2"
           typographyToken="primaryBodySmallRegular"
@@ -141,7 +141,7 @@ export const SettleDetails: React.FunctionComponent = () => {
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
         <TokenTypography
