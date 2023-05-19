@@ -59,18 +59,24 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
 
   const protocolIconMemo = useMemo(() => {
     if (protocol) {
-      const prefix = protocol[0];
+      // todo: refactor this
+      let prefix = protocol[0];
+      if (prefix === 's') {
+        prefix = prefix.concat(protocol[1]);
+      }
       switch (prefix) {
         case 'c':
           return ['Compound', <Compound key="Compound" height="38" width="38" />];
         case 'a':
           return ['Aave', <Aave key="Aave" height="38" width="38" />];
-        case 's':
+        case 'st':
           return ['Lido', <Lido key="Lido" height="38" width="38" />];
         case 'r':
           return ['Rocket', <Rocket key="Rocket" height="38" width="38" />];
         case 'g':
           return ['GMX:GLP', <GLP key="GLP" height="38" width="38" />];
+        case 'so':
+          return ['SOFR', '']; //todo: filip
         default:
           return ['', ''];
       }
@@ -80,7 +86,8 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
 
   const tokenIconMemo = useMemo(() => {
     if (protocol) {
-      const token = protocol[0] === 's' ? protocol.substring(2) : protocol.substring(1);
+      // todo: refactor this
+      const token = protocol.substring(1);
       switch (token) {
         case 'DAI':
           return ['DAI', <DAI key="DAI" height="38" width="38" />];
@@ -88,8 +95,14 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
           return ['USDC', <USDC key="USDC" height="38" width="38" />];
         case 'ETH':
           return ['ETH', <ETH key="ETH" height="38" width="38" />];
+        case 'tETH':
+          return ['ETH', <ETH key="ETH" height="38" width="38" />];
         case 'USDT':
           return ['USDT', <USDT key="USDT" height="38" width="38" />];
+        case 'VUSD':
+          return ['VUSD', ''];
+        case 'ofrVUSD':
+          return ['VUSD', ''];
         default:
           return ['', ''];
       }

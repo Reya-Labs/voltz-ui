@@ -97,6 +97,9 @@ export const getProtocolName = (protocolId: number): string => {
     case 9: {
       return 'aaveV3Borrowing';
     }
+    case 10: {
+      return 'sofr';
+    }
     default:
       throw new Error('Not supported protocolId');
   }
