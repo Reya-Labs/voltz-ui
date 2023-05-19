@@ -29,7 +29,7 @@ const STEP_TITLE_MAP: Record<0 | 1 | 2, string> = {
 };
 const STEP_DESCRIPTION_MAP: Record<0 | 1 | 2, string> = {
   0: 'Voyages can start at any time and will last for a number of weeks. They provide you with an opportunity to earn unique badges that have a number of unique benefits.',
-  1: 'The first ever Voyage gives you the chance to gain early access to Voltz v2. If you meet the criteria required to earn the badge(s), you’ll become part of a unique set of users who will kick-start the exclusive voyager program and help us build out Voltz v2 as a v2 OG.',
+  1: 'The first ever Voyage gives you the chance to gain early access to Voltz v2. If you meet the criteria required to earn the badge, you’ll become part of a unique set of users who will kick-start the exclusive voyager program and help us build out Voltz v2 as a v2 OG.',
   2: 'This initial voyage will span over four weeks. On a weekly basis, the badge winners will be revealed in the “BIG REVEAL”. At that point, if you’ve met the criteria of the badge, you’ll see these unique SBTs on your "Profile" page',
 };
 
