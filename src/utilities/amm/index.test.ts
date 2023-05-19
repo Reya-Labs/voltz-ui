@@ -394,8 +394,12 @@ describe('utilities/amm', () => {
       expect(getProtocolName(9)).toEqual('aaveV3Borrowing');
     });
 
+    it('should return "sofr" for protocol id 10', () => {
+      expect(getProtocolName(10)).toEqual('sofr');
+    });
+
     it('should throw an error for an unsupported protocol id', () => {
-      expect(() => getProtocolName(10)).toThrow('Not supported protocolId');
+      expect(() => getProtocolName(11)).toThrow('Not supported protocolId');
     });
   });
 });

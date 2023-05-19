@@ -93,6 +93,8 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
           return ['DAI', <DAI key="DAI" height="38" width="38" />];
         case 'USDC':
           return ['USDC', <USDC key="USDC" height="38" width="38" />];
+        case 'ofrUSDC':
+          return ['USDC', <USDC key="USDC" height="38" width="38" />];
         case 'ETH':
           return ['ETH', <ETH key="ETH" height="38" width="38" />];
         case 'tETH':
