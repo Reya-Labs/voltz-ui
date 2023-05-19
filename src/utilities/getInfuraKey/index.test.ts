@@ -1,6 +1,6 @@
 import { getInfuraKey } from './index';
 
-describe('getAlchemyKey', () => {
+describe('getInfuraKey', () => {
   it('should return an empty string if the process environment variable is not provided', () => {
     expect(getInfuraKey('')).toBe('');
     expect(getInfuraKey(undefined)).toBe('');
