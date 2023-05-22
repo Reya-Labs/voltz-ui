@@ -8,10 +8,8 @@ import {
   selectMarginUpdateConfirmationFlowError,
 } from '../../../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import {
-  MarketTokenInformation,
-  MarketTokenInformationProps,
-} from '../../../../../components/MarketTokenInformation';
+import { MarketTokenInformationProps } from '../../../../../components/MarketTokenInformation';
+import { MarketTokenInformationCompact } from '../../../../../components/MarketTokenInformationCompact';
 import { TransactionDetails } from '../../TransactionDetails';
 import { MarginUpdateDetails } from '../MarginUpdateDetails';
 import {
@@ -45,16 +43,9 @@ export const MarginUpdateConfirmationStep: React.FunctionComponent = () => {
         <CloseButton onClick={handleCloseButtonClick} />
       </TitleBox>
       <MarginUpdateDetailsBox>
-        <MarketTokenInformation
-          colorToken="lavenderWeb"
-          iconSize={30}
-          isAaveV3={aMM.market.tags.isAaveV3}
-          isBorrowing={aMM.market.tags.isBorrowing}
-          isV2={aMM.market.tags.isV2}
+        <MarketTokenInformationCompact
           market={aMM.market.name as MarketTokenInformationProps['market']}
-          pillVariant="regular"
           token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
-          typographyToken="primaryHeader2Black"
         />
         <MarginUpdateDetails />
       </MarginUpdateDetailsBox>

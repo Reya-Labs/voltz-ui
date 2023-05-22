@@ -13,6 +13,10 @@ export const LeaderboardGridBox = styled('div')`
   margin-top: 24px;
 `;
 
+export const PaginationBox = styled('div')`
+  margin-top: 16px;
+`;
+
 export const LeaderboardGrid = styled(Grid)`
   margin-top: 16px;
   row-gap: 8px;

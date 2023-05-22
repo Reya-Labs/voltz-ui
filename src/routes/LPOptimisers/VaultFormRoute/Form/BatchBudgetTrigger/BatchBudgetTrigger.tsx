@@ -11,6 +11,7 @@ import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
+import { getInfuraKey } from '../../../../../utilities/getInfuraKey';
 import { formatCurrency } from '../../../../../utilities/number';
 import { GasCost } from '../GasCost/GasCost';
 import { batchBudgetReducer, initialState } from './batchBudgetReducer';
@@ -70,6 +71,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       signer,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     })
       .then(({ newOptimiserState }) => {
         void dispatch({
@@ -105,6 +107,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
       signer,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     })
       .then(({ gasEstimateUsd }) => {
         setGasCost(gasEstimateUsd);

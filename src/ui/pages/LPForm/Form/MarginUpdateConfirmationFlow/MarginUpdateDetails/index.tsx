@@ -23,7 +23,7 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
   return (
     <MarginUpdateDetailsBox>
       <MarginUpdateDetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Fixed Rate Low
         </Typography>
         <TokenTypography
@@ -34,7 +34,7 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
         />
       </MarginUpdateDetailBox>
       <MarginUpdateDetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Fixed Rate High
         </Typography>
         <TokenTypography
@@ -45,7 +45,7 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
         />
       </MarginUpdateDetailBox>
       <MarginUpdateDetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Margin
         </Typography>
         <TokenTypography
@@ -56,7 +56,7 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
         />
       </MarginUpdateDetailBox>
       <MarginUpdateDetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
         <TokenTypography

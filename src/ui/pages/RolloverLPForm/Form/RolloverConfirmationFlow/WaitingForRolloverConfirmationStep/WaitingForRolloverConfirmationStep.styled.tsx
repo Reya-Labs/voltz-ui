@@ -6,7 +6,7 @@ export const WaitingForRolloverConfirmationStepBox = styled('div')`
   align-items: flex-start;
   padding: 0px;
   gap: 64px;
-  width: 100%;
+  width: 316px;
   box-sizing: border-box;
 `;
 

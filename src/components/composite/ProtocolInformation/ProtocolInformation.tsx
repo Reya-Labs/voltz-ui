@@ -13,6 +13,7 @@ import { ReactComponent as ETH } from '../PoolField/eth-icon.svg';
 import { ReactComponent as GLP } from '../PoolField/glp-icon.svg';
 import { ReactComponent as Lido } from '../PoolField/lido-icon.svg';
 import { ReactComponent as Rocket } from '../PoolField/rocket-icon.svg';
+import { ReactComponent as SOFR } from '../PoolField/sofr.svg';
 import { ReactComponent as USDC } from '../PoolField/usdc-icon.svg';
 import { ReactComponent as USDT } from '../PoolField/usdt-icon.svg';
 import { FixedAPR, MaturityEndDate, VariableAPY } from './components';
@@ -59,18 +60,24 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
 
   const protocolIconMemo = useMemo(() => {
     if (protocol) {
-      const prefix = protocol[0];
+      // todo: refactor this
+      let prefix = protocol[0];
+      if (prefix === 's') {
+        prefix = prefix.concat(protocol[1]);
+      }
       switch (prefix) {
         case 'c':
           return ['Compound', <Compound key="Compound" height="38" width="38" />];
         case 'a':
           return ['Aave', <Aave key="Aave" height="38" width="38" />];
-        case 's':
+        case 'st':
           return ['Lido', <Lido key="Lido" height="38" width="38" />];
         case 'r':
           return ['Rocket', <Rocket key="Rocket" height="38" width="38" />];
         case 'g':
           return ['GMX:GLP', <GLP key="GLP" height="38" width="38" />];
+        case 'so':
+          return ['SOFR', <SOFR key="sofr" height="38" width="38" />];
         default:
           return ['', ''];
       }
@@ -80,16 +87,25 @@ export const ProtocolInformation: React.FunctionComponent<ProtocolInformationPro
 
   const tokenIconMemo = useMemo(() => {
     if (protocol) {
-      const token = protocol[0] === 's' ? protocol.substring(2) : protocol.substring(1);
+      // todo: refactor this
+      const token = protocol.substring(1);
       switch (token) {
         case 'DAI':
           return ['DAI', <DAI key="DAI" height="38" width="38" />];
         case 'USDC':
           return ['USDC', <USDC key="USDC" height="38" width="38" />];
+        case 'ofrUSDC':
+          return ['USDC', <USDC key="USDC" height="38" width="38" />];
         case 'ETH':
+          return ['ETH', <ETH key="ETH" height="38" width="38" />];
+        case 'tETH':
           return ['ETH', <ETH key="ETH" height="38" width="38" />];
         case 'USDT':
           return ['USDT', <USDT key="USDT" height="38" width="38" />];
+        case 'VUSD':
+          return ['VUSD', ''];
+        case 'ofrVUSD':
+          return ['VUSD', ''];
         default:
           return ['', ''];
       }

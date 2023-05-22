@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { AutomaticRolloverToggleProps } from '../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
 import { useWallet } from '../../../../hooks/useWallet';
 import { getAlchemyKey } from '../../../../utilities/getAlchemyKey';
+import { getInfuraKey } from '../../../../utilities/getInfuraKey';
 import { pushEvent } from '../../../../utilities/googleAnalytics';
 import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
@@ -80,6 +81,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
         signer,
         chainId,
         alchemyApiKey: getAlchemyKey(),
+        infuraApiKey: getInfuraKey(),
       }).then(
         ({ receipt, newOptimiserState }) => {
           pushEvent(account ?? '', {
@@ -160,6 +162,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       userAddress: account,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     }).then(
       (resp) => {
         if (resp) {
@@ -190,6 +193,7 @@ export const VaultDepositForm: React.FunctionComponent<VaultDepositFormProps> = 
       signer,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     })
       .then(({ gasEstimateUsd }) => {
         setDepositGasCost(gasEstimateUsd);

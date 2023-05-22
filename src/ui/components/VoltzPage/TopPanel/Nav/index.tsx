@@ -2,7 +2,11 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Nav as BrokoliNav, NavProps } from 'brokoli-ui';
 import React, { useMemo } from 'react';
 
-import { isArbitrumChain, selectChainId } from '../../../../../app/features/network';
+import {
+  isArbitrumChain,
+  isAvalancheChain,
+  selectChainId,
+} from '../../../../../app/features/network';
 import { useAppSelector } from '../../../../../app/hooks';
 import { routes } from '../../../../../routes/paths';
 import { isVoyageEnabled } from '../../../../../utilities/isEnvVarProvided/is-voyage-enabled';
@@ -30,22 +34,22 @@ const getLinks = (chainId?: SupportedChainId | null) =>
           ],
         },
         {
-          isHidden: isArbitrumChain(chainId),
+          isHidden: isAvalancheChain(chainId) || isArbitrumChain(chainId),
           text: 'Optimisers',
           link: `/${routes.LP_OPTIMISERS}`,
         },
         {
-          isHidden: false,
+          isHidden: isAvalancheChain(chainId),
           text: 'Leaderboard',
           link: `/${routes.TRADING_LEAGUE}`,
         },
         {
-          isHidden: false,
+          isHidden: isAvalancheChain(chainId),
           text: 'Profile',
           link: `/${routes.PROFILE}`,
         },
         {
-          isHidden: !isVoyageEnabled(),
+          isHidden: !isVoyageEnabled() || isAvalancheChain(chainId),
           colorToken: 'rainbow',
           text: 'Voyage',
           link: `/${routes.VOYAGE}`,

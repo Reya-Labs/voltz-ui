@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { isArbitrumChain, selectChainId } from '../../../../app/features/network';
+import { isArbitrumChain, isAvalancheChain, selectChainId } from '../../../../app/features/network';
 import { useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
 import { isVoyageEnabled } from '../../../../utilities/isEnvVarProvided/is-voyage-enabled';
@@ -10,6 +10,7 @@ import { NavLink } from './NavLink/NavLink';
 export const Nav: React.FunctionComponent = React.memo(() => {
   const chainId = useAppSelector(selectChainId);
   const isArbitrum = isArbitrumChain(chainId);
+  const isAvalanche = isAvalancheChain(chainId);
 
   return (
     <NavBox>
@@ -44,16 +45,16 @@ export const Nav: React.FunctionComponent = React.memo(() => {
         Portfolio
       </NavLink>
 
-      <NavLink hidden={isArbitrum} isNew={false} link={`/${routes.LP_OPTIMISERS}`}>
+      <NavLink hidden={isAvalanche || isArbitrum} isNew={false} link={`/${routes.LP_OPTIMISERS}`}>
         Optimisers
       </NavLink>
-      <NavLink hidden={false} isNew={false} link={`/${routes.TRADING_LEAGUE}`}>
+      <NavLink hidden={isAvalanche} isNew={false} link={`/${routes.TRADING_LEAGUE}`}>
         Leaderboard
       </NavLink>
-      <NavLink hidden={false} isNew={false} link={`/${routes.PROFILE}`}>
+      <NavLink hidden={isAvalanche} isNew={false} link={`/${routes.PROFILE}`}>
         Profile
       </NavLink>
-      <NavLink hidden={!isVoyageEnabled()} isNew={false} link={`/${routes.VOYAGE}`}>
+      <NavLink hidden={!isVoyageEnabled() || isAvalanche} isNew={true} link={`/${routes.VOYAGE}`}>
         Voyage
       </NavLink>
     </NavBox>

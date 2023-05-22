@@ -10,6 +10,7 @@ import { ReactComponent as ETH } from './eth-icon.svg';
 import { ReactComponent as GLP } from './glp-icon.svg';
 import { ReactComponent as Lido } from './lido-icon.svg';
 import { ReactComponent as Rocket } from './rocket-icon.svg';
+import { ReactComponent as SOFR } from './sofr.svg';
 import { ReactComponent as USDC } from './usdc-icon.svg';
 import { ReactComponent as USDT } from './usdt-icon.svg';
 
@@ -31,29 +32,37 @@ export const PoolField = ({
   const protocolIcon = () => {
     // todo: this seems duplicated in other files as well
     // extract a component
-    const prefix = protocol[0];
+    let prefix = protocol[0];
+    if (prefix === 's') {
+      prefix = prefix.concat(protocol[1]);
+    }
     switch (prefix) {
       case 'c':
         return ['Compound', <Compound key="Compound" />];
       case 'a':
         return ['Aave', <Aave key="Aave" />];
-      case 's':
+      case 'st':
         return ['Lido', <Lido key="Lido" />];
       case 'r':
         return ['Rocket', <Rocket key="Rocket" />];
       case 'g':
         return ['GMX:GLP', <GLP key="GLP" />];
+      case 'so':
+        return ['SOFR', <SOFR key="sofr" />];
       default:
         return ['', ''];
     }
   };
 
   const tokenIcon = () => {
+    // todo: refactor this
     const token = protocol.substring(1);
     switch (token) {
       case 'DAI':
         return ['DAI', <DAI key="DAI" />];
       case 'USDC':
+        return ['USDC', <USDC key="USDC" />];
+      case 'ofrUSDC':
         return ['USDC', <USDC key="USDC" />];
       case 'ETH':
         return ['ETH', <ETH key="ETH" />];
@@ -61,6 +70,10 @@ export const PoolField = ({
         return ['ETH', <ETH key="tETH" />];
       case 'USDT':
         return ['USDT', <USDT key="USDT" />];
+      case 'VUSD':
+        return ['VUSD', ''];
+      case 'ofrVUSD':
+        return ['VUSD', ''];
       default:
         return ['', ''];
     }

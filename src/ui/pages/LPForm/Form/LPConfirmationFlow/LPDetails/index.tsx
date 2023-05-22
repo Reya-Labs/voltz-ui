@@ -25,7 +25,7 @@ export const LPDetails: React.FunctionComponent<LPDetailsProps> = () => {
   return (
     <DetailsBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Fixed Rate Low
         </Typography>
         <TokenTypography
@@ -36,7 +36,7 @@ export const LPDetails: React.FunctionComponent<LPDetailsProps> = () => {
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Fixed Rate High
         </Typography>
         <TokenTypography
@@ -47,7 +47,7 @@ export const LPDetails: React.FunctionComponent<LPDetailsProps> = () => {
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Notional
         </Typography>
         <TokenTypography
@@ -58,7 +58,7 @@ export const LPDetails: React.FunctionComponent<LPDetailsProps> = () => {
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Margin
         </Typography>
         <TokenTypography
@@ -69,7 +69,7 @@ export const LPDetails: React.FunctionComponent<LPDetailsProps> = () => {
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
         <TokenTypography

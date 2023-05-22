@@ -6,6 +6,7 @@ import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
 import { getAlchemyKey } from '../../../../utilities/getAlchemyKey';
+import { getInfuraKey } from '../../../../utilities/getInfuraKey';
 import { getSpareWeights } from '../../Helpers/getSpareWeights';
 import { FormProps } from '../Form/DepositForm/DepositForm';
 import { WithdrawRolloverForm } from '../Form/WithdrawRolloverForm/WithdrawRolloverForm';
@@ -67,6 +68,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       signer,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {
@@ -105,6 +107,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       signer,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     }).then(
       ({ newOptimiserState }) => {
         if (newOptimiserState) {

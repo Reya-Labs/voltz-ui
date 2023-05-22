@@ -2,6 +2,7 @@ import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { getAlchemyKey } from '../../../../../../../utilities/getAlchemyKey';
+import { getInfuraKey } from '../../../../../../../utilities/getInfuraKey';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 
@@ -20,6 +21,7 @@ export const getUnderlyingTokenAllowanceThunkHandler: AsyncThunkPayloadCreator<
       forceErc20Check: false,
       chainId,
       alchemyApiKey: getAlchemyKey(),
+      infuraApiKey: getInfuraKey(),
     });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

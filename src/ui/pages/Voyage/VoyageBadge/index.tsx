@@ -75,7 +75,7 @@ export const VoyageBadge: React.FunctionComponent<VoyageBadgeProps> = ({
     <VoyageBadgeBox>
       <VoyagePillBox>
         <Pill colorToken="rainbow" typographyToken="primaryBodySmallRegular" variant="compact">
-          Voltz V2
+          Voltz v2
         </Pill>
       </VoyagePillBox>
       <VoyageBadgeImageBox completed={completed}>
@@ -84,7 +84,7 @@ export const VoyageBadge: React.FunctionComponent<VoyageBadgeProps> = ({
       <VoyageBadgeTextBox>
         <VoyageBadgeHeaderBox>
           <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Black">
-            EPIC VOLTZ V2 VOYAGE -
+            EPIC VOLTZ v2 VOYAGE -
           </Typography>
           <Typography
             colorToken={completed ? 'skyBlueCrayola' : 'wildStrawberry'}

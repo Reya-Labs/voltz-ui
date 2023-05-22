@@ -11,6 +11,7 @@ const mockState: SliceState = {
     [SupportedChainId.arbitrum]: 'idle',
     [SupportedChainId.arbitrumGoerli]: 'idle',
     [SupportedChainId.avalanche]: 'idle',
+    [SupportedChainId.avalancheFuji]: 'idle',
   },
   rankings: {
     [SupportedChainId.mainnet]: [],
@@ -18,6 +19,7 @@ const mockState: SliceState = {
     [SupportedChainId.arbitrum]: [],
     [SupportedChainId.arbitrumGoerli]: [],
     [SupportedChainId.avalanche]: [],
+    [SupportedChainId.avalancheFuji]: [],
   },
 };
 

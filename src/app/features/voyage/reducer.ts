@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { SupportedChainId, Voyage } from '@voltz-protocol/v1-sdk';
 
-import { fetchVoyageBadgesThunk, VoyageBadges } from './thunks';
+import { fetchVoyageBadgesThunk } from './thunks';
 
 export type SliceState = {
   status: Record<string, 'idle' | 'pending' | 'succeeded' | 'failed'>;
-  badges: Record<string, VoyageBadges[]>;
+  badges: Record<string, Voyage[]>;
 };
 
 const initialState: SliceState = {
@@ -31,7 +31,7 @@ const slice = createSlice({
       })
       .addCase(fetchVoyageBadgesThunk.fulfilled, (state, { payload, meta }) => {
         state.status[getVoyageId(meta.arg)] = 'succeeded';
-        state.badges[getVoyageId(meta.arg)] = payload as VoyageBadges[];
+        state.badges[getVoyageId(meta.arg)] = payload as Voyage[];
       });
   },
 });
