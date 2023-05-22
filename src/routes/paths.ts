@@ -3,8 +3,6 @@ export const routes = {
   TRADER_PORTFOLIO: 'portfolio',
   POOLS: 'pools',
   WELCOME: 'welcome',
-  // todo: remove this route when we perform general cleanup
-  BORROW_POS: 'borrow-positions',
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
   VOYAGE: 'voyage',
