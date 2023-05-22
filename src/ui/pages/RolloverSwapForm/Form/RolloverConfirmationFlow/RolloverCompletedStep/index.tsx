@@ -18,7 +18,7 @@ export const RolloverCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeRolloverConfirmationFlowAction());
-    navigate(`/${routes.TRADER_PORTFOLIO}`);
+    navigate(`/${routes.PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
     <RolloverCompletedStepBox>

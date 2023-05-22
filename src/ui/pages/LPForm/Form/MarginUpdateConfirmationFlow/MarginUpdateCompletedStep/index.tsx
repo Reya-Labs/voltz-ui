@@ -8,6 +8,7 @@ import {
 } from '../../../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
+import { isPortfolioNextEnabled } from '../../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { MarginUpdateDetails } from '../MarginUpdateDetails';
 import { MarginUpdateCompletedStepBox } from './MarginUpdateCompletedStep.styled';
 
@@ -18,7 +19,11 @@ export const MarginUpdateCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeMarginUpdateConfirmationFlowAction());
-    navigate(`/${routes.LP_PORTFOLIO}`);
+    if (isPortfolioNextEnabled()) {
+      navigate(`/${routes.PORTFOLIO}`);
+      return;
+    }
+    navigate(`/${routes.DEPRECATED_LP_PORTFOLIO_2}`);
   }, [dispatch, navigate]);
   return (
     <MarginUpdateCompletedStepBox>

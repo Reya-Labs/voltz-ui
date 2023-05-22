@@ -3,6 +3,7 @@ import React from 'react';
 import { isArbitrumChain, isAvalancheChain, selectChainId } from '../../../../app/features/network';
 import { useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
+import { isPortfolioNextEnabled } from '../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { isVoyageEnabled } from '../../../../utilities/isEnvVarProvided/is-voyage-enabled';
 import { NavBox, VoltzIcon, VoltzIconBox } from './Nav.styled';
 import { NavLink } from './NavLink/NavLink';
@@ -27,23 +28,29 @@ export const Nav: React.FunctionComponent = React.memo(() => {
         Pools
       </NavLink>
 
-      <NavLink
-        hidden={false}
-        subLinks={[
-          {
-            text: 'TRADER PORTFOLIO',
-            link: `/${routes.TRADER_PORTFOLIO}`,
-            hidden: false,
-          },
-          {
-            text: 'LP PORTFOLIO',
-            link: `/${routes.LP_PORTFOLIO}`,
-            hidden: false,
-          },
-        ]}
-      >
-        Portfolio
-      </NavLink>
+      {isPortfolioNextEnabled() ? (
+        <NavLink hidden={false} isNew={false} link={`/${routes.PORTFOLIO}`}>
+          Portfolio
+        </NavLink>
+      ) : (
+        <NavLink
+          hidden={false}
+          subLinks={[
+            {
+              text: 'TRADER PORTFOLIO',
+              link: `/${routes.PORTFOLIO}`,
+              hidden: false,
+            },
+            {
+              text: 'LP PORTFOLIO',
+              link: `/${routes.DEPRECATED_LP_PORTFOLIO_2}`,
+              hidden: false,
+            },
+          ]}
+        >
+          Portfolio
+        </NavLink>
+      )}
 
       <NavLink hidden={isAvalanche || isArbitrum} isNew={false} link={`/${routes.LP_OPTIMISERS}`}>
         Optimisers

@@ -18,7 +18,7 @@ export const SwapCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeSwapConfirmationFlowAction());
-    navigate(`/${routes.TRADER_PORTFOLIO}`);
+    navigate(`/${routes.PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
     <SwapCompletedStepBox>

@@ -91,7 +91,7 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
 
   const handleComplete = () => {
     onReset();
-    navigate(`/${routes.TRADER_PORTFOLIO}`);
+    navigate(`/${routes.PORTFOLIO}`);
   };
 
   const handleGoBack = () => {

@@ -17,6 +17,7 @@ import { usePositionContext } from '../../../contexts/PositionContext/PositionCo
 import { useAgent } from '../../../hooks/useAgent';
 import { routes } from '../../../routes/paths';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
+import { isPortfolioNextEnabled } from '../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
 import { MintBurnForm } from '../../interface/MintBurnForm/MintBurnForm';
@@ -91,7 +92,11 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
 
   const handleComplete = () => {
     onReset();
-    navigate(`/${routes.LP_PORTFOLIO}`);
+    if (isPortfolioNextEnabled()) {
+      navigate(`/${routes.PORTFOLIO}`);
+      return;
+    }
+    navigate(`/${routes.DEPRECATED_LP_PORTFOLIO_2}`);
   };
 
   const handleGoBack = () => {
