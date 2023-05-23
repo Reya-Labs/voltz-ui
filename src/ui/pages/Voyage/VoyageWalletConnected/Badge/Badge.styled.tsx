@@ -9,6 +9,6 @@ export const Skeleton = styled(SkeletonComponent)`
 `;
 
 export const Icon = styled(IconComponent)`
-  width: 168px;
-  height: 168px;
+  width: 213px;
+  height: 160px;
 `;

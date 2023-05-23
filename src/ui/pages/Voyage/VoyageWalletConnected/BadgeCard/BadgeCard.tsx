@@ -69,7 +69,7 @@ export const BadgeCard = forwardRef<BadgeCardHandle, BadgeCardProps>(
         <BadgePillBox>
           <BadgePill loading={loading} variant={id} />
         </BadgePillBox>
-        <BadgeBox>
+        <BadgeBox achieved={status === 'achieved'}>
           <Badge loading={loading} variant={id} />
         </BadgeBox>
         <TitleBox>

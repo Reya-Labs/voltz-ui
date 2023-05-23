@@ -36,13 +36,17 @@ export const HighlightedContainer = styled(Container)`
 `;
 
 export const BadgePillBox = styled('div')`
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 `;
 
-export const BadgeBox = styled('div')`
+export const BadgeBox = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'achieved',
+})<{ achieved: boolean }>`
+  opacity: ${({ achieved }) => (achieved ? '1' : '0.3')};
   display: flex;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+  border-radius: 4px;
 `;
 
 export const TitleBox = styled('div')`
