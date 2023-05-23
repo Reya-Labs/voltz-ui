@@ -110,6 +110,7 @@ import {
   TokenUsdt,
   TopTrader,
   Voltz,
+  VoyageWeek1,
   WalletConnect,
   WarningCircle,
   WaterHose,
@@ -238,7 +239,9 @@ export type SupportedIcons =
   | 's3MaxBiddingArbitrum'
   | 's3MellowLpVaultTier1Arbitrum'
   | 's3MellowLpVaultTier2Arbitrum'
-  | 's3MellowLpVaultTier3Arbitrum';
+  | 's3MellowLpVaultTier3Arbitrum'
+  // voyage
+  | 'voyageWeek1';
 
 export const iconMap: Record<SupportedIcons, ElementType> = {
   'arrow-left': ArrowLeft as ElementType,
@@ -363,4 +366,6 @@ export const iconMap: Record<SupportedIcons, ElementType> = {
   s3MellowLpVaultTier1Arbitrum: S3MellowLpVaultTier1Arbitrum as ElementType,
   s3MellowLpVaultTier2Arbitrum: S3MellowLpVaultTier2Arbitrum as ElementType,
   s3MellowLpVaultTier3Arbitrum: S3MellowLpVaultTier3Arbitrum as ElementType,
+  // Voyage
+  voyageWeek1: VoyageWeek1 as ElementType,
 };

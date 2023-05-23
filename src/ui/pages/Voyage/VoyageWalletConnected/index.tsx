@@ -1,22 +1,22 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Dialog, formatEthereumAddress, Typography } from 'brokoli-ui';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   fetchVoyageBadgesThunk,
   selectVoyageBadges,
   selectVoyageBadgesStatus,
 } from '../../../../app/features/voyage';
+import { VoyageBadgeUI } from '../../../../app/features/voyage/types';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
 import { GenericError } from '../../../components/GenericError';
+import { BadgeCard, BadgeCardHandle } from './BadgeCard/BadgeCard';
 import { LearnMoreAboutVoyage } from './LearnMoreAboutVoyage';
 import { NotificationSection } from './NotificationSection';
-import { VoyageBadge } from './VoyageBadge';
 import { VoyageBadgeEntry } from './VoyageBadgeEntry';
 import {
   BadgeCollectionBox,
-  BadgeCollectionTypographyBox,
   BadgesBox,
   BadgesListGrid,
   BadgesListSubheading,
@@ -37,6 +37,7 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
   accountENS,
   chainId,
 }) => {
+  const badgeCardRefs = useRef<Record<string, BadgeCardHandle>>({});
   const dispatch = useAppDispatch();
   const [isLearnMoreOpen, setIsLearnMoreOpen] = useState(false);
   const openLearnMoreModal = () => setIsLearnMoreOpen(true);
@@ -63,6 +64,10 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
   const loading = status !== 'succeeded';
   const badges = useAppSelector(selectVoyageBadges(account));
 
+  const handleSmoothScroll = React.useCallback((id: VoyageBadgeUI['id']) => {
+    badgeCardRefs.current[id]?.scrollIntoView();
+  }, []);
+
   if (error) {
     return (
       <ContainerBox>
@@ -70,7 +75,6 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
       </ContainerBox>
     );
   }
-
   return (
     <ContainerBox>
       <Dialog open={isLearnMoreOpen}>
@@ -95,21 +99,23 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
       <NotificationSection onLearnMoreClick={openLearnMoreModal} />
       <BadgesBox>
         <BadgeCollectionBox data-testid="Voyage-BadgeCollectionBox">
-          <BadgeCollectionTypographyBox>
-            <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
-              Voltz v2 Voyage
-            </Typography>
-          </BadgeCollectionTypographyBox>
-          <VoyageBadgesGrid itemsPerRow={1}>
-            {loading && <VoyageBadge completed={false} isClaimable={false} loading={loading} />}
+          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+            Voltz v2 Voyage
+          </Typography>
+          <VoyageBadgesGrid itemsPerRow={3}>
+            {loading &&
+              Array.from({ length: 4 }, (index) => index).map((_, index) => (
+                <BadgeCard key={index} id="v2Voyage" loading={loading} status="notAchieved" />
+              ))}
             {!loading &&
               badges.length !== 0 &&
-              badges.map(({ completed, isClaimable }, index) => (
-                <VoyageBadge
-                  key={index}
-                  completed={completed}
-                  isClaimable={isClaimable}
-                  loading={false}
+              badges.map((badge, index) => (
+                <BadgeCard
+                  key={`${badge.id}${index}`}
+                  ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.id] = ref)}
+                  id={badge.id}
+                  loading={loading}
+                  status={badge.status}
                 />
               ))}
           </VoyageBadgesGrid>
@@ -126,13 +132,24 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
           </BadgesListSubheading>
           <BadgesListGrid data-testid="Voyage-AchievedBadgesListGrid" itemsPerRow={1}>
             {loading
-              ? Array.from({ length: 3 }, (index) => index).map((_, index) => (
-                  <VoyageBadgeEntry key={index} achievedAt={undefined} loading={loading} />
+              ? Array.from({ length: 4 }, (index) => index).map((_, index) => (
+                  <VoyageBadgeEntry
+                    key={index}
+                    achievedAt={undefined}
+                    loading={loading}
+                    variant="v2Voyage"
+                  />
                 ))
               : null}
             {!loading
-              ? badges.map(({ achievedAt }, index) => (
-                  <VoyageBadgeEntry key={index} achievedAt={achievedAt} loading={loading} />
+              ? badges.map(({ id, achievedAt }, index) => (
+                  <VoyageBadgeEntry
+                    key={index}
+                    achievedAt={achievedAt}
+                    loading={loading}
+                    variant={id}
+                    onClick={() => handleSmoothScroll(id)}
+                  />
                 ))
               : null}
           </BadgesListGrid>

@@ -1,7 +1,9 @@
 import { Pill } from 'brokoli-ui';
 import React from 'react';
 
+import { VoyageBadgeUI } from '../../../../../app/features/voyage/types';
 import { formatPOSIXTimestamp } from '../../../../../utilities/date';
+import { BADGE_ID_PILL_TEXT_MAP, BADGE_ID_TITLE_COPY_MAP } from '../helpers';
 import {
   AchievedAtTypography,
   AchievedContainerBox,
@@ -14,10 +16,14 @@ import {
 export type VoyageBadgeEntryProps = {
   achievedAt?: number;
   loading?: boolean;
+  onClick?: () => void;
+  variant: VoyageBadgeUI['id'];
 };
 export const VoyageBadgeEntry: React.FunctionComponent<VoyageBadgeEntryProps> = ({
   achievedAt,
   loading,
+  onClick,
+  variant,
 }) => {
   if (loading) {
     return (
@@ -35,16 +41,16 @@ export const VoyageBadgeEntry: React.FunctionComponent<VoyageBadgeEntryProps> = 
     : 'Keep trading...';
 
   return (
-    <Container data-testid={`VoyageBadgeEntry-Container`}>
+    <Container data-testid={`VoyageBadgeEntry-Container`} onClick={onClick}>
       <BadgePillBox>
         <div>
           <Pill colorToken="rainbow" typographyToken="primaryBodySmallRegular" variant="regular">
-            Voltz v2
+            {`Voltz v2 - ${BADGE_ID_PILL_TEXT_MAP[variant]}`}
           </Pill>
         </div>
       </BadgePillBox>
       <TitleTypography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
-        EPIC VOLTZ v2 VOYAGE
+        {BADGE_ID_TITLE_COPY_MAP[variant]}
       </TitleTypography>
       <AchievedAtTypography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
         {achievedText}

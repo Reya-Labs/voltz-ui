@@ -79,7 +79,7 @@ export const VoyageBadge: React.FunctionComponent<VoyageBadgeProps> = ({
         </Pill>
       </VoyagePillBox>
       <VoyageBadgeImageBox completed={completed}>
-        <IconImage src="/images/badges/voyage/badge_voyage.png" />
+        <IconImage src="/images/badges/voyage/week1.png" />
       </VoyageBadgeImageBox>
       <VoyageBadgeTextBox>
         <VoyageBadgeHeaderBox>

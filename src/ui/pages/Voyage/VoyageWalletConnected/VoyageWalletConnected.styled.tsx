@@ -35,11 +35,6 @@ export const VoyageBadgesGrid = styled(Grid)`
   column-gap: 16px;
 `;
 
-export const BadgeCollectionTypographyBox = styled('div')`
-  display: flex;
-  justify-content: center;
-`;
-
 export const BadgeCollectionBox = styled('div')`
   border-radius: 8px;
   width: 100%;
