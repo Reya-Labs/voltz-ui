@@ -87,7 +87,6 @@ export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props })
         return {
           viewBox: '0 0 459 459',
         };
-      case 'voyageWeek1':
       case 'voyageWeek3':
         return {
           viewBox: '0 0 447 336',
