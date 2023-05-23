@@ -1,6 +1,7 @@
 export const routes = {
-  PORTFOLIO: 'portfolio',
   POOLS: 'pools',
+  PORTFOLIO_POSITIONS: 'portfolio/positions',
+  PORTFOLIO_OPTIMISERS: 'portfolio/optimisers',
   WELCOME: 'welcome',
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
@@ -20,4 +21,5 @@ export const routes = {
   DEPRECATED_LP_PORTFOLIO_2: 'lp-portfolio',
   DEPRECATED_TRADER_POOLS: 'trader-pools',
   DEPRECATED_LP_POOLS: 'lp-pools',
+  DEPRECATED_PORTFOLIO: 'portfolio',
 };

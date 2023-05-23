@@ -8,6 +8,7 @@ import {
 } from '../../../../../../app/features/forms/trader/swap';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
+import { isPortfolioNextEnabled } from '../../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { SwapDetails } from '../SwapDetails';
 import { SwapCompletedStepBox } from './SwapCompletedStep.styled';
 
@@ -18,7 +19,11 @@ export const SwapCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeSwapConfirmationFlowAction());
-    navigate(`/${routes.PORTFOLIO}`);
+    if (isPortfolioNextEnabled()) {
+      navigate(`/${routes.PORTFOLIO_POSITIONS}`);
+      return;
+    }
+    navigate(`/${routes.DEPRECATED_PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
     <SwapCompletedStepBox>

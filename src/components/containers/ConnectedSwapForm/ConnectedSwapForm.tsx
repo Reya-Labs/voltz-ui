@@ -15,6 +15,7 @@ import { useAgent } from '../../../hooks/useAgent';
 import { useWallet } from '../../../hooks/useWallet';
 import { routes } from '../../../routes/paths';
 import { getPoolButtonId } from '../../../utilities/googleAnalytics/helpers';
+import { isPortfolioNextEnabled } from '../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { setPageTitle } from '../../../utilities/page';
 import { FormPanel } from '../../interface/FormPanel/FormPanel';
 import { PendingTransaction } from '../../interface/PendingTransaction/PendingTransaction';
@@ -91,7 +92,11 @@ export const ConnectedSwapForm: React.FunctionComponent<ConnectedSwapFormProps> 
 
   const handleComplete = () => {
     onReset();
-    navigate(`/${routes.PORTFOLIO}`);
+    if (isPortfolioNextEnabled()) {
+      navigate(`/${routes.PORTFOLIO_POSITIONS}`);
+      return;
+    }
+    navigate(`/${routes.DEPRECATED_PORTFOLIO}`);
   };
 
   const handleGoBack = () => {

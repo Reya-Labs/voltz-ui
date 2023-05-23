@@ -20,7 +20,7 @@ export const MarginUpdateCompletedStep: React.FunctionComponent = () => {
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeMarginUpdateConfirmationFlowAction());
     if (isPortfolioNextEnabled()) {
-      navigate(`/${routes.PORTFOLIO}`);
+      navigate(`/${routes.PORTFOLIO_POSITIONS}`);
       return;
     }
     navigate(`/${routes.DEPRECATED_LP_PORTFOLIO_2}`);

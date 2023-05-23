@@ -20,7 +20,7 @@ export const RolloverCompletedStep: React.FunctionComponent = () => {
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeRolloverConfirmationFlowAction());
     if (isPortfolioNextEnabled()) {
-      navigate(`/${routes.PORTFOLIO}`);
+      navigate(`/${routes.PORTFOLIO_POSITIONS}`);
       return;
     }
     navigate(`/${routes.DEPRECATED_LP_PORTFOLIO_2}`);

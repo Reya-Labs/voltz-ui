@@ -8,6 +8,7 @@ import {
 } from '../../../../../../app/features/forms/trader/rollover-swap';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
+import { isPortfolioNextEnabled } from '../../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { RolloverDetails } from '../RolloverDetails';
 import { RolloverCompletedStepBox } from './RolloverCompletedStep.styled';
 
@@ -18,7 +19,11 @@ export const RolloverCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeRolloverConfirmationFlowAction());
-    navigate(`/${routes.PORTFOLIO}`);
+    if (isPortfolioNextEnabled()) {
+      navigate(`/${routes.PORTFOLIO_POSITIONS}`);
+      return;
+    }
+    navigate(`/${routes.DEPRECATED_PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
     <RolloverCompletedStepBox>

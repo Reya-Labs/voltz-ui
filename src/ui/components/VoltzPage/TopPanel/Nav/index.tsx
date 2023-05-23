@@ -24,14 +24,14 @@ const getLinks = (chainId?: SupportedChainId | null) =>
         isPortfolioNextEnabled()
           ? {
               text: 'Portfolio',
-              link: `/${routes.PORTFOLIO}`,
+              link: `/${routes.PORTFOLIO_POSITIONS}`,
             }
           : {
               text: 'Portfolio',
               subLinks: [
                 {
                   text: 'Trader Portfolio',
-                  link: `/${routes.PORTFOLIO}`,
+                  link: `/${routes.DEPRECATED_PORTFOLIO}`,
                 },
                 {
                   text: 'LP Portfolio',

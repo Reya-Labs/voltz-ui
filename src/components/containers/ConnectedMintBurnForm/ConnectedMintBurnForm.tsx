@@ -93,7 +93,7 @@ export const ConnectedMintBurnForm: React.FunctionComponent<ConnectedMintBurnFor
   const handleComplete = () => {
     onReset();
     if (isPortfolioNextEnabled()) {
-      navigate(`/${routes.PORTFOLIO}`);
+      navigate(`/${routes.PORTFOLIO_POSITIONS}`);
       return;
     }
     navigate(`/${routes.DEPRECATED_LP_PORTFOLIO_2}`);

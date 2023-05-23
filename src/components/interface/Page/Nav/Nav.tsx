@@ -29,7 +29,7 @@ export const Nav: React.FunctionComponent = React.memo(() => {
       </NavLink>
 
       {isPortfolioNextEnabled() ? (
-        <NavLink hidden={false} isNew={false} link={`/${routes.PORTFOLIO}`}>
+        <NavLink hidden={false} isNew={false} link={`/${routes.PORTFOLIO_POSITIONS}`}>
           Portfolio
         </NavLink>
       ) : (
@@ -38,7 +38,7 @@ export const Nav: React.FunctionComponent = React.memo(() => {
           subLinks={[
             {
               text: 'TRADER PORTFOLIO',
-              link: `/${routes.PORTFOLIO}`,
+              link: `/${routes.DEPRECATED_PORTFOLIO}`,
               hidden: false,
             },
             {

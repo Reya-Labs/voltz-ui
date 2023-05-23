@@ -54,7 +54,7 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
           data-testid="DepositSuccessModalContent-GotoYourPortfolioLink"
           to={
             isPortfolioNextEnabled()
-              ? `/${routes.PORTFOLIO}`
+              ? `/${routes.DEPRECATED_PORTFOLIO}`
               : `/${routes.DEPRECATED_LP_PORTFOLIO_2}`
           }
         >
