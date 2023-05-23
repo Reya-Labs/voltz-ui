@@ -3,8 +3,10 @@ import React from 'react';
 import { selectChainId } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
+import { isVoyageNextEnabled } from '../../../utilities/isEnvVarProvided/is-voyage-next-enabled';
 import { ConnectWallet } from '../../components/ConnectWallet';
-import { VoyagePageWalletConnected } from './VoyagePageWalletConnected';
+import { DeprecatedVoyageWalletConnected } from './DeprecatedVoyageWalletConnected';
+import { VoyageWalletConnected } from './VoyageWalletConnected';
 
 export const Voyage: React.FunctionComponent = () => {
   const wallet = useWallet();
@@ -22,9 +24,18 @@ export const Voyage: React.FunctionComponent = () => {
       />
     );
   }
+  if (isVoyageNextEnabled()) {
+    return (
+      <VoyageWalletConnected
+        account={wallet.account}
+        accountENS={wallet.accountENS || wallet.account}
+        chainId={chainId}
+      />
+    );
+  }
 
   return (
-    <VoyagePageWalletConnected
+    <DeprecatedVoyageWalletConnected
       account={wallet.account}
       accountENS={wallet.accountENS || wallet.account}
       chainId={chainId}

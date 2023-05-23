@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Typography } from 'brokoli-ui';
 
-import { Grid } from '../../components/Grid';
+import { Grid } from '../../../components/Grid';
 
 export const ContainerBox = styled('div')`
   width: 800px;

@@ -6,14 +6,14 @@ import {
   fetchVoyageBadgesThunk,
   selectVoyageBadges,
   selectVoyageBadgesStatus,
-} from '../../../app/features/voyage';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { routes } from '../../../routes/paths';
-import { GenericError } from '../../components/GenericError';
-import { LearnMoreAboutVoyage } from './LearnMoreAboutVoyage';
-import { NotificationSection } from './NotificationSection';
-import { VoyageBadge } from './VoyageBadge';
-import { VoyageBadgeEntry } from './VoyageBadgeEntry';
+} from '../../../../app/features/voyage';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { routes } from '../../../../routes/paths';
+import { GenericError } from '../../../components/GenericError';
+import { LearnMoreAboutVoyage } from '../LearnMoreAboutVoyage';
+import { NotificationSection } from '../NotificationSection';
+import { VoyageBadge } from '../VoyageBadge';
+import { VoyageBadgeEntry } from '../VoyageBadgeEntry';
 import {
   BadgeCollectionBox,
   BadgeCollectionTypographyBox,
@@ -24,7 +24,7 @@ import {
   Subheading,
   VoyageBadgesGrid,
   VoyageBadgesListBox,
-} from './VoyagePageWalletConnected.styled';
+} from './VoyageWalletConnected.styled';
 
 type VoyagePageWalletConnectedProps = {
   account: string;
@@ -32,7 +32,7 @@ type VoyagePageWalletConnectedProps = {
   chainId: SupportedChainId;
 };
 
-export const VoyagePageWalletConnected: React.FunctionComponent<VoyagePageWalletConnectedProps> = ({
+export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConnectedProps> = ({
   account,
   accountENS,
   chainId,
