@@ -1,7 +1,7 @@
 import { Button, Pill, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { IconImage } from '../../../../components/atomic/Icon/icons/IconImage';
+import { IconImage } from '../../../../../components/atomic/Icon/icons/IconImage';
 import {
   SkeletonButton,
   SkeletonHeaderTypography,

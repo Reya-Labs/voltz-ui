@@ -10,10 +10,10 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
 import { GenericError } from '../../../components/GenericError';
-import { LearnMoreAboutVoyage } from '../LearnMoreAboutVoyage';
-import { NotificationSection } from '../NotificationSection';
-import { VoyageBadge } from '../VoyageBadge';
-import { VoyageBadgeEntry } from '../VoyageBadgeEntry';
+import { LearnMoreAboutVoyage } from './LearnMoreAboutVoyage';
+import { NotificationSection } from './NotificationSection';
+import { VoyageBadge } from './VoyageBadge';
+import { VoyageBadgeEntry } from './VoyageBadgeEntry';
 import {
   BadgeCollectionBox,
   BadgeCollectionTypographyBox,

@@ -10,10 +10,6 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
 import { GenericError } from '../../../components/GenericError';
-import { LearnMoreAboutVoyage } from '../LearnMoreAboutVoyage';
-import { NotificationSection } from '../NotificationSection';
-import { VoyageBadge } from '../VoyageBadge';
-import { VoyageBadgeEntry } from '../VoyageBadgeEntry';
 import {
   BadgeCollectionBox,
   BadgeCollectionTypographyBox,
@@ -25,6 +21,10 @@ import {
   VoyageBadgesGrid,
   VoyageBadgesListBox,
 } from './DeprecatedVoyageWalletConnected.styled';
+import { LearnMoreAboutVoyage } from './LearnMoreAboutVoyage';
+import { NotificationSection } from './NotificationSection';
+import { VoyageBadge } from './VoyageBadge';
+import { VoyageBadgeEntry } from './VoyageBadgeEntry';
 
 type VoyagePageWalletConnectedProps = {
   account: string;
