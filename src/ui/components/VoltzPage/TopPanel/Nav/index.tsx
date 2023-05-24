@@ -9,7 +9,7 @@ import {
 } from '../../../../../app/features/network';
 import { useAppSelector } from '../../../../../app/hooks';
 import { routes } from '../../../../../routes/paths';
-import { isVoyageEnabled } from '../../../../../utilities/isEnvVarProvided/is-voyage-enabled';
+import { isPortfolioNextEnabled } from '../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 
 const getLinks = (chainId?: SupportedChainId | null) =>
   !chainId
@@ -20,19 +20,24 @@ const getLinks = (chainId?: SupportedChainId | null) =>
           text: 'Pools',
           link: `/${routes.POOLS}`,
         },
-        {
-          text: 'Portfolio',
-          subLinks: [
-            {
-              text: 'Trader Portfolio',
-              link: `/${routes.TRADER_PORTFOLIO}`,
+        isPortfolioNextEnabled()
+          ? {
+              text: 'Portfolio',
+              link: `/${routes.PORTFOLIO_POSITIONS}`,
+            }
+          : {
+              text: 'Portfolio',
+              subLinks: [
+                {
+                  text: 'Trader Portfolio',
+                  link: `/${routes.DEPRECATED_PORTFOLIO}`,
+                },
+                {
+                  text: 'LP Portfolio',
+                  link: `/${routes.DEPRECATED_LP_PORTFOLIO_2}`,
+                },
+              ],
             },
-            {
-              text: 'LP Portfolio',
-              link: `/${routes.LP_PORTFOLIO}`,
-            },
-          ],
-        },
         {
           isHidden: isAvalancheChain(chainId) || isArbitrumChain(chainId),
           text: 'Optimisers',
@@ -49,7 +54,7 @@ const getLinks = (chainId?: SupportedChainId | null) =>
           link: `/${routes.PROFILE}`,
         },
         {
-          isHidden: !isVoyageEnabled() || isAvalancheChain(chainId),
+          isHidden: isAvalancheChain(chainId),
           colorToken: 'rainbow',
           text: 'Voyage',
           link: `/${routes.VOYAGE}`,

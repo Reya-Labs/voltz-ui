@@ -383,3 +383,14 @@ export const S3YikesArbitrum: React.FunctionComponent<IconProps> = ({
 export { ReactComponent as S3MellowLpVaultTier1Arbitrum } from './badges/season2/s2MellowLpVaultTier1.svg';
 export { ReactComponent as S3MellowLpVaultTier2Arbitrum } from './badges/season2/s2MellowLpVaultTier2.svg';
 export { ReactComponent as S3MellowLpVaultTier3Arbitrum } from './badges/season2/s2MellowLpVaultTier3.svg';
+
+// Voyage badges
+export const VoyageWeek1: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage className={className} data-testid={dataTestId} src="/images/badges/voyage/week1.png" />
+);
+export { ReactComponent as VoyageWeek2 } from './voyage/week2.svg';
+export { ReactComponent as VoyageWeek3 } from './voyage/week3.svg';
+export { ReactComponent as VoyageWeek4 } from './voyage/week4.svg';

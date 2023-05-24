@@ -1,3 +1,4 @@
+import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { isArbitrumChain, isAvalancheChain, selectChainId } from './app/features/network';
@@ -15,12 +16,14 @@ import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
 import { LPFormPage } from './ui/pages/LPForm';
 import { PoolsPage } from './ui/pages/Pools';
+import { PortfolioPage } from './ui/pages/Portfolio';
 import { ProfilePage } from './ui/pages/Profile';
 import { RolloverLPFormPage } from './ui/pages/RolloverLPForm';
 import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
 import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { VoyagePage } from './ui/pages/Voyage';
+import { isPortfolioNextEnabled } from './utilities/isEnvVarProvided/is-portfolio-next-enabled';
 
 export const AppRoutes = () => {
   const chainId = useAppSelector(selectChainId);
@@ -40,14 +43,6 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage>
-              <TraderPortfolio />
-            </NetworkProtectedPage>
-          }
-          path={routes.TRADER_PORTFOLIO}
-        />
-        <Route
-          element={
             <NetworkProtectedVoltzPage>
               <PoolsPage />
             </NetworkProtectedVoltzPage>
@@ -57,11 +52,29 @@ export const AppRoutes = () => {
         <Route
           element={
             <NetworkProtectedPage>
-              <LPPortfolio />
+              <TraderPortfolio />
             </NetworkProtectedPage>
           }
-          path={routes.LP_PORTFOLIO}
+          path={routes.DEPRECATED_PORTFOLIO}
         />
+        <Route
+          element={
+            <NetworkProtectedVoltzPage>
+              <PortfolioPage />
+            </NetworkProtectedVoltzPage>
+          }
+          path={routes.PORTFOLIO_POSITIONS}
+        />
+        {isPortfolioNextEnabled() ? null : (
+          <Route
+            element={
+              <NetworkProtectedPage>
+                <LPPortfolio />
+              </NetworkProtectedPage>
+            }
+            path={routes.DEPRECATED_LP_PORTFOLIO_2}
+          />
+        )}
         <Route
           element={
             <NetworkProtectedPage hidden={isAvalancheChain(chainId) || isArbitrumChain(chainId)}>
@@ -148,8 +161,12 @@ export const AppRoutes = () => {
           path={routes.DEPRECATED_PRODUCTS}
         />
         <Route
-          element={<Navigate replace={true} to={`/${routes.LP_PORTFOLIO}`} />}
+          element={<Navigate replace={true} to={`/${routes.DEPRECATED_LP_PORTFOLIO_2}`} />}
           path={routes.DEPRECATED_LP_PORTFOLIO}
+        />
+        <Route
+          element={<Navigate replace={true} to={`/${routes.DEPRECATED_PORTFOLIO}`} />}
+          path={routes.PORTFOLIO_POSITIONS}
         />
         <Route
           element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
@@ -159,6 +176,12 @@ export const AppRoutes = () => {
           element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
           path={routes.DEPRECATED_LP_POOLS}
         />
+        {isPortfolioNextEnabled() ? (
+          <Route
+            element={<Navigate replace={true} to={`/${routes.PORTFOLIO_POSITIONS}`} />}
+            path={routes.DEPRECATED_LP_PORTFOLIO_2}
+          />
+        ) : null}
       </Route>
     </Routes>
   );

@@ -8,6 +8,7 @@ import {
 } from '../../../../../../app/features/forms/trader/swap';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
+import { isPortfolioNextEnabled } from '../../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { MarginUpdateDetails } from '../MarginUpdateDetails';
 import { MarginUpdateCompletedStepBox } from './MarginUpdateCompletedStep.styled';
 
@@ -18,7 +19,11 @@ export const MarginUpdateCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeMarginUpdateConfirmationFlowAction());
-    navigate(`/${routes.TRADER_PORTFOLIO}`);
+    if (isPortfolioNextEnabled()) {
+      navigate(`/${routes.PORTFOLIO_POSITIONS}`);
+      return;
+    }
+    navigate(`/${routes.DEPRECATED_PORTFOLIO}`);
   }, [dispatch, navigate]);
   return (
     <MarginUpdateCompletedStepBox>

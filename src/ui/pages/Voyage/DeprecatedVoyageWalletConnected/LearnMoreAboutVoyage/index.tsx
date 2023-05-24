@@ -1,7 +1,7 @@
 import { CloseButton, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { Pagination } from '../../../components/Pagination';
+import { Pagination } from '../../../../components/Pagination';
 import { ReactComponent as Slide1Svg } from './assets/slide_1.svg';
 import { ReactComponent as Slide2Svg } from './assets/slide_2.svg';
 import { ReactComponent as Slide3Svg } from './assets/slide_3.svg';

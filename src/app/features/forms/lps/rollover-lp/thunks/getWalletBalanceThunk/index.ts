@@ -13,7 +13,6 @@ export const getWalletBalanceThunk = createAsyncThunk<
     if (!amm || !amm.signer) {
       return 0;
     }
-
     return await amm.underlyingTokens();
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

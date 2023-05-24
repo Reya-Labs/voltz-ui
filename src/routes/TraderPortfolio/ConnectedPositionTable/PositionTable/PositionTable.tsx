@@ -21,7 +21,6 @@ import {
   generatePositionIdForRoute,
 } from '../../../../utilities/amm';
 import { getRowButtonId } from '../../../../utilities/googleAnalytics/helpers';
-import { isTraderRolloverExperienceFlowEnabled } from '../../../../utilities/isEnvVarProvided/is-trader-rollover-experience-flow-enabled';
 import { getMaturityWindow } from '../../../../utilities/maturityWindow';
 import { PositionTableHead, PositionTableRow } from './components';
 import { TransactionList } from './TransactionList/TransactionList';
@@ -92,13 +91,6 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
     }
   };
 
-  const handleSelectRow = (
-    index: number,
-    mode: 'margin' | 'liquidity' | 'rollover' | 'notional',
-  ) => {
-    onSelectItem(positions[index], mode);
-  };
-
   const config = getConfig(chainId);
   const pools = config ? config.pools : [];
 
@@ -140,15 +132,11 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 underlyingTokenName={pos.amm.underlyingToken.name || ''}
                 unrealizedPnL={pos.unrealizedPnLFromSwaps}
                 onRollover={() => {
-                  if (isTraderRolloverExperienceFlowEnabled()) {
-                    navigate.toRolloverSwapFormPage({
-                      ammId: generateAmmIdForRoute(pos.amm),
-                      poolId: generatePoolId(pos.amm),
-                      positionId: generatePositionIdForRoute(pos),
-                    });
-                    return;
-                  }
-                  handleSelectRow(index, 'rollover');
+                  navigate.toRolloverSwapFormPage({
+                    ammId: generateAmmIdForRoute(pos.amm),
+                    poolId: generatePoolId(pos.amm),
+                    positionId: generatePositionIdForRoute(pos),
+                  });
                 }}
                 onSelect={
                   closeToMaturity

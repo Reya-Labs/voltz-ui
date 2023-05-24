@@ -45,7 +45,10 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const handleError = (error: unknown) => {
     let errorMessage = getErrorMessage(error).trim();
     let shouldDisconnect = true;
-    if (errorMessage.includes('Wrong network')) {
+    if (errorMessage === 'Metamask not installed') {
+      errorMessage = 'Metamask not installed';
+      window.open('https://metamask.io', '_blank')?.focus();
+    } else if (errorMessage.includes('Wrong network')) {
       errorMessage = 'Wrong network';
     } else if (errorMessage.includes('Risky Account Detected')) {
       errorMessage = 'Risky Account Detected';

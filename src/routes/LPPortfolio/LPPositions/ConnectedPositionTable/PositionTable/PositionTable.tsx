@@ -14,7 +14,6 @@ import {
   generatePositionIdForRoute,
 } from '../../../../../utilities/amm';
 import { getRowButtonId } from '../../../../../utilities/googleAnalytics/helpers';
-import { isLPRolloverExperienceFlowEnabled } from '../../../../../utilities/isEnvVarProvided/is-lp-rollover-experience-flow-enabled';
 import { PositionTableHead } from './components/PositionTableHead/PositionTableHead';
 import { PositionTableRow } from './components/PositionTableRow/PositionTableRow';
 import { TransactionList } from './components/TransactionList/TransactionList';
@@ -76,15 +75,11 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 settlementCashflowInUSD={position.settlementCashflowInUSD}
                 underlyingTokenName={'USD'}
                 onRollover={() => {
-                  if (isLPRolloverExperienceFlowEnabled()) {
-                    navigate.toRolloverLPFormPage({
-                      ammId: generateAmmIdForRoute(position.amm),
-                      poolId: generatePoolId(position.amm),
-                      positionId: generatePositionIdForRoute(position),
-                    });
-                    return;
-                  }
-                  handleSelectRow(position, 'rollover');
+                  navigate.toRolloverLPFormPage({
+                    ammId: generateAmmIdForRoute(position.amm),
+                    poolId: generatePoolId(position.amm),
+                    positionId: generatePositionIdForRoute(position),
+                  });
                 }}
                 onSettle={() => onSettle(position)}
               />

@@ -5,6 +5,7 @@ import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
 import { useAppSelector } from '../../../../../app/hooks';
 import { doNothing } from '../../../../../utilities/doNothing';
+import { isPortfolioNextEnabled } from '../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { routes } from '../../../../paths';
 import { BatchBudgetTrigger } from '../BatchBudgetTrigger/BatchBudgetTrigger';
 import {
@@ -51,7 +52,11 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
         </ViewOnEtherScanLink>
         <GotoYourPortfolioLink
           data-testid="DepositSuccessModalContent-GotoYourPortfolioLink"
-          to={`/${routes.LP_PORTFOLIO}`}
+          to={
+            isPortfolioNextEnabled()
+              ? `/${routes.DEPRECATED_PORTFOLIO}`
+              : `/${routes.DEPRECATED_LP_PORTFOLIO_2}`
+          }
         >
           GO TO YOUR PORTFOLIO
         </GotoYourPortfolioLink>

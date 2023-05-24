@@ -87,6 +87,18 @@ export const Icon: React.FunctionComponent<IconProps> = ({ name, sx, ...props })
         return {
           viewBox: '0 0 459 459',
         };
+      case 'voyageWeek3':
+        return {
+          viewBox: '0 0 447 336',
+        };
+      case 'voyageWeek2':
+        return {
+          viewBox: '0 0 459 337',
+        };
+      case 'voyageWeek4':
+        return {
+          viewBox: '0 0 459 357',
+        };
       case 'metamask':
         return {
           viewBox: '0 0 23 22',

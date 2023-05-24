@@ -1,7 +1,7 @@
 import { Pill } from 'brokoli-ui';
 import React from 'react';
 
-import { formatPOSIXTimestamp } from '../../../../utilities/date';
+import { formatPOSIXTimestamp } from '../../../../../utilities/date';
 import {
   AchievedAtTypography,
   AchievedContainerBox,

@@ -12,7 +12,7 @@ describe('<Nav />', () => {
         <Nav />
       </HashRouter>,
     );
-    expect(screen.getAllByTestId('NavLinkButton').length).toBe(5);
+    expect(screen.getAllByTestId('NavLinkButton').length).toBe(6);
   });
 
   it('renders the correct text for each NavLink', () => {
@@ -26,5 +26,6 @@ describe('<Nav />', () => {
     expect(screen.getAllByTestId('NavLinkButton')[2].textContent).toBe('Optimisers');
     expect(screen.getAllByTestId('NavLinkButton')[3].textContent).toBe('Leaderboard');
     expect(screen.getAllByTestId('NavLinkButton')[4].textContent).toBe('Profile');
+    expect(screen.getAllByTestId('NavLinkButton')[5].textContent).toBe('Voyage');
   });
 });

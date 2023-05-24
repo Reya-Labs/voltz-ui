@@ -1,10 +1,8 @@
 export const routes = {
-  LP_PORTFOLIO: 'lp-portfolio',
-  TRADER_PORTFOLIO: 'portfolio',
   POOLS: 'pools',
+  PORTFOLIO_POSITIONS: 'portfolio/positions',
+  PORTFOLIO_OPTIMISERS: 'portfolio/optimisers',
   WELCOME: 'welcome',
-  // todo: remove this route when we perform general cleanup
-  BORROW_POS: 'borrow-positions',
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
   VOYAGE: 'voyage',
@@ -19,6 +17,9 @@ export const routes = {
   // old route for lp-optimisers, redirects to lp-optimisers
   DEPRECATED_PRODUCTS: 'products',
   DEPRECATED_LP_PORTFOLIO: 'lp-positions',
+  // todo: remove once we launch portfolio fully
+  DEPRECATED_LP_PORTFOLIO_2: 'lp-portfolio',
   DEPRECATED_TRADER_POOLS: 'trader-pools',
   DEPRECATED_LP_POOLS: 'lp-pools',
+  DEPRECATED_PORTFOLIO: 'portfolio',
 };

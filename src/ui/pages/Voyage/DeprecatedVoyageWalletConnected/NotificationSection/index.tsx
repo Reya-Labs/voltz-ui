@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ProfileNotification } from '../../../components/ProfileNotification/ProfileNotification';
+import { ProfileNotification } from '../../../../components/ProfileNotification/ProfileNotification';
 import {
   ButtonBox,
   LearnMoreButton,

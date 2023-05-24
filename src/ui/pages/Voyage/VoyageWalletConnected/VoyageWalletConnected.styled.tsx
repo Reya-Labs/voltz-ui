@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Typography } from 'brokoli-ui';
 
-import { Grid } from '../../components/Grid';
+import { Grid } from '../../../components/Grid';
 
 export const ContainerBox = styled('div')`
   width: 800px;
@@ -33,11 +33,6 @@ export const VoyageBadgesGrid = styled(Grid)`
   margin-top: 24px;
   row-gap: 16px;
   column-gap: 16px;
-`;
-
-export const BadgeCollectionTypographyBox = styled('div')`
-  display: flex;
-  justify-content: center;
 `;
 
 export const BadgeCollectionBox = styled('div')`
