@@ -171,19 +171,20 @@ export const compactFormatToParts = (
     .trim();
 
   // Determine which formatted number to use based on the user's locale
-  const compactNumber =
-    enUsNumberValue === localeNumberValue
-      ? enUsNumberValue
-      : enUsNumberValue.indexOf('.') === localeNumberValue.indexOf(',')
-      ? localeNumberValue
-      : enUsNumberValue;
+  let compactNumber = enUsNumberValue;
+  if (
+    enUsNumberValue !== localeNumberValue &&
+    enUsNumberValue.indexOf('.') !== -1 &&
+    enUsNumberValue.indexOf('.') === localeNumberValue.indexOf(',')
+  ) {
+    compactNumber = localeNumberValue;
+  }
 
   // Get the compact suffix for the formatted number
   const compactSuffix = enUsNumberParts
     .filter((part) => part.type === 'compact')
     .map(({ value }) => value)
     .join('');
-
   return {
     compactNumber,
     compactSuffix,
