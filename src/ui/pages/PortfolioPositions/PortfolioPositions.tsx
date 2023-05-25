@@ -4,8 +4,9 @@ import { selectChainId } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
 import { ConnectWallet } from '../../components/ConnectWallet';
+import { Positions } from './Positions';
 
-export const Portfolio: React.FunctionComponent = () => {
+export const PortfolioPositions: React.FunctionComponent = () => {
   const wallet = useWallet();
   const chainId = useAppSelector(selectChainId);
 
@@ -22,5 +23,5 @@ export const Portfolio: React.FunctionComponent = () => {
     );
   }
 
-  return <ConnectWallet heading="Welcome to the Voltz Portfolio" subheading="Hi" />;
+  return <Positions />;
 };
