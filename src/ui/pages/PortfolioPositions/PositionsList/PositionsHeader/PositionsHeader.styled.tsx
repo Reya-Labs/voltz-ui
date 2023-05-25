@@ -28,10 +28,6 @@ export const MiddleBox = styled(InfoBox)`
   margin-right: 30px;
 `;
 
-export const RightBox = styled(InfoBox)`
-  width: 140px;
-`;
-
 export const NotionalBox = styled(InfoBox)`
   width: 70px;
 `;

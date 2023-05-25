@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Position } from '@voltz-protocol/v1-sdk';
 
 import { initialSortingDirection, resetSortingDirection } from './constants';
+import { initialisePortfolioPositionsThunk, PositionMock } from './thunks';
 import { PositionSortDirection, PositionSortId, PositionSorting } from './types';
 
 type SliceState = {
   positionsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
-  positions: Position[];
+  positions: PositionMock[];
   sortingDirection: PositionSorting;
 };
 
@@ -46,7 +46,21 @@ const slice = createSlice({
       };
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(initialisePortfolioPositionsThunk.pending, (state) => {
+        state.positionsLoadedState = 'pending';
+        state.positions = [];
+      })
+      .addCase(initialisePortfolioPositionsThunk.rejected, (state) => {
+        state.positionsLoadedState = 'failed';
+        state.positions = [];
+      })
+      .addCase(initialisePortfolioPositionsThunk.fulfilled, (state, { payload }) => {
+        state.positionsLoadedState = 'succeeded';
+        state.positions = payload as PositionMock[];
+      });
+  },
 });
 
 export const { togglePositionSortingDirectionAction } = slice.actions;

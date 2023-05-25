@@ -44,20 +44,22 @@ export const PositionsList: React.FunctionComponent = () => {
             ? positions.map((position, index) => (
                 <PositionEntry
                   key={position.id}
-                  aMMMaturity={position.aMMMaturity}
                   backgroundColorToken={index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8'}
                   borderColorToken={index % 2 !== 0 ? 'lavenderWeb8' : 'transparent'}
                   chainId={position.chainId}
-                  fixedRateFormatted={position.fixedAPRRateFormatted}
                   isAaveV3={position.isAaveV3}
                   isBorrowing={position.isBorrowing}
                   isV2={position.isV2}
+                  marginCompactFormat={position.marginCompactFormat}
                   market={position.market}
+                  maturityFormatted={position.maturityFormatted}
+                  notionalCompactFormat={position.notionalCompactFormat}
+                  realizedPNLCompactFormat={position.realizedPNLCompactFormat}
                   routeAmmId={position.routeAmmId}
                   routePoolId={position.routePoolId}
+                  status={position.status}
                   token={position.token}
-                  variableRate24hDelta={position.variableAPYRate24hDelta}
-                  variableRateFormatted={position.variableAPYRateFormatted}
+                  unrealizedPNLCompactFormat={position.unrealizedPNLCompactFormat}
                 />
               ))
             : null}

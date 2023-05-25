@@ -1,7 +1,5 @@
-import { MarketTokenInformationProps } from '../../../ui/components/MarketTokenInformation';
-import { generateAmmIdForRoute, generatePoolId } from '../../../utilities/amm';
 import { formatPOSIXTimestamp } from '../../../utilities/date';
-import { formatNumber, stringToBigFloat } from '../../../utilities/number';
+import { compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { SORT_CONFIG } from './constants';
 import { sortPositions } from './helpers/sortPositions';
@@ -15,43 +13,53 @@ export const selectPositions = (state: RootState): PositionUI[] => {
   }
 
   const pools: PositionUI[] = portfolioPositions.map((position) => {
-    const aMM = position.amm;
-
-    const isV2 = aMM.market.tags.isV2;
-    const isAaveV3 = aMM.market.tags.isAaveV3;
-    const isBorrowing = aMM.market.tags.isBorrowing;
-    const market = aMM.market.name as MarketTokenInformationProps['market'];
-    const token = aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token'];
-    const fixedAPRRate = aMM.fixedApr;
-    const variableAPYRate = aMM.variableApy;
-    const variableApy24Ago = aMM.variableApy24Ago;
+    const isV2 = position.isV2;
+    const isAaveV3 = position.isAaveV3;
+    const isBorrowing = position.isBorrowing;
+    const market = position.market;
+    const token = position.token;
+    const notional = position.notional;
+    const margin = position.margin;
+    const type = position.type;
+    const unrealizedPNL = position.unrealizedPNL;
+    const realizedPNL = position.realizedPNL;
 
     return {
+      type,
       market,
       token,
       isBorrowing,
       isAaveV3,
       isV2,
-      fixedAPRRateFormatted: formatNumber(fixedAPRRate),
-      fixedAPRRate,
-      maturityTimestampInMS: aMM.termEndTimestampInMS,
-      aMMMaturity: formatPOSIXTimestamp(aMM.termEndTimestampInMS),
-      id: aMM.id,
-      variableAPYRate24hDelta: stringToBigFloat(
-        formatNumber(variableAPYRate - variableApy24Ago, 0, 3),
-      ),
-      chainId: aMM.chainId,
-      variableAPYRateFormatted: formatNumber(variableAPYRate),
-      variableAPYRate,
-      routeAmmId: generateAmmIdForRoute(aMM),
-      routePoolId: generatePoolId(aMM),
-      name: `${market} - ${token as string}`,
+      marginCompactFormat: compactFormatToParts(margin),
+      margin,
+      notionalCompactFormat: compactFormatToParts(notional),
+      notional,
+      maturityTimestampInMS: position.termEndTimestampInMS,
+      maturityFormatted: formatPOSIXTimestamp(position.termEndTimestampInMS),
+      id: position.id,
+      chainId: position.chainId,
+      routeAmmId: 'todo:',
+      routePoolId: 'todo:',
+      name: `${type} - ${market}${isAaveV3 ? ' - Aave v3' : ''} - ${token as string}${
+        isBorrowing ? ' - Borrowing' : ''
+      }`,
+      status: position.status,
+      unrealizedPNL,
+      unrealizedPNLCompactFormat: compactFormatToParts(unrealizedPNL),
+      realizedPNL,
+      realizedPNLCompactFormat: compactFormatToParts(realizedPNL),
     };
   });
 
   return sortPositions(pools, {
     marginSortingDirection: appliedSortingDirection['margin'],
     notionalSortingDirection: appliedSortingDirection['notional'],
+    statusSortingDirection: appliedSortingDirection['status'],
+    nameSortingDirection: appliedSortingDirection['name'],
+    maturitySortingDirection: appliedSortingDirection['maturity'],
+    unrealizedPNLSortingDirection: appliedSortingDirection['unrealizedPNL'],
+    realizedPNLSortingDirection: appliedSortingDirection['realizedPNL'],
   });
 };
 

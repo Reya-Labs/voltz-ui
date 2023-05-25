@@ -7,9 +7,19 @@ export const sortPositions = (
   {
     marginSortingDirection,
     notionalSortingDirection,
+    statusSortingDirection,
+    nameSortingDirection,
+    maturitySortingDirection,
+    realizedPNLSortingDirection,
+    unrealizedPNLSortingDirection,
   }: {
     marginSortingDirection: PositionSortDirection;
     notionalSortingDirection: PositionSortDirection;
+    statusSortingDirection: PositionSortDirection;
+    nameSortingDirection: PositionSortDirection;
+    maturitySortingDirection: PositionSortDirection;
+    unrealizedPNLSortingDirection: PositionSortDirection;
+    realizedPNLSortingDirection: PositionSortDirection;
   },
 ) => {
   const fields = [];
@@ -21,6 +31,26 @@ export const sortPositions = (
   if (notionalSortingDirection !== 'noSort') {
     fields.push('notional');
     directions.push(notionalSortingDirection === 'ascending' ? 'asc' : 'desc');
+  }
+  if (statusSortingDirection !== 'noSort') {
+    fields.push('status.variant');
+    directions.push(statusSortingDirection === 'ascending' ? 'asc' : 'desc');
+  }
+  if (nameSortingDirection !== 'noSort') {
+    fields.push('name');
+    directions.push(nameSortingDirection === 'ascending' ? 'asc' : 'desc');
+  }
+  if (maturitySortingDirection !== 'noSort') {
+    fields.push('maturity');
+    directions.push(maturitySortingDirection === 'ascending' ? 'asc' : 'desc');
+  }
+  if (unrealizedPNLSortingDirection !== 'noSort') {
+    fields.push('unrealizedPNL');
+    directions.push(unrealizedPNLSortingDirection === 'ascending' ? 'asc' : 'desc');
+  }
+  if (realizedPNLSortingDirection !== 'noSort') {
+    fields.push('realizedPNL');
+    directions.push(realizedPNLSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   return orderBy(positions, fields, directions);
 };

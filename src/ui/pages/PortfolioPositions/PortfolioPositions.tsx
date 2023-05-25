@@ -1,20 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { selectChainId } from '../../../app/features/network';
-import { useAppSelector } from '../../../app/hooks';
+import { initialisePortfolioPositionsThunk } from '../../../app/features/portfolio';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
 import { ConnectWallet } from '../../components/ConnectWallet';
 import { Positions } from './Positions';
 
 export const PortfolioPositions: React.FunctionComponent = () => {
-  const wallet = useWallet();
+  const { account, signer } = useWallet();
   const chainId = useAppSelector(selectChainId);
+  const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (!chainId) {
+      return;
+    }
+    if (!account || !signer) {
+      return;
+    }
+    void dispatch(
+      initialisePortfolioPositionsThunk({
+        chainId,
+        signer,
+      }),
+    );
+  }, [chainId, signer, account]);
   if (!chainId) {
     return null;
   }
 
-  if (!wallet.account) {
+  if (!account || !signer) {
     return (
       <ConnectWallet
         heading="Welcome to the your Portfolio"

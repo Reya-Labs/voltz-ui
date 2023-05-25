@@ -2,6 +2,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { PositionUI } from '../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import {
   MarketTokenInformation,
@@ -11,13 +12,16 @@ import {
   ArbitrumIcon,
   AvalancheIcon,
   ChainIconContainer,
-  FixedAPRBox,
   LeftBox,
+  MarginBox,
   MaturityBox,
   MiddleBox,
+  NotionalBox,
   PositionEntryBox,
   PositionEntryBoxWrapper,
-  VariableAPYBox,
+  RealizedPNLBox,
+  StatusBox,
+  UnrealizedPNLBox,
 } from './PositionEntry.styled';
 
 type PositionEntryProps = {
@@ -26,15 +30,29 @@ type PositionEntryProps = {
   isBorrowing: boolean;
   market: MarketTokenInformationProps['market'];
   token: MarketTokenInformationProps['token'];
-  fixedRateFormatted: string;
-  variableRate24hDelta: number | undefined;
-  variableRateFormatted: string;
-  aMMMaturity: string;
+  maturityFormatted: string;
   backgroundColorToken: ColorTokens;
   borderColorToken: ColorTokens | 'transparent';
   routeAmmId: string;
   routePoolId: string;
   chainId: SupportedChainId;
+  status: PositionUI['status'];
+  marginCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  unrealizedPNLCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  realizedPNLCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  notionalCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
 };
 const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
   [SupportedChainId.mainnet]: null,
@@ -52,15 +70,17 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
       isBorrowing,
       market,
       token,
-      fixedRateFormatted,
-      variableRate24hDelta,
-      variableRateFormatted,
-      aMMMaturity,
+      maturityFormatted,
       backgroundColorToken,
       routePoolId,
       routeAmmId,
+      status,
       isV2,
       borderColorToken,
+      marginCompactFormat,
+      notionalCompactFormat,
+      realizedPNLCompactFormat,
+      unrealizedPNLCompactFormat,
     },
     ref,
   ) => {
@@ -95,32 +115,54 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
             />
           </LeftBox>
           <MiddleBox>
-            <FixedAPRBox>
+            <NotionalBox>
               <TokenTypography
                 colorToken="lavenderWeb"
-                token="%"
+                token={notionalCompactFormat.compactSuffix}
                 typographyToken={typographyToken}
-                value={fixedRateFormatted}
+                value={notionalCompactFormat.compactNumber}
               />
-            </FixedAPRBox>
-            <VariableAPYBox>
+            </NotionalBox>
+            <MarginBox>
               <TokenTypography
                 colorToken="lavenderWeb"
-                differenceToken="%"
-                differenceValue={variableRate24hDelta}
-                token="%"
+                token={marginCompactFormat.compactSuffix}
                 typographyToken={typographyToken}
-                value={variableRateFormatted}
+                value={marginCompactFormat.compactNumber}
               />
-            </VariableAPYBox>
+            </MarginBox>
             <MaturityBox>
               <TokenTypography
                 colorToken="lavenderWeb"
                 token=""
                 typographyToken={typographyToken}
-                value={aMMMaturity}
+                value={maturityFormatted}
               />
             </MaturityBox>
+            <StatusBox>
+              <TokenTypography
+                colorToken="wildStrawberry"
+                token=""
+                typographyToken={typographyToken}
+                value={status.variant}
+              />
+            </StatusBox>
+            <UnrealizedPNLBox>
+              <TokenTypography
+                colorToken="wildStrawberry"
+                token={unrealizedPNLCompactFormat.compactSuffix}
+                typographyToken={typographyToken}
+                value={unrealizedPNLCompactFormat.compactNumber}
+              />
+            </UnrealizedPNLBox>
+            <RealizedPNLBox>
+              <TokenTypography
+                colorToken="wildStrawberry"
+                token={realizedPNLCompactFormat.compactSuffix}
+                typographyToken={typographyToken}
+                value={realizedPNLCompactFormat.compactNumber}
+              />
+            </RealizedPNLBox>
           </MiddleBox>
         </PositionEntryBox>
       </PositionEntryBoxWrapper>

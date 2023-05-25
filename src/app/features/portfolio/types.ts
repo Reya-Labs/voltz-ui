@@ -1,23 +1,43 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 export type PositionUI = {
+  id: string;
+  routeAmmId: string;
+  routePoolId: string;
+  isAaveV3: boolean;
+  isBorrowing: boolean;
+  isV2: boolean;
+  type: 'LP' | 'Variable' | 'Fixed';
+  chainId: SupportedChainId;
   market: 'Aave' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
   token?: 'eth' | 'usdc' | 'usdt' | 'dai';
   name: string;
-  isBorrowing: boolean;
-  isV2: boolean;
-  isAaveV3: boolean;
-  fixedAPRRateFormatted: string;
-  fixedAPRRate: number;
-  aMMMaturity: string;
-  chainId: SupportedChainId;
-  id: string;
-  variableAPYRate24hDelta: number;
-  variableAPYRateFormatted: string;
-  variableAPYRate: number;
-  routeAmmId: string;
-  routePoolId: string;
+  notional: number;
+  notionalCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  margin: number;
+  marginCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  maturityFormatted: string;
   maturityTimestampInMS: number;
+  status: {
+    variant: 'none' | 'receiving' | 'in-range' | 'paying';
+    value: number;
+  };
+  unrealizedPNL: number;
+  unrealizedPNLCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  realizedPNL: number;
+  realizedPNLCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
 };
 
 export type PositionSortId =

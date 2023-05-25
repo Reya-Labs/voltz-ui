@@ -20,6 +20,11 @@ describe('sortPositions function', () => {
     it('should sort by margin in ascending order', () => {
       const sortedPools = sortPositions(positions, {
         marginSortingDirection: 'ascending',
+        nameSortingDirection: 'noSort',
+        statusSortingDirection: 'noSort',
+        unrealizedPNLSortingDirection: 'noSort',
+        maturitySortingDirection: 'noSort',
+        realizedPNLSortingDirection: 'noSort',
         notionalSortingDirection: 'noSort',
       });
 
@@ -31,6 +36,11 @@ describe('sortPositions function', () => {
     it('should sort by margin in descending order', () => {
       const sortedPools = sortPositions(positions, {
         marginSortingDirection: 'descending',
+        nameSortingDirection: 'noSort',
+        statusSortingDirection: 'noSort',
+        unrealizedPNLSortingDirection: 'noSort',
+        maturitySortingDirection: 'noSort',
+        realizedPNLSortingDirection: 'noSort',
         notionalSortingDirection: 'noSort',
       });
 
@@ -43,6 +53,11 @@ describe('sortPositions function', () => {
       const sortedPools = sortPositions(positions, {
         notionalSortingDirection: 'ascending',
         marginSortingDirection: 'noSort',
+        nameSortingDirection: 'noSort',
+        statusSortingDirection: 'noSort',
+        unrealizedPNLSortingDirection: 'noSort',
+        maturitySortingDirection: 'noSort',
+        realizedPNLSortingDirection: 'noSort',
       });
 
       expect(sortedPools[0]).toEqual(positions[0]);
@@ -54,6 +69,11 @@ describe('sortPositions function', () => {
       const sortedPools = sortPositions(positions, {
         notionalSortingDirection: 'descending',
         marginSortingDirection: 'noSort',
+        nameSortingDirection: 'noSort',
+        statusSortingDirection: 'noSort',
+        unrealizedPNLSortingDirection: 'noSort',
+        maturitySortingDirection: 'noSort',
+        realizedPNLSortingDirection: 'noSort',
       });
 
       expect(sortedPools[0]).toEqual(positions[1]);
