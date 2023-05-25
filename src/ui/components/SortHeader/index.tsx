@@ -1,39 +1,33 @@
 import { Typography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import {
-  selectPoolsLoading,
-  togglePoolSortingDirectionAction,
-} from '../../../../../../app/features/aMMs';
-import { PoolSortDirection, PoolSortId } from '../../../../../../app/features/aMMs/types';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { useResponsiveQuery } from '../../../../../../hooks/useResponsiveQuery';
+import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import {
   AscendingSortIcon,
   DescendingSortIcon,
   NoSortIcon,
   RowsBox,
   TypographyWithIcon,
-} from './PoolSortHeader.styled';
+} from './SortHeader.styled';
 
-type PoolSortHeaderProps = {
-  id: PoolSortId;
+type SortHeaderProps = {
   text: string;
   subtext?: string;
-  direction: PoolSortDirection;
+  direction: 'noSort' | 'ascending' | 'descending';
   disabled: boolean;
+  loading: boolean;
+  onClick: () => void;
 };
 
-export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
+export const SortHeader: React.FunctionComponent<SortHeaderProps> = ({
   text,
   subtext,
-  id,
   direction,
   disabled,
+  loading,
+  onClick,
 }) => {
-  const dispatch = useAppDispatch();
   const { isLargeDesktopDevice } = useResponsiveQuery();
-  const loading = useAppSelector(selectPoolsLoading);
 
   const typographyToken: TypographyToken = isLargeDesktopDevice
     ? 'primaryBodySmallRegular'
@@ -52,11 +46,7 @@ export const PoolSortHeader: React.FunctionComponent<PoolSortHeaderProps> = ({
         if (loading || disabled) {
           return;
         }
-        dispatch(
-          togglePoolSortingDirectionAction({
-            sortId: id,
-          }),
-        );
+        onClick && onClick();
       }}
     >
       <TypographyWithIcon colorToken="lavenderWeb3" typographyToken={typographyToken}>
