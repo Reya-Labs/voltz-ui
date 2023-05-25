@@ -1,14 +1,7 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import {
-  selectChainChangeState,
-  selectChainId,
-  setChainIdThunk,
-} from '../../../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import {
   MarketTokenInformation,
@@ -17,7 +10,6 @@ import {
 import {
   ArbitrumIcon,
   AvalancheIcon,
-  ButtonStyled,
   ChainIconContainer,
   FixedAPRBox,
   LeftBox,
@@ -25,7 +17,6 @@ import {
   MiddleBox,
   PositionEntryBox,
   PositionEntryBoxWrapper,
-  RightBox,
   VariableAPYBox,
 } from './PositionEntry.styled';
 
@@ -56,7 +47,7 @@ const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
 export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps>(
   (
     {
-      chainId: poolChainId,
+      chainId,
       isAaveV3,
       isBorrowing,
       market,
@@ -73,82 +64,11 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
     },
     ref,
   ) => {
-    const dispatch = useAppDispatch();
-    const [waitingOnNetworkChange, setWaitingOnNetworkChange] = useState<
-      null | 'lpForm' | 'swapForm'
-    >(null);
-    const chainId = useAppSelector(selectChainId);
-    const chainStateChangeError = useAppSelector(selectChainChangeState) === 'error';
     const { isLargeDesktopDevice } = useResponsiveQuery();
-    const navigate = useAppNavigate();
-    const ChainIcon = ChainIconMap[poolChainId];
+    const ChainIcon = ChainIconMap[chainId];
     const typographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyLargeRegular'
       : 'secondaryBodyMediumRegular';
-    const promptForNetworkChange = chainId !== null ? chainId !== poolChainId : false;
-
-    const switchNetwork = (form: 'lpForm' | 'swapForm') => {
-      setWaitingOnNetworkChange(form);
-      void dispatch(
-        setChainIdThunk({
-          chainId: poolChainId,
-          isSupportedChain: true,
-          triggerApprovalFlow: true,
-        }),
-      );
-    };
-
-    useEffect(() => {
-      if (chainStateChangeError) {
-        setWaitingOnNetworkChange(null);
-      }
-    }, [chainStateChangeError]);
-    useEffect(() => {
-      if (waitingOnNetworkChange === null) {
-        return;
-      }
-      if (!chainId) {
-        return;
-      }
-      if (chainId === poolChainId) {
-        if (waitingOnNetworkChange === 'lpForm') {
-          navigateToLPFormPage();
-        }
-        if (waitingOnNetworkChange === 'swapForm') {
-          navigateToSwapFormPage();
-        }
-      }
-    }, [poolChainId, waitingOnNetworkChange, chainId]);
-
-    const navigateToLPFormPage = () => {
-      navigate.toLPFormPage({
-        ammId: routeAmmId,
-        poolId: routePoolId,
-      });
-    };
-
-    const handleOnLPClick = () => {
-      if (!promptForNetworkChange) {
-        navigateToLPFormPage();
-      } else {
-        switchNetwork('lpForm');
-      }
-    };
-
-    const navigateToSwapFormPage = () => {
-      navigate.toSwapFormPage({
-        ammId: routeAmmId,
-        poolId: routePoolId,
-      });
-    };
-
-    const handleOnTradeClick = () => {
-      if (!promptForNetworkChange) {
-        navigateToSwapFormPage();
-      } else {
-        switchNetwork('swapForm');
-      }
-    };
 
     return (
       <PositionEntryBoxWrapper ref={ref}>
@@ -202,22 +122,6 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
               />
             </MaturityBox>
           </MiddleBox>
-          <RightBox>
-            <ButtonStyled
-              typographyToken="primaryBodySmallBold"
-              variant="primary"
-              onClick={handleOnTradeClick}
-            >
-              Trade
-            </ButtonStyled>
-            <ButtonStyled
-              typographyToken="primaryBodySmallBold"
-              variant="secondary"
-              onClick={handleOnLPClick}
-            >
-              LP
-            </ButtonStyled>
-          </RightBox>
         </PositionEntryBox>
       </PositionEntryBoxWrapper>
     );

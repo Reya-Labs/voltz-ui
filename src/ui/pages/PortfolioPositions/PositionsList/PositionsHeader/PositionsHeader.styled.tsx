@@ -32,12 +32,22 @@ export const RightBox = styled(InfoBox)`
   width: 140px;
 `;
 
-export const FixedAPRBox = styled(InfoBox)`
+export const NotionalBox = styled(InfoBox)`
   width: 70px;
 `;
-export const VariableAPYBox = styled(InfoBox)`
-  width: 130px;
+export const MarginBox = styled(InfoBox)`
+  width: 70px;
 `;
 export const MaturityBox = styled(InfoBox)`
+  width: 70px;
+`;
+export const StatusBox = styled(InfoBox)`
+  width: 70px;
+`;
+
+export const UnrealizedPNLBox = styled(InfoBox)`
+  width: 70px;
+`;
+export const RealizedPNLBox = styled(InfoBox)`
   width: 70px;
 `;

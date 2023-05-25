@@ -1,6 +1,8 @@
 import { LabelTokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { selectPositionsLength } from '../../../../app/features/portfolio';
+import { useAppSelector } from '../../../../app/hooks';
 import { PositionsList } from '../PositionsList';
 import {
   BottomBox,
@@ -18,6 +20,8 @@ import {
 } from './Positions.styled';
 
 export const Positions: React.FunctionComponent = () => {
+  const positionsLength = useAppSelector(selectPositionsLength);
+
   return (
     <PositionsBox>
       <TopBox>
@@ -113,14 +117,14 @@ export const Positions: React.FunctionComponent = () => {
       </TopBox>
       <MidBox>
         <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyMediumBold">
-          12
+          {positionsLength}
         </Typography>
         <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Positions
         </Typography>
       </MidBox>
       <BottomBox>
-        <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyMediumBold">
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
           Positions in this account
         </Typography>
         <PositionsList />

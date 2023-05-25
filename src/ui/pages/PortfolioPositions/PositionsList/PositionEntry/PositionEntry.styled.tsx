@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
 
 import { ReactComponent as Arbitrum } from './assets/arbitrum.svg';
 import { ReactComponent as Avalanche } from './assets/avalanche.svg';
@@ -47,14 +47,6 @@ export const MiddleBox = styled(InfoBox)`
   margin-right: 30px;
 `;
 
-export const RightBox = styled(InfoBox)`
-  width: 140px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 8px;
-`;
-
 export const FixedAPRBox = styled(InfoBox)`
   width: 70px;
 `;
@@ -63,10 +55,6 @@ export const VariableAPYBox = styled(InfoBox)`
 `;
 export const MaturityBox = styled(InfoBox)`
   width: 70px;
-`;
-
-export const ButtonStyled = styled(Button)`
-  padding: 6px 16px;
 `;
 
 export const ChainIconContainer = styled('div')`

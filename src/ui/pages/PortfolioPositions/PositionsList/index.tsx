@@ -1,8 +1,9 @@
-import { Typography } from 'brokoli-ui';
+import { AppLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectPools, selectPoolsLoading } from '../../../../app/features/aMMs';
+import { selectPositions, selectPositionsLoading } from '../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../app/hooks';
+import { routes } from '../../../../routes/paths';
 import { PositionEntry } from './PositionEntry';
 import { PositionsHeader } from './PositionsHeader';
 import {
@@ -13,8 +14,8 @@ import {
 } from './PositionsList.styled';
 
 export const PositionsList: React.FunctionComponent = () => {
-  const loading = useAppSelector(selectPoolsLoading);
-  const pools = useAppSelector(selectPools);
+  const loading = useAppSelector(selectPositionsLoading);
+  const positions = useAppSelector(selectPositions);
 
   return (
     <PositionsHeaderAndListBox>
@@ -25,7 +26,7 @@ export const PositionsList: React.FunctionComponent = () => {
             <PositionEntrySkeleton
               key={index}
               colorToken="liberty2"
-              data-testid="PoolsList-PoolEntrySkeleton"
+              data-testid="PositionsList-PositionEntrySkeleton"
               variant="rectangular"
             />
           ))}
@@ -39,32 +40,41 @@ export const PositionsList: React.FunctionComponent = () => {
           staggerDelayBy={20}
           staggerDurationBy={15}
         >
-          {pools.length > 0
-            ? pools.map((pool, index) => (
+          {positions.length > 0
+            ? positions.map((position, index) => (
                 <PositionEntry
-                  key={pool.id}
-                  aMMMaturity={pool.aMMMaturity}
+                  key={position.id}
+                  aMMMaturity={position.aMMMaturity}
                   backgroundColorToken={index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8'}
                   borderColorToken={index % 2 !== 0 ? 'lavenderWeb8' : 'transparent'}
-                  chainId={pool.chainId}
-                  fixedRateFormatted={pool.fixedAPRRateFormatted}
-                  isAaveV3={pool.isAaveV3}
-                  isBorrowing={pool.isBorrowing}
-                  isV2={pool.isV2}
-                  market={pool.market}
-                  routeAmmId={pool.routeAmmId}
-                  routePoolId={pool.routePoolId}
-                  token={pool.token}
-                  variableRate24hDelta={pool.variableAPYRate24hDelta}
-                  variableRateFormatted={pool.variableAPYRateFormatted}
+                  chainId={position.chainId}
+                  fixedRateFormatted={position.fixedAPRRateFormatted}
+                  isAaveV3={position.isAaveV3}
+                  isBorrowing={position.isBorrowing}
+                  isV2={position.isV2}
+                  market={position.market}
+                  routeAmmId={position.routeAmmId}
+                  routePoolId={position.routePoolId}
+                  token={position.token}
+                  variableRate24hDelta={position.variableAPYRate24hDelta}
+                  variableRateFormatted={position.variableAPYRateFormatted}
                 />
               ))
             : null}
-          {pools.length === 0 ? (
+          {positions.length === 0 ? (
             <NoPositionsFoundBox>
               <img alt="Gimme" src="/images/no-pools-found.png" />
               <Typography colorToken="lavenderWeb" typographyToken="primaryBodyLargeBold">
-                No pools match the filter criteria. Try refining them.
+                No positions found. Visit our{' '}
+                <AppLink
+                  colorToken="skyBlueCrayola"
+                  data-testid="NoPositions-AppLink"
+                  to={`/${routes.POOLS}`}
+                  typographyToken="primaryBodyMediumRegular"
+                >
+                  pool page
+                </AppLink>{' '}
+                and start trading!
               </Typography>
             </NoPositionsFoundBox>
           ) : null}
