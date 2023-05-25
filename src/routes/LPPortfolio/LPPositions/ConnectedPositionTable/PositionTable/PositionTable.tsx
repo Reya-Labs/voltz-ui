@@ -53,6 +53,9 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
       {positions.map((position) => {
         const rolloverAmm = findCurrentAmm(aMMs, pools, position);
         const rolloverAvailable = rolloverAmm ? rolloverAmm.id !== position.amm.id : false;
+        const realizedPnLFromSwapsInUSD = position.isPoolMatured
+          ? position.settlementCashflowInUSD
+          : position.realizedPnLFromSwapsInUSD;
 
         return (
           <PositionsListItemBox key={position.id}>
@@ -70,7 +73,7 @@ export const PositionTable: React.FunctionComponent<PositionTableProps> = ({
                 isBothTraderAndLP={position.isBothTraderAndLP ?? false}
                 isSettled={position.isSettled}
                 realizedPnLFromFeesInUSD={position.feesInUSD}
-                realizedPnLFromSwapsInUSD={position.realizedPnLFromSwapsInUSD}
+                realizedPnLFromSwapsInUSD={realizedPnLFromSwapsInUSD}
                 rolloverAvailable={rolloverAvailable}
                 settlementCashflowInUSD={position.settlementCashflowInUSD}
                 underlyingTokenName={'USD'}
