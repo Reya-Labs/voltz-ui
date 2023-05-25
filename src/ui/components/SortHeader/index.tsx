@@ -42,6 +42,7 @@ export const SortHeader: React.FunctionComponent<SortHeaderProps> = ({
 
   return (
     <RowsBox
+      disabled={loading || disabled}
       onClick={() => {
         if (loading || disabled) {
           return;
