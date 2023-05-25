@@ -76,6 +76,13 @@ export const ChainIconContainer = styled('div')`
   left: -15px;
 `;
 
+export const TestPillContainer = styled('div')`
+  position: absolute;
+  z-index: 2;
+  top: 18px;
+  right: -55px;
+`;
+
 export const ArbitrumIcon = styled(Arbitrum)`
   width: 20px;
   height: 20px;
