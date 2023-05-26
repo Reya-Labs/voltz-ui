@@ -105,7 +105,7 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
           <VoyageBadgesGrid itemsPerRow={3}>
             {loading &&
               Array.from({ length: 4 }, (index) => index).map((_, index) => (
-                <BadgeCard key={index} id="v2Voyage" loading={loading} status="notAchieved" />
+                <BadgeCard key={index} id={1} loading={loading} status="notAchieved" />
               ))}
             {!loading &&
               badges.length !== 0 &&
@@ -137,7 +137,7 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
                     key={index}
                     achievedAt={undefined}
                     loading={loading}
-                    variant="v2Voyage"
+                    variant={1}
                   />
                 ))
               : null}

@@ -10,7 +10,10 @@ type BadgeProps = {
 };
 
 const BADGE_ID_ICON_NAME_MAP: Record<VoyageBadgeUI['id'], SupportedIcons> = {
-  v2Voyage: 'voyageWeek1',
+  1: 'voyageWeek1',
+  2: 'voyageWeek2',
+  3: 'voyageWeek3',
+  4: 'voyageWeek4',
 };
 
 export const Badge: React.FunctionComponent<BadgeProps> = ({ loading, variant }) => {
