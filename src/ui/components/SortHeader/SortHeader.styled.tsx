@@ -5,10 +5,13 @@ import { ReactComponent as AscendingSort } from './assets/ascending-sort.svg';
 import { ReactComponent as DescendingSort } from './assets/descending-sort.svg';
 import { ReactComponent as NoSort } from './assets/no-sort.svg';
 
-export const RowsBox = styled('div')`
+export const RowsBox = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'disabled',
+})<{ disabled: boolean }>`
   display: flex;
   flex-direction: column;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? undefined : 'pointer')};
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : undefined)};
 `;
 
 export const TypographyWithIcon = styled(Typography)`

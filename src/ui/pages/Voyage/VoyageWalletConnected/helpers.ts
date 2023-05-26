@@ -3,7 +3,10 @@ import { ColorTokens } from 'brokoli-ui';
 import { VoyageBadgeUI } from '../../../../app/features/voyage/types';
 
 export const BADGE_ID_TITLE_COPY_MAP: Record<VoyageBadgeUI['id'], string> = {
-  v2Voyage: 'VOLTZ V2 VOYAGE - W1',
+  1: 'VOLTZ V2 VOYAGE - W1',
+  2: 'VOLTZ V2 VOYAGE - W2',
+  3: 'VOLTZ V2 VOYAGE - W3',
+  4: 'VOLTZ V2 VOYAGE - W4',
 };
 
 export const STATUS_DESCRIPTION_COPY_MAP: Record<VoyageBadgeUI['status'], string> = {
@@ -29,5 +32,8 @@ export const STATUS_COLOR_TOKEN_MAP: Record<VoyageBadgeUI['status'], ColorTokens
 };
 
 export const BADGE_ID_PILL_TEXT_MAP: Record<VoyageBadgeUI['id'], string> = {
-  v2Voyage: 'Week 1',
+  1: 'Week 1',
+  2: 'Week 2',
+  3: 'Week 3',
+  4: 'Week 4',
 };

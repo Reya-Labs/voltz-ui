@@ -1,5 +1,5 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
-import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
+import { ColorTokens, Pill, TokenTypography, TypographyToken } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
 import {
@@ -26,6 +26,7 @@ import {
   PoolEntryBox,
   PoolEntryBoxWrapper,
   RightBox,
+  TestPillContainer,
   VariableAPYBox,
 } from './PoolEntry.styled';
 
@@ -52,6 +53,14 @@ const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
   [SupportedChainId.arbitrumGoerli]: ArbitrumIcon,
   [SupportedChainId.avalanche]: AvalancheIcon,
   [SupportedChainId.avalancheFuji]: AvalancheIcon,
+};
+const TestNetMap: Record<SupportedChainId, boolean> = {
+  [SupportedChainId.mainnet]: false,
+  [SupportedChainId.goerli]: true,
+  [SupportedChainId.arbitrum]: false,
+  [SupportedChainId.arbitrumGoerli]: true,
+  [SupportedChainId.avalanche]: false,
+  [SupportedChainId.avalancheFuji]: true,
 };
 export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
   (
@@ -156,6 +165,17 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
           <ChainIconContainer>
             <ChainIcon />
           </ChainIconContainer>
+        ) : null}
+        {TestNetMap[poolChainId] ? (
+          <TestPillContainer>
+            <Pill
+              colorToken="skyBlueCrayola"
+              typographyToken="primaryBodySmallRegular"
+              variant="compact"
+            >
+              Testnet
+            </Pill>
+          </TestPillContainer>
         ) : null}
         <PoolEntryBox
           backgroundColorToken={backgroundColorToken}

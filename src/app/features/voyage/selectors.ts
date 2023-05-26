@@ -54,7 +54,7 @@ export const selectVoyageBadges =
       id: badge.id,
       completed: Boolean(badge.timestamp),
       isClaimable: false,
-      status: 'notAchieved',
+      status: badge.status,
       achievedAt: badge.timestamp ? badge.timestamp : undefined,
     }));
   };

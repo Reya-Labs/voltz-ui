@@ -16,7 +16,7 @@ import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
 import { LPFormPage } from './ui/pages/LPForm';
 import { PoolsPage } from './ui/pages/Pools';
-import { PortfolioPage } from './ui/pages/Portfolio';
+import { PortfolioPositionsPage } from './ui/pages/PortfolioPositions';
 import { ProfilePage } from './ui/pages/Profile';
 import { RolloverLPFormPage } from './ui/pages/RolloverLPForm';
 import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
@@ -24,6 +24,7 @@ import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { VoyagePage } from './ui/pages/Voyage';
 import { isPortfolioNextEnabled } from './utilities/isEnvVarProvided/is-portfolio-next-enabled';
+import { isVoyageNextEnabled } from './utilities/isEnvVarProvided/is-voyage-next-enabled';
 
 export const AppRoutes = () => {
   const chainId = useAppSelector(selectChainId);
@@ -60,7 +61,7 @@ export const AppRoutes = () => {
         <Route
           element={
             <NetworkProtectedVoltzPage>
-              <PortfolioPage />
+              <PortfolioPositionsPage />
             </NetworkProtectedVoltzPage>
           }
           path={routes.PORTFOLIO_POSITIONS}
@@ -141,7 +142,9 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId)}>
+            <NetworkProtectedVoltzPage
+              hidden={isAvalancheChain(chainId) ? !isVoyageNextEnabled() : false}
+            >
               <VoyagePage />
             </NetworkProtectedVoltzPage>
           }

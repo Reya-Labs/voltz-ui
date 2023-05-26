@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
-import { Button, colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
 
 import { ReactComponent as Arbitrum } from './assets/arbitrum.svg';
 import { ReactComponent as Avalanche } from './assets/avalanche.svg';
 
-export const PoolEntryBoxWrapper = styled('div')`
+export const PositionEntryBoxWrapper = styled('div')`
   position: relative;
 `;
 
-export const PoolEntryBox = styled('div', {
+export const PositionEntryBox = styled('div', {
   shouldForwardProp: (prop) => prop !== 'backgroundColorToken' && prop !== 'borderColorToken',
 })<{
   backgroundColorToken: ColorTokens;
@@ -47,26 +47,24 @@ export const MiddleBox = styled(InfoBox)`
   margin-right: 30px;
 `;
 
-export const RightBox = styled(InfoBox)`
-  width: 140px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 8px;
-`;
-
-export const FixedAPRBox = styled(InfoBox)`
+export const NotionalBox = styled(InfoBox)`
   width: 70px;
 `;
-export const VariableAPYBox = styled(InfoBox)`
-  width: 130px;
+export const MarginBox = styled(InfoBox)`
+  width: 70px;
 `;
 export const MaturityBox = styled(InfoBox)`
   width: 70px;
 `;
+export const StatusBox = styled(InfoBox)`
+  width: 70px;
+`;
 
-export const ButtonStyled = styled(Button)`
-  padding: 6px 16px;
+export const UnrealizedPNLBox = styled(InfoBox)`
+  width: 70px;
+`;
+export const RealizedPNLBox = styled(InfoBox)`
+  width: 70px;
 `;
 
 export const ChainIconContainer = styled('div')`
@@ -74,13 +72,6 @@ export const ChainIconContainer = styled('div')`
   z-index: 0;
   top: 18px;
   left: -15px;
-`;
-
-export const TestPillContainer = styled('div')`
-  position: absolute;
-  z-index: 2;
-  top: 18px;
-  right: -55px;
 `;
 
 export const ArbitrumIcon = styled(Arbitrum)`
