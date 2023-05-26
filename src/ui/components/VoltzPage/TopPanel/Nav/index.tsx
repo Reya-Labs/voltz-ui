@@ -10,6 +10,7 @@ import {
 import { useAppSelector } from '../../../../../app/hooks';
 import { routes } from '../../../../../routes/paths';
 import { isPortfolioNextEnabled } from '../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
+import { isVoyageNextEnabled } from '../../../../../utilities/isEnvVarProvided/is-voyage-next-enabled';
 
 const getLinks = (chainId?: SupportedChainId | null) =>
   !chainId
@@ -54,7 +55,7 @@ const getLinks = (chainId?: SupportedChainId | null) =>
           link: `/${routes.PROFILE}`,
         },
         {
-          isHidden: isAvalancheChain(chainId),
+          isHidden: isAvalancheChain(chainId) ? !isVoyageNextEnabled() : false,
           colorToken: 'rainbow',
           text: 'Voyage',
           link: `/${routes.VOYAGE}`,

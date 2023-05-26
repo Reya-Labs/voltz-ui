@@ -24,6 +24,7 @@ import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { VoyagePage } from './ui/pages/Voyage';
 import { isPortfolioNextEnabled } from './utilities/isEnvVarProvided/is-portfolio-next-enabled';
+import { isVoyageNextEnabled } from './utilities/isEnvVarProvided/is-voyage-next-enabled';
 
 export const AppRoutes = () => {
   const chainId = useAppSelector(selectChainId);
@@ -141,7 +142,9 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId)}>
+            <NetworkProtectedVoltzPage
+              hidden={isAvalancheChain(chainId) ? !isVoyageNextEnabled() : false}
+            >
               <VoyagePage />
             </NetworkProtectedVoltzPage>
           }

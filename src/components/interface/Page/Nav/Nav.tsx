@@ -4,6 +4,7 @@ import { isArbitrumChain, isAvalancheChain, selectChainId } from '../../../../ap
 import { useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
 import { isPortfolioNextEnabled } from '../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
+import { isVoyageNextEnabled } from '../../../../utilities/isEnvVarProvided/is-voyage-next-enabled';
 import { NavBox, VoltzIcon, VoltzIconBox } from './Nav.styled';
 import { NavLink } from './NavLink/NavLink';
 
@@ -60,7 +61,11 @@ export const Nav: React.FunctionComponent = React.memo(() => {
       <NavLink hidden={isAvalanche} isNew={false} link={`/${routes.PROFILE}`}>
         Profile
       </NavLink>
-      <NavLink hidden={isAvalanche} isNew={true} link={`/${routes.VOYAGE}`}>
+      <NavLink
+        hidden={isAvalanche ? !isVoyageNextEnabled() : false}
+        isNew={true}
+        link={`/${routes.VOYAGE}`}
+      >
         Voyage
       </NavLink>
     </NavBox>
