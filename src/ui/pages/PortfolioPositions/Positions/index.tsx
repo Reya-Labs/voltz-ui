@@ -40,9 +40,10 @@ export const Positions: React.FunctionComponent = () => {
               label="Margin"
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
+              prefixToken="$"
               token={''}
               typographyToken="secondaryBodyMediumBold"
-              value={'$12,999.00'}
+              value={'12,999.00'}
             />
           </MarginBox>
           <RealizedPNLBox>
@@ -51,9 +52,10 @@ export const Positions: React.FunctionComponent = () => {
               label="Realised PnL"
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
+              prefixToken="+$"
               token={''}
               typographyToken="secondaryBodyMediumBold"
-              value={'+$54,988'}
+              value={'54,988'}
             />
           </RealizedPNLBox>
           <UnrealizedPNLBox>
@@ -62,9 +64,10 @@ export const Positions: React.FunctionComponent = () => {
               label="Unrealised PnL"
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
+              prefixToken="-$"
               token={''}
               typographyToken="secondaryBodyMediumBold"
-              value={'-$54,988'}
+              value={'54,988'}
             />
           </UnrealizedPNLBox>
           <TotalNotionalBox>
@@ -73,9 +76,10 @@ export const Positions: React.FunctionComponent = () => {
               label="Total Notional"
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
+              prefixToken="$"
               token={'M'}
               typographyToken="secondaryBodyMediumBold"
-              value={'$245.004'}
+              value={'245.004'}
             />
           </TotalNotionalBox>
           <HealthStatusBox>

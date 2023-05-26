@@ -5,6 +5,7 @@ import { initialisePortfolioPositionsThunk } from '../../../app/features/portfol
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
 import { ConnectWallet } from '../../components/ConnectWallet';
+import { PortfolioPositionsBox } from './PortfolioPositions.styled';
 import { Positions } from './Positions';
 
 export const PortfolioPositions: React.FunctionComponent = () => {
@@ -39,5 +40,9 @@ export const PortfolioPositions: React.FunctionComponent = () => {
     );
   }
 
-  return <Positions />;
+  return (
+    <PortfolioPositionsBox>
+      <Positions />
+    </PortfolioPositionsBox>
+  );
 };

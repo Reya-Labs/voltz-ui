@@ -1,10 +1,12 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
+
 import { PositionMock } from './index';
 
 export const positionMocks: PositionMock[] = [
   {
     type: 'LP',
     id: '1',
-    chainId: 1,
+    chainId: SupportedChainId.mainnet,
     market: 'Aave',
     token: 'eth',
     name: 'Position 1',
@@ -24,7 +26,7 @@ export const positionMocks: PositionMock[] = [
   {
     type: 'Variable',
     id: '2',
-    chainId: 1,
+    chainId: SupportedChainId.mainnet,
     market: 'Compound',
     token: 'usdc',
     name: 'Position 2',
@@ -44,7 +46,7 @@ export const positionMocks: PositionMock[] = [
   {
     type: 'Fixed',
     id: '3',
-    chainId: 2,
+    chainId: SupportedChainId.avalanche,
     market: 'Lido',
     token: 'eth',
     name: 'Position 3',
@@ -64,7 +66,7 @@ export const positionMocks: PositionMock[] = [
   {
     type: 'Variable',
     id: '4',
-    chainId: 2,
+    chainId: SupportedChainId.avalanche,
     market: 'Rocket',
     token: 'dai',
     name: 'Position 4',
@@ -84,7 +86,7 @@ export const positionMocks: PositionMock[] = [
   {
     type: 'Fixed',
     id: '5',
-    chainId: 3,
+    chainId: SupportedChainId.arbitrum,
     market: 'GMX:GLP',
     token: 'eth',
     name: 'Position 5',
@@ -104,7 +106,7 @@ export const positionMocks: PositionMock[] = [
   {
     type: 'LP',
     id: '6',
-    chainId: 3,
+    chainId: SupportedChainId.arbitrum,
     market: 'SOFR',
     token: 'usdt',
     name: 'Position 6',
@@ -124,7 +126,7 @@ export const positionMocks: PositionMock[] = [
   {
     type: 'LP',
     id: '7',
-    chainId: 1,
+    chainId: SupportedChainId.mainnet,
     market: 'Aave',
     token: 'usdc',
     name: 'Position 7',
@@ -144,7 +146,7 @@ export const positionMocks: PositionMock[] = [
   {
     type: 'Fixed',
     id: '8',
-    chainId: 2,
+    chainId: SupportedChainId.avalanche,
     market: 'Compound',
     token: 'usdt',
     name: 'Position 8',
@@ -164,7 +166,7 @@ export const positionMocks: PositionMock[] = [
   {
     type: 'Variable',
     id: '9',
-    chainId: 3,
+    chainId: SupportedChainId.arbitrum,
     market: 'Lido',
     token: 'usdt',
     name: 'Position 9',
@@ -184,7 +186,7 @@ export const positionMocks: PositionMock[] = [
   {
     type: 'Fixed',
     id: '10',
-    chainId: 1,
+    chainId: SupportedChainId.mainnet,
     market: 'Rocket',
     token: 'eth',
     name: 'Position 10',
@@ -204,7 +206,7 @@ export const positionMocks: PositionMock[] = [
   {
     type: 'LP',
     id: '11',
-    chainId: 2,
+    chainId: SupportedChainId.avalanche,
     market: 'GMX:GLP',
     token: 'usdc',
     name: 'Position 11',
