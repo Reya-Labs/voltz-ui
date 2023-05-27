@@ -1,4 +1,4 @@
-import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import { AMM, InfoPostLp, Position } from '@voltz-protocol/v1-sdk';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
@@ -66,14 +66,7 @@ export type SliceState = {
       maxLeverage: string;
     };
     infoPostLp: {
-      value: {
-        // Margin requirement for prospective lp operation (either removing or adding liquidity)
-        marginRequirement: number;
-        // Max margin that can be withdrawn after prospective liquidity addition or removal operation
-        maxMarginWithdrawable: number;
-        // Extra information about prospective swap
-        gasFeeETH: number;
-      };
+      value: InfoPostLp;
       status: ThunkStatus;
     };
   };
@@ -135,7 +128,10 @@ export const initialState: SliceState = {
       value: {
         marginRequirement: 0,
         maxMarginWithdrawable: 0,
-        gasFeeETH: 0,
+        gasFee: {
+          value: 0,
+          token: 'ETH',
+        },
       },
       status: 'idle',
     },

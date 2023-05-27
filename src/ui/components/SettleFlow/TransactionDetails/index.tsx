@@ -1,7 +1,7 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectSettleGasFeeETH } from '../../../../app/features/settle-flow';
+import { selectSettleGasFee, selectSettleGasFeeToken } from '../../../../app/features/settle-flow';
 import { useAppSelector } from '../../../../app/hooks';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
@@ -9,7 +9,8 @@ import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styl
 type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
-  const gasFeeETH = useAppSelector(selectSettleGasFeeETH);
+  const gasFeeETH = useAppSelector(selectSettleGasFee);
+  const gasFeeToken = useAppSelector(selectSettleGasFeeToken);
 
   return (
     <React.Fragment>
@@ -22,7 +23,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </IconTextWrapper>
         <TokenTypography
           colorToken="lavenderWeb"
-          token=" ETH"
+          token={` ${gasFeeToken}`}
           typographyToken="secondaryBodySmallRegular"
           value={gasFeeETH}
         />

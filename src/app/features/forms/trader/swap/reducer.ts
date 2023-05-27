@@ -63,17 +63,7 @@ const slice = createSlice({
     ) => {
       state.userInput.mode = value;
       state.prospectiveSwap.infoPostSwap = {
-        value: {
-          marginRequirement: 0,
-          maxMarginWithdrawable: 0,
-          averageFixedRate: 0,
-          fixedTokenDeltaBalance: 0,
-          variableTokenDeltaBalance: 0,
-          fixedTokenDeltaUnbalanced: 0,
-          fee: 0,
-          slippage: 0,
-          gasFeeETH: 0,
-        },
+        value: initialState.prospectiveSwap.infoPostSwap.value,
         status: 'idle',
       };
 
@@ -282,33 +272,13 @@ const slice = createSlice({
       })
       .addCase(getInfoPostSwapThunk.pending, (state) => {
         state.prospectiveSwap.infoPostSwap = {
-          value: {
-            marginRequirement: 0,
-            maxMarginWithdrawable: 0,
-            averageFixedRate: 0,
-            fixedTokenDeltaBalance: 0,
-            variableTokenDeltaBalance: 0,
-            fixedTokenDeltaUnbalanced: 0,
-            fee: 0,
-            slippage: 0,
-            gasFeeETH: 0,
-          },
+          value: initialState.prospectiveSwap.infoPostSwap.value,
           status: 'pending',
         };
       })
       .addCase(getInfoPostSwapThunk.rejected, (state) => {
         state.prospectiveSwap.infoPostSwap = {
-          value: {
-            marginRequirement: 0,
-            maxMarginWithdrawable: 0,
-            averageFixedRate: 0,
-            fixedTokenDeltaBalance: 0,
-            variableTokenDeltaBalance: 0,
-            fixedTokenDeltaUnbalanced: 0,
-            fee: 0,
-            slippage: 0,
-            gasFeeETH: 0,
-          },
+          value: initialState.prospectiveSwap.infoPostSwap.value,
           status: 'error',
         };
       })
@@ -322,34 +292,14 @@ const slice = createSlice({
 
         if (earlyReturn) {
           state.prospectiveSwap.infoPostSwap = {
-            value: {
-              marginRequirement: 0,
-              maxMarginWithdrawable: 0,
-              averageFixedRate: 0,
-              fixedTokenDeltaBalance: 0,
-              variableTokenDeltaBalance: 0,
-              fixedTokenDeltaUnbalanced: 0,
-              fee: 0,
-              slippage: 0,
-              gasFeeETH: 0,
-            },
+            value: initialState.prospectiveSwap.infoPostSwap.value,
             status: 'idle',
           };
           return;
         }
 
         state.prospectiveSwap.infoPostSwap = {
-          value: {
-            marginRequirement: infoPostSwap.marginRequirement,
-            maxMarginWithdrawable: infoPostSwap.maxMarginWithdrawable,
-            averageFixedRate: infoPostSwap.averageFixedRate,
-            fixedTokenDeltaBalance: infoPostSwap.fixedTokenDeltaBalance,
-            variableTokenDeltaBalance: infoPostSwap.variableTokenDeltaBalance,
-            fixedTokenDeltaUnbalanced: infoPostSwap.fixedTokenDeltaUnbalanced,
-            fee: infoPostSwap.fee,
-            slippage: infoPostSwap.slippage,
-            gasFeeETH: infoPostSwap.gasFeeETH,
-          },
+          value: infoPostSwap,
           status: 'success',
         };
         if (infoPostSwap.availableNotional < notionalAmount) {

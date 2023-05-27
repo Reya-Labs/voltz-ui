@@ -336,3 +336,22 @@ export const selectPreviousPositionRealizedPnLFromSwapsFormatted = (state: RootS
 
   return realizedPnLFromSwaps === null ? '--' : formFormatNumber(realizedPnLFromSwaps);
 };
+// todo: FB same as in swap
+export const selectGasFeeToken = (state: RootState) => {
+  const infoPostSwap = state.rolloverSwapForm.prospectiveSwap.infoPostSwap;
+  if (infoPostSwap.status === 'success') {
+    return infoPostSwap.value.gasFee.token;
+  }
+
+  return '--';
+};
+
+// todo: FB same as in swap
+export const selectGasFeeFormatted = (state: RootState) => {
+  const infoPostSwap = state.rolloverSwapForm.prospectiveSwap.infoPostSwap;
+  if (infoPostSwap.status === 'success') {
+    return formatNumber(infoPostSwap.value.gasFee.value, 2, 4);
+  }
+
+  return '--';
+};

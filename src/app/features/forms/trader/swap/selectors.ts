@@ -102,10 +102,19 @@ export const selectProspectiveSwapFeeFormatted = (state: RootState) => {
   return '--';
 };
 
-export const selectGasFeeETHFormatted = (state: RootState) => {
+export const selectGasFeeToken = (state: RootState) => {
   const infoPostSwap = state.swapForm.prospectiveSwap.infoPostSwap;
   if (infoPostSwap.status === 'success') {
-    return formatNumber(infoPostSwap.value.gasFeeETH, 2, 4);
+    return infoPostSwap.value.gasFee.token;
+  }
+
+  return '--';
+};
+
+export const selectGasFeeFormatted = (state: RootState) => {
+  const infoPostSwap = state.swapForm.prospectiveSwap.infoPostSwap;
+  if (infoPostSwap.status === 'success') {
+    return formatNumber(infoPostSwap.value.gasFee.value, 2, 4);
   }
 
   return '--';

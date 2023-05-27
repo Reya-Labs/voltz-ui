@@ -13,9 +13,7 @@ export type SliceState = {
   error: string | null;
   txHash: string | null;
   infoPostSettlePosition: {
-    value: {
-      gasFeeETH: number;
-    };
+    value: InfoPostSettlePosition;
     status: ThunkStatus;
   };
 };
@@ -27,7 +25,10 @@ const initialState: SliceState = {
   txHash: null,
   infoPostSettlePosition: {
     value: {
-      gasFeeETH: 0,
+      gasFee: {
+        value: 0,
+        token: 'ETH',
+      },
     },
     status: 'idle',
   },
@@ -77,7 +78,10 @@ const slice = createSlice({
       .addCase(getInfoPostSettlePositionThunk.pending, (state) => {
         state.infoPostSettlePosition = {
           value: {
-            gasFeeETH: 0,
+            gasFee: {
+              value: 0,
+              token: 'ETH',
+            },
           },
           status: 'pending',
         };
@@ -85,20 +89,19 @@ const slice = createSlice({
       .addCase(getInfoPostSettlePositionThunk.rejected, (state) => {
         state.infoPostSettlePosition = {
           value: {
-            gasFeeETH: 0,
+            gasFee: {
+              value: 0,
+              token: 'ETH',
+            },
           },
           status: 'error',
         };
       })
       .addCase(getInfoPostSettlePositionThunk.fulfilled, (state, { payload }) => {
-        const { infoPostSettlePosition } = payload as {
-          infoPostSettlePosition: InfoPostSettlePosition;
-        };
+        const infoPostSettlePosition = payload as InfoPostSettlePosition;
 
         state.infoPostSettlePosition = {
-          value: {
-            gasFeeETH: infoPostSettlePosition.gasFeeETH,
-          },
+          value: infoPostSettlePosition,
           status: 'success',
         };
       });

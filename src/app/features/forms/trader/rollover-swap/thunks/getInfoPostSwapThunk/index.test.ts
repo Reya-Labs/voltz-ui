@@ -66,6 +66,7 @@ describe('getInfoPostSwapThunkHandler', () => {
       notionalAmount: 0,
       swapMode: undefined,
       infoPostSwap: {
+        availableNotional: 0,
         marginRequirement: 0,
         maxMarginWithdrawable: 0,
         averageFixedRate: 0,
@@ -74,7 +75,10 @@ describe('getInfoPostSwapThunkHandler', () => {
         fixedTokenDeltaUnbalanced: 0,
         fee: 0,
         slippage: 0,
-        gasFeeETH: 0,
+        gasFee: {
+          value: 0,
+          token: 'ETH',
+        },
       },
       earlyReturn: false,
     });

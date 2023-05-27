@@ -3,22 +3,23 @@ import React from 'react';
 
 import {
   selectAMMTokenFormatted,
-  selectInfoPostSwap,
+  selectGasFeeFormatted,
+  selectGasFeeToken,
   selectProspectiveSwapFeeFormatted,
   selectSlippageFormatted,
 } from '../../../../../app/features/forms/trader/rollover-swap';
 import { useAppSelector } from '../../../../../app/hooks';
-import { formatNumber } from '../../../../../utilities/number';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 
 type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
-  const infoPostSwap = useAppSelector(selectInfoPostSwap);
   const token = useAppSelector(selectAMMTokenFormatted);
   const slippageFormatted = useAppSelector(selectSlippageFormatted);
   const feeFormatted = useAppSelector(selectProspectiveSwapFeeFormatted);
+  const gasFeeFormatted = useAppSelector(selectGasFeeFormatted);
+  const gasFeeToken = useAppSelector(selectGasFeeToken);
 
   return (
     <React.Fragment>
@@ -53,13 +54,9 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </IconTextWrapper>
         <TokenTypography
           colorToken="lavenderWeb"
-          token=" ETH"
+          token={` ${gasFeeToken}`}
           typographyToken="secondaryBodySmallRegular"
-          value={
-            infoPostSwap.status === 'success'
-              ? formatNumber(infoPostSwap.value.gasFeeETH, 2, 4)
-              : '--'
-          }
+          value={gasFeeFormatted}
         />
       </TransactionDetailBox>
     </React.Fragment>

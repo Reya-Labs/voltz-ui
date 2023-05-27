@@ -336,3 +336,23 @@ export const selectMarginRequirementFormatted = (state: RootState) => {
     ? formatNumber(state.lpForm.prospectiveLp.infoPostLp.value.marginRequirement, 2, 4)
     : '--';
 };
+
+// todo: FB same in swap form
+export const selectGasFeeToken = (state: RootState) => {
+  const infoPostLp = state.lpForm.prospectiveLp.infoPostLp;
+  if (infoPostLp.status === 'success') {
+    return infoPostLp.value.gasFee.token;
+  }
+
+  return '--';
+};
+
+// todo: FB same in swap form
+export const selectGasFeeFormatted = (state: RootState) => {
+  const infoPostLp = state.lpForm.prospectiveLp.infoPostLp;
+  if (infoPostLp.status === 'success') {
+    return formatNumber(infoPostLp.value.gasFee.value, 2, 4);
+  }
+
+  return '--';
+};

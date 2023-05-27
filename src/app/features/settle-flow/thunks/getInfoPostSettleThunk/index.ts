@@ -5,12 +5,7 @@ import { RootState } from '../../../../store';
 import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
 
 export const getInfoPostSettlePositionThunkHandler: AsyncThunkPayloadCreator<
-  Awaited<
-    | {
-        infoPostSettlePosition: InfoPostSettlePosition;
-      }
-    | ReturnType<typeof rejectThunkWithError>
-  >,
+  Awaited<InfoPostSettlePosition | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
 > = async (_, thunkAPI) => {
@@ -21,26 +16,17 @@ export const getInfoPostSettlePositionThunkHandler: AsyncThunkPayloadCreator<
       return {};
     }
 
-    const infoPostSettlePosition = await amm.getInfoPostSettlePosition({
+    return await amm.getInfoPostSettlePosition({
       fixedLow: position.fixedRateLower.toNumber(),
       fixedHigh: position.fixedRateUpper.toNumber(),
     });
-
-    return {
-      infoPostSettlePosition,
-    };
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
 };
 
 export const getInfoPostSettlePositionThunk = createAsyncThunk<
-  Awaited<
-    | {
-        infoPostSettlePosition: InfoPostSettlePosition;
-      }
-    | ReturnType<typeof rejectThunkWithError>
-  >,
+  Awaited<InfoPostSettlePosition | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
 >('settleFlow/getInfoPostSettlePosition', getInfoPostSettlePositionThunkHandler);

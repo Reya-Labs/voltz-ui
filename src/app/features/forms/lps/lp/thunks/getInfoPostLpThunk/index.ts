@@ -4,6 +4,7 @@ import { InfoPostLp } from '@voltz-protocol/v1-sdk';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 import { isUserInputNotionalError } from '../../../../common/utils';
+import { initialState } from '../../state';
 import { getProspectiveLpNotional } from '../../utils';
 
 export const getInfoPostLpThunk = createAsyncThunk<
@@ -11,7 +12,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
     | {
         notionalAmount: number;
         lpMode: 'add' | 'remove';
-        infoPostLpV1: InfoPostLp;
+        infoPostLp: InfoPostLp;
         earlyReturn: boolean;
       }
     | ReturnType<typeof rejectThunkWithError>
@@ -45,11 +46,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
     if (getProspectiveLpNotional(lpFormState) === 0) {
       return {
         notionalAmount: 0,
-        infoPostLp: {
-          marginRequirement: 0,
-          maxMarginWithdrawable: 0,
-          gasFeeETH: 0,
-        },
+        infoPostLp: initialState.prospectiveLp.infoPostLp.value,
         earlyReturn: false,
       };
     }
