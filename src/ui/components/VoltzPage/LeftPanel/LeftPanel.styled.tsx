@@ -20,7 +20,7 @@ export const PanelBox = styled('div')`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0px;
+  padding: 10.5px 0px 8px 0px;
 
   width: 63px;
   height: 100%;
