@@ -24,11 +24,14 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
         colorToken="lavenderWeb"
         data-testid="MarketTokenInformation-MarketToken"
         iconSize={24}
-        infoFormatter={({ market, token }) =>
-          `${type} - ${market}${isAaveV3 ? 'v3' : ''}${token ? ` - ${token.toUpperCase()}` : ''}${
-            isBorrowing ? ' Borrow' : ''
-          }`
-        }
+        infoFormatter={({ market, token }) => (
+          <React.Fragment>
+            <b>{type}</b> - {market}
+            {isAaveV3 ? ' v3' : ''}
+            {token ? ` - ${token.toUpperCase()}` : ''}
+            {isBorrowing ? ' Borrow' : ''}
+          </React.Fragment>
+        )}
         market={market}
         token={token}
         typographyToken="primaryBodyMediumRegular"
