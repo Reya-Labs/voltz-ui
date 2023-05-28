@@ -24,7 +24,7 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
         colorToken="lavenderWeb"
         data-testid="MarketTokenInformation-MarketToken"
         iconSize={24}
-        infoFormatter={({ market, token }) => (
+        infoFormatter={() => (
           <React.Fragment>
             <b>{type}</b> - {market}
             {isAaveV3 ? ' v3' : ''}
