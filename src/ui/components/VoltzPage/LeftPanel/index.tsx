@@ -1,23 +1,15 @@
-import { Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { CraftedByBox, PanelBox, VoltzLogo } from './LeftPanel.styled';
+import { LeftPanelWithoutSubmenu } from './LeftPanelWithoutSubmenu';
+import { LeftPanelWithSubmenu } from './LeftPanelWithSubmenu';
 
-export const LeftPanel: React.FunctionComponent = React.memo(() => (
-  <PanelBox data-testid="LeftPanel-PanelBox">
-    <VoltzLogo
-      data-testid="LeftPanel-VoltzLogo"
-      onClick={() => {
-        window.open('https://voltz.xyz', '_blank');
-      }}
-    />
-    <CraftedByBox data-testid="LeftPanel-CraftedByBox">
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodyXSmallRegular">
-        Voltz
-      </Typography>
-      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-        {process.env.APP_VERSION}
-      </Typography>
-    </CraftedByBox>
-  </PanelBox>
-));
+type LeftPanelProps = {
+  submenu?: React.ReactNode;
+};
+
+export const LeftPanel: React.FunctionComponent<LeftPanelProps> = ({ submenu }) => {
+  if (submenu) {
+    return <LeftPanelWithSubmenu submenu={submenu} />;
+  }
+  return <LeftPanelWithoutSubmenu />;
+};
