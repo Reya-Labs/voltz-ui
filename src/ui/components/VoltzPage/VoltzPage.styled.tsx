@@ -2,11 +2,13 @@ import styled from '@emotion/styled';
 
 import { mediaQuery } from '../../../hooks/useResponsiveQuery/mediaQuery';
 
-export const PageSectionBox = styled('div')`
+export const PageSectionBox = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'hasSubmenu',
+})<{ hasSubmenu: boolean }>`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  height: 100%;
+  height: ${({ hasSubmenu }) => (hasSubmenu ? 'calc(100% - 55px)' : '100%')};
   width: 100%;
 `;
 
