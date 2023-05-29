@@ -4,8 +4,9 @@ import React from 'react';
 
 import { PositionUI } from '../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
-import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
 import {
+  ActivePositionEntryBox,
+  ActivePositionEntryBoxWrapper,
   ArbitrumIcon,
   AvalancheIcon,
   ChainIconContainer,
@@ -13,15 +14,14 @@ import {
   MarginBox,
   MaturityBox,
   NotionalBox,
-  PositionEntryBox,
-  PositionEntryBoxWrapper,
   RealizedPNLBox,
   StatusBox,
   UnrealizedPNLBox,
-} from './PositionEntry.styled';
+} from './ActivePositionEntry.styled';
+import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
 import { PositionStatus } from './PositionStatus';
 
-type PositionEntryProps = {
+type ActivePositionEntryProps = {
   isAaveV3: PositionUI['isAaveV3'];
   isV2: PositionUI['isV2'];
   isBorrowing: PositionUI['isBorrowing'];
@@ -48,7 +48,7 @@ const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
   [SupportedChainId.avalanche]: AvalancheIcon,
   [SupportedChainId.avalancheFuji]: AvalancheIcon,
 };
-export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps>(
+export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositionEntryProps>(
   (
     {
       chainId,
@@ -78,13 +78,13 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
       : 'secondaryBodySmallRegular';
 
     return (
-      <PositionEntryBoxWrapper ref={ref}>
+      <ActivePositionEntryBoxWrapper ref={ref}>
         {ChainIcon ? (
           <ChainIconContainer>
             <ChainIcon />
           </ChainIconContainer>
         ) : null}
-        <PositionEntryBox
+        <ActivePositionEntryBox
           backgroundColorToken={backgroundColorToken}
           borderColorToken={borderColorToken}
         >
@@ -152,8 +152,8 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
               value={realizedPNLCompactFormat.compactNumber.replace('-', '')}
             />
           </RealizedPNLBox>
-        </PositionEntryBox>
-      </PositionEntryBoxWrapper>
+        </ActivePositionEntryBox>
+      </ActivePositionEntryBoxWrapper>
     );
   },
 );

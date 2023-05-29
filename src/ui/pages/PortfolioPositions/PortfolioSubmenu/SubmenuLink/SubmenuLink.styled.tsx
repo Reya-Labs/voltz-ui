@@ -15,7 +15,7 @@ export const SubmenuLinkStyled = styled(Link)`
   color: ${colors.lavenderWeb3};
   text-decoration: none;
   background-color: ${colors.liberty7};
-  border-radius: 2px;
+  border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
   & path {

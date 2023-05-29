@@ -52,6 +52,12 @@ export const BottomBox = styled('div')`
   box-sizing: border-box;
 `;
 
+export const PositionsSelectorBox = styled('div')`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const Box = styled('div')`
   display: flex;
   flex-direction: row;

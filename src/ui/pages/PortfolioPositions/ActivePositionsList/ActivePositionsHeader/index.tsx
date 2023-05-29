@@ -9,17 +9,17 @@ import { PositionSortId } from '../../../../../app/features/portfolio/types';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { SortHeader } from '../../../../components/SortHeader';
 import {
+  ActivePositionsHeaderBox,
   LeftBox,
   MarginBox,
   MaturityBox,
   NotionalBox,
-  PositionsHeaderBox,
   RealizedPNLBox,
   StatusBox,
   UnrealizedPNLBox,
-} from './PositionsHeader.styled';
+} from './ActivePositionsHeader.styled';
 
-export const PositionsHeader: React.FunctionComponent = () => {
+export const ActivePositionsHeader: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const sortOptions = useAppSelector(selectPositionsSortOptions);
   const marginSortOption = sortOptions.find((o) => o.id === 'margin');
@@ -39,7 +39,7 @@ export const PositionsHeader: React.FunctionComponent = () => {
   };
 
   return (
-    <PositionsHeaderBox>
+    <ActivePositionsHeaderBox>
       <LeftBox>
         {nameSortOption ? (
           <SortHeader
@@ -124,6 +124,6 @@ export const PositionsHeader: React.FunctionComponent = () => {
           />
         ) : null}
       </RealizedPNLBox>
-    </PositionsHeaderBox>
+    </ActivePositionsHeaderBox>
   );
 };

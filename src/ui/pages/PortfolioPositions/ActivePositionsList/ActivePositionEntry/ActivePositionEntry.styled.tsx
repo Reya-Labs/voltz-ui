@@ -4,11 +4,11 @@ import { colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
 import { ReactComponent as Arbitrum } from './assets/arbitrum.svg';
 import { ReactComponent as Avalanche } from './assets/avalanche.svg';
 
-export const PositionEntryBoxWrapper = styled('div')`
+export const ActivePositionEntryBoxWrapper = styled('div')`
   position: relative;
 `;
 
-export const PositionEntryBox = styled('div', {
+export const ActivePositionEntryBox = styled('div', {
   shouldForwardProp: (prop) => prop !== 'backgroundColorToken' && prop !== 'borderColorToken',
 })<{
   backgroundColorToken: ColorTokens;
