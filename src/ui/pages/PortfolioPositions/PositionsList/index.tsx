@@ -59,6 +59,7 @@ export const PositionsList: React.FunctionComponent = () => {
                   routePoolId={position.routePoolId}
                   status={position.status}
                   token={position.token}
+                  type={position.type}
                   unrealizedPNLCompactFormat={position.unrealizedPNLCompactFormat}
                 />
               ))

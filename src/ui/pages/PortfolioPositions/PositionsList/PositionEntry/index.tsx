@@ -4,10 +4,7 @@ import React from 'react';
 
 import { PositionUI } from '../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
-import {
-  MarketTokenInformation,
-  MarketTokenInformationProps,
-} from '../../../../components/MarketTokenInformation';
+import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
 import {
   ArbitrumIcon,
   AvalancheIcon,
@@ -15,7 +12,6 @@ import {
   LeftBox,
   MarginBox,
   MaturityBox,
-  MiddleBox,
   NotionalBox,
   PositionEntryBox,
   PositionEntryBoxWrapper,
@@ -23,36 +19,26 @@ import {
   StatusBox,
   UnrealizedPNLBox,
 } from './PositionEntry.styled';
+import { PositionStatus } from './PositionStatus';
 
 type PositionEntryProps = {
-  isAaveV3: boolean;
-  isV2: boolean;
-  isBorrowing: boolean;
+  isAaveV3: PositionUI['isAaveV3'];
+  isV2: PositionUI['isV2'];
+  isBorrowing: PositionUI['isBorrowing'];
   market: MarketTokenInformationProps['market'];
   token: MarketTokenInformationProps['token'];
-  maturityFormatted: string;
+  maturityFormatted: PositionUI['maturityFormatted'];
   backgroundColorToken: ColorTokens;
   borderColorToken: ColorTokens | 'transparent';
-  routeAmmId: string;
-  routePoolId: string;
+  routeAmmId: PositionUI['routeAmmId'];
+  routePoolId: PositionUI['routePoolId'];
   chainId: SupportedChainId;
   status: PositionUI['status'];
-  marginCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-  unrealizedPNLCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-  realizedPNLCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-  notionalCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  type: PositionUI['type'];
+  marginCompactFormat: PositionUI['marginCompactFormat'];
+  unrealizedPNLCompactFormat: PositionUI['unrealizedPNLCompactFormat'];
+  realizedPNLCompactFormat: PositionUI['realizedPNLCompactFormat'];
+  notionalCompactFormat: PositionUI['notionalCompactFormat'];
 };
 const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
   [SupportedChainId.mainnet]: null,
@@ -81,14 +67,15 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
       notionalCompactFormat,
       realizedPNLCompactFormat,
       unrealizedPNLCompactFormat,
+      type,
     },
     ref,
   ) => {
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const ChainIcon = ChainIconMap[chainId];
     const typographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'secondaryBodyLargeRegular'
-      : 'secondaryBodyMediumRegular';
+      ? 'secondaryBodyMediumRegular'
+      : 'secondaryBodySmallRegular';
 
     return (
       <PositionEntryBoxWrapper ref={ref}>
@@ -103,67 +90,68 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
         >
           <LeftBox>
             <MarketTokenInformation
-              colorToken="lavenderWeb"
-              iconSize={24}
               isAaveV3={isAaveV3}
               isBorrowing={isBorrowing}
-              isV2={isV2}
               market={market}
-              pillVariant="compact"
               token={token}
-              typographyToken="primaryBodyLargeBold"
+              type={type}
             />
           </LeftBox>
-          <MiddleBox>
-            <NotionalBox>
-              <TokenTypography
-                colorToken="lavenderWeb"
-                token={notionalCompactFormat.compactSuffix}
-                typographyToken={typographyToken}
-                value={notionalCompactFormat.compactNumber}
-              />
-            </NotionalBox>
-            <MarginBox>
-              <TokenTypography
-                colorToken="lavenderWeb"
-                token={marginCompactFormat.compactSuffix}
-                typographyToken={typographyToken}
-                value={marginCompactFormat.compactNumber}
-              />
-            </MarginBox>
-            <MaturityBox>
-              <TokenTypography
-                colorToken="lavenderWeb"
-                token=""
-                typographyToken={typographyToken}
-                value={maturityFormatted}
-              />
-            </MaturityBox>
-            <StatusBox>
-              <TokenTypography
-                colorToken="wildStrawberry"
-                token=""
-                typographyToken={typographyToken}
-                value={status.variant}
-              />
-            </StatusBox>
-            <UnrealizedPNLBox>
-              <TokenTypography
-                colorToken="wildStrawberry"
-                token={unrealizedPNLCompactFormat.compactSuffix}
-                typographyToken={typographyToken}
-                value={unrealizedPNLCompactFormat.compactNumber}
-              />
-            </UnrealizedPNLBox>
-            <RealizedPNLBox>
-              <TokenTypography
-                colorToken="wildStrawberry"
-                token={realizedPNLCompactFormat.compactSuffix}
-                typographyToken={typographyToken}
-                value={realizedPNLCompactFormat.compactNumber}
-              />
-            </RealizedPNLBox>
-          </MiddleBox>
+          <NotionalBox>
+            <TokenTypography
+              colorToken="lavenderWeb"
+              token={notionalCompactFormat.compactSuffix}
+              typographyToken={typographyToken}
+              value={notionalCompactFormat.compactNumber}
+            />
+          </NotionalBox>
+          <MarginBox>
+            <TokenTypography
+              colorToken="lavenderWeb"
+              token={marginCompactFormat.compactSuffix}
+              typographyToken={typographyToken}
+              value={marginCompactFormat.compactNumber}
+            />
+          </MarginBox>
+          <MaturityBox>
+            <TokenTypography
+              colorToken="lavenderWeb"
+              token=""
+              typographyToken={typographyToken}
+              value={maturityFormatted}
+            />
+          </MaturityBox>
+          <StatusBox>
+            <PositionStatus status={status} typographyToken={typographyToken} />
+          </StatusBox>
+          <UnrealizedPNLBox>
+            <TokenTypography
+              colorToken={
+                unrealizedPNLCompactFormat.compactNumber.indexOf('-') === -1
+                  ? 'skyBlueCrayola'
+                  : 'wildStrawberry'
+              }
+              prefixToken={
+                unrealizedPNLCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'
+              }
+              token={unrealizedPNLCompactFormat.compactSuffix}
+              typographyToken={typographyToken}
+              value={unrealizedPNLCompactFormat.compactNumber.replace('-', '')}
+            />
+          </UnrealizedPNLBox>
+          <RealizedPNLBox>
+            <TokenTypography
+              colorToken={
+                realizedPNLCompactFormat.compactNumber.indexOf('-') === -1
+                  ? 'skyBlueCrayola'
+                  : 'wildStrawberry'
+              }
+              prefixToken={realizedPNLCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'}
+              token={realizedPNLCompactFormat.compactSuffix}
+              typographyToken={typographyToken}
+              value={realizedPNLCompactFormat.compactNumber.replace('-', '')}
+            />
+          </RealizedPNLBox>
         </PositionEntryBox>
       </PositionEntryBoxWrapper>
     );

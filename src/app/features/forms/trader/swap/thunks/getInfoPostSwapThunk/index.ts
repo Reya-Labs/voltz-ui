@@ -4,6 +4,7 @@ import { InfoPostSwapV1 } from '@voltz-protocol/v1-sdk';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 import { isUserInputNotionalError } from '../../../../common/utils';
+import { initialState } from '../../state';
 import { getProspectiveSwapMode, getProspectiveSwapNotional } from '../../utils';
 
 export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
@@ -11,7 +12,7 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
     | {
         notionalAmount: number;
         swapMode: 'fixed' | 'variable';
-        infoPostSwapV1: InfoPostSwapV1;
+        infoPostSwap: InfoPostSwapV1;
         earlyReturn: boolean;
       }
     | ReturnType<typeof rejectThunkWithError>
@@ -37,17 +38,7 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
       return {
         notionalAmount: 0,
         swapMode: prospectiveSwapMode,
-        infoPostSwap: {
-          marginRequirement: 0,
-          maxMarginWithdrawable: 0,
-          averageFixedRate: 0,
-          fixedTokenDeltaBalance: 0,
-          variableTokenDeltaBalance: 0,
-          fixedTokenDeltaUnbalanced: 0,
-          fee: 0,
-          slippage: 0,
-          gasFeeETH: 0,
-        },
+        infoPostSwap: initialState.prospectiveSwap.infoPostSwap.value,
         earlyReturn: false,
       };
     }
@@ -83,7 +74,7 @@ export const getInfoPostSwapThunk = createAsyncThunk<
     | {
         notionalAmount: number;
         swapMode: 'fixed' | 'variable';
-        infoPostSwapV1: InfoPostSwapV1;
+        infoPostSwap: InfoPostSwapV1;
         earlyReturn: boolean;
       }
     | ReturnType<typeof rejectThunkWithError>

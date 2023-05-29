@@ -18,12 +18,19 @@ export const selectSettleStep = (state: RootState) => state.settleFlow.step;
 export const selectConfirmationFlowEtherscanLink = (state: RootState) => {
   return getViewOnEtherScanLink(state.network.chainId, state.settleFlow.txHash || '');
 };
-export const selectSettleGasFeeETH = (state: RootState) => {
+export const selectSettleGasFee = (state: RootState) => {
   const infoPostSettlePosition = state.settleFlow.infoPostSettlePosition;
   if (infoPostSettlePosition.status !== 'success') {
     return '--';
   }
-  return formatNumber(infoPostSettlePosition.value.gasFeeETH, 2, 4);
+  return formatNumber(infoPostSettlePosition.value.gasFee.value, 2, 4);
+};
+export const selectSettleGasFeeToken = (state: RootState) => {
+  const infoPostSettlePosition = state.settleFlow.infoPostSettlePosition;
+  if (infoPostSettlePosition.status !== 'success') {
+    return '--';
+  }
+  return infoPostSettlePosition.value.gasFee.token;
 };
 
 // todo: FB duplicate as in swap form

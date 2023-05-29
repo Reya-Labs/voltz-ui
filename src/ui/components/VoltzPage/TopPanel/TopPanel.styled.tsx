@@ -1,6 +1,12 @@
 import styled from '@emotion/styled';
 import { colors } from 'brokoli-ui';
 
+export const LogoAndNavBox = styled('div')`
+  display: flex;
+  flex-direction: row;
+  margin-left: 21.5px;
+  gap: 21.5px;
+`;
 export const PanelBox = styled('div')`
   box-sizing: border-box;
 

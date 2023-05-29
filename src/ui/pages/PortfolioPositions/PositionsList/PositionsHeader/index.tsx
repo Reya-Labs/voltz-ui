@@ -12,7 +12,6 @@ import {
   LeftBox,
   MarginBox,
   MaturityBox,
-  MiddleBox,
   NotionalBox,
   PositionsHeaderBox,
   RealizedPNLBox,
@@ -53,80 +52,78 @@ export const PositionsHeader: React.FunctionComponent = () => {
           />
         ) : null}
       </LeftBox>
-      <MiddleBox>
-        <MarginBox>
-          {marginSortOption ? (
-            <SortHeader
-              direction={marginSortOption.direction}
-              disabled={marginSortOption.disabled}
-              loading={loading}
-              subtext={marginSortOption.subtext}
-              text={marginSortOption.text}
-              onClick={onSort(marginSortOption.id)}
-            />
-          ) : null}
-        </MarginBox>
-        <NotionalBox>
-          {notionalSortOption ? (
-            <SortHeader
-              direction={notionalSortOption.direction}
-              disabled={notionalSortOption.disabled}
-              loading={loading}
-              subtext={notionalSortOption.subtext}
-              text={notionalSortOption.text}
-              onClick={onSort(notionalSortOption.id)}
-            />
-          ) : null}
-        </NotionalBox>
-        <MaturityBox>
-          {maturitySortOption ? (
-            <SortHeader
-              direction={maturitySortOption.direction}
-              disabled={maturitySortOption.disabled}
-              loading={loading}
-              subtext={maturitySortOption.subtext}
-              text={maturitySortOption.text}
-              onClick={onSort(maturitySortOption.id)}
-            />
-          ) : null}
-        </MaturityBox>
-        <StatusBox>
-          {statusSortOption ? (
-            <SortHeader
-              direction={statusSortOption.direction}
-              disabled={statusSortOption.disabled}
-              loading={loading}
-              subtext={statusSortOption.subtext}
-              text={statusSortOption.text}
-              onClick={onSort(statusSortOption.id)}
-            />
-          ) : null}
-        </StatusBox>
-        <UnrealizedPNLBox>
-          {unrealizedPNLSortOption ? (
-            <SortHeader
-              direction={unrealizedPNLSortOption.direction}
-              disabled={unrealizedPNLSortOption.disabled}
-              loading={loading}
-              subtext={unrealizedPNLSortOption.subtext}
-              text={unrealizedPNLSortOption.text}
-              onClick={onSort(unrealizedPNLSortOption.id)}
-            />
-          ) : null}
-        </UnrealizedPNLBox>
-        <RealizedPNLBox>
-          {realizedPNLSortOption ? (
-            <SortHeader
-              direction={realizedPNLSortOption.direction}
-              disabled={realizedPNLSortOption.disabled}
-              loading={loading}
-              subtext={realizedPNLSortOption.subtext}
-              text={realizedPNLSortOption.text}
-              onClick={onSort(realizedPNLSortOption.id)}
-            />
-          ) : null}
-        </RealizedPNLBox>
-      </MiddleBox>
+      <MarginBox>
+        {marginSortOption ? (
+          <SortHeader
+            direction={marginSortOption.direction}
+            disabled={marginSortOption.disabled}
+            loading={loading}
+            subtext={marginSortOption.subtext}
+            text={marginSortOption.text}
+            onClick={onSort(marginSortOption.id)}
+          />
+        ) : null}
+      </MarginBox>
+      <NotionalBox>
+        {notionalSortOption ? (
+          <SortHeader
+            direction={notionalSortOption.direction}
+            disabled={notionalSortOption.disabled}
+            loading={loading}
+            subtext={notionalSortOption.subtext}
+            text={notionalSortOption.text}
+            onClick={onSort(notionalSortOption.id)}
+          />
+        ) : null}
+      </NotionalBox>
+      <MaturityBox>
+        {maturitySortOption ? (
+          <SortHeader
+            direction={maturitySortOption.direction}
+            disabled={maturitySortOption.disabled}
+            loading={loading}
+            subtext={maturitySortOption.subtext}
+            text={maturitySortOption.text}
+            onClick={onSort(maturitySortOption.id)}
+          />
+        ) : null}
+      </MaturityBox>
+      <StatusBox>
+        {statusSortOption ? (
+          <SortHeader
+            direction={statusSortOption.direction}
+            disabled={statusSortOption.disabled}
+            loading={loading}
+            subtext={statusSortOption.subtext}
+            text={statusSortOption.text}
+            onClick={onSort(statusSortOption.id)}
+          />
+        ) : null}
+      </StatusBox>
+      <UnrealizedPNLBox>
+        {unrealizedPNLSortOption ? (
+          <SortHeader
+            direction={unrealizedPNLSortOption.direction}
+            disabled={unrealizedPNLSortOption.disabled}
+            loading={loading}
+            subtext={unrealizedPNLSortOption.subtext}
+            text={unrealizedPNLSortOption.text}
+            onClick={onSort(unrealizedPNLSortOption.id)}
+          />
+        ) : null}
+      </UnrealizedPNLBox>
+      <RealizedPNLBox>
+        {realizedPNLSortOption ? (
+          <SortHeader
+            direction={realizedPNLSortOption.direction}
+            disabled={realizedPNLSortOption.disabled}
+            loading={loading}
+            subtext={realizedPNLSortOption.subtext}
+            text={realizedPNLSortOption.text}
+            onClick={onSort(realizedPNLSortOption.id)}
+          />
+        ) : null}
+      </RealizedPNLBox>
     </PositionsHeaderBox>
   );
 };

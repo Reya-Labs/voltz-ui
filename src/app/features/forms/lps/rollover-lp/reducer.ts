@@ -249,21 +249,13 @@ const slice = createSlice({
       })
       .addCase(getInfoPostLpThunk.pending, (state) => {
         state.prospectiveLp.infoPostLp = {
-          value: {
-            marginRequirement: 0,
-            maxMarginWithdrawable: 0,
-            gasFeeETH: 0,
-          },
+          value: initialState.prospectiveLp.infoPostLp.value,
           status: 'pending',
         };
       })
       .addCase(getInfoPostLpThunk.rejected, (state) => {
         state.prospectiveLp.infoPostLp = {
-          value: {
-            marginRequirement: 0,
-            maxMarginWithdrawable: 0,
-            gasFeeETH: 0,
-          },
+          value: initialState.prospectiveLp.infoPostLp.value,
           status: 'error',
         };
       })
@@ -275,11 +267,7 @@ const slice = createSlice({
 
         if (earlyReturn) {
           state.prospectiveLp.infoPostLp = {
-            value: {
-              marginRequirement: 0,
-              maxMarginWithdrawable: 0,
-              gasFeeETH: 0,
-            },
+            value: initialState.prospectiveLp.infoPostLp.value,
             status: 'idle',
           };
           return;
@@ -291,7 +279,7 @@ const slice = createSlice({
           value: {
             marginRequirement: marginRequirementWithBuffer,
             maxMarginWithdrawable: infoPostLp.maxMarginWithdrawable,
-            gasFeeETH: infoPostLp.gasFeeETH,
+            gasFee: infoPostLp.gasFee,
           },
           status: 'success',
         };

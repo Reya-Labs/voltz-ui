@@ -138,6 +138,7 @@ describe('swapFormReducer', () => {
         expect(nextState.userInput.mode).toEqual('variable');
         expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
           value: {
+            availableNotional: 0,
             marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
@@ -146,7 +147,10 @@ describe('swapFormReducer', () => {
             fixedTokenDeltaUnbalanced: 0,
             fee: 0,
             slippage: 0,
-            gasFeeETH: 0,
+            gasFee: {
+              value: 0,
+              token: 'ETH',
+            },
           },
           status: 'idle',
         });
@@ -467,6 +471,7 @@ describe('swapFormReducer', () => {
         });
         expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
           value: {
+            availableNotional: 0,
             marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
@@ -475,7 +480,10 @@ describe('swapFormReducer', () => {
             fixedTokenDeltaUnbalanced: 0,
             fee: 0,
             slippage: 0,
-            gasFeeETH: 0,
+            gasFee: {
+              value: 0,
+              token: 'ETH',
+            },
           },
           status: 'pending',
         });
@@ -487,6 +495,7 @@ describe('swapFormReducer', () => {
         });
         expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
           value: {
+            availableNotional: 0,
             marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
@@ -495,7 +504,10 @@ describe('swapFormReducer', () => {
             fixedTokenDeltaUnbalanced: 0,
             fee: 0,
             slippage: 0,
-            gasFeeETH: 0,
+            gasFee: {
+              value: 0,
+              token: 'ETH',
+            },
           },
           status: 'error',
         });
@@ -512,7 +524,10 @@ describe('swapFormReducer', () => {
           fixedTokenDeltaBalance: 7,
           variableTokenDeltaBalance: 8,
           fixedTokenDeltaUnbalanced: 9,
-          gasFeeETH: 10,
+          gasFee: {
+            value: 10,
+            token: 'ETH',
+          },
         };
 
         const nextState = swapFormReducer(testsInitialState, {
@@ -537,7 +552,8 @@ describe('swapFormReducer', () => {
             fixedTokenDeltaUnbalanced: mockedInfoPostSwap.fixedTokenDeltaUnbalanced,
             fee: mockedInfoPostSwap.fee,
             slippage: mockedInfoPostSwap.slippage,
-            gasFeeETH: mockedInfoPostSwap.gasFeeETH,
+            availableNotional: 3,
+            gasFee: mockedInfoPostSwap.gasFee,
           },
           status: 'success',
         });
@@ -556,6 +572,7 @@ describe('swapFormReducer', () => {
         expect(updateLeverageOptionsAfterGetInfoPostSwap).toHaveBeenCalledTimes(0);
         expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
           value: {
+            availableNotional: 0,
             marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
@@ -564,7 +581,10 @@ describe('swapFormReducer', () => {
             fixedTokenDeltaUnbalanced: 0,
             fee: 0,
             slippage: 0,
-            gasFeeETH: 0,
+            gasFee: {
+              value: 0,
+              token: 'ETH',
+            },
           },
           status: 'idle',
         });

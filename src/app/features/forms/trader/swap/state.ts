@@ -1,4 +1,4 @@
-import { AMM, Position } from '@voltz-protocol/v1-sdk';
+import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
@@ -61,24 +61,7 @@ export type SliceState = {
       maxLeverage: string;
     };
     infoPostSwap: {
-      value: {
-        // Margin requirement for prospective swap
-        marginRequirement: number;
-        // Max margin that can be withdrawn after prospective swap
-        maxMarginWithdrawable: number;
-        // Average fixed rate obtained by the prospective swap
-        averageFixedRate: number;
-
-        // Token balance deltas resulted by prospective swap
-        fixedTokenDeltaBalance: number;
-        variableTokenDeltaBalance: number;
-        fixedTokenDeltaUnbalanced: number;
-
-        // Extra information about prospective swap
-        fee: number;
-        slippage: number;
-        gasFeeETH: number;
-      };
+      value: InfoPostSwapV1;
       status: ThunkStatus;
     };
   };
@@ -153,6 +136,7 @@ export const initialState: SliceState = {
     },
     infoPostSwap: {
       value: {
+        availableNotional: 0,
         marginRequirement: 0,
         maxMarginWithdrawable: 0,
         averageFixedRate: 0,
@@ -161,7 +145,10 @@ export const initialState: SliceState = {
         fixedTokenDeltaUnbalanced: 0,
         fee: 0,
         slippage: 0,
-        gasFeeETH: 0,
+        gasFee: {
+          value: 0,
+          token: 'ETH',
+        },
       },
       status: 'idle',
     },

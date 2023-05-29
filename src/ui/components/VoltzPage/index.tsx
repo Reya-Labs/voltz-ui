@@ -17,6 +17,7 @@ type VoltzPageProps = {
   rightSlot?: React.ReactNode;
   notFoundSlot?: React.ReactNode;
   pageLoadingSlot?: React.ReactNode;
+  leftPanelSubmenu?: React.ReactNode;
 };
 export const VoltzPage: React.FunctionComponent<VoltzPageProps> = ({
   mainSlot,
@@ -24,6 +25,7 @@ export const VoltzPage: React.FunctionComponent<VoltzPageProps> = ({
   errorSlot,
   notFoundSlot,
   pageLoadingSlot,
+  leftPanelSubmenu,
 }) => {
   let pageContent: React.ReactNode = (
     <MainAndFormSectionBox data-testid="VoltzPage-MainAndFormSectionBox">
@@ -42,12 +44,15 @@ export const VoltzPage: React.FunctionComponent<VoltzPageProps> = ({
   } else if (errorSlot) {
     pageContent = errorSlot;
   }
+  const hasSubmenu = Boolean(leftPanelSubmenu);
+
   return (
     <Page data-testid="VoltzPage">
-      <PageSectionBox data-testid="VoltzPage-PageSectionBox">
-        <LeftPanel />
+      {hasSubmenu ? <TopPanel showLogo={true} /> : null}
+      <PageSectionBox data-testid="VoltzPage-PageSectionBox" hasSubmenu={hasSubmenu}>
+        <LeftPanel submenu={leftPanelSubmenu} />
         <RightPageSectionBox data-testid="VoltzPage-RightPageSectionBox">
-          <TopPanel />
+          {!hasSubmenu ? <TopPanel showLogo={false} /> : null}
           {pageContent}
         </RightPageSectionBox>
       </PageSectionBox>
