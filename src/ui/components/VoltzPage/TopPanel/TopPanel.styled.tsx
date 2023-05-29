@@ -4,8 +4,8 @@ import { colors } from 'brokoli-ui';
 export const LogoAndNavBox = styled('div')`
   display: flex;
   flex-direction: row;
-  margin-left: 24px;
-  gap: 16px;
+  margin-left: 21.5px;
+  gap: 21.5px;
 `;
 export const PanelBox = styled('div')`
   box-sizing: border-box;

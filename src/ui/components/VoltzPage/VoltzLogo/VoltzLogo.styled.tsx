@@ -4,7 +4,6 @@ import { colors } from 'brokoli-ui';
 import { ReactComponent as VoltzLogoSvg } from './voltz-logo.svg';
 
 export const VoltzLogoBox = styled('div')`
-  height: 58px;
   display: flex;
   flex-direction: row;
   align-items: center;

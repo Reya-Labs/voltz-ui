@@ -26,12 +26,8 @@ export const CraftedByBox = styled('div')`
   align-items: center;
 `;
 
-// submenu
-
-export const LeftPanelSubmenuBox = styled('div')`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+export const VoltzLogoBox = styled('div')`
+  margin-top: 11px;
 `;
 
 export const SubmenuBox = styled('div')`

@@ -10,10 +10,14 @@ export const TopPanel: React.FunctionComponent<{
   showLogo: boolean;
 }> = React.memo(({ showLogo }) => (
   <PanelBox data-testid="TopPanel-PanelBox">
-    <LogoAndNavBox>
-      {showLogo ? <VoltzLogo /> : null}
+    {showLogo ? (
+      <LogoAndNavBox>
+        <VoltzLogo />
+        <Nav />
+      </LogoAndNavBox>
+    ) : (
       <Nav />
-    </LogoAndNavBox>
+    )}
     <RightContent data-testid="TopPanel-TopSectionRightContent">
       <ChainSelector />
       <WalletConnectModal />

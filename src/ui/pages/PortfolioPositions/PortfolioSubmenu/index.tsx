@@ -5,7 +5,7 @@ import { routes } from '../../../../routes/paths';
 import { ReactComponent as OptimisersIcon } from './assets/optimisers.svg';
 import { ReactComponent as PositionsIcon } from './assets/positions.svg';
 import { PortfolioSubmenuBox } from './PortfolioSubmenu.styled';
-import { SubPageLink } from './SubPageLink';
+import { SubmenuLink } from './SubmenuLink';
 
 const subpages = [
   {
@@ -25,9 +25,9 @@ export const PortfolioSubmenu: React.FunctionComponent = () => {
   return (
     <PortfolioSubmenuBox>
       {subpages.map(({ label, Icon, to }) => (
-        <SubPageLink key={to} Icon={Icon} isActive={pathname.indexOf(to) !== -1} to={to}>
+        <SubmenuLink key={to} Icon={Icon} isActive={pathname.indexOf(to) !== -1} to={to}>
           {label}
-        </SubPageLink>
+        </SubmenuLink>
       ))}
     </PortfolioSubmenuBox>
   );

@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { colors, primaryBodyMediumRegularCSSObject } from 'brokoli-ui';
 import { Link } from 'react-router-dom';
 
-export const SubPageLinkStyled = styled(Link)`
+export const SubmenuLinkStyled = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -32,7 +32,7 @@ export const SubPageLinkStyled = styled(Link)`
   }
 `;
 
-export const ActiveSubPageLink = styled(SubPageLinkStyled)`
+export const ActiveSubmenuLink = styled(SubmenuLinkStyled)`
   text-decoration: none;
   background: ${colors.lavenderWeb8};
   color: ${colors.lavenderWeb};

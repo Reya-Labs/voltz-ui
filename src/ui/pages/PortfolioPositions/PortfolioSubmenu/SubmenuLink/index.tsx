@@ -1,21 +1,21 @@
 import React, { ReactNode } from 'react';
 
-import { ActiveSubPageLink, SubPageLinkStyled } from './SubPageLink.styled';
+import { ActiveSubmenuLink, SubmenuLinkStyled } from './SubmenuLink.styled';
 
-export type SubLinkProps = {
+export type SubmenuLinkProps = {
   to: string;
   isActive: boolean;
   Icon: React.FunctionComponent;
   children?: ReactNode | undefined;
 };
 
-export const SubPageLink: React.FunctionComponent<SubLinkProps> = ({
+export const SubmenuLink: React.FunctionComponent<SubmenuLinkProps> = ({
   to,
   Icon,
   isActive,
   children,
-}: SubLinkProps) => {
-  const LinkUI = isActive ? ActiveSubPageLink : SubPageLinkStyled;
+}: SubmenuLinkProps) => {
+  const LinkUI = isActive ? ActiveSubmenuLink : SubmenuLinkStyled;
   return (
     <LinkUI data-testid={isActive ? 'ActiveSubLinkButton' : 'SubLinkButton'} role="link" to={to}>
       {Icon ? <Icon /> : null}

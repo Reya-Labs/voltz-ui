@@ -2,11 +2,13 @@ import { Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { VoltzLogo } from '../VoltzLogo';
-import { CraftedByBox, PanelBox } from './LeftPanel.styled';
+import { CraftedByBox, PanelBox, VoltzLogoBox } from './LeftPanel.styled';
 
 export const LeftPanelWithoutSubmenu: React.FunctionComponent = React.memo(() => (
   <PanelBox data-testid="LeftPanel-PanelBox">
-    <VoltzLogo />
+    <VoltzLogoBox>
+      <VoltzLogo />
+    </VoltzLogoBox>
     <CraftedByBox data-testid="LeftPanel-CraftedByBox">
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodyXSmallRegular">
         Voltz
