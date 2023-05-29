@@ -1,9 +1,9 @@
 import { TokenTypography, Tooltip, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { formFormatNumber } from '../../../../../../app/features/forms/common/utils';
-import { PositionUI } from '../../../../../../app/features/portfolio/types';
-import { PnLDetails } from '../../../../../components/PnLDetails';
+import { formFormatNumber } from '../../../../../../../app/features/forms/common/utils';
+import { PositionUI } from '../../../../../../../app/features/portfolio/types';
+import { PnLDetails } from '../../../../../../components/PnLDetails';
 
 export type PositionPNLDetailsProps = {
   typographyToken: TypographyToken;

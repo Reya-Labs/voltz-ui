@@ -1,9 +1,9 @@
 import { AppLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectPositions, selectPositionsLoading } from '../../../../app/features/portfolio';
-import { useAppSelector } from '../../../../app/hooks';
-import { routes } from '../../../../routes/paths';
+import { selectPositions, selectPositionsLoading } from '../../../../../app/features/portfolio';
+import { useAppSelector } from '../../../../../app/hooks';
+import { routes } from '../../../../../routes/paths';
 import { ActivePositionEntry } from './ActivePositionEntry';
 import { ActivePositionsHeader } from './ActivePositionsHeader';
 import {

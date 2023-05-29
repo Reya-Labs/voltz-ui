@@ -4,10 +4,10 @@ import {
   selectPositionsLoading,
   selectPositionsSortOptions,
   togglePositionSortingDirectionAction,
-} from '../../../../../app/features/portfolio';
-import { PositionSortId } from '../../../../../app/features/portfolio/types';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { SortHeader } from '../../../../components/SortHeader';
+} from '../../../../../../app/features/portfolio';
+import { PositionSortId } from '../../../../../../app/features/portfolio/types';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { SortHeader } from '../../../../../components/SortHeader';
 import {
   ActivePositionsHeaderBox,
   LeftBox,

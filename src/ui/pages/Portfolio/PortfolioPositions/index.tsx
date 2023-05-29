@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { VoltzPage } from '../../components/VoltzPage';
+import { VoltzPage } from '../../../components/VoltzPage';
 import { PortfolioPositions } from './PortfolioPositions';
 import { PortfolioSubmenu } from './PortfolioSubmenu';
 

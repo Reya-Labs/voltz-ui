@@ -1,8 +1,8 @@
 import { LabelTokenTypography, PillSelector, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { selectPositionsLength } from '../../../../app/features/portfolio';
-import { useAppSelector } from '../../../../app/hooks';
+import { selectPositionsLength } from '../../../../../app/features/portfolio';
+import { useAppSelector } from '../../../../../app/hooks';
 import { ActivePositionsList } from '../ActivePositionsList';
 import {
   BottomBox,

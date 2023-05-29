@@ -1,7 +1,7 @@
 import { TokenTypography, Tooltip, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { PositionUI } from '../../../../../../app/features/portfolio/types';
+import { PositionUI } from '../../../../../../../app/features/portfolio/types';
 import { MaturityDetails } from './MaturityDetails';
 
 type PositionMaturityProps = {

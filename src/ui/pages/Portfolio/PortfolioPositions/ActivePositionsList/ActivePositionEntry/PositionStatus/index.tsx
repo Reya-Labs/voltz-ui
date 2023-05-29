@@ -1,7 +1,7 @@
 import { TokenTypography, Tooltip, Typography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { PositionUI } from '../../../../../../app/features/portfolio/types';
+import { PositionUI } from '../../../../../../../app/features/portfolio/types';
 import { InRange } from './InRange';
 import { LPStatusDetails } from './LPStatusDetails';
 import { PositionStatusBox } from './PositionStatus.styled';

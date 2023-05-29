@@ -1,7 +1,7 @@
 import { ProgressBar, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useMemo } from 'react';
 
-import { PositionUI } from '../../../../../../../app/features/portfolio/types';
+import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { DetailsBox, ProgressBarBox, RowBox, RowsBox } from './MaturityDetails.styled';
 
 export type MaturityDetailsProps = {

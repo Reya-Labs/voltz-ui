@@ -2,8 +2,8 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { PositionUI } from '../../../../../app/features/portfolio/types';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
+import { PositionUI } from '../../../../../../app/features/portfolio/types';
+import { useResponsiveQuery } from '../../../../../../hooks/useResponsiveQuery';
 import {
   ActivePositionEntryBox,
   ActivePositionEntryBoxWrapper,

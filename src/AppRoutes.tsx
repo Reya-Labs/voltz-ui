@@ -16,7 +16,7 @@ import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
 import { LPFormPage } from './ui/pages/LPForm';
 import { PoolsPage } from './ui/pages/Pools';
-import { PortfolioPositionsPage } from './ui/pages/PortfolioPositions';
+import { PortfolioPositionsPage } from './ui/pages/Portfolio/PortfolioPositions';
 import { ProfilePage } from './ui/pages/Profile';
 import { RolloverLPFormPage } from './ui/pages/RolloverLPForm';
 import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';

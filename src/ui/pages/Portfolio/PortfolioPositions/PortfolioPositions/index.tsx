@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 
-import { selectChainId } from '../../../app/features/network';
-import { initialisePortfolioPositionsThunk } from '../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { useWallet } from '../../../hooks/useWallet';
-import { ConnectWallet } from '../../components/ConnectWallet';
+import { selectChainId } from '../../../../../app/features/network';
+import { initialisePortfolioPositionsThunk } from '../../../../../app/features/portfolio';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { useWallet } from '../../../../../hooks/useWallet';
+import { ConnectWallet } from '../../../../components/ConnectWallet';
+import { Positions } from '../Positions';
 import { PortfolioPositionsBox } from './PortfolioPositions.styled';
-import { Positions } from './Positions';
 
 export const PortfolioPositions: React.FunctionComponent = () => {
   const { account, signer } = useWallet();
