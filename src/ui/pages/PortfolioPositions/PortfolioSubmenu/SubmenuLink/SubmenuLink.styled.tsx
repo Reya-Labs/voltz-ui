@@ -4,6 +4,7 @@ import { colors, primaryBodyMediumRegularCSSObject } from 'brokoli-ui';
 import { Link } from 'react-router-dom';
 
 export const SubmenuLinkStyled = styled(Link)`
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -26,7 +26,9 @@ export type PositionMock = {
     fixHigh: number;
   };
   unrealizedPNL: number;
-  realizedPNL: number;
+  realizedPNLTotal: number;
+  realizedPNLFees: number;
+  realizedPNLCashflow: number;
   isBorrowing: boolean;
   isAaveV3: boolean;
   isV2: boolean;

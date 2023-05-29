@@ -49,7 +49,7 @@ export const sortPositions = (
     directions.push(unrealizedPNLSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   if (realizedPNLSortingDirection !== 'noSort') {
-    fields.push('realizedPNL');
+    fields.push('realizedPNLTotal');
     directions.push(realizedPNLSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   return orderBy(positions, fields, directions);

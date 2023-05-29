@@ -56,7 +56,10 @@ export const ActivePositionsList: React.FunctionComponent = () => {
                   maturityFormatted={position.maturityFormatted}
                   maturityStartTimestampInMS={position.maturityStartTimestampInMS}
                   notionalCompactFormat={position.notionalCompactFormat}
-                  realizedPNLCompactFormat={position.realizedPNLCompactFormat}
+                  realizedPNLCashflow={position.realizedPNLCashflow}
+                  realizedPNLFees={position.realizedPNLFees}
+                  realizedPNLTotal={position.realizedPNLTotal}
+                  realizedPNLTotalCompactFormat={position.realizedPNLTotalCompactFormat}
                   routeAmmId={position.routeAmmId}
                   routePoolId={position.routePoolId}
                   status={position.status}

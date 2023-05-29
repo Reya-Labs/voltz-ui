@@ -22,7 +22,9 @@ export const selectPositions = (state: RootState): PositionUI[] => {
     const margin = position.margin;
     const type = position.type;
     const unrealizedPNL = position.unrealizedPNL;
-    const realizedPNL = position.realizedPNL;
+    const realizedPNLTotal = position.realizedPNLTotal;
+    const realizedPNLFees = position.realizedPNLFees;
+    const realizedPNLCashflow = position.realizedPNLCashflow;
 
     return {
       type,
@@ -48,8 +50,12 @@ export const selectPositions = (state: RootState): PositionUI[] => {
       status: position.status,
       unrealizedPNL,
       unrealizedPNLCompactFormat: compactFormatToParts(unrealizedPNL),
-      realizedPNL,
-      realizedPNLCompactFormat: compactFormatToParts(realizedPNL),
+      realizedPNLTotal,
+      realizedPNLTotalCompactFormat: compactFormatToParts(realizedPNLTotal),
+      realizedPNLFees,
+      realizedPNLFeesCompactFormat: compactFormatToParts(realizedPNLFees),
+      realizedPNLCashflow,
+      realizedPNLCashflowCompactFormat: compactFormatToParts(realizedPNLCashflow),
     };
   });
 

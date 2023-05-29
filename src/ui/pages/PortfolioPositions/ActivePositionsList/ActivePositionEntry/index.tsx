@@ -20,6 +20,7 @@ import {
 } from './ActivePositionEntry.styled';
 import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
 import { PositionMaturity } from './PositionMaturity';
+import { PositionPNLDetails } from './PositionPNLDetails';
 import { PositionStatus } from './PositionStatus';
 
 type ActivePositionEntryProps = {
@@ -40,7 +41,10 @@ type ActivePositionEntryProps = {
   type: PositionUI['type'];
   marginCompactFormat: PositionUI['marginCompactFormat'];
   unrealizedPNLCompactFormat: PositionUI['unrealizedPNLCompactFormat'];
-  realizedPNLCompactFormat: PositionUI['realizedPNLCompactFormat'];
+  realizedPNLTotalCompactFormat: PositionUI['realizedPNLTotalCompactFormat'];
+  realizedPNLTotal: PositionUI['realizedPNLTotal'];
+  realizedPNLFees: PositionUI['realizedPNLFees'];
+  realizedPNLCashflow: PositionUI['realizedPNLCashflow'];
   notionalCompactFormat: PositionUI['notionalCompactFormat'];
 };
 const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
@@ -68,7 +72,10 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositi
       borderColorToken,
       marginCompactFormat,
       notionalCompactFormat,
-      realizedPNLCompactFormat,
+      realizedPNLTotalCompactFormat,
+      realizedPNLFees,
+      realizedPNLTotal,
+      realizedPNLCashflow,
       unrealizedPNLCompactFormat,
       type,
       maturityEndTimestampInMS,
@@ -145,16 +152,13 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositi
             />
           </UnrealizedPNLBox>
           <RealizedPNLBox>
-            <TokenTypography
-              colorToken={
-                realizedPNLCompactFormat.compactNumber.indexOf('-') === -1
-                  ? 'skyBlueCrayola'
-                  : 'wildStrawberry'
-              }
-              prefixToken={realizedPNLCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'}
-              token={realizedPNLCompactFormat.compactSuffix}
+            <PositionPNLDetails
+              realizedPNLCashflow={realizedPNLCashflow}
+              realizedPNLFees={realizedPNLFees}
+              realizedPNLTotal={realizedPNLTotal}
+              realizedPNLTotalCompactFormat={realizedPNLTotalCompactFormat}
+              type={type}
               typographyToken={typographyToken}
-              value={realizedPNLCompactFormat.compactNumber.replace('-', '')}
             />
           </RealizedPNLBox>
         </ActivePositionEntryBox>

@@ -39,8 +39,18 @@ export type PositionUI = {
     compactNumber: string;
     compactSuffix: string;
   };
-  realizedPNL: number;
-  realizedPNLCompactFormat: {
+  realizedPNLTotal: number;
+  realizedPNLTotalCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  realizedPNLFees: number;
+  realizedPNLFeesCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  realizedPNLCashflow: number;
+  realizedPNLCashflowCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };
