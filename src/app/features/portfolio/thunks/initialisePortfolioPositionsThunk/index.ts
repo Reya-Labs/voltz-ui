@@ -15,9 +15,15 @@ export type PositionMock = {
   notional: number;
   margin: number;
   termEndTimestampInMS: number;
+  termStartTimestampInMS: number;
   status: {
     variant: 'none' | 'receiving' | 'in-range' | 'paying';
     value: number;
+    currentFixed: number;
+    receiving: number;
+    paying: number;
+    fixLow: number;
+    fixHigh: number;
   };
   unrealizedPNL: number;
   realizedPNL: number;

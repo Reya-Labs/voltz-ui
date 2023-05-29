@@ -19,6 +19,7 @@ import {
   UnrealizedPNLBox,
 } from './ActivePositionEntry.styled';
 import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
+import { PositionMaturity } from './PositionMaturity';
 import { PositionStatus } from './PositionStatus';
 
 type ActivePositionEntryProps = {
@@ -28,6 +29,8 @@ type ActivePositionEntryProps = {
   market: MarketTokenInformationProps['market'];
   token: MarketTokenInformationProps['token'];
   maturityFormatted: PositionUI['maturityFormatted'];
+  maturityEndTimestampInMS: PositionUI['maturityEndTimestampInMS'];
+  maturityStartTimestampInMS: PositionUI['maturityStartTimestampInMS'];
   backgroundColorToken: ColorTokens;
   borderColorToken: ColorTokens | 'transparent';
   routeAmmId: PositionUI['routeAmmId'];
@@ -68,6 +71,8 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositi
       realizedPNLCompactFormat,
       unrealizedPNLCompactFormat,
       type,
+      maturityEndTimestampInMS,
+      maturityStartTimestampInMS,
     },
     ref,
   ) => {
@@ -114,11 +119,11 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositi
             />
           </MarginBox>
           <MaturityBox>
-            <TokenTypography
-              colorToken="lavenderWeb"
-              token=""
+            <PositionMaturity
+              maturityEndTimestampInMS={maturityEndTimestampInMS}
+              maturityFormatted={maturityFormatted}
+              maturityStartTimestampInMS={maturityStartTimestampInMS}
               typographyToken={typographyToken}
-              value={maturityFormatted}
             />
           </MaturityBox>
           <StatusBox>

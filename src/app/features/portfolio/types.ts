@@ -23,10 +23,16 @@ export type PositionUI = {
     compactSuffix: string;
   };
   maturityFormatted: string;
-  maturityTimestampInMS: number;
+  maturityEndTimestampInMS: number;
+  maturityStartTimestampInMS: number;
   status: {
     variant: 'none' | 'receiving' | 'in-range' | 'paying';
     value: number;
+    currentFixed: number;
+    receiving: number;
+    paying: number;
+    fixLow: number;
+    fixHigh: number;
   };
   unrealizedPNL: number;
   unrealizedPNLCompactFormat: {
