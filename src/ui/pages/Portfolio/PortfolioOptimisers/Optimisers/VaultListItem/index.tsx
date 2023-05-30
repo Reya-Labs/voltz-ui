@@ -23,6 +23,7 @@ import {
   PoolsBox,
   StatusBox,
   TopBox,
+  TopLeftBox,
   TopRightBox,
   TotalBalanceBox,
   VaultListItemBox,
@@ -67,19 +68,21 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   return (
     <VaultListItemBox>
       <TopBox>
-        <MarketTokenInformation token={token} />
-        {depositable ? (
-          <DepositButton
-            colorToken="lavenderWeb"
-            to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
-              actions: 'deposit',
-              vaultId: id,
-            })}`}
-            typographyToken="primaryBodyXSmallBold"
-          >
-            Deposit
-          </DepositButton>
-        ) : null}
+        <TopLeftBox>
+          <MarketTokenInformation token={token} />
+          {depositable ? (
+            <DepositButton
+              colorToken="lavenderWeb"
+              to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
+                actions: 'deposit',
+                vaultId: id,
+              })}`}
+              typographyToken="primaryBodyXSmallBold"
+            >
+              Deposit
+            </DepositButton>
+          ) : null}
+        </TopLeftBox>
         <TopRightBox>
           <TotalBalanceBox>
             <TokenTypography
@@ -198,7 +201,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                         value={distribution}
                       />
                     </DistributionBox>
-                    <TotalBalanceBox>
+                    <BalanceBox>
                       <TokenTypography
                         colorToken="lavenderWeb"
                         prefixToken="$"
@@ -206,7 +209,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                         typographyToken="secondaryBodySmallRegular"
                         value={currentBalanceCompactFormat.compactNumber}
                       />
-                    </TotalBalanceBox>
+                    </BalanceBox>
                     <PoolsBox>
                       <Typography
                         colorToken="lavenderWeb"

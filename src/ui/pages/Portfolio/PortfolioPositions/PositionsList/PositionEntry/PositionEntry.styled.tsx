@@ -42,7 +42,7 @@ const InfoBox = styled('div')`
   align-items: center;
 `;
 
-const CenterTextBox = styled(InfoBox)`
+const BorderBox = styled(InfoBox)`
   justify-content: center;
   border-left: 1px solid ${colors.lavenderWeb7};
 `;
@@ -51,22 +51,22 @@ export const LeftBox = styled(InfoBox)`
   width: 342px;
 `;
 
-export const NotionalBox = styled(CenterTextBox)`
+export const NotionalBox = styled(BorderBox)`
   width: 78px;
 `;
-export const MarginBox = styled(CenterTextBox)`
+export const MarginBox = styled(BorderBox)`
   width: 78px;
 `;
-export const MaturityBox = styled(CenterTextBox)`
+export const MaturityBox = styled(BorderBox)`
   width: 88px;
 `;
-export const StatusBox = styled(CenterTextBox)`
+export const StatusBox = styled(BorderBox)`
   width: 128px;
 `;
-export const UnrealizedPNLBox = styled(CenterTextBox)`
+export const UnrealizedPNLBox = styled(BorderBox)`
   width: 88px;
 `;
-export const RealizedPNLBox = styled(CenterTextBox)`
+export const RealizedPNLBox = styled(BorderBox)`
   width: 88px;
 `;
 

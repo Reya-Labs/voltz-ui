@@ -17,6 +17,13 @@ export const VaultListItemBox = styled('div')`
   border-radius: 8px;
 `;
 
+export const TopLeftBox = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+`;
+
 export const TopRightBox = styled('div')`
   display: flex;
   flex-direction: row;
