@@ -4,16 +4,24 @@ import React from 'react';
 import { PositionUI } from '../../../../../../../app/features/portfolio/types';
 
 export type PositionUnrealizedPNLDetailsProps = {
-  typographyToken: TypographyToken;
   status: PositionUI['status'];
+  textsTypographyToken: TypographyToken;
+  numbersTypographyToken: TypographyToken;
   unrealizedPNLCompactFormat: PositionUI['unrealizedPNLCompactFormat'];
 };
 export const PositionUnrealizedPNLDetails: React.FunctionComponent<PositionUnrealizedPNLDetailsProps> =
-  ({ typographyToken, status, unrealizedPNLCompactFormat }) => {
+  ({ numbersTypographyToken, textsTypographyToken, status, unrealizedPNLCompactFormat }) => {
+    if (status.variant === 'matured') {
+      return (
+        <Typography colorToken="skyBlueCrayola" typographyToken={textsTypographyToken}>
+          Matured
+        </Typography>
+      );
+    }
     if (status.variant === 'settled') {
       return (
-        <Typography colorToken="lavenderWeb" typographyToken={typographyToken}>
-          --
+        <Typography colorToken="lavenderWeb" typographyToken={textsTypographyToken}>
+          ---
         </Typography>
       );
     }
@@ -26,7 +34,7 @@ export const PositionUnrealizedPNLDetails: React.FunctionComponent<PositionUnrea
         }
         prefixToken={unrealizedPNLCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'}
         token={unrealizedPNLCompactFormat.compactSuffix}
-        typographyToken={typographyToken}
+        typographyToken={numbersTypographyToken}
         value={unrealizedPNLCompactFormat.compactNumber.replace('-', '')}
       />
     );

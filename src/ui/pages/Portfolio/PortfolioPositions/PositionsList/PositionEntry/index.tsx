@@ -100,9 +100,12 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
     const navigate = useAppNavigate();
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const ChainIcon = ChainIconMap[chainId];
-    const typographyToken: TypographyToken = isLargeDesktopDevice
+    const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyMediumRegular'
       : 'secondaryBodySmallRegular';
+    const textsTypographyToken: TypographyToken = isLargeDesktopDevice
+      ? 'primaryBodyMediumRegular'
+      : 'primaryBodySmallRegular';
 
     const handleOnRollover = () => {
       if (type === 'LP') {
@@ -151,14 +154,14 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
             <PositionNotional
               notionalCompactFormat={notionalCompactFormat}
               status={status}
-              typographyToken={typographyToken}
+              typographyToken={numbersTypographyToken}
             />
           </NotionalBox>
           <MarginBox>
             <PositionMargin
               marginCompactFormat={marginCompactFormat}
               status={status}
-              typographyToken={typographyToken}
+              typographyToken={numbersTypographyToken}
             />
           </MarginBox>
           <MaturityBox>
@@ -167,22 +170,24 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
               maturityFormatted={maturityFormatted}
               maturityStartTimestampInMS={maturityStartTimestampInMS}
               status={status}
-              typographyToken={typographyToken}
+              typographyToken={textsTypographyToken}
               onSettle={handleOnSettle}
             />
           </MaturityBox>
           <StatusBox>
             <PositionStatus
+              numbersTypographyToken={numbersTypographyToken}
               status={status}
+              textsTypographyToken={textsTypographyToken}
               type={type}
-              typographyToken={typographyToken}
               onRollover={handleOnRollover}
             />
           </StatusBox>
           <UnrealizedPNLBox>
             <PositionUnrealizedPNLDetails
+              numbersTypographyToken={numbersTypographyToken}
               status={status}
-              typographyToken={typographyToken}
+              textsTypographyToken={textsTypographyToken}
               unrealizedPNLCompactFormat={unrealizedPNLCompactFormat}
             />
           </UnrealizedPNLBox>
@@ -193,7 +198,7 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
               realizedPNLTotal={realizedPNLTotal}
               realizedPNLTotalCompactFormat={realizedPNLTotalCompactFormat}
               type={type}
-              typographyToken={typographyToken}
+              typographyToken={numbersTypographyToken}
             />
           </RealizedPNLBox>
         </PositionEntryBox>

@@ -1,4 +1,4 @@
-import { TokenTypography, Tooltip, Typography, TypographyToken } from 'brokoli-ui';
+import { TokenTypography, Tooltip, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import { PositionUI } from '../../../../../../../app/features/portfolio/types';
@@ -24,14 +24,7 @@ export const PositionMaturity: React.FunctionComponent<PositionMaturityProps> = 
 }) => {
   if (status.variant === 'matured') {
     return (
-      <Typography colorToken="skyBlueCrayola" typographyToken={typographyToken}>
-        Matured
-      </Typography>
-    );
-  }
-  if (status.variant === 'settled') {
-    return (
-      <SettleButton typographyToken="primaryBodyXSmallBold" variant="secondary" onClick={onSettle}>
+      <SettleButton typographyToken={typographyToken} variant="secondary" onClick={onSettle}>
         Settle
       </SettleButton>
     );

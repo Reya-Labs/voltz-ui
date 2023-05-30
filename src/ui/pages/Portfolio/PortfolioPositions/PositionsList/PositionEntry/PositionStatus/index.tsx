@@ -10,20 +10,22 @@ import { PositionStatusBox, RolloverButton } from './PositionStatus.styled';
 import { TraderStatusDetails } from './TraderStatusDetails';
 
 export type PositionStatusProps = {
-  typographyToken: TypographyToken;
+  textsTypographyToken: TypographyToken;
+  numbersTypographyToken: TypographyToken;
   status: PositionUI['status'];
   type: PositionUI['type'];
   onRollover: () => void;
 };
 export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
-  typographyToken,
+  textsTypographyToken,
+  numbersTypographyToken,
   status,
   type,
   onRollover,
 }) => {
   if (status.variant === 'settled') {
     return (
-      <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
+      <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
         Settled
       </Typography>
     );
@@ -31,7 +33,7 @@ export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
   if (status.variant === 'matured') {
     return (
       <RolloverButton
-        typographyToken="primaryBodyXSmallBold"
+        typographyToken={textsTypographyToken}
         variant="secondary"
         onClick={onRollover}
       >
@@ -45,9 +47,9 @@ export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
       <Tooltip
         trigger={
           inRange ? (
-            <InRange typographyToken={typographyToken} />
+            <InRange typographyToken={textsTypographyToken} />
           ) : (
-            <OutOfRange typographyToken={typographyToken} />
+            <OutOfRange typographyToken={textsTypographyToken} />
           )
         }
       >
@@ -66,14 +68,14 @@ export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
     <Tooltip
       trigger={
         <PositionStatusBox>
-          <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
+          <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
             {isReceiving ? 'Receiving' : 'Paying'}
           </Typography>
           &nbsp;&nbsp;
           <TokenTypography
             colorToken={isReceiving ? 'skyBlueCrayola' : 'wildStrawberry'}
             token="%"
-            typographyToken={typographyToken}
+            typographyToken={numbersTypographyToken}
             value={formFormatNumber(value)}
           />
         </PositionStatusBox>
