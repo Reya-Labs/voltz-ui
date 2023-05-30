@@ -1,9 +1,9 @@
-import { LabelTokenTypography, Typography } from 'brokoli-ui';
-import React from 'react';
+import { LabelTokenTypography, PillSelector, Typography } from 'brokoli-ui';
+import React, { useState } from 'react';
 
 import { selectPositionsLength } from '../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../app/hooks';
-import { PositionsList } from '../PositionsList';
+import { ActivePositionsList } from '../ActivePositionsList';
 import {
   BottomBox,
   HealthBox,
@@ -12,6 +12,7 @@ import {
   MidBox,
   PositionDetailsBox,
   PositionsBox,
+  PositionsSelectorBox,
   RealizedPNLBox,
   TopBox,
   TotalNotionalBox,
@@ -19,9 +20,25 @@ import {
   UnrealizedPNLBox,
 } from './Positions.styled';
 
+const positionFilterOptions = [
+  {
+    id: 'active',
+    label: 'Active',
+  },
+  {
+    id: 'matured',
+    label: 'Matured',
+  },
+  {
+    id: 'settled',
+    label: 'Settled',
+  },
+];
+type PositionsFilterId = 'active' | 'matured' | 'settled';
+
 export const Positions: React.FunctionComponent = () => {
   const positionsLength = useAppSelector(selectPositionsLength);
-
+  const [activeFilter, setActiveFilter] = useState<PositionsFilterId>('active');
   return (
     <PositionsBox>
       <TopBox>
@@ -128,10 +145,17 @@ export const Positions: React.FunctionComponent = () => {
         </Typography>
       </MidBox>
       <BottomBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
-          Positions in this account
-        </Typography>
-        <PositionsList />
+        <PositionsSelectorBox>
+          <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
+            Positions in this account
+          </Typography>
+          <PillSelector
+            activePillId={activeFilter as string}
+            pillOptions={positionFilterOptions}
+            onPillClick={(id) => setActiveFilter(id as PositionsFilterId)}
+          />
+        </PositionsSelectorBox>
+        <ActivePositionsList />
       </BottomBox>
     </PositionsBox>
   );

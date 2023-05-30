@@ -4,8 +4,9 @@ import React from 'react';
 
 import { PositionUI } from '../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
-import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
 import {
+  ActivePositionEntryBox,
+  ActivePositionEntryBoxWrapper,
   ArbitrumIcon,
   AvalancheIcon,
   ChainIconContainer,
@@ -13,21 +14,24 @@ import {
   MarginBox,
   MaturityBox,
   NotionalBox,
-  PositionEntryBox,
-  PositionEntryBoxWrapper,
   RealizedPNLBox,
   StatusBox,
   UnrealizedPNLBox,
-} from './PositionEntry.styled';
+} from './ActivePositionEntry.styled';
+import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
+import { PositionMaturity } from './PositionMaturity';
+import { PositionPNLDetails } from './PositionPNLDetails';
 import { PositionStatus } from './PositionStatus';
 
-type PositionEntryProps = {
+type ActivePositionEntryProps = {
   isAaveV3: PositionUI['isAaveV3'];
   isV2: PositionUI['isV2'];
   isBorrowing: PositionUI['isBorrowing'];
   market: MarketTokenInformationProps['market'];
   token: MarketTokenInformationProps['token'];
   maturityFormatted: PositionUI['maturityFormatted'];
+  maturityEndTimestampInMS: PositionUI['maturityEndTimestampInMS'];
+  maturityStartTimestampInMS: PositionUI['maturityStartTimestampInMS'];
   backgroundColorToken: ColorTokens;
   borderColorToken: ColorTokens | 'transparent';
   routeAmmId: PositionUI['routeAmmId'];
@@ -37,7 +41,10 @@ type PositionEntryProps = {
   type: PositionUI['type'];
   marginCompactFormat: PositionUI['marginCompactFormat'];
   unrealizedPNLCompactFormat: PositionUI['unrealizedPNLCompactFormat'];
-  realizedPNLCompactFormat: PositionUI['realizedPNLCompactFormat'];
+  realizedPNLTotalCompactFormat: PositionUI['realizedPNLTotalCompactFormat'];
+  realizedPNLTotal: PositionUI['realizedPNLTotal'];
+  realizedPNLFees: PositionUI['realizedPNLFees'];
+  realizedPNLCashflow: PositionUI['realizedPNLCashflow'];
   notionalCompactFormat: PositionUI['notionalCompactFormat'];
 };
 const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
@@ -48,7 +55,7 @@ const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
   [SupportedChainId.avalanche]: AvalancheIcon,
   [SupportedChainId.avalancheFuji]: AvalancheIcon,
 };
-export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps>(
+export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositionEntryProps>(
   (
     {
       chainId,
@@ -65,9 +72,14 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
       borderColorToken,
       marginCompactFormat,
       notionalCompactFormat,
-      realizedPNLCompactFormat,
+      realizedPNLTotalCompactFormat,
+      realizedPNLFees,
+      realizedPNLTotal,
+      realizedPNLCashflow,
       unrealizedPNLCompactFormat,
       type,
+      maturityEndTimestampInMS,
+      maturityStartTimestampInMS,
     },
     ref,
   ) => {
@@ -78,13 +90,13 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
       : 'secondaryBodySmallRegular';
 
     return (
-      <PositionEntryBoxWrapper ref={ref}>
+      <ActivePositionEntryBoxWrapper ref={ref}>
         {ChainIcon ? (
           <ChainIconContainer>
             <ChainIcon />
           </ChainIconContainer>
         ) : null}
-        <PositionEntryBox
+        <ActivePositionEntryBox
           backgroundColorToken={backgroundColorToken}
           borderColorToken={borderColorToken}
         >
@@ -114,11 +126,11 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
             />
           </MarginBox>
           <MaturityBox>
-            <TokenTypography
-              colorToken="lavenderWeb"
-              token=""
+            <PositionMaturity
+              maturityEndTimestampInMS={maturityEndTimestampInMS}
+              maturityFormatted={maturityFormatted}
+              maturityStartTimestampInMS={maturityStartTimestampInMS}
               typographyToken={typographyToken}
-              value={maturityFormatted}
             />
           </MaturityBox>
           <StatusBox>
@@ -140,20 +152,17 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
             />
           </UnrealizedPNLBox>
           <RealizedPNLBox>
-            <TokenTypography
-              colorToken={
-                realizedPNLCompactFormat.compactNumber.indexOf('-') === -1
-                  ? 'skyBlueCrayola'
-                  : 'wildStrawberry'
-              }
-              prefixToken={realizedPNLCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'}
-              token={realizedPNLCompactFormat.compactSuffix}
+            <PositionPNLDetails
+              realizedPNLCashflow={realizedPNLCashflow}
+              realizedPNLFees={realizedPNLFees}
+              realizedPNLTotal={realizedPNLTotal}
+              realizedPNLTotalCompactFormat={realizedPNLTotalCompactFormat}
+              type={type}
               typographyToken={typographyToken}
-              value={realizedPNLCompactFormat.compactNumber.replace('-', '')}
             />
           </RealizedPNLBox>
-        </PositionEntryBox>
-      </PositionEntryBoxWrapper>
+        </ActivePositionEntryBox>
+      </ActivePositionEntryBoxWrapper>
     );
   },
 );

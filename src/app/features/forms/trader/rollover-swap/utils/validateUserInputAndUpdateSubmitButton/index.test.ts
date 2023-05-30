@@ -187,7 +187,9 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
     (validateUserInput as jest.Mock).mockReturnValue(undefined);
     const state = {
       previousPosition: {
-        settlementCashflow: 100,
+        settlementCashflow: 50,
+        margin: 20,
+        fees: 30,
       },
       amm: {
         underlyingToken: {

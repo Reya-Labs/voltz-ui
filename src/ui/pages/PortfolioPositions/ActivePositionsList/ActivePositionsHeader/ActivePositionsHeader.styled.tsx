@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const PositionsHeaderBox = styled('div')`
+export const ActivePositionsHeaderBox = styled('div')`
   display: flex;
   flex-direction: row;
   padding: 0 8px;

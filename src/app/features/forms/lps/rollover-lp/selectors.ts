@@ -35,7 +35,9 @@ export const selectWalletBalance = (state: RootState) => {
 
   return formCompactFormat(
     state.rolloverLpForm.walletBalance.value +
-      state.rolloverLpForm.previousPosition.settlementCashflow,
+      state.rolloverLpForm.previousPosition.settlementCashflow +
+      state.rolloverLpForm.previousPosition.margin +
+      state.rolloverLpForm.previousPosition.fees,
   );
 };
 export const selectPoolLpInfoStatus = (state: RootState) => state.rolloverLpForm.poolLpInfo.status;

@@ -4,36 +4,36 @@ import React from 'react';
 import { selectPositions, selectPositionsLoading } from '../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
-import { PositionEntry } from './PositionEntry';
-import { PositionsHeader } from './PositionsHeader';
+import { ActivePositionEntry } from './ActivePositionEntry';
+import { ActivePositionsHeader } from './ActivePositionsHeader';
 import {
+  ActivePositionEntrySkeleton,
+  ActivePositionsHeaderAndListBox,
+  ActivePositionsListBox,
   NoPositionsFoundBox,
-  PositionEntrySkeleton,
-  PositionsHeaderAndListBox,
-  PositionsListBox,
-} from './PositionsList.styled';
+} from './ActivePositionsList.styled';
 
-export const PositionsList: React.FunctionComponent = () => {
+export const ActivePositionsList: React.FunctionComponent = () => {
   const loading = useAppSelector(selectPositionsLoading);
   const positions = useAppSelector(selectPositions);
 
   return (
-    <PositionsHeaderAndListBox>
-      <PositionsHeader />
+    <ActivePositionsHeaderAndListBox>
+      <ActivePositionsHeader />
       {loading ? (
-        <PositionsListBox>
+        <ActivePositionsListBox>
           {Array.from({ length: 10 }, () => ({})).map((ranking, index) => (
-            <PositionEntrySkeleton
+            <ActivePositionEntrySkeleton
               key={index}
               colorToken="liberty2"
               data-testid="PositionsList-PositionEntrySkeleton"
               variant="rectangular"
             />
           ))}
-        </PositionsListBox>
+        </ActivePositionsListBox>
       ) : null}
       {!loading ? (
-        <PositionsListBox
+        <ActivePositionsListBox
           delay={0}
           duration={300}
           easing="cubic-bezier(0.25,0.1,0.25,1.0)"
@@ -42,7 +42,7 @@ export const PositionsList: React.FunctionComponent = () => {
         >
           {positions.length > 0
             ? positions.map((position, index) => (
-                <PositionEntry
+                <ActivePositionEntry
                   key={position.id}
                   backgroundColorToken={index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8'}
                   borderColorToken={index % 2 !== 0 ? 'lavenderWeb8' : 'transparent'}
@@ -52,9 +52,14 @@ export const PositionsList: React.FunctionComponent = () => {
                   isV2={position.isV2}
                   marginCompactFormat={position.marginCompactFormat}
                   market={position.market}
+                  maturityEndTimestampInMS={position.maturityEndTimestampInMS}
                   maturityFormatted={position.maturityFormatted}
+                  maturityStartTimestampInMS={position.maturityStartTimestampInMS}
                   notionalCompactFormat={position.notionalCompactFormat}
-                  realizedPNLCompactFormat={position.realizedPNLCompactFormat}
+                  realizedPNLCashflow={position.realizedPNLCashflow}
+                  realizedPNLFees={position.realizedPNLFees}
+                  realizedPNLTotal={position.realizedPNLTotal}
+                  realizedPNLTotalCompactFormat={position.realizedPNLTotalCompactFormat}
                   routeAmmId={position.routeAmmId}
                   routePoolId={position.routePoolId}
                   status={position.status}
@@ -81,8 +86,8 @@ export const PositionsList: React.FunctionComponent = () => {
               </Typography>
             </NoPositionsFoundBox>
           ) : null}
-        </PositionsListBox>
+        </ActivePositionsListBox>
       ) : null}
-    </PositionsHeaderAndListBox>
+    </ActivePositionsHeaderAndListBox>
   );
 };

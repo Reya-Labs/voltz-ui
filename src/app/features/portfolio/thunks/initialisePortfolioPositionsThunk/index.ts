@@ -15,12 +15,20 @@ export type PositionMock = {
   notional: number;
   margin: number;
   termEndTimestampInMS: number;
+  termStartTimestampInMS: number;
   status: {
     variant: 'none' | 'receiving' | 'in-range' | 'paying';
     value: number;
+    currentFixed: number;
+    receiving: number;
+    paying: number;
+    fixLow: number;
+    fixHigh: number;
   };
   unrealizedPNL: number;
-  realizedPNL: number;
+  realizedPNLTotal: number;
+  realizedPNLFees: number;
+  realizedPNLCashflow: number;
   isBorrowing: boolean;
   isAaveV3: boolean;
   isV2: boolean;

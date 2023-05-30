@@ -171,6 +171,8 @@ describe('swap-form.selectors', () => {
           },
           previousPosition: {
             settlementCashflow: 100,
+            margin: 200,
+            fees: 300,
           },
         },
       } as never;
@@ -179,7 +181,7 @@ describe('swap-form.selectors', () => {
       selectWalletBalance(state);
 
       // Assert that formCompactFormat is called with wallet balance value
-      expect(formCompactFormat).toHaveBeenCalledWith(1100);
+      expect(formCompactFormat).toHaveBeenCalledWith(1600);
     });
 
     it('returns formatted wallet balance if status is "success"', () => {
@@ -191,14 +193,16 @@ describe('swap-form.selectors', () => {
           },
           previousPosition: {
             settlementCashflow: 100,
+            margin: 200,
+            fees: 300,
           },
         },
       } as never;
 
       // Mock return value of formCompactFormat
-      (formCompactFormat as jest.Mock).mockReturnValue('$1,100');
+      (formCompactFormat as jest.Mock).mockReturnValue('$1,600');
 
-      expect(selectWalletBalance(state)).toEqual('$1,100');
+      expect(selectWalletBalance(state)).toEqual('$1,600');
     });
   });
 

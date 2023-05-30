@@ -9,6 +9,9 @@ export type PnLDetailsProps = {
   pnlFromFees: string;
   pnlTotal: string;
   variant: 'lp' | 'trader';
+  pnlFromFeesPrefixToken?: string;
+  pnlFromSwapsPrefixToken?: string;
+  pnlTotalPrefixToken?: string;
 };
 
 export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
@@ -17,6 +20,9 @@ export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
   pnlFromFees,
   pnlTotal,
   variant,
+  pnlFromFeesPrefixToken,
+  pnlFromSwapsPrefixToken,
+  pnlTotalPrefixToken,
 }) => {
   return (
     <PnLDetailsBox>
@@ -30,7 +36,8 @@ export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            token={` ${underlyingTokenName.toUpperCase()}`}
+            prefixToken={pnlFromSwapsPrefixToken}
+            token={underlyingTokenName ? ` ${underlyingTokenName.toUpperCase()}` : ''}
             typographyToken="primaryBodySmallRegular"
             value={pnlFromSwaps}
           />
@@ -41,7 +48,8 @@ export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            token={` ${underlyingTokenName.toUpperCase()}`}
+            prefixToken={pnlFromFeesPrefixToken}
+            token={underlyingTokenName ? ` ${underlyingTokenName.toUpperCase()}` : ''}
             typographyToken="primaryBodySmallRegular"
             value={pnlFromFees}
           />
@@ -53,7 +61,8 @@ export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            token={` ${underlyingTokenName.toUpperCase()}`}
+            prefixToken={pnlTotalPrefixToken}
+            token={underlyingTokenName ? ` ${underlyingTokenName.toUpperCase()}` : ''}
             typographyToken="primaryBodySmallRegular"
             value={pnlTotal}
           />
