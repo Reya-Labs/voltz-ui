@@ -118,6 +118,7 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
       </Dialog>
       <PillSelector
         activePillId={automaticRolloverState as string}
+        disabled={disabled}
         pillOptions={options}
         onPillClick={(autoRolloverState) => handleOpen(autoRolloverState as AutomaticRolloverState)}
       />

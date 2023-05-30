@@ -4,12 +4,10 @@ import React from 'react';
 import { MarketTokenBox } from './MarketTokenInformation.styled';
 
 export type MarketTokenInformationProps = {
-  market: MarketTokenProps['market'];
-  token?: MarketTokenProps['token'];
+  token: MarketTokenProps['token'];
 };
 
 export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformationProps> = ({
-  market,
   token,
 }) => {
   return (
@@ -20,10 +18,9 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
         iconSize={24}
         infoFormatter={() => (
           <React.Fragment>
-            <b>LP Mellow {market}</b>
+            <b>LP Mellow {token.toUpperCase()}</b>
           </React.Fragment>
         )}
-        market={market}
         token={token}
         typographyToken="primaryBodyMediumRegular"
       />

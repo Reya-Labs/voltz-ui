@@ -6,26 +6,26 @@ import { AutomaticRolloverToggleProps } from '../../../../../../components/inter
 import { routes } from '../../../../../../routes/paths';
 import { formatPOSIXTimestamp } from '../../../../../../utilities/date';
 import { doNothing } from '../../../../../../utilities/doNothing';
-import { compactFormat, compactFormatToParts } from '../../../../../../utilities/number';
+import { compactFormatToParts } from '../../../../../../utilities/number';
 import { AutomaticRolloverToggle } from './AutomaticRolloverToggle';
 import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
 import {
+  BottomBox,
   CurrentBalanceBox,
   DepositButton,
   DistributionBox,
   HeaderBox,
-  HeaderLeftBox,
-  HeaderRightBox,
+  ListEntryLeftBox,
+  ListEntryRightBox,
   ManageButton,
   MaturityBox,
   PoolsBox,
-  PoolsCountBox,
-  RightBox,
   StatusBox,
-  VaultListItemBottomBox,
+  TopBox,
+  TopRightBox,
   VaultListItemBox,
   VaultListItemInfo,
-  VaultListItemTopBox,
+  VaultsBox,
 } from './VaultListItem.styled';
 
 export type VaultListItemProps = {
@@ -64,8 +64,8 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
 
   return (
     <VaultListItemBox>
-      <VaultListItemTopBox>
-        <MarketTokenInformation market={'Aave'} token={token} />
+      <TopBox>
+        <MarketTokenInformation token={token} />
         {depositable ? (
           <DepositButton
             colorToken="lavenderWeb"
@@ -78,7 +78,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
             Deposit
           </DepositButton>
         ) : null}
-        <RightBox>
+        <TopRightBox>
           <TokenTypography
             colorToken="lavenderWeb"
             prefixToken="$"
@@ -97,11 +97,11 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
               await onChangeAutomaticRolloverStatePromise(id, value)
             }
           />
-        </RightBox>
-      </VaultListItemTopBox>
-      <VaultListItemBottomBox>
+        </TopRightBox>
+      </TopBox>
+      <BottomBox>
         <HeaderBox>
-          <HeaderLeftBox>
+          <ListEntryLeftBox>
             <MaturityBox>
               <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
                 Maturity
@@ -109,19 +109,19 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
             </MaturityBox>
             <DistributionBox>
               <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-                Distribution
+                Status
               </Typography>
             </DistributionBox>
-          </HeaderLeftBox>
-          <HeaderRightBox>
+          </ListEntryLeftBox>
+          <ListEntryRightBox>
             <CurrentBalanceBox>
               <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-                Current Balance
+                Distribution
               </Typography>
             </CurrentBalanceBox>
             <StatusBox>
               <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-                Status
+                Current Balance
               </Typography>
             </StatusBox>
             <PoolsBox>
@@ -129,67 +129,93 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                 Pools
               </Typography>
             </PoolsBox>
-          </HeaderRightBox>
+          </ListEntryRightBox>
         </HeaderBox>
-        {vaults.map(
-          (
-            {
-              canManageVaultPosition,
-              poolsCount,
-              currentBalance,
-              distribution,
-              isCompleted,
-              maturityTimestampMS,
-            },
-            vaultIndex,
-          ) => {
-            if (isCompleted && currentBalance <= 0) {
-              // can't replace this with filter because it screws up vaultIndex
-              return null;
-            }
+        <VaultsBox>
+          {vaults.map(
+            (
+              {
+                canManageVaultPosition,
+                poolsCount,
+                currentBalance,
+                distribution,
+                isCompleted,
+                maturityTimestampMS,
+              },
+              vaultIndex,
+            ) => {
+              if (isCompleted && currentBalance <= 0) {
+                // can't replace this with filter because it messes up vaultIndex
+                return null;
+              }
+              const currentBalanceCompactFormat = compactFormatToParts(currentBalance);
 
-            return (
-              <VaultListItemInfo key={maturityTimestampMS}>
-                <MaturityBox>
-                  <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-                    {formatPOSIXTimestamp(maturityTimestampMS)}
-                    {isCompleted ? ' -' : ''}
-                  </Typography>
-                </MaturityBox>
-                <StatusBox>
-                  <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-                    {isCompleted ? 'Completed' : 'In progress'}
-                  </Typography>
-                </StatusBox>
-                <DistributionBox>
-                  <TokenTypography
-                    colorToken="lavenderWeb"
-                    token="%"
-                    typographyToken="secondaryBodySmallRegular"
-                    value={distribution}
-                  />
-                  {}
-                </DistributionBox>
-                <CurrentBalanceBox>{compactFormat(currentBalance)}</CurrentBalanceBox>
-                <PoolsCountBox>{poolsCount}</PoolsCountBox>
-                {isCompleted && canManageVaultPosition ? (
-                  <ManageButton
-                    colorToken="lavenderWeb"
-                    to={`/${generatePath(routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM, {
-                      actions: 'manage',
-                      vaultId: id,
-                      vaultIndex: vaultIndex.toString(),
-                    })}`}
-                    typographyToken="primaryBodyXSmallBold"
-                  >
-                    Manage
-                  </ManageButton>
-                ) : null}
-              </VaultListItemInfo>
-            );
-          },
-        )}
-      </VaultListItemBottomBox>
+              return (
+                <VaultListItemInfo key={maturityTimestampMS}>
+                  <ListEntryLeftBox>
+                    <MaturityBox>
+                      <Typography
+                        colorToken="lavenderWeb3"
+                        typographyToken="primaryBodyXSmallRegular"
+                      >
+                        {formatPOSIXTimestamp(maturityTimestampMS)}
+                      </Typography>
+                    </MaturityBox>
+                    <StatusBox>
+                      <Typography
+                        colorToken={isCompleted ? 'skyBlueCrayola' : 'skyBlueCrayola3'}
+                        typographyToken="primaryBodyXSmallRegular"
+                      >
+                        {isCompleted ? 'Completed' : 'In progress'}
+                      </Typography>
+                    </StatusBox>
+                    {isCompleted && canManageVaultPosition ? (
+                      <ManageButton
+                        colorToken="lavenderWeb"
+                        to={`/${generatePath(routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM, {
+                          actions: 'manage',
+                          vaultId: id,
+                          vaultIndex: vaultIndex.toString(),
+                        })}`}
+                        typographyToken="primaryBodyXSmallBold"
+                      >
+                        Manage
+                      </ManageButton>
+                    ) : null}
+                  </ListEntryLeftBox>
+                  <ListEntryRightBox>
+                    <DistributionBox>
+                      <TokenTypography
+                        colorToken="lavenderWeb"
+                        token="%"
+                        typographyToken="secondaryBodySmallRegular"
+                        value={distribution}
+                      />
+                    </DistributionBox>
+                    <CurrentBalanceBox>
+                      <TokenTypography
+                        colorToken="lavenderWeb"
+                        prefixToken="$"
+                        token={currentBalanceCompactFormat.compactSuffix}
+                        typographyToken="secondaryBodySmallRegular"
+                        value={currentBalanceCompactFormat.compactNumber}
+                      />
+                    </CurrentBalanceBox>
+                    <PoolsBox>
+                      <Typography
+                        colorToken="lavenderWeb"
+                        typographyToken="secondaryBodySmallRegular"
+                      >
+                        {poolsCount}
+                      </Typography>
+                    </PoolsBox>
+                  </ListEntryRightBox>
+                </VaultListItemInfo>
+              );
+            },
+          )}
+        </VaultsBox>
+      </BottomBox>
     </VaultListItemBox>
   );
 };

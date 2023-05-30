@@ -100,29 +100,30 @@ export const Optimisers: React.FunctionComponent = () => {
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
         Optimisers
       </Typography>
-      <Header />
       {vaultsWithDeposit.map((vault) => (
-        <VaultListItem
-          key={vault.optimiserId}
-          automaticRolloverState={
-            Boolean(vault.isUserRegisteredForAutoRollover) ? 'active' : 'inactive'
-          }
-          canRegisterUnregister={vault.canRegisterUnregister}
-          depositable={vault.depositable}
-          gasCost={vault.autorolloverGasCostInUSD}
-          id={vault.optimiserId}
-          token={vault.tokenName.toLowerCase() as MarketTokenProps['token']}
-          totalBalance={vault.userOptimiserDepositUSD}
-          vaults={vault.vaults.map((vVaults) => ({
-            maturityTimestampMS: vVaults.maturityTimestampMS,
-            isCompleted: vVaults.withdrawable,
-            poolsCount: vVaults.pools.length,
-            currentBalance: vVaults.userVaultDepositUSD,
-            distribution: vVaults.defaultWeight,
-            canManageVaultPosition: vVaults.canUserManageVault,
-          }))}
-          onChangeAutomaticRolloverStatePromise={automaticRolloverChangePromise}
-        />
+        <React.Fragment key={vault.optimiserId}>
+          <Header />
+          <VaultListItem
+            automaticRolloverState={
+              Boolean(vault.isUserRegisteredForAutoRollover) ? 'active' : 'inactive'
+            }
+            canRegisterUnregister={vault.canRegisterUnregister}
+            depositable={vault.depositable}
+            gasCost={vault.autorolloverGasCostInUSD}
+            id={vault.optimiserId}
+            token={vault.tokenName.toLowerCase() as MarketTokenProps['token']}
+            totalBalance={vault.userOptimiserDepositUSD}
+            vaults={vault.vaults.map((vVaults) => ({
+              maturityTimestampMS: vVaults.maturityTimestampMS,
+              isCompleted: vVaults.withdrawable,
+              poolsCount: vVaults.pools.length,
+              currentBalance: vVaults.userVaultDepositUSD,
+              distribution: vVaults.defaultWeight,
+              canManageVaultPosition: vVaults.canUserManageVault,
+            }))}
+            onChangeAutomaticRolloverStatePromise={automaticRolloverChangePromise}
+          />
+        </React.Fragment>
       ))}
     </OptimisersBox>
   );

@@ -17,7 +17,7 @@ export const VaultListItemBox = styled('div')`
   border-radius: 8px;
 `;
 
-export const RightBox = styled('div')`
+export const TopRightBox = styled('div')`
   margin-left: auto;
   display: flex;
   flex-direction: row;
@@ -25,7 +25,7 @@ export const RightBox = styled('div')`
   gap: 16px;
 `;
 
-export const VaultListItemTopBox = styled('div')`
+export const TopBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -66,44 +66,55 @@ export const ManageButton = styled(AppLink)`
   border-radius: 4px;
 `;
 
-export const VaultListItemBottomBox = styled('div')`
+export const BottomBox = styled('div')`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 8px 16px 16px;
-  gap: 4px;
-
-  /* Liberty 7 */
-  background: #0f0d18;
-
-  /* Liberty 5 */
-  border-width: 0px 1px 1px 1px;
-  border-style: solid;
-  border-color: #1e1933;
-  border-radius: 0px 0px 8px 8px;
+  gap: 16px;
+  width: 100%;
   box-sizing: border-box;
 `;
 
 export const HeaderBox = styled('div')`
   display: flex;
   flex-direction: row;
-`;
-
-export const VaultListItemInfo = styled('div')`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0px 0px 0px 24px;
-  gap: 61px;
-
-  /* Liberty 6 */
-  background: #19152a;
-  border-radius: 4px;
+  justify-content: space-between;
   width: 100%;
   box-sizing: border-box;
 `;
-export const HeaderLeftBox = styled('div')``;
-export const HeaderRightBox = styled('div')``;
+
+export const VaultsBox = styled('div')`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const VaultListItemInfo = styled('div')`
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0px;
+  gap: 8px;
+
+  background: ${colors.lavenderWeb8};
+  border: 1px solid ${colors.lavenderWeb7};
+
+  box-shadow: -2px 0px 8px ${colors.liberty8};
+  border-radius: 8px;
+`;
+
+export const ListEntryLeftBox = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+export const ListEntryRightBox = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
 const ValueBox = styled('div')`
   display: flex;
   flex-direction: row;
@@ -128,4 +139,3 @@ export const CurrentBalanceBox = styled(ValueBox)`
 export const PoolsBox = styled(ValueBox)`
   width: 80px;
 `;
-export const PoolsCountBox = styled(ValueBox)``;
