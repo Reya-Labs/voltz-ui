@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const LPCompletedStepBox = styled('div')`
+export const SettleCompletedStepBox = styled('div')`
   display: flex;
   box-sizing: border-box;
   width: 316px;

@@ -7,7 +7,7 @@ import {
 } from '../../../../app/features/settle-flow';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { SettleDetails } from '../SettleDetails';
-import { LPCompletedStepBox } from './SettleCompletedStep.styled';
+import { SettleCompletedStepBox } from './SettleCompletedStep.styled';
 
 export const SettleCompletedStep: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ export const SettleCompletedStep: React.FunctionComponent = () => {
   }, [dispatch]);
 
   return (
-    <LPCompletedStepBox>
+    <SettleCompletedStepBox>
       <Confetti>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
           Settle Completed
@@ -42,6 +42,6 @@ export const SettleCompletedStep: React.FunctionComponent = () => {
           Close
         </Button>
       </Confetti>
-    </LPCompletedStepBox>
+    </SettleCompletedStepBox>
   );
 };

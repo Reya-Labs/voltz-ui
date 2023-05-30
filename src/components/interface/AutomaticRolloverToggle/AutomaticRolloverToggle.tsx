@@ -2,7 +2,6 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import React, { useState } from 'react';
 
 import { doNothing } from '../../../utilities/doNothing';
-import { isEnvVarProvided } from '../../../utilities/isEnvVarProvided';
 import { IconLabel } from '../../composite/IconLabel/IconLabel';
 import { Modal } from '../../composite/Modal/Modal';
 import { ActiveRolloverModalContent } from './ActiveRolloverModalContent/ActiveRolloverModalContent';
@@ -58,10 +57,6 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
   const [selectedOption, setSelectedOption] = useState<AutomaticRolloverState | undefined>(
     undefined,
   );
-
-  if (!isEnvVarProvided(process.env.REACT_APP_AUTOROLLOVER_LP)) {
-    return null;
-  }
 
   const resetModal = () => {
     setTransactionStatus('idle');
