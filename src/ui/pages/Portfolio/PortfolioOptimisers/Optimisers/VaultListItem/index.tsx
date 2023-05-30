@@ -10,8 +10,9 @@ import { compactFormatToParts } from '../../../../../../utilities/number';
 import { AutomaticRolloverToggle } from './AutomaticRolloverToggle';
 import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
 import {
+  AutomaticRolloverBox,
+  BalanceBox,
   BottomBox,
-  CurrentBalanceBox,
   DepositButton,
   DistributionBox,
   HeaderBox,
@@ -23,6 +24,7 @@ import {
   StatusBox,
   TopBox,
   TopRightBox,
+  TotalBalanceBox,
   VaultListItemBox,
   VaultListItemInfo,
   VaultsBox,
@@ -79,24 +81,28 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           </DepositButton>
         ) : null}
         <TopRightBox>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            prefixToken="$"
-            token={totalBalanceCompactFormat.compactSuffix}
-            typographyToken="secondaryBodySmallRegular"
-            value={totalBalanceCompactFormat.compactNumber}
-          />
-          <AutomaticRolloverToggle
-            automaticRolloverState={automaticRolloverState}
-            canRegisterUnregister={canRegisterUnregister}
-            disabled={!depositable}
-            gasCost={gasCost}
-            showTooltip={false}
-            triggersOnChainTransaction={true}
-            onChangePromise={async (value) =>
-              await onChangeAutomaticRolloverStatePromise(id, value)
-            }
-          />
+          <TotalBalanceBox>
+            <TokenTypography
+              colorToken="lavenderWeb"
+              prefixToken="$"
+              token={totalBalanceCompactFormat.compactSuffix}
+              typographyToken="secondaryBodySmallRegular"
+              value={totalBalanceCompactFormat.compactNumber}
+            />
+          </TotalBalanceBox>
+          <AutomaticRolloverBox>
+            <AutomaticRolloverToggle
+              automaticRolloverState={automaticRolloverState}
+              canRegisterUnregister={canRegisterUnregister}
+              disabled={!depositable}
+              gasCost={gasCost}
+              showTooltip={false}
+              triggersOnChainTransaction={true}
+              onChangePromise={async (value) =>
+                await onChangeAutomaticRolloverStatePromise(id, value)
+              }
+            />
+          </AutomaticRolloverBox>
         </TopRightBox>
       </TopBox>
       <BottomBox>
@@ -107,23 +113,23 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                 Maturity
               </Typography>
             </MaturityBox>
-            <DistributionBox>
+            <StatusBox>
               <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
                 Status
               </Typography>
-            </DistributionBox>
+            </StatusBox>
           </ListEntryLeftBox>
           <ListEntryRightBox>
-            <CurrentBalanceBox>
+            <DistributionBox>
               <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
                 Distribution
               </Typography>
-            </CurrentBalanceBox>
-            <StatusBox>
+            </DistributionBox>
+            <BalanceBox>
               <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-                Current Balance
+                Balance
               </Typography>
-            </StatusBox>
+            </BalanceBox>
             <PoolsBox>
               <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
                 Pools
@@ -192,7 +198,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                         value={distribution}
                       />
                     </DistributionBox>
-                    <CurrentBalanceBox>
+                    <TotalBalanceBox>
                       <TokenTypography
                         colorToken="lavenderWeb"
                         prefixToken="$"
@@ -200,7 +206,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                         typographyToken="secondaryBodySmallRegular"
                         value={currentBalanceCompactFormat.compactNumber}
                       />
-                    </CurrentBalanceBox>
+                    </TotalBalanceBox>
                     <PoolsBox>
                       <Typography
                         colorToken="lavenderWeb"

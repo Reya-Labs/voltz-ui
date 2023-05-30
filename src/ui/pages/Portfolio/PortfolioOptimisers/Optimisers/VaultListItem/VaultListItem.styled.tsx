@@ -18,7 +18,6 @@ export const VaultListItemBox = styled('div')`
 `;
 
 export const TopRightBox = styled('div')`
-  margin-left: auto;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -133,9 +132,16 @@ export const StatusBox = styled(ValueBox)`
 export const DistributionBox = styled(ValueBox)`
   width: 80px;
 `;
-export const CurrentBalanceBox = styled(ValueBox)`
+export const BalanceBox = styled(ValueBox)`
   width: 80px;
 `;
 export const PoolsBox = styled(ValueBox)`
   width: 80px;
+`;
+export const TotalBalanceBox = styled(ValueBox)`
+  width: 80px;
+`;
+
+export const AutomaticRolloverBox = styled(ValueBox)`
+  width: 100px;
 `;
