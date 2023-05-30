@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { routes } from '../../../../../routes/paths';
+import { routes } from '../../../../routes/paths';
 import { ReactComponent as OptimisersIcon } from './assets/optimisers.svg';
 import { ReactComponent as PositionsIcon } from './assets/positions.svg';
 import { PortfolioSubmenuBox } from './PortfolioSubmenu.styled';

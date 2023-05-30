@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const PortfolioPositionsBox = styled('div')`
+export const PortfolioOptimisersBox = styled('div')`
   width: 850px;
   margin: 24px auto;
   background: transparent;
