@@ -72,7 +72,10 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   if (isWalletBalanceLoaded && state.previousPosition !== null) {
     const walletBalance = state.walletBalance.value;
     const settlementCashflow = state.previousPosition.settlementCashflow;
-    if (userInputMarginAmount > walletBalance + settlementCashflow) {
+    const margin = state.previousPosition.margin;
+    const fees = state.previousPosition.fees;
+    const allowedBalance = walletBalance + settlementCashflow + margin + fees;
+    if (userInputMarginAmount > allowedBalance) {
       state.submitButton = {
         state: 'not-enough-balance',
         disabled: true,
@@ -84,7 +87,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       return;
     }
 
-    if (isInfoPostSwapLoaded && userInputMarginAmount + fee > walletBalance + settlementCashflow) {
+    if (isInfoPostSwapLoaded && userInputMarginAmount + fee > allowedBalance) {
       state.submitButton = {
         state: 'not-enough-balance',
         disabled: true,
