@@ -6,18 +6,21 @@ import { AutomaticRolloverToggleProps } from '../../../../../../components/inter
 import { routes } from '../../../../../../routes/paths';
 import { formatPOSIXTimestamp } from '../../../../../../utilities/date';
 import { doNothing } from '../../../../../../utilities/doNothing';
-import { compactFormat } from '../../../../../../utilities/number';
+import { compactFormat, compactFormatToParts } from '../../../../../../utilities/number';
 import { AutomaticRolloverToggle } from './AutomaticRolloverToggle';
 import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
 import {
-  ActionsBox,
   CurrentBalanceBox,
   DepositButton,
   DistributionBox,
   HeaderBox,
+  HeaderLeftBox,
+  HeaderRightBox,
   ManageButton,
-  MaturityInfoBox,
+  MaturityBox,
+  PoolsBox,
   PoolsCountBox,
+  RightBox,
   StatusBox,
   VaultListItemBottomBox,
   VaultListItemBox,
@@ -57,27 +60,32 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
   canRegisterUnregister,
   onChangeAutomaticRolloverStatePromise = doNothing,
 }) => {
+  const totalBalanceCompactFormat = compactFormatToParts(totalBalance);
+
   return (
     <VaultListItemBox>
       <VaultListItemTopBox>
         <MarketTokenInformation market={'Aave'} token={token} />
-        <Typography colorToken="lavenderWeb" typographyToken="secondaryBodySmallRegular">
-          {compactFormat(totalBalance).toUpperCase()}
-          TODO: make it in usd
-        </Typography>
-        <ActionsBox>
-          {depositable ? (
-            <DepositButton
-              colorToken="lavenderWeb"
-              to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
-                actions: 'deposit',
-                vaultId: id,
-              })}`}
-              typographyToken="primaryBodyXSmallBold"
-            >
-              DEPOSIT
-            </DepositButton>
-          ) : null}
+        {depositable ? (
+          <DepositButton
+            colorToken="lavenderWeb"
+            to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
+              actions: 'deposit',
+              vaultId: id,
+            })}`}
+            typographyToken="primaryBodyXSmallBold"
+          >
+            Deposit
+          </DepositButton>
+        ) : null}
+        <RightBox>
+          <TokenTypography
+            colorToken="lavenderWeb"
+            prefixToken="$"
+            token={totalBalanceCompactFormat.compactSuffix}
+            typographyToken="secondaryBodySmallRegular"
+            value={totalBalanceCompactFormat.compactNumber}
+          />
           <AutomaticRolloverToggle
             automaticRolloverState={automaticRolloverState}
             canRegisterUnregister={canRegisterUnregister}
@@ -89,25 +97,39 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
               await onChangeAutomaticRolloverStatePromise(id, value)
             }
           />
-        </ActionsBox>
+        </RightBox>
       </VaultListItemTopBox>
       <VaultListItemBottomBox>
         <HeaderBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-            Maturity
-          </Typography>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-            Distribution
-          </Typography>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-            Current Balance
-          </Typography>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-            Status
-          </Typography>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
-            Pools
-          </Typography>
+          <HeaderLeftBox>
+            <MaturityBox>
+              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+                Maturity
+              </Typography>
+            </MaturityBox>
+            <DistributionBox>
+              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+                Distribution
+              </Typography>
+            </DistributionBox>
+          </HeaderLeftBox>
+          <HeaderRightBox>
+            <CurrentBalanceBox>
+              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+                Current Balance
+              </Typography>
+            </CurrentBalanceBox>
+            <StatusBox>
+              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+                Status
+              </Typography>
+            </StatusBox>
+            <PoolsBox>
+              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+                Pools
+              </Typography>
+            </PoolsBox>
+          </HeaderRightBox>
         </HeaderBox>
         {vaults.map(
           (
@@ -128,12 +150,12 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
 
             return (
               <VaultListItemInfo key={maturityTimestampMS}>
-                <MaturityInfoBox>
+                <MaturityBox>
                   <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
                     {formatPOSIXTimestamp(maturityTimestampMS)}
                     {isCompleted ? ' -' : ''}
                   </Typography>
-                </MaturityInfoBox>
+                </MaturityBox>
                 <StatusBox>
                   <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
                     {isCompleted ? 'Completed' : 'In progress'}
@@ -148,10 +170,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                   />
                   {}
                 </DistributionBox>
-                <CurrentBalanceBox>
-                  {compactFormat(currentBalance)}
-                  TODO: USD
-                </CurrentBalanceBox>
+                <CurrentBalanceBox>{compactFormat(currentBalance)}</CurrentBalanceBox>
                 <PoolsCountBox>{poolsCount}</PoolsCountBox>
                 {isCompleted && canManageVaultPosition ? (
                   <ManageButton

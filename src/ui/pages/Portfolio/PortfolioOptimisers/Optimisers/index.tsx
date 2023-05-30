@@ -111,13 +111,13 @@ export const Optimisers: React.FunctionComponent = () => {
           depositable={vault.depositable}
           gasCost={vault.autorolloverGasCostInUSD}
           id={vault.optimiserId}
-          token={vault.tokenName as MarketTokenProps['token']}
-          totalBalance={vault.userOptimiserDeposit}
+          token={vault.tokenName.toLowerCase() as MarketTokenProps['token']}
+          totalBalance={vault.userOptimiserDepositUSD}
           vaults={vault.vaults.map((vVaults) => ({
             maturityTimestampMS: vVaults.maturityTimestampMS,
             isCompleted: vVaults.withdrawable,
             poolsCount: vVaults.pools.length,
-            currentBalance: vVaults.userVaultDeposit,
+            currentBalance: vVaults.userVaultDepositUSD,
             distribution: vVaults.defaultWeight,
             canManageVaultPosition: vVaults.canUserManageVault,
           }))}

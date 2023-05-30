@@ -14,11 +14,11 @@ const options: {
 }[] = [
   {
     id: 'active',
-    label: 'ACTIVE',
+    label: 'Active',
   },
   {
     id: 'inactive',
-    label: 'INACTIVE',
+    label: 'Inactive',
   },
 ];
 

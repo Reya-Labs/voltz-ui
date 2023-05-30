@@ -75,4 +75,6 @@ export const HealthBox = styled('div')`
   flex-direction: row;
   align-items: center;
   min-width: 40px;
+  gap: 4px;
+  justify-content: center;
 `;

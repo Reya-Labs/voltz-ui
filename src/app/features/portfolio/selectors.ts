@@ -1,3 +1,8 @@
+import {
+  generateAmmIdForRoute,
+  generatePoolId,
+  generatePositionIdForRoute,
+} from '../../../utilities/amm';
 import { formatPOSIXTimestamp } from '../../../utilities/date';
 import { compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
@@ -13,18 +18,18 @@ export const selectPositions = (state: RootState): PositionUI[] => {
   }
 
   const pools: PositionUI[] = portfolioPositions.map((position) => {
-    const isV2 = position.isV2;
-    const isAaveV3 = position.isAaveV3;
-    const isBorrowing = position.isBorrowing;
-    const market = position.market;
-    const token = position.token;
+    const isV2 = position.amm.isV2;
+    const isAaveV3 = position.amm.isAaveV3;
+    const isBorrowing = position.amm.isBorrowing;
+    const market = position.amm.market;
+    const token = position.amm.underlyingToken.name;
     const notional = position.notional;
     const margin = position.margin;
     const type = position.type;
-    const unrealizedPNL = position.unrealizedPNL;
-    const realizedPNLTotal = position.realizedPNLTotal;
-    const realizedPNLFees = position.realizedPNLFees;
-    const realizedPNLCashflow = position.realizedPNLCashflow;
+    const unrealizedPNL = position.unrealizedPNLUSD;
+    const realizedPNLTotal = position.realizedPNLTotalUSD;
+    const realizedPNLFees = position.realizedPNLFeesUSD;
+    const realizedPNLCashflow = position.realizedPNLCashflowUSD;
 
     return {
       type,
@@ -37,13 +42,14 @@ export const selectPositions = (state: RootState): PositionUI[] => {
       margin,
       notionalCompactFormat: compactFormatToParts(notional),
       notional,
-      maturityEndTimestampInMS: position.termEndTimestampInMS,
-      maturityStartTimestampInMS: position.termStartTimestampInMS,
-      maturityFormatted: formatPOSIXTimestamp(position.termEndTimestampInMS),
+      maturityEndTimestampInMS: position.amm.termEndTimestampInMS,
+      maturityStartTimestampInMS: position.amm.termStartTimestampInMS,
+      maturityFormatted: formatPOSIXTimestamp(position.amm.termEndTimestampInMS),
       id: position.id,
-      chainId: position.chainId,
-      routeAmmId: 'todo:',
-      routePoolId: 'todo:',
+      chainId: position.amm.chainId,
+      routeAmmId: generateAmmIdForRoute(position.amm),
+      routePositionId: generatePositionIdForRoute(position),
+      routePoolId: generatePoolId(position.amm),
       name: `${type} - ${market}${isAaveV3 ? ' - Aave v3' : ''} - ${token as string}${
         isBorrowing ? ' - Borrowing' : ''
       }`,
@@ -80,6 +86,30 @@ export const selectPositionsLength = (state: RootState): string => {
     return '--';
   }
   return selectPositions(state).length.toString();
+};
+export const selectHealthyPositionsLength = (state: RootState): string => {
+  if (selectPositionsLoading(state)) {
+    return '--';
+  }
+  return selectPositions(state)
+    .filter((p) => p.status.health === 'healthy')
+    .length.toString();
+};
+export const selectWarningPositionsLength = (state: RootState): string => {
+  if (selectPositionsLoading(state)) {
+    return '--';
+  }
+  return selectPositions(state)
+    .filter((p) => p.status.health === 'warning')
+    .length.toString();
+};
+export const selectDangerPositionsLength = (state: RootState): string => {
+  if (selectPositionsLoading(state)) {
+    return '--';
+  }
+  return selectPositions(state)
+    .filter((p) => p.status.health === 'danger')
+    .length.toString();
 };
 export const selectPositionsSortOptions = (
   state: RootState,

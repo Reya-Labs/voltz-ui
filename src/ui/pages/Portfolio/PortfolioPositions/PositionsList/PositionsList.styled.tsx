@@ -2,13 +2,13 @@ import styled from '@emotion/styled';
 import { getColorFromToken, Skeleton } from 'brokoli-ui';
 import FlipMove from 'react-flip-move';
 
-export const ActivePositionsListBox = styled(FlipMove)`
+export const PositionsListBox = styled(FlipMove)`
   display: flex;
   flex-direction: column;
   gap: 8px;
 `;
 
-export const ActivePositionsHeaderAndListBox = styled('div')`
+export const PositionsHeaderAndListBox = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -17,7 +17,7 @@ export const ActivePositionsHeaderAndListBox = styled('div')`
   border-radius: 8px;
 `;
 
-export const ActivePositionEntrySkeleton = styled(Skeleton)`
+export const PositionEntrySkeleton = styled(Skeleton)`
   padding: 8px 8px 8px 32px;
   border-radius: 8px;
   font-size: 18px;

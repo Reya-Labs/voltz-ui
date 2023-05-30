@@ -13,7 +13,7 @@ export type PositionPNLDetailsProps = {
   realizedPNLCashflow: PositionUI['realizedPNLCashflow'];
   realizedPNLTotalCompactFormat: PositionUI['realizedPNLTotalCompactFormat'];
 };
-export const PositionPNLDetails: React.FunctionComponent<PositionPNLDetailsProps> = ({
+export const PositionRealizedPNLDetails: React.FunctionComponent<PositionPNLDetailsProps> = ({
   typographyToken,
   type,
   realizedPNLFees,

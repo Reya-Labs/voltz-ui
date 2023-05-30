@@ -4,11 +4,11 @@ import { colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
 import { ReactComponent as Arbitrum } from './assets/arbitrum.svg';
 import { ReactComponent as Avalanche } from './assets/avalanche.svg';
 
-export const ActivePositionEntryBoxWrapper = styled('div')`
+export const PositionEntryBoxWrapper = styled('div')`
   position: relative;
 `;
 
-export const ActivePositionEntryBox = styled('div', {
+export const PositionEntryBox = styled('div', {
   shouldForwardProp: (prop) => prop !== 'backgroundColorToken' && prop !== 'borderColorToken',
 })<{
   backgroundColorToken: ColorTokens;
@@ -75,6 +75,13 @@ export const ChainIconContainer = styled('div')`
   z-index: 0;
   top: 12px;
   left: -15px;
+`;
+
+export const HealthIndicatorBox = styled('div')`
+  position: absolute;
+  z-index: 0;
+  top: 10px;
+  right: -8px;
 `;
 
 export const ArbitrumIcon = styled(Arbitrum)`

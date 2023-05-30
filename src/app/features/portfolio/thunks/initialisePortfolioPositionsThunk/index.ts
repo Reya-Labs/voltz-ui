@@ -8,17 +8,11 @@ import { positionMocks } from './mock';
 export type PositionMock = {
   id: string;
   type: 'LP' | 'Variable' | 'Fixed';
-  chainId: SupportedChainId;
-  market: 'Aave' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
-  token?: 'eth' | 'usdc' | 'usdt' | 'dai';
-  name: string;
   notional: number;
   margin: number;
-  termEndTimestampInMS: number;
-  termStartTimestampInMS: number;
   status: {
-    variant: 'none' | 'receiving' | 'in-range' | 'paying';
-    value: number;
+    health: 'healthy' | 'danger' | 'warning';
+    variant: 'matured' | 'settled' | 'active';
     currentFixed: number;
     receiving: number;
     paying: number;
@@ -29,9 +23,27 @@ export type PositionMock = {
   realizedPNLTotal: number;
   realizedPNLFees: number;
   realizedPNLCashflow: number;
-  isBorrowing: boolean;
-  isAaveV3: boolean;
-  isV2: boolean;
+  unrealizedPNLUSD: number;
+  realizedPNLTotalUSD: number;
+  realizedPNLFeesUSD: number;
+  realizedPNLCashflowUSD: number;
+
+  amm: {
+    id: string;
+    isBorrowing: boolean;
+    isAaveV3: boolean;
+    isV2: boolean;
+    rateOracle: {
+      protocolId: number;
+    };
+    underlyingToken: {
+      name: 'eth' | 'usdc' | 'usdt' | 'dai';
+    };
+    termEndTimestampInMS: number;
+    termStartTimestampInMS: number;
+    market: 'Aave' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
+    chainId: SupportedChainId;
+  };
 };
 
 export const initialisePortfolioPositionsThunk = createAsyncThunk<

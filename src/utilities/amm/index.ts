@@ -105,16 +105,24 @@ export const getProtocolName = (protocolId: number): string => {
   }
 };
 
-export const generatePoolId = (amm: AMM) => {
+export const generatePoolId = (amm: {
+  rateOracle: {
+    protocolId: number;
+  };
+  underlyingToken: {
+    name: string;
+  };
+  termEndTimestampInMS: number;
+}) => {
   const timestamp = new Date(amm.termEndTimestampInMS).toISOString().split('T')[0];
 
   return `${getProtocolName(amm.rateOracle.protocolId)}-${amm.underlyingToken.name}-${timestamp}`;
 };
 
-export const generateAmmIdForRoute = (amm: AMM) => {
+export const generateAmmIdForRoute = (amm: { id: string }) => {
   return amm.id.substring(amm.id.length - 4);
 };
 
-export const generatePositionIdForRoute = (position: Position) => {
+export const generatePositionIdForRoute = (position: { id: string }) => {
   return position.id.substring(position.id.length - 4).replace('#', '_');
 };

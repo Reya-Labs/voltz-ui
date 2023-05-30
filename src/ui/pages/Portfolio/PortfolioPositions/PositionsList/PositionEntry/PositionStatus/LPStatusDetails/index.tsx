@@ -2,6 +2,7 @@ import { HorizontalLine, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { InRange } from '../InRange';
+import { OutOfRange } from '../OutOfRange';
 import { LPStatusDetailsBox, RowBox, RowsBox } from './LPStatusDetails.styled';
 
 export type LPStatusDetailsProps = {
@@ -15,6 +16,7 @@ export const LPStatusDetails: React.FunctionComponent<LPStatusDetailsProps> = ({
   fixLow,
   fixHigh,
 }) => {
+  const inRange = fixLow <= currentFixed && currentFixed <= fixHigh;
   return (
     <LPStatusDetailsBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallBold">
@@ -63,7 +65,11 @@ export const LPStatusDetails: React.FunctionComponent<LPStatusDetailsProps> = ({
           <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
             Position
           </Typography>
-          <InRange typographyToken="primaryBodySmallRegular" />
+          {inRange ? (
+            <InRange typographyToken="primaryBodySmallRegular" />
+          ) : (
+            <OutOfRange typographyToken="primaryBodySmallRegular" />
+          )}
         </RowBox>
       </RowsBox>
     </LPStatusDetailsBox>

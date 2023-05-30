@@ -1,9 +1,14 @@
 import { LabelTokenTypography, PillSelector, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { selectPositionsLength } from '../../../../../app/features/portfolio';
+import {
+  selectDangerPositionsLength,
+  selectHealthyPositionsLength,
+  selectPositionsLength,
+  selectWarningPositionsLength,
+} from '../../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../../app/hooks';
-import { ActivePositionsList } from '../ActivePositionsList';
+import { PositionsFilterId, PositionsList } from '../PositionsList';
 import {
   BottomBox,
   HealthBox,
@@ -20,25 +25,27 @@ import {
   UnrealizedPNLBox,
 } from './Positions.styled';
 
-const positionFilterOptions = [
+const positionFilterOptions: {
+  id: PositionsFilterId;
+  label: string;
+}[] = [
   {
     id: 'active',
     label: 'Active',
-  },
-  {
-    id: 'matured',
-    label: 'Matured',
   },
   {
     id: 'settled',
     label: 'Settled',
   },
 ];
-type PositionsFilterId = 'active' | 'matured' | 'settled';
 
 export const Positions: React.FunctionComponent = () => {
   const positionsLength = useAppSelector(selectPositionsLength);
+  const healthyPositionsLength = useAppSelector(selectHealthyPositionsLength);
+  const warningPositionsLength = useAppSelector(selectWarningPositionsLength);
+  const dangerPositionsLength = useAppSelector(selectDangerPositionsLength);
   const [activeFilter, setActiveFilter] = useState<PositionsFilterId>('active');
+
   return (
     <PositionsBox>
       <TopBox>
@@ -102,35 +109,38 @@ export const Positions: React.FunctionComponent = () => {
           <HealthStatusBox>
             <HealthBox>
               <LabelTokenTypography
+                attentionIndicatorColorToken="skyBlueCrayola"
                 colorToken="lavenderWeb"
                 label="Healthy"
                 labelColorToken="lavenderWeb3"
                 labelTypographyToken="primaryBodyXSmallRegular"
                 token={''}
                 typographyToken="secondaryBodyMediumBold"
-                value={2}
+                value={healthyPositionsLength}
               />
             </HealthBox>
             <HealthBox>
               <LabelTokenTypography
+                attentionIndicatorColorToken="orangeYellow"
                 colorToken="lavenderWeb"
                 label="Warning"
                 labelColorToken="lavenderWeb3"
                 labelTypographyToken="primaryBodyXSmallRegular"
                 token={''}
                 typographyToken="secondaryBodyMediumBold"
-                value={0}
+                value={warningPositionsLength}
               />
             </HealthBox>
             <HealthBox>
               <LabelTokenTypography
+                attentionIndicatorColorToken="wildStrawberry"
                 colorToken="lavenderWeb"
                 label="Danger"
                 labelColorToken="lavenderWeb3"
                 labelTypographyToken="primaryBodyXSmallRegular"
                 token={''}
                 typographyToken="secondaryBodyMediumBold"
-                value={1}
+                value={dangerPositionsLength}
               />
             </HealthBox>
           </HealthStatusBox>
@@ -155,7 +165,7 @@ export const Positions: React.FunctionComponent = () => {
             onPillClick={(id) => setActiveFilter(id as PositionsFilterId)}
           />
         </PositionsSelectorBox>
-        <ActivePositionsList />
+        <PositionsList positionsFilterId={activeFilter} />
       </BottomBox>
     </PositionsBox>
   );

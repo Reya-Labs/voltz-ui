@@ -1,29 +1,35 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
-import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
+import { AttentionIndicator, ColorTokens, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import { PositionUI } from '../../../../../../app/features/portfolio/types';
+import { useAppNavigate } from '../../../../../../hooks/useAppNavigate';
 import { useResponsiveQuery } from '../../../../../../hooks/useResponsiveQuery';
+import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
 import {
-  ActivePositionEntryBox,
-  ActivePositionEntryBoxWrapper,
   ArbitrumIcon,
   AvalancheIcon,
   ChainIconContainer,
+  HealthIndicatorBox,
   LeftBox,
   MarginBox,
   MaturityBox,
   NotionalBox,
+  PositionEntryBox,
+  PositionEntryBoxWrapper,
   RealizedPNLBox,
   StatusBox,
   UnrealizedPNLBox,
-} from './ActivePositionEntry.styled';
-import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
+} from './PositionEntry.styled';
+import { PositionMargin } from './PositionMargin';
 import { PositionMaturity } from './PositionMaturity';
-import { PositionPNLDetails } from './PositionPNLDetails';
+import { PositionNotional } from './PositionNotional';
+import { PositionRealizedPNLDetails } from './PositionRealizedPNLDetails';
 import { PositionStatus } from './PositionStatus';
+import { PositionUnrealizedPNLDetails } from './PositionUnrealizedPNLDetails';
 
-type ActivePositionEntryProps = {
+type PositionEntryProps = {
+  health: PositionUI['status']['health'];
   isAaveV3: PositionUI['isAaveV3'];
   isV2: PositionUI['isV2'];
   isBorrowing: PositionUI['isBorrowing'];
@@ -36,6 +42,7 @@ type ActivePositionEntryProps = {
   borderColorToken: ColorTokens | 'transparent';
   routeAmmId: PositionUI['routeAmmId'];
   routePoolId: PositionUI['routePoolId'];
+  routePositionId: PositionUI['routePositionId'];
   chainId: SupportedChainId;
   status: PositionUI['status'];
   type: PositionUI['type'];
@@ -55,9 +62,15 @@ const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
   [SupportedChainId.avalanche]: AvalancheIcon,
   [SupportedChainId.avalancheFuji]: AvalancheIcon,
 };
-export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositionEntryProps>(
+const HealthColorMap: Record<PositionEntryProps['health'], ColorTokens | undefined> = {
+  danger: 'wildStrawberry',
+  healthy: undefined,
+  warning: 'orangeYellow',
+};
+export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps>(
   (
     {
+      health,
       chainId,
       isAaveV3,
       isBorrowing,
@@ -80,23 +93,48 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositi
       type,
       maturityEndTimestampInMS,
       maturityStartTimestampInMS,
+      routePositionId,
     },
     ref,
   ) => {
+    const navigate = useAppNavigate();
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const ChainIcon = ChainIconMap[chainId];
     const typographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyMediumRegular'
       : 'secondaryBodySmallRegular';
 
+    const handleOnRollover = () => {
+      if (type === 'LP') {
+        navigate.toRolloverLPFormPage({
+          ammId: routeAmmId,
+          poolId: routePoolId,
+          positionId: routePositionId,
+        });
+      } else {
+        navigate.toRolloverSwapFormPage({
+          ammId: routeAmmId,
+          poolId: routePoolId,
+          positionId: routePositionId,
+        });
+      }
+    };
+    const handleOnSettle = () => {
+      alert('TODO!');
+    };
     return (
-      <ActivePositionEntryBoxWrapper ref={ref}>
+      <PositionEntryBoxWrapper ref={ref}>
         {ChainIcon ? (
           <ChainIconContainer>
             <ChainIcon />
           </ChainIconContainer>
         ) : null}
-        <ActivePositionEntryBox
+        {HealthColorMap[health] !== undefined ? (
+          <HealthIndicatorBox>
+            <AttentionIndicator colorToken={HealthColorMap[health]!} />
+          </HealthIndicatorBox>
+        ) : null}
+        <PositionEntryBox
           backgroundColorToken={backgroundColorToken}
           borderColorToken={borderColorToken}
         >
@@ -110,19 +148,17 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositi
             />
           </LeftBox>
           <NotionalBox>
-            <TokenTypography
-              colorToken="lavenderWeb"
-              token={notionalCompactFormat.compactSuffix}
+            <PositionNotional
+              notionalCompactFormat={notionalCompactFormat}
+              status={status}
               typographyToken={typographyToken}
-              value={notionalCompactFormat.compactNumber}
             />
           </NotionalBox>
           <MarginBox>
-            <TokenTypography
-              colorToken="lavenderWeb"
-              token={marginCompactFormat.compactSuffix}
+            <PositionMargin
+              marginCompactFormat={marginCompactFormat}
+              status={status}
               typographyToken={typographyToken}
-              value={marginCompactFormat.compactNumber}
             />
           </MarginBox>
           <MaturityBox>
@@ -130,29 +166,28 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositi
               maturityEndTimestampInMS={maturityEndTimestampInMS}
               maturityFormatted={maturityFormatted}
               maturityStartTimestampInMS={maturityStartTimestampInMS}
+              status={status}
               typographyToken={typographyToken}
+              onSettle={handleOnSettle}
             />
           </MaturityBox>
           <StatusBox>
-            <PositionStatus status={status} typographyToken={typographyToken} />
+            <PositionStatus
+              status={status}
+              type={type}
+              typographyToken={typographyToken}
+              onRollover={handleOnRollover}
+            />
           </StatusBox>
           <UnrealizedPNLBox>
-            <TokenTypography
-              colorToken={
-                unrealizedPNLCompactFormat.compactNumber.indexOf('-') === -1
-                  ? 'skyBlueCrayola'
-                  : 'wildStrawberry'
-              }
-              prefixToken={
-                unrealizedPNLCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'
-              }
-              token={unrealizedPNLCompactFormat.compactSuffix}
+            <PositionUnrealizedPNLDetails
+              status={status}
               typographyToken={typographyToken}
-              value={unrealizedPNLCompactFormat.compactNumber.replace('-', '')}
+              unrealizedPNLCompactFormat={unrealizedPNLCompactFormat}
             />
           </UnrealizedPNLBox>
           <RealizedPNLBox>
-            <PositionPNLDetails
+            <PositionRealizedPNLDetails
               realizedPNLCashflow={realizedPNLCashflow}
               realizedPNLFees={realizedPNLFees}
               realizedPNLTotal={realizedPNLTotal}
@@ -161,8 +196,8 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, ActivePositi
               typographyToken={typographyToken}
             />
           </RealizedPNLBox>
-        </ActivePositionEntryBox>
-      </ActivePositionEntryBoxWrapper>
+        </PositionEntryBox>
+      </PositionEntryBoxWrapper>
     );
   },
 );
