@@ -38,7 +38,9 @@ export const selectWalletBalance = (state: RootState) => {
 
   return formCompactFormat(
     state.rolloverSwapForm.walletBalance.value +
-      state.rolloverSwapForm.previousPosition.settlementCashflow,
+      state.rolloverSwapForm.previousPosition.settlementCashflow +
+      state.rolloverSwapForm.previousPosition.margin +
+      state.rolloverSwapForm.previousPosition.fees,
   );
 };
 export const selectFixedRateInfo = (state: RootState) => state.rolloverSwapForm.amm?.fixedApr;
