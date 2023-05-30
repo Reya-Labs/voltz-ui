@@ -16,6 +16,7 @@ import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
 import { LPFormPage } from './ui/pages/LPForm';
 import { PoolsPage } from './ui/pages/Pools';
+import { PortfolioOptimisersPage } from './ui/pages/Portfolio/PortfolioOptimisers';
 import { PortfolioPositionsPage } from './ui/pages/Portfolio/PortfolioPositions';
 import { ProfilePage } from './ui/pages/Profile';
 import { RolloverLPFormPage } from './ui/pages/RolloverLPForm';
@@ -65,6 +66,14 @@ export const AppRoutes = () => {
             </NetworkProtectedVoltzPage>
           }
           path={routes.PORTFOLIO_POSITIONS}
+        />
+        <Route
+          element={
+            <NetworkProtectedVoltzPage>
+              <PortfolioOptimisersPage />
+            </NetworkProtectedVoltzPage>
+          }
+          path={routes.PORTFOLIO_OPTIMISERS}
         />
         {isPortfolioNextEnabled() ? null : (
           <Route
