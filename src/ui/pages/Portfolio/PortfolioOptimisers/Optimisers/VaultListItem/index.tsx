@@ -33,7 +33,7 @@ import {
 
 export type VaultListItemProps = {
   id: string;
-  token: MarketTokenInformationProps['token'];
+  token: NonNullable<MarketTokenInformationProps['token']>;
   totalBalance: number;
   gasCost: number;
   vaults: {
@@ -164,7 +164,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                   <ListEntryLeftBox>
                     <MaturityBox>
                       <Typography
-                        colorToken="lavenderWeb3"
+                        colorToken="lavenderWeb"
                         typographyToken="primaryBodyXSmallRegular"
                       >
                         {formatPOSIXTimestamp(maturityTimestampMS)}

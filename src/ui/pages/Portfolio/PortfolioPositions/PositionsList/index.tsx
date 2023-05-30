@@ -32,7 +32,7 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
       <PositionsHeader />
       {loading ? (
         <PositionsListBox>
-          {Array.from({ length: 10 }, () => ({})).map((ranking, index) => (
+          {Array.from({ length: 10 }, () => ({})).map((_, index) => (
             <PositionEntrySkeleton
               key={index}
               colorToken="liberty2"

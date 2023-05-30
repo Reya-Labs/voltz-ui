@@ -12,16 +12,18 @@ import { routes } from '../../../../../routes/paths';
 import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../../utilities/getInfuraKey';
 import { ConnectWallet } from '../../../../components/ConnectWallet';
+import { GenericError } from '../../../../components/GenericError';
 import { NoVaultsFound } from '../NoVaultsFound';
 import { Header } from './Header';
 import { OptimisersBox } from './Optimisers.styled';
 import { VaultListItem } from './VaultListItem';
+import { VaultListItemSkeleton } from './VaultListItemSkeleton';
 
 export const Optimisers: React.FunctionComponent = () => {
   const { signer } = useWallet();
   const dispatch = useAppDispatch();
   const chainId = useAppSelector(selectChainId);
-  const { lpVaults, vaultsLoaded } = useLPVaults('all');
+  const { lpVaults, vaultsError, vaultsLoading, vaultsLoaded } = useLPVaults('all');
   // TODO: remove this once the entire state is lifted to Redux properly,
   // What is missing it Redux to give us some plain objects and not SDK classes
   const [forcedRerenderCounter, setForcedRerenderCounter] = useState<number>(0);
@@ -39,22 +41,18 @@ export const Optimisers: React.FunctionComponent = () => {
     );
   }
 
-  if (!vaultsLoaded) {
-    return null;
+  if (vaultsError) {
+    return <GenericError to={`/${routes.POOLS}`} />;
   }
 
   const vaultsWithDeposit = lpVaults.filter((vault) => vault.userOptimiserDeposit > 0);
 
-  if (vaultsWithDeposit.length === 0) {
+  if (vaultsLoaded && vaultsWithDeposit.length === 0) {
     return (
-      <OptimisersBox>
-        <NoVaultsFound
-          description="Open your first position here:"
-          navigateTo={`/${routes.LP_OPTIMISERS}`}
-          navigateToText="LP OPTIMISERS"
-          title="You haven’t provided liquidity to any Optimiser yet."
-        />
-      </OptimisersBox>
+      <NoVaultsFound
+        description="Open your first position here:"
+        title="You haven’t provided liquidity to any Optimiser yet."
+      />
     );
   }
 
@@ -100,31 +98,39 @@ export const Optimisers: React.FunctionComponent = () => {
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
         Optimisers
       </Typography>
-      {vaultsWithDeposit.map((vault) => (
-        <React.Fragment key={vault.optimiserId}>
-          <Header />
-          <VaultListItem
-            automaticRolloverState={
-              Boolean(vault.isUserRegisteredForAutoRollover) ? 'active' : 'inactive'
-            }
-            canRegisterUnregister={vault.canRegisterUnregister}
-            depositable={vault.depositable}
-            gasCost={vault.autorolloverGasCostInUSD}
-            id={vault.optimiserId}
-            token={vault.tokenName.toLowerCase() as MarketTokenProps['token']}
-            totalBalance={vault.userOptimiserDepositUSD}
-            vaults={vault.vaults.map((vVaults) => ({
-              maturityTimestampMS: vVaults.maturityTimestampMS,
-              isCompleted: vVaults.withdrawable,
-              poolsCount: vVaults.pools.length,
-              currentBalance: vVaults.userVaultDepositUSD,
-              distribution: vVaults.defaultWeight,
-              canManageVaultPosition: vVaults.canUserManageVault,
-            }))}
-            onChangeAutomaticRolloverStatePromise={automaticRolloverChangePromise}
-          />
-        </React.Fragment>
-      ))}
+      {vaultsLoading &&
+        Array.from({ length: 1 }, () => ({})).map((_, index) => (
+          <React.Fragment key={index}>
+            <Header />
+            <VaultListItemSkeleton />
+          </React.Fragment>
+        ))}
+      {!vaultsLoading &&
+        vaultsWithDeposit.map((vault) => (
+          <React.Fragment key={vault.optimiserId}>
+            <Header />
+            <VaultListItem
+              automaticRolloverState={
+                Boolean(vault.isUserRegisteredForAutoRollover) ? 'active' : 'inactive'
+              }
+              canRegisterUnregister={vault.canRegisterUnregister}
+              depositable={vault.depositable}
+              gasCost={vault.autorolloverGasCostInUSD}
+              id={vault.optimiserId}
+              token={vault.tokenName.toLowerCase() as NonNullable<MarketTokenProps['token']>}
+              totalBalance={vault.userOptimiserDepositUSD}
+              vaults={vault.vaults.map((vVaults) => ({
+                maturityTimestampMS: vVaults.maturityTimestampMS,
+                isCompleted: vVaults.withdrawable,
+                poolsCount: vVaults.pools.length,
+                currentBalance: vVaults.userVaultDepositUSD,
+                distribution: vVaults.defaultWeight,
+                canManageVaultPosition: vVaults.canUserManageVault,
+              }))}
+              onChangeAutomaticRolloverStatePromise={automaticRolloverChangePromise}
+            />
+          </React.Fragment>
+        ))}
     </OptimisersBox>
   );
 };

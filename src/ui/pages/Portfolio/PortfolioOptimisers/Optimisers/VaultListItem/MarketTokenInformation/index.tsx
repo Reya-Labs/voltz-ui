@@ -4,7 +4,7 @@ import React from 'react';
 import { MarketTokenBox } from './MarketTokenInformation.styled';
 
 export type MarketTokenInformationProps = {
-  token: MarketTokenProps['token'];
+  token: NonNullable<MarketTokenProps['token']>;
 };
 
 export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformationProps> = ({

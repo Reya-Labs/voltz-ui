@@ -27,5 +27,7 @@ export const useLPVaults = (type: 'active' | 'all') => {
   return {
     lpVaults,
     vaultsLoaded: vaultsLoaded === 'succeeded',
+    vaultsError: vaultsLoaded === 'failed',
+    vaultsLoading: vaultsLoaded === 'pending' || vaultsLoaded === 'idle',
   };
 };
