@@ -35,23 +35,23 @@ export type PositionUI = {
     fixLow: number;
     fixHigh: number;
   };
-  unrealizedPNL: number;
-  unrealizedPNLCompactFormat: {
+  unrealizedPNLUSD: number;
+  unrealizedPNLUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };
-  realizedPNLTotal: number;
-  realizedPNLTotalCompactFormat: {
+  realizedPNLTotalUSD: number;
+  realizedPNLTotalUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };
-  realizedPNLFees: number;
-  realizedPNLFeesCompactFormat: {
+  realizedPNLFeesUSD: number;
+  realizedPNLFeesUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };
-  realizedPNLCashflow: number;
-  realizedPNLCashflowCompactFormat: {
+  realizedPNLCashflowUSD: number;
+  realizedPNLCashflowUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };

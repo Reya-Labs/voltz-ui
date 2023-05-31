@@ -47,11 +47,11 @@ type PositionEntryProps = {
   status: PositionUI['status'];
   type: PositionUI['type'];
   marginCompactFormat: PositionUI['marginCompactFormat'];
-  unrealizedPNLCompactFormat: PositionUI['unrealizedPNLCompactFormat'];
-  realizedPNLTotalCompactFormat: PositionUI['realizedPNLTotalCompactFormat'];
-  realizedPNLTotal: PositionUI['realizedPNLTotal'];
-  realizedPNLFees: PositionUI['realizedPNLFees'];
-  realizedPNLCashflow: PositionUI['realizedPNLCashflow'];
+  unrealizedPNLUSDCompactFormat: PositionUI['unrealizedPNLUSDCompactFormat'];
+  realizedPNLTotalUSDCompactFormat: PositionUI['realizedPNLTotalUSDCompactFormat'];
+  realizedPNLTotalUSD: PositionUI['realizedPNLTotalUSD'];
+  realizedPNLFeesUSD: PositionUI['realizedPNLFeesUSD'];
+  realizedPNLCashflowUSD: PositionUI['realizedPNLCashflowUSD'];
   notionalCompactFormat: PositionUI['notionalCompactFormat'];
 };
 const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
@@ -85,11 +85,11 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
       borderColorToken,
       marginCompactFormat,
       notionalCompactFormat,
-      realizedPNLTotalCompactFormat,
-      realizedPNLFees,
-      realizedPNLTotal,
-      realizedPNLCashflow,
-      unrealizedPNLCompactFormat,
+      realizedPNLTotalUSDCompactFormat,
+      realizedPNLFeesUSD,
+      realizedPNLTotalUSD,
+      realizedPNLCashflowUSD,
+      unrealizedPNLUSDCompactFormat,
       type,
       maturityEndTimestampInMS,
       maturityStartTimestampInMS,
@@ -188,15 +188,15 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
               numbersTypographyToken={numbersTypographyToken}
               status={status}
               textsTypographyToken={textsTypographyToken}
-              unrealizedPNLCompactFormat={unrealizedPNLCompactFormat}
+              unrealizedPNLUSDCompactFormat={unrealizedPNLUSDCompactFormat}
             />
           </UnrealizedPNLBox>
           <RealizedPNLBox>
             <PositionRealizedPNLDetails
-              realizedPNLCashflow={realizedPNLCashflow}
-              realizedPNLFees={realizedPNLFees}
-              realizedPNLTotal={realizedPNLTotal}
-              realizedPNLTotalCompactFormat={realizedPNLTotalCompactFormat}
+              realizedPNLCashflowUSD={realizedPNLCashflowUSD}
+              realizedPNLFeesUSD={realizedPNLFeesUSD}
+              realizedPNLTotalUSD={realizedPNLTotalUSD}
+              realizedPNLTotalUSDCompactFormat={realizedPNLTotalUSDCompactFormat}
               type={type}
               typographyToken={numbersTypographyToken}
             />

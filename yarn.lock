@@ -7227,10 +7227,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.140.0":
-  version "1.140.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.140.0.tgz#268c0bedaaba06a5683c1e8f9b5b2470e16b5046"
-  integrity sha512-ooCBfa6QZh/wS7GwCWIKdZJsRzb+klqeQG6G05qiwL8NdnOFczOVrBy0PpHERD5steie4P9Eep/EtMuB6uaWcg==
+"@voltz-protocol/v1-sdk@1.141.1":
+  version "1.141.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.141.1.tgz#b757867bda3ba85c952ba7788865a6c5f861d294"
+  integrity sha512-MupGgRgvRbdPeHXcACjc4N2qDs/blxk8IMUmJOzVm04nD+KSLcH+MhA3iWpfhNWUkZY0cN63r7lr3PoyRl28Cw==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"

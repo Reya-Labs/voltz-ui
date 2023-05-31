@@ -17,16 +17,15 @@ export const PortfolioPositions: React.FunctionComponent = () => {
     if (!chainId) {
       return;
     }
-    if (!account || !signer) {
+    if (!account) {
       return;
     }
     void dispatch(
       initialisePortfolioPositionsThunk({
-        chainId,
-        signer,
+        account,
       }),
     );
-  }, [chainId, signer, account]);
+  }, [account, chainId, dispatch]);
   if (!chainId) {
     return null;
   }

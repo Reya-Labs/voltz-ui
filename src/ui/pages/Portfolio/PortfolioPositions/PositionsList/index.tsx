@@ -67,17 +67,17 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
                   maturityFormatted={position.maturityFormatted}
                   maturityStartTimestampInMS={position.maturityStartTimestampInMS}
                   notionalCompactFormat={position.notionalCompactFormat}
-                  realizedPNLCashflow={position.realizedPNLCashflow}
-                  realizedPNLFees={position.realizedPNLFees}
-                  realizedPNLTotal={position.realizedPNLTotal}
-                  realizedPNLTotalCompactFormat={position.realizedPNLTotalCompactFormat}
+                  realizedPNLCashflowUSD={position.realizedPNLCashflowUSD}
+                  realizedPNLFeesUSD={position.realizedPNLFeesUSD}
+                  realizedPNLTotalUSD={position.realizedPNLTotalUSD}
+                  realizedPNLTotalUSDCompactFormat={position.realizedPNLTotalUSDCompactFormat}
                   routeAmmId={position.routeAmmId}
                   routePoolId={position.routePoolId}
                   routePositionId={position.routePositionId}
                   status={position.status}
                   token={position.token}
                   type={position.type}
-                  unrealizedPNLCompactFormat={position.unrealizedPNLCompactFormat}
+                  unrealizedPNLUSDCompactFormat={position.unrealizedPNLUSDCompactFormat}
                 />
               ))
             : null}

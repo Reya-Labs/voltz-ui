@@ -18,18 +18,21 @@ export const selectPositions = (state: RootState): PositionUI[] => {
   }
 
   const pools: PositionUI[] = portfolioPositions.map((position) => {
-    const isV2 = position.amm.isV2;
-    const isAaveV3 = position.amm.isAaveV3;
+    const isV2 = false;
+    const isAaveV3 = position.amm.market === 'Aave V3';
     const isBorrowing = position.amm.isBorrowing;
-    const market = position.amm.market;
+    const market =
+      position.amm.market === 'Aave V3' || position.amm.market === 'Aave V2'
+        ? 'Aave'
+        : position.amm.market;
     const token = position.amm.underlyingToken.name;
     const notional = position.notional;
     const margin = position.margin;
     const type = position.type;
-    const unrealizedPNL = position.unrealizedPNLUSD;
-    const realizedPNLTotal = position.realizedPNLTotalUSD;
-    const realizedPNLFees = position.realizedPNLFeesUSD;
-    const realizedPNLCashflow = position.realizedPNLCashflowUSD;
+    const unrealizedPNLUSD = position.unrealizedPNL * position.tokenPriceUSD;
+    const realizedPNLTotalUSD = position.realizedPNLTotal * position.tokenPriceUSD;
+    const realizedPNLFeesUSD = position.realizedPNLFees * position.tokenPriceUSD;
+    const realizedPNLCashflowUSD = position.realizedPNLCashflow * position.tokenPriceUSD;
 
     return {
       type,
@@ -53,15 +56,23 @@ export const selectPositions = (state: RootState): PositionUI[] => {
       name: `${type} - ${market}${isAaveV3 ? ' - Aave v3' : ''} - ${token as string}${
         isBorrowing ? ' - Borrowing' : ''
       }`,
-      status: position.status,
-      unrealizedPNL,
-      unrealizedPNLCompactFormat: compactFormatToParts(unrealizedPNL),
-      realizedPNLTotal,
-      realizedPNLTotalCompactFormat: compactFormatToParts(realizedPNLTotal),
-      realizedPNLFees,
-      realizedPNLFeesCompactFormat: compactFormatToParts(realizedPNLFees),
-      realizedPNLCashflow,
-      realizedPNLCashflowCompactFormat: compactFormatToParts(realizedPNLCashflow),
+      status: {
+        fixHigh: position.fixHigh,
+        fixLow: position.fixLow,
+        currentFixed: position.status.currentFixed,
+        health: position.status.health,
+        receiving: position.status.receiving,
+        paying: position.status.paying,
+        variant: position.status.variant,
+      },
+      unrealizedPNLUSD,
+      unrealizedPNLUSDCompactFormat: compactFormatToParts(unrealizedPNLUSD),
+      realizedPNLTotalUSD,
+      realizedPNLTotalUSDCompactFormat: compactFormatToParts(realizedPNLTotalUSD),
+      realizedPNLFeesUSD,
+      realizedPNLFeesUSDCompactFormat: compactFormatToParts(realizedPNLFeesUSD),
+      realizedPNLCashflowUSD,
+      realizedPNLCashflowUSDCompactFormat: compactFormatToParts(realizedPNLCashflowUSD),
     };
   });
 

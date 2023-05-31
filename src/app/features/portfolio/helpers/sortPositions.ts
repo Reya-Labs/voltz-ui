@@ -41,15 +41,15 @@ export const sortPositions = (
     directions.push(nameSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   if (maturitySortingDirection !== 'noSort') {
-    fields.push('maturity');
+    fields.push('maturityEndTimestampInMS');
     directions.push(maturitySortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   if (unrealizedPNLSortingDirection !== 'noSort') {
-    fields.push('unrealizedPNL');
+    fields.push('unrealizedPNLUSD');
     directions.push(unrealizedPNLSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   if (realizedPNLSortingDirection !== 'noSort') {
-    fields.push('realizedPNLTotal');
+    fields.push('realizedPNLTotalUSD');
     directions.push(realizedPNLSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   return orderBy(positions, fields, directions);
