@@ -42,6 +42,7 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
       ) : null}
       {!loading ? (
         <PositionsListBox
+          key={positionsFilterId}
           delay={0}
           duration={300}
           easing="cubic-bezier(0.25,0.1,0.25,1.0)"
