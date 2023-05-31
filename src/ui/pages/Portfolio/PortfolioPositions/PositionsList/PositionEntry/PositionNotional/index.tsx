@@ -6,12 +6,11 @@ import { PositionUI } from '../../../../../../../app/features/portfolio/types';
 type PositionNotionalProps = {
   status: PositionUI['status'];
   typographyToken: TypographyToken;
-
-  notionalCompactFormat: PositionUI['notionalCompactFormat'];
+  notionalUSDCompactFormat: PositionUI['notionalUSDCompactFormat'];
 };
 
 export const PositionNotional: React.FunctionComponent<PositionNotionalProps> = ({
-  notionalCompactFormat,
+  notionalUSDCompactFormat,
   status,
   typographyToken,
 }) => {
@@ -21,9 +20,9 @@ export const PositionNotional: React.FunctionComponent<PositionNotionalProps> = 
   return (
     <TokenTypography
       colorToken="lavenderWeb"
-      token={notionalCompactFormat.compactSuffix}
+      token={notionalUSDCompactFormat.compactSuffix}
       typographyToken={typographyToken}
-      value={notionalCompactFormat.compactNumber}
+      value={notionalUSDCompactFormat.compactNumber}
     />
   );
 };

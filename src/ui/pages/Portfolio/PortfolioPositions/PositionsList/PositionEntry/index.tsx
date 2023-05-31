@@ -50,13 +50,13 @@ type PositionEntryProps = {
   chainId: SupportedChainId;
   status: PositionUI['status'];
   type: PositionUI['type'];
-  marginCompactFormat: PositionUI['marginCompactFormat'];
+  marginUSDCompactFormat: PositionUI['marginUSDCompactFormat'];
   unrealizedPNLUSDCompactFormat: PositionUI['unrealizedPNLUSDCompactFormat'];
   realizedPNLTotalUSDCompactFormat: PositionUI['realizedPNLTotalUSDCompactFormat'];
   realizedPNLTotalUSD: PositionUI['realizedPNLTotalUSD'];
   realizedPNLFeesUSD: PositionUI['realizedPNLFeesUSD'];
   realizedPNLCashflowUSD: PositionUI['realizedPNLCashflowUSD'];
-  notionalCompactFormat: PositionUI['notionalCompactFormat'];
+  notionalUSDCompactFormat: PositionUI['notionalUSDCompactFormat'];
 };
 const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
   [SupportedChainId.mainnet]: null,
@@ -90,8 +90,8 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
       status,
       isV2,
       borderColorToken,
-      marginCompactFormat,
-      notionalCompactFormat,
+      marginUSDCompactFormat,
+      notionalUSDCompactFormat,
       realizedPNLTotalUSDCompactFormat,
       realizedPNLFeesUSD,
       realizedPNLTotalUSD,
@@ -176,14 +176,14 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
           </LeftBox>
           <NotionalBox>
             <PositionNotional
-              notionalCompactFormat={notionalCompactFormat}
+              notionalUSDCompactFormat={notionalUSDCompactFormat}
               status={status}
               typographyToken={numbersTypographyToken}
             />
           </NotionalBox>
           <MarginBox>
             <PositionMargin
-              marginCompactFormat={marginCompactFormat}
+              marginUSDCompactFormat={marginUSDCompactFormat}
               status={status}
               typographyToken={numbersTypographyToken}
             />

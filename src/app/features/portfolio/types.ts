@@ -16,13 +16,13 @@ export type PositionUI = {
   market: 'Aave' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
   token?: 'eth' | 'usdc' | 'usdt' | 'dai';
   name: string;
-  notional: number;
-  notionalCompactFormat: {
+  notionalUSD: number;
+  notionalUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };
-  margin: number;
-  marginCompactFormat: {
+  marginUSD: number;
+  marginUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };

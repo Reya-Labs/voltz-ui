@@ -6,12 +6,11 @@ import { PositionUI } from '../../../../../../../app/features/portfolio/types';
 type PositionMarginProps = {
   status: PositionUI['status'];
   typographyToken: TypographyToken;
-
-  marginCompactFormat: PositionUI['marginCompactFormat'];
+  marginUSDCompactFormat: PositionUI['marginUSDCompactFormat'];
 };
 
 export const PositionMargin: React.FunctionComponent<PositionMarginProps> = ({
-  marginCompactFormat,
+  marginUSDCompactFormat,
   status,
   typographyToken,
 }) => {
@@ -21,9 +20,9 @@ export const PositionMargin: React.FunctionComponent<PositionMarginProps> = ({
   return (
     <TokenTypography
       colorToken="lavenderWeb"
-      token={marginCompactFormat.compactSuffix}
+      token={marginUSDCompactFormat.compactSuffix}
       typographyToken={typographyToken}
-      value={marginCompactFormat.compactNumber}
+      value={marginUSDCompactFormat.compactNumber}
     />
   );
 };

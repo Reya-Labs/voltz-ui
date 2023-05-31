@@ -6,6 +6,7 @@ import {
 import { formatPOSIXTimestamp } from '../../../utilities/date';
 import { compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
+import { formFormatNumber } from '../forms/common/utils';
 import { SORT_CONFIG } from './constants';
 import { sortPositions } from './helpers/sortPositions';
 import { PositionSortDirection, PositionSortId, PositionUI } from './types';
@@ -26,8 +27,8 @@ export const selectPositions = (state: RootState): PositionUI[] => {
         ? 'Aave'
         : position.amm.market;
     const token = position.amm.underlyingToken.name;
-    const notional = position.notional;
-    const margin = position.margin;
+    const notionalUSD = position.notional * position.tokenPriceUSD;
+    const marginUSD = position.margin * position.tokenPriceUSD;
     const type = position.type;
     const unrealizedPNLUSD = position.unrealizedPNL * position.tokenPriceUSD;
     const realizedPNLTotalUSD = position.realizedPNLTotal * position.tokenPriceUSD;
@@ -35,20 +36,19 @@ export const selectPositions = (state: RootState): PositionUI[] => {
     const realizedPNLCashflowUSD = position.realizedPNLCashflow * position.tokenPriceUSD;
 
     return {
-      // TODO: FB finish integration with API
-      canEdit: false,
-      canSettle: false,
-      canRollover: false,
+      canEdit: position.canEdit,
+      canSettle: position.canSettle,
+      canRollover: Boolean(position.rolloverAmmId),
       type,
       market,
       token,
       isBorrowing,
       isAaveV3,
       isV2,
-      marginCompactFormat: compactFormatToParts(margin),
-      margin,
-      notionalCompactFormat: compactFormatToParts(notional),
-      notional,
+      marginUSDCompactFormat: compactFormatToParts(marginUSD),
+      marginUSD,
+      notionalUSDCompactFormat: compactFormatToParts(notionalUSD),
+      notionalUSD,
       maturityEndTimestampInMS: position.amm.termEndTimestampInMS,
       maturityStartTimestampInMS: position.amm.termStartTimestampInMS,
       maturityFormatted: formatPOSIXTimestamp(position.amm.termEndTimestampInMS),
@@ -125,6 +125,67 @@ export const selectDangerPositionsLength = (state: RootState): string => {
   return selectPositions(state)
     .filter((p) => p.status.health === 'danger')
     .length.toString();
+};
+export const selectTotalPortfolioValueUSDFormatted = (state: RootState) => {
+  if (selectPositionsLoading(state)) {
+    return '--';
+  }
+  return formFormatNumber(
+    selectTotalPortfolioMarginValueUSD(state) +
+      selectTotalPortfolioRealizedPNLValueUSD(state) +
+      selectTotalPortfolioUnrealizedPNLValueUSD(state),
+  );
+};
+export const selectTotalPortfolioNotionalValueUSD = (state: RootState) => {
+  if (selectPositionsLoading(state)) {
+    return 0;
+  }
+  return selectPositions(state).reduce((total, curr) => total + curr.notionalUSD, 0);
+};
+export const selectTotalPortfolioMarginValueUSD = (state: RootState) => {
+  if (selectPositionsLoading(state)) {
+    return 0;
+  }
+  return selectPositions(state).reduce((total, curr) => total + curr.marginUSD, 0);
+};
+export const selectTotalPortfolioMarginValueUSDFormatted = (state: RootState) => {
+  if (selectPositionsLoading(state)) {
+    return '--';
+  }
+  return formFormatNumber(selectTotalPortfolioMarginValueUSD(state));
+};
+export const selectTotalPortfolioRealizedPNLValueUSD = (state: RootState) => {
+  if (selectPositionsLoading(state)) {
+    return 0;
+  }
+  return selectPositions(state).reduce((total, curr) => total + curr.realizedPNLTotalUSD, 0);
+};
+export const selectTotalPortfolioRealizedPNLValueUSDFormatted = (state: RootState) => {
+  if (selectPositionsLoading(state)) {
+    return '--';
+  }
+  return formFormatNumber(selectTotalPortfolioRealizedPNLValueUSD(state));
+};
+export const selectTotalPortfolioUnrealizedPNLValueUSD = (state: RootState) => {
+  if (selectPositionsLoading(state)) {
+    return 0;
+  }
+  return selectPositions(state).reduce((total, curr) => total + curr.unrealizedPNLUSD, 0);
+};
+export const selectTotalPortfolioUnrealizedPNLValueUSDFormatted = (state: RootState) => {
+  if (selectPositionsLoading(state)) {
+    return '--';
+  }
+  return formFormatNumber(selectTotalPortfolioUnrealizedPNLValueUSD(state));
+};
+export const selectTotalPortfolioNotionalValueUSDCompactFormatted = (state: RootState) => {
+  if (selectPositionsLoading(state)) {
+    return {
+      compactNumber: '--',
+      compactSuffix: '',
+    };
+  }
+  return compactFormatToParts(selectTotalPortfolioNotionalValueUSD(state));
 };
 export const selectPositionsSortOptions = (
   state: RootState,

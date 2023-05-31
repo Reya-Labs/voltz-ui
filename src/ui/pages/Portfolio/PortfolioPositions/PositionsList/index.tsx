@@ -17,15 +17,13 @@ type PositionsListProps = {
   positionsFilterId: PositionsFilterId;
 };
 
-export type PositionsFilterId = 'active' | 'settled';
+export type PositionsFilterId = 'active' | 'matured' | 'settled';
 export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
   positionsFilterId,
 }) => {
   const loading = useAppSelector(selectPositionsLoading);
-  const positions = useAppSelector(selectPositions).filter((p) =>
-    positionsFilterId === 'active'
-      ? p.status.variant === 'matured' || p.status.variant === 'active'
-      : p.status.variant === 'settled',
+  const positions = useAppSelector(selectPositions).filter(
+    (p) => positionsFilterId === p.status.variant,
   );
   return (
     <PositionsHeaderAndListBox>
@@ -64,12 +62,12 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
                   isAaveV3={position.isAaveV3}
                   isBorrowing={position.isBorrowing}
                   isV2={position.isV2}
-                  marginCompactFormat={position.marginCompactFormat}
+                  marginUSDCompactFormat={position.marginUSDCompactFormat}
                   market={position.market}
                   maturityEndTimestampInMS={position.maturityEndTimestampInMS}
                   maturityFormatted={position.maturityFormatted}
                   maturityStartTimestampInMS={position.maturityStartTimestampInMS}
-                  notionalCompactFormat={position.notionalCompactFormat}
+                  notionalUSDCompactFormat={position.notionalUSDCompactFormat}
                   realizedPNLCashflowUSD={position.realizedPNLCashflowUSD}
                   realizedPNLFeesUSD={position.realizedPNLFeesUSD}
                   realizedPNLTotalUSD={position.realizedPNLTotalUSD}

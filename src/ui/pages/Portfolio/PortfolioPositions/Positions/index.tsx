@@ -5,6 +5,11 @@ import {
   selectDangerPositionsLength,
   selectHealthyPositionsLength,
   selectPositionsLength,
+  selectTotalPortfolioMarginValueUSDFormatted,
+  selectTotalPortfolioNotionalValueUSDCompactFormatted,
+  selectTotalPortfolioRealizedPNLValueUSDFormatted,
+  selectTotalPortfolioUnrealizedPNLValueUSDFormatted,
+  selectTotalPortfolioValueUSDFormatted,
   selectWarningPositionsLength,
 } from '../../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -34,6 +39,10 @@ const positionFilterOptions: {
     label: 'Active',
   },
   {
+    id: 'matured',
+    label: 'Matured',
+  },
+  {
     id: 'settled',
     label: 'Settled',
   },
@@ -44,6 +53,19 @@ export const Positions: React.FunctionComponent = () => {
   const healthyPositionsLength = useAppSelector(selectHealthyPositionsLength);
   const warningPositionsLength = useAppSelector(selectWarningPositionsLength);
   const dangerPositionsLength = useAppSelector(selectDangerPositionsLength);
+  const totalPortfolioValueUSDFormatted = useAppSelector(selectTotalPortfolioValueUSDFormatted);
+  const totalPortfolioMarginValueUSDFormatted = useAppSelector(
+    selectTotalPortfolioMarginValueUSDFormatted,
+  );
+  const totalPortfolioRealizedPNLValueUSDFormatted = useAppSelector(
+    selectTotalPortfolioRealizedPNLValueUSDFormatted,
+  );
+  const totalPortfolioUnrealizedPNLValueUSDFormatted = useAppSelector(
+    selectTotalPortfolioUnrealizedPNLValueUSDFormatted,
+  );
+  const totalPortfolioNotionalValueUSDCompactFormatted = useAppSelector(
+    selectTotalPortfolioNotionalValueUSDCompactFormatted,
+  );
   const [activeFilter, setActiveFilter] = useState<PositionsFilterId>('active');
 
   return (
@@ -54,7 +76,7 @@ export const Positions: React.FunctionComponent = () => {
             Total Portfolio Value (USD)
           </Typography>
           <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyExtraLargeBold">
-            $189,099.01
+            ${totalPortfolioValueUSDFormatted}
           </Typography>
         </TotalPortfolioValueBox>
         <PositionDetailsBox>
@@ -67,7 +89,7 @@ export const Positions: React.FunctionComponent = () => {
               prefixToken="$"
               token={''}
               typographyToken="secondaryBodyMediumBold"
-              value={'12,999.00'}
+              value={totalPortfolioMarginValueUSDFormatted}
             />
           </MarginBox>
           <RealizedPNLBox>
@@ -76,10 +98,20 @@ export const Positions: React.FunctionComponent = () => {
               label="Realised PnL"
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
-              prefixToken="+$"
+              prefixToken={
+                totalPortfolioRealizedPNLValueUSDFormatted === '--'
+                  ? ''
+                  : totalPortfolioRealizedPNLValueUSDFormatted.indexOf('-') === -1
+                  ? '+$'
+                  : '-$'
+              }
               token={''}
               typographyToken="secondaryBodyMediumBold"
-              value={'54,988'}
+              value={
+                totalPortfolioRealizedPNLValueUSDFormatted === '--'
+                  ? totalPortfolioRealizedPNLValueUSDFormatted
+                  : totalPortfolioRealizedPNLValueUSDFormatted.replace('-', '')
+              }
             />
           </RealizedPNLBox>
           <UnrealizedPNLBox>
@@ -88,10 +120,20 @@ export const Positions: React.FunctionComponent = () => {
               label="Unrealised PnL"
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
-              prefixToken="-$"
+              prefixToken={
+                totalPortfolioUnrealizedPNLValueUSDFormatted === '--'
+                  ? ''
+                  : totalPortfolioUnrealizedPNLValueUSDFormatted.indexOf('-') === -1
+                  ? '+$'
+                  : '-$'
+              }
               token={''}
               typographyToken="secondaryBodyMediumBold"
-              value={'54,988'}
+              value={
+                totalPortfolioUnrealizedPNLValueUSDFormatted === '--'
+                  ? totalPortfolioUnrealizedPNLValueUSDFormatted
+                  : totalPortfolioUnrealizedPNLValueUSDFormatted.replace('-', '')
+              }
             />
           </UnrealizedPNLBox>
           <TotalNotionalBox>
@@ -101,9 +143,9 @@ export const Positions: React.FunctionComponent = () => {
               labelColorToken="lavenderWeb3"
               labelTypographyToken="primaryBodyXSmallRegular"
               prefixToken="$"
-              token={'M'}
+              token={totalPortfolioNotionalValueUSDCompactFormatted.compactSuffix}
               typographyToken="secondaryBodyMediumBold"
-              value={'245.004'}
+              value={totalPortfolioNotionalValueUSDCompactFormatted.compactNumber}
             />
           </TotalNotionalBox>
           <HealthStatusBox>

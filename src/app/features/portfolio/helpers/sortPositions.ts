@@ -25,11 +25,11 @@ export const sortPositions = (
   const fields = [];
   const directions: ('asc' | 'desc')[] = [];
   if (marginSortingDirection !== 'noSort') {
-    fields.push('margin');
+    fields.push('marginUSD');
     directions.push(marginSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   if (notionalSortingDirection !== 'noSort') {
-    fields.push('notional');
+    fields.push('notionalUSD');
     directions.push(notionalSortingDirection === 'ascending' ? 'asc' : 'desc');
   }
   if (statusSortingDirection !== 'noSort') {

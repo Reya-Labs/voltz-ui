@@ -4,16 +4,16 @@ describe('sortPositions function', () => {
   describe('single property sort', () => {
     const positions = [
       {
-        notional: 1000,
-        margin: 1000,
+        notionalUSD: 1000,
+        marginUSD: 1000,
       },
       {
-        notional: 3000,
-        margin: 3000,
+        notionalUSD: 3000,
+        marginUSD: 3000,
       },
       {
-        notional: 2000,
-        margin: 2000,
+        notionalUSD: 2000,
+        marginUSD: 2000,
       },
     ] as never;
 
