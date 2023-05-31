@@ -1,17 +1,7 @@
 import { LabelTokenTypography, PillSelector, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import {
-  selectDangerPositionsLength,
-  selectHealthyPositionsLength,
-  selectPositionsLength,
-  selectTotalPortfolioMarginValueUSDFormatted,
-  selectTotalPortfolioNotionalValueUSDCompactFormatted,
-  selectTotalPortfolioRealizedPNLValueUSDFormatted,
-  selectTotalPortfolioUnrealizedPNLValueUSDFormatted,
-  selectTotalPortfolioValueUSDFormatted,
-  selectWarningPositionsLength,
-} from '../../../../../app/features/portfolio';
+import { selectPositionsSummary } from '../../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../../app/hooks';
 import { PositionsFilterId, PositionsList } from '../PositionsList';
 import {
@@ -49,23 +39,17 @@ const positionFilterOptions: {
 ];
 
 export const Positions: React.FunctionComponent = () => {
-  const positionsLength = useAppSelector(selectPositionsLength);
-  const healthyPositionsLength = useAppSelector(selectHealthyPositionsLength);
-  const warningPositionsLength = useAppSelector(selectWarningPositionsLength);
-  const dangerPositionsLength = useAppSelector(selectDangerPositionsLength);
-  const totalPortfolioValueUSDFormatted = useAppSelector(selectTotalPortfolioValueUSDFormatted);
-  const totalPortfolioMarginValueUSDFormatted = useAppSelector(
-    selectTotalPortfolioMarginValueUSDFormatted,
-  );
-  const totalPortfolioRealizedPNLValueUSDFormatted = useAppSelector(
-    selectTotalPortfolioRealizedPNLValueUSDFormatted,
-  );
-  const totalPortfolioUnrealizedPNLValueUSDFormatted = useAppSelector(
-    selectTotalPortfolioUnrealizedPNLValueUSDFormatted,
-  );
-  const totalPortfolioNotionalValueUSDCompactFormatted = useAppSelector(
-    selectTotalPortfolioNotionalValueUSDCompactFormatted,
-  );
+  const {
+    positionsLength,
+    healthyPositionsLength,
+    totalPortfolioNotionalValueUSDCompactFormatted,
+    totalPortfolioMarginValueUSDFormatted,
+    totalPortfolioRealizedPNLValueUSDFormatted,
+    totalPortfolioValueUSDFormatted,
+    totalPortfolioUnrealizedPNLValueUSDFormatted,
+    warningPositionsLength,
+    dangerPositionsLength,
+  } = useAppSelector(selectPositionsSummary);
   const [activeFilter, setActiveFilter] = useState<PositionsFilterId>('active');
 
   return (

@@ -96,97 +96,96 @@ export const selectPositionsLoading = (state: RootState): boolean => {
   return loadedState === 'idle' || loadedState === 'pending';
 };
 
-export const selectPositionsLength = (state: RootState): string => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return selectPositions(state).length.toString();
-};
-export const selectHealthyPositionsLength = (state: RootState): string => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return selectPositions(state)
-    .filter((p) => p.status.health === 'healthy')
-    .length.toString();
-};
-export const selectWarningPositionsLength = (state: RootState): string => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return selectPositions(state)
-    .filter((p) => p.status.health === 'warning')
-    .length.toString();
-};
-export const selectDangerPositionsLength = (state: RootState): string => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return selectPositions(state)
-    .filter((p) => p.status.health === 'danger')
-    .length.toString();
-};
-export const selectTotalPortfolioValueUSDFormatted = (state: RootState) => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return formFormatNumber(
-    selectTotalPortfolioMarginValueUSD(state) +
-      selectTotalPortfolioRealizedPNLValueUSD(state) +
-      selectTotalPortfolioUnrealizedPNLValueUSD(state),
-  );
-};
-export const selectTotalPortfolioNotionalValueUSD = (state: RootState) => {
-  if (selectPositionsLoading(state)) {
-    return 0;
-  }
-  return selectPositions(state).reduce((total, curr) => total + curr.notionalUSD, 0);
-};
-export const selectTotalPortfolioMarginValueUSD = (state: RootState) => {
-  if (selectPositionsLoading(state)) {
-    return 0;
-  }
-  return selectPositions(state).reduce((total, curr) => total + curr.marginUSD, 0);
-};
-export const selectTotalPortfolioMarginValueUSDFormatted = (state: RootState) => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return formFormatNumber(selectTotalPortfolioMarginValueUSD(state));
-};
-export const selectTotalPortfolioRealizedPNLValueUSD = (state: RootState) => {
-  if (selectPositionsLoading(state)) {
-    return 0;
-  }
-  return selectPositions(state).reduce((total, curr) => total + curr.realizedPNLTotalUSD, 0);
-};
-export const selectTotalPortfolioRealizedPNLValueUSDFormatted = (state: RootState) => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return formFormatNumber(selectTotalPortfolioRealizedPNLValueUSD(state));
-};
-export const selectTotalPortfolioUnrealizedPNLValueUSD = (state: RootState) => {
-  if (selectPositionsLoading(state)) {
-    return 0;
-  }
-  return selectPositions(state).reduce((total, curr) => total + curr.unrealizedPNLUSD, 0);
-};
-export const selectTotalPortfolioUnrealizedPNLValueUSDFormatted = (state: RootState) => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return formFormatNumber(selectTotalPortfolioUnrealizedPNLValueUSD(state));
-};
-export const selectTotalPortfolioNotionalValueUSDCompactFormatted = (state: RootState) => {
+export const selectPositionsSummary = (
+  state: RootState,
+): {
+  positionsLength: string;
+  healthyPositionsLength: string;
+  warningPositionsLength: string;
+  dangerPositionsLength: string;
+  totalPortfolioValueUSDFormatted: string;
+  totalPortfolioMarginValueUSDFormatted: string;
+  totalPortfolioRealizedPNLValueUSDFormatted: string;
+  totalPortfolioUnrealizedPNLValueUSDFormatted: string;
+  totalPortfolioNotionalValueUSDCompactFormatted: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+} => {
   if (selectPositionsLoading(state)) {
     return {
-      compactNumber: '--',
-      compactSuffix: '',
+      positionsLength: '--',
+      healthyPositionsLength: '--',
+      warningPositionsLength: '--',
+      dangerPositionsLength: '--',
+      totalPortfolioValueUSDFormatted: '--',
+      totalPortfolioMarginValueUSDFormatted: '--',
+      totalPortfolioRealizedPNLValueUSDFormatted: '--',
+      totalPortfolioUnrealizedPNLValueUSDFormatted: '--',
+      totalPortfolioNotionalValueUSDCompactFormatted: {
+        compactNumber: '--',
+        compactSuffix: '',
+      },
     };
   }
-  return compactFormatToParts(selectTotalPortfolioNotionalValueUSD(state));
+  const positions = selectPositions(state);
+  const {
+    healthyPositionsLength,
+    dangerPositionsLength,
+    warningPositionsLength,
+    totalPortfolioMarginValueUSD,
+    totalPortfolioRealizedPNLValueUSD,
+    totalPortfolioNotionalValueUSD,
+    totalPortfolioUnrealizedPNLValueUSD,
+  } = positions.reduce(
+    (acc, curr) => {
+      if (curr.status.health === 'healthy') {
+        acc.healthyPositionsLength++;
+      } else if (curr.status.health === 'danger') {
+        acc.dangerPositionsLength++;
+      } else if (curr.status.health === 'warning') {
+        acc.warningPositionsLength++;
+      }
+
+      acc.totalPortfolioMarginValueUSD += curr.marginUSD;
+      acc.totalPortfolioRealizedPNLValueUSD += curr.realizedPNLTotalUSD;
+      acc.totalPortfolioNotionalValueUSD += curr.notionalUSD;
+      acc.totalPortfolioUnrealizedPNLValueUSD += curr.unrealizedPNLUSD;
+
+      return acc;
+    },
+    {
+      healthyPositionsLength: 0,
+      dangerPositionsLength: 0,
+      warningPositionsLength: 0,
+      totalPortfolioMarginValueUSD: 0,
+      totalPortfolioRealizedPNLValueUSD: 0,
+      totalPortfolioNotionalValueUSD: 0,
+      totalPortfolioUnrealizedPNLValueUSD: 0,
+    },
+  );
+
+  return {
+    positionsLength: positions.length.toString(),
+    healthyPositionsLength: healthyPositionsLength.toString(),
+    dangerPositionsLength: dangerPositionsLength.toString(),
+    warningPositionsLength: warningPositionsLength.toString(),
+    totalPortfolioMarginValueUSDFormatted: formFormatNumber(totalPortfolioMarginValueUSD),
+    totalPortfolioNotionalValueUSDCompactFormatted: compactFormatToParts(
+      totalPortfolioNotionalValueUSD,
+    ),
+    totalPortfolioRealizedPNLValueUSDFormatted: formFormatNumber(totalPortfolioRealizedPNLValueUSD),
+    totalPortfolioUnrealizedPNLValueUSDFormatted: formFormatNumber(
+      totalPortfolioUnrealizedPNLValueUSD,
+    ),
+    totalPortfolioValueUSDFormatted: formFormatNumber(
+      totalPortfolioMarginValueUSD +
+        totalPortfolioUnrealizedPNLValueUSD +
+        totalPortfolioRealizedPNLValueUSD,
+    ),
+  };
 };
+
 export const selectPositionsSortOptions = (
   state: RootState,
 ): {
