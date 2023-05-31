@@ -138,19 +138,21 @@ export const selectPositionsSummary = (
     totalPortfolioNotionalValueUSD,
     totalPortfolioUnrealizedPNLValueUSD,
   } = positions.reduce(
-    (acc, curr) => {
-      if (curr.status.health === 'healthy') {
-        acc.healthyPositionsLength++;
-      } else if (curr.status.health === 'danger') {
-        acc.dangerPositionsLength++;
-      } else if (curr.status.health === 'warning') {
-        acc.warningPositionsLength++;
+    (acc, position) => {
+      if (position.status.variant === 'active') {
+        if (position.status.health === 'healthy') {
+          acc.healthyPositionsLength++;
+        } else if (position.status.health === 'danger') {
+          acc.dangerPositionsLength++;
+        } else if (position.status.health === 'warning') {
+          acc.warningPositionsLength++;
+        }
       }
 
-      acc.totalPortfolioMarginValueUSD += curr.marginUSD;
-      acc.totalPortfolioRealizedPNLValueUSD += curr.realizedPNLTotalUSD;
-      acc.totalPortfolioNotionalValueUSD += curr.notionalUSD;
-      acc.totalPortfolioUnrealizedPNLValueUSD += curr.unrealizedPNLUSD;
+      acc.totalPortfolioMarginValueUSD += position.marginUSD;
+      acc.totalPortfolioRealizedPNLValueUSD += position.realizedPNLTotalUSD;
+      acc.totalPortfolioNotionalValueUSD += position.notionalUSD;
+      acc.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
 
       return acc;
     },
