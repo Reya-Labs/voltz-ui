@@ -70,7 +70,7 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
 
   const loading = useAppSelector(selectHistoricalRatesStatus) === 'pending';
   const dispatch = useAppDispatch();
-  const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1w');
+  const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1m');
   const [activeModeId, setActiveModeId] = useState<string>('variable');
   const chainId = useAppSelector(selectChainId);
   const { isLargeDesktopDevice } = useResponsiveQuery();
