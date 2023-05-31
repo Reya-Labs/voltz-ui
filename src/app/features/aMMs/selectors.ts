@@ -77,7 +77,7 @@ export const selectPools = (state: RootState): PoolUI[] => {
       const isV2 = aMM.market.tags.isV2;
       const isAaveV3 = aMM.market.tags.isAaveV3;
       const isBorrowing = aMM.market.tags.isBorrowing;
-      const market = aMM.market.name as MarketTokenInformationProps['market'];
+      const market = aMM.market.name as NonNullable<MarketTokenInformationProps['market']>;
       const token = aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token'];
       const fixedAPRRate = aMM.fixedApr;
       const variableAPYRate = aMM.variableApy;
@@ -102,7 +102,7 @@ export const selectPools = (state: RootState): PoolUI[] => {
         variableAPYRate,
         routeAmmId: generateAmmIdForRoute(aMM),
         routePoolId: generatePoolId(aMM),
-        name: `${market} - ${token as string}`,
+        name: `${market as string} - ${token as string}`,
       };
     });
 

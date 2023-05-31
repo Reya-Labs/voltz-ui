@@ -1,17 +1,10 @@
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { Dialog, PillSelector, TypographyWithTooltip } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { doNothing } from '../../../utilities/doNothing';
-import { IconLabel } from '../../composite/IconLabel/IconLabel';
-import { Modal } from '../../composite/Modal/Modal';
-import { ActiveRolloverModalContent } from './ActiveRolloverModalContent/ActiveRolloverModalContent';
-import {
-  AutomaticRolloverToggleBox,
-  AutomaticRolloverToggleInputLabel,
-  AutomaticRolloverToggleTypography,
-  ToggleButton,
-} from './AutomaticRolloverToggle.styled';
-import { CannotRegisterRolloverModalContent } from './CannotRegisterRolloverModalContent/CannotRegisterRolloverModalContent';
+import { doNothing } from '../../../../../../../utilities/doNothing';
+import { ActiveRolloverModalContent } from './ActiveRolloverModalContent';
+import { AutomaticRolloverToggleBox } from './AutomaticRolloverToggle.styled';
+import { CannotRegisterRolloverModalContent } from './CannotRegisterRolloverModalContent';
 
 type AutomaticRolloverState = 'active' | 'inactive';
 
@@ -21,11 +14,11 @@ const options: {
 }[] = [
   {
     id: 'active',
-    label: 'ACTIVE',
+    label: 'Active',
   },
   {
     id: 'inactive',
-    label: 'INACTIVE',
+    label: 'Inactive',
   },
 ];
 
@@ -101,15 +94,15 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
   return (
     <AutomaticRolloverToggleBox>
       {showTooltip ? (
-        <AutomaticRolloverToggleInputLabel shrink>
-          <IconLabel
-            icon="information-circle"
-            info="Automatically redistributes funds from maturing pools to new pools. This configuration will affect all your deposits in this Optimiser, and will not affect pools that matured before the automatic rollover was activated."
-            label="AUTOMATIC ROLLOVER"
-          />
-        </AutomaticRolloverToggleInputLabel>
+        <TypographyWithTooltip
+          colorToken="lavenderWeb"
+          tooltip="Automatically redistributes funds from maturing pools to new pools. This configuration will affect all your deposits in this Optimiser, and will not affect pools that matured before the automatic rollover was activated."
+          typographyToken="primaryBodyMediumRegular"
+        >
+          Automatic Rollover
+        </TypographyWithTooltip>
       ) : null}
-      <Modal open={isOpen} onClose={handleOnCancel}>
+      <Dialog open={isOpen}>
         {canRegisterUnregister ? (
           <ActiveRolloverModalContent
             gasCost={gasCost}
@@ -122,24 +115,13 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
         ) : (
           <CannotRegisterRolloverModalContent onProceed={handleOnCancel} />
         )}
-      </Modal>
-      <ToggleButtonGroup
-        aria-label="text alignment"
-        value={automaticRolloverState}
-        exclusive
-        onChange={(_, autoRolloverState) => {
-          if (!autoRolloverState) {
-            return;
-          }
-          handleOpen(autoRolloverState as AutomaticRolloverState);
-        }}
-      >
-        {options.map((option) => (
-          <ToggleButton key={option.id} disabled={disabled} value={option.id}>
-            <AutomaticRolloverToggleTypography>{option.label}</AutomaticRolloverToggleTypography>
-          </ToggleButton>
-        ))}
-      </ToggleButtonGroup>
+      </Dialog>
+      <PillSelector
+        activePillId={automaticRolloverState as string}
+        disabled={disabled}
+        pillOptions={options}
+        onPillClick={(autoRolloverState) => handleOpen(autoRolloverState as AutomaticRolloverState)}
+      />
     </AutomaticRolloverToggleBox>
   );
 };

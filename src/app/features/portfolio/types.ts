@@ -3,6 +3,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 export type PositionUI = {
   id: string;
   routeAmmId: string;
+  routePositionId: string;
   routePoolId: string;
   isAaveV3: boolean;
   isBorrowing: boolean;
@@ -26,8 +27,8 @@ export type PositionUI = {
   maturityEndTimestampInMS: number;
   maturityStartTimestampInMS: number;
   status: {
-    variant: 'none' | 'receiving' | 'in-range' | 'paying';
-    value: number;
+    health: 'healthy' | 'danger' | 'warning';
+    variant: 'matured' | 'settled' | 'active';
     currentFixed: number;
     receiving: number;
     paying: number;
