@@ -52,18 +52,6 @@ export const PositionsHeader: React.FunctionComponent = () => {
           />
         ) : null}
       </LeftBox>
-      <MarginBox>
-        {marginSortOption ? (
-          <SortHeader
-            direction={marginSortOption.direction}
-            disabled={marginSortOption.disabled}
-            loading={loading}
-            subtext={marginSortOption.subtext}
-            text={marginSortOption.text}
-            onClick={onSort(marginSortOption.id)}
-          />
-        ) : null}
-      </MarginBox>
       <NotionalBox>
         {notionalSortOption ? (
           <SortHeader
@@ -76,6 +64,18 @@ export const PositionsHeader: React.FunctionComponent = () => {
           />
         ) : null}
       </NotionalBox>
+      <MarginBox>
+        {marginSortOption ? (
+          <SortHeader
+            direction={marginSortOption.direction}
+            disabled={marginSortOption.disabled}
+            loading={loading}
+            subtext={marginSortOption.subtext}
+            text={marginSortOption.text}
+            onClick={onSort(marginSortOption.id)}
+          />
+        ) : null}
+      </MarginBox>
       <MaturityBox>
         {maturitySortOption ? (
           <SortHeader
