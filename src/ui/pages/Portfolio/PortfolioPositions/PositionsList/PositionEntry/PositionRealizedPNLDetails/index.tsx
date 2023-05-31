@@ -40,9 +40,12 @@ export const PositionRealizedPNLDetails: React.FunctionComponent<PositionPNLDeta
       }
     >
       <PnLDetails
-        pnlFromFees={formFormatNumber(realizedPNLFees)}
-        pnlFromSwaps={formFormatNumber(realizedPNLCashflow)}
-        pnlTotal={formFormatNumber(realizedPNLTotal)}
+        pnlFromFees={formFormatNumber(Math.abs(realizedPNLFees))}
+        pnlFromFeesPrefixToken={realizedPNLFees >= 0 ? '+$' : '-$'}
+        pnlFromSwaps={formFormatNumber(Math.abs(realizedPNLCashflow))}
+        pnlFromSwapsPrefixToken={realizedPNLCashflow >= 0 ? '+$' : '-$'}
+        pnlTotal={formFormatNumber(Math.abs(realizedPNLTotal))}
+        pnlTotalPrefixToken={realizedPNLTotal >= 0 ? '+$' : '-$'}
         underlyingTokenName={''}
         variant={type === 'LP' ? 'lp' : 'trader'}
       />

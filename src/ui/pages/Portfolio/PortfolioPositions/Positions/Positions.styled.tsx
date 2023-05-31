@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { colors } from 'brokoli-ui';
 
 export const PositionsBox = styled('div')`
   display: flex;
@@ -26,14 +27,6 @@ export const PositionDetailsBox = styled('div')`
   flex-direction: row;
   width: 100%;
   box-sizing: border-box;
-  gap: 48px;
-`;
-export const HealthStatusBox = styled('div')`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  box-sizing: border-box;
-  gap: 24px;
 `;
 export const MidBox = styled('div')`
   display: flex;
@@ -62,13 +55,24 @@ const Box = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
-  min-width: 100px;
+  justify-content: center;
+  padding-right: 24px;
+  min-width: 75px;
+`;
+const BorderBox = styled(Box)`
+  border-left: 1px solid ${colors.lavenderWeb7};
+  padding-left: 24px;
 `;
 
 export const MarginBox = styled(Box)``;
-export const RealizedPNLBox = styled(Box)``;
-export const UnrealizedPNLBox = styled(Box)``;
-export const TotalNotionalBox = styled(Box)``;
+export const RealizedPNLBox = styled(BorderBox)``;
+export const UnrealizedPNLBox = styled(BorderBox)``;
+export const TotalNotionalBox = styled(BorderBox)``;
+
+export const HealthStatusBox = styled(BorderBox)`
+  display: flex;
+  gap: 24px;
+`;
 
 export const HealthBox = styled('div')`
   display: flex;

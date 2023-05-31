@@ -6,7 +6,7 @@ export const PnLDetailsBox = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: 16px;
 
   width: 240px;
 `;
@@ -17,7 +17,7 @@ export const RowsBox = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 8px;
   width: 100%;
 `;
 

@@ -1,6 +1,7 @@
 import { HorizontalLine, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { formFormatNumber } from '../../../../../../../../app/features/forms/common/utils';
 import { InRange } from '../InRange';
 import { OutOfRange } from '../OutOfRange';
 import { LPStatusDetailsBox, RowBox, RowsBox } from './LPStatusDetails.styled';
@@ -20,11 +21,12 @@ export const LPStatusDetails: React.FunctionComponent<LPStatusDetailsProps> = ({
   return (
     <LPStatusDetailsBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallBold">
-        LP Position in range
+        {inRange ? 'LP Position in range' : 'LP Position out of range'}
       </Typography>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-        When the fixed rate is between your fixed low and fixed high rates your position will be in
-        range.
+        {inRange
+          ? 'When the fixed rate is between your fixed low and fixed high rates your position will be in range.'
+          : 'When the fixed rate is not between your fixed low or fixed high rates your position will be out of range.'}
       </Typography>
       <RowsBox>
         <RowBox>
@@ -35,7 +37,7 @@ export const LPStatusDetails: React.FunctionComponent<LPStatusDetailsProps> = ({
             colorToken="lavenderWeb"
             token="%"
             typographyToken="primaryBodySmallRegular"
-            value={currentFixed}
+            value={formFormatNumber(currentFixed)}
           />
         </RowBox>
         <RowBox>
@@ -46,7 +48,7 @@ export const LPStatusDetails: React.FunctionComponent<LPStatusDetailsProps> = ({
             colorToken="lavenderWeb"
             token="%"
             typographyToken="primaryBodySmallRegular"
-            value={fixLow}
+            value={formFormatNumber(fixLow)}
           />
         </RowBox>
         <RowBox>
@@ -57,7 +59,7 @@ export const LPStatusDetails: React.FunctionComponent<LPStatusDetailsProps> = ({
             colorToken="lavenderWeb"
             token="%"
             typographyToken="primaryBodySmallRegular"
-            value={fixHigh}
+            value={formFormatNumber(fixHigh)}
           />
         </RowBox>
         <HorizontalLine />

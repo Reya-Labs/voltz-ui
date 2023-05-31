@@ -1,6 +1,7 @@
 import { HorizontalLine, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { formFormatNumber } from '../../../../../../../../app/features/forms/common/utils';
 import { RowBox, RowsBox, TraderStatusDetailsBox } from './TraderStatusDetails.styled';
 
 export type TraderStatusDetailsProps = {
@@ -33,7 +34,7 @@ export const TraderStatusDetails: React.FunctionComponent<TraderStatusDetailsPro
             colorToken="lavenderWeb"
             token="%"
             typographyToken="primaryBodySmallRegular"
-            value={currentFixed}
+            value={formFormatNumber(currentFixed)}
           />
         </RowBox>
         <RowBox>
@@ -44,7 +45,7 @@ export const TraderStatusDetails: React.FunctionComponent<TraderStatusDetailsPro
             colorToken="lavenderWeb"
             token="%"
             typographyToken="primaryBodySmallRegular"
-            value={receiving}
+            value={formFormatNumber(receiving)}
           />
         </RowBox>
         <RowBox>
@@ -55,7 +56,7 @@ export const TraderStatusDetails: React.FunctionComponent<TraderStatusDetailsPro
             colorToken="lavenderWeb"
             token="%"
             typographyToken="primaryBodySmallRegular"
-            value={paying}
+            value={formFormatNumber(paying)}
           />
         </RowBox>
         <HorizontalLine />
@@ -73,7 +74,7 @@ export const TraderStatusDetails: React.FunctionComponent<TraderStatusDetailsPro
             }
             token="%"
             typographyToken="primaryBodySmallRegular"
-            value={positionRate}
+            value={formFormatNumber(positionRate)}
           />
         </RowBox>
       </RowsBox>
