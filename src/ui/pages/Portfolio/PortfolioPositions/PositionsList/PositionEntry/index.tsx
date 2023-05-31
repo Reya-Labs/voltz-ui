@@ -10,6 +10,7 @@ import {
   ArbitrumIcon,
   AvalancheIcon,
   ChainIconContainer,
+  EditablePositionEntryBox,
   HealthIndicatorBox,
   LeftBox,
   MarginBox,
@@ -32,6 +33,9 @@ type PositionEntryProps = {
   health: PositionUI['status']['health'];
   isAaveV3: PositionUI['isAaveV3'];
   isV2: PositionUI['isV2'];
+  canEdit: PositionUI['canEdit'];
+  canSettle: PositionUI['canSettle'];
+  canRollover: PositionUI['canRollover'];
   isBorrowing: PositionUI['isBorrowing'];
   market: MarketTokenInformationProps['market'];
   token: MarketTokenInformationProps['token'];
@@ -70,6 +74,9 @@ const HealthColorMap: Record<PositionEntryProps['health'], ColorTokens | undefin
 export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps>(
   (
     {
+      canEdit,
+      canSettle,
+      canRollover,
       health,
       chainId,
       isAaveV3,
@@ -125,8 +132,28 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
     const handleOnSettle = () => {
       alert('TODO!');
     };
+
+    const handleOnEntryClick = () => {
+      if (!canEdit) {
+        return;
+      }
+      if (type === 'LP') {
+        navigate.toLPFormPage({
+          ammId: routeAmmId,
+          poolId: routePoolId,
+          fixedLower: status.fixLow,
+          fixedUpper: status.fixHigh,
+        });
+      } else {
+        navigate.toSwapFormPage({
+          ammId: routeAmmId,
+          poolId: routePoolId,
+        });
+      }
+    };
+    const EntryBox = canEdit ? EditablePositionEntryBox : PositionEntryBox;
     return (
-      <PositionEntryBoxWrapper ref={ref}>
+      <PositionEntryBoxWrapper ref={ref} onClick={handleOnEntryClick}>
         {ChainIcon ? (
           <ChainIconContainer>
             <ChainIcon />
@@ -137,10 +164,7 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
             <AttentionIndicator colorToken={HealthColorMap[health]!} />
           </HealthIndicatorBox>
         ) : null}
-        <PositionEntryBox
-          backgroundColorToken={backgroundColorToken}
-          borderColorToken={borderColorToken}
-        >
+        <EntryBox backgroundColorToken={backgroundColorToken} borderColorToken={borderColorToken}>
           <LeftBox>
             <MarketTokenInformation
               isAaveV3={isAaveV3}
@@ -166,6 +190,7 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
           </MarginBox>
           <MaturityBox>
             <PositionMaturity
+              canSettle={canSettle}
               maturityEndTimestampInMS={maturityEndTimestampInMS}
               maturityFormatted={maturityFormatted}
               maturityStartTimestampInMS={maturityStartTimestampInMS}
@@ -176,6 +201,7 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
           </MaturityBox>
           <StatusBox>
             <PositionStatus
+              canRollover={canRollover}
               numbersTypographyToken={numbersTypographyToken}
               status={status}
               textsTypographyToken={textsTypographyToken}
@@ -201,7 +227,7 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
               typographyToken={numbersTypographyToken}
             />
           </RealizedPNLBox>
-        </PositionEntryBox>
+        </EntryBox>
       </PositionEntryBoxWrapper>
     );
   },

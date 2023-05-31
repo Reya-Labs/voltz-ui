@@ -2,6 +2,9 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 export type PositionUI = {
   id: string;
+  canEdit: boolean;
+  canRollover: boolean;
+  canSettle: boolean;
   routeAmmId: string;
   routePositionId: string;
   routePoolId: string;

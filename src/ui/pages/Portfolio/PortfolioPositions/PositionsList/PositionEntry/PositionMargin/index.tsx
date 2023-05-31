@@ -15,7 +15,7 @@ export const PositionMargin: React.FunctionComponent<PositionMarginProps> = ({
   status,
   typographyToken,
 }) => {
-  if (status.variant === 'matured') {
+  if (status.variant === 'matured' || status.variant === 'settled') {
     return null;
   }
   return (

@@ -35,6 +35,10 @@ export const selectPositions = (state: RootState): PositionUI[] => {
     const realizedPNLCashflowUSD = position.realizedPNLCashflow * position.tokenPriceUSD;
 
     return {
+      // TODO: FB finish integration with API
+      canEdit: false,
+      canSettle: false,
+      canRollover: false,
       type,
       market,
       token,

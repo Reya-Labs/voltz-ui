@@ -56,6 +56,9 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
                   key={position.id}
                   backgroundColorToken={index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8'}
                   borderColorToken={index % 2 !== 0 ? 'lavenderWeb8' : 'transparent'}
+                  canEdit={position.canEdit}
+                  canRollover={position.canRollover}
+                  canSettle={position.canSettle}
                   chainId={position.chainId}
                   health={position.status.health}
                   isAaveV3={position.isAaveV3}
