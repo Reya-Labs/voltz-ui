@@ -20,6 +20,7 @@ export const PositionMargin: React.FunctionComponent<PositionMarginProps> = ({
   return (
     <TokenTypography
       colorToken="lavenderWeb"
+      prefixToken="$"
       token={marginUSDCompactFormat.compactSuffix}
       typographyToken={typographyToken}
       value={marginUSDCompactFormat.compactNumber}
