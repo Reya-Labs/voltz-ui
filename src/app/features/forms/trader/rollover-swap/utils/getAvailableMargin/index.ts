@@ -9,5 +9,10 @@ export const getAvailableMargin = (state: Draft<SliceState>): number | null => {
     return null;
   }
 
-  return walletBalance.value + previousPosition.settlementCashflow;
+  return (
+    walletBalance.value +
+    previousPosition.settlementCashflow +
+    previousPosition.margin +
+    previousPosition.fees
+  );
 };

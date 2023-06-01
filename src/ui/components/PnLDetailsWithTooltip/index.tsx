@@ -1,16 +1,16 @@
 import { LabelTokenTypography, LabelTokenTypographyProps } from 'brokoli-ui';
 import React from 'react';
 
-import { PnLDetails, PnLDetailsProps } from '../PnLDetails';
+import { RealizedPNLDetails, RealizedPNLDetailsProps } from '../RealizedPNLDetails';
 
 type PnLDetailsWithTooltipProps = {
-  realizedPnLTotal: PnLDetailsProps['pnlTotal'];
+  realizedPnLTotal: RealizedPNLDetailsProps['pnlTotal'];
   labelTypographyToken: LabelTokenTypographyProps['labelTypographyToken'];
-  underlyingTokenName: PnLDetailsProps['underlyingTokenName'];
-  variant: PnLDetailsProps['variant'];
+  underlyingTokenName: RealizedPNLDetailsProps['underlyingTokenName'];
+  variant: RealizedPNLDetailsProps['variant'];
   typographyToken: LabelTokenTypographyProps['typographyToken'];
-  realizedPnLFromFees: PnLDetailsProps['pnlFromFees'];
-  realizedPnLFromSwaps: PnLDetailsProps['pnlFromSwaps'];
+  realizedPnLFromFees: RealizedPNLDetailsProps['pnlFromFees'];
+  realizedPnLFromSwaps: RealizedPNLDetailsProps['pnlFromSwaps'];
 };
 
 export const PnLDetailsWithTooltip: React.FunctionComponent<PnLDetailsWithTooltipProps> = ({
@@ -36,7 +36,7 @@ export const PnLDetailsWithTooltip: React.FunctionComponent<PnLDetailsWithToolti
       labelTypographyToken={labelTypographyToken}
       token={` ${underlyingTokenName.toUpperCase()}`}
       tooltip={
-        <PnLDetails
+        <RealizedPNLDetails
           pnlFromFees={realizedPnLFromFees}
           pnlFromSwaps={realizedPnLFromSwaps}
           pnlTotal={realizedPnLTotal}

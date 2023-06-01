@@ -1,31 +1,26 @@
 import styled from '@emotion/styled';
 import { colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
 
-import { ReactComponent as Arbitrum } from './assets/arbitrum.svg';
-import { ReactComponent as Avalanche } from './assets/avalanche.svg';
-
 export const PositionEntryBoxWrapper = styled('div')`
   position: relative;
 `;
 
 export const PositionEntryBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'backgroundColorToken' && prop !== 'borderColorToken',
+  shouldForwardProp: (prop) => prop !== 'backgroundColorToken',
 })<{
   backgroundColorToken: ColorTokens;
-  borderColorToken: ColorTokens | 'transparent';
 }>`
   position: relative;
   z-index: 1;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   padding: 8px;
   box-shadow: -2px 0px 8px 0px ${colors.liberty8};
   background-color: ${({ backgroundColorToken }) => getColorFromToken(backgroundColorToken)};
-  border: 1px solid
-    ${({ borderColorToken }) =>
-      borderColorToken !== 'transparent' ? getColorFromToken(borderColorToken) : 'transparent'};
+  border: 1px solid ${colors.lavenderWeb7};
   border-radius: 8px;
 `;
 
@@ -54,6 +49,11 @@ export const LeftBox = styled(InfoBox)`
   width: 342px;
 `;
 
+export const RightBox = styled(InfoBox)``;
+export const ButtonsBox = styled(InfoBox)`
+  gap: 8px;
+`;
+
 export const NotionalBox = styled(BorderBox)`
   width: 78px;
 `;
@@ -63,8 +63,12 @@ export const MarginBox = styled(BorderBox)`
 export const MaturityBox = styled(BorderBox)`
   width: 88px;
 `;
-export const StatusBox = styled(BorderBox)`
-  width: 128px;
+export const StatusBox = styled(BorderBox, {
+  shouldForwardProp: (prop) => prop !== 'variant',
+})<{
+  variant: 'small' | 'large';
+}>`
+  width: ${({ variant }) => (variant === 'small' ? '60px' : '128px')}};
 `;
 export const UnrealizedPNLBox = styled(BorderBox)`
   width: 88px;
@@ -78,21 +82,4 @@ export const ChainIconContainer = styled('div')`
   z-index: 0;
   top: 12px;
   left: -15px;
-`;
-
-export const HealthIndicatorBox = styled('div')`
-  position: absolute;
-  z-index: 0;
-  top: 10px;
-  right: -8px;
-`;
-
-export const ArbitrumIcon = styled(Arbitrum)`
-  width: 20px;
-  height: 20px;
-`;
-
-export const AvalancheIcon = styled(Avalanche)`
-  width: 20px;
-  height: 20px;
 `;

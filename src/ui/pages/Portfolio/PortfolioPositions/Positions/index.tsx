@@ -1,15 +1,15 @@
-import { LabelTokenTypography, PillSelector, Typography } from 'brokoli-ui';
+import { LabelTokenTypography, PillSelector, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
 import { selectPositionsSummary } from '../../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../../app/hooks';
+import { capitalize } from '../../../../../utilities/capitalize';
 import { PositionsFilterId, PositionsList } from '../PositionsList';
 import {
   BottomBox,
   HealthBox,
   HealthStatusBox,
   MarginBox,
-  MidBox,
   PositionDetailsBox,
   PositionsBox,
   PositionsSelectorBox,
@@ -40,7 +40,9 @@ const positionFilterOptions: {
 
 export const Positions: React.FunctionComponent = () => {
   const {
-    positionsLength,
+    activePositionsLength,
+    maturedPositionsLength,
+    settledPositionsLength,
     healthyPositionsLength,
     totalPortfolioNotionalValueUSDCompactFormatted,
     totalPortfolioMarginValueUSDFormatted,
@@ -49,6 +51,7 @@ export const Positions: React.FunctionComponent = () => {
     totalPortfolioUnrealizedPNLValueUSDFormatted,
     warningPositionsLength,
     dangerPositionsLength,
+    positionsLength,
   } = useAppSelector(selectPositionsSummary);
   const [activeFilter, setActiveFilter] = useState<PositionsFilterId>('active');
 
@@ -59,9 +62,13 @@ export const Positions: React.FunctionComponent = () => {
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
             Total Portfolio Value (USD)
           </Typography>
-          <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyExtraLargeBold">
-            ${totalPortfolioValueUSDFormatted}
-          </Typography>
+          <TokenTypography
+            colorToken="lavenderWeb"
+            prefixToken="$"
+            token=""
+            typographyToken="secondaryBodyExtraLargeBold"
+            value={totalPortfolioValueUSDFormatted}
+          />
         </TotalPortfolioValueBox>
         <PositionDetailsBox>
           <MarginBox>
@@ -172,21 +179,19 @@ export const Positions: React.FunctionComponent = () => {
           </HealthStatusBox>
         </PositionDetailsBox>
       </TopBox>
-      <MidBox>
-        <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyMediumBold">
-          {positionsLength}
-        </Typography>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-          Positions
-        </Typography>
-      </MidBox>
       <BottomBox>
         <PositionsSelectorBox>
           <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
-            Positions in this account
+            {activeFilter === 'active'
+              ? activePositionsLength
+              : activeFilter === 'settled'
+              ? settledPositionsLength
+              : maturedPositionsLength}{' '}
+            {capitalize(activeFilter)} Positions
           </Typography>
           <PillSelector
             activePillId={activeFilter as string}
+            disabled={positionsLength === '--'}
             pillOptions={positionFilterOptions}
             onPillClick={(id) => setActiveFilter(id as PositionsFilterId)}
           />

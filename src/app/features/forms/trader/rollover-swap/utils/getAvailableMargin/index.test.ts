@@ -28,10 +28,12 @@ describe('getAvailableMargin', () => {
       },
       previousPosition: {
         settlementCashflow: 100,
+        margin: 10,
+        fees: 0,
       },
     } as never;
     const availableMargin = getAvailableMargin(state);
-    expect(availableMargin).toBe(1100);
+    expect(availableMargin).toBe(1110);
   });
 
   it('returns null when wallet balance is not available', () => {

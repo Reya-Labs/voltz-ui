@@ -1,9 +1,6 @@
 import styled from '@emotion/styled';
 import { Button, colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
 
-import { ReactComponent as Arbitrum } from './assets/arbitrum.svg';
-import { ReactComponent as Avalanche } from './assets/avalanche.svg';
-
 export const PoolEntryBoxWrapper = styled('div')`
   position: relative;
 `;
@@ -81,14 +78,4 @@ export const TestPillContainer = styled('div')`
   z-index: 2;
   top: 18px;
   right: -55px;
-`;
-
-export const ArbitrumIcon = styled(Arbitrum)`
-  width: 20px;
-  height: 20px;
-`;
-
-export const AvalancheIcon = styled(Avalanche)`
-  width: 20px;
-  height: 20px;
 `;

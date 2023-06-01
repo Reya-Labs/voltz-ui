@@ -33,3 +33,7 @@ export const NoPositionsFoundBox = styled('div')`
   border-radius: 8px;
   background-color: ${getColorFromToken('liberty7')};
 `;
+
+export const PaginationBox = styled('div')`
+  margin-top: 16px;
+`;

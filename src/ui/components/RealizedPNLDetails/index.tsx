@@ -1,9 +1,9 @@
 import { HorizontalLine, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { PnLDetailsBox, RowBox, RowsBox } from './PnLDetails.styled';
+import { RealizedPnLDetailsBox, RowBox, RowsBox } from './RealizedPnLDetails.styled';
 
-export type PnLDetailsProps = {
+export type RealizedPNLDetailsProps = {
   underlyingTokenName: string;
   pnlFromSwaps: string;
   pnlFromFees: string;
@@ -14,7 +14,7 @@ export type PnLDetailsProps = {
   pnlTotalPrefixToken?: string;
 };
 
-export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
+export const RealizedPNLDetails: React.FunctionComponent<RealizedPNLDetailsProps> = ({
   underlyingTokenName,
   pnlFromSwaps,
   pnlFromFees,
@@ -25,7 +25,7 @@ export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
   pnlTotalPrefixToken,
 }) => {
   return (
-    <PnLDetailsBox>
+    <RealizedPnLDetailsBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallBold">
         Realized PnL = Cashflow from Swaps {variant === 'lp' ? '+' : '-'} Fees
       </Typography>
@@ -72,6 +72,6 @@ export const PnLDetails: React.FunctionComponent<PnLDetailsProps> = ({
           />
         </RowBox>
       </RowsBox>
-    </PnLDetailsBox>
+    </RealizedPnLDetailsBox>
   );
 };

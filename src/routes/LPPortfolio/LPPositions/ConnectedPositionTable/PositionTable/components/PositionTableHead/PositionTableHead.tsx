@@ -6,7 +6,7 @@ import { formFormatNumber } from '../../../../../../../app/features/forms/common
 import { PositionBadge } from '../../../../../../../components/atomic/PositionBadge/PositionBadge';
 import { IconLabel } from '../../../../../../../components/composite/IconLabel/IconLabel';
 import { SystemStyleObject, Theme } from '../../../../../../../theme';
-import { PnLDetails } from '../../../../../../../ui/components/PnLDetails';
+import { RealizedPNLDetails } from '../../../../../../../ui/components/RealizedPNLDetails';
 import { formatNumber } from '../../../../../../../utilities/number';
 import { HealthFactorText } from './HealthFactorText/HealthFactorText';
 import {
@@ -84,7 +84,7 @@ export const PositionTableHead: React.FunctionComponent<PositionTableHeadProps> 
           <IconLabel
             icon="information-circle"
             info={
-              <PnLDetails
+              <RealizedPNLDetails
                 pnlFromFees={formFormatNumber(realizedPnLFromFeesInUSD)}
                 pnlFromSwaps={formFormatNumber(realizedPnLFromSwapsInUSD)}
                 pnlTotal={formFormatNumber(realizedPnLTotalInUSD)}
