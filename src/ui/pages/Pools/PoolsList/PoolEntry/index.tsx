@@ -10,13 +10,12 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
+import { ChainIcon } from '../../../../components/ChainIcon';
 import {
   MarketTokenInformation,
   MarketTokenInformationProps,
 } from '../../../../components/MarketTokenInformation';
 import {
-  ArbitrumIcon,
-  AvalancheIcon,
   ButtonStyled,
   ChainIconContainer,
   FixedAPRBox,
@@ -46,14 +45,7 @@ type PoolEntryProps = {
   routePoolId: string;
   chainId: SupportedChainId;
 };
-const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
-  [SupportedChainId.mainnet]: null,
-  [SupportedChainId.goerli]: null,
-  [SupportedChainId.arbitrum]: ArbitrumIcon,
-  [SupportedChainId.arbitrumGoerli]: ArbitrumIcon,
-  [SupportedChainId.avalanche]: AvalancheIcon,
-  [SupportedChainId.avalancheFuji]: AvalancheIcon,
-};
+
 const TestNetMap: Record<SupportedChainId, boolean> = {
   [SupportedChainId.mainnet]: false,
   [SupportedChainId.goerli]: true,
@@ -90,7 +82,6 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     const chainStateChangeError = useAppSelector(selectChainChangeState) === 'error';
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const navigate = useAppNavigate();
-    const ChainIcon = ChainIconMap[poolChainId];
     const typographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyLargeRegular'
       : 'secondaryBodyMediumRegular';
@@ -158,14 +149,10 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
         switchNetwork('swapForm');
       }
     };
-
+    const chainIcon = <ChainIcon chainId={poolChainId} />;
     return (
       <PoolEntryBoxWrapper ref={ref}>
-        {ChainIcon ? (
-          <ChainIconContainer>
-            <ChainIcon />
-          </ChainIconContainer>
-        ) : null}
+        {chainIcon ? <ChainIconContainer>{chainIcon}</ChainIconContainer> : null}
         {TestNetMap[poolChainId] ? (
           <TestPillContainer>
             <Pill

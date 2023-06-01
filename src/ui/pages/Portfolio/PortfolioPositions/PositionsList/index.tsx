@@ -4,7 +4,9 @@ import React from 'react';
 import { selectPositions, selectPositionsLoading } from '../../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../../app/hooks';
 import { routes } from '../../../../../routes/paths';
-import { PositionEntry } from './PositionEntry';
+import { ActivePositionEntry } from './PositionEntry/Entry/ActivePositionEntry';
+import { MaturedPositionEntry } from './PositionEntry/Entry/MaturedPositionEntry';
+import { SettledPositionEntry } from './PositionEntry/Entry/SettledPositionEntry';
 import { PositionsHeader } from './PositionsHeader';
 import {
   NoPositionsFoundBox,
@@ -27,7 +29,7 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
   );
   return (
     <PositionsHeaderAndListBox>
-      <PositionsHeader />
+      <PositionsHeader positionsFilterId={positionsFilterId} />
       {loading ? (
         <PositionsListBox>
           {Array.from({ length: 10 }, () => ({})).map((_, index) => (
@@ -50,38 +52,40 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
           staggerDurationBy={15}
         >
           {positions.length > 0
-            ? positions.map((position, index) => (
-                <PositionEntry
-                  key={position.id}
-                  backgroundColorToken={index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8'}
-                  borderColorToken={index % 2 !== 0 ? 'lavenderWeb8' : 'transparent'}
-                  canEdit={position.canEdit}
-                  canRollover={position.canRollover}
-                  canSettle={position.canSettle}
-                  chainId={position.chainId}
-                  health={position.status.health}
-                  isAaveV3={position.isAaveV3}
-                  isBorrowing={position.isBorrowing}
-                  isV2={position.isV2}
-                  marginUSDCompactFormat={position.marginUSDCompactFormat}
-                  market={position.market}
-                  maturityEndTimestampInMS={position.maturityEndTimestampInMS}
-                  maturityFormatted={position.maturityFormatted}
-                  maturityStartTimestampInMS={position.maturityStartTimestampInMS}
-                  notionalUSDCompactFormat={position.notionalUSDCompactFormat}
-                  realizedPNLCashflowUSD={position.realizedPNLCashflowUSD}
-                  realizedPNLFeesUSD={position.realizedPNLFeesUSD}
-                  realizedPNLTotalUSD={position.realizedPNLTotalUSD}
-                  realizedPNLTotalUSDCompactFormat={position.realizedPNLTotalUSDCompactFormat}
-                  routeAmmId={position.routeAmmId}
-                  routePoolId={position.routePoolId}
-                  routePositionId={position.routePositionId}
-                  status={position.status}
-                  token={position.token}
-                  type={position.type}
-                  unrealizedPNLUSDCompactFormat={position.unrealizedPNLUSDCompactFormat}
-                />
-              ))
+            ? positions.map((position, index) => {
+                const backgroundColorToken = index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8';
+
+                if (positionsFilterId === 'matured') {
+                  return (
+                    <MaturedPositionEntry
+                      key={position.id}
+                      backgroundColorToken={backgroundColorToken}
+                      {...position}
+                      token={position.token}
+                    />
+                  );
+                }
+
+                if (positionsFilterId === 'settled') {
+                  return (
+                    <SettledPositionEntry
+                      key={position.id}
+                      backgroundColorToken={backgroundColorToken}
+                      {...position}
+                      token={position.token}
+                    />
+                  );
+                }
+
+                return (
+                  <ActivePositionEntry
+                    key={position.id}
+                    backgroundColorToken={backgroundColorToken}
+                    {...position}
+                    token={position.token}
+                  />
+                );
+              })
             : null}
           {positions.length === 0 ? (
             <NoPositionsFoundBox>

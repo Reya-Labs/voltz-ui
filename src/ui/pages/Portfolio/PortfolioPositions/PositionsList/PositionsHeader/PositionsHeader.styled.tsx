@@ -22,7 +22,7 @@ const CenterTextBox = styled(InfoBox)`
 export const LeftBox = styled(InfoBox)`
   width: 342px;
 `;
-
+export const RightBox = styled(InfoBox)``;
 export const NotionalBox = styled(CenterTextBox)`
   width: 78px;
 `;
@@ -32,8 +32,12 @@ export const MarginBox = styled(CenterTextBox)`
 export const MaturityBox = styled(CenterTextBox)`
   width: 88px;
 `;
-export const StatusBox = styled(CenterTextBox)`
-  width: 128px;
+export const StatusBox = styled(CenterTextBox, {
+  shouldForwardProp: (prop) => prop !== 'variant',
+})<{
+  variant: 'small' | 'large';
+}>`
+  width: ${({ variant }) => (variant === 'small' ? '60px' : '128px')}};
 `;
 export const UnrealizedPNLBox = styled(CenterTextBox)`
   width: 88px;

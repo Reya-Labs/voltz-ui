@@ -22,8 +22,6 @@ const ButtonXS = styled(Button)`
   box-shadow: 0px 2px 10px ${colors.liberty6}, 0px 8px 40px rgba(38, 103, 255, 0.2),
     0px 5px 40px rgba(255, 74, 169, 0.2);
   border-radius: 4px;
-
-  width: 80px;
 `;
 export const RolloverButton = styled(ButtonXS)``;
 export const SettleButton = styled(ButtonXS)``;
