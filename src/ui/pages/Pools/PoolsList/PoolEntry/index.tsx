@@ -80,12 +80,12 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     >(null);
     const chainId = useAppSelector(selectChainId);
     const chainStateChangeError = useAppSelector(selectChainChangeState) === 'error';
+    const promptForNetworkChange = chainId !== null ? chainId !== poolChainId : false;
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const navigate = useAppNavigate();
     const typographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyLargeRegular'
       : 'secondaryBodyMediumRegular';
-    const promptForNetworkChange = chainId !== null ? chainId !== poolChainId : false;
 
     const switchNetwork = (form: 'lpForm' | 'swapForm') => {
       setWaitingOnNetworkChange(form);

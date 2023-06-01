@@ -1,6 +1,12 @@
 import { TypographyToken } from 'brokoli-ui';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+import {
+  selectChainChangeState,
+  selectChainId,
+  setChainIdThunk,
+} from '../../../../../../../../app/features/network';
+import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
@@ -34,7 +40,7 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
       canEdit,
       canSettle,
       canRollover,
-      chainId,
+      chainId: poolChainId,
       isAaveV3,
       isBorrowing,
       market,
@@ -59,6 +65,13 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
     },
     ref,
   ) => {
+    const dispatch = useAppDispatch();
+    const [waitingOnNetworkChange, setWaitingOnNetworkChange] = useState<
+      null | 'lpForm' | 'swapForm'
+    >(null);
+    const chainId = useAppSelector(selectChainId);
+    const chainStateChangeError = useAppSelector(selectChainChangeState) === 'error';
+    const promptForNetworkChange = chainId !== null ? chainId !== poolChainId : false;
     const navigate = useAppNavigate();
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
@@ -68,26 +81,72 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
       ? 'primaryBodyMediumRegular'
       : 'primaryBodySmallRegular';
 
+    const navigateToLPFormPage = () => {
+      navigate.toLPFormPage({
+        ammId: routeAmmId,
+        poolId: routePoolId,
+        fixedLower: status.fixLow,
+        fixedUpper: status.fixHigh,
+      });
+    };
+
+    const navigateToSwapFormPage = () => {
+      navigate.toSwapFormPage({
+        ammId: routeAmmId,
+        poolId: routePoolId,
+      });
+    };
+
     const handleOnEntryClick = () => {
       if (!canEdit) {
         return;
       }
-      if (type === 'LP') {
-        navigate.toLPFormPage({
-          ammId: routeAmmId,
-          poolId: routePoolId,
-          fixedLower: status.fixLow,
-          fixedUpper: status.fixHigh,
-        });
+      if (!promptForNetworkChange) {
+        if (type === 'LP') {
+          navigateToLPFormPage();
+        } else {
+          navigateToSwapFormPage();
+        }
       } else {
-        navigate.toSwapFormPage({
-          ammId: routeAmmId,
-          poolId: routePoolId,
-        });
+        switchNetwork(type === 'LP' ? 'lpForm' : 'swapForm');
       }
     };
+
+    const switchNetwork = (form: 'lpForm' | 'swapForm') => {
+      setWaitingOnNetworkChange(form);
+      void dispatch(
+        setChainIdThunk({
+          chainId: poolChainId,
+          isSupportedChain: true,
+          triggerApprovalFlow: true,
+        }),
+      );
+    };
+
+    useEffect(() => {
+      if (chainStateChangeError) {
+        setWaitingOnNetworkChange(null);
+      }
+    }, [chainStateChangeError]);
+    useEffect(() => {
+      if (waitingOnNetworkChange === null) {
+        return;
+      }
+      if (!chainId) {
+        return;
+      }
+      if (chainId === poolChainId) {
+        if (waitingOnNetworkChange === 'lpForm') {
+          navigateToLPFormPage();
+        }
+        if (waitingOnNetworkChange === 'swapForm') {
+          navigateToSwapFormPage();
+        }
+      }
+    }, [poolChainId, waitingOnNetworkChange, chainId]);
+
     const EntryBox = canEdit ? EditablePositionEntryBox : PositionEntryBox;
-    const chainIcon = <ChainIcon chainId={chainId} />;
+    const chainIcon = <ChainIcon chainId={poolChainId} />;
     return (
       <PositionEntryBoxWrapper ref={ref} onClick={handleOnEntryClick}>
         {chainIcon ? <ChainIconContainer>{chainIcon}</ChainIconContainer> : null}

@@ -1,4 +1,4 @@
-import { LabelTokenTypography, PillSelector, Typography } from 'brokoli-ui';
+import { LabelTokenTypography, PillSelector, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
 import { selectPositionsSummary } from '../../../../../app/features/portfolio';
@@ -51,6 +51,7 @@ export const Positions: React.FunctionComponent = () => {
     totalPortfolioUnrealizedPNLValueUSDFormatted,
     warningPositionsLength,
     dangerPositionsLength,
+    positionsLength,
   } = useAppSelector(selectPositionsSummary);
   const [activeFilter, setActiveFilter] = useState<PositionsFilterId>('active');
 
@@ -61,9 +62,13 @@ export const Positions: React.FunctionComponent = () => {
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
             Total Portfolio Value (USD)
           </Typography>
-          <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyExtraLargeBold">
-            ${totalPortfolioValueUSDFormatted}
-          </Typography>
+          <TokenTypography
+            colorToken="lavenderWeb"
+            prefixToken="$"
+            token=""
+            typographyToken="secondaryBodyExtraLargeBold"
+            value={totalPortfolioValueUSDFormatted}
+          />
         </TotalPortfolioValueBox>
         <PositionDetailsBox>
           <MarginBox>
@@ -186,6 +191,7 @@ export const Positions: React.FunctionComponent = () => {
           </Typography>
           <PillSelector
             activePillId={activeFilter as string}
+            disabled={positionsLength === '--'}
             pillOptions={positionFilterOptions}
             onPillClick={(id) => setActiveFilter(id as PositionsFilterId)}
           />
