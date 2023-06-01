@@ -8,41 +8,44 @@ import { PnLDetails } from '../../../../../../components/PnLDetails';
 export type PositionPNLDetailsProps = {
   typographyToken: TypographyToken;
   type: PositionUI['type'];
-  realizedPNLTotal: PositionUI['realizedPNLTotal'];
-  realizedPNLFees: PositionUI['realizedPNLFees'];
-  realizedPNLCashflow: PositionUI['realizedPNLCashflow'];
-  realizedPNLTotalCompactFormat: PositionUI['realizedPNLTotalCompactFormat'];
+  realizedPNLTotalUSD: PositionUI['realizedPNLTotalUSD'];
+  realizedPNLFeesUSD: PositionUI['realizedPNLFeesUSD'];
+  realizedPNLCashflowUSD: PositionUI['realizedPNLCashflowUSD'];
+  realizedPNLTotalUSDCompactFormat: PositionUI['realizedPNLTotalUSDCompactFormat'];
 };
 export const PositionRealizedPNLDetails: React.FunctionComponent<PositionPNLDetailsProps> = ({
   typographyToken,
   type,
-  realizedPNLFees,
-  realizedPNLCashflow,
-  realizedPNLTotalCompactFormat,
-  realizedPNLTotal,
+  realizedPNLFeesUSD,
+  realizedPNLCashflowUSD,
+  realizedPNLTotalUSDCompactFormat,
+  realizedPNLTotalUSD,
 }) => {
   return (
     <Tooltip
       trigger={
         <TokenTypography
           colorToken={
-            realizedPNLTotalCompactFormat.compactNumber.indexOf('-') === -1
+            realizedPNLTotalUSDCompactFormat.compactNumber.indexOf('-') === -1
               ? 'skyBlueCrayola'
               : 'wildStrawberry'
           }
           prefixToken={
-            realizedPNLTotalCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'
+            realizedPNLTotalUSDCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'
           }
-          token={realizedPNLTotalCompactFormat.compactSuffix}
+          token={realizedPNLTotalUSDCompactFormat.compactSuffix}
           typographyToken={typographyToken}
-          value={realizedPNLTotalCompactFormat.compactNumber.replace('-', '')}
+          value={realizedPNLTotalUSDCompactFormat.compactNumber.replace('-', '')}
         />
       }
     >
       <PnLDetails
-        pnlFromFees={formFormatNumber(realizedPNLFees)}
-        pnlFromSwaps={formFormatNumber(realizedPNLCashflow)}
-        pnlTotal={formFormatNumber(realizedPNLTotal)}
+        pnlFromFees={formFormatNumber(Math.abs(realizedPNLFeesUSD))}
+        pnlFromFeesPrefixToken={realizedPNLFeesUSD >= 0 ? '+$' : '-$'}
+        pnlFromSwaps={formFormatNumber(Math.abs(realizedPNLCashflowUSD))}
+        pnlFromSwapsPrefixToken={realizedPNLCashflowUSD >= 0 ? '+$' : '-$'}
+        pnlTotal={formFormatNumber(Math.abs(realizedPNLTotalUSD))}
+        pnlTotalPrefixToken={realizedPNLTotalUSD >= 0 ? '+$' : '-$'}
         underlyingTokenName={''}
         variant={type === 'LP' ? 'lp' : 'trader'}
       />

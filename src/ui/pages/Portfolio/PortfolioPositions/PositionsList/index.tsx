@@ -17,15 +17,13 @@ type PositionsListProps = {
   positionsFilterId: PositionsFilterId;
 };
 
-export type PositionsFilterId = 'active' | 'settled';
+export type PositionsFilterId = 'active' | 'matured' | 'settled';
 export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
   positionsFilterId,
 }) => {
   const loading = useAppSelector(selectPositionsLoading);
-  const positions = useAppSelector(selectPositions).filter((p) =>
-    positionsFilterId === 'active'
-      ? p.status.variant === 'matured' || p.status.variant === 'active'
-      : p.status.variant === 'settled',
+  const positions = useAppSelector(selectPositions).filter(
+    (p) => positionsFilterId === p.status.variant,
   );
   return (
     <PositionsHeaderAndListBox>
@@ -44,6 +42,7 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
       ) : null}
       {!loading ? (
         <PositionsListBox
+          key={positionsFilterId}
           delay={0}
           duration={300}
           easing="cubic-bezier(0.25,0.1,0.25,1.0)"
@@ -56,28 +55,31 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
                   key={position.id}
                   backgroundColorToken={index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8'}
                   borderColorToken={index % 2 !== 0 ? 'lavenderWeb8' : 'transparent'}
+                  canEdit={position.canEdit}
+                  canRollover={position.canRollover}
+                  canSettle={position.canSettle}
                   chainId={position.chainId}
                   health={position.status.health}
                   isAaveV3={position.isAaveV3}
                   isBorrowing={position.isBorrowing}
                   isV2={position.isV2}
-                  marginCompactFormat={position.marginCompactFormat}
+                  marginUSDCompactFormat={position.marginUSDCompactFormat}
                   market={position.market}
                   maturityEndTimestampInMS={position.maturityEndTimestampInMS}
                   maturityFormatted={position.maturityFormatted}
                   maturityStartTimestampInMS={position.maturityStartTimestampInMS}
-                  notionalCompactFormat={position.notionalCompactFormat}
-                  realizedPNLCashflow={position.realizedPNLCashflow}
-                  realizedPNLFees={position.realizedPNLFees}
-                  realizedPNLTotal={position.realizedPNLTotal}
-                  realizedPNLTotalCompactFormat={position.realizedPNLTotalCompactFormat}
+                  notionalUSDCompactFormat={position.notionalUSDCompactFormat}
+                  realizedPNLCashflowUSD={position.realizedPNLCashflowUSD}
+                  realizedPNLFeesUSD={position.realizedPNLFeesUSD}
+                  realizedPNLTotalUSD={position.realizedPNLTotalUSD}
+                  realizedPNLTotalUSDCompactFormat={position.realizedPNLTotalUSDCompactFormat}
                   routeAmmId={position.routeAmmId}
                   routePoolId={position.routePoolId}
                   routePositionId={position.routePositionId}
                   status={position.status}
                   token={position.token}
                   type={position.type}
-                  unrealizedPNLCompactFormat={position.unrealizedPNLCompactFormat}
+                  unrealizedPNLUSDCompactFormat={position.unrealizedPNLUSDCompactFormat}
                 />
               ))
             : null}

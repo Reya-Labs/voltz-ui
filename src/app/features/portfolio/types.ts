@@ -2,6 +2,9 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 export type PositionUI = {
   id: string;
+  canEdit: boolean;
+  canRollover: boolean;
+  canSettle: boolean;
   routeAmmId: string;
   routePositionId: string;
   routePoolId: string;
@@ -13,13 +16,13 @@ export type PositionUI = {
   market: 'Aave' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
   token?: 'eth' | 'usdc' | 'usdt' | 'dai';
   name: string;
-  notional: number;
-  notionalCompactFormat: {
+  notionalUSD: number;
+  notionalUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };
-  margin: number;
-  marginCompactFormat: {
+  marginUSD: number;
+  marginUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };
@@ -35,23 +38,23 @@ export type PositionUI = {
     fixLow: number;
     fixHigh: number;
   };
-  unrealizedPNL: number;
-  unrealizedPNLCompactFormat: {
+  unrealizedPNLUSD: number;
+  unrealizedPNLUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };
-  realizedPNLTotal: number;
-  realizedPNLTotalCompactFormat: {
+  realizedPNLTotalUSD: number;
+  realizedPNLTotalUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };
-  realizedPNLFees: number;
-  realizedPNLFeesCompactFormat: {
+  realizedPNLFeesUSD: number;
+  realizedPNLFeesUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };
-  realizedPNLCashflow: number;
-  realizedPNLCashflowCompactFormat: {
+  realizedPNLCashflowUSD: number;
+  realizedPNLCashflowUSDCompactFormat: {
     compactNumber: string;
     compactSuffix: string;
   };

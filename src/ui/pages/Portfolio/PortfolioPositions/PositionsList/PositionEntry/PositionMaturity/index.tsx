@@ -9,6 +9,7 @@ type PositionMaturityProps = {
   typographyToken: TypographyToken;
   maturityEndTimestampInMS: PositionUI['maturityEndTimestampInMS'];
   status: PositionUI['status'];
+  canSettle: PositionUI['canSettle'];
   onSettle: () => void;
   maturityStartTimestampInMS: PositionUI['maturityStartTimestampInMS'];
   maturityFormatted: PositionUI['maturityFormatted'];
@@ -21,8 +22,9 @@ export const PositionMaturity: React.FunctionComponent<PositionMaturityProps> = 
   maturityStartTimestampInMS,
   status,
   onSettle,
+  canSettle,
 }) => {
-  if (status.variant === 'matured') {
+  if (status.variant === 'matured' && canSettle) {
     return (
       <SettleButton typographyToken={typographyToken} variant="secondary" onClick={onSettle}>
         Settle

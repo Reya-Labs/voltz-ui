@@ -27,6 +27,9 @@ export const PositionEntryBox = styled('div', {
     ${({ borderColorToken }) =>
       borderColorToken !== 'transparent' ? getColorFromToken(borderColorToken) : 'transparent'};
   border-radius: 8px;
+`;
+
+export const EditablePositionEntryBox = styled(PositionEntryBox)`
   transition: all 200ms ease-in;
 
   &:hover {

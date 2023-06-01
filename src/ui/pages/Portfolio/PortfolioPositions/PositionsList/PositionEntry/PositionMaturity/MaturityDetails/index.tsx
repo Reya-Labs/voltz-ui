@@ -46,7 +46,7 @@ export const MaturityDetails: React.FunctionComponent<MaturityDetailsProps> = ({
             Days Remaining
           </Typography>
           <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-            {daysRemaining}
+            {daysRemaining > 0 ? daysRemaining : '/'}
           </Typography>
         </RowBox>
         <RowBox>
@@ -59,7 +59,7 @@ export const MaturityDetails: React.FunctionComponent<MaturityDetailsProps> = ({
               colorToken="lavenderWeb"
               token="%"
               typographyToken="primaryBodySmallRegular"
-              value={percentageCompleted}
+              value={Math.min(100, percentageCompleted)}
             />
           </ProgressBarBox>
         </RowBox>

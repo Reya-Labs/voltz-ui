@@ -10,6 +10,7 @@ import {
   ArbitrumIcon,
   AvalancheIcon,
   ChainIconContainer,
+  EditablePositionEntryBox,
   HealthIndicatorBox,
   LeftBox,
   MarginBox,
@@ -32,6 +33,9 @@ type PositionEntryProps = {
   health: PositionUI['status']['health'];
   isAaveV3: PositionUI['isAaveV3'];
   isV2: PositionUI['isV2'];
+  canEdit: PositionUI['canEdit'];
+  canSettle: PositionUI['canSettle'];
+  canRollover: PositionUI['canRollover'];
   isBorrowing: PositionUI['isBorrowing'];
   market: MarketTokenInformationProps['market'];
   token: MarketTokenInformationProps['token'];
@@ -46,13 +50,13 @@ type PositionEntryProps = {
   chainId: SupportedChainId;
   status: PositionUI['status'];
   type: PositionUI['type'];
-  marginCompactFormat: PositionUI['marginCompactFormat'];
-  unrealizedPNLCompactFormat: PositionUI['unrealizedPNLCompactFormat'];
-  realizedPNLTotalCompactFormat: PositionUI['realizedPNLTotalCompactFormat'];
-  realizedPNLTotal: PositionUI['realizedPNLTotal'];
-  realizedPNLFees: PositionUI['realizedPNLFees'];
-  realizedPNLCashflow: PositionUI['realizedPNLCashflow'];
-  notionalCompactFormat: PositionUI['notionalCompactFormat'];
+  marginUSDCompactFormat: PositionUI['marginUSDCompactFormat'];
+  unrealizedPNLUSDCompactFormat: PositionUI['unrealizedPNLUSDCompactFormat'];
+  realizedPNLTotalUSDCompactFormat: PositionUI['realizedPNLTotalUSDCompactFormat'];
+  realizedPNLTotalUSD: PositionUI['realizedPNLTotalUSD'];
+  realizedPNLFeesUSD: PositionUI['realizedPNLFeesUSD'];
+  realizedPNLCashflowUSD: PositionUI['realizedPNLCashflowUSD'];
+  notionalUSDCompactFormat: PositionUI['notionalUSDCompactFormat'];
 };
 const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
   [SupportedChainId.mainnet]: null,
@@ -70,6 +74,9 @@ const HealthColorMap: Record<PositionEntryProps['health'], ColorTokens | undefin
 export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps>(
   (
     {
+      canEdit,
+      canSettle,
+      canRollover,
       health,
       chainId,
       isAaveV3,
@@ -83,13 +90,13 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
       status,
       isV2,
       borderColorToken,
-      marginCompactFormat,
-      notionalCompactFormat,
-      realizedPNLTotalCompactFormat,
-      realizedPNLFees,
-      realizedPNLTotal,
-      realizedPNLCashflow,
-      unrealizedPNLCompactFormat,
+      marginUSDCompactFormat,
+      notionalUSDCompactFormat,
+      realizedPNLTotalUSDCompactFormat,
+      realizedPNLFeesUSD,
+      realizedPNLTotalUSD,
+      realizedPNLCashflowUSD,
+      unrealizedPNLUSDCompactFormat,
       type,
       maturityEndTimestampInMS,
       maturityStartTimestampInMS,
@@ -125,8 +132,28 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
     const handleOnSettle = () => {
       alert('TODO!');
     };
+
+    const handleOnEntryClick = () => {
+      if (!canEdit) {
+        return;
+      }
+      if (type === 'LP') {
+        navigate.toLPFormPage({
+          ammId: routeAmmId,
+          poolId: routePoolId,
+          fixedLower: status.fixLow,
+          fixedUpper: status.fixHigh,
+        });
+      } else {
+        navigate.toSwapFormPage({
+          ammId: routeAmmId,
+          poolId: routePoolId,
+        });
+      }
+    };
+    const EntryBox = canEdit ? EditablePositionEntryBox : PositionEntryBox;
     return (
-      <PositionEntryBoxWrapper ref={ref}>
+      <PositionEntryBoxWrapper ref={ref} onClick={handleOnEntryClick}>
         {ChainIcon ? (
           <ChainIconContainer>
             <ChainIcon />
@@ -137,10 +164,7 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
             <AttentionIndicator colorToken={HealthColorMap[health]!} />
           </HealthIndicatorBox>
         ) : null}
-        <PositionEntryBox
-          backgroundColorToken={backgroundColorToken}
-          borderColorToken={borderColorToken}
-        >
+        <EntryBox backgroundColorToken={backgroundColorToken} borderColorToken={borderColorToken}>
           <LeftBox>
             <MarketTokenInformation
               isAaveV3={isAaveV3}
@@ -152,20 +176,21 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
           </LeftBox>
           <NotionalBox>
             <PositionNotional
-              notionalCompactFormat={notionalCompactFormat}
+              notionalUSDCompactFormat={notionalUSDCompactFormat}
               status={status}
               typographyToken={numbersTypographyToken}
             />
           </NotionalBox>
           <MarginBox>
             <PositionMargin
-              marginCompactFormat={marginCompactFormat}
+              marginUSDCompactFormat={marginUSDCompactFormat}
               status={status}
               typographyToken={numbersTypographyToken}
             />
           </MarginBox>
           <MaturityBox>
             <PositionMaturity
+              canSettle={canSettle}
               maturityEndTimestampInMS={maturityEndTimestampInMS}
               maturityFormatted={maturityFormatted}
               maturityStartTimestampInMS={maturityStartTimestampInMS}
@@ -176,6 +201,7 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
           </MaturityBox>
           <StatusBox>
             <PositionStatus
+              canRollover={canRollover}
               numbersTypographyToken={numbersTypographyToken}
               status={status}
               textsTypographyToken={textsTypographyToken}
@@ -188,20 +214,20 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, PositionEntryProps
               numbersTypographyToken={numbersTypographyToken}
               status={status}
               textsTypographyToken={textsTypographyToken}
-              unrealizedPNLCompactFormat={unrealizedPNLCompactFormat}
+              unrealizedPNLUSDCompactFormat={unrealizedPNLUSDCompactFormat}
             />
           </UnrealizedPNLBox>
           <RealizedPNLBox>
             <PositionRealizedPNLDetails
-              realizedPNLCashflow={realizedPNLCashflow}
-              realizedPNLFees={realizedPNLFees}
-              realizedPNLTotal={realizedPNLTotal}
-              realizedPNLTotalCompactFormat={realizedPNLTotalCompactFormat}
+              realizedPNLCashflowUSD={realizedPNLCashflowUSD}
+              realizedPNLFeesUSD={realizedPNLFeesUSD}
+              realizedPNLTotalUSD={realizedPNLTotalUSD}
+              realizedPNLTotalUSDCompactFormat={realizedPNLTotalUSDCompactFormat}
               type={type}
               typographyToken={numbersTypographyToken}
             />
           </RealizedPNLBox>
-        </PositionEntryBox>
+        </EntryBox>
       </PositionEntryBoxWrapper>
     );
   },

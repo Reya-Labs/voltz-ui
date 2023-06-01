@@ -6,24 +6,24 @@ import { PositionUI } from '../../../../../../../app/features/portfolio/types';
 type PositionNotionalProps = {
   status: PositionUI['status'];
   typographyToken: TypographyToken;
-
-  notionalCompactFormat: PositionUI['notionalCompactFormat'];
+  notionalUSDCompactFormat: PositionUI['notionalUSDCompactFormat'];
 };
 
 export const PositionNotional: React.FunctionComponent<PositionNotionalProps> = ({
-  notionalCompactFormat,
+  notionalUSDCompactFormat,
   status,
   typographyToken,
 }) => {
-  if (status.variant === 'matured') {
+  if (status.variant === 'matured' || status.variant === 'settled') {
     return null;
   }
   return (
     <TokenTypography
       colorToken="lavenderWeb"
-      token={notionalCompactFormat.compactSuffix}
+      prefixToken="$"
+      token={notionalUSDCompactFormat.compactSuffix}
       typographyToken={typographyToken}
-      value={notionalCompactFormat.compactNumber}
+      value={notionalUSDCompactFormat.compactNumber}
     />
   );
 };

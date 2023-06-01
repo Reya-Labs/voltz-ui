@@ -14,6 +14,7 @@ export type PositionStatusProps = {
   numbersTypographyToken: TypographyToken;
   status: PositionUI['status'];
   type: PositionUI['type'];
+  canRollover: PositionUI['canRollover'];
   onRollover: () => void;
 };
 export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
@@ -22,6 +23,7 @@ export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
   status,
   type,
   onRollover,
+  canRollover,
 }) => {
   if (status.variant === 'settled') {
     return (
@@ -31,6 +33,9 @@ export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
     );
   }
   if (status.variant === 'matured') {
+    if (!canRollover) {
+      return null;
+    }
     return (
       <RolloverButton
         typographyToken={textsTypographyToken}

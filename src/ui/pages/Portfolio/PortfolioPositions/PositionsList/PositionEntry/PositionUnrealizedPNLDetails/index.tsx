@@ -7,10 +7,10 @@ export type PositionUnrealizedPNLDetailsProps = {
   status: PositionUI['status'];
   textsTypographyToken: TypographyToken;
   numbersTypographyToken: TypographyToken;
-  unrealizedPNLCompactFormat: PositionUI['unrealizedPNLCompactFormat'];
+  unrealizedPNLUSDCompactFormat: PositionUI['unrealizedPNLUSDCompactFormat'];
 };
 export const PositionUnrealizedPNLDetails: React.FunctionComponent<PositionUnrealizedPNLDetailsProps> =
-  ({ numbersTypographyToken, textsTypographyToken, status, unrealizedPNLCompactFormat }) => {
+  ({ numbersTypographyToken, textsTypographyToken, status, unrealizedPNLUSDCompactFormat }) => {
     if (status.variant === 'matured') {
       return (
         <Typography colorToken="skyBlueCrayola" typographyToken={textsTypographyToken}>
@@ -28,14 +28,14 @@ export const PositionUnrealizedPNLDetails: React.FunctionComponent<PositionUnrea
     return (
       <TokenTypography
         colorToken={
-          unrealizedPNLCompactFormat.compactNumber.indexOf('-') === -1
+          unrealizedPNLUSDCompactFormat.compactNumber.indexOf('-') === -1
             ? 'skyBlueCrayola'
             : 'wildStrawberry'
         }
-        prefixToken={unrealizedPNLCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'}
-        token={unrealizedPNLCompactFormat.compactSuffix}
+        prefixToken={unrealizedPNLUSDCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'}
+        token={unrealizedPNLUSDCompactFormat.compactSuffix}
         typographyToken={numbersTypographyToken}
-        value={unrealizedPNLCompactFormat.compactNumber.replace('-', '')}
+        value={unrealizedPNLUSDCompactFormat.compactNumber.replace('-', '')}
       />
     );
   };

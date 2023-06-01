@@ -6,6 +6,7 @@ import {
 import { formatPOSIXTimestamp } from '../../../utilities/date';
 import { compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
+import { formFormatNumber } from '../forms/common/utils';
 import { SORT_CONFIG } from './constants';
 import { sortPositions } from './helpers/sortPositions';
 import { PositionSortDirection, PositionSortId, PositionUI } from './types';
@@ -18,30 +19,36 @@ export const selectPositions = (state: RootState): PositionUI[] => {
   }
 
   const pools: PositionUI[] = portfolioPositions.map((position) => {
-    const isV2 = position.amm.isV2;
-    const isAaveV3 = position.amm.isAaveV3;
+    const isV2 = false;
+    const isAaveV3 = position.amm.market === 'Aave V3';
     const isBorrowing = position.amm.isBorrowing;
-    const market = position.amm.market;
+    const market =
+      position.amm.market === 'Aave V3' || position.amm.market === 'Aave V2'
+        ? 'Aave'
+        : position.amm.market;
     const token = position.amm.underlyingToken.name;
-    const notional = position.notional;
-    const margin = position.margin;
+    const notionalUSD = position.notional * position.tokenPriceUSD;
+    const marginUSD = position.margin * position.tokenPriceUSD;
     const type = position.type;
-    const unrealizedPNL = position.unrealizedPNLUSD;
-    const realizedPNLTotal = position.realizedPNLTotalUSD;
-    const realizedPNLFees = position.realizedPNLFeesUSD;
-    const realizedPNLCashflow = position.realizedPNLCashflowUSD;
+    const unrealizedPNLUSD = position.unrealizedPNL * position.tokenPriceUSD;
+    const realizedPNLTotalUSD = position.realizedPNLTotal * position.tokenPriceUSD;
+    const realizedPNLFeesUSD = position.realizedPNLFees * position.tokenPriceUSD;
+    const realizedPNLCashflowUSD = position.realizedPNLCashflow * position.tokenPriceUSD;
 
     return {
+      canEdit: position.canEdit,
+      canSettle: position.canSettle,
+      canRollover: Boolean(position.rolloverAmmId),
       type,
       market,
       token,
       isBorrowing,
       isAaveV3,
       isV2,
-      marginCompactFormat: compactFormatToParts(margin),
-      margin,
-      notionalCompactFormat: compactFormatToParts(notional),
-      notional,
+      marginUSDCompactFormat: compactFormatToParts(marginUSD),
+      marginUSD,
+      notionalUSDCompactFormat: compactFormatToParts(notionalUSD),
+      notionalUSD,
       maturityEndTimestampInMS: position.amm.termEndTimestampInMS,
       maturityStartTimestampInMS: position.amm.termStartTimestampInMS,
       maturityFormatted: formatPOSIXTimestamp(position.amm.termEndTimestampInMS),
@@ -53,15 +60,23 @@ export const selectPositions = (state: RootState): PositionUI[] => {
       name: `${type} - ${market}${isAaveV3 ? ' - Aave v3' : ''} - ${token as string}${
         isBorrowing ? ' - Borrowing' : ''
       }`,
-      status: position.status,
-      unrealizedPNL,
-      unrealizedPNLCompactFormat: compactFormatToParts(unrealizedPNL),
-      realizedPNLTotal,
-      realizedPNLTotalCompactFormat: compactFormatToParts(realizedPNLTotal),
-      realizedPNLFees,
-      realizedPNLFeesCompactFormat: compactFormatToParts(realizedPNLFees),
-      realizedPNLCashflow,
-      realizedPNLCashflowCompactFormat: compactFormatToParts(realizedPNLCashflow),
+      status: {
+        fixHigh: position.fixHigh,
+        fixLow: position.fixLow,
+        currentFixed: position.status.currentFixed,
+        health: position.status.health,
+        receiving: position.status.receiving,
+        paying: position.status.paying,
+        variant: position.status.variant,
+      },
+      unrealizedPNLUSD,
+      unrealizedPNLUSDCompactFormat: compactFormatToParts(unrealizedPNLUSD),
+      realizedPNLTotalUSD,
+      realizedPNLTotalUSDCompactFormat: compactFormatToParts(realizedPNLTotalUSD),
+      realizedPNLFeesUSD,
+      realizedPNLFeesUSDCompactFormat: compactFormatToParts(realizedPNLFeesUSD),
+      realizedPNLCashflowUSD,
+      realizedPNLCashflowUSDCompactFormat: compactFormatToParts(realizedPNLCashflowUSD),
     };
   });
 
@@ -81,36 +96,98 @@ export const selectPositionsLoading = (state: RootState): boolean => {
   return loadedState === 'idle' || loadedState === 'pending';
 };
 
-export const selectPositionsLength = (state: RootState): string => {
+export const selectPositionsSummary = (
+  state: RootState,
+): {
+  positionsLength: string;
+  healthyPositionsLength: string;
+  warningPositionsLength: string;
+  dangerPositionsLength: string;
+  totalPortfolioValueUSDFormatted: string;
+  totalPortfolioMarginValueUSDFormatted: string;
+  totalPortfolioRealizedPNLValueUSDFormatted: string;
+  totalPortfolioUnrealizedPNLValueUSDFormatted: string;
+  totalPortfolioNotionalValueUSDCompactFormatted: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+} => {
   if (selectPositionsLoading(state)) {
-    return '--';
+    return {
+      positionsLength: '--',
+      healthyPositionsLength: '--',
+      warningPositionsLength: '--',
+      dangerPositionsLength: '--',
+      totalPortfolioValueUSDFormatted: '--',
+      totalPortfolioMarginValueUSDFormatted: '--',
+      totalPortfolioRealizedPNLValueUSDFormatted: '--',
+      totalPortfolioUnrealizedPNLValueUSDFormatted: '--',
+      totalPortfolioNotionalValueUSDCompactFormatted: {
+        compactNumber: '--',
+        compactSuffix: '',
+      },
+    };
   }
-  return selectPositions(state).length.toString();
+  const positions = selectPositions(state);
+  const {
+    healthyPositionsLength,
+    dangerPositionsLength,
+    warningPositionsLength,
+    totalPortfolioMarginValueUSD,
+    totalPortfolioRealizedPNLValueUSD,
+    totalPortfolioNotionalValueUSD,
+    totalPortfolioUnrealizedPNLValueUSD,
+  } = positions.reduce(
+    (acc, position) => {
+      if (position.status.variant === 'active') {
+        if (position.status.health === 'healthy') {
+          acc.healthyPositionsLength++;
+        } else if (position.status.health === 'danger') {
+          acc.dangerPositionsLength++;
+        } else if (position.status.health === 'warning') {
+          acc.warningPositionsLength++;
+        }
+      }
+
+      acc.totalPortfolioMarginValueUSD += position.marginUSD;
+      acc.totalPortfolioRealizedPNLValueUSD += position.realizedPNLTotalUSD;
+      acc.totalPortfolioNotionalValueUSD += position.notionalUSD;
+      acc.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
+
+      return acc;
+    },
+    {
+      healthyPositionsLength: 0,
+      dangerPositionsLength: 0,
+      warningPositionsLength: 0,
+      totalPortfolioMarginValueUSD: 0,
+      totalPortfolioRealizedPNLValueUSD: 0,
+      totalPortfolioNotionalValueUSD: 0,
+      totalPortfolioUnrealizedPNLValueUSD: 0,
+    },
+  );
+
+  return {
+    positionsLength: positions.length.toString(),
+    healthyPositionsLength: healthyPositionsLength.toString(),
+    dangerPositionsLength: dangerPositionsLength.toString(),
+    warningPositionsLength: warningPositionsLength.toString(),
+    totalPortfolioMarginValueUSDFormatted: formFormatNumber(totalPortfolioMarginValueUSD),
+    totalPortfolioNotionalValueUSDCompactFormatted: compactFormatToParts(
+      totalPortfolioNotionalValueUSD,
+    ),
+    totalPortfolioRealizedPNLValueUSDFormatted: formFormatNumber(totalPortfolioRealizedPNLValueUSD),
+    totalPortfolioUnrealizedPNLValueUSDFormatted: formFormatNumber(
+      totalPortfolioUnrealizedPNLValueUSD,
+    ),
+    totalPortfolioValueUSDFormatted: formFormatNumber(
+      totalPortfolioMarginValueUSD +
+        totalPortfolioUnrealizedPNLValueUSD +
+        totalPortfolioRealizedPNLValueUSD,
+    ),
+  };
 };
-export const selectHealthyPositionsLength = (state: RootState): string => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return selectPositions(state)
-    .filter((p) => p.status.health === 'healthy')
-    .length.toString();
-};
-export const selectWarningPositionsLength = (state: RootState): string => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return selectPositions(state)
-    .filter((p) => p.status.health === 'warning')
-    .length.toString();
-};
-export const selectDangerPositionsLength = (state: RootState): string => {
-  if (selectPositionsLoading(state)) {
-    return '--';
-  }
-  return selectPositions(state)
-    .filter((p) => p.status.health === 'danger')
-    .length.toString();
-};
+
 export const selectPositionsSortOptions = (
   state: RootState,
 ): {
