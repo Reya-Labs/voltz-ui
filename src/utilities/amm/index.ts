@@ -116,13 +116,18 @@ export const generatePoolId = (amm: {
 }) => {
   const timestamp = new Date(amm.termEndTimestampInMS).toISOString().split('T')[0];
 
-  return `${getProtocolName(amm.rateOracle.protocolId)}-${amm.underlyingToken.name}-${timestamp}`;
+  return `${getProtocolName(
+    amm.rateOracle.protocolId,
+  ).toLowerCase()}-${amm.underlyingToken.name.toLowerCase()}-${timestamp}`;
 };
 
 export const generateAmmIdForRoute = (amm: { id: string }) => {
-  return amm.id.substring(amm.id.length - 4);
+  return amm.id.toLowerCase().substring(amm.id.length - 4);
 };
 
 export const generatePositionIdForRoute = (position: { id: string }) => {
-  return position.id.substring(position.id.length - 4).replace('#', '_');
+  return position.id
+    .toLowerCase()
+    .substring(position.id.length - 4)
+    .replace('#', '_');
 };

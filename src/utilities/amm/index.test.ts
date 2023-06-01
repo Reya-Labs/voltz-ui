@@ -318,7 +318,7 @@ describe('utilities/amm', () => {
     } as never;
 
     it('should generate the correct pool id', () => {
-      const expectedPoolId = `aave-Token1-2022-06-24`;
+      const expectedPoolId = `aave-token1-2022-06-24`;
       const actualPoolId = generatePoolId(mockAMM);
       expect(actualPoolId).toEqual(expectedPoolId);
     });
