@@ -18,6 +18,7 @@ import {
 } from '../../../../../app/features/forms/trader/swap';
 import { useAppSelector } from '../../../../../app/hooks';
 import { PnLDetailsWithTooltip } from '../../../../components/PnLDetailsWithTooltip';
+import { UnrealizedPNLDetails } from '../../../../components/UnrealizedPNLDetails';
 import { MODE_COLOR_TOKEN_MAP, MODE_TEXT_MAP } from '../../helpers';
 import {
   CashFlowBox,
@@ -27,7 +28,6 @@ import {
   PositionDetailsLeftBox,
   PositionDetailsRightBox,
   ReceivingBox,
-  TooltipBox,
 } from './PositionDetails.styled';
 
 type EditPositionDetailsUIProps = {
@@ -209,16 +209,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
-            tooltip={
-              <TooltipBox>
-                The additional PnL you’d generate should you close your position now.
-                <br />
-                <br />
-                To close your position you must enter an opposite sided swap, meaning your uPnL is
-                generated from any difference in the fixed rate from when you entered to when you
-                exit.
-              </TooltipBox>
-            }
+            tooltip={<UnrealizedPNLDetails />}
             typographyToken={typographyToken}
             value={unrealizedPnLFromSwaps}
           />
