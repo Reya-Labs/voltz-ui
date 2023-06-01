@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const PnLDetailsBox = styled('div')`
+export const RealizedPnLDetailsBox = styled('div')`
   box-sizing: border-box;
 
   display: flex;

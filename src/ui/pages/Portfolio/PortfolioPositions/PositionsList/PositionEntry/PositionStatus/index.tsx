@@ -6,7 +6,7 @@ import { PositionUI } from '../../../../../../../app/features/portfolio/types';
 import { InRange } from './InRange';
 import { LPStatusDetails } from './LPStatusDetails';
 import { OutOfRange } from './OutOfRange';
-import { PositionStatusBox, RolloverButton } from './PositionStatus.styled';
+import { PositionStatusBox } from './PositionStatus.styled';
 import { TraderStatusDetails } from './TraderStatusDetails';
 
 export type PositionStatusProps = {
@@ -14,16 +14,12 @@ export type PositionStatusProps = {
   numbersTypographyToken: TypographyToken;
   status: PositionUI['status'];
   type: PositionUI['type'];
-  canRollover: PositionUI['canRollover'];
-  onRollover: () => void;
 };
 export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
   textsTypographyToken,
   numbersTypographyToken,
   status,
   type,
-  onRollover,
-  canRollover,
 }) => {
   if (status.variant === 'settled') {
     return (
@@ -33,17 +29,10 @@ export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
     );
   }
   if (status.variant === 'matured') {
-    if (!canRollover) {
-      return null;
-    }
     return (
-      <RolloverButton
-        typographyToken={textsTypographyToken}
-        variant="secondary"
-        onClick={onRollover}
-      >
-        Rollover
-      </RolloverButton>
+      <Typography colorToken="skyBlueCrayola" typographyToken={textsTypographyToken}>
+        Matured
+      </Typography>
     );
   }
   if (type === 'LP') {

@@ -99,6 +99,9 @@ export const selectPositionsLoading = (state: RootState): boolean => {
 export const selectPositionsSummary = (
   state: RootState,
 ): {
+  maturedPositionsLength: string;
+  settledPositionsLength: string;
+  activePositionsLength: string;
   positionsLength: string;
   healthyPositionsLength: string;
   warningPositionsLength: string;
@@ -115,6 +118,9 @@ export const selectPositionsSummary = (
   if (selectPositionsLoading(state)) {
     return {
       positionsLength: '--',
+      activePositionsLength: '--',
+      settledPositionsLength: '--',
+      maturedPositionsLength: '--',
       healthyPositionsLength: '--',
       warningPositionsLength: '--',
       dangerPositionsLength: '--',
@@ -130,6 +136,9 @@ export const selectPositionsSummary = (
   }
   const positions = selectPositions(state);
   const {
+    maturedPositionsLength,
+    activePositionsLength,
+    settledPositionsLength,
     healthyPositionsLength,
     dangerPositionsLength,
     warningPositionsLength,
@@ -138,25 +147,43 @@ export const selectPositionsSummary = (
     totalPortfolioNotionalValueUSD,
     totalPortfolioUnrealizedPNLValueUSD,
   } = positions.reduce(
-    (acc, position) => {
-      if (position.status.variant === 'active') {
-        if (position.status.health === 'healthy') {
-          acc.healthyPositionsLength++;
-        } else if (position.status.health === 'danger') {
-          acc.dangerPositionsLength++;
-        } else if (position.status.health === 'warning') {
-          acc.warningPositionsLength++;
+    (summary, position) => {
+      const variant = position.status.variant;
+      const health = position.status.health;
+
+      if (variant === 'active') {
+        summary.activePositionsLength++;
+        summary.totalPortfolioNotionalValueUSD += position.notionalUSD;
+        summary.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
+
+        if (health === 'healthy') {
+          summary.healthyPositionsLength++;
+        } else if (health === 'danger') {
+          summary.dangerPositionsLength++;
+        } else if (health === 'warning') {
+          summary.warningPositionsLength++;
         }
       }
 
-      acc.totalPortfolioMarginValueUSD += position.marginUSD;
-      acc.totalPortfolioRealizedPNLValueUSD += position.realizedPNLTotalUSD;
-      acc.totalPortfolioNotionalValueUSD += position.notionalUSD;
-      acc.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
+      if (variant === 'matured') {
+        summary.maturedPositionsLength++;
+      }
 
-      return acc;
+      if (variant === 'settled') {
+        summary.settledPositionsLength++;
+      }
+
+      if (variant === 'active' || variant === 'matured') {
+        summary.totalPortfolioRealizedPNLValueUSD += position.realizedPNLTotalUSD;
+        summary.totalPortfolioMarginValueUSD += position.marginUSD;
+      }
+
+      return summary;
     },
     {
+      maturedPositionsLength: 0,
+      activePositionsLength: 0,
+      settledPositionsLength: 0,
       healthyPositionsLength: 0,
       dangerPositionsLength: 0,
       warningPositionsLength: 0,
@@ -169,6 +196,9 @@ export const selectPositionsSummary = (
 
   return {
     positionsLength: positions.length.toString(),
+    activePositionsLength: activePositionsLength.toString(),
+    settledPositionsLength: settledPositionsLength.toString(),
+    maturedPositionsLength: maturedPositionsLength.toString(),
     healthyPositionsLength: healthyPositionsLength.toString(),
     dangerPositionsLength: dangerPositionsLength.toString(),
     warningPositionsLength: warningPositionsLength.toString(),

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { formFormatNumber } from '../../../../../../../app/features/forms/common/utils';
 import { PositionUI } from '../../../../../../../app/features/portfolio/types';
-import { PnLDetails } from '../../../../../../components/PnLDetails';
+import { RealizedPNLDetails } from '../../../../../../components/RealizedPNLDetails';
 
 export type PositionPNLDetailsProps = {
   typographyToken: TypographyToken;
@@ -39,7 +39,7 @@ export const PositionRealizedPNLDetails: React.FunctionComponent<PositionPNLDeta
         />
       }
     >
-      <PnLDetails
+      <RealizedPNLDetails
         pnlFromFees={formFormatNumber(Math.abs(realizedPNLFeesUSD))}
         pnlFromFeesPrefixToken={realizedPNLFeesUSD >= 0 ? '+$' : '-$'}
         pnlFromSwaps={formFormatNumber(Math.abs(realizedPNLCashflowUSD))}

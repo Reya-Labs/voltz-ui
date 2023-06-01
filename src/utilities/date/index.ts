@@ -50,6 +50,22 @@ export const formatPOSIXTimestamp = (timestamp: number): string => {
 };
 
 /**
+ * Takes a POSIX timestamp and returns a string representation: 10/12/22 04:30 (DD/MM/YY)
+ * or 12/10/22 04:30 (MM/DD/YY) depending on locale in UTC
+ * @param timestamp - The POSIX timestamp to process
+ */
+export const formatPOSIXTimestampWithHoursMinutesUTC = (timestamp: number): string => {
+  return DateTime.fromMillis(timestamp).toLocaleString({
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'UTC',
+  });
+};
+
+/**
  * It takes a DateTime object and returns a string with the ordinal suffix added to the day of the month
  * @param {DateTime} dateTime - The DateTime object to format
  * @returns A string

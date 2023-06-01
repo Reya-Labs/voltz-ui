@@ -14,7 +14,7 @@ import {
   selectSettleVariant,
 } from '../../../../app/features/settle-flow';
 import { useAppSelector } from '../../../../app/hooks';
-import { PnLDetails } from '../../PnLDetails';
+import { RealizedPNLDetails } from '../../RealizedPNLDetails';
 import { DetailBox, DetailsBox } from './SettleDetails.styled';
 
 export const SettleDetails: React.FunctionComponent = () => {
@@ -92,7 +92,7 @@ export const SettleDetails: React.FunctionComponent = () => {
         <TypographyWithTooltip
           colorToken="lavenderWeb3"
           tooltip={
-            <PnLDetails
+            <RealizedPNLDetails
               pnlFromFees={compactRealizedPnL.compactRealizedPnLFees}
               pnlFromSwaps={compactRealizedPnL.compactRealizedPnLSwaps}
               pnlTotal={`${compactRealizedPnL.compactRealizedPnLTotal} ${compactRealizedPnL.compactRealizedPnLSuffix}`}
