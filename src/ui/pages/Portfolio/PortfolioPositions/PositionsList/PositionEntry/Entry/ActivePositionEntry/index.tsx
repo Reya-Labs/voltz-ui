@@ -16,6 +16,7 @@ import {
   PositionEntryBox,
   PositionEntryBoxWrapper,
   RealizedPNLBox,
+  RightBox,
   StatusBox,
   UnrealizedPNLBox,
 } from '../../PositionEntry.styled';
@@ -101,51 +102,53 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
               type={type}
             />
           </LeftBox>
-          <NotionalBox>
-            <PositionNotional
-              notionalUSDCompactFormat={notionalUSDCompactFormat}
-              status={status}
-              typographyToken={numbersTypographyToken}
-            />
-          </NotionalBox>
-          <MarginBox>
-            <PositionMargin
-              marginUSDCompactFormat={marginUSDCompactFormat}
-              typographyToken={numbersTypographyToken}
-            />
-          </MarginBox>
-          <MaturityBox>
-            <PositionMaturity
-              maturityEndTimestampInMS={maturityEndTimestampInMS}
-              maturityFormatted={maturityFormatted}
-              maturityStartTimestampInMS={maturityStartTimestampInMS}
-              typographyToken={textsTypographyToken}
-            />
-          </MaturityBox>
-          <StatusBox variant="large">
-            <PositionStatus
-              numbersTypographyToken={numbersTypographyToken}
-              status={status}
-              textsTypographyToken={textsTypographyToken}
-              type={type}
-            />
-          </StatusBox>
-          <UnrealizedPNLBox>
-            <PositionUnrealizedPNLDetails
-              numbersTypographyToken={numbersTypographyToken}
-              unrealizedPNLUSDCompactFormat={unrealizedPNLUSDCompactFormat}
-            />
-          </UnrealizedPNLBox>
-          <RealizedPNLBox>
-            <PositionRealizedPNLDetails
-              realizedPNLCashflowUSD={realizedPNLCashflowUSD}
-              realizedPNLFeesUSD={realizedPNLFeesUSD}
-              realizedPNLTotalUSD={realizedPNLTotalUSD}
-              realizedPNLTotalUSDCompactFormat={realizedPNLTotalUSDCompactFormat}
-              type={type}
-              typographyToken={numbersTypographyToken}
-            />
-          </RealizedPNLBox>
+          <RightBox>
+            <NotionalBox>
+              <PositionNotional
+                notionalUSDCompactFormat={notionalUSDCompactFormat}
+                status={status}
+                typographyToken={numbersTypographyToken}
+              />
+            </NotionalBox>
+            <MarginBox>
+              <PositionMargin
+                marginUSDCompactFormat={marginUSDCompactFormat}
+                typographyToken={numbersTypographyToken}
+              />
+            </MarginBox>
+            <MaturityBox>
+              <PositionMaturity
+                maturityEndTimestampInMS={maturityEndTimestampInMS}
+                maturityFormatted={maturityFormatted}
+                maturityStartTimestampInMS={maturityStartTimestampInMS}
+                typographyToken={textsTypographyToken}
+              />
+            </MaturityBox>
+            <StatusBox variant="large">
+              <PositionStatus
+                numbersTypographyToken={numbersTypographyToken}
+                status={status}
+                textsTypographyToken={textsTypographyToken}
+                type={type}
+              />
+            </StatusBox>
+            <UnrealizedPNLBox>
+              <PositionUnrealizedPNLDetails
+                numbersTypographyToken={numbersTypographyToken}
+                unrealizedPNLUSDCompactFormat={unrealizedPNLUSDCompactFormat}
+              />
+            </UnrealizedPNLBox>
+            <RealizedPNLBox>
+              <PositionRealizedPNLDetails
+                realizedPNLCashflowUSD={realizedPNLCashflowUSD}
+                realizedPNLFeesUSD={realizedPNLFeesUSD}
+                realizedPNLTotalUSD={realizedPNLTotalUSD}
+                realizedPNLTotalUSDCompactFormat={realizedPNLTotalUSDCompactFormat}
+                type={type}
+                typographyToken={numbersTypographyToken}
+              />
+            </RealizedPNLBox>
+          </RightBox>
         </EntryBox>
       </PositionEntryBoxWrapper>
     );

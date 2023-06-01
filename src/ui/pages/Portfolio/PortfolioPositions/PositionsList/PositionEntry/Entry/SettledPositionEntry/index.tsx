@@ -1,7 +1,6 @@
 import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { HealthIndicator } from '../../HealthIndicator';
@@ -50,7 +49,6 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
     },
     ref,
   ) => {
-    const navigate = useAppNavigate();
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyMediumRegular'

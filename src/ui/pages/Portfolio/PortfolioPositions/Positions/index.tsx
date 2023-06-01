@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 
 import { selectPositionsSummary } from '../../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../../app/hooks';
+import { capitalize } from '../../../../../utilities/capitalize';
 import { PositionsFilterId, PositionsList } from '../PositionsList';
 import {
   BottomBox,
   HealthBox,
   HealthStatusBox,
   MarginBox,
-  MidBox,
   PositionDetailsBox,
   PositionsBox,
   PositionsSelectorBox,
@@ -40,7 +40,9 @@ const positionFilterOptions: {
 
 export const Positions: React.FunctionComponent = () => {
   const {
-    positionsLength,
+    activePositionsLength,
+    maturedPositionsLength,
+    settledPositionsLength,
     healthyPositionsLength,
     totalPortfolioNotionalValueUSDCompactFormatted,
     totalPortfolioMarginValueUSDFormatted,
@@ -172,18 +174,15 @@ export const Positions: React.FunctionComponent = () => {
           </HealthStatusBox>
         </PositionDetailsBox>
       </TopBox>
-      <MidBox>
-        <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyMediumBold">
-          {positionsLength}
-        </Typography>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-          Positions
-        </Typography>
-      </MidBox>
       <BottomBox>
         <PositionsSelectorBox>
           <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
-            Positions in this account
+            {activeFilter === 'active'
+              ? activePositionsLength
+              : activeFilter === 'settled'
+              ? settledPositionsLength
+              : maturedPositionsLength}{' '}
+            {capitalize(activeFilter)} Positions
           </Typography>
           <PillSelector
             activePillId={activeFilter as string}

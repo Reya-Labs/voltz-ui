@@ -41,14 +41,16 @@ export const MaturityDetails: React.FunctionComponent<MaturityDetailsProps> = ({
             {maturityFormatted} UTC
           </Typography>
         </RowBox>
-        <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-            Days Remaining
-          </Typography>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-            {daysRemaining > 0 ? daysRemaining : '/'}
-          </Typography>
-        </RowBox>
+        {daysRemaining > 0 ? (
+          <RowBox>
+            <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+              Days Remaining
+            </Typography>
+            <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+              {daysRemaining}
+            </Typography>
+          </RowBox>
+        ) : null}
         <RowBox>
           <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
             Progress
