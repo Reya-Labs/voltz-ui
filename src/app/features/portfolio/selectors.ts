@@ -148,29 +148,35 @@ export const selectPositionsSummary = (
     totalPortfolioUnrealizedPNLValueUSD,
   } = positions.reduce(
     (summary, position) => {
-      if (position.status.variant === 'active') {
-        if (position.status.health === 'healthy') {
+      const variant = position.status.variant;
+      const health = position.status.health;
+
+      if (variant === 'active') {
+        summary.activePositionsLength++;
+        summary.totalPortfolioNotionalValueUSD += position.notionalUSD;
+        summary.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
+
+        if (health === 'healthy') {
           summary.healthyPositionsLength++;
-        } else if (position.status.health === 'danger') {
+        } else if (health === 'danger') {
           summary.dangerPositionsLength++;
-        } else if (position.status.health === 'warning') {
+        } else if (health === 'warning') {
           summary.warningPositionsLength++;
         }
       }
-      if (position.status.variant === 'active') {
-        summary.activePositionsLength++;
-      }
-      if (position.status.variant === 'matured') {
+
+      if (variant === 'matured') {
         summary.maturedPositionsLength++;
       }
-      if (position.status.variant === 'settled') {
+
+      if (variant === 'settled') {
         summary.settledPositionsLength++;
       }
 
-      summary.totalPortfolioMarginValueUSD += position.marginUSD;
-      summary.totalPortfolioRealizedPNLValueUSD += position.realizedPNLTotalUSD;
-      summary.totalPortfolioNotionalValueUSD += position.notionalUSD;
-      summary.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
+      if (variant === 'active' || variant === 'matured') {
+        summary.totalPortfolioRealizedPNLValueUSD += position.realizedPNLTotalUSD;
+        summary.totalPortfolioMarginValueUSD += position.marginUSD;
+      }
 
       return summary;
     },
