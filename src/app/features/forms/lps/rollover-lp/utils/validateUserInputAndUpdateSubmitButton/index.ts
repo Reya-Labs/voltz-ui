@@ -2,6 +2,7 @@ import { Draft } from '@reduxjs/toolkit';
 
 import { isUserInputMarginError } from '../../../../common/utils';
 import { SliceState } from '../../state';
+import { getAvailableMargin } from '../getAvailableMargin';
 import { getProspectiveLpMargin } from '../getProspectiveLpMargin';
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
 import { validateUserInput } from '../validateUserInput';
@@ -48,11 +49,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     return;
   }
   if (isWalletBalanceLoaded && state.previousPosition !== null) {
-    const walletBalance = state.walletBalance.value;
-    const settlementCashflow = state.previousPosition.settlementCashflow;
-    const margin = state.previousPosition.margin;
-    const fees = state.previousPosition.fees;
-    const allowedBalance = walletBalance + settlementCashflow + margin + fees;
+    const allowedBalance = getAvailableMargin(state)!;
     if (state.userInput.marginAmount.value > allowedBalance) {
       state.submitButton = {
         state: 'not-enough-balance',
@@ -67,11 +64,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   }
 
   if (isWalletBalanceLoaded && state.previousPosition !== null && isInfoPostLpLoaded) {
-    const walletBalance = state.walletBalance.value;
-    const settlementCashflow = state.previousPosition.settlementCashflow;
-    const margin = state.previousPosition.margin;
-    const fees = state.previousPosition.fees;
-    const allowedBalance = walletBalance + settlementCashflow + margin + fees;
+    const allowedBalance = getAvailableMargin(state)!;
     if (state.userInput.marginAmount.value > allowedBalance) {
       state.submitButton = {
         state: 'not-enough-balance',
