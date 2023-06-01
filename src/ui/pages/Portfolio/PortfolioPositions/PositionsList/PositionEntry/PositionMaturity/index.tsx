@@ -30,7 +30,6 @@ export const PositionMaturity: React.FunctionComponent<PositionMaturityProps> = 
     >
       <MaturityDetails
         maturityEndTimestampInMS={maturityEndTimestampInMS}
-        maturityFormatted={maturityFormatted}
         maturityStartTimestampInMS={maturityStartTimestampInMS}
       />
     </Tooltip>

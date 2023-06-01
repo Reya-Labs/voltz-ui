@@ -2,16 +2,15 @@ import { ProgressBar, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useMemo } from 'react';
 
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
+import { formatPOSIXTimestampWithHoursMinutesUTC } from '../../../../../../../../utilities/date';
 import { DetailsBox, ProgressBarBox, RowBox, RowsBox } from './MaturityDetails.styled';
 
 export type MaturityDetailsProps = {
-  maturityFormatted: PositionUI['maturityFormatted'];
   maturityEndTimestampInMS: PositionUI['maturityEndTimestampInMS'];
   maturityStartTimestampInMS: PositionUI['maturityStartTimestampInMS'];
 };
 
 export const MaturityDetails: React.FunctionComponent<MaturityDetailsProps> = ({
-  maturityFormatted,
   maturityEndTimestampInMS,
   maturityStartTimestampInMS,
 }) => {
@@ -23,6 +22,7 @@ export const MaturityDetails: React.FunctionComponent<MaturityDetailsProps> = ({
     return Math.floor(percentage);
   }, [maturityStartTimestampInMS, maturityEndTimestampInMS]);
   const daysRemaining = Math.ceil((maturityEndTimestampInMS - Date.now()) / (1000 * 60 * 60 * 24));
+  const maturityFormatted = formatPOSIXTimestampWithHoursMinutesUTC(maturityEndTimestampInMS);
   return (
     <DetailsBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallBold">
@@ -38,7 +38,7 @@ export const MaturityDetails: React.FunctionComponent<MaturityDetailsProps> = ({
             Expiry
           </Typography>
           <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-            {maturityFormatted}
+            {maturityFormatted} UTC
           </Typography>
         </RowBox>
         <RowBox>
