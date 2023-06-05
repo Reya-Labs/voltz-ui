@@ -69,7 +69,9 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage>
+            <NetworkProtectedVoltzPage
+              hidden={isAvalancheChain(chainId) || isArbitrumChain(chainId)}
+            >
               <PortfolioOptimisersPage />
             </NetworkProtectedVoltzPage>
           }

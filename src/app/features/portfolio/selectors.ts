@@ -1,3 +1,4 @@
+import { PositionsFilterId } from '../../../ui/pages/Portfolio/PortfolioPositions/PositionsList';
 import {
   generateAmmIdForRoute,
   generatePoolId,
@@ -35,6 +36,11 @@ export const selectPositions = (state: RootState): PositionUI[] => {
     const realizedPNLFeesUSD = position.realizedPNLFees * position.tokenPriceUSD;
     const realizedPNLCashflowUSD = position.realizedPNLCashflow * position.tokenPriceUSD;
 
+    const fixHigh = position.fixHigh * 100;
+    const fixLow = position.fixLow * 100;
+    const currentFixed = position.status.currentFixed * 100;
+    const receiving = position.status.receiving * 100;
+    const paying = position.status.paying * 100;
     return {
       canEdit: position.canEdit,
       canSettle: position.canSettle,
@@ -61,12 +67,12 @@ export const selectPositions = (state: RootState): PositionUI[] => {
         isBorrowing ? ' - Borrowing' : ''
       }`,
       status: {
-        fixHigh: position.fixHigh,
-        fixLow: position.fixLow,
-        currentFixed: position.status.currentFixed,
+        fixHigh,
+        fixLow,
+        currentFixed,
         health: position.status.health,
-        receiving: position.status.receiving,
-        paying: position.status.paying,
+        receiving,
+        paying,
         variant: position.status.variant,
       },
       unrealizedPNLUSD,
@@ -114,7 +120,31 @@ export const selectPositionsSummary = (
     compactNumber: string;
     compactSuffix: string;
   };
+  filterOptions: {
+    id: PositionsFilterId;
+    label: string;
+    attentionPrefixText?: string;
+  }[];
 } => {
+  const filterOptions: {
+    id: PositionsFilterId;
+    label: string;
+    attentionPrefixText?: string;
+  }[] = [
+    {
+      id: 'active',
+      label: 'Active',
+    },
+    {
+      id: 'matured',
+      label: 'To settle',
+    },
+    {
+      id: 'settled',
+      label: 'Settled',
+    },
+  ];
+
   if (selectPositionsLoading(state)) {
     return {
       positionsLength: '--',
@@ -132,6 +162,7 @@ export const selectPositionsSummary = (
         compactNumber: '--',
         compactSuffix: '',
       },
+      filterOptions,
     };
   }
   const positions = selectPositions(state);
@@ -194,6 +225,9 @@ export const selectPositionsSummary = (
     },
   );
 
+  filterOptions[0].attentionPrefixText = activePositionsLength.toString();
+  filterOptions[1].attentionPrefixText = maturedPositionsLength.toString();
+  filterOptions[2].attentionPrefixText = settledPositionsLength.toString();
   return {
     positionsLength: positions.length.toString(),
     activePositionsLength: activePositionsLength.toString(),
@@ -215,6 +249,7 @@ export const selectPositionsSummary = (
         totalPortfolioUnrealizedPNLValueUSD +
         totalPortfolioRealizedPNLValueUSD,
     ),
+    filterOptions,
   };
 };
 

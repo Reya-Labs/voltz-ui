@@ -20,24 +20,6 @@ import {
   UnrealizedPNLBox,
 } from './Positions.styled';
 
-const positionFilterOptions: {
-  id: PositionsFilterId;
-  label: string;
-}[] = [
-  {
-    id: 'active',
-    label: 'Active',
-  },
-  {
-    id: 'matured',
-    label: 'Matured',
-  },
-  {
-    id: 'settled',
-    label: 'Settled',
-  },
-];
-
 export const Positions: React.FunctionComponent = () => {
   const {
     activePositionsLength,
@@ -52,6 +34,7 @@ export const Positions: React.FunctionComponent = () => {
     warningPositionsLength,
     dangerPositionsLength,
     positionsLength,
+    filterOptions,
   } = useAppSelector(selectPositionsSummary);
   const [activeFilter, setActiveFilter] = useState<PositionsFilterId>('active');
 
@@ -192,7 +175,8 @@ export const Positions: React.FunctionComponent = () => {
           <PillSelector
             activePillId={activeFilter as string}
             disabled={positionsLength === '--'}
-            pillOptions={positionFilterOptions}
+            pillOptions={filterOptions}
+            variant="regular"
             onPillClick={(id) => setActiveFilter(id as PositionsFilterId)}
           />
         </PositionsSelectorBox>

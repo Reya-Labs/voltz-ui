@@ -120,6 +120,7 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
         activePillId={automaticRolloverState as string}
         disabled={disabled}
         pillOptions={options}
+        variant="compact"
         onPillClick={(autoRolloverState) => handleOpen(autoRolloverState as AutomaticRolloverState)}
       />
     </AutomaticRolloverToggleBox>
