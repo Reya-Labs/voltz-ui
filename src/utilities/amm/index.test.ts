@@ -347,11 +347,11 @@ describe('utilities/amm', () => {
 
   describe('generatePositionIdForRoute', () => {
     const mockPosition: Position = {
-      id: '0x1234567890abcdef',
+      id: '42161_0x1aac6232b7c7cd6c8479077844eb0302cca0d2af_0x22b908c2fea7a1e6043ffcdbc77d660d4d326961_-36900_-27060',
     } as never;
 
     it('should generate the correct Position id for route', () => {
-      const expectedAmmIdForRoute = 'cdef';
+      const expectedAmmIdForRoute = '2161d2af6961';
       const actualAmmIdForRoute = generatePositionIdForRoute(mockPosition);
       expect(actualAmmIdForRoute).toEqual(expectedAmmIdForRoute);
     });
