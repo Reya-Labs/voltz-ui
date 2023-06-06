@@ -18,7 +18,7 @@ const initialState: SliceState = {
 };
 
 const slice = createSlice({
-  name: 'aMMs',
+  name: 'portfolio',
   initialState,
   reducers: {
     togglePositionSortingDirectionAction: (
