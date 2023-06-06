@@ -96,7 +96,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
         ) : entry.type === 'margin-update' ? (
           <TokenTypography
             colorToken="lavenderWeb"
-            prefixToken={entry.marginDelta > 0 ? 'Margin Delta $' : 'Margin Delta -$'}
+            prefixToken={entry.marginDelta > 0 ? 'Deposited $' : 'Withdraw $'}
             token={entry.marginDeltaUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
             value={entry.marginDeltaUSDCompactFormat.compactNumber.replace('-', '')}
@@ -109,7 +109,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
             typographyToken="secondaryBodySmallRegular"
             value={entry.marginDeltaUSDCompactFormat.compactNumber.replace('-', '')}
           />
-        ) : entry.type === 'settlement' || entry.type === 'maturity' ? (
+        ) : entry.type === 'maturity' ? (
           <TokenTypography
             colorToken="lavenderWeb"
             prefixToken={entry.marginDelta > 0 ? 'Realized PnL +$' : 'Realized PnL -$'}

@@ -133,6 +133,7 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
               <UnrealizedPNLBox>
                 <PositionUnrealizedPNLDetails
                   numbersTypographyToken={numbersTypographyToken}
+                  type={type}
                   unrealizedPNLUSDCompactFormat={unrealizedPNLUSDCompactFormat}
                 />
               </UnrealizedPNLBox>
