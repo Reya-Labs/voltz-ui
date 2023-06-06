@@ -1,13 +1,11 @@
-import { TypographyToken } from 'brokoli-ui';
-import React from 'react';
+import { Dialog, TypographyToken } from 'brokoli-ui';
+import React, { useState } from 'react';
 
-import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { HealthIndicator } from '../../HealthIndicator';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
 import {
-  ButtonsBox,
   ChainIconContainer,
   LeftBox,
   MarginBox,
@@ -22,15 +20,13 @@ import { PositionMargin } from '../../PositionMargin';
 import { PositionMaturity } from '../../PositionMaturity';
 import { PositionRealizedPNLDetails } from '../../PositionRealizedPNLDetails';
 import { PositionStatus } from '../../PositionStatus';
-import { RolloverButton, SettleButton } from '../../PositionStatus/PositionStatus.styled';
+import { PositionTransactionHistoryDialogContent } from '../PositionTransactionHistoryDialogContent';
 import { EntryProps } from '../types';
 
 export const MaturedPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
   (
     {
-      canEdit,
-      canSettle,
-      canRollover,
+      id,
       chainId,
       isAaveV3,
       isBorrowing,
@@ -56,7 +52,7 @@ export const MaturedPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
     },
     ref,
   ) => {
-    const navigate = useAppNavigate();
+    const [transactionHistoryDialogOpen, setTransactionHistoryDialogOpen] = useState(false);
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyMediumRegular'
@@ -65,97 +61,77 @@ export const MaturedPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
       ? 'primaryBodyMediumRegular'
       : 'primaryBodySmallRegular';
 
-    const handleOnRollover = () => {
-      if (type === 'LP') {
-        navigate.toRolloverLPFormPage({
-          ammId: routeAmmId,
-          poolId: routePoolId,
-          positionId: routePositionId,
-        });
-      } else {
-        navigate.toRolloverSwapFormPage({
-          ammId: routeAmmId,
-          poolId: routePoolId,
-          positionId: routePositionId,
-        });
-      }
-    };
-
-    const handleOnSettle = () => {
-      alert('TODO!');
-    };
-
     const chainIcon = <ChainIcon chainId={chainId} />;
+    const handleOnEntryClick = () => setTransactionHistoryDialogOpen(true);
+    const handleOnClose = () => setTransactionHistoryDialogOpen(false);
     return (
-      <PositionEntryBoxWrapper ref={ref}>
-        {chainIcon ? <ChainIconContainer>{chainIcon}</ChainIconContainer> : null}
-        <HealthIndicator health={status.health} />
-        <PositionEntryBox backgroundColorToken={backgroundColorToken}>
-          <LeftBox>
-            <MarketTokenInformation
-              isAaveV3={isAaveV3}
-              isBorrowing={isBorrowing}
-              market={market}
-              token={token}
-              type={type}
-            />
-          </LeftBox>
-          <RightBox>
-            <ButtonsBox>
-              {canSettle ? (
-                <SettleButton
-                  typographyToken={textsTypographyToken}
-                  variant="secondary"
-                  onClick={handleOnSettle}
-                >
-                  Settle
-                </SettleButton>
-              ) : null}
-              {canRollover ? (
-                <RolloverButton
-                  typographyToken={textsTypographyToken}
-                  variant="secondary"
-                  onClick={handleOnRollover}
-                >
-                  Rollover
-                </RolloverButton>
-              ) : null}
-            </ButtonsBox>
-            <MaturityBox>
-              <PositionMaturity
-                maturityEndTimestampInMS={maturityEndTimestampInMS}
-                maturityFormatted={maturityFormatted}
-                maturityStartTimestampInMS={maturityStartTimestampInMS}
-                typographyToken={textsTypographyToken}
-              />
-            </MaturityBox>
-            <StatusBox variant="small">
-              <PositionStatus
-                numbersTypographyToken={numbersTypographyToken}
-                status={status}
-                textsTypographyToken={textsTypographyToken}
+      <React.Fragment>
+        <Dialog open={transactionHistoryDialogOpen}>
+          <PositionTransactionHistoryDialogContent
+            chainId={chainId}
+            id={id}
+            isAaveV3={isAaveV3}
+            isBorrowing={isBorrowing}
+            market={market}
+            routeAmmId={routeAmmId}
+            routePoolId={routePoolId}
+            routePositionId={routePositionId}
+            status={status}
+            token={token}
+            type={type}
+            onClose={handleOnClose}
+          />
+        </Dialog>
+        <PositionEntryBoxWrapper ref={ref} onClick={handleOnEntryClick}>
+          {chainIcon ? <ChainIconContainer>{chainIcon}</ChainIconContainer> : null}
+          <HealthIndicator health={status.health} />
+          <PositionEntryBox backgroundColorToken={backgroundColorToken}>
+            <LeftBox>
+              <MarketTokenInformation
+                isAaveV3={isAaveV3}
+                isBorrowing={isBorrowing}
+                market={market}
+                token={token}
                 type={type}
               />
-            </StatusBox>
-            <MarginBox>
-              <PositionMargin
-                marginUSDCompactFormat={marginUSDCompactFormat}
-                typographyToken={numbersTypographyToken}
-              />
-            </MarginBox>
-            <RealizedPNLBox>
-              <PositionRealizedPNLDetails
-                realizedPNLCashflowUSD={realizedPNLCashflowUSD}
-                realizedPNLFeesUSD={realizedPNLFeesUSD}
-                realizedPNLTotalUSD={realizedPNLTotalUSD}
-                realizedPNLTotalUSDCompactFormat={realizedPNLTotalUSDCompactFormat}
-                type={type}
-                typographyToken={numbersTypographyToken}
-              />
-            </RealizedPNLBox>
-          </RightBox>
-        </PositionEntryBox>
-      </PositionEntryBoxWrapper>
+            </LeftBox>
+            <RightBox>
+              <MaturityBox>
+                <PositionMaturity
+                  maturityEndTimestampInMS={maturityEndTimestampInMS}
+                  maturityFormatted={maturityFormatted}
+                  maturityStartTimestampInMS={maturityStartTimestampInMS}
+                  typographyToken={textsTypographyToken}
+                />
+              </MaturityBox>
+              <StatusBox variant="small">
+                <PositionStatus
+                  numbersTypographyToken={numbersTypographyToken}
+                  status={status}
+                  textsTypographyToken={textsTypographyToken}
+                  type={type}
+                />
+              </StatusBox>
+              <MarginBox>
+                <PositionMargin
+                  marginUSDCompactFormat={marginUSDCompactFormat}
+                  typographyToken={numbersTypographyToken}
+                />
+              </MarginBox>
+              <RealizedPNLBox>
+                <PositionRealizedPNLDetails
+                  realizedPNLCashflowUSD={realizedPNLCashflowUSD}
+                  realizedPNLFeesUSD={realizedPNLFeesUSD}
+                  realizedPNLTotalUSD={realizedPNLTotalUSD}
+                  realizedPNLTotalUSDCompactFormat={realizedPNLTotalUSDCompactFormat}
+                  type={type}
+                  typographyToken={numbersTypographyToken}
+                />
+              </RealizedPNLBox>
+            </RightBox>
+          </PositionEntryBox>
+        </PositionEntryBoxWrapper>
+      </React.Fragment>
     );
   },
 );

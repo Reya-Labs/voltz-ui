@@ -1,5 +1,5 @@
-import { TypographyToken } from 'brokoli-ui';
-import React from 'react';
+import { Dialog, TypographyToken } from 'brokoli-ui';
+import React, { useState } from 'react';
 
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
@@ -16,14 +16,13 @@ import {
 } from '../../PositionEntry.styled';
 import { PositionMaturity } from '../../PositionMaturity';
 import { PositionStatus } from '../../PositionStatus';
+import { PositionTransactionHistoryDialogContent } from '../PositionTransactionHistoryDialogContent';
 import { EntryProps } from '../types';
 
 export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
   (
     {
-      canEdit,
-      canSettle,
-      canRollover,
+      id,
       chainId,
       isAaveV3,
       isBorrowing,
@@ -49,6 +48,7 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
     },
     ref,
   ) => {
+    const [transactionHistoryDialogOpen, setTransactionHistoryDialogOpen] = useState(false);
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyMediumRegular'
@@ -58,40 +58,60 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
       : 'primaryBodySmallRegular';
 
     const chainIcon = <ChainIcon chainId={chainId} />;
+    const handleOnEntryClick = () => setTransactionHistoryDialogOpen(true);
+    const handleOnClose = () => setTransactionHistoryDialogOpen(false);
     return (
-      <PositionEntryBoxWrapper ref={ref}>
-        {chainIcon ? <ChainIconContainer>{chainIcon}</ChainIconContainer> : null}
-        <HealthIndicator health={status.health} />
-        <PositionEntryBox backgroundColorToken={backgroundColorToken}>
-          <LeftBox>
-            <MarketTokenInformation
-              isAaveV3={isAaveV3}
-              isBorrowing={isBorrowing}
-              market={market}
-              token={token}
-              type={type}
-            />
-          </LeftBox>
-          <RightBox>
-            <MaturityBox>
-              <PositionMaturity
-                maturityEndTimestampInMS={maturityEndTimestampInMS}
-                maturityFormatted={maturityFormatted}
-                maturityStartTimestampInMS={maturityStartTimestampInMS}
-                typographyToken={textsTypographyToken}
-              />
-            </MaturityBox>
-            <StatusBox variant="small">
-              <PositionStatus
-                numbersTypographyToken={numbersTypographyToken}
-                status={status}
-                textsTypographyToken={textsTypographyToken}
+      <React.Fragment>
+        <Dialog open={transactionHistoryDialogOpen}>
+          <PositionTransactionHistoryDialogContent
+            chainId={chainId}
+            id={id}
+            isAaveV3={isAaveV3}
+            isBorrowing={isBorrowing}
+            market={market}
+            routeAmmId={routeAmmId}
+            routePoolId={routePoolId}
+            routePositionId={routePositionId}
+            status={status}
+            token={token}
+            type={type}
+            onClose={handleOnClose}
+          />
+        </Dialog>
+        <PositionEntryBoxWrapper ref={ref} onClick={handleOnEntryClick}>
+          {chainIcon ? <ChainIconContainer>{chainIcon}</ChainIconContainer> : null}
+          <HealthIndicator health={status.health} />
+          <PositionEntryBox backgroundColorToken={backgroundColorToken}>
+            <LeftBox>
+              <MarketTokenInformation
+                isAaveV3={isAaveV3}
+                isBorrowing={isBorrowing}
+                market={market}
+                token={token}
                 type={type}
               />
-            </StatusBox>
-          </RightBox>
-        </PositionEntryBox>
-      </PositionEntryBoxWrapper>
+            </LeftBox>
+            <RightBox>
+              <MaturityBox>
+                <PositionMaturity
+                  maturityEndTimestampInMS={maturityEndTimestampInMS}
+                  maturityFormatted={maturityFormatted}
+                  maturityStartTimestampInMS={maturityStartTimestampInMS}
+                  typographyToken={textsTypographyToken}
+                />
+              </MaturityBox>
+              <StatusBox variant="small">
+                <PositionStatus
+                  numbersTypographyToken={numbersTypographyToken}
+                  status={status}
+                  textsTypographyToken={textsTypographyToken}
+                  type={type}
+                />
+              </StatusBox>
+            </RightBox>
+          </PositionEntryBox>
+        </PositionEntryBoxWrapper>
+      </React.Fragment>
     );
   },
 );

@@ -12,7 +12,6 @@ export const resetSortingDirection: PositionSorting = {
 
 export const initialSortingDirection: PositionSorting = {
   ...resetSortingDirection,
-  name: 'ascending',
 };
 
 export const SORT_CONFIG: Record<

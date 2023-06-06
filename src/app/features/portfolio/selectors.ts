@@ -35,6 +35,7 @@ export const selectPositions = (state: RootState): PositionUI[] => {
     const realizedPNLTotalUSD = position.realizedPNLTotal * position.tokenPriceUSD;
     const realizedPNLFeesUSD = position.realizedPNLFees * position.tokenPriceUSD;
     const realizedPNLCashflowUSD = position.realizedPNLCashflow * position.tokenPriceUSD;
+    const creationTimestampInMS = position.creationTimestampInMS;
 
     const fixHigh = position.fixHigh * 100;
     const fixLow = position.fixLow * 100;
@@ -42,9 +43,7 @@ export const selectPositions = (state: RootState): PositionUI[] => {
     const receiving = position.status.receiving * 100;
     const paying = position.status.paying * 100;
     return {
-      canEdit: position.canEdit,
-      canSettle: position.canSettle,
-      canRollover: Boolean(position.rolloverAmmId),
+      creationTimestampInMS,
       type,
       market,
       token,

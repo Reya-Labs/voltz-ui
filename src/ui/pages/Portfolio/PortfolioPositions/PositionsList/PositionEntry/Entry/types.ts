@@ -5,11 +5,9 @@ import { PositionUI } from '../../../../../../../app/features/portfolio/types';
 import { MarketTokenInformationProps } from '../MarketTokenInformation';
 
 export type EntryProps = {
+  id: PositionUI['id'];
   isAaveV3: PositionUI['isAaveV3'];
   isV2: PositionUI['isV2'];
-  canEdit: PositionUI['canEdit'];
-  canSettle: PositionUI['canSettle'];
-  canRollover: PositionUI['canRollover'];
   isBorrowing: PositionUI['isBorrowing'];
   market: MarketTokenInformationProps['market'];
   token: MarketTokenInformationProps['token'];
