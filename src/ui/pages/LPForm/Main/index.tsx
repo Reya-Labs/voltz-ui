@@ -3,9 +3,11 @@ import React from 'react';
 import {
   selectFixedRateInfo,
   selectLpFormAMM,
+  selectLpFormSelectedPosition,
   selectVariableRateInfo,
 } from '../../../../app/features/forms/lps/lp';
 import { useAppSelector } from '../../../../app/hooks';
+import { FormTransactionHistory } from '../../../components/FormTransactionHistory';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
 import { BottomMainBox, MainBox } from './Main.styled';
 import { PoolHeader } from './PoolHeader';
@@ -15,6 +17,7 @@ export const Main: React.FunctionComponent = () => {
   const aMM = useAppSelector(selectLpFormAMM);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
+  const existingPosition = useAppSelector(selectLpFormSelectedPosition);
   if (!aMM || fixedRateInfo === undefined || variableRateInfo === undefined) {
     return null;
   }
@@ -30,6 +33,7 @@ export const Main: React.FunctionComponent = () => {
       />
       <BottomMainBox>
         <PositionDetails />
+        <FormTransactionHistory positionId={existingPosition?.id} />
       </BottomMainBox>
     </MainBox>
   );

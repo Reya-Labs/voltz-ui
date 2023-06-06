@@ -13,7 +13,7 @@ export const usePositionDetails = ({ positionId }: { positionId: string }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (positionDetailsLoadingState === 'success' || positionDetailsLoadingState === 'pending') {
+    if (positionDetailsLoadingState !== 'idle') {
       return;
     }
     void dispatch(

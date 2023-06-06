@@ -341,3 +341,10 @@ export const selectGasFeeFormatted = (state: RootState) => {
 
   return '--';
 };
+
+export const selectPreviousPositionId = (state: RootState) => {
+  if (!state.rolloverLpForm.previousPosition) {
+    return null;
+  }
+  return state.rolloverLpForm.previousPosition.id;
+};
