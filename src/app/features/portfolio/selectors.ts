@@ -184,7 +184,9 @@ export const selectPositionsSummary = (
       if (variant === 'active') {
         summary.activePositionsLength++;
         summary.totalPortfolioNotionalValueUSD += position.notionalUSD;
-        summary.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
+        if (position.type !== 'LP') {
+          summary.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
+        }
 
         if (health === 'healthy') {
           summary.healthyPositionsLength++;
