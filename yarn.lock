@@ -7217,10 +7217,10 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/sdk-v1-stateless@1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.8.0.tgz#067f7014a3d2b8918213c3c0e1727696bab3698f"
-  integrity sha512-/+ruyVBYnpBQgrEPxHjBqORBtrp83C18KKwixNIPBwkQpqGyiXC+o+tc5g55GfCobaAs+e33UdeTYVc86kcMTg==
+"@voltz-protocol/sdk-v1-stateless@1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.8.1.tgz#dec8cc67387a8cfa92fe12303bfcf461ac9f6a68"
+  integrity sha512-xFt24Km2urYK+UAQ7Sg6/QoHeSIk0/v+jqxEU87uUjYvRjBaKullXcbAHCT45t9a8m2POIj8pDSMPvJg8ZbaWQ==
   dependencies:
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
@@ -9573,10 +9573,10 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.72.0:
-  version "1.72.0"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.72.0.tgz#9dc21ff79f7eb7d3d88bc94d85bb92fca33fe7ae"
-  integrity sha512-0eZIFnzq+b8y0FBrrBEvBSY9cv/M9MbS7dXzBHKKAxjw1Sbfeb7+QyYmgcNLeu4cl7+ZAKJ0pF7SVbvcLaL+nQ==
+brokoli-ui@1.73.0:
+  version "1.73.0"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.73.0.tgz#5ee20d240d55b2cc46d8b36af612e965e3f1f2f6"
+  integrity sha512-X2eNnECjZGNi18I39q3LOOO4TqUHHwbIRtXwjFmgM89eItNs3OT6/CdwJotN0keFkV4R2cLfEF8A6c2KCORtmw==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"

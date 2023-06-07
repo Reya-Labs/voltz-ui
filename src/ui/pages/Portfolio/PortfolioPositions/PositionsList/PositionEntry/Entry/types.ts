@@ -6,7 +6,6 @@ import { MarketTokenInformationProps } from '../MarketTokenInformation';
 
 export type EntryProps = {
   id: PositionUI['id'];
-  isAaveV3: PositionUI['isAaveV3'];
   isV2: PositionUI['isV2'];
   isBorrowing: PositionUI['isBorrowing'];
   market: MarketTokenInformationProps['market'];

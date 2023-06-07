@@ -7,7 +7,6 @@ export type MarketTokenInformationProps = {
   market: MarketTokenProps['market'];
   token: MarketTokenProps['token'];
   isBorrowing: boolean;
-  isAaveV3: boolean;
   type: 'LP' | 'Variable' | 'Fixed';
 };
 
@@ -15,7 +14,6 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
   market,
   token,
   isBorrowing,
-  isAaveV3,
   type,
 }) => {
   return (
@@ -27,7 +25,6 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
         infoFormatter={() => (
           <React.Fragment>
             <b>{type}</b> - {market}
-            {isAaveV3 ? ' v3' : ''}
             {token ? ` - ${token.toUpperCase()}` : ''}
             {isBorrowing ? ' Borrow' : ''}
           </React.Fragment>

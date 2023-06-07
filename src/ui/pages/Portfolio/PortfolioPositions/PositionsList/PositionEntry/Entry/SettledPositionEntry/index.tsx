@@ -24,7 +24,6 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
     {
       id,
       chainId,
-      isAaveV3,
       isBorrowing,
       market,
       token,
@@ -66,9 +65,7 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
           <PositionTransactionHistoryDialogContent
             chainId={chainId}
             id={id}
-            isAaveV3={isAaveV3}
             isBorrowing={isBorrowing}
-            market={market}
             routeAmmId={routeAmmId}
             routePoolId={routePoolId}
             routePositionId={routePositionId}
@@ -84,7 +81,6 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
           <PositionEntryBox backgroundColorToken={backgroundColorToken}>
             <LeftBox>
               <MarketTokenInformation
-                isAaveV3={isAaveV3}
                 isBorrowing={isBorrowing}
                 market={market}
                 token={token}

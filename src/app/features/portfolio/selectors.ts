@@ -21,12 +21,8 @@ export const selectPositions = (state: RootState): PositionUI[] => {
 
   const pools: PositionUI[] = portfolioPositions.map((position) => {
     const isV2 = false;
-    const isAaveV3 = position.amm.market === 'Aave V3';
     const isBorrowing = position.amm.isBorrowing;
-    const market =
-      position.amm.market === 'Aave V3' || position.amm.market === 'Aave V2'
-        ? 'Aave'
-        : position.amm.market;
+    const market = position.amm.market;
     const token = position.amm.underlyingToken.name;
     const notionalUSD = position.notional * position.tokenPriceUSD;
     const marginUSD = position.margin * position.tokenPriceUSD;
@@ -48,7 +44,6 @@ export const selectPositions = (state: RootState): PositionUI[] => {
       market,
       token,
       isBorrowing,
-      isAaveV3,
       isV2,
       marginUSDCompactFormat: compactFormatToParts(marginUSD),
       marginUSD,
@@ -62,9 +57,7 @@ export const selectPositions = (state: RootState): PositionUI[] => {
       routeAmmId: generateAmmIdForRoute(position.amm),
       routePositionId: generatePositionIdForRoute(position),
       routePoolId: generatePoolId(position.amm),
-      name: `${type} - ${market}${isAaveV3 ? ' - Aave v3' : ''} - ${token as string}${
-        isBorrowing ? ' - Borrowing' : ''
-      }`,
+      name: `${type} - ${market} - ${token as string}${isBorrowing ? ' - Borrowing' : ''}`,
       status: {
         fixHigh,
         fixLow,

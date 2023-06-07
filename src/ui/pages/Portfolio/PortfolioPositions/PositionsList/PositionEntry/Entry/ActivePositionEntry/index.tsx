@@ -1,6 +1,7 @@
 import { Dialog, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 
+import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { HealthIndicator } from '../../HealthIndicator';
@@ -31,7 +32,6 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
   (
     {
       chainId,
-      isAaveV3,
       isBorrowing,
       market,
       token,
@@ -75,9 +75,8 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
           <PositionTransactionHistoryDialogContent
             chainId={chainId}
             id={id}
-            isAaveV3={isAaveV3}
             isBorrowing={isBorrowing}
-            market={market}
+            market={market as PositionUI['market']}
             routeAmmId={routeAmmId}
             routePoolId={routePoolId}
             routePositionId={routePositionId}
@@ -93,7 +92,6 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
           <PositionEntryBox backgroundColorToken={backgroundColorToken}>
             <LeftBox>
               <MarketTokenInformation
-                isAaveV3={isAaveV3}
                 isBorrowing={isBorrowing}
                 market={market}
                 token={token}

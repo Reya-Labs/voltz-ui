@@ -196,9 +196,6 @@ export const selectAMMMarket = (state: RootState) => {
     if (!aMM) {
       return '';
     }
-    if (aMM.market === 'Aave V2' || aMM.market === 'Aave V3') {
-      return 'Aave';
-    }
     return aMM.market;
   }
   const aMM = state.settleFlow.position?.amm;

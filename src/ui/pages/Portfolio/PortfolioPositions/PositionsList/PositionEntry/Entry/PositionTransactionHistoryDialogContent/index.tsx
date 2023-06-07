@@ -27,7 +27,6 @@ type PositionTransactionHistoryDialogContentProps = {
   status: PositionUI['status'];
   type: PositionUI['type'];
   token: PositionUI['token'];
-  isAaveV3: PositionUI['isAaveV3'];
   isBorrowing: PositionUI['isBorrowing'];
   market?: PositionUI['market'];
   routePositionId: PositionUI['routePositionId'];
@@ -38,7 +37,6 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
   ({
     token,
     isBorrowing,
-    isAaveV3,
     type,
     status,
     id,
@@ -187,7 +185,6 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
             <CloseButton onClick={onClose} />
           </TitleBox>
           <MarketTokenInformation
-            isAaveV3={isAaveV3}
             isBorrowing={isBorrowing}
             market={market}
             token={token}
