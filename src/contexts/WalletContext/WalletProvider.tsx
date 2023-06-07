@@ -6,6 +6,7 @@ import {
   selectChainId,
   setChainIdThunk,
 } from '../../app/features/network';
+import { resetPortfolioStateAction } from '../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
 import { getENSDetails } from '../../utilities/getENSDetails';
@@ -30,14 +31,15 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const disconnect = useCallback(
     (errorMessage: string | null = null) => {
       window.wallet = undefined;
+      localStorage.removeItem('connectedWalletName');
       setProvider(null);
       setSigner(null);
       setName(null);
-      localStorage.removeItem('connectedWalletName');
       setAccount(null);
       setAccountENS(null);
       setStatus('notConnected');
       setWalletError(errorMessage);
+      dispatch(resetPortfolioStateAction());
     },
     [dispatch],
   );

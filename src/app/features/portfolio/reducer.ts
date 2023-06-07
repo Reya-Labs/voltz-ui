@@ -21,6 +21,7 @@ const slice = createSlice({
   name: 'portfolio',
   initialState,
   reducers: {
+    resetPortfolioStateAction: () => initialState,
     togglePositionSortingDirectionAction: (
       state,
       {
@@ -64,5 +65,5 @@ const slice = createSlice({
   },
 });
 
-export const { togglePositionSortingDirectionAction } = slice.actions;
+export const { resetPortfolioStateAction, togglePositionSortingDirectionAction } = slice.actions;
 export const portfolioReducer = slice.reducer;

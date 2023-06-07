@@ -11,7 +11,7 @@ import { VaultsTable } from './VaultsTable/VaultsTable';
 export const Vaults: React.FunctionComponent = () => {
   const navigate = useAppNavigate();
   const { signer, setRequired } = useWallet();
-  const { lpVaults, vaultsLoaded } = useLPVaults('active');
+  const { activeLpVaults, vaultsLoaded } = useLPVaults();
   const handleSelectMellowLpVault = (selectedVault: OptimiserInfo) => {
     if (!signer) {
       setRequired(true);
@@ -30,7 +30,7 @@ export const Vaults: React.FunctionComponent = () => {
     <VaultsBox>
       <VaultsTable
         dataLoading={!vaultsLoaded}
-        mellowProducts={lpVaults}
+        mellowProducts={activeLpVaults}
         onSelectItem={handleSelectMellowLpVault}
       />
     </VaultsBox>

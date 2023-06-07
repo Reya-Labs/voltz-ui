@@ -6,6 +6,7 @@ import {
   closeRolloverConfirmationFlowAction,
   selectRolloverConfirmationFlowEtherscanLink,
 } from '../../../../../../app/features/forms/lps/rollover-lp';
+import { resetPortfolioStateAction } from '../../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
 import { isPortfolioNextEnabled } from '../../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
@@ -19,6 +20,7 @@ export const RolloverCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeRolloverConfirmationFlowAction());
+    dispatch(resetPortfolioStateAction());
     if (isPortfolioNextEnabled()) {
       navigate(`/${routes.PORTFOLIO_POSITIONS}`);
       return;

@@ -27,16 +27,14 @@ export const VaultsTable: React.FunctionComponent<VaultsTableProps> = ({
     )}
     {!dataLoading && mellowProducts && (
       <VaultsGrid itemsPerRow={3}>
-        {mellowProducts
-          .filter((mellowProduct) => !mellowProduct.expired)
-          .map((product, index) => (
-            <VaultEntry
-              key={index}
-              dataLoading={dataLoading}
-              lpVault={product}
-              onSelectItem={() => onSelectItem(product)}
-            />
-          ))}
+        {mellowProducts.map((product, index) => (
+          <VaultEntry
+            key={index}
+            dataLoading={dataLoading}
+            lpVault={product}
+            onSelectItem={() => onSelectItem(product)}
+          />
+        ))}
       </VaultsGrid>
     )}
   </VaultsTableBox>

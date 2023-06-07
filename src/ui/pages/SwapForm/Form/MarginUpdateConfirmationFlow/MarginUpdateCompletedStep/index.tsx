@@ -6,6 +6,7 @@ import {
   closeMarginUpdateConfirmationFlowAction,
   selectMarginUpdateConfirmationFlowEtherscanLink,
 } from '../../../../../../app/features/forms/trader/swap';
+import { resetPortfolioStateAction } from '../../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
 import { isPortfolioNextEnabled } from '../../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
@@ -19,6 +20,7 @@ export const MarginUpdateCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeMarginUpdateConfirmationFlowAction());
+    dispatch(resetPortfolioStateAction());
     if (isPortfolioNextEnabled()) {
       navigate(`/${routes.PORTFOLIO_POSITIONS}`);
       return;
