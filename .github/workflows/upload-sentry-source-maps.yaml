@@ -18,7 +18,11 @@ jobs:
         with:
           node-version: '16.17.0'
           cache: 'yarn'
+          always-auth: true
+          registry-url: https://workspace.bytesafe.dev/r/example-registry/
       - name: Install dependencies
         run: make install-ci
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: Create build and upload source maps
         run: make build

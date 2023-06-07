@@ -18,8 +18,17 @@ jobs:
         with:
           node-version: '16.17.0'
           cache: 'yarn'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.17.0'
+          cache: 'yarn'
+          always-auth: true
+          registry-url: 'https://npm.pkg.github.com'
       - name: Install dependencies
         run: make install-ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
       - name: Prettier check, Eslint check, Typescript check
         run: make code-quality-check
       - name: Run tests

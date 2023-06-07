@@ -1,7 +1,6 @@
 node_modules
 build
 yarn-error.log
-.npmrc
 storybook-static
 build-storybook.log
 .DS_Store
