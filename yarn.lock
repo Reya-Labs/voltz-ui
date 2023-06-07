@@ -7217,10 +7217,10 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/sdk-v1-stateless@1.6.1":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.6.1.tgz#63e3d7dfab411ad35da821c80f211eeca11e0d00"
-  integrity sha512-7SAwXarwyL4+QTcrO3RRlGlfl7RryJzjrN2FdQCulXwdEze/vDz1PkAez9IL8sROhlcwZbeRrLyHGrQ7UzFTjQ==
+"@voltz-protocol/sdk-v1-stateless@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.8.0.tgz#067f7014a3d2b8918213c3c0e1727696bab3698f"
+  integrity sha512-/+ruyVBYnpBQgrEPxHjBqORBtrp83C18KKwixNIPBwkQpqGyiXC+o+tc5g55GfCobaAs+e33UdeTYVc86kcMTg==
   dependencies:
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
@@ -7244,10 +7244,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.148.0":
-  version "1.148.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.148.0.tgz#f87b6fabfd7c4b5e3a74316157f16df59b036fe5"
-  integrity sha512-H/1r0dgZeiLsF2XOkaAd86FNOBP4icVmeer6sy/EqqOOyWJWgHr5vgtmRCXZjiDzZBGqgeISq4OWXRkgiHUueA==
+"@voltz-protocol/v1-sdk@1.149.0":
+  version "1.149.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.149.0.tgz#b3f608f479839a170a8c00ead9c7164fc7333cb2"
+  integrity sha512-+d5NQWe2Rj7+JW/oyl2YXuU0564cpmcak3n+GqwTFbTAEN6l6ksUGWOvvbvgGvcAqYEV4UoEQSZCQTkzqhmaXw==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"

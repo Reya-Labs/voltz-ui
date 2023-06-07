@@ -8,6 +8,7 @@ import {
   selectSettleVariant,
 } from '../../../app/features/settle-flow';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useWallet } from '../../../hooks/useWallet';
 import { SettleCompletedStep } from './SettleCompletedStep';
 import { SettleConfirmationStep } from './SettleConfirmationStep';
 import { WaitingForConfirmationStep } from './WaitingForConfirmationStep';
@@ -17,13 +18,18 @@ export const SettleFlow: React.FunctionComponent = () => {
   const variant = useAppSelector(selectSettleVariant);
   const position = useAppSelector(selectSettlePosition);
   const dispatch = useAppDispatch();
+  const { signer } = useWallet();
 
   useEffect(() => {
-    if (!position?.id) {
+    if (!position?.id || !signer) {
       return;
     }
-    void dispatch(getInfoPostSettlePositionThunk());
-  }, [dispatch, position?.id]);
+    void dispatch(
+      getInfoPostSettlePositionThunk({
+        signer,
+      }),
+    );
+  }, [signer, dispatch, position?.id]);
 
   return (
     <Dialog open={step !== null && variant !== null}>

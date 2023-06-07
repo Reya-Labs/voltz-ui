@@ -8,10 +8,13 @@ import {
   setChainIdThunk,
 } from '../../../../../../../../app/features/network';
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
+import { initializeSettleFlowAction } from '../../../../../../../../app/features/settle-flow';
 import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
 import { usePositionDetails } from '../../../../../../../../hooks/usePositionDetails';
+import { useWallet } from '../../../../../../../../hooks/useWallet';
 import { PositionTransactionHistory } from '../../../../../../../components/PositionTransactionHistory';
+import { SettleFlow } from '../../../../../../../components/SettleFlow';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
 import { ButtonsBox, ContentBox, TitleBox } from './PositionTransactionHistoryDialogContent.styled';
 
@@ -54,6 +57,7 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
     const promptForNetworkChange = chainId !== null ? chainId !== poolChainId : false;
     const navigate = useAppNavigate();
     const { positionDetails } = usePositionDetails({ positionId: id });
+    const { account } = useWallet();
     const canEdit = positionDetails?.canEdit;
     const canRollover = positionDetails?.canRollover;
     const canSettle = positionDetails?.canSettle;
@@ -159,51 +163,60 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
     }, [poolChainId, waitingOnNetworkChange, chainId]);
 
     const handleOnSettle = () => {
-      alert('TODO!');
+      dispatch(
+        initializeSettleFlowAction({
+          position: null,
+          account,
+          positionDetails,
+        }),
+      );
     };
 
     return (
-      <ContentBox>
-        <TitleBox>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-            {variant === 'active'
-              ? 'Position History'
-              : variant === 'matured'
-              ? 'Matured Position'
-              : 'Settled Position'}
-          </Typography>
-          <CloseButton onClick={onClose} />
-        </TitleBox>
-        <MarketTokenInformation
-          isAaveV3={isAaveV3}
-          isBorrowing={isBorrowing}
-          market={market}
-          token={token}
-          type={type}
-        />
-        <PositionTransactionHistory positionId={id} />
-        {canEdit || canRollover || canSettle ? (
-          <ButtonsBox>
-            {canEdit ? (
-              <Button variant="primary" onClick={handleOnEdit}>
-                Edit
-              </Button>
-            ) : null}
-            {canSettle ? (
-              <Button
-                variant={canSettle && canRollover ? 'secondary' : 'primary'}
-                onClick={handleOnSettle}
-              >
-                Settle
-              </Button>
-            ) : null}
-            {canRollover ? (
-              <Button variant="primary" onClick={handleOnRollover}>
-                Rollover
-              </Button>
-            ) : null}
-          </ButtonsBox>
-        ) : null}
-      </ContentBox>
+      <React.Fragment>
+        <SettleFlow />
+        <ContentBox>
+          <TitleBox>
+            <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+              {variant === 'active'
+                ? 'Position History'
+                : variant === 'matured'
+                ? 'Matured Position'
+                : 'Settled Position'}
+            </Typography>
+            <CloseButton onClick={onClose} />
+          </TitleBox>
+          <MarketTokenInformation
+            isAaveV3={isAaveV3}
+            isBorrowing={isBorrowing}
+            market={market}
+            token={token}
+            type={type}
+          />
+          <PositionTransactionHistory positionId={id} />
+          {canEdit || canRollover || canSettle ? (
+            <ButtonsBox>
+              {canEdit ? (
+                <Button variant="primary" onClick={handleOnEdit}>
+                  Edit
+                </Button>
+              ) : null}
+              {canSettle ? (
+                <Button
+                  variant={canSettle && canRollover ? 'secondary' : 'primary'}
+                  onClick={handleOnSettle}
+                >
+                  Settle
+                </Button>
+              ) : null}
+              {canRollover ? (
+                <Button variant="primary" onClick={handleOnRollover}>
+                  Rollover
+                </Button>
+              ) : null}
+            </ButtonsBox>
+          ) : null}
+        </ContentBox>
+      </React.Fragment>
     );
   };

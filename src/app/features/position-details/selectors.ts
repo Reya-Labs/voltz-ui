@@ -10,6 +10,8 @@ export type PositionDetailsUI = {
   variant: 'matured' | 'settled' | 'active';
   type: 'LP' | 'Variable' | 'Fixed';
   creationTimestampInMS: number;
+  fixLow: number;
+  fixHigh: number;
 
   tokenPriceUSD: number;
   notional: number;
@@ -26,6 +28,8 @@ export type PositionDetailsUI = {
   amm: PortfolioPositionAMM;
   canRollover: boolean;
   creationTimestampInMSFormatted: string;
+  fixLowPercentage: number;
+  fixHighPercentage: number;
   notionalUSDCompactFormatted: {
     compactNumber: string;
     compactSuffix: string;
@@ -99,6 +103,8 @@ export const selectPositionDetails =
 
     return {
       ...detailsValue,
+      fixHighPercentage: detailsValue.fixHigh * 100,
+      fixLowPercentage: detailsValue.fixLow * 100,
       canRollover: Boolean(detailsValue.rolloverAmmId),
       creationTimestampInMSFormatted: formatPOSIXTimestamp(detailsValue.creationTimestampInMS),
       notionalUSDCompactFormatted: compactFormatToParts(notionalUSD),

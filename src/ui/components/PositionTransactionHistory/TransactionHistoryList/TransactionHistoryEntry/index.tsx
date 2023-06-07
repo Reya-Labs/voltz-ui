@@ -69,7 +69,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
         ) : entry.type === 'liquidation' ? (
           <TokenTypography
             colorToken="lavenderWeb"
-            prefixToken={entry.notional > 0 ? 'Unwound $' : 'Unwound -$'}
+            prefixToken={entry.notional >= 0 ? 'Unwound $' : 'Unwound -$'}
             token={entry.notionalUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
             value={entry.notionalUSDCompactFormat.compactNumber.replace('-', '')}
@@ -77,7 +77,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
         ) : entry.type === 'mint' || entry.type === 'burn' ? (
           <TokenTypography
             colorToken="lavenderWeb"
-            prefixToken={entry.notional > 0 ? 'Notional $' : 'Notional -$'}
+            prefixToken={entry.notional >= 0 ? 'Notional $' : 'Notional -$'}
             token={entry.notionalUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
             value={entry.notionalUSDCompactFormat.compactNumber.replace('-', '')}
@@ -96,7 +96,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
         ) : entry.type === 'margin-update' ? (
           <TokenTypography
             colorToken="lavenderWeb"
-            prefixToken={entry.marginDelta > 0 ? 'Deposited $' : 'Withdraw $'}
+            prefixToken={entry.marginDelta >= 0 ? 'Deposited $' : 'Withdraw $'}
             token={entry.marginDeltaUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
             value={entry.marginDeltaUSDCompactFormat.compactNumber.replace('-', '')}
@@ -112,7 +112,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
         ) : entry.type === 'maturity' ? (
           <TokenTypography
             colorToken="lavenderWeb"
-            prefixToken={entry.marginDelta > 0 ? 'Realized PnL +$' : 'Realized PnL -$'}
+            prefixToken={entry.marginDelta >= 0 ? 'Realized PnL +$' : 'Realized PnL -$'}
             token={entry.marginDeltaUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
             value={entry.marginDeltaUSDCompactFormat.compactNumber.replace('-', '')}
