@@ -25,7 +25,7 @@ export const fetchPositionDetailsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      return await getPortfolioPositionDetails(positionId);
+      return await getPortfolioPositionDetails({ positionId, includeHistory: true });
     } catch (err) {
       return rejectThunkWithError(thunkAPI, err);
     }
