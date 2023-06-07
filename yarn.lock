@@ -7217,6 +7217,23 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
+"@voltz-protocol/sdk-v1-stateless@1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.6.1.tgz#63e3d7dfab411ad35da821c80f211eeca11e0d00"
+  integrity sha512-7SAwXarwyL4+QTcrO3RRlGlfl7RryJzjrN2FdQCulXwdEze/vDz1PkAez9IL8sROhlcwZbeRrLyHGrQ7UzFTjQ==
+  dependencies:
+    "@sentry/browser" "7.25.0"
+    "@sentry/tracing" "7.25.0"
+    big.js "^6.1.1"
+    decimal.js-light "^2.5.1"
+    ethers "5.5.4"
+    evm-bn "^1.1.1"
+    fraction.js "^4.2.0"
+    jsbi "^4.2.0"
+    keccak256 "^1.0.6"
+    tiny-invariant "^1.2.0"
+    toformat "^2.0.0"
+
 "@voltz-protocol/subgraph-data@1.18.1":
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/@voltz-protocol/subgraph-data/-/subgraph-data-1.18.1.tgz#0c562c1841238e5cc66e8295be774e99c0b719a4"
