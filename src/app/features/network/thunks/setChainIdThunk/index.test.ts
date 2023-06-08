@@ -16,6 +16,7 @@ describe('setChainIdThunkHandler', () => {
   const triggerApprovalFlow = true;
   const chainId = SupportedChainId.mainnet;
   const isSupportedChain = true;
+  const reloadPage = true;
   const thunkAPI = {
     dispatch: jest.fn(),
     getState: jest.fn(),
@@ -27,7 +28,7 @@ describe('setChainIdThunkHandler', () => {
 
   it('should do nothing if triggerApprovalFlow is false', async () => {
     const result = await setChainIdThunkHandler(
-      { triggerApprovalFlow: false, chainId, isSupportedChain },
+      { reloadPage, triggerApprovalFlow: false, chainId, isSupportedChain },
       thunkAPI as never,
     );
     expect(result).toBeUndefined();
@@ -52,7 +53,7 @@ describe('setChainIdThunkHandler', () => {
     (getChainInfo as jest.MockedFunction<typeof getChainInfo>).mockReturnValueOnce(info);
 
     await setChainIdThunkHandler(
-      { triggerApprovalFlow, chainId: SupportedChainId.goerli, isSupportedChain },
+      { reloadPage, triggerApprovalFlow, chainId: SupportedChainId.goerli, isSupportedChain },
       thunkAPI as never,
     );
     expect(provider.request).toHaveBeenCalledTimes(2);
@@ -99,7 +100,7 @@ describe('setChainIdThunkHandler', () => {
     };
 
     await setChainIdThunkHandler(
-      { triggerApprovalFlow, chainId, isSupportedChain },
+      { reloadPage, triggerApprovalFlow, chainId, isSupportedChain },
       thunkAPI as never,
     );
     expect(provider.request).toHaveBeenCalledTimes(3);
@@ -129,7 +130,7 @@ describe('setChainIdThunkHandler', () => {
     });
 
     await setChainIdThunkHandler(
-      { triggerApprovalFlow, chainId, isSupportedChain },
+      { reloadPage, triggerApprovalFlow, chainId, isSupportedChain },
       thunkAPI as never,
     );
     expect(provider.request).toHaveBeenCalledTimes(2);
@@ -175,7 +176,7 @@ describe('setChainIdThunkHandler', () => {
     (getChainInfo as jest.MockedFunction<typeof getChainInfo>).mockReturnValueOnce(info);
 
     await setChainIdThunkHandler(
-      { triggerApprovalFlow, chainId, isSupportedChain },
+      { reloadPage, triggerApprovalFlow, chainId, isSupportedChain },
       thunkAPI as never,
     );
 
@@ -212,7 +213,7 @@ describe('setChainIdThunkHandler', () => {
     (getChainInfo as jest.MockedFunction<typeof getChainInfo>).mockReturnValueOnce(undefined);
 
     await setChainIdThunkHandler(
-      { triggerApprovalFlow, chainId, isSupportedChain },
+      { reloadPage, triggerApprovalFlow, chainId, isSupportedChain },
       thunkAPI as never,
     );
 

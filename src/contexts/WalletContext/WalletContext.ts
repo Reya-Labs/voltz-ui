@@ -6,6 +6,7 @@ export const WalletContext = createContext<Wallet>({
   status: 'initializing',
   connect: () => Promise.resolve(),
   disconnect: () => {},
+  reconnect: () => Promise.resolve(),
   account: null,
   accountENS: null,
   name: null,

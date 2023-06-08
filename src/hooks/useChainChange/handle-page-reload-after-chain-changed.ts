@@ -18,6 +18,7 @@ export const handlePageReloadAfterChainChanged = async (
         chainId: defaultChainId,
         isSupportedChain: Boolean(defaultChainId),
         triggerApprovalFlow: false,
+        reloadPage: true,
       }),
     );
     return;
@@ -30,6 +31,7 @@ export const handlePageReloadAfterChainChanged = async (
         chainId: getDefaultChainId(),
         isSupportedChain: false,
         triggerApprovalFlow: false,
+        reloadPage: true,
       }),
     );
   } else {
@@ -38,6 +40,7 @@ export const handlePageReloadAfterChainChanged = async (
         chainId: networkValidation.chainId,
         isSupportedChain: true,
         triggerApprovalFlow: false,
+        reloadPage: true,
       }),
     );
   }

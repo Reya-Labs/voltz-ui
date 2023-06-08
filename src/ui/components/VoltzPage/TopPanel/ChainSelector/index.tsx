@@ -27,6 +27,7 @@ export const ChainSelector: React.FunctionComponent = () => {
           chainId: selectedChainId,
           isSupportedChain: true,
           triggerApprovalFlow: isSignedIn,
+          reloadPage: true,
         }),
       );
     },

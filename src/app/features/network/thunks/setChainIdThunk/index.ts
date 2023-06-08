@@ -13,6 +13,7 @@ export const setChainIdThunkHandler: AsyncThunkPayloadCreator<
     chainId: SupportedChainId;
     isSupportedChain: boolean;
     triggerApprovalFlow: boolean;
+    reloadPage: boolean;
   }
 > = async ({ triggerApprovalFlow, chainId, isSupportedChain }, thunkAPI) => {
   if (!triggerApprovalFlow) {
@@ -69,5 +70,6 @@ export const setChainIdThunk = createAsyncThunk<
     chainId: SupportedChainId;
     isSupportedChain: boolean;
     triggerApprovalFlow: boolean;
+    reloadPage: boolean;
   }
 >('network/setChainId', setChainIdThunkHandler);

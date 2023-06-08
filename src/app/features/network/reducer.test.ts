@@ -6,12 +6,14 @@ const mockState: SliceState = {
   chainId: null,
   isSupportedChain: true,
   chainChangeState: 'idle',
+  reloadPage: true,
 };
 
 // Define the mock setChainIdThunk
 const mockPayload = {
   chainId: 1,
   isSupportedChain: true,
+  reloadPage: false,
 };
 
 describe('networkReducer', () => {
@@ -38,6 +40,7 @@ describe('networkReducer', () => {
     });
     expect(nextState.chainId).toEqual(mockPayload.chainId);
     expect(nextState.isSupportedChain).toEqual(mockPayload.isSupportedChain);
+    expect(nextState.reloadPage).toEqual(mockPayload.reloadPage);
     expect(nextState.chainChangeState).toEqual('success');
   });
 });
