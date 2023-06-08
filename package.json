@@ -141,7 +141,7 @@
     "@reduxjs/toolkit": "1.9.0",
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0",
-    "@voltz-protocol/sdk-v1-stateless": "1.8.3",
+    "@voltz-protocol/sdk-v1-stateless": "1.9.0",
     "@voltz-protocol/v1-sdk": "1.149.0",
     "@walletconnect/ethereum-provider": "1.8.0",
     "@walletconnect/web3-provider": "1.8.0",
