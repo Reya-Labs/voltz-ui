@@ -16,6 +16,7 @@ const initialState: SliceState = {
     [SupportedChainId.arbitrumGoerli]: 'idle',
     [SupportedChainId.avalanche]: 'idle',
     [SupportedChainId.avalancheFuji]: 'idle',
+    [SupportedChainId.spruce]: 'idle',
   },
   rankings: {
     [SupportedChainId.mainnet]: [],
@@ -24,6 +25,7 @@ const initialState: SliceState = {
     [SupportedChainId.arbitrumGoerli]: [],
     [SupportedChainId.avalanche]: [],
     [SupportedChainId.avalancheFuji]: [],
+    [SupportedChainId.spruce]: [],
   },
 };
 

@@ -7,10 +7,10 @@ import {
   isAvalancheChain,
   selectChainId,
 } from '../../../../../app/features/network';
+import { isSpruceChain } from '../../../../../app/features/network/helpers/is-spruce-chain';
 import { useAppSelector } from '../../../../../app/hooks';
 import { routes } from '../../../../../routes/paths';
 import { isPortfolioNextEnabled } from '../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
-import { isVoyageNextEnabled } from '../../../../../utilities/isEnvVarProvided/is-voyage-next-enabled';
 
 const getLinks = (chainId?: SupportedChainId | null) =>
   !chainId
@@ -40,22 +40,22 @@ const getLinks = (chainId?: SupportedChainId | null) =>
               ],
             },
         {
-          isHidden: isAvalancheChain(chainId) || isArbitrumChain(chainId),
+          isHidden: isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId),
           text: 'Optimisers',
           link: `/${routes.LP_OPTIMISERS}`,
         },
         {
-          isHidden: isAvalancheChain(chainId),
+          isHidden: isAvalancheChain(chainId) || isSpruceChain(chainId),
           text: 'Leaderboard',
           link: `/${routes.TRADING_LEAGUE}`,
         },
         {
-          isHidden: isAvalancheChain(chainId),
+          isHidden: isAvalancheChain(chainId) || isSpruceChain(chainId),
           text: 'Profile',
           link: `/${routes.PROFILE}`,
         },
         {
-          isHidden: isAvalancheChain(chainId) ? !isVoyageNextEnabled() : false,
+          isHidden: isAvalancheChain(chainId) || isSpruceChain(chainId),
           colorToken: 'rainbow',
           text: 'Voyage',
           link: `/${routes.VOYAGE}`,

@@ -10,6 +10,7 @@ const ChainIconMap: Record<SupportedChainId, React.FunctionComponent | null> = {
   [SupportedChainId.arbitrumGoerli]: ArbitrumIcon,
   [SupportedChainId.avalanche]: AvalancheIcon,
   [SupportedChainId.avalancheFuji]: AvalancheIcon,
+  [SupportedChainId.spruce]: AvalancheIcon,
 };
 export const ChainIcon = ({ chainId }: { chainId: SupportedChainId }) => {
   const ChainIconSvg = ChainIconMap[chainId];

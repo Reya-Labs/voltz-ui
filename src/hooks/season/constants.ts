@@ -81,6 +81,7 @@ const arbitrumSeasons: Season[] = [
   },
 ];
 const avalancheSeasons: Season[] = [];
+const spruceSeasons: Season[] = [];
 export const SEASONS: Record<SupportedChainId, Season[]> = {
   [SupportedChainId.arbitrum]: arbitrumSeasons,
   [SupportedChainId.arbitrumGoerli]: arbitrumSeasons,
@@ -88,4 +89,5 @@ export const SEASONS: Record<SupportedChainId, Season[]> = {
   [SupportedChainId.mainnet]: ethSeasons,
   [SupportedChainId.avalanche]: avalancheSeasons,
   [SupportedChainId.avalancheFuji]: avalancheSeasons,
+  [SupportedChainId.spruce]: spruceSeasons,
 };

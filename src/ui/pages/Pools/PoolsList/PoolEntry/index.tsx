@@ -53,6 +53,7 @@ const TestNetMap: Record<SupportedChainId, boolean> = {
   [SupportedChainId.arbitrumGoerli]: true,
   [SupportedChainId.avalanche]: false,
   [SupportedChainId.avalancheFuji]: true,
+  [SupportedChainId.spruce]: false,
 };
 export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
   (

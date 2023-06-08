@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { isArbitrumChain, isAvalancheChain, selectChainId } from './app/features/network';
+import { isSpruceChain } from './app/features/network/helpers/is-spruce-chain';
 import { useAppSelector } from './app/hooks';
 import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
@@ -25,7 +26,6 @@ import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { VoyagePage } from './ui/pages/Voyage';
 import { isPortfolioNextEnabled } from './utilities/isEnvVarProvided/is-portfolio-next-enabled';
-import { isVoyageNextEnabled } from './utilities/isEnvVarProvided/is-voyage-next-enabled';
 
 export const AppRoutes = () => {
   const chainId = useAppSelector(selectChainId);
@@ -70,7 +70,9 @@ export const AppRoutes = () => {
         <Route
           element={
             <NetworkProtectedVoltzPage
-              hidden={isAvalancheChain(chainId) || isArbitrumChain(chainId)}
+              hidden={
+                isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
+              }
             >
               <PortfolioOptimisersPage />
             </NetworkProtectedVoltzPage>
@@ -89,7 +91,11 @@ export const AppRoutes = () => {
         )}
         <Route
           element={
-            <NetworkProtectedPage hidden={isAvalancheChain(chainId) || isArbitrumChain(chainId)}>
+            <NetworkProtectedPage
+              hidden={
+                isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
+              }
+            >
               <Vaults />
             </NetworkProtectedPage>
           }
@@ -97,7 +103,11 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage hidden={isAvalancheChain(chainId) || isArbitrumChain(chainId)}>
+            <NetworkProtectedPage
+              hidden={
+                isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
+              }
+            >
               <VaultFormRoute />
             </NetworkProtectedPage>
           }
@@ -137,7 +147,11 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage hidden={isAvalancheChain(chainId) || isArbitrumChain(chainId)}>
+            <NetworkProtectedPage
+              hidden={
+                isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
+              }
+            >
               <VaultFormRoute />
             </NetworkProtectedPage>
           }
@@ -145,7 +159,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId)}>
+            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId) || isSpruceChain(chainId)}>
               <ProfilePage />
             </NetworkProtectedVoltzPage>
           }
@@ -153,9 +167,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage
-              hidden={isAvalancheChain(chainId) ? !isVoyageNextEnabled() : false}
-            >
+            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId) || isSpruceChain(chainId)}>
               <VoyagePage />
             </NetworkProtectedVoltzPage>
           }
@@ -163,7 +175,7 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId)}>
+            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId) || isSpruceChain(chainId)}>
               <TradingLeaguePage />
             </NetworkProtectedVoltzPage>
           }
