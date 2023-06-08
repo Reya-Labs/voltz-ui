@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import styled from '@emotion/styled';
 
 export const ContainerBox = styled('div')`
   margin: 0 auto;
