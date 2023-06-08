@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
-import Box from '@mui/material/Box';
 
-export const ContentBox = styled(Box)`
+export const ContentBox = styled('div')`
   display: flex;
   box-sizing: border-box;
   width: 316px;
@@ -11,7 +10,7 @@ export const ContentBox = styled(Box)`
   gap: 24px;
 `;
 
-export const ButtonBox = styled(Box)`
+export const ButtonBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
