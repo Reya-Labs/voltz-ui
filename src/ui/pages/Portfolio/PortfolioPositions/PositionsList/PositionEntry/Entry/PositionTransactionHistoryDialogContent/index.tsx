@@ -32,7 +32,12 @@ type PositionTransactionHistoryDialogContentProps = {
   routePositionId: PositionUI['routePositionId'];
 };
 
-type SwitchNetworkParams = 'lpForm' | 'swapForm' | 'lpRolloverForm' | 'swapRolloverForm';
+type SwitchNetworkParams =
+  | 'settleFlow'
+  | 'lpForm'
+  | 'swapForm'
+  | 'lpRolloverForm'
+  | 'swapRolloverForm';
 export const PositionTransactionHistoryDialogContent: React.FunctionComponent<PositionTransactionHistoryDialogContentProps> =
   ({
     token,
@@ -128,6 +133,7 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
           chainId: poolChainId,
           isSupportedChain: true,
           triggerApprovalFlow: true,
+          reloadPage: form !== 'settleFlow',
         }),
       );
     };
@@ -145,22 +151,19 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
         return;
       }
       if (chainId === poolChainId) {
-        if (waitingOnNetworkChange === 'lpForm') {
-          navigateToLPFormPage();
-        }
-        if (waitingOnNetworkChange === 'swapForm') {
-          navigateToSwapFormPage();
-        }
-        if (waitingOnNetworkChange === 'swapRolloverForm') {
-          navigateToSwapRolloverForm();
-        }
-        if (waitingOnNetworkChange === 'lpRolloverForm') {
-          navigateToLPRolloverForm();
-        }
+        const afterNetworkChangeCallbackMap: Record<SwitchNetworkParams, () => void> = {
+          lpForm: navigateToLPFormPage,
+          lpRolloverForm: navigateToLPRolloverForm,
+          settleFlow: initializeSettle,
+          swapForm: navigateToSwapFormPage,
+          swapRolloverForm: navigateToSwapRolloverForm,
+        };
+        afterNetworkChangeCallbackMap[waitingOnNetworkChange] &&
+          afterNetworkChangeCallbackMap[waitingOnNetworkChange]();
       }
     }, [poolChainId, waitingOnNetworkChange, chainId]);
 
-    const handleOnSettle = () => {
+    const initializeSettle = () => {
       dispatch(
         initializeSettleFlowAction({
           position: null,
@@ -168,6 +171,17 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
           positionDetails,
         }),
       );
+    };
+
+    const handleOnSettle = () => {
+      if (!canSettle) {
+        return;
+      }
+      if (!promptForNetworkChange) {
+        initializeSettle();
+      } else {
+        switchNetwork('settleFlow');
+      }
     };
 
     return (

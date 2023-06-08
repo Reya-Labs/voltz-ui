@@ -46,6 +46,7 @@ describe('handlePageReloadAfterChainChanged', () => {
       chainId: 1,
       isSupportedChain: true,
       triggerApprovalFlow: false,
+      reloadPage: true,
     });
   });
 
@@ -66,6 +67,7 @@ describe('handlePageReloadAfterChainChanged', () => {
       chainId: 1,
       isSupportedChain: false,
       triggerApprovalFlow: false,
+      reloadPage: true,
     });
     expect(deleteChainId).toHaveBeenCalled();
   });
@@ -85,6 +87,7 @@ describe('handlePageReloadAfterChainChanged', () => {
       chainId: 3,
       isSupportedChain: true,
       triggerApprovalFlow: false,
+      reloadPage: true,
     });
     expect(deleteChainId).toHaveBeenCalled();
   });

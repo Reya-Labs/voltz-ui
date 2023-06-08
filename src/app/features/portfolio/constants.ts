@@ -23,7 +23,7 @@ export const SORT_CONFIG: Record<
   }
 > = {
   realizedPNL: {
-    text: 'Realized PNL',
+    text: 'Realized PnL',
     disabled: true,
   },
   status: {

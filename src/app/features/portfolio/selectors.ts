@@ -20,7 +20,7 @@ export const selectPositions = (state: RootState): PositionUI[] => {
   }
 
   const pools: PositionUI[] = portfolioPositions.map((position) => {
-    const isV2 = false;
+    const isV2 = position.amm.isV2;
     const isBorrowing = position.amm.isBorrowing;
     const market = position.amm.market;
     const token = position.amm.underlyingToken.name;

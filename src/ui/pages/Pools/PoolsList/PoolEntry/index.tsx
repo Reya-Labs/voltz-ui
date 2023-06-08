@@ -95,6 +95,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
           chainId: poolChainId,
           isSupportedChain: true,
           triggerApprovalFlow: true,
+          reloadPage: true,
         }),
       );
     };

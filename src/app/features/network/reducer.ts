@@ -6,12 +6,14 @@ import { setChainIdThunk } from './thunks';
 export type SliceState = {
   chainId: SupportedChainId | null;
   isSupportedChain: boolean;
+  reloadPage: boolean;
   chainChangeState: 'idle' | 'pending' | 'error' | 'success';
 };
 
 const initialState: SliceState = {
   chainId: null,
   isSupportedChain: true,
+  reloadPage: true,
   chainChangeState: 'idle',
 };
 
@@ -30,6 +32,7 @@ const slice = createSlice({
       .addCase(setChainIdThunk.fulfilled, (state, { meta }) => {
         state.chainId = meta.arg.chainId;
         state.isSupportedChain = meta.arg.isSupportedChain;
+        state.reloadPage = meta.arg.reloadPage;
         state.chainChangeState = 'success';
       });
   },
