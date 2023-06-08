@@ -7217,10 +7217,10 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/sdk-v1-stateless@1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.9.0.tgz#d316001de622797939db26e7b0f320bd3cc82097"
-  integrity sha512-lhSzapCjyr6p7dtMsqSgdRo3HYhUn+dvN70zEdGlY94y5aH1+4NWelWIoYbQJJqx55VQjcb4ok7sExnaoLnd5Q==
+"@voltz-protocol/sdk-v1-stateless@1.8.3":
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.8.3.tgz#addd9e42787e1d58968d2d31313db49d16f9d7a5"
+  integrity sha512-0MSyjJ0tHSn9I4AZzH2qSXbepi/23jDbADrYyZc24rh4zi0uW0IA6o7nkObVa8Jdh2aoML3mBf6wo7h3YMLlHg==
   dependencies:
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
