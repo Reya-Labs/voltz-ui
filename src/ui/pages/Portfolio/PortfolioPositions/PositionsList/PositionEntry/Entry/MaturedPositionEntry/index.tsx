@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
+import { V2EntryInformation } from '../../../../../../../components/V2EntryInformation';
 import { HealthIndicator } from '../../HealthIndicator';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
 import {
@@ -128,6 +129,7 @@ export const MaturedPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
               </RealizedPNLBox>
             </RightBox>
           </PositionEntryBox>
+          {isV2 ? <V2EntryInformation poolCap={1000000} /> : null}
         </PositionEntryBoxWrapper>
       </React.Fragment>
     );

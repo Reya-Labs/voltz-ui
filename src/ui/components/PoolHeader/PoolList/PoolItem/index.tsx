@@ -24,13 +24,11 @@ type PoolItemProps = {
   variableRate24hDelta: number | undefined;
   variableRateFormatted: string;
   aMMMaturity: string;
-  isV2: boolean;
   onClick: () => void;
 };
 
 export const PoolItem: React.FunctionComponent<PoolItemProps> = ({
   isAaveV3,
-  isV2,
   isBorrowing,
   market,
   token,
@@ -58,9 +56,7 @@ export const PoolItem: React.FunctionComponent<PoolItemProps> = ({
           iconSize={24}
           isAaveV3={isAaveV3}
           isBorrowing={isBorrowing}
-          isV2={isV2}
           market={market}
-          pillVariant="compact"
           token={token}
           typographyToken="primaryHeader3Bold"
         />

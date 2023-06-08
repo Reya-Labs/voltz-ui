@@ -1,4 +1,4 @@
-import { MarketToken, MarketTokenProps, Pill, PillProps, ToggleCaret } from 'brokoli-ui';
+import { MarketToken, MarketTokenProps, ToggleCaret } from 'brokoli-ui';
 import React from 'react';
 
 import { MarketTokenBox, ToggleCaretBox } from './MarketTokenInformation.styled';
@@ -8,8 +8,6 @@ export type MarketTokenInformationProps = {
   token: MarketTokenProps['token'];
   isBorrowing: boolean;
   isAaveV3: boolean;
-  isV2: boolean;
-  pillVariant: PillProps['variant'];
   colorToken: MarketTokenProps['colorToken'];
   iconSize: MarketTokenProps['iconSize'];
   typographyToken: MarketTokenProps['typographyToken'];
@@ -23,11 +21,9 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
   token,
   isBorrowing,
   isAaveV3,
-  isV2,
   typographyToken,
   colorToken,
   iconSize,
-  pillVariant,
   showToggleCaret,
   onToggleCaretClick,
   isToggleCaretOpen,
@@ -38,6 +34,13 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
         colorToken={colorToken}
         data-testid="MarketTokenInformation-MarketToken"
         iconSize={iconSize}
+        infoFormatter={() => (
+          <React.Fragment>
+            {`${market as string}${isAaveV3 ? ' v3' : ''}${
+              token ? ` - ${token.toUpperCase()}` : ''
+            }${isBorrowing ? ' Borrow' : ''}`}
+          </React.Fragment>
+        )}
         market={market}
         token={token}
         typographyToken={typographyToken}
@@ -46,36 +49,6 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
         <ToggleCaretBox onClick={onToggleCaretClick}>
           <ToggleCaret isOpen={Boolean(isToggleCaretOpen)} />
         </ToggleCaretBox>
-      ) : null}
-      {isBorrowing ? (
-        <Pill
-          colorToken="wildStrawberry"
-          data-testid="MarketTokenInformation-PillBorrowing"
-          typographyToken="primaryBodySmallRegular"
-          variant={pillVariant}
-        >
-          Borrow
-        </Pill>
-      ) : null}
-      {isAaveV3 ? (
-        <Pill
-          colorToken="wildStrawberry"
-          data-testid="MarketTokenInformation-PillAaveV3"
-          typographyToken="primaryBodySmallRegular"
-          variant={pillVariant}
-        >
-          Aave v3
-        </Pill>
-      ) : null}
-      {isV2 ? (
-        <Pill
-          colorToken="rainbow"
-          data-testid="MarketTokenInformation-PillV2"
-          typographyToken="primaryBodySmallRegular"
-          variant={pillVariant}
-        >
-          v2
-        </Pill>
       ) : null}
     </MarketTokenBox>
   );
