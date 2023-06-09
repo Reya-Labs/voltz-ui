@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { isArbitrumChain, isAvalancheChain, selectChainId } from '../../../../app/features/network';
+import { isSpruceChain } from '../../../../app/features/network/helpers/is-spruce-chain';
 import { useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
 import { isPortfolioNextEnabled } from '../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
-import { isVoyageNextEnabled } from '../../../../utilities/isEnvVarProvided/is-voyage-next-enabled';
 import { NavBox, VoltzIcon, VoltzIconBox } from './Nav.styled';
 import { NavLink } from './NavLink/NavLink';
 
@@ -12,6 +12,7 @@ export const Nav: React.FunctionComponent = React.memo(() => {
   const chainId = useAppSelector(selectChainId);
   const isArbitrum = isArbitrumChain(chainId);
   const isAvalanche = isAvalancheChain(chainId);
+  const isSpruce = isSpruceChain(chainId);
 
   return (
     <NavBox>
@@ -52,20 +53,20 @@ export const Nav: React.FunctionComponent = React.memo(() => {
         </NavLink>
       )}
 
-      <NavLink hidden={isAvalanche || isArbitrum} isNew={false} link={`/${routes.LP_OPTIMISERS}`}>
+      <NavLink
+        hidden={isAvalanche || isArbitrum || isSpruce}
+        isNew={false}
+        link={`/${routes.LP_OPTIMISERS}`}
+      >
         Optimisers
       </NavLink>
-      <NavLink hidden={isAvalanche} isNew={false} link={`/${routes.TRADING_LEAGUE}`}>
+      <NavLink hidden={isAvalanche || isSpruce} isNew={false} link={`/${routes.TRADING_LEAGUE}`}>
         Leaderboard
       </NavLink>
-      <NavLink hidden={isAvalanche} isNew={false} link={`/${routes.PROFILE}`}>
+      <NavLink hidden={isAvalanche || isSpruce} isNew={false} link={`/${routes.PROFILE}`}>
         Profile
       </NavLink>
-      <NavLink
-        hidden={isAvalanche ? !isVoyageNextEnabled() : false}
-        isNew={true}
-        link={`/${routes.VOYAGE}`}
-      >
+      <NavLink hidden={isAvalanche || isSpruce} isNew={true} link={`/${routes.VOYAGE}`}>
         Voyage
       </NavLink>
     </NavBox>

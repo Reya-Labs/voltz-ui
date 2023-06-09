@@ -36,4 +36,8 @@ export const chainOptionsConfiguration: Record<
     name: 'Avalanche Fuji',
     Icon: AvalancheIcon,
   },
+  [SupportedChainId.spruce]: {
+    name: 'Spruce',
+    Icon: AvalancheIcon,
+  },
 };

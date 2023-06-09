@@ -3,6 +3,7 @@ import React from 'react';
 
 import {
   selectAMMMaturityFormatted,
+  selectAMMToken,
   selectAMMTokenFormatted,
   selectCompactDepositedMargin,
   selectCompactNetBalance,
@@ -10,7 +11,6 @@ import {
   selectCompactRealizedPnL,
   selectFixedLower,
   selectFixedUpper,
-  selectSettleAMM,
   selectSettleVariant,
 } from '../../../../app/features/settle-flow';
 import { useAppSelector } from '../../../../app/hooks';
@@ -23,13 +23,13 @@ export const SettleDetails: React.FunctionComponent = () => {
   const compactNetBalance = useAppSelector(selectCompactNetBalance);
   const compactRealizedPnL = useAppSelector(selectCompactRealizedPnL);
   const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
-  const token = useAppSelector(selectAMMTokenFormatted);
+  const tokenFormatted = useAppSelector(selectAMMTokenFormatted);
   const fixedLower = useAppSelector(selectFixedLower);
   const fixedUpper = useAppSelector(selectFixedUpper);
   const variant = useAppSelector(selectSettleVariant);
-  const aMM = useAppSelector(selectSettleAMM);
+  const token = useAppSelector(selectAMMToken);
 
-  if (!variant || !aMM) {
+  if (!variant || !token) {
     return null;
   }
 
@@ -41,7 +41,7 @@ export const SettleDetails: React.FunctionComponent = () => {
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={`${compactNotional.compactNotionalSuffix}${token}`}
+          token={`${compactNotional.compactNotionalSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={compactNotional.compactNotionalNumber}
         />
@@ -83,7 +83,7 @@ export const SettleDetails: React.FunctionComponent = () => {
         </TypographyWithTooltip>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={`${compactDepositedMargin.compactDepositedMarginSuffix}${token}`}
+          token={`${compactDepositedMargin.compactDepositedMarginSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={compactDepositedMargin.compactDepositedMarginNumber}
         />
@@ -96,7 +96,7 @@ export const SettleDetails: React.FunctionComponent = () => {
               pnlFromFees={compactRealizedPnL.compactRealizedPnLFees}
               pnlFromSwaps={compactRealizedPnL.compactRealizedPnLSwaps}
               pnlTotal={`${compactRealizedPnL.compactRealizedPnLTotal} ${compactRealizedPnL.compactRealizedPnLSuffix}`}
-              underlyingTokenName={aMM.underlyingToken.name}
+              underlyingTokenName={token}
               variant={variant}
             />
           }
@@ -113,7 +113,7 @@ export const SettleDetails: React.FunctionComponent = () => {
               ? 'wildStrawberry'
               : 'skyBlueCrayola'
           }
-          token={`${compactRealizedPnL.compactRealizedPnLSuffix}${token}`}
+          token={`${compactRealizedPnL.compactRealizedPnLSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={compactRealizedPnL.compactRealizedPnLTotal}
         />
@@ -135,7 +135,7 @@ export const SettleDetails: React.FunctionComponent = () => {
               ? 'wildStrawberry'
               : 'skyBlueCrayola'
           }
-          token={`${compactNetBalance.compactNetBalanceSuffix}${token}`}
+          token={`${compactNetBalance.compactNetBalanceSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={compactNetBalance.compactNetBalanceNumber}
         />

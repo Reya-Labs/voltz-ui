@@ -2,18 +2,15 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 export type PositionUI = {
   id: string;
-  canEdit: boolean;
-  canRollover: boolean;
-  canSettle: boolean;
+  creationTimestampInMS: number;
   routeAmmId: string;
   routePositionId: string;
   routePoolId: string;
-  isAaveV3: boolean;
   isBorrowing: boolean;
   isV2: boolean;
   type: 'LP' | 'Variable' | 'Fixed';
   chainId: SupportedChainId;
-  market: 'Aave' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
+  market: 'Aave V2' | 'Aave V3' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
   token?: 'eth' | 'usdc' | 'usdt' | 'dai';
   name: string;
   notionalUSD: number;

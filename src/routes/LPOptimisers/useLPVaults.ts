@@ -9,25 +9,32 @@ import { selectChainId } from '../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useWallet } from '../../hooks/useWallet';
 
-export const useLPVaults = (type: 'active' | 'all') => {
+export const useLPVaults = () => {
   const { signer } = useWallet();
   const chainId = useAppSelector(selectChainId);
-
-  const vaultsLoaded = useAppSelector(selectOptimisersLoadedState);
+  const vaultsLoadedState = useAppSelector(selectOptimisersLoadedState);
   const lpVaults = useAppSelector(selectOptimisers);
   const dispatch = useAppDispatch();
+
+  const vaultsLoaded = vaultsLoadedState === 'succeeded';
+  const vaultsError = vaultsLoadedState === 'failed';
+  const vaultsLoading = vaultsLoadedState === 'pending' || vaultsLoadedState === 'idle';
 
   useEffect(() => {
     if (!chainId) {
       return;
     }
-    void dispatch(initialiseOptimisersThunk({ chainId, signer, type }));
-  }, [dispatch, signer, chainId]);
+    if (vaultsLoaded) {
+      return;
+    }
+    void dispatch(initialiseOptimisersThunk({ chainId, signer }));
+  }, [vaultsLoaded, dispatch, signer, chainId]);
 
   return {
     lpVaults,
-    vaultsLoaded: vaultsLoaded === 'succeeded',
-    vaultsError: vaultsLoaded === 'failed',
-    vaultsLoading: vaultsLoaded === 'pending' || vaultsLoaded === 'idle',
+    activeLpVaults: lpVaults.filter((vault) => !vault.expired && !vault.deprecated),
+    vaultsLoaded,
+    vaultsError,
+    vaultsLoading,
   };
 };

@@ -4,10 +4,12 @@ import React, { useCallback } from 'react';
 import {
   closeSettleFlowAction,
   confirmSettleThunk,
-  selectSettleAMM,
+  selectAMMMarket,
+  selectAMMToken,
   selectSettleError,
 } from '../../../../app/features/settle-flow';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useWallet } from '../../../../hooks/useWallet';
 import { MarketTokenInformationProps } from '../../MarketTokenInformation';
 import { MarketTokenInformationCompact } from '../../MarketTokenInformationCompact';
 import { SettleDetails } from '../SettleDetails';
@@ -20,18 +22,24 @@ import {
 } from './SettleConfirmationStep.styled';
 
 export const SettleConfirmationStep: React.FunctionComponent = () => {
-  const aMM = useAppSelector(selectSettleAMM);
+  const market = useAppSelector(selectAMMMarket);
+  const token = useAppSelector(selectAMMToken);
+  const { signer } = useWallet();
   const dispatch = useAppDispatch();
   const handleConfirm = useCallback(() => {
-    void dispatch(confirmSettleThunk());
-  }, [dispatch]);
+    if (!signer) {
+      return;
+    }
+    void dispatch(
+      confirmSettleThunk({
+        signer,
+      }),
+    );
+  }, [signer, dispatch]);
   const error = useAppSelector(selectSettleError);
   const handleCloseButtonClick = useCallback(() => {
     dispatch(closeSettleFlowAction());
   }, [dispatch]);
-  if (!aMM) {
-    return null;
-  }
 
   return (
     <ConfirmationStepBox>
@@ -43,8 +51,8 @@ export const SettleConfirmationStep: React.FunctionComponent = () => {
       </TitleBox>
       <DetailsBox>
         <MarketTokenInformationCompact
-          market={aMM.market.name as MarketTokenInformationProps['market']}
-          token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
+          market={market as MarketTokenInformationProps['market']}
+          token={token.toLowerCase() as MarketTokenInformationProps['token']}
         />
         <SettleDetails />
       </DetailsBox>

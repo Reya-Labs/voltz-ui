@@ -7217,6 +7217,23 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
+"@voltz-protocol/sdk-v1-stateless@1.12.3":
+  version "1.12.3"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.12.3.tgz#fc67fb1a3b47942388e715f8a972f532d6d03e88"
+  integrity sha512-piWvpf9YkhtpEpUQd5GwcYlmqsd5tBni1zp/m4SDCD1peNaiW8hrPfUCVE23mztlAs2uyZf0nrWq+DUJUdgWpw==
+  dependencies:
+    "@sentry/browser" "7.25.0"
+    "@sentry/tracing" "7.25.0"
+    big.js "^6.1.1"
+    decimal.js-light "^2.5.1"
+    ethers "5.5.4"
+    evm-bn "^1.1.1"
+    fraction.js "^4.2.0"
+    jsbi "^4.2.0"
+    keccak256 "^1.0.6"
+    tiny-invariant "^1.2.0"
+    toformat "^2.0.0"
+
 "@voltz-protocol/subgraph-data@1.18.1":
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/@voltz-protocol/subgraph-data/-/subgraph-data-1.18.1.tgz#0c562c1841238e5cc66e8295be774e99c0b719a4"
@@ -7227,10 +7244,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.142.1":
-  version "1.142.1"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.142.1.tgz#90ebed381d405c30fe552847d12108d881653e29"
-  integrity sha512-ds6y0MbDj9YBjh9mIIH42/+8npgreypEaHSbxImr4COjHVLzH2lW6gX/3zJ4s9euJyRTOfdrrTxEMCEVZ3H03w==
+"@voltz-protocol/v1-sdk@1.152.0":
+  version "1.152.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.152.0.tgz#b3b47271028a59c6aab32063901f31a062b3d9bc"
+  integrity sha512-WCYRecRx7sUq2kMp76fQ8KD2FOVy0MVv7xvTY7oFkkqfLA9TWmrhnFkKHNB9UF1DfdqfXB7MP8N7O/Uz0aFJmw==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
@@ -9556,10 +9573,10 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.71.1:
-  version "1.71.1"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.71.1.tgz#340f1c219bf158406881aa75a3c59ce868e6b226"
-  integrity sha512-AnvF8cXDc/NZEbzYECtxBSxeseKN6naMVpQX5Bz3XOhBMBzCPTGLxfd67eQS6rRc4a71isFUFnu75xCbtRgKqw==
+brokoli-ui@1.75.0:
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.75.0.tgz#95d279544998d01fd28574549cc439227bf42d58"
+  integrity sha512-RxyNv937X0rDnjzcwPauDx0lDS4TiyKpbOnMQKB3wgBCWVREP4IfZqce0uI5faf5q0kBGWGHMIvyrbDk1kH4sg==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"

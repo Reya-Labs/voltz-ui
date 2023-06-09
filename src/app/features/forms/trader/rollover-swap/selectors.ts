@@ -88,6 +88,13 @@ export const selectPreviousPositionSwapMode = (state: RootState) => {
   return state.rolloverSwapForm.previousPosition.positionType === 1 ? 'fixed' : 'variable';
 };
 
+export const selectPreviousPositionId = (state: RootState) => {
+  if (!state.rolloverSwapForm.previousPosition) {
+    return null;
+  }
+  return state.rolloverSwapForm.previousPosition.id;
+};
+
 export const selectProspectiveSwapNotionalFormatted = (state: RootState) => {
   return formCompactFormat(getProspectiveSwapNotional(state.rolloverSwapForm));
 };

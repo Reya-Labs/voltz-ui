@@ -117,7 +117,7 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
             {positions.length === 0 ? (
               <NoPositionsFoundBox>
                 <img alt="Gimme" src="/images/no-pools-found.png" />
-                <Typography colorToken="lavenderWeb" typographyToken="primaryBodyLargeBold">
+                <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
                   No {positionsFilterId === 'settled' ? 'settled' : 'active'} positions found. Visit
                   our{' '}
                   <AppLink

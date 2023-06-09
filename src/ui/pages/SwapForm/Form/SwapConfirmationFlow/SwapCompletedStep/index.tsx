@@ -6,6 +6,7 @@ import {
   closeSwapConfirmationFlowAction,
   selectSwapConfirmationFlowEtherscanLink,
 } from '../../../../../../app/features/forms/trader/swap';
+import { resetPortfolioStateAction } from '../../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
 import { isPortfolioNextEnabled } from '../../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
@@ -19,6 +20,7 @@ export const SwapCompletedStep: React.FunctionComponent = () => {
 
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeSwapConfirmationFlowAction());
+    dispatch(resetPortfolioStateAction());
     if (isPortfolioNextEnabled()) {
       navigate(`/${routes.PORTFOLIO_POSITIONS}`);
       return;

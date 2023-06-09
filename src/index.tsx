@@ -13,6 +13,7 @@ import './index.css';
 import 'brokoli-ui/dist/esm/index.css';
 
 import { ThemeProvider } from '@mui/material/styles';
+import { init as initSDKV1Stateless } from '@voltz-protocol/sdk-v1-stateless';
 import { init } from '@voltz-protocol/v1-sdk';
 import { Amplify } from 'aws-amplify';
 import { Notifications } from 'brokoli-ui';
@@ -36,7 +37,7 @@ try {
 } catch (_) {}
 
 init();
-
+initSDKV1Stateless();
 initSentryTracker();
 
 ReactDOM.render(

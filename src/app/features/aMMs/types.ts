@@ -1,7 +1,7 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 export type PoolUI = {
-  market: 'Aave' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
+  market: 'Aave' | 'Aave V2' | 'Aave V3' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
   token?: 'eth' | 'usdc' | 'usdt' | 'dai';
   name: string;
   isBorrowing: boolean;

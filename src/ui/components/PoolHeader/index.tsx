@@ -21,14 +21,12 @@ type PoolHeaderProps = {
   variableRate24hDelta: number | undefined;
   variableRateFormatted: string;
   aMMMaturity: string;
-  isV2: boolean;
   onPoolItemClick: PoolListProps['onPoolItemClick'];
   pools: PoolListProps['pools'];
 };
 
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   isAaveV3,
-  isV2,
   isBorrowing,
   market,
   token,
@@ -67,9 +65,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
             isAaveV3={isAaveV3}
             isBorrowing={isBorrowing}
             isToggleCaretOpen={isToggleCaretOpen}
-            isV2={isV2}
             market={market}
-            pillVariant="regular"
             showToggleCaret={true}
             token={token}
             typographyToken="primaryHeader2Black"

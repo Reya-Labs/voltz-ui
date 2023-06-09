@@ -11,6 +11,7 @@ import {
 } from '../../../../app/features/forms/trader/swap';
 import { useAppSelector } from '../../../../app/hooks';
 import { CashFlowCalculator } from '../../../components/CashflowCalculator';
+import { FormTransactionHistory } from '../../../components/FormTransactionHistory';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
 import { BottomMainBox, MainBox } from './Main.styled';
 import { PoolHeader } from './PoolHeader';
@@ -46,6 +47,7 @@ export const Main: React.FunctionComponent = () => {
           position={position}
           variableTokenDeltaBalance={variableTokenDeltaBalance}
         />
+        <FormTransactionHistory positionId={position?.id} />
       </BottomMainBox>
     </MainBox>
   );

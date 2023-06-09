@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 
 import { selectChainId } from '../../../../../app/features/network';
-import { initialisePortfolioPositionsThunk } from '../../../../../app/features/portfolio';
+import {
+  initialisePortfolioPositionsThunk,
+  selectPositionsLoadedState,
+} from '../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { ConnectWallet } from '../../../../components/ConnectWallet';
@@ -11,6 +14,7 @@ import { PortfolioPositionsBox } from './PortfolioPositions.styled';
 export const PortfolioPositions: React.FunctionComponent = () => {
   const { account, signer } = useWallet();
   const chainId = useAppSelector(selectChainId);
+  const positionsLoadedState = useAppSelector(selectPositionsLoadedState);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -20,12 +24,15 @@ export const PortfolioPositions: React.FunctionComponent = () => {
     if (!account) {
       return;
     }
+    if (positionsLoadedState === 'succeeded') {
+      return;
+    }
     void dispatch(
       initialisePortfolioPositionsThunk({
         account,
       }),
     );
-  }, [account, chainId, dispatch]);
+  }, [positionsLoadedState, account, chainId, dispatch]);
   if (!chainId) {
     return null;
   }

@@ -12,6 +12,7 @@ import { historicalRatesReducer } from './features/historical-rates';
 import { lpOptimisersReducer } from './features/lp-optimisers';
 import { networkReducer } from './features/network';
 import { portfolioReducer } from './features/portfolio';
+import { positionDetailsReducer } from './features/position-details';
 import { settleFlowReducer } from './features/settle-flow';
 import { tradingLeagueReducer } from './features/trading-league';
 import { saga, transactionsReducer } from './features/transactions';
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   rolloverLpForm: rolloverLpFormReducer,
   voyage: voyageReducer,
   portfolio: portfolioReducer,
+  positionDetails: positionDetailsReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

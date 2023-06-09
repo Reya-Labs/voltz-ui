@@ -42,7 +42,7 @@ export const formatTimestamp = (timestampInMS: number) => {
  * @param timestamp - The POSIX timestamp to process
  */
 export const formatPOSIXTimestamp = (timestamp: number): string => {
-  return DateTime.fromMillis(timestamp).toLocaleString({
+  return DateTime.fromMillis(timestamp || 0).toLocaleString({
     day: '2-digit',
     month: '2-digit',
     year: '2-digit',
@@ -55,7 +55,7 @@ export const formatPOSIXTimestamp = (timestamp: number): string => {
  * @param timestamp - The POSIX timestamp to process
  */
 export const formatPOSIXTimestampWithHoursMinutesUTC = (timestamp: number): string => {
-  return DateTime.fromMillis(timestamp).toLocaleString({
+  return DateTime.fromMillis(timestamp || 0).toLocaleString({
     day: '2-digit',
     month: '2-digit',
     year: '2-digit',

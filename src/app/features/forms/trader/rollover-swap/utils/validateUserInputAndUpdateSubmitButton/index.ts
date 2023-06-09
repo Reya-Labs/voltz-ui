@@ -2,6 +2,7 @@ import { Draft } from '@reduxjs/toolkit';
 
 import { isUserInputMarginError } from '../../../../common/utils';
 import { SliceState } from '../../state';
+import { getAvailableMargin } from '../getAvailableMargin';
 import { getProspectiveSwapMargin } from '../getProspectiveSwapMargin';
 import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
@@ -70,11 +71,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   }
 
   if (isWalletBalanceLoaded && state.previousPosition !== null) {
-    const walletBalance = state.walletBalance.value;
-    const settlementCashflow = state.previousPosition.settlementCashflow;
-    const margin = state.previousPosition.margin;
-    const fees = state.previousPosition.fees;
-    const allowedBalance = walletBalance + settlementCashflow + margin + fees;
+    const allowedBalance = getAvailableMargin(state)!;
     if (userInputMarginAmount > allowedBalance) {
       state.submitButton = {
         state: 'not-enough-balance',

@@ -11,14 +11,13 @@ export const initialiseOptimisersThunk = createAsyncThunk<
   OptimiserInfo | Awaited<ReturnType<typeof rejectThunkWithError>>,
   {
     signer: ethers.Signer | null;
-    type: 'active' | 'all';
     chainId: SupportedChainId;
   }
->('lp-optimisers/getProducts', async ({ chainId, signer, type }, thunkAPI) => {
+>('lp-optimisers/getProducts', async ({ chainId, signer }, thunkAPI) => {
   try {
     const mappedRouters: OptimiserInfo[] = await getAllMellowProducts({
       signer,
-      type,
+      type: 'all',
       chainId,
       alchemyApiKey: getAlchemyKey(),
       infuraApiKey: getInfuraKey(),

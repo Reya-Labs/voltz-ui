@@ -15,6 +15,7 @@ import {
   MarketTokenInformation,
   MarketTokenInformationProps,
 } from '../../../../components/MarketTokenInformation';
+import { V2EntryInformation } from '../../../../components/V2EntryInformation';
 import {
   ButtonStyled,
   ChainIconContainer,
@@ -53,6 +54,7 @@ const TestNetMap: Record<SupportedChainId, boolean> = {
   [SupportedChainId.arbitrumGoerli]: true,
   [SupportedChainId.avalanche]: false,
   [SupportedChainId.avalancheFuji]: true,
+  [SupportedChainId.spruce]: false,
 };
 export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
   (
@@ -94,6 +96,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
           chainId: poolChainId,
           isSupportedChain: true,
           triggerApprovalFlow: true,
+          reloadPage: true,
         }),
       );
     };
@@ -174,9 +177,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
               iconSize={24}
               isAaveV3={isAaveV3}
               isBorrowing={isBorrowing}
-              isV2={isV2}
               market={market}
-              pillVariant="compact"
               token={token}
               typographyToken="primaryBodyLargeBold"
             />
@@ -226,6 +227,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
             </ButtonStyled>
           </RightBox>
         </PoolEntryBox>
+        {isV2 ? <V2EntryInformation poolCap={1000000} /> : null}
       </PoolEntryBoxWrapper>
     );
   },

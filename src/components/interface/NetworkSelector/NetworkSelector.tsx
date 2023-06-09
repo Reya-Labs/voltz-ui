@@ -73,6 +73,7 @@ export const NetworkSelector: React.FunctionComponent = () => {
               chainId: parseInt(event.target.value, 10),
               isSupportedChain: true,
               triggerApprovalFlow: isSignedIn,
+              reloadPage: true,
             }),
           );
         }}

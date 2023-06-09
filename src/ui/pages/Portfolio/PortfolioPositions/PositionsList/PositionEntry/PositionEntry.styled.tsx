@@ -22,9 +22,6 @@ export const PositionEntryBox = styled('div', {
   background-color: ${({ backgroundColorToken }) => getColorFromToken(backgroundColorToken)};
   border: 1px solid ${colors.lavenderWeb7};
   border-radius: 8px;
-`;
-
-export const EditablePositionEntryBox = styled(PositionEntryBox)`
   transition: all 200ms ease-in;
 
   &:hover {
@@ -50,9 +47,6 @@ export const LeftBox = styled(InfoBox)`
 `;
 
 export const RightBox = styled(InfoBox)``;
-export const ButtonsBox = styled(InfoBox)`
-  gap: 8px;
-`;
 
 export const NotionalBox = styled(BorderBox)`
   width: 78px;

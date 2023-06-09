@@ -47,6 +47,7 @@ export const ConnectedPositionTable: React.FunctionComponent<ConnectedPositionTa
         initializeSettleFlowAction({
           position,
           account,
+          positionDetails: null,
         }),
       );
     },

@@ -12,7 +12,6 @@ export const resetSortingDirection: PositionSorting = {
 
 export const initialSortingDirection: PositionSorting = {
   ...resetSortingDirection,
-  name: 'ascending',
 };
 
 export const SORT_CONFIG: Record<
@@ -24,7 +23,7 @@ export const SORT_CONFIG: Record<
   }
 > = {
   realizedPNL: {
-    text: 'Realized PNL',
+    text: 'Realized PnL',
     disabled: true,
   },
   status: {

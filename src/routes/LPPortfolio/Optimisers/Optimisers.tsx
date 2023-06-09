@@ -22,7 +22,7 @@ export const Optimisers: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const chainId = useAppSelector(selectChainId);
 
-  const { lpVaults, vaultsLoaded } = useLPVaults('all');
+  const { lpVaults, vaultsLoaded } = useLPVaults();
   // TODO: remove this once the entire state is lifted to Redux properly,
   // What is missing it Redux to give us some plain objects and not SDK classes
   const [forcedRerenderCounter, setForcedRerenderCounter] = useState<number>(0);

@@ -39,7 +39,6 @@ export const PoolList: React.FunctionComponent<PoolListProps> = ({ onPoolItemCli
           fixedRateFormatted={pool.fixedAPRRateFormatted}
           isAaveV3={pool.isAaveV3}
           isBorrowing={pool.isBorrowing}
-          isV2={pool.isV2}
           market={pool.market}
           token={pool.token}
           variableRate24hDelta={pool.variableAPYRate24hDelta}

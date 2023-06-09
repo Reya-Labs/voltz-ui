@@ -1,3 +1,4 @@
+import { PositionsFilterId } from '../../../ui/pages/Portfolio/PortfolioPositions/PositionsList';
 import {
   generateAmmIdForRoute,
   generatePoolId,
@@ -19,13 +20,9 @@ export const selectPositions = (state: RootState): PositionUI[] => {
   }
 
   const pools: PositionUI[] = portfolioPositions.map((position) => {
-    const isV2 = false;
-    const isAaveV3 = position.amm.market === 'Aave V3';
+    const isV2 = position.amm.isV2;
     const isBorrowing = position.amm.isBorrowing;
-    const market =
-      position.amm.market === 'Aave V3' || position.amm.market === 'Aave V2'
-        ? 'Aave'
-        : position.amm.market;
+    const market = position.amm.market;
     const token = position.amm.underlyingToken.name;
     const notionalUSD = position.notional * position.tokenPriceUSD;
     const marginUSD = position.margin * position.tokenPriceUSD;
@@ -34,16 +31,19 @@ export const selectPositions = (state: RootState): PositionUI[] => {
     const realizedPNLTotalUSD = position.realizedPNLTotal * position.tokenPriceUSD;
     const realizedPNLFeesUSD = position.realizedPNLFees * position.tokenPriceUSD;
     const realizedPNLCashflowUSD = position.realizedPNLCashflow * position.tokenPriceUSD;
+    const creationTimestampInMS = position.creationTimestampInMS;
 
+    const fixHigh = position.fixHigh * 100;
+    const fixLow = position.fixLow * 100;
+    const currentFixed = position.status.currentFixed * 100;
+    const receiving = position.status.receiving * 100;
+    const paying = position.status.paying * 100;
     return {
-      canEdit: position.canEdit,
-      canSettle: position.canSettle,
-      canRollover: Boolean(position.rolloverAmmId),
+      creationTimestampInMS,
       type,
       market,
       token,
       isBorrowing,
-      isAaveV3,
       isV2,
       marginUSDCompactFormat: compactFormatToParts(marginUSD),
       marginUSD,
@@ -57,16 +57,14 @@ export const selectPositions = (state: RootState): PositionUI[] => {
       routeAmmId: generateAmmIdForRoute(position.amm),
       routePositionId: generatePositionIdForRoute(position),
       routePoolId: generatePoolId(position.amm),
-      name: `${type} - ${market}${isAaveV3 ? ' - Aave v3' : ''} - ${token as string}${
-        isBorrowing ? ' - Borrowing' : ''
-      }`,
+      name: `${type} - ${market} - ${token as string}${isBorrowing ? ' - Borrowing' : ''}`,
       status: {
-        fixHigh: position.fixHigh,
-        fixLow: position.fixLow,
-        currentFixed: position.status.currentFixed,
+        fixHigh,
+        fixLow,
+        currentFixed,
         health: position.status.health,
-        receiving: position.status.receiving,
-        paying: position.status.paying,
+        receiving,
+        paying,
         variant: position.status.variant,
       },
       unrealizedPNLUSD,
@@ -114,7 +112,31 @@ export const selectPositionsSummary = (
     compactNumber: string;
     compactSuffix: string;
   };
+  filterOptions: {
+    id: PositionsFilterId;
+    label: string;
+    attentionPrefixText?: string;
+  }[];
 } => {
+  const filterOptions: {
+    id: PositionsFilterId;
+    label: string;
+    attentionPrefixText?: string;
+  }[] = [
+    {
+      id: 'active',
+      label: 'Active',
+    },
+    {
+      id: 'matured',
+      label: 'To settle',
+    },
+    {
+      id: 'settled',
+      label: 'Settled',
+    },
+  ];
+
   if (selectPositionsLoading(state)) {
     return {
       positionsLength: '--',
@@ -132,6 +154,7 @@ export const selectPositionsSummary = (
         compactNumber: '--',
         compactSuffix: '',
       },
+      filterOptions,
     };
   }
   const positions = selectPositions(state);
@@ -154,7 +177,9 @@ export const selectPositionsSummary = (
       if (variant === 'active') {
         summary.activePositionsLength++;
         summary.totalPortfolioNotionalValueUSD += position.notionalUSD;
-        summary.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
+        if (position.type !== 'LP') {
+          summary.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
+        }
 
         if (health === 'healthy') {
           summary.healthyPositionsLength++;
@@ -194,6 +219,9 @@ export const selectPositionsSummary = (
     },
   );
 
+  filterOptions[0].attentionPrefixText = activePositionsLength.toString();
+  filterOptions[1].attentionPrefixText = maturedPositionsLength.toString();
+  filterOptions[2].attentionPrefixText = settledPositionsLength.toString();
   return {
     positionsLength: positions.length.toString(),
     activePositionsLength: activePositionsLength.toString(),
@@ -215,6 +243,7 @@ export const selectPositionsSummary = (
         totalPortfolioUnrealizedPNLValueUSD +
         totalPortfolioRealizedPNLValueUSD,
     ),
+    filterOptions,
   };
 };
 

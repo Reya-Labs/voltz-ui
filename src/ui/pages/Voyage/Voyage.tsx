@@ -3,9 +3,7 @@ import React from 'react';
 import { selectChainId } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
-import { isVoyageNextEnabled } from '../../../utilities/isEnvVarProvided/is-voyage-next-enabled';
 import { ConnectWallet } from '../../components/ConnectWallet';
-import { DeprecatedVoyageWalletConnected } from './DeprecatedVoyageWalletConnected';
 import { VoyageWalletConnected } from './VoyageWalletConnected';
 
 export const Voyage: React.FunctionComponent = () => {
@@ -24,18 +22,8 @@ export const Voyage: React.FunctionComponent = () => {
       />
     );
   }
-  if (isVoyageNextEnabled()) {
-    return (
-      <VoyageWalletConnected
-        account={wallet.account}
-        accountENS={wallet.accountENS || wallet.account}
-        chainId={chainId}
-      />
-    );
-  }
-
   return (
-    <DeprecatedVoyageWalletConnected
+    <VoyageWalletConnected
       account={wallet.account}
       accountENS={wallet.accountENS || wallet.account}
       chainId={chainId}

@@ -6,6 +6,7 @@ import {
   selectChainId,
   setChainIdThunk,
 } from '../../app/features/network';
+import { resetPortfolioStateAction } from '../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
 import { getENSDetails } from '../../utilities/getENSDetails';
@@ -30,14 +31,15 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const disconnect = useCallback(
     (errorMessage: string | null = null) => {
       window.wallet = undefined;
+      localStorage.removeItem('connectedWalletName');
       setProvider(null);
       setSigner(null);
       setName(null);
-      localStorage.removeItem('connectedWalletName');
       setAccount(null);
       setAccountENS(null);
       setStatus('notConnected');
       setWalletError(errorMessage);
+      dispatch(resetPortfolioStateAction());
     },
     [dispatch],
   );
@@ -94,6 +96,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
                 chainId: getDefaultChainId(),
                 isSupportedChain: false,
                 triggerApprovalFlow: false,
+                reloadPage: true,
               }),
             );
             throw new Error('Wrong network');
@@ -103,6 +106,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
                 chainId: networkValidation.chainId,
                 isSupportedChain: true,
                 triggerApprovalFlow: false,
+                reloadPage: true,
               }),
             );
           }
@@ -110,6 +114,42 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
           if (!process.env.REACT_APP_SKIP_WALLET_SCREENING) {
             await checkForRiskyWallet(walletAddress);
           }
+
+          window.wallet = {
+            provider: newProvider,
+            signer: newSigner,
+          };
+
+          const walletAddressAccount = walletAddress.toLowerCase();
+          const details = await getENSDetails(walletAddressAccount);
+
+          setProvider(newProvider);
+          setSigner(newSigner);
+          setName(walletName);
+          localStorage.setItem('connectedWalletName', walletName);
+          setAccount(walletAddressAccount); // metamask wallet data will not load unless walletAddress is all lower case - why?
+          setAccountENS(details?.name || walletAddressAccount); // ENS details
+          setStatus('connected');
+          setWalletError(null);
+        } else {
+          setStatus('notConnected');
+        }
+      } catch (error) {
+        handleError(error);
+      }
+    },
+    [disconnect, dispatch],
+  );
+
+  const reconnect = useCallback(
+    async (walletName: WalletName) => {
+      try {
+        setStatus('connecting');
+        const newProvider = await getWalletProvider(walletName);
+
+        if (newProvider) {
+          const newSigner = newProvider.getSigner();
+          const walletAddress = await newSigner.getAddress();
 
           window.wallet = {
             provider: newProvider,
@@ -177,6 +217,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     required,
     setRequired,
     walletError,
+    reconnect,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

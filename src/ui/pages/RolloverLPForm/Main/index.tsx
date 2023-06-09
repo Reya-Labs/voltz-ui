@@ -2,10 +2,12 @@ import React from 'react';
 
 import {
   selectFixedRateInfo,
+  selectPreviousPositionId,
   selectRolloverLpFormAMM,
   selectVariableRateInfo,
 } from '../../../../app/features/forms/lps/rollover-lp';
 import { useAppSelector } from '../../../../app/hooks';
+import { FormTransactionHistory } from '../../../components/FormTransactionHistory';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
 import { BottomMainBox, MainBox } from './Main.styled';
 import { PoolHeader } from './PoolHeader';
@@ -15,6 +17,7 @@ export const Main: React.FunctionComponent = () => {
   const aMM = useAppSelector(selectRolloverLpFormAMM);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
+  const previousPositionId = useAppSelector(selectPreviousPositionId);
   if (!aMM || fixedRateInfo === undefined || variableRateInfo === undefined) {
     return null;
   }
@@ -30,6 +33,7 @@ export const Main: React.FunctionComponent = () => {
       />
       <BottomMainBox>
         <PositionDetails />
+        <FormTransactionHistory positionId={previousPositionId} />
       </BottomMainBox>
     </MainBox>
   );

@@ -2,13 +2,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { InfoPostSettlePosition, Position } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
+import { PositionDetailsUI } from '../position-details';
 import { pushPageViewEvent } from './analytics';
 import { confirmSettleThunk, getInfoPostSettlePositionThunk } from './thunks';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
 export type SliceState = {
+  // todo: FB deprecated after portfolio launch
   position: Position | null;
+  positionDetails: PositionDetailsUI | null;
   step: 'confirmation' | 'waitingForConfirmation' | 'completed' | null;
   error: string | null;
   txHash: string | null;
@@ -19,7 +22,9 @@ export type SliceState = {
 };
 
 const initialState: SliceState = {
+  // todo: FB deprecated after portfolio launch
   position: null,
+  positionDetails: null,
   step: null,
   error: null,
   txHash: null,
@@ -41,20 +46,30 @@ const slice = createSlice({
     initializeSettleFlowAction: (
       state,
       {
-        payload: { position, account },
+        payload: { position, positionDetails, account },
       }: PayloadAction<{
-        position: Position;
+        position: Position | null;
+        positionDetails: PositionDetailsUI | null;
         account: null | string;
       }>,
     ) => {
-      pushPageViewEvent({
-        account: account || '',
-        isTrader: position.positionType !== 3,
-      });
+      if (position) {
+        pushPageViewEvent({
+          account: account || '',
+          isTrader: position.positionType !== 3,
+        });
+      }
+      if (positionDetails) {
+        pushPageViewEvent({
+          account: account || '',
+          isTrader: positionDetails.type !== 'LP',
+        });
+      }
       state.step = 'confirmation';
       state.error = null;
       state.txHash = null;
       state.position = position;
+      state.positionDetails = positionDetails;
     },
     closeSettleFlowAction: () => initialState,
   },

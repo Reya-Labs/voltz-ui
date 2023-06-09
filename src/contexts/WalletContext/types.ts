@@ -11,6 +11,7 @@ export type WalletName = 'metamask' | 'walletConnect' | 'disconnect';
 
 export type Wallet = {
   status: WalletStatus;
+  reconnect: (name: WalletName) => Promise<void>;
   connect: (name: WalletName) => Promise<void>;
   disconnect: () => void;
   account: string | null;

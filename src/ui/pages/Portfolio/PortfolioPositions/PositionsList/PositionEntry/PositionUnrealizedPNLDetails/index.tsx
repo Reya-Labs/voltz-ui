@@ -1,4 +1,4 @@
-import { TokenTypography, Tooltip, TypographyToken } from 'brokoli-ui';
+import { TokenTypography, Tooltip, Typography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import { PositionUI } from '../../../../../../../app/features/portfolio/types';
@@ -7,9 +7,18 @@ import { UnrealizedPNLDetails } from '../../../../../../components/UnrealizedPNL
 export type PositionUnrealizedPNLDetailsProps = {
   numbersTypographyToken: TypographyToken;
   unrealizedPNLUSDCompactFormat: PositionUI['unrealizedPNLUSDCompactFormat'];
+  type: PositionUI['type'];
 };
 export const PositionUnrealizedPNLDetails: React.FunctionComponent<PositionUnrealizedPNLDetailsProps> =
-  ({ numbersTypographyToken, unrealizedPNLUSDCompactFormat }) => {
+  ({ type, numbersTypographyToken, unrealizedPNLUSDCompactFormat }) => {
+    if (type === 'LP') {
+      return (
+        <Typography colorToken="lavenderWeb" typographyToken={numbersTypographyToken}>
+          --
+        </Typography>
+      );
+    }
+
     return (
       <Tooltip
         trigger={

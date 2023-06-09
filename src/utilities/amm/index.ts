@@ -126,8 +126,8 @@ export const generateAmmIdForRoute = (amm: { id: string }) => {
 };
 
 export const generatePositionIdForRoute = (position: { id: string }) => {
-  return position.id
-    .toLowerCase()
-    .substring(position.id.length - 4)
-    .replace('#', '_');
+  const trimmed = position.id.trim();
+  const [info1, info2, info3] = trimmed.toLowerCase().split('_');
+  const id = [info1, info2, info3].map((i) => i.trim().substring(i.length - 4)).join('');
+  return id.replace('#', '_');
 };

@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import styled from '@emotion/styled';
 import { colors } from 'brokoli-ui';
 
 import { ReactComponent as Metamask } from './metamask.svg';
