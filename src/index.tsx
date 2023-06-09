@@ -24,8 +24,6 @@ import { HashRouter } from 'react-router-dom';
 
 import { store } from './app';
 import { AppRoutes } from './AppRoutes';
-import { AgentProvider } from './contexts/AgentContext/AgentProvider';
-import { AMMsProvider } from './contexts/AMMsContext/AMMsContext';
 import { WalletProvider } from './contexts/WalletContext/WalletProvider';
 import { themes } from './theme';
 import { initSentryTracker } from './utilities/sentry';
@@ -46,13 +44,9 @@ ReactDOM.render(
     <ThemeProvider theme={themes.dark}>
       <ReduxProvider store={store}>
         <WalletProvider>
-          <AgentProvider>
-            <HashRouter>
-              <AMMsProvider>
-                <AppRoutes />
-              </AMMsProvider>
-            </HashRouter>
-          </AgentProvider>
+          <HashRouter>
+            <AppRoutes />
+          </HashRouter>
         </WalletProvider>
       </ReduxProvider>
     </ThemeProvider>
