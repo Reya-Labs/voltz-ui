@@ -1,11 +1,17 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { simulateSwap } from '@voltz-protocol/sdk-v1-stateless';
 import { InfoPostSwapV1 } from '@voltz-protocol/v1-sdk';
 
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 import { isUserInputNotionalError } from '../../../../common/utils';
 import { initialState } from '../../state';
-import { getProspectiveSwapMode, getProspectiveSwapNotional } from '../../utils';
+import {
+  getProspectiveSwapMargin,
+  getProspectiveSwapMode,
+  getProspectiveSwapNotional,
+} from '../../utils';
 
 export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
   Awaited<
@@ -25,6 +31,7 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
     const amm = swapFormState.amm;
     const prospectiveSwapMode = getProspectiveSwapMode(swapFormState);
     const prospectiveSwapNotional = getProspectiveSwapNotional(swapFormState);
+    const prospectiveSwapMargin = getProspectiveSwapMargin(swapFormState);
     if (!amm || isUserInputNotionalError(swapFormState)) {
       return {
         notionalAmount: NaN,
@@ -44,12 +51,28 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
     }
 
     const notionalAmount = prospectiveSwapNotional;
-    const infoPostSwapV1 = await amm.getInfoPostSwapV1({
-      isFT: prospectiveSwapMode === 'fixed',
-      notional: notionalAmount,
-      fixedLow: 1,
-      fixedHigh: 999,
-    });
+
+    let infoPostSwapV1: InfoPostSwapV1;
+    if (isV1StatelessEnabled()) {
+      // TODO: Artur make a simulateSwap for edit
+      // TODO: Artur make the signer required and don't require provider
+      // TODO: Artur confirm if type returned from 'simulateSwap' is same as amm.getInfoPostSwapV1
+      infoPostSwapV1 = await simulateSwap({
+        ammId: amm.id,
+        isFT: prospectiveSwapMode === 'fixed',
+        notional: prospectiveSwapNotional,
+        margin: prospectiveSwapMargin,
+        signer: amm.signer!,
+        provider: amm.signer!.provider!,
+      });
+    } else {
+      infoPostSwapV1 = await amm.getInfoPostSwapV1({
+        isFT: prospectiveSwapMode === 'fixed',
+        notional: notionalAmount,
+        fixedLow: 1,
+        fixedHigh: 999,
+      });
+    }
 
     // margin requirement is collateral only now
     if (infoPostSwapV1.marginRequirement > infoPostSwapV1.fee) {
