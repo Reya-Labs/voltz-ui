@@ -2,6 +2,7 @@ import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolki
 import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 
+import { admitPassFlowReducer } from './features/admit-pass-flow';
 import { aMMsReducer } from './features/aMMs';
 import { cashflowCalculatorReducer } from './features/cashflow-calculator';
 import { lpFormReducer } from './features/forms/lps/lp';
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   voyage: voyageReducer,
   portfolio: portfolioReducer,
   positionDetails: positionDetailsReducer,
+  admitPassFlow: admitPassFlowReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

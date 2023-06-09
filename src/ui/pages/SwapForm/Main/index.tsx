@@ -10,6 +10,7 @@ import {
   selectVariableRateInfo,
 } from '../../../../app/features/forms/trader/swap';
 import { useAppSelector } from '../../../../app/hooks';
+import { AdmitPassFlow } from '../../../components/AdmitPassFlow';
 import { CashFlowCalculator } from '../../../components/CashflowCalculator';
 import { FormTransactionHistory } from '../../../components/FormTransactionHistory';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
@@ -31,6 +32,7 @@ export const Main: React.FunctionComponent = () => {
 
   return (
     <MainBox>
+      {aMM.market.tags.isV2 ? <AdmitPassFlow poolCap={1000000} /> : null}
       <PoolHeader />
       <HistoricalRatesChart
         aMMId={aMM.id}

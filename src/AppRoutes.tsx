@@ -51,14 +51,16 @@ export const AppRoutes = () => {
           }
           path={routes.POOLS}
         />
-        <Route
-          element={
-            <NetworkProtectedPage>
-              <TraderPortfolio />
-            </NetworkProtectedPage>
-          }
-          path={routes.DEPRECATED_PORTFOLIO}
-        />
+        {isPortfolioNextEnabled() ? null : (
+          <Route
+            element={
+              <NetworkProtectedPage>
+                <TraderPortfolio />
+              </NetworkProtectedPage>
+            }
+            path={routes.DEPRECATED_PORTFOLIO}
+          />
+        )}
         <Route
           element={
             <NetworkProtectedVoltzPage>
@@ -191,8 +193,8 @@ export const AppRoutes = () => {
           path={routes.DEPRECATED_LP_PORTFOLIO}
         />
         <Route
-          element={<Navigate replace={true} to={`/${routes.DEPRECATED_PORTFOLIO}`} />}
-          path={routes.PORTFOLIO_POSITIONS}
+          element={<Navigate replace={true} to={`/${routes.PORTFOLIO_POSITIONS}`} />}
+          path={routes.DEPRECATED_PORTFOLIO}
         />
         <Route
           element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
