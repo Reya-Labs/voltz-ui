@@ -7,6 +7,7 @@ import {
   selectVariableRateInfo,
 } from '../../../../app/features/forms/lps/rollover-lp';
 import { useAppSelector } from '../../../../app/hooks';
+import { AdmitPassFlow } from '../../../components/AdmitPassFlow';
 import { FormTransactionHistory } from '../../../components/FormTransactionHistory';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
 import { BottomMainBox, MainBox } from './Main.styled';
@@ -24,6 +25,7 @@ export const Main: React.FunctionComponent = () => {
 
   return (
     <MainBox>
+      {aMM.market.tags.isV2 ? <AdmitPassFlow poolCap={1000000} /> : null}
       <PoolHeader />
       <HistoricalRatesChart
         aMMId={aMM.id}

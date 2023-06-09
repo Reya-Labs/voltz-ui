@@ -1,4 +1,4 @@
-import { LabelTokenTypography, Popover, TypographyToken } from 'brokoli-ui';
+import { LabelTokenTypography, Popover, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import React, { useState } from 'react';
 
 import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
@@ -9,11 +9,14 @@ import {
   MaturityBox,
   PoolHeaderBox,
   PoolHeaderDetailsBox,
+  V2InfoBox,
   VariableBox,
 } from './PoolHeader.styled';
 import { PoolList, PoolListProps } from './PoolList';
+import { V2InfoTooltip } from './V2InfoTooltip';
 type PoolHeaderProps = {
   isAaveV3: boolean;
+  isV2: boolean;
   isBorrowing: boolean;
   market: MarketTokenInformationProps['market'];
   token: MarketTokenInformationProps['token'];
@@ -23,6 +26,7 @@ type PoolHeaderProps = {
   aMMMaturity: string;
   onPoolItemClick: PoolListProps['onPoolItemClick'];
   pools: PoolListProps['pools'];
+  poolCap: number;
 };
 
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
@@ -35,7 +39,9 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   variableRateFormatted,
   aMMMaturity,
   onPoolItemClick,
+  isV2,
   pools,
+  poolCap,
 }) => {
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
@@ -110,6 +116,17 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
             value={aMMMaturity}
           />
         </MaturityBox>
+        {isV2 ? (
+          <V2InfoBox>
+            <TypographyWithTooltip
+              colorToken="rainbow"
+              tooltip={<V2InfoTooltip poolCap={poolCap} />}
+              typographyToken={typographyToken}
+            >
+              Voltz v2 Alpha Launch
+            </TypographyWithTooltip>
+          </V2InfoBox>
+        ) : null}
       </PoolHeaderDetailsBox>
     </PoolHeaderBox>
   );

@@ -9,6 +9,7 @@ type UseAppNavigateResult = {
     fixedUpper?: number;
     fixedLower?: number;
   }) => void;
+  toPoolsPage: () => void;
   toSwapFormPage: (params: { ammId: string; poolId: string }) => void;
   toRolloverSwapFormPage: (params: { ammId: string; poolId: string; positionId: string }) => void;
   toRolloverLPFormPage: (params: { ammId: string; poolId: string; positionId: string }) => void;
@@ -78,8 +79,13 @@ export const useAppNavigate = (): UseAppNavigateResult => {
     navigate(`/${path}`);
   };
 
+  const toPoolsPage = () => {
+    navigate(`/${routes.POOLS}`);
+  };
+
   return {
     toLPFormPage,
+    toPoolsPage,
     toSwapFormPage,
     toRolloverSwapFormPage,
     toRolloverLPFormPage,
