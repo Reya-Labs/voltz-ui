@@ -14,7 +14,7 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
     if (!amm) {
       return;
     }
-
+    // TODO: This should be removed once we have pools data coming from indexers
     return await amm.getPoolSwapInfo();
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);

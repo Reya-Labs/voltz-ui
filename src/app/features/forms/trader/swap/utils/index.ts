@@ -6,6 +6,7 @@ export * from './getEditPositionNotional';
 export * from './getEditPositionTokenBalance';
 export * from './getEditPositionVariableRate';
 export * from './getExistingPositionFixedRate';
+export * from './getExistingPositionId';
 export * from './getExistingPositionMode';
 export * from './getExistingPositionNotional';
 export * from './getExistingPositionVariableRate';
