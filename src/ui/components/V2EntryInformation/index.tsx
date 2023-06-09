@@ -11,7 +11,7 @@ export const V2EntryInformation: React.FunctionComponent<{
   return (
     <V2Box>
       <V2BorderDetailBox>
-        <Typography colorToken="wildStrawberry" typographyToken="primaryBodyXSmallRegular">
+        <Typography colorToken="rainbow" typographyToken="primaryBodyXSmallRegular">
           Voltz v2 Alpha Launch
         </Typography>
       </V2BorderDetailBox>
