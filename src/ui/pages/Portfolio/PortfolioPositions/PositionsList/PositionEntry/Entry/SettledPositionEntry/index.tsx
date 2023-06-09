@@ -1,6 +1,7 @@
 import { Dialog, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 
+import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { V2EntryInformation } from '../../../../../../../components/V2EntryInformation';
@@ -67,6 +68,7 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
             chainId={chainId}
             id={id}
             isBorrowing={isBorrowing}
+            market={market as PositionUI['market']}
             routeAmmId={routeAmmId}
             routePoolId={routePoolId}
             routePositionId={routePositionId}
