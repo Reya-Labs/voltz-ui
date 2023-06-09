@@ -30,20 +30,29 @@ export const FixedBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-right: 12px;
-  border-right: 1px solid ${colors.lavenderWeb7};
+  padding: 0 12px;
 `;
 
 export const VariableBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-right: 12px;
-  border-right: 1px solid ${colors.lavenderWeb7};
+  padding: 0 12px;
+  border-left: 1px solid ${colors.lavenderWeb7};
 `;
 
 export const MaturityBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 0 12px;
+  border-left: 1px solid ${colors.lavenderWeb7};
+`;
+
+export const V2InfoBox = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 12px;
+  border-left: 1px solid ${colors.lavenderWeb7};
 `;
