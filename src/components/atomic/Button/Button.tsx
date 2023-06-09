@@ -2,71 +2,24 @@ import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 import { SxProps } from '@mui/system';
 import React from 'react';
 
-import { AgentProps, Agents } from '../../../contexts/AgentContext/types';
-import { useAgentWithOverride } from '../../../hooks/useAgentWithOverride';
 import { SystemStyleObject, Theme } from '../../../theme';
 
 export function Button<C extends React.ElementType>({
-  agent: agentOverride,
   selected,
   link,
   ...props
-}: Omit<MuiButtonProps<C, { component?: C }>, 'onClick' | 'sx'> &
-  AgentProps & {
-    sx?: SxProps<Theme>;
-    selected?: boolean;
-    link?: string;
-    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  }) {
-  const { agent } = useAgentWithOverride(agentOverride);
+}: Omit<MuiButtonProps<C, { component?: C }>, 'onClick' | 'sx'> & {
+  sx?: SxProps<Theme>;
+  selected?: boolean;
+  link?: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}) {
   const styleOverrides: SystemStyleObject<Theme> = {
     border: 1,
     borderColor: 'transparent',
     borderRadius: 1,
   };
-  const agentStyleOverrides = (): SystemStyleObject<Theme> => {
-    if (!agent) {
-      return {};
-    }
 
-    // selecting different colours from the pallet to style the component
-    if (agent === Agents.FIXED_TRADER) {
-      return {
-        backgroundColor: 'primary.darken030',
-        color: 'primary.light',
-        '&:hover': {
-          backgroundColor: 'primary.darken030',
-          borderColor: 'primary.light',
-          boxShadow: '0px 4px 20px 0px #4de5ff33',
-        },
-      };
-    }
-
-    if (agent === Agents.VARIABLE_TRADER) {
-      return {
-        backgroundColor: 'tertiary.light',
-        color: 'secondary.light',
-        '&:hover': {
-          backgroundColor: 'tertiary.darken010',
-          borderColor: 'tertiary.light',
-          boxShadow: '0px 4px 20px 0px #2667FF4D',
-        },
-      };
-    }
-
-    if (agent === Agents.LIQUIDITY_PROVIDER) {
-      return {
-        backgroundColor: 'secondary.dark',
-        color: 'primary.light',
-        '&:hover': {
-          backgroundColor: 'secondary.darken035',
-          boxShadow: '0px 4px 20px 0px #4DE5FF40',
-        },
-      };
-    }
-
-    return {};
-  };
   const stateStyleOverrides = (): SystemStyleObject<Theme> => {
     if (props.disabled) {
       return {
@@ -231,7 +184,7 @@ export function Button<C extends React.ElementType>({
     <MuiButton
       disableRipple
       {...props}
-      sx={{ ...styleOverrides, ...agentStyleOverrides(), ...stateStyleOverrides(), ...props.sx }}
+      sx={{ ...styleOverrides, ...stateStyleOverrides(), ...props.sx }}
     />
   );
 }

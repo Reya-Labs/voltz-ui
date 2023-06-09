@@ -1,6 +1,5 @@
 import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-import createSagaMiddleware from 'redux-saga';
 
 import { admitPassFlowReducer } from './features/admit-pass-flow';
 import { aMMsReducer } from './features/aMMs';
@@ -16,11 +15,9 @@ import { portfolioReducer } from './features/portfolio';
 import { positionDetailsReducer } from './features/position-details';
 import { settleFlowReducer } from './features/settle-flow';
 import { tradingLeagueReducer } from './features/trading-league';
-import { saga, transactionsReducer } from './features/transactions';
 import { voyageReducer } from './features/voyage';
 
 const rootReducer = combineReducers({
-  transactions: transactionsReducer,
   lpOptimisers: lpOptimisersReducer,
   aMMs: aMMsReducer,
   network: networkReducer,
@@ -38,22 +35,15 @@ const rootReducer = combineReducers({
   admitPassFlow: admitPassFlowReducer,
 });
 
-const sagaMiddleware = createSagaMiddleware();
-
-export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
-  const store = configureStore({
+export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
+  configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: false,
-      })
-        .concat(logger)
-        .concat(sagaMiddleware),
+      }).concat(logger),
     preloadedState,
   });
-  sagaMiddleware.run(saga);
-  return store;
-};
 export const store = setupStore();
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -1,17 +1,12 @@
-import { getViewOnEtherScanLink, Position } from '@voltz-protocol/v1-sdk';
+import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatTimestamp } from '../../../utilities/date';
-import { isPortfolioNextEnabled } from '../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { formatNumber } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { formCompactFormatToParts, formFormatNumber } from '../forms/common/utils';
-import { PositionDetailsUI } from '../position-details';
 
 export const selectSettlePosition = (state: RootState) => {
-  if (isPortfolioNextEnabled()) {
-    return state.settleFlow.positionDetails;
-  }
-  return state.settleFlow.position;
+  return state.settleFlow.positionDetails;
 };
 export const selectSettleVariant = (state: RootState) => {
   if (state.settleFlow.position) {
@@ -44,14 +39,7 @@ export const selectSettleGasFeeToken = (state: RootState) => {
 
 // todo: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  if (isPortfolioNextEnabled()) {
-    const aMM = state.settleFlow.positionDetails?.amm;
-    if (!aMM) {
-      return '';
-    }
-    return formatTimestamp(aMM.termEndTimestampInMS);
-  }
-  const aMM = state.settleFlow.position?.amm;
+  const aMM = state.settleFlow.positionDetails?.amm;
   if (!aMM) {
     return '';
   }
@@ -60,14 +48,7 @@ export const selectAMMMaturityFormatted = (state: RootState) => {
 
 // todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
-  if (isPortfolioNextEnabled()) {
-    const aMM = state.settleFlow.positionDetails?.amm;
-    if (!aMM) {
-      return '';
-    }
-    return ` ${aMM.underlyingToken.name.toUpperCase()}`;
-  }
-  const aMM = state.settleFlow.position?.amm;
+  const aMM = state.settleFlow.positionDetails?.amm;
   if (!aMM) {
     return '';
   }
@@ -79,11 +60,7 @@ export const selectFixedLower = (state: RootState) => {
   if (position === null) {
     return null;
   }
-  if (isPortfolioNextEnabled()) {
-    return formFormatNumber((position as PositionDetailsUI).fixLowPercentage);
-  }
-
-  return (position as Position).fixedRateLower.toNumber();
+  return formFormatNumber(position.fixLowPercentage);
 };
 
 export const selectFixedUpper = (state: RootState) => {
@@ -91,11 +68,7 @@ export const selectFixedUpper = (state: RootState) => {
   if (position === null) {
     return null;
   }
-  if (isPortfolioNextEnabled()) {
-    return formFormatNumber((position as PositionDetailsUI).fixHighPercentage);
-  }
-
-  return (position as Position).fixedRateUpper.toNumber();
+  return formFormatNumber(position.fixHighPercentage);
 };
 
 export const selectCompactNotional = (state: RootState) => {
@@ -123,9 +96,7 @@ export const selectCompactDepositedMargin = (state: RootState) => {
       compactDepositedMarginNumber: '--',
     };
   }
-  const feesPaid = isPortfolioNextEnabled()
-    ? (position as PositionDetailsUI).realizedPNLFees
-    : (position as Position).realizedPnLFromFeesPaid;
+  const feesPaid = position.realizedPNLFees;
   const depositedMargin = position.margin - feesPaid;
 
   const compactParts = formCompactFormatToParts(depositedMargin);
@@ -143,12 +114,8 @@ export const selectCompactNetBalance = (state: RootState) => {
       compactNetBalanceNumber: '--',
     };
   }
-  const settlementCashflow = isPortfolioNextEnabled()
-    ? (position as PositionDetailsUI).realizedPNLCashflow
-    : (position as Position).settlementCashflow;
-  const fees = isPortfolioNextEnabled()
-    ? (position as PositionDetailsUI).realizedPNLFees
-    : (position as Position).fees;
+  const settlementCashflow = position.realizedPNLCashflow;
+  const fees = position.realizedPNLFees;
 
   const netBalance = position.margin + settlementCashflow + fees;
 
@@ -169,18 +136,13 @@ export const selectCompactRealizedPnL = (state: RootState) => {
       compactRealizedPnLSwaps: '--',
     };
   }
-  const settlementCashflow = isPortfolioNextEnabled()
-    ? (position as PositionDetailsUI).realizedPNLCashflow
-    : (position as Position).settlementCashflow;
-  const feesPaid = isPortfolioNextEnabled()
-    ? (position as PositionDetailsUI).realizedPNLFees
-    : (position as Position).realizedPnLFromFeesPaid;
-  const fees = isPortfolioNextEnabled() ? 0 : (position as Position).fees;
+  const settlementCashflow = position.realizedPNLCashflow;
+  const feesPaid = position.realizedPNLFees;
 
-  const realizedPnL = settlementCashflow + fees + feesPaid;
+  const realizedPnL = settlementCashflow + feesPaid;
 
   const compactPartsTotal = formCompactFormatToParts(realizedPnL);
-  const compactPartsFees = formCompactFormatToParts(fees + feesPaid);
+  const compactPartsFees = formCompactFormatToParts(feesPaid);
   const compactPartsSwaps = formCompactFormatToParts(settlementCashflow);
   return {
     compactRealizedPnLSuffix: compactPartsTotal.compactSuffix,
@@ -191,30 +153,16 @@ export const selectCompactRealizedPnL = (state: RootState) => {
 };
 
 export const selectAMMMarket = (state: RootState) => {
-  if (isPortfolioNextEnabled()) {
-    const aMM = state.settleFlow.positionDetails?.amm;
-    if (!aMM) {
-      return '';
-    }
-    return aMM.market;
-  }
-  const aMM = state.settleFlow.position?.amm;
+  const aMM = state.settleFlow.positionDetails?.amm;
   if (!aMM) {
     return '';
   }
-  return aMM.market.name;
+  return aMM.market;
 };
 
 // todo: FB duplicate as in swap form
 export const selectAMMToken = (state: RootState) => {
-  if (isPortfolioNextEnabled()) {
-    const aMM = state.settleFlow.positionDetails?.amm;
-    if (!aMM) {
-      return '';
-    }
-    return aMM.underlyingToken.name;
-  }
-  const aMM = state.settleFlow.position?.amm;
+  const aMM = state.settleFlow.positionDetails?.amm;
   if (!aMM) {
     return '';
   }

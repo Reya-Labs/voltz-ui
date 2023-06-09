@@ -172,7 +172,6 @@
     "react-router-dom": "6.9.0",
     "redux": "4.2.0",
     "redux-logger": "3.0.6",
-    "redux-saga": "1.2.1",
     "reselect": "4.1.7",
     "uuid": "9.0.0"
   },

@@ -10,7 +10,6 @@ import {
 import { isSpruceChain } from '../../../../../app/features/network/helpers/is-spruce-chain';
 import { useAppSelector } from '../../../../../app/hooks';
 import { routes } from '../../../../../routes/paths';
-import { isPortfolioNextEnabled } from '../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 
 const getLinks = (chainId?: SupportedChainId | null) =>
   !chainId
@@ -21,24 +20,10 @@ const getLinks = (chainId?: SupportedChainId | null) =>
           text: 'Pools',
           link: `/${routes.POOLS}`,
         },
-        isPortfolioNextEnabled()
-          ? {
-              text: 'Portfolio',
-              link: `/${routes.PORTFOLIO_POSITIONS}`,
-            }
-          : {
-              text: 'Portfolio',
-              subLinks: [
-                {
-                  text: 'Trader Portfolio',
-                  link: `/${routes.DEPRECATED_PORTFOLIO}`,
-                },
-                {
-                  text: 'LP Portfolio',
-                  link: `/${routes.DEPRECATED_LP_PORTFOLIO_2}`,
-                },
-              ],
-            },
+        {
+          text: 'Portfolio',
+          link: `/${routes.PORTFOLIO_POSITIONS}`,
+        },
         {
           isHidden: isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId),
           text: 'Optimisers',
