@@ -11,9 +11,7 @@ import { useInitializeGoogleTagManager } from './hooks/useInitializeGoogleTagMan
 import { useReferrer } from './hooks/useReferrer';
 import { VaultFormRoute } from './routes/LPOptimisers/VaultFormRoute/VaultFormRoute';
 import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
-import { LPPortfolio } from './routes/LPPortfolio/LPPortfolio';
 import { routes } from './routes/paths';
-import { TraderPortfolio } from './routes/TraderPortfolio/TraderPortfolio';
 import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
 import { LPFormPage } from './ui/pages/LPForm';
 import { PoolsPage } from './ui/pages/Pools';
@@ -25,7 +23,6 @@ import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
 import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { VoyagePage } from './ui/pages/Voyage';
-import { isPortfolioNextEnabled } from './utilities/isEnvVarProvided/is-portfolio-next-enabled';
 
 export const AppRoutes = () => {
   const chainId = useAppSelector(selectChainId);
@@ -51,16 +48,6 @@ export const AppRoutes = () => {
           }
           path={routes.POOLS}
         />
-        {isPortfolioNextEnabled() ? null : (
-          <Route
-            element={
-              <NetworkProtectedPage>
-                <TraderPortfolio />
-              </NetworkProtectedPage>
-            }
-            path={routes.DEPRECATED_PORTFOLIO}
-          />
-        )}
         <Route
           element={
             <NetworkProtectedVoltzPage>
@@ -81,16 +68,6 @@ export const AppRoutes = () => {
           }
           path={routes.PORTFOLIO_OPTIMISERS}
         />
-        {isPortfolioNextEnabled() ? null : (
-          <Route
-            element={
-              <NetworkProtectedPage>
-                <LPPortfolio />
-              </NetworkProtectedPage>
-            }
-            path={routes.DEPRECATED_LP_PORTFOLIO_2}
-          />
-        )}
         <Route
           element={
             <NetworkProtectedPage
@@ -204,12 +181,10 @@ export const AppRoutes = () => {
           element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
           path={routes.DEPRECATED_LP_POOLS}
         />
-        {isPortfolioNextEnabled() ? (
-          <Route
-            element={<Navigate replace={true} to={`/${routes.PORTFOLIO_POSITIONS}`} />}
-            path={routes.DEPRECATED_LP_PORTFOLIO_2}
-          />
-        ) : null}
+        <Route
+          element={<Navigate replace={true} to={`/${routes.PORTFOLIO_POSITIONS}`} />}
+          path={routes.DEPRECATED_LP_PORTFOLIO_2}
+        />
       </Route>
     </Routes>
   );

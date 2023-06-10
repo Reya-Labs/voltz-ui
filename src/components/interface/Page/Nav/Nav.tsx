@@ -4,7 +4,6 @@ import { isArbitrumChain, isAvalancheChain, selectChainId } from '../../../../ap
 import { isSpruceChain } from '../../../../app/features/network/helpers/is-spruce-chain';
 import { useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
-import { isPortfolioNextEnabled } from '../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { NavBox, VoltzIcon, VoltzIconBox } from './Nav.styled';
 import { NavLink } from './NavLink/NavLink';
 
@@ -29,29 +28,9 @@ export const Nav: React.FunctionComponent = React.memo(() => {
         Pools
       </NavLink>
 
-      {isPortfolioNextEnabled() ? (
-        <NavLink hidden={false} isNew={false} link={`/${routes.PORTFOLIO_POSITIONS}`}>
-          Portfolio
-        </NavLink>
-      ) : (
-        <NavLink
-          hidden={false}
-          subLinks={[
-            {
-              text: 'TRADER PORTFOLIO',
-              link: `/${routes.DEPRECATED_PORTFOLIO}`,
-              hidden: false,
-            },
-            {
-              text: 'LP PORTFOLIO',
-              link: `/${routes.DEPRECATED_LP_PORTFOLIO_2}`,
-              hidden: false,
-            },
-          ]}
-        >
-          Portfolio
-        </NavLink>
-      )}
+      <NavLink hidden={false} isNew={false} link={`/${routes.PORTFOLIO_POSITIONS}`}>
+        Portfolio
+      </NavLink>
 
       <NavLink
         hidden={isAvalanche || isArbitrum || isSpruce}

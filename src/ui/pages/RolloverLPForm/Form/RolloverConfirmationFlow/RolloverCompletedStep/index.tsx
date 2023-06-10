@@ -9,7 +9,6 @@ import {
 import { resetPortfolioStateAction } from '../../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
-import { isPortfolioNextEnabled } from '../../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { RolloverDetails } from '../RolloverDetails';
 import { RolloverCompletedStepBox } from './RolloverCompletedStep.styled';
 
@@ -21,11 +20,7 @@ export const RolloverCompletedStep: React.FunctionComponent = () => {
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeRolloverConfirmationFlowAction());
     dispatch(resetPortfolioStateAction());
-    if (isPortfolioNextEnabled()) {
-      navigate(`/${routes.PORTFOLIO_POSITIONS}`);
-      return;
-    }
-    navigate(`/${routes.DEPRECATED_LP_PORTFOLIO_2}`);
+    navigate(`/${routes.PORTFOLIO_POSITIONS}`);
   }, [dispatch, navigate]);
   return (
     <RolloverCompletedStepBox>

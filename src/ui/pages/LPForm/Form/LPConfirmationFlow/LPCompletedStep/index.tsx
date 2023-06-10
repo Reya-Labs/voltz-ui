@@ -9,7 +9,6 @@ import {
 import { resetPortfolioStateAction } from '../../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
-import { isPortfolioNextEnabled } from '../../../../../../utilities/isEnvVarProvided/is-portfolio-next-enabled';
 import { LPDetails } from '../LPDetails';
 import { LPCompletedStepBox } from './LPCompletedStep.styled';
 
@@ -21,11 +20,7 @@ export const LPCompletedStep: React.FunctionComponent = () => {
   const handleVisitPortfolio = useCallback(() => {
     dispatch(closeLpConfirmationFlowAction());
     dispatch(resetPortfolioStateAction());
-    if (isPortfolioNextEnabled()) {
-      navigate(`/${routes.PORTFOLIO_POSITIONS}`);
-      return;
-    }
-    navigate(`/${routes.DEPRECATED_LP_PORTFOLIO_2}`);
+    navigate(`/${routes.PORTFOLIO_POSITIONS}`);
   }, [dispatch, navigate]);
   return (
     <LPCompletedStepBox>
