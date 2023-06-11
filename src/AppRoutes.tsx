@@ -4,16 +4,15 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { isArbitrumChain, isAvalancheChain, selectChainId } from './app/features/network';
 import { isSpruceChain } from './app/features/network/helpers/is-spruce-chain';
 import { useAppSelector } from './app/hooks';
-import { NetworkProtectedPage } from './components/interface/NetworkProtectedPage/NetworkProtectedPage';
 import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
 import { useChainChange } from './hooks/useChainChange';
 import { useInitializeGoogleTagManager } from './hooks/useInitializeGoogleTagManager';
 import { useReferrer } from './hooks/useReferrer';
-import { VaultFormRoute } from './routes/LPOptimisers/VaultFormRoute/VaultFormRoute';
-import { Vaults } from './routes/LPOptimisers/Vaults/Vaults';
 import { routes } from './routes/paths';
 import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
 import { LPFormPage } from './ui/pages/LPForm';
+import { LPOptimisersPage } from './ui/pages/LPOptimisers';
+import { LPOptimisersFormPage } from './ui/pages/LPOptimisersForm';
 import { PoolsPage } from './ui/pages/Pools';
 import { PortfolioOptimisersPage } from './ui/pages/Portfolio/PortfolioOptimisers';
 import { PortfolioPositionsPage } from './ui/pages/Portfolio/PortfolioPositions';
@@ -70,25 +69,25 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage
+            <NetworkProtectedVoltzPage
               hidden={
                 isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
               }
             >
-              <Vaults />
-            </NetworkProtectedPage>
+              <LPOptimisersPage />
+            </NetworkProtectedVoltzPage>
           }
           path={routes.LP_OPTIMISERS}
         />
         <Route
           element={
-            <NetworkProtectedPage
+            <NetworkProtectedVoltzPage
               hidden={
                 isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
               }
             >
-              <VaultFormRoute />
-            </NetworkProtectedPage>
+              <LPOptimisersFormPage />
+            </NetworkProtectedVoltzPage>
           }
           path={routes.LP_OPTIMISERS_DEPOSIT_FORM}
         />
@@ -126,13 +125,13 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedPage
+            <NetworkProtectedVoltzPage
               hidden={
                 isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
               }
             >
-              <VaultFormRoute />
-            </NetworkProtectedPage>
+              <LPOptimisersFormPage />
+            </NetworkProtectedVoltzPage>
           }
           path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM}
         />
