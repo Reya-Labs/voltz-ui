@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { OptimiserInfo } from '../../../app/features/lp-optimisers';
-import { useAppNavigate } from '../../../hooks/useAppNavigate';
-import { useWallet } from '../../../hooks/useWallet';
-import { setPageTitle } from '../../../utilities/page';
-import { useLPVaults } from '../useLPVaults';
+import { OptimiserInfo } from '../../../../app/features/lp-optimisers';
+import { useAppNavigate } from '../../../../hooks/useAppNavigate';
+import { useLPVaults } from '../../../../hooks/useLPVaults';
+import { useWallet } from '../../../../hooks/useWallet';
 import { VaultsBox } from './Vaults.styled';
 import { VaultsTable } from './VaultsTable/VaultsTable';
 
@@ -21,10 +20,6 @@ export const Vaults: React.FunctionComponent = () => {
       });
     }
   };
-
-  useEffect(() => {
-    setPageTitle('LP Optimisers');
-  }, []);
 
   return (
     <VaultsBox>

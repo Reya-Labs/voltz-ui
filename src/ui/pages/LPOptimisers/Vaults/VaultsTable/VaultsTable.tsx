@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { OptimiserInfo } from '../../../../app/features/lp-optimisers';
-import { Loading } from '../../../../components/atomic/Loading/Loading';
-import { Panel } from '../../../../components/atomic/Panel/Panel';
+import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { Header } from '../Header/Header';
 import { VaultEntry } from './VaultEntry/VaultEntry';
 import { VaultsGrid, VaultsTableBox } from './VaultsTable.styled';
