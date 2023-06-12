@@ -1,5 +1,7 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { approvePeriphery } from '@voltz-protocol/sdk-v1-stateless';
 
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 
@@ -14,7 +16,14 @@ export const approveUnderlyingTokenThunkHandler: AsyncThunkPayloadCreator<
       return;
     }
 
-    return await amm.approveUnderlyingTokenForPeripheryV1();
+    if (isV1StatelessEnabled()) {
+      return await approvePeriphery({
+        signer: amm.signer,
+        ammId: amm.id,
+      });
+    } else {
+      return await amm.approveUnderlyingTokenForPeripheryV1();
+    }
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
