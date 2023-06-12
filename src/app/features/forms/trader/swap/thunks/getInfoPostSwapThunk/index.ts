@@ -57,9 +57,6 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
 
     let infoPostSwapV1: InfoPostSwapV1;
     if (isV1StatelessEnabled()) {
-      // TODO: Artur make a simulateSwap for edit
-      // TODO: Artur make the signer required and don't require provider
-      // TODO: Artur confirm if type returned from 'simulateSwap' is same as amm.getInfoPostSwapV1
       if (isEdit) {
         infoPostSwapV1 = await simulateEditSwap({
           positionId,
