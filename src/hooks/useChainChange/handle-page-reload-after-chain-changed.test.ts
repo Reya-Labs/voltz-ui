@@ -2,10 +2,10 @@ import {
   deleteChainId,
   detectIfNetworkSupported,
   getChainId,
+  getDefaultChainId,
   setChainIdThunk,
 } from '../../app/features/network';
 import { useAppDispatch } from '../../app/hooks';
-import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
 import { handlePageReloadAfterChainChanged } from './handle-page-reload-after-chain-changed';
 
 // Mock setChainIdThunk
@@ -14,16 +14,12 @@ jest.mock('../../app/features/network', () => ({
   getChainId: jest.fn(),
   deleteChainId: jest.fn(),
   detectIfNetworkSupported: jest.fn(),
+  getDefaultChainId: jest.fn(),
 }));
 
 // Mock useAppDispatch
 jest.mock('../../app/hooks', () => ({
   useAppDispatch: jest.fn(),
-}));
-
-// Mock getDefaultChainId
-jest.mock('../../components/interface/NetworkSelector/get-default-chain-id', () => ({
-  getDefaultChainId: jest.fn(),
 }));
 
 describe('handlePageReloadAfterChainChanged', () => {

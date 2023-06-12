@@ -4,12 +4,13 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { isArbitrumChain, isAvalancheChain, selectChainId } from './app/features/network';
 import { isSpruceChain } from './app/features/network/helpers/is-spruce-chain';
 import { useAppSelector } from './app/hooks';
-import { NotFoundPage } from './components/interface/NotFoundPage/NotFoundPage';
 import { useChainChange } from './hooks/useChainChange';
 import { useInitializeGoogleTagManager } from './hooks/useInitializeGoogleTagManager';
 import { useReferrer } from './hooks/useReferrer';
 import { routes } from './routes/paths';
 import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
+import { NotFoundPageContent } from './ui/components/NotFoundPageContent';
+import { VoltzPage } from './ui/components/VoltzPage';
 import { LPFormPage } from './ui/pages/LPForm';
 import { LPOptimisersPage } from './ui/pages/LPOptimisers';
 import { LPOptimisersFormPage } from './ui/pages/LPOptimisersForm';
@@ -32,7 +33,7 @@ export const AppRoutes = () => {
 
   return (
     <Routes>
-      <Route element={<NotFoundPage />} path="*" />
+      <Route element={<VoltzPage mainSlot={<NotFoundPageContent />} />} path="*" />
       <Route path="/">
         <Route element={<Navigate to={routes.POOLS} />} index />
         <Route

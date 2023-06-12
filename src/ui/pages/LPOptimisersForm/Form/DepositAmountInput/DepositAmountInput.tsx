@@ -30,7 +30,9 @@ export const DepositAmountInput: React.FunctionComponent<Props> = ({
     setInputValue(toUSFormat(nextValue.toString()));
   };
   const subtext = `Wallet Balance: ${
-    walletBalance === undefined ? '---' : `${formatCurrency(walletBalance, true)} ${tokenName}`
+    walletBalance === undefined
+      ? '---'
+      : `${formatCurrency(walletBalance, true)} ${tokenName || ''}`
   }`;
 
   return (

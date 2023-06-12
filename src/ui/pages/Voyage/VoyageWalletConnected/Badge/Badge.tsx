@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { VoyageBadgeUI } from '../../../../../app/features/voyage/types';
-import { SupportedIcons } from '../../../../../components/atomic/Icon/types';
+import { SupportedIcons } from '../../../../components/Icon/types';
 import { Icon, Skeleton } from './Badge.styled';
 
 type BadgeProps = {

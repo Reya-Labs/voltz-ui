@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 
-import { Typography } from '../../../../../components/atomic/Typography/Typography';
-
 export const ContentBox = styled('div')`
   display: flex;
   flex-direction: column;
@@ -9,18 +7,6 @@ export const ContentBox = styled('div')`
   padding: 0px;
   gap: 12px;
   width: 100%;
-`;
-
-export const DescriptionTypography = styled(Typography)`
-  font-family: 'DM Sans', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 150%;
-  letter-spacing: 0.02em;
-
-  /* Lavender Web */
-  color: #e1ddf7;
 `;
 
 export const ActionBox = styled('div')`

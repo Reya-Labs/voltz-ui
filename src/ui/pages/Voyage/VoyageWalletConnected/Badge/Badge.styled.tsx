@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Skeleton as SkeletonComponent } from 'brokoli-ui';
 
-import { Icon as IconComponent } from '../../../../../components/atomic/Icon/Icon';
+import { Icon as IconComponent } from '../../../../components/Icon/Icon';
 
 export const Skeleton = styled(SkeletonComponent)`
   width: 168px;

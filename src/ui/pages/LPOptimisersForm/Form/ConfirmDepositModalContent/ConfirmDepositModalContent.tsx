@@ -51,7 +51,7 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
     <TitleBox>
       <Typography
         colorToken="lavenderWeb"
-        data-testid="ConfirmBatchBudgetModalContent-TitleTypography"
+        data-testid="ConfirmDepositModalContent-TitleTypography"
         typographyToken="primaryHeader3Bold"
       >
         Deposit
@@ -86,14 +86,14 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
         <DepositBudgetValueBox>
           <TokenTypography
             colorToken="skyBlueCrayola"
-            data-testid="ConfirmBatchBudgetModalContent-BatchBudgetUnderlyingTypography"
+            data-testid="ConfirmDepositModalContent-DepositBudgetUnderlyingTypography"
             token={` ${token.toUpperCase()}`}
             typographyToken="primaryBodySmallRegular"
             value={formFormatNumber(depositFeeUnderlying)}
           />
           <TokenTypography
             colorToken="lavenderWeb"
-            data-testid="ConfirmBatchBudgetModalContent-BatchBudgetTextTypography"
+            data-testid="ConfirmDepositModalContent-DepositBudgetTextTypography"
             prefixToken="$"
             token=" USD"
             typographyToken="primaryBodySmallRegular"
