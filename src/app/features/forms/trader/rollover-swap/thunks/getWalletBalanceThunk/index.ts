@@ -1,5 +1,7 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { getBalance } from '@voltz-protocol/sdk-v1-stateless';
 
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 
@@ -14,7 +16,14 @@ export const getWalletBalanceThunkHandler: AsyncThunkPayloadCreator<
       return 0;
     }
 
-    return await amm.underlyingTokens();
+    if (isV1StatelessEnabled()) {
+      return await getBalance({
+        ammId: amm.id,
+        signer: amm.signer,
+      });
+    } else {
+      return await amm.underlyingTokens();
+    }
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
