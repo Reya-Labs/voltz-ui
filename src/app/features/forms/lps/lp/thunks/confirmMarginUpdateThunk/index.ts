@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { updateMargin } from '@voltz-protocol/sdk-v1-stateless';
 import { ContractReceipt } from 'ethers';
 
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 import {
@@ -17,12 +19,9 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
   try {
     const lpFormState = thunkAPI.getState().lpForm;
     const amm = lpFormState.amm;
+    const positionId = lpFormState.selectedPosition?.id;
 
-    if (!amm) {
-      return;
-    }
-
-    if (!lpFormState.selectedPosition) {
+    if (!amm || !amm.signer || !positionId) {
       return;
     }
 
@@ -32,12 +31,19 @@ export const confirmMarginUpdateThunk = createAsyncThunk<
     if (fixedLow === null || fixedHigh === null) {
       return;
     }
-
-    return await amm.updatePositionMargin({
-      fixedLow,
-      fixedHigh,
-      marginDelta: getProspectiveLpMargin(lpFormState),
-    });
+    if (isV1StatelessEnabled()) {
+      return await updateMargin({
+        positionId,
+        signer: amm.signer,
+        margin: getProspectiveLpMargin(lpFormState),
+      });
+    } else {
+      return await amm.updatePositionMargin({
+        fixedLow,
+        fixedHigh,
+        marginDelta: getProspectiveLpMargin(lpFormState),
+      });
+    }
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
