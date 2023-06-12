@@ -27,6 +27,7 @@ describe('getPoolSwapInfoThunkHandler', () => {
     // Mock dependencies
     const getPoolSwapInfoResult = 100;
     const amm = {
+      provider: jest.fn(),
       getPoolSwapInfo: jest.fn().mockResolvedValue(getPoolSwapInfoResult),
     };
 
@@ -46,6 +47,7 @@ describe('getPoolSwapInfoThunkHandler', () => {
     const rejectThunkWithErrorResult = { error: true };
     (rejectThunkWithError as jest.Mock).mockReturnValue(rejectThunkWithErrorResult);
     const amm = {
+      provider: jest.fn(),
       getPoolSwapInfo: jest.fn().mockRejectedValue(error),
     };
     const thunkApiMock = {
