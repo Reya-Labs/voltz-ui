@@ -1,4 +1,5 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { getAllowanceToPeriphery } from '@voltz-protocol/sdk-v1-stateless';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { getAlchemyKey } from '../../../../../../../utilities/getAlchemyKey';
@@ -18,19 +19,10 @@ export const getUnderlyingTokenAllowanceThunkHandler: AsyncThunkPayloadCreator<
       return;
     }
     if (isV1StatelessEnabled()) {
-      // TODO: Artur is this correct fn? Can I not provide you with ammId only?
-      return await amm.getUnderlyingTokenAllowance({
-        forceErc20Check: false,
-        chainId,
-        alchemyApiKey: getAlchemyKey(),
-        infuraApiKey: getInfuraKey(),
+      return await getAllowanceToPeriphery({
+        ammId: amm.id,
+        signer: amm.signer,
       });
-      // return await getAllowanceToPeriphery({
-      //   forceErc20Check: false,
-      //   chainId,
-      //   alchemyApiKey: getAlchemyKey(),
-      //   infuraApiKey: getInfuraKey(),
-      // });
     } else {
       return await amm.getUnderlyingTokenAllowance({
         forceErc20Check: false,

@@ -1,4 +1,5 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { getBalance } from '@voltz-protocol/sdk-v1-stateless';
 
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
@@ -15,11 +16,10 @@ export const getWalletBalanceThunkHandler: AsyncThunkPayloadCreator<
       return 0;
     }
     if (isV1StatelessEnabled()) {
-      // TODO: Artur, getBalance is correct here?
-      // TODO: Artur it is not exposed and params are too much
-      // TODO: Artur can't I provide just ammId?
-      // return await getBalance();
-      return await amm.underlyingTokens();
+      return await getBalance({
+        ammId: amm.id,
+        signer: amm.signer,
+      });
     } else {
       return await amm.underlyingTokens();
     }
