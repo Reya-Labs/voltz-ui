@@ -1,6 +1,8 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { getPoolSwapInfo } from '@voltz-protocol/sdk-v1-stateless';
 import { PoolSwapInfo } from '@voltz-protocol/v1-sdk';
 
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 
@@ -11,11 +13,18 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
 > = async (_, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().swapForm.amm;
-    if (!amm) {
+    if (!amm || !amm.provider) {
       return;
     }
-    // TODO: This should be removed once we have pools data coming from indexers
-    return await amm.getPoolSwapInfo();
+    if (isV1StatelessEnabled()) {
+      return await getPoolSwapInfo({
+        isFixedTaker: true,
+        ammId: amm.id,
+        provider: amm.provider,
+      });
+    } else {
+      return await amm.getPoolSwapInfo();
+    }
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
