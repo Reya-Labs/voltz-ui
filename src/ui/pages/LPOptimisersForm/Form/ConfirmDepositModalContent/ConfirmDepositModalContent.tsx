@@ -1,20 +1,15 @@
+import { Button, CloseButton, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { formatCurrency } from '../../../../../utilities/number';
-import { FormActionButton } from '../FormActionButton/FormActionButton';
+import { formFormatNumber } from '../../../../../app/features/forms/common/utils';
 import { GasCost } from '../GasCost/GasCost';
 import { HintText } from '../HintText/HintText';
 import {
   ButtonBox,
-  CancelButton,
   ContentBox,
-  DepositBudgetTextTypography,
-  DepositBudgetUnderlyingTypography,
-  DepositBudgetUSDCurrencyTypography,
   DepositBudgetValueBox,
   DepositFeeContentBox,
-  DescriptionTypography,
-  TitleTypography,
+  TitleBox,
 } from './ConfirmDepositModalContent.styled';
 
 type Props = {
@@ -53,55 +48,78 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
   hintTextSuffixText,
 }) => (
   <ContentBox data-testid="ConfirmDepositModalContent-ContentBox">
-    <TitleTypography data-testid="ConfirmDepositModalContent-TitleTypography">
-      Deposit
-    </TitleTypography>
-    <DescriptionTypography data-testid="ConfirmDepositModalContent-DescriptionTypography">
+    <TitleBox>
+      <Typography
+        colorToken="lavenderWeb"
+        data-testid="ConfirmBatchBudgetModalContent-TitleTypography"
+        typographyToken="primaryHeader3Bold"
+      >
+        Deposit
+      </Typography>
+      <CloseButton onClick={onCancel} />
+    </TitleBox>
+    <Typography
+      colorToken="lavenderWeb3"
+      data-testid="ConfirmDepositModalContent-DescriptionTypography"
+      typographyToken="primaryBodyMediumRegular"
+    >
       When depositing funds in the Optimiser, users pay a contribution to the batch budget fund.
       Batches are done to reduce the gas cost of depositing in pools by splitting the costs between
       those depositing funds.
-    </DescriptionTypography>
+    </Typography>
     <GasCost gasCost={gasCost} />
     <DepositFeeContentBox>
-      <DepositBudgetTextTypography>BATCH FEE&nbsp;</DepositBudgetTextTypography>
+      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        Batch Fee&nbsp;{' '}
+      </Typography>
       {depositFeeUSD === -1 || depositFeeUnderlying === -1 ? (
         <DepositBudgetValueBox>
-          <DepositBudgetTextTypography data-testid="ConfirmDepositModalContent-DepositFeeLoading">
+          <Typography
+            colorToken="lavenderWeb3"
+            data-testid="ConfirmDepositModalContent-DepositFeeLoading"
+            typographyToken="primaryBodySmallRegular"
+          >
             ---
-          </DepositBudgetTextTypography>
+          </Typography>
         </DepositBudgetValueBox>
       ) : (
         <DepositBudgetValueBox>
-          <DepositBudgetUnderlyingTypography data-testid="ConfirmDepositModalContent-DepositBudgetUnderlyingTypography">
-            {formatCurrency(depositFeeUnderlying)}&nbsp;
-            {token.toUpperCase()}
-          </DepositBudgetUnderlyingTypography>
-          <DepositBudgetTextTypography data-testid="ConfirmDepositModalContent-DepositBudgetTextTypography">
-            <DepositBudgetUSDCurrencyTypography>$</DepositBudgetUSDCurrencyTypography>
-            {formatCurrency(depositFeeUSD)} USD
-          </DepositBudgetTextTypography>
+          <TokenTypography
+            colorToken="skyBlueCrayola"
+            data-testid="ConfirmBatchBudgetModalContent-BatchBudgetUnderlyingTypography"
+            token={` ${token.toUpperCase()}`}
+            typographyToken="primaryBodySmallRegular"
+            value={formFormatNumber(depositFeeUnderlying)}
+          />
+          <TokenTypography
+            colorToken="lavenderWeb"
+            data-testid="ConfirmBatchBudgetModalContent-BatchBudgetTextTypography"
+            prefixToken="$"
+            token=" USD"
+            typographyToken="primaryBodySmallRegular"
+            value={formFormatNumber(depositFeeUSD)}
+          />
         </DepositBudgetValueBox>
       )}
     </DepositFeeContentBox>
-
     <ButtonBox>
-      <FormActionButton
-        dataTestId="ConfirmDepositModalContent-DepositButton"
+      <Button
+        data-testid="ConfirmDepositModalContent-DepositButton"
         disabled={disabled}
         loading={loading}
-        success={success}
-        variant="blue"
+        variant="primary"
         onClick={onProceed}
       >
         {submitText}
-      </FormActionButton>
-      <CancelButton
+      </Button>
+      <Button
         data-testid="ConfirmDepositModalContent-CancelButton"
         disabled={loading}
+        variant="secondary"
         onClick={onCancel}
       >
-        CANCEL
-      </CancelButton>
+        Cancel
+      </Button>
     </ButtonBox>
     <HintText
       error={hintTextError}

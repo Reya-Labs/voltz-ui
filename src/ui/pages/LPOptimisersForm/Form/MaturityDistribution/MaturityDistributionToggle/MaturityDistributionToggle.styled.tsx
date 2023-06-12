@@ -1,6 +1,5 @@
-import Box from '@mui/material/Box';
+import styled from '@emotion/styled';
 import InputLabel from '@mui/material/InputLabel';
-import { styled } from '@mui/material/styles';
 import ToggleButtonComponent from '@mui/material/ToggleButton';
 
 import { Typography } from '../../../../../../components/atomic/Typography/Typography';
@@ -15,7 +14,7 @@ export const MaturityDistributionTypography = styled(Typography)`
   color: inherit;
 `;
 
-export const MaturityDistributionBox = styled(Box)`
+export const MaturityDistributionBox = styled('div')`
   display: flex;
   flex-direction: column;
   row-gap: ${({ theme }) => theme.spacing(2)};

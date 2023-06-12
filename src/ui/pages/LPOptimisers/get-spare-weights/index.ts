@@ -6,9 +6,7 @@ export const getSpareWeights = (
     return [];
   }
 
-  const spareWeights = weights
+  return weights
     .map((w, index): [string, number] => [vaults[index].vaultId, w.distribution])
     .filter((w) => w[1] > 0);
-
-  return spareWeights;
 };

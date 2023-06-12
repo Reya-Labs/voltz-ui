@@ -1,24 +1,35 @@
+import { Typography, TypographyWithTooltip } from 'brokoli-ui';
 import React from 'react';
 
-import { IconLabel } from '../../../../../../components/composite/IconLabel/IconLabel';
 import {
+  DistributionBox,
+  MaturityBox,
   MaturityDistributionBox,
-  MaturityDistributionHeaderTypography,
-  MaturityDistributionInputLabel,
+  PoolBox,
 } from './MaturityDistributionHeader.styled';
 
 export const MaturityDistributionHeader: React.FunctionComponent = () => {
   return (
     <MaturityDistributionBox>
-      <MaturityDistributionInputLabel shrink>
-        <IconLabel
-          icon="information-circle"
-          info="Input what % of your funds you would like to allocate to each maturity. The total must add to 100%."
-          label="DISTRIBUTION"
-        />
-      </MaturityDistributionInputLabel>
-      <MaturityDistributionHeaderTypography>MATURITY</MaturityDistributionHeaderTypography>
-      <MaturityDistributionHeaderTypography>POOL</MaturityDistributionHeaderTypography>
+      <DistributionBox>
+        <TypographyWithTooltip
+          colorToken="lavenderWeb3"
+          tooltip="Input what % of your funds you would like to allocate to each maturity. The total must add to 100%."
+          typographyToken="primaryBodySmallRegular"
+        >
+          Distribution
+        </TypographyWithTooltip>
+      </DistributionBox>
+      <MaturityBox>
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          Maturity
+        </Typography>
+      </MaturityBox>
+      <PoolBox>
+        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          Pool
+        </Typography>
+      </PoolBox>
     </MaturityDistributionBox>
   );
 };

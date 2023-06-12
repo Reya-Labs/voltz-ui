@@ -1,67 +1,34 @@
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
+import styled from '@emotion/styled';
+import { colors, Typography } from 'brokoli-ui';
 
-import { colors } from '../../../../../theme';
-
-export const VaultInfoBox = styled(Typography)`
+export const VaultInfoBox = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: ${({ theme }) => theme.spacing(4)};
+  gap: 16px;
 
   align-self: stretch;
 `;
 
-export const PositionBox = styled(Box)`
+export const PositionBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: ${({ theme }) => theme.spacing(2, 4)};
-  gap: ${({ theme }) => theme.spacing(2)};
+  padding: 8px 16px;
+  gap: 8px;
 
-  background: #1e1933;
-  border-radius: ${({ theme }) => theme.spacing(1)};
+  background: ${colors.liberty5};
+  border-radius: 4px;
 
   align-self: stretch;
 `;
 
-export const PositionLabelTypography = styled(Typography)`
-  font-family: 'PixelOperatorMono', monospace;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-
-  letter-spacing: 0.02em;
-
-  color: #8b879d;
-`;
-
-export const PositionValueTypography = styled(Typography)`
-  font-family: 'PixelOperatorMono', monospace;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-
-  letter-spacing: 0.02em;
-
-  color: ${colors.skyBlueCrayola.base};
-`;
-
 export const PendingDepositTypography = styled(Typography)`
-  font-family: 'PixelOperatorMono', monospace;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-
-  margin-top: ${({ theme }) => theme.spacing(-2)};
-  color: ${colors.lavenderWeb.darken010};
+  margin-top: -8px;
+  color: ${colors.lavenderWeb3};
 `;
 
 export const PendingDepositAmountSpan = styled('span')`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;

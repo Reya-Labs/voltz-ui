@@ -1,33 +1,17 @@
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import { styled } from '@mui/material/styles';
+import styled from '@emotion/styled';
 
-import { Typography } from '../../../../../../components/atomic/Typography/Typography';
-import colors from '../../../../../../theme/colors';
-
-export const MaturityDistributionHeaderTypography = styled(Typography)`
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-  font-family: 'PixelOperatorMono', monospace;
-  color: ${colors.lavenderWeb.base};
-  flex: 1;
-`;
-
-export const MaturityDistributionBox = styled(Box)`
+export const MaturityDistributionBox = styled('div')`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
+  margin-bottom: 8px;
 `;
 
-export const MaturityDistributionInputLabel = styled(InputLabel)`
-  position: relative;
-  margin: 0;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-  font-family: 'PixelOperatorMono', monospace;
-  color: ${colors.lavenderWeb.base};
-  flex: 1;
+export const DistributionBox = styled('div')`
+  width: 100px;
+`;
+export const MaturityBox = styled('div')`
+  width: 100px;
+`;
+export const PoolBox = styled('div')`
+  width: 100px;
 `;

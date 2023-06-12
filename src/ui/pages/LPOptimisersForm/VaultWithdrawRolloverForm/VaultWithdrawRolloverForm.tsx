@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
 import { getAlchemyKey } from '../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../utilities/getInfuraKey';
-import { getSpareWeights } from '../../Helpers/getSpareWeights';
+import { getSpareWeights } from '../../LPOptimisers/get-spare-weights';
 import { FormProps } from '../Form/DepositForm/DepositForm';
 import { WithdrawRolloverForm } from '../Form/WithdrawRolloverForm/WithdrawRolloverForm';
 import { getSubmissionState, RolloverStates, WithdrawStates } from './mappers';
@@ -150,12 +150,10 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
       }
       rolloverLoading={submissionState.rollover.loading}
       rolloverSubmitText={submissionState.rollover.submitText}
-      rolloverSuccess={submissionState.rollover.success}
       weights={weights}
       withdrawDisabled={submissionState.disabled || loading || !subvault.withdrawable}
       withdrawLoading={submissionState.withdraw.loading}
       withdrawSubmitText={submissionState.withdraw.submitText}
-      withdrawSuccess={submissionState.withdraw.success}
       onDistributionToggle={setDistribution}
       onGoBack={onGoBack}
       onManualDistributionsUpdate={setManualWeights}

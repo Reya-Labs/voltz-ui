@@ -6,8 +6,8 @@ import { updateOptimiserStateAction } from '../../../../../app/features/lp-optim
 import { selectChainId } from '../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { AutomaticRolloverToggleProps } from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
+import { useLPVaults } from '../../../../../hooks/useLPVaults';
 import { useWallet } from '../../../../../hooks/useWallet';
-import { useLPVaults } from '../../../../../routes/LPOptimisers/useLPVaults';
 import { routes } from '../../../../../routes/paths';
 import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../../utilities/getInfuraKey';

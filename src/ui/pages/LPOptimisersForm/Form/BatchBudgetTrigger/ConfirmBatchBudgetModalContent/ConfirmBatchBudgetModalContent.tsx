@@ -1,20 +1,15 @@
+import { Button, CloseButton, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { formatCurrency } from '../../../../../../utilities/number';
-import { FormActionButton } from '../../FormActionButton/FormActionButton';
+import { formFormatNumber } from '../../../../../../app/features/forms/common/utils';
+import { TitleBox } from '../../../../../components/SettleFlow/SettleConfirmationStep/SettleConfirmationStep.styled';
 import { GasCost } from '../../GasCost/GasCost';
 import { HintText } from '../../HintText/HintText';
 import {
-  BatchBudgetTextTypography,
-  BatchBudgetUnderlyingTypography,
-  BatchBudgetUSDCurrencyTypography,
   BatchBudgetValueBox,
   BatchFeeContentBox,
   ButtonBox,
-  CancelButton,
   ContentBox,
-  DescriptionTypography,
-  TitleTypography,
 } from './ConfirmBatchBudgetModalContent.styled';
 
 type Props = {
@@ -47,53 +42,77 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
   token,
 }) => (
   <ContentBox data-testid="ConfirmBatchBudgetModalContent-ContentBox">
-    <TitleTypography data-testid="ConfirmBatchBudgetModalContent-TitleTypography">
-      Batch deposits
-    </TitleTypography>
-    <DescriptionTypography data-testid="ConfirmBatchBudgetModalContent-DescriptionTypography">
+    <TitleBox>
+      <Typography
+        colorToken="lavenderWeb"
+        data-testid="ConfirmBatchBudgetModalContent-TitleTypography"
+        typographyToken="primaryHeader3Bold"
+      >
+        Batch deposits
+      </Typography>
+      <CloseButton onClick={onCancel} />
+    </TitleBox>
+    <Typography
+      colorToken="lavenderWeb3"
+      data-testid="ConfirmBatchBudgetModalContent-DescriptionTypography"
+      typographyToken="primaryBodyMediumRegular"
+    >
       When depositing funds in the Optimiser, users pay a contribution to the batch budget fund.
       These funds can be claimed by anyone by triggering the Optimiser batch.
-    </DescriptionTypography>
+    </Typography>
     <GasCost gasCost={gasCost} />
     <BatchFeeContentBox>
-      <BatchBudgetTextTypography>BATCH BUDGET&nbsp;</BatchBudgetTextTypography>
+      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        Batch Budget&nbsp;
+      </Typography>
       {batchBudgetUSD === -1 ? (
         <BatchBudgetValueBox>
-          <BatchBudgetTextTypography data-testid="ConfirmBatchBudgetModalContent-BatchBudgetLoading">
+          <Typography
+            colorToken="lavenderWeb3"
+            data-testid="ConfirmBatchBudgetModalContent-BatchBudgetLoading"
+            typographyToken="primaryBodySmallRegular"
+          >
             ---
-          </BatchBudgetTextTypography>
+          </Typography>
         </BatchBudgetValueBox>
       ) : (
         <BatchBudgetValueBox>
-          <BatchBudgetUnderlyingTypography data-testid="ConfirmBatchBudgetModalContent-BatchBudgetUnderlyingTypography">
-            {formatCurrency(batchBudgetUnderlying)}&nbsp;
-            {token.toUpperCase()}
-          </BatchBudgetUnderlyingTypography>
-          <BatchBudgetTextTypography data-testid="ConfirmBatchBudgetModalContent-BatchBudgetTextTypography">
-            <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
-            {formatCurrency(batchBudgetUSD)} USD
-          </BatchBudgetTextTypography>
+          <TokenTypography
+            colorToken="skyBlueCrayola"
+            data-testid="ConfirmBatchBudgetModalContent-BatchBudgetUnderlyingTypography"
+            token={` ${token.toUpperCase()}`}
+            typographyToken="primaryBodySmallRegular"
+            value={formFormatNumber(batchBudgetUnderlying)}
+          />
+          <TokenTypography
+            colorToken="lavenderWeb"
+            data-testid="ConfirmBatchBudgetModalContent-BatchBudgetTextTypography"
+            prefixToken="$"
+            token=" USD"
+            typographyToken="primaryBodySmallRegular"
+            value={formFormatNumber(batchBudgetUSD)}
+          />
         </BatchBudgetValueBox>
       )}
     </BatchFeeContentBox>
     <ButtonBox>
-      <FormActionButton
-        dataTestId="ConfirmBatchBudgetModalContent-BatchButton"
+      <Button
+        data-testid="ConfirmBatchBudgetModalContent-BatchButton"
         disabled={disabled}
         loading={loading}
-        success={success}
-        variant="blue"
+        variant="primary"
         onClick={onProceed}
       >
         {submitText}
-      </FormActionButton>
-      <CancelButton
+      </Button>
+      <Button
         data-testid="ConfirmBatchBudgetModalContent-CancelButton"
         disabled={loading}
+        variant="secondary"
         onClick={onCancel}
       >
-        {success ? 'BACK' : 'CANCEL'}
-      </CancelButton>
+        {success ? 'Back' : 'Cancel'}
+      </Button>
     </ButtonBox>
     <HintText error={error} loading={loading} success={success} text={hintText} />
   </ContentBox>

@@ -1,7 +1,7 @@
 import { Dialog, PillSelector, TypographyWithTooltip } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { doNothing } from '../../../../../../../utilities/doNothing';
+import { doNothing } from '../../../utilities/doNothing';
 import { ActiveRolloverModalContent } from './ActiveRolloverModalContent';
 import { AutomaticRolloverToggleBox } from './AutomaticRolloverToggle.styled';
 import { CannotRegisterRolloverModalContent } from './CannotRegisterRolloverModalContent';
@@ -95,9 +95,9 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
     <AutomaticRolloverToggleBox>
       {showTooltip ? (
         <TypographyWithTooltip
-          colorToken="lavenderWeb"
+          colorToken="lavenderWeb3"
           tooltip="Automatically redistributes funds from maturing pools to new pools. This configuration will affect all your deposits in this Optimiser, and will not affect pools that matured before the automatic rollover was activated."
-          typographyToken="primaryBodyMediumRegular"
+          typographyToken="primaryBodySmallRegular"
         >
           Automatic Rollover
         </TypographyWithTooltip>

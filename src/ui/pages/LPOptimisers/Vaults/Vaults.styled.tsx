@@ -1,9 +1,8 @@
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
+import styled from '@emotion/styled';
 
-export const VaultsBox = styled(Box)`
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  backdrop-filter: blur(8px);
+export const VaultsBox = styled('div')`
+  width: 1114px;
+  margin: 24px auto;
+  background: transparent;
+  padding-bottom: 70px;
 `;

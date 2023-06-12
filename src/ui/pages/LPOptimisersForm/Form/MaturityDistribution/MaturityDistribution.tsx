@@ -1,14 +1,14 @@
 import { closeOrPastMaturity } from '@voltz-protocol/v1-sdk';
+import { Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { doNothing } from '../../../../../utilities/doNothing';
 import {
   AutomaticRolloverToggle,
   AutomaticRolloverToggleProps,
-} from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
-import { doNothing } from '../../../../../utilities/doNothing';
+} from '../../../../components/AutomaticRolloverToggle';
 import {
   MaturityDistributionBox,
-  MaturityDistributionErrorTypography,
   MaturityDistributionsBox,
   ToggleBox,
 } from './MaturityDistribution.styled';
@@ -109,9 +109,9 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
       {distribution === 'manual' &&
       !allVaultsWeightEditingDisabled &&
       combinedWeightValue !== 100 ? (
-        <MaturityDistributionErrorTypography>
+        <Typography colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
           The total distribution is {combinedWeightValue}%, it has to be 100%.
-        </MaturityDistributionErrorTypography>
+        </Typography>
       ) : null}
     </MaturityDistributionBox>
   );

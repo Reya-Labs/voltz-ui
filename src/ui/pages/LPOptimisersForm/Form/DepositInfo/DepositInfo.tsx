@@ -1,15 +1,13 @@
-import isUndefined from 'lodash.isundefined';
+import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { formFormatNumber } from '../../../../../app/features/forms/common/utils';
 import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
-import { formatCurrency } from '../../../../../utilities/number';
-import { VaultField } from '../../../VaultField/VaultField';
+import { VaultField } from '../../../../components/VaultField/VaultField';
 import {
   PendingDepositAmountSpan,
   PendingDepositTypography,
   PositionBox,
-  PositionLabelTypography,
-  PositionValueTypography,
   VaultInfoBox,
 } from './DepositInfo.styled';
 
@@ -21,32 +19,42 @@ export type LPMellowVaultDepositInfoProps = {
 export const DepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps> = ({
   mellowProduct,
   weights,
-}: LPMellowVaultDepositInfoProps) => (
-  <VaultInfoBox>
-    <VaultField
-      expectedApys={mellowProduct.vaults.map((v) => v.estimatedHistoricApy)}
-      title={mellowProduct.title}
-      token={mellowProduct.tokenName}
-      weights={weights}
-    />
-    <PositionBox>
-      <PositionLabelTypography>YOUR POSITION:</PositionLabelTypography>
-      <PositionValueTypography>
-        {isUndefined(mellowProduct.userOptimiserDeposit)
-          ? '---'
-          : `${formatCurrency(mellowProduct.userOptimiserDeposit, true)} ${
-              mellowProduct.tokenName
-            }`}
-      </PositionValueTypography>
-    </PositionBox>
-    {mellowProduct.userOptimiserPendingDeposit > 0 && (
-      <PendingDepositTypography>
-        {`Pending `}
-        <PendingDepositAmountSpan>
-          {`${mellowProduct.userOptimiserPendingDeposit.toFixed(2)} ${mellowProduct.tokenName}`}
-        </PendingDepositAmountSpan>
-        {` will be deposited at 7PM UTC`}
-      </PendingDepositTypography>
-    )}
-  </VaultInfoBox>
-);
+}: LPMellowVaultDepositInfoProps) => {
+  const userOptimiserPendingDeposit = mellowProduct.userOptimiserPendingDeposit;
+  const userOptimiserDeposit = mellowProduct.userOptimiserDeposit;
+  return (
+    <VaultInfoBox>
+      <VaultField
+        expectedApys={mellowProduct.vaults.map((v) => v.estimatedHistoricApy)}
+        title={mellowProduct.title}
+        token={mellowProduct.tokenName}
+        weights={weights}
+      />
+      <PositionBox>
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+          Your Position:
+        </Typography>
+        <TokenTypography
+          colorToken="lavenderWeb"
+          token={` ${mellowProduct.tokenName}`}
+          typographyToken="primaryBodySmallRegular"
+          value={
+            userOptimiserDeposit === undefined ? '---' : formFormatNumber(userOptimiserDeposit)
+          }
+        />
+      </PositionBox>
+      {userOptimiserPendingDeposit > 0 && (
+        <PendingDepositTypography
+          colorToken="lavenderWeb3"
+          typographyToken="primaryBodySmallRegular"
+        >
+          {`Pending `}
+          <PendingDepositAmountSpan>
+            {`${userOptimiserPendingDeposit.toFixed(2)} ${mellowProduct.tokenName}`}
+          </PendingDepositAmountSpan>
+          {` will be deposited at 7PM UTC`}
+        </PendingDepositTypography>
+      )}
+    </VaultInfoBox>
+  );
+};

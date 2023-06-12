@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
+import { RainbowLoader } from 'brokoli-ui';
+import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Loading } from '../../../components/atomic/Loading/Loading';
-import { Panel } from '../../../components/atomic/Panel/Panel';
-import { ConnectWallet } from '../../../components/composite/ConnectWallet/ConnectWallet';
 import { useLPVaults } from '../../../hooks/useLPVaults';
 import { useWallet } from '../../../hooks/useWallet';
-import { setPageTitle } from '../../../utilities/page';
+import { ConnectWallet } from '../../components/ConnectWallet';
+import { RainbowLoaderBox } from '../LPOptimisers/Vaults/VaultsTable/VaultsTable.styled';
 import { NoVaultFound } from './NoVaultFound/NoVaultFound';
 import { VaultDepositForm } from './VaultDepositForm/VaultDepositForm';
 import { VaultFormBox } from './VaultFormRoute.styled';
@@ -21,35 +20,18 @@ export const VaultFormRoute: React.FunctionComponent = () => {
   const currentVault = lpVaults.find((v) => v.optimiserId === vaultId);
 
   const loading = !vaultsLoaded;
-  useEffect(() => {
-    setPageTitle(actions === 'deposit' ? 'Deposit Form' : 'Rollover/Withdraw Form');
-  }, [actions]);
 
   if (!signer) {
-    return (
-      <ConnectWallet
-        connectWalletText="CONNECT YOUR WALLET"
-        heading="🚫 RESTRICTED"
-        subheading="Your wallet needs to be connected before proceeding."
-      />
-    );
+    return <ConnectWallet heading="Welcome!" subheading="Please connect your wallet" />;
   }
 
   if (loading) {
     return (
-      <Panel
-        sx={{
-          width: '400px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          height: '500px',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-        variant="grey-dashed"
-      >
-        <Loading />
-      </Panel>
+      <VaultFormBox>
+        <RainbowLoaderBox>
+          <RainbowLoader height={2} text={'Loading Optimiser Information...'} />
+        </RainbowLoaderBox>
+      </VaultFormBox>
     );
   }
 

@@ -51,7 +51,7 @@ export const PositionsSelectorBox = styled('div')`
   justify-content: space-between;
 `;
 
-const Box = styled('div')`
+const PositionBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -59,12 +59,12 @@ const Box = styled('div')`
   padding-right: 24px;
   min-width: 75px;
 `;
-const BorderBox = styled(Box)`
+const BorderBox = styled(PositionBox)`
   border-left: 1px solid ${colors.lavenderWeb7};
   padding-left: 24px;
 `;
 
-export const MarginBox = styled(Box)``;
+export const MarginBox = styled(PositionBox)``;
 export const RealizedPNLBox = styled(BorderBox)``;
 export const UnrealizedPNLBox = styled(BorderBox)``;
 export const TotalNotionalBox = styled(BorderBox)``;
