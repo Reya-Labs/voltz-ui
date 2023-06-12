@@ -11,6 +11,7 @@ jest.mock('../../utils', () => ({
   getProspectiveSwapMode: jest.fn(),
   getProspectiveSwapNotional: jest.fn(),
   getProspectiveSwapMargin: jest.fn(),
+  getExistingPositionId: jest.fn(),
 }));
 jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
