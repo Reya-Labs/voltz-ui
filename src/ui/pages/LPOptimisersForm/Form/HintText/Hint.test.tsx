@@ -55,6 +55,6 @@ describe('HintText', () => {
     const text = 'This is a text';
     render(<HintText loading={true} text={text} />);
     expect(screen.getByText(text)).toBeInTheDocument();
-    expect(screen.getByTestId('EllipsisTypography')).toBeInTheDocument();
+    expect(screen.getByTestId('EllipsisTypography-inherit')).toBeInTheDocument();
   });
 });

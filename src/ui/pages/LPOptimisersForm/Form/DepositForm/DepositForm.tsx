@@ -2,7 +2,7 @@ import { Button, Dialog } from 'brokoli-ui';
 import React from 'react';
 
 import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
-import { AutomaticRolloverToggleProps } from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
+import { AutomaticRolloverToggleProps } from '../../../../components/AutomaticRolloverToggle';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
 import { ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
 import { ConfirmDepositModalContent } from '../ConfirmDepositModalContent/ConfirmDepositModalContent';

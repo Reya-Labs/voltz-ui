@@ -1,18 +1,6 @@
-import './fonts/PixelOperator/PixelOperatorMono8.woff';
-import './fonts/PixelOperator/PixelOperatorMono8-Bold.woff';
-import './fonts/PixelOperator/PixelOperatorMono.woff';
-import './fonts/PixelOperator/PixelOperatorMono-Bold.woff';
-import './fonts/DM_Sans/DMSans-Bold.woff';
-import './fonts/DM_Sans/DMSans-BoldItalic.woff';
-import './fonts/DM_Sans/DMSans-Italic.woff';
-import './fonts/DM_Sans/DMSans-Medium.woff';
-import './fonts/DM_Sans/DMSans-MediumItalic.woff';
-import './fonts/DM_Sans/DMSans-Regular.woff';
-import './index.css';
 // eslint-disable-next-line no-restricted-imports
 import 'brokoli-ui/dist/esm/index.css';
 
-import { ThemeProvider } from '@mui/material/styles';
 import { init as initSDKV1Stateless } from '@voltz-protocol/sdk-v1-stateless';
 import { init } from '@voltz-protocol/v1-sdk';
 import { Amplify } from 'aws-amplify';
@@ -25,7 +13,6 @@ import { HashRouter } from 'react-router-dom';
 import { store } from './app';
 import { AppRoutes } from './AppRoutes';
 import { WalletProvider } from './contexts/WalletContext/WalletProvider';
-import { themes } from './theme';
 import { initSentryTracker } from './utilities/sentry';
 
 try {
@@ -41,15 +28,13 @@ initSentryTracker();
 ReactDOM.render(
   <React.StrictMode>
     <Notifications />
-    <ThemeProvider theme={themes.dark}>
-      <ReduxProvider store={store}>
-        <WalletProvider>
-          <HashRouter>
-            <AppRoutes />
-          </HashRouter>
-        </WalletProvider>
-      </ReduxProvider>
-    </ThemeProvider>
+    <ReduxProvider store={store}>
+      <WalletProvider>
+        <HashRouter>
+          <AppRoutes />
+        </HashRouter>
+      </WalletProvider>
+    </ReduxProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );

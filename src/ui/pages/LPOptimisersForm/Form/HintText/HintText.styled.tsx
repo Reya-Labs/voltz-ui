@@ -1,16 +1,15 @@
 import styled from '@emotion/styled';
-
-import { colors } from '../../../../../theme';
+import { colors } from 'brokoli-ui';
 
 export const BaseTextSpan = styled('span')`
   color: inherit;
 `;
 export const ErrorTextSpan = styled('span')`
-  color: ${colors.wildStrawberry.base};
+  color: ${colors.wildStrawberry};
 `;
 export const SuccessTextSpan = styled('span')`
-  color: ${colors.skyBlueCrayola.base};
+  color: ${colors.skyBlueCrayola};
 `;
 export const WarningTextSpan = styled('span')`
-  color: ${colors.orangeYellow.base};
+  color: ${colors.orangeYellow};
 `;
