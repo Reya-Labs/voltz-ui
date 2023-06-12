@@ -1,9 +1,12 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { getPoolSwapInfo } from '@voltz-protocol/sdk-v1-stateless';
 import { PoolSwapInfo } from '@voltz-protocol/v1-sdk';
 
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 
+// todo: FB same as in swap
 export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
   Awaited<PoolSwapInfo | ReturnType<typeof rejectThunkWithError>>,
   void,
@@ -15,7 +18,15 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
       return;
     }
 
-    return await amm.getPoolSwapInfo();
+    if (isV1StatelessEnabled()) {
+      return await getPoolSwapInfo({
+        isFixedTaker: true,
+        ammId: amm.id,
+        provider: amm.provider,
+      });
+    } else {
+      return await amm.getPoolSwapInfo();
+    }
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
