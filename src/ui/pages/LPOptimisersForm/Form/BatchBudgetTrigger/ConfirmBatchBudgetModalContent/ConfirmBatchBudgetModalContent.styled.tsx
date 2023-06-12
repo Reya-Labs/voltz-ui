@@ -1,50 +1,26 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
+import styled from '@emotion/styled';
 
-import { Typography } from '../../../../../../components/atomic/Typography/Typography';
-import colors from '../../../../../../theme/colors';
-
-export const ContentBox = styled(Box)`
+export const ContentBox = styled('div')`
   display: flex;
+  box-sizing: border-box;
+  width: 316px;
   flex-direction: column;
   align-items: flex-start;
-  padding: 24px;
+  padding: 0px;
   gap: 16px;
-
-  width: 340px;
-
-  /* Liberty 6 */
-  background: #19152a;
-
-  /* Liberty 3 */
-  border: 1px solid #38305b;
-  border-radius: 8px;
 `;
 
-export const TitleTypography = styled(Typography)`
-  font-family: 'DM Sans', sans-serif;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 130%;
-
-  /* Lavender Web */
-  color: #e1ddf7;
+export const TitleBox = styled('div')`
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
 `;
 
-export const DescriptionTypography = styled(Typography)`
-  font-family: 'DM Sans', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 160%;
-
-  /* Lavender Web 2 */
-  color: #a49ebf;
-`;
-
-export const ButtonBox = styled(Box)`
+export const ButtonBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -54,22 +30,7 @@ export const ButtonBox = styled(Box)`
   box-sizing: border-box;
 `;
 
-export const CancelButton = styled(Button)`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: ${({ theme }) => theme.spacing(4, 6)};
-  gap: ${({ theme }) => theme.spacing(2.5)};
-
-  /* Liberty 5 */
-  background: #1e1933;
-  border-radius: 4px;
-
-  color: ${colors.skyBlueCrayola.base};
-  flex: 1;
-`;
-
-export const BatchFeeContentBox = styled(Box)`
+export const BatchFeeContentBox = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -85,32 +46,8 @@ export const BatchFeeContentBox = styled(Box)`
   box-sizing: border-box;
 `;
 
-const BatchBudgetText = styled(Typography)`
-  display: inline-block;
-  font-family: 'PixelOperatorMono', monospace;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-  /* identical to box height, or 125% */
-  letter-spacing: 0.02em;
-`;
-
-export const BatchBudgetValueBox = styled(Box)`
+export const BatchBudgetValueBox = styled('div')`
   display: flex;
   align-items: flex-end;
   flex-direction: column;
-`;
-
-export const BatchBudgetUSDCurrencyTypography = styled(BatchBudgetText)`
-  /* Lavender Web 5 */
-  color: #4d476a;
-`;
-
-export const BatchBudgetUnderlyingTypography = styled(BatchBudgetText)`
-  color: #4de5ff;
-`;
-
-export const BatchBudgetTextTypography = styled(BatchBudgetText)`
-  color: #a49ebf;
 `;

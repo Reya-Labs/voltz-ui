@@ -1,17 +1,14 @@
-import isUndefined from 'lodash.isundefined';
+import { Button, Dialog } from 'brokoli-ui';
 import React from 'react';
 
 import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
-import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { AutomaticRolloverToggleProps } from '../../../../../components/interface/AutomaticRolloverToggle/AutomaticRolloverToggle';
-import { formatCurrency } from '../../../../../utilities/number';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
-import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
+import { ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
 import { ConfirmDepositModalContent } from '../ConfirmDepositModalContent/ConfirmDepositModalContent';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
 import { DepositInfo } from '../DepositInfo/DepositInfo';
 import { DepositSuccessModalContent } from '../DepositSuccessModalContent/DepositSuccessModalContent';
-import { FormActionButton } from '../FormActionButton/FormActionButton';
 import {
   MaturityDistribution,
   MaturityDistributionProps,
@@ -86,11 +83,6 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
   depositFeeUnderlying,
   depositTransactionId,
 }: FormProps) => {
-  const subtext = `WALLET BALANCE: ${
-    isUndefined(lpVault.userWalletBalance)
-      ? '---'
-      : `${formatCurrency(lpVault.userWalletBalance, true)} ${lpVault.tokenName}`
-  }`;
   return (
     <>
       <FormBox>
@@ -110,31 +102,33 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
         />
         <DepositAmountInput
           disabled={false}
-          subtext={subtext}
           token={lpVault.tokenName}
+          tokenName={lpVault.tokenName}
           value={depositValue}
+          walletBalance={lpVault.userWalletBalance}
           onChange={onChangeDeposit}
         />
         <FullButtonBox>
           <ButtonBox>
-            <FormActionButton
-              dataTestId="DepositButton"
+            <Button
+              data-testid="DepositButton"
               disabled={disabled}
               loading={loading}
-              success={success}
-              variant="blue"
+              variant="primary"
               onClick={onSubmit}
             >
               {submitText}
-            </FormActionButton>
-            <BackButton onClick={onGoBack}>BACK</BackButton>
+            </Button>
+            <Button variant="secondary" onClick={onGoBack}>
+              Back
+            </Button>
           </ButtonBox>
         </FullButtonBox>
 
         <AboutYourFunds depositsText="Deposits" />
       </FormBox>
       <>
-        <Modal open={isConfirmDepositModalOpen} onClose={onConfirmDepositModalClose}>
+        <Dialog open={isConfirmDepositModalOpen}>
           <ConfirmDepositModalContent
             depositFeeUnderlying={depositFeeUnderlying}
             depositFeeUSD={depositFeeUSD}
@@ -152,8 +146,8 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
             onCancel={onConfirmDepositModalClose}
             onProceed={onSubmit}
           />
-        </Modal>
-        <Modal open={isSuccessDepositModalOpen} onClose={onSuccessDepositModalClose}>
+        </Dialog>
+        <Dialog open={isSuccessDepositModalOpen}>
           <DepositSuccessModalContent
             depositTransactionId={depositTransactionId}
             isBatchFlowOpen={isBatchFlowOpen}
@@ -161,7 +155,7 @@ export const DepositForm: React.FunctionComponent<FormProps> = ({
             onBatchBudgetModalClose={onSuccessDepositModalClose}
             onBatchBudgetModalOpen={onBatchBudgetModalOpen}
           />
-        </Modal>
+        </Dialog>
       </>
     </>
   );

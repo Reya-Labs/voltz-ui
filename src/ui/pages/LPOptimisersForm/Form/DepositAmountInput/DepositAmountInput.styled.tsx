@@ -1,8 +1,5 @@
-import { styled } from '@mui/material/styles';
+import styled from '@emotion/styled';
 
-import { MaskedIntegerField } from '../../../../../components/composite/MaskedIntegerField/MaskedIntegerField';
-
-export const MaskedIntegerFieldStyled = styled(MaskedIntegerField)`
-  border-color: #5d5296 !important;
-  background-color: #2b2548 !important;
+export const DepositionAmountInputBox = styled('div')`
+  width: 100%;
 `;

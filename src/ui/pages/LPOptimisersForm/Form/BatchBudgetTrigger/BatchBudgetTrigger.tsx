@@ -1,18 +1,18 @@
 import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
+import { Button, Dialog, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useEffect, useReducer, useState } from 'react';
 
+import { formFormatNumber } from '../../../../../app/features/forms/common/utils';
 import {
   OptimiserInfo,
   updateOptimiserStateAction,
 } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { Modal } from '../../../../../components/composite/Modal/Modal';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../../utilities/getInfuraKey';
-import { formatCurrency } from '../../../../../utilities/number';
 import { GasCost } from '../GasCost/GasCost';
 import { batchBudgetReducer, initialState } from './batchBudgetReducer';
 import {
@@ -20,14 +20,8 @@ import {
   ActionLeftContentBox,
   ActionRightContentBox,
   BatchBudgetContentBox,
-  BatchBudgetTextBox,
-  BatchBudgetTextTypography,
-  BatchBudgetUnderlyingTypography,
-  BatchBudgetUSDCurrencyTypography,
   BatchBudgetValueBox,
-  BatchButton,
   ContentBox,
-  DescriptionTypography,
 } from './BatchBudgetTrigger.styled';
 import { ConfirmBatchBudgetModalContent } from './ConfirmBatchBudgetModalContent/ConfirmBatchBudgetModalContent';
 
@@ -119,7 +113,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <Modal open={isConfirmBatchBudgetOpen} onClose={handleConfirmBatchClose}>
+      <Dialog open={isConfirmBatchBudgetOpen}>
         <ConfirmBatchBudgetModalContent
           batchBudgetUnderlying={lpVault.accumulatedFees}
           batchBudgetUSD={lpVault.accumulatedFeesUSD}
@@ -134,38 +128,46 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
           onCancel={handleConfirmBatchClose}
           onProceed={handleOnProceed}
         />
-      </Modal>
+      </Dialog>
       <ContentBox>
-        <DescriptionTypography>
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           Trigger the batch of deposits, and claim the batch budget at any time! Careful with the
           batch gas cost.
-        </DescriptionTypography>
+        </Typography>
         <GasCost gasCost={gasCost} />
         <ActionBox>
           <ActionLeftContentBox>
             <BatchBudgetContentBox>
-              <BatchBudgetTextTypography>BATCH BUDGET:&nbsp;</BatchBudgetTextTypography>
-              <BatchBudgetTextBox>
-                <BatchBudgetValueBox>
-                  <BatchBudgetUnderlyingTypography data-testid="BatchBudgetTrigger-BatchBudgetUnderlyingTypography">
-                    {formatCurrency(lpVault.accumulatedFees)}&nbsp;
-                    {lpVault.tokenName.toUpperCase()}
-                  </BatchBudgetUnderlyingTypography>
-                  <BatchBudgetTextTypography data-testid="BatchBudgetTrigger-BatchBudgetTextTypography">
-                    <BatchBudgetUSDCurrencyTypography>$</BatchBudgetUSDCurrencyTypography>
-                    {formatCurrency(lpVault.accumulatedFeesUSD)} USD
-                  </BatchBudgetTextTypography>
-                </BatchBudgetValueBox>
-              </BatchBudgetTextBox>
+              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+                Batch Budget:&nbsp;
+              </Typography>
+              <BatchBudgetValueBox>
+                <TokenTypography
+                  colorToken="skyBlueCrayola"
+                  data-testid="BatchBudgetTrigger-BatchBudgetUnderlyingTypography"
+                  token={` ${lpVault.tokenName.toUpperCase()}`}
+                  typographyToken="primaryBodySmallRegular"
+                  value={formFormatNumber(lpVault.accumulatedFees)}
+                />
+                <TokenTypography
+                  colorToken="lavenderWeb"
+                  data-testid="BatchBudgetTrigger-BatchBudgetTextTypography"
+                  prefixToken="$"
+                  token=" USD"
+                  typographyToken="primaryBodySmallRegular"
+                  value={formFormatNumber(lpVault.accumulatedFeesUSD)}
+                />
+              </BatchBudgetValueBox>
             </BatchBudgetContentBox>
           </ActionLeftContentBox>
           <ActionRightContentBox>
-            <BatchButton
+            <Button
               data-testid="BatchBudgetTrigger-BatchButton"
+              variant="secondary"
               onClick={handleConfirmBatchOpen}
             >
-              BATCH
-            </BatchButton>
+              Batch
+            </Button>
           </ActionRightContentBox>
         </ActionBox>
       </ContentBox>

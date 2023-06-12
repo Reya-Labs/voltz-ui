@@ -1,11 +1,11 @@
+import { Button } from 'brokoli-ui';
 import React from 'react';
 
 import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { AboutYourFunds } from '../AboutYourFunds/AboutYourFunds';
-import { BackButton, ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
+import { ButtonBox, FormBox, FullButtonBox } from '../CommonForm.styled';
 import { DepositAmountInput } from '../DepositAmountInput/DepositAmountInput';
 import { DepositInfo } from '../DepositInfo/DepositInfo';
-import { FormActionButton } from '../FormActionButton/FormActionButton';
 import { HintText } from '../HintText/HintText';
 import {
   MaturityDistribution,
@@ -28,8 +28,6 @@ type WithdrawRolloverFormProps = {
   withdrawDisabled: boolean;
   rolloverLoading: boolean;
   withdrawLoading: boolean;
-  rolloverSuccess: boolean;
-  withdrawSuccess: boolean;
   onGoBack: () => void;
   combinedWeightValue: number;
   weights: MaturityDistributionProps['weights'];
@@ -40,7 +38,6 @@ type WithdrawRolloverFormProps = {
 
 export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormProps> = ({
   lpVault,
-  rolloverSuccess,
   rolloverDisabled,
   rolloverLoading,
   rolloverSubmitText,
@@ -48,7 +45,6 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
   onWithdrawClick,
   withdrawDisabled,
   withdrawLoading,
-  withdrawSuccess,
   withdrawSubmitText,
   hintText,
   onGoBack,
@@ -76,31 +72,33 @@ export const WithdrawRolloverForm: React.FunctionComponent<WithdrawRolloverFormP
       <DepositAmountInput disabled={true} token={lpVault.tokenName} value={depositValue} />
       <FullButtonBox>
         <ButtonBox>
-          <FormActionButton
-            dataTestId="WithdrawRolloverForm-WithdrawAllButton"
+          <Button
+            data-testid="WithdrawRolloverForm-WithdrawAllButton"
             disabled={withdrawDisabled}
             loading={withdrawLoading}
-            success={withdrawSuccess}
-            variant="dark-blue"
+            variant="primary"
             onClick={onWithdrawClick}
           >
             {withdrawSubmitText}
-          </FormActionButton>
-          <FormActionButton
-            dataTestId="WithdrawRolloverForm-RolloverAllButton"
+          </Button>
+          <Button
+            data-testid="WithdrawRolloverForm-RolloverAllButton"
             disabled={rolloverDisabled}
             loading={rolloverLoading}
-            success={rolloverSuccess}
-            variant="blue"
+            variant="secondary"
             onClick={onRolloverClick}
           >
             {rolloverSubmitText}
-          </FormActionButton>
+          </Button>
         </ButtonBox>
         <HintText {...hintText} loading={loading} />
-        <BackButton data-testid="WithdrawRolloverForm-BackButton" onClick={onGoBack}>
-          BACK
-        </BackButton>
+        <Button
+          data-testid="WithdrawRolloverForm-BackButton"
+          variant="secondary"
+          onClick={onGoBack}
+        >
+          Back
+        </Button>
       </FullButtonBox>
       <AboutYourFunds depositsText="Rollover deposits" />
     </FormBox>

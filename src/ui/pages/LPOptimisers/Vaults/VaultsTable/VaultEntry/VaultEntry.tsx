@@ -1,14 +1,13 @@
+import { MarketToken, MarketTokenProps, Pill, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
-import { VaultField } from '../../../VaultField/VaultField';
-import { BatchBudgetTrigger } from '../../../VaultFormRoute/Form/BatchBudgetTrigger/BatchBudgetTrigger';
+import { OptimiserInfo } from '../../../../../../app/features/lp-optimisers';
+import { capitalize } from '../../../../../../utilities/capitalize';
+import { VaultField } from '../../../../../components/VaultField/VaultField';
+import { BatchBudgetTrigger } from '../../../../LPOptimisersForm/Form/BatchBudgetTrigger/BatchBudgetTrigger';
 import { MellowPosition } from '../MellowPosition/MellowPosition';
-import { Tag } from '../Tag/Tag';
 import {
-  DescriptionTypography,
   PoolFieldsBox,
-  PoolFieldTypography,
   PoolOutlineBox,
   PositionBox,
   VaultEntryContainerBox,
@@ -18,13 +17,11 @@ import {
 export type VaultEntryProps = {
   onSelectItem: () => void;
   lpVault: OptimiserInfo;
-  dataLoading: boolean;
 };
 
 export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
   lpVault,
   onSelectItem,
-  dataLoading,
 }: VaultEntryProps) => {
   return (
     <VaultEntryContainerBox>
@@ -36,33 +33,56 @@ export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
           weights={lpVault.vaults.map((v) => v.defaultWeight)}
         />
 
-        <DescriptionTypography data-testid="VaultEntry-DescriptionTypography" variant="h6">
+        <Typography
+          colorToken="lavenderWeb3"
+          data-testid="VaultEntry-DescriptionTypography"
+          typographyToken="primaryBodyMediumRegular"
+        >
           {lpVault.description}
-        </DescriptionTypography>
+        </Typography>
 
         <PoolOutlineBox>
-          <Tag>
+          <Pill
+            colorToken="wildStrawberry"
+            typographyToken="primaryBodySmallRegular"
+            variant="regular"
+          >
             {`${lpVault.underlyingPools.length} ${lpVault.tokenName} ${
               lpVault.underlyingPools.length === 1 ? 'POOL' : 'POOLS'
             }`}
-          </Tag>
+          </Pill>
 
-          <DescriptionTypography variant="h6">LIQUIDITY SPREAD ACROSS</DescriptionTypography>
+          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyMediumRegular">
+            Liquidity Spread Across
+          </Typography>
 
           <PoolFieldsBox>
             {lpVault.underlyingPools.map((pool, index) => (
-              <PoolFieldTypography key={`${pool}-${index}`} variant="body2">
-                {pool}
-              </PoolFieldTypography>
+              <MarketToken
+                key={`${pool}-${index}`}
+                colorToken="lavenderWeb"
+                iconSize={24}
+                infoFormatter={() => pool}
+                market={
+                  pool.split(' - ')[0] === 'AAVE V3'
+                    ? 'Aave V3'
+                    : pool.split(' - ')[0] === 'AAVE V2'
+                    ? 'Aave V2'
+                    : (capitalize(pool.split(' - ')[0], true) as MarketTokenProps['market'])
+                }
+                token={
+                  pool.split(' - ')[1].split(' ')[0].toLowerCase() as MarketTokenProps['token']
+                }
+                typographyToken="primaryBodySmallRegular"
+              />
             ))}
           </PoolFieldsBox>
         </PoolOutlineBox>
-        {!dataLoading ? <BatchBudgetTrigger lpVault={lpVault} /> : null}
+        <BatchBudgetTrigger lpVault={lpVault} />
       </VaultEntryInfoBox>
 
       <PositionBox>
         <MellowPosition
-          dataLoading={dataLoading}
           disabled={lpVault.soon || !lpVault.depositable}
           handleClick={onSelectItem}
           tokenName={lpVault.tokenName}

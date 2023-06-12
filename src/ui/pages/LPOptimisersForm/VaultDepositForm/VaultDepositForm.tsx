@@ -10,7 +10,7 @@ import { useWallet } from '../../../../hooks/useWallet';
 import { getAlchemyKey } from '../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../utilities/getInfuraKey';
 import { pushEvent } from '../../../../utilities/googleAnalytics';
-import { getSpareWeights } from '../../Helpers/getSpareWeights';
+import { getSpareWeights } from '../../LPOptimisers/get-spare-weights';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';
 

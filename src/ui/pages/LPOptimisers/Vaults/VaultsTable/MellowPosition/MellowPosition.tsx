@@ -1,22 +1,18 @@
-import isUndefined from 'lodash.isundefined';
+import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { formatCurrency } from '../../../../../utilities/number';
+import { formFormatNumber } from '../../../../../../app/features/forms/common/utils';
 import {
   DepositButton,
-  DepositTypography,
   MellowPositionBox,
   MellowPositionBoxAndButtonContainer,
   MellowPositionInfoBox,
-  MellowPositionSkeleton,
-  PositionTypography,
 } from './MellowPosition.styled';
 
 export type MellowPositionProps = {
   userDeposit?: number;
   tokenName: string;
   handleClick: () => void;
-  dataLoading: boolean;
   disabled: boolean;
 };
 
@@ -24,33 +20,25 @@ export const MellowPosition: React.FunctionComponent<MellowPositionProps> = ({
   userDeposit,
   tokenName,
   handleClick,
-  dataLoading,
   disabled,
 }: MellowPositionProps) => {
-  if (dataLoading) {
-    return (
-      <MellowPositionBox>
-        <MellowPositionSkeleton variant="text" />
-      </MellowPositionBox>
-    );
-  }
-
   return (
     <MellowPositionBoxAndButtonContainer>
       <MellowPositionBox>
         <MellowPositionInfoBox>
-          <PositionTypography variant="h6">
-            {`Your position: ${isUndefined(userDeposit) ? ' ---' : ''}`}
-          </PositionTypography>
-          {!isUndefined(userDeposit) && (
-            <DepositTypography variant="h6">
-              {isUndefined(userDeposit) ? '---' : `${formatCurrency(userDeposit)} ${tokenName}`}
-            </DepositTypography>
-          )}
+          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+            {`Your position: ${userDeposit === undefined ? ' ---' : ''}`}&nbsp;
+          </Typography>
+          <TokenTypography
+            colorToken="skyBlueCrayola"
+            token={` ${tokenName}`}
+            typographyToken="primaryBodySmallRegular"
+            value={userDeposit === undefined ? '---' : formFormatNumber(userDeposit)}
+          />
         </MellowPositionInfoBox>
       </MellowPositionBox>
-      <DepositButton disabled={disabled} onClick={handleClick}>
-        DEPOSIT
+      <DepositButton disabled={disabled} variant="primary" onClick={handleClick}>
+        Deposit
       </DepositButton>
     </MellowPositionBoxAndButtonContainer>
   );

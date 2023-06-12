@@ -1,11 +1,11 @@
+import { TokenField, TokenFieldProps } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { IconLabel } from '../../../../../components/composite/IconLabel/IconLabel';
-import { InputTokenLabel } from '../../../../../components/composite/InputTokenLabel/InputTokenLabel';
+import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { localeParseFloat } from '../../../../../utilities/localeParseFloat';
-import { toUSFormat } from '../../../../../utilities/number';
-import { MaskedIntegerFieldStyled } from './DepositAmountInput.styled';
+import { formatCurrency, toUSFormat } from '../../../../../utilities/number';
+import { DepositionAmountInputBox } from './DepositAmountInput.styled';
 
 type Props = {
   subtext?: string;
@@ -13,49 +13,51 @@ type Props = {
   value: number;
   disabled: boolean;
   onChange?: (newValue: number) => void;
+  walletBalance?: number;
+  tokenName?: string;
 };
 export const DepositAmountInput: React.FunctionComponent<Props> = ({
-  subtext,
+  walletBalance,
   token,
   onChange = doNothing,
   disabled,
   value,
+  tokenName,
 }) => {
   const [inputValue, setInputValue] = useState(toUSFormat(value.toString()));
   const handleOnBlur = (nextValue: number) => {
     onChange(nextValue);
     setInputValue(toUSFormat(nextValue.toString()));
   };
+  const subtext = `Wallet Balance: ${
+    walletBalance === undefined ? '---' : `${formatCurrency(walletBalance, true)} ${tokenName}`
+  }`;
 
   return (
-    <MaskedIntegerFieldStyled
-      allowNegativeValue={false}
-      defaultValue={0}
-      disabled={disabled}
-      label={
-        <IconLabel
-          icon="information-circle"
-          info={
-            'Choose the amount you wish to deposit into the strategy. Remember you won’t be able to withdraw until the pool matures. '
+    <DepositionAmountInputBox>
+      <TokenField
+        allowNegativeValue={false}
+        bottomLeftText={subtext}
+        bottomLeftTextColorToken="lavenderWeb3"
+        bottomLeftTextTypographyToken="primaryBodySmallRegular"
+        decimalsLimit={FormNumberLimits.decimalLimit}
+        disabled={disabled}
+        label="Amount"
+        labelTypographyToken="primaryBodySmallRegular"
+        maxLength={FormNumberLimits.digitLimit}
+        token={token.toLowerCase() as TokenFieldProps['token']}
+        tooltip="Choose the amount you wish to deposit into the strategy. Remember you won’t be able to withdraw until the pool matures."
+        value={inputValue}
+        onBlur={() => {
+          const valueParsed = localeParseFloat(inputValue || '0');
+          if (isNaN(valueParsed)) {
+            handleOnBlur(0);
+            return;
           }
-          label={'AMOUNT'}
-        />
-      }
-      subtext={subtext}
-      subtextSize={12}
-      suffix={<InputTokenLabel tokenName={token} />}
-      suffixPadding={90}
-      value={inputValue}
-      allowDecimals
-      onBlur={() => {
-        const valueParsed = localeParseFloat(inputValue || '0');
-        if (isNaN(valueParsed)) {
-          handleOnBlur(0);
-          return;
-        }
-        handleOnBlur(valueParsed);
-      }}
-      onChange={setInputValue}
-    />
+          handleOnBlur(valueParsed);
+        }}
+        onChange={setInputValue}
+      />
+    </DepositionAmountInputBox>
   );
 };

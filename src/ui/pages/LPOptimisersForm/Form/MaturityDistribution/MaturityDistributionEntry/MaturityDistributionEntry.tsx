@@ -1,15 +1,14 @@
+import { CurrencyField, Typography, TypographyWithTooltip } from 'brokoli-ui';
 import { DateTime } from 'luxon';
 import React, { useState } from 'react';
 
-import { IconLabel } from '../../../../../../components/composite/IconLabel/IconLabel';
 import { doNothing } from '../../../../../../utilities/doNothing';
 import {
-  DistributionInput,
-  DistributionInputWrapper,
-  EvenBox,
+  DistributionBox,
+  InputBox,
+  MaturityBox,
   MaturityDistributionBox,
-  MaturityTypography,
-  PoolInputLabel,
+  PoolBox,
   PoolList,
 } from './MaturityDistributionEntry.styled';
 type MaturityDistributionEntryProps = {
@@ -32,15 +31,17 @@ export const MaturityDistributionEntry: React.FunctionComponent<MaturityDistribu
     onChange(nextValue);
     setValue(nextValue.toString());
   };
+  const notCompleted = maturityTimestamp > Date.now().valueOf();
   return (
     <MaturityDistributionBox>
-      <EvenBox>
-        <DistributionInputWrapper>
-          <DistributionInput
+      <DistributionBox>
+        <InputBox>
+          <CurrencyField
+            allowNegativeValue={false}
             disabled={disabled}
             max="100"
             min="0"
-            type="number"
+            suffix="%"
             value={value}
             onBlur={() => {
               const valueParsed = parseInt(value, 10);
@@ -54,39 +55,45 @@ export const MaturityDistributionEntry: React.FunctionComponent<MaturityDistribu
               }
               handleOnBlur(valueParsed);
             }}
-            onChange={(event) => {
-              setValue(event.target.value);
+            onChange={(nextValue) => {
+              if (!nextValue) {
+                return;
+              }
+              setValue(nextValue);
             }}
           />
-        </DistributionInputWrapper>
-      </EvenBox>
-      <EvenBox>
-        <MaturityTypography>
-          {maturityTimestamp > Date.now().valueOf()
+        </InputBox>
+      </DistributionBox>
+      <MaturityBox>
+        <Typography
+          colorToken={notCompleted ? 'lavenderWeb' : 'skyBlueCrayola'}
+          typographyToken="primaryBodySmallRegular"
+        >
+          {notCompleted
             ? DateTime.fromMillis(maturityTimestamp).toFormat('dd LLL yyyy')
-            : 'COMPLETED'}
-        </MaturityTypography>
-      </EvenBox>
-      <EvenBox>
+            : 'Completed'}
+        </Typography>
+      </MaturityBox>
+      <PoolBox>
         {poolsCount !== 0 ? (
-          <PoolInputLabel shrink>
-            <IconLabel
-              icon="information-circle"
-              info={
-                <>
-                  {poolsCount} Pools sharing the same maturity:
-                  <PoolList>
-                    {pools.map((p, index) => (
-                      <li key={index}>{p}</li>
-                    ))}
-                  </PoolList>
-                </>
-              }
-              label={`${poolsCount} POOL${poolsCount > 1 ? 'S' : ''}`}
-            />
-          </PoolInputLabel>
+          <TypographyWithTooltip
+            colorToken="lavenderWeb"
+            tooltip={
+              <>
+                {poolsCount} Pools sharing the same maturity:
+                <PoolList>
+                  {pools.map((p, index) => (
+                    <li key={index}>{p}</li>
+                  ))}
+                </PoolList>
+              </>
+            }
+            typographyToken="primaryBodySmallRegular"
+          >
+            {`${poolsCount} POOL${poolsCount > 1 ? 'S' : ''}`}
+          </TypographyWithTooltip>
         ) : null}
-      </EvenBox>
+      </PoolBox>
     </MaturityDistributionBox>
   );
 };

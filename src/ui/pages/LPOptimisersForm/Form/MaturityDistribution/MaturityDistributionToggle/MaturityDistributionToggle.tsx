@@ -1,14 +1,7 @@
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { PillSelector } from 'brokoli-ui';
 import React from 'react';
 
-import { IconLabel } from '../../../../../../components/composite/IconLabel/IconLabel';
 import { doNothing } from '../../../../../../utilities/doNothing';
-import {
-  MaturityDistributionBox,
-  MaturityDistributionInputLabel,
-  MaturityDistributionTypography,
-  ToggleButton,
-} from './MaturityDistributionToggle.styled';
 
 type Distribution = 'automatic' | 'manual';
 
@@ -18,11 +11,11 @@ const distributions: {
 }[] = [
   {
     id: 'automatic',
-    label: 'AUTOMATIC',
+    label: 'Automatic',
   },
   {
     id: 'manual',
-    label: 'MANUAL',
+    label: 'Manual',
   },
 ];
 
@@ -34,31 +27,19 @@ export type MaturityDistributionToggleProps = {
 export const MaturityDistributionToggle: React.FunctionComponent<MaturityDistributionToggleProps> =
   ({ disabled, distribution, onChange = doNothing }) => {
     return (
-      <MaturityDistributionBox>
-        <MaturityDistributionInputLabel shrink>
-          <IconLabel
-            icon="information-circle"
-            info="Choose if you want the LP optimiser to optimise the maturity distribution for you or if you would like to customise it yourself."
-            label="MATURITY DISTRIBUTION"
-          />
-        </MaturityDistributionInputLabel>
-        <ToggleButtonGroup
-          aria-label="text alignment"
-          value={distribution}
-          exclusive
-          onChange={(_, distributionId) => {
-            if (!distributionId) {
-              return;
-            }
-            onChange(distributionId as Distribution);
-          }}
-        >
-          {distributions.map((option) => (
-            <ToggleButton key={option.id} disabled={disabled} value={option.id}>
-              <MaturityDistributionTypography>{option.label}</MaturityDistributionTypography>
-            </ToggleButton>
-          ))}
-        </ToggleButtonGroup>
-      </MaturityDistributionBox>
+      <PillSelector
+        activePillId={distribution as string}
+        disabled={disabled}
+        label="Maturity Distribution"
+        pillOptions={distributions}
+        tooltip="Choose if you want the LP optimiser to optimise the maturity distribution for you or if you would like to customise it yourself."
+        variant="compact"
+        onPillClick={(distributionId) => {
+          if (!distributionId) {
+            return;
+          }
+          onChange(distributionId as Distribution);
+        }}
+      />
     );
   };

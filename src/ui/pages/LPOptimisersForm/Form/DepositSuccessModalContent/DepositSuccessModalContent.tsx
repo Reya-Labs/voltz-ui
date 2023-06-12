@@ -1,21 +1,15 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
+import { AppLink, CloseButton, ExternalLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
 import { useAppSelector } from '../../../../../app/hooks';
+import { routes } from '../../../../../routes/paths';
 import { doNothing } from '../../../../../utilities/doNothing';
-import { routes } from '../../../../paths';
+import { TitleBox } from '../../../../components/SettleFlow/SettleConfirmationStep/SettleConfirmationStep.styled';
 import { BatchBudgetTrigger } from '../BatchBudgetTrigger/BatchBudgetTrigger';
-import {
-  BottomBox,
-  CircledBlueCheckmark,
-  ContentBox,
-  GotoYourPortfolioLink,
-  TitleTypography,
-  TopBox,
-  ViewOnEtherScanLink,
-} from './DepositSuccessModalContent.styled';
+import { BottomBox, ContentBox, TopBox } from './DepositSuccessModalContent.styled';
 
 type Props = {
   lpVault: OptimiserInfo;
@@ -33,28 +27,38 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
   depositTransactionId,
 }) => {
   const chainId = useAppSelector(selectChainId);
+  if (isBatchFlowOpen) {
+    return null;
+  }
   return (
-    <ContentBox
-      data-testid="DepositSuccessModalContent-ContentBox"
-      sx={{
-        display: isBatchFlowOpen ? 'none' : undefined,
-      }}
-    >
+    <ContentBox data-testid="DepositSuccessModalContent-ContentBox">
       <TopBox>
-        <CircledBlueCheckmark />
-        <TitleTypography>TRANSACTION SUBMITTED</TitleTypography>
-        <ViewOnEtherScanLink
+        <TitleBox>
+          <Typography
+            colorToken="lavenderWeb"
+            data-testid="ConfirmBatchBudgetModalContent-TitleTypography"
+            typographyToken="primaryHeader3Bold"
+          >
+            Transaction Submitted
+          </Typography>
+          <CloseButton onClick={onBatchBudgetModalClose} />
+        </TitleBox>
+        <ExternalLink
+          colorToken="skyBlueCrayola"
           data-testid="DepositSuccessModalContent-ViewOnEtherScanLink"
           href={getViewOnEtherScanLink(chainId, depositTransactionId)}
+          typographyToken="primaryBodyMediumRegular"
         >
-          VIEW ON ETHERSCAN
-        </ViewOnEtherScanLink>
-        <GotoYourPortfolioLink
+          View on Etherscan
+        </ExternalLink>
+        <AppLink
+          colorToken="skyBlueCrayola"
           data-testid="DepositSuccessModalContent-GotoYourPortfolioLink"
           to={`/${routes.PORTFOLIO_POSITIONS}`}
+          typographyToken="primaryBodyMediumRegular"
         >
-          GO TO YOUR PORTFOLIO
-        </GotoYourPortfolioLink>
+          Go to Your Portfolio
+        </AppLink>
       </TopBox>
       <BottomBox>
         <BatchBudgetTrigger

@@ -1,36 +1,23 @@
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
+import styled from '@emotion/styled';
 
-import { colors } from '../../../../../theme';
-
-export const MaturityDistributionBox = styled(Box)`
+export const MaturityDistributionBox = styled('div')`
   display: flex;
   flex-direction: column;
   width: 100%;
 `;
 
-export const ToggleBox = styled(Box)`
+export const ToggleBox = styled('div')`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 24px;
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: ${({ theme }) => theme.spacing(4)};
+  margin-bottom: 16px;
 `;
 
-export const MaturityDistributionErrorTypography = styled(Typography)`
-  color: ${colors.wildStrawberry.base};
-  font-family: 'PixelOperatorMono', monospace;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-  margin-top: ${({ theme }) => theme.spacing(2)};
-`;
-
-export const MaturityDistributionsBox = styled(Box)`
+export const MaturityDistributionsBox = styled('div')`
   display: flex;
   flex-direction: column;
-  row-gap: ${({ theme }) => theme.spacing(4)};
+  margin-bottom: 16px;
   width: 100%;
 `;

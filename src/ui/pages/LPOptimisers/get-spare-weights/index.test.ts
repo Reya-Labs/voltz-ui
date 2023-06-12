@@ -1,4 +1,4 @@
-import { getSpareWeights } from './getSpareWeights';
+import { getSpareWeights } from './index';
 
 describe('getSpareWeights', () => {
   it('non-zero weights with 1 element', () => {

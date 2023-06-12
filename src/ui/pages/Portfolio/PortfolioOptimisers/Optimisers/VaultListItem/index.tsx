@@ -7,7 +7,7 @@ import { routes } from '../../../../../../routes/paths';
 import { formatPOSIXTimestamp } from '../../../../../../utilities/date';
 import { doNothing } from '../../../../../../utilities/doNothing';
 import { compactFormatToParts } from '../../../../../../utilities/number';
-import { AutomaticRolloverToggle } from './AutomaticRolloverToggle';
+import { AutomaticRolloverToggle } from '../../../../../components/AutomaticRolloverToggle';
 import { MarketTokenInformation, MarketTokenInformationProps } from './MarketTokenInformation';
 import {
   AutomaticRolloverBox,

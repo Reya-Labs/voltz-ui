@@ -1,13 +1,7 @@
+import { Ellipsis, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { Ellipsis } from '../../../../../components/atomic/Ellipsis/Ellipsis';
-import {
-  BaseTextSpan,
-  ErrorTextSpan,
-  HintTextTypography,
-  SuccessTextSpan,
-  WarningTextSpan,
-} from './HintText.styled';
+import { BaseTextSpan, ErrorTextSpan, SuccessTextSpan, WarningTextSpan } from './HintText.styled';
 
 export const HintText: React.FunctionComponent<{
   prefixText?: string;
@@ -33,13 +27,19 @@ export const HintText: React.FunctionComponent<{
     : warning
     ? 'WarningTextSpan'
     : 'BaseTextSpan';
-
+  if (!text && !prefixText && !suffixText) {
+    return null;
+  }
   return (
-    <HintTextTypography data-testid="HintText-HintTextTypography">
+    <Typography
+      colorToken="lavenderWeb3"
+      data-testid="HintText-HintTextTypography"
+      typographyToken="primaryBodySmallRegular"
+    >
       {prefixText ? `${prefixText} ` : null}
       <TextSpanUI data-testid={`HintText-${dataTestId}`}>{text}</TextSpanUI>
       {loading ? <Ellipsis /> : null}
       {suffixText ? ` ${suffixText}` : null}
-    </HintTextTypography>
+    </Typography>
   );
 };

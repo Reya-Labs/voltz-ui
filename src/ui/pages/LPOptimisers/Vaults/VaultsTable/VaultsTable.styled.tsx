@@ -1,19 +1,22 @@
-import { styled } from '@mui/material/styles';
-import Box from '@mui/system/Box';
+import styled from '@emotion/styled';
 
-import { Grid } from '../../../../components/layout/Grid';
+import { Grid } from '../../../../components/Grid';
 
-export const VaultsTableBox = styled(Box)`
+export const VaultsTableBox = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: ${({ theme }) => theme.spacing(8)};
+  gap: 32px;
 
-  width: 1084px;
+  width: 100%;
 `;
 
 export const VaultsGrid = styled(Grid)`
-  row-gap: ${({ theme }) => theme.spacing(8)};
-  column-gap: ${({ theme }) => theme.spacing(8)};
+  row-gap: 32px;
+  column-gap: 32px;
+`;
+
+export const RainbowLoaderBox = styled('div')`
+  width: 100%;
 `;
