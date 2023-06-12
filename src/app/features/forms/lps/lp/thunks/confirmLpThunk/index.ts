@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { lp } from '@voltz-protocol/sdk-v1-stateless/dist/types/actions/lp/lp';
+import { lp } from '@voltz-protocol/sdk-v1-stateless';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../../../../../utilities/amm';
