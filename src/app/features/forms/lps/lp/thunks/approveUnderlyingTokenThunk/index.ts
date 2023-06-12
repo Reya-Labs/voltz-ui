@@ -1,8 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { approvePeriphery } from '@voltz-protocol/sdk-v1-stateless';
 
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 
+// TODO: FB same as in swap-form
 export const approveUnderlyingTokenThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   void,
@@ -13,8 +16,14 @@ export const approveUnderlyingTokenThunk = createAsyncThunk<
     if (!amm || !amm.signer) {
       return;
     }
-
-    return await amm.approveUnderlyingTokenForPeripheryV1();
+    if (isV1StatelessEnabled()) {
+      return await approvePeriphery({
+        signer: amm.signer,
+        ammId: amm.id,
+      });
+    } else {
+      return await amm.approveUnderlyingTokenForPeripheryV1();
+    }
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
