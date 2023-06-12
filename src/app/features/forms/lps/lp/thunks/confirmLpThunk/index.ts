@@ -1,7 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { lp } from '@voltz-protocol/sdk-v1-stateless/dist/types/actions/lp/lp';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../../../../../utilities/amm';
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { extractError } from '../../../../../helpers/extract-error';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
@@ -26,7 +28,7 @@ export const confirmLpThunk = createAsyncThunk<
   const lpFormState = thunkAPI.getState().lpForm;
   const amm = lpFormState.amm;
   const selectedPosition = lpFormState.selectedPosition;
-  if (!amm) {
+  if (!amm || !amm.signer) {
     return;
   }
 
@@ -36,7 +38,7 @@ export const confirmLpThunk = createAsyncThunk<
   if (fixedLow === null || fixedHigh === null) {
     return;
   }
-  const account = amm.signer ? await amm.signer.getAddress() : '';
+  const account = await amm.signer.getAddress();
 
   let notional: number = getProspectiveLpNotional(lpFormState);
   let addLiquidity: boolean = true;
@@ -58,13 +60,26 @@ export const confirmLpThunk = createAsyncThunk<
 
   try {
     pushLPTransactionSubmittedEvent(eventParams);
-    const result = await amm.lp({
-      addLiquidity: addLiquidity,
-      notional: notional,
-      margin,
-      fixedLow: fixedLow,
-      fixedHigh: fixedHigh,
-    });
+    let result: ContractReceipt;
+    if (isV1StatelessEnabled()) {
+      result = await lp({
+        addLiquidity,
+        notional,
+        margin,
+        fixedLow,
+        fixedHigh,
+        ammId: amm.id,
+        signer: amm.signer,
+      });
+    } else {
+      result = await amm.lp({
+        addLiquidity,
+        notional,
+        margin,
+        fixedLow,
+        fixedHigh,
+      });
+    }
     pushLPTransactionSuccessEvent(eventParams);
     return result;
   } catch (err) {

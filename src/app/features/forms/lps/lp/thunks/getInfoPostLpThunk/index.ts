@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { InfoPostLp } from '@voltz-protocol/v1-sdk';
 
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 import { isUserInputNotionalError } from '../../../../common/utils';
@@ -59,12 +60,18 @@ export const getInfoPostLpThunk = createAsyncThunk<
       prospectiveNotional = -prospectiveNotional;
     }
 
-    const infoPostLpV1: InfoPostLp = await amm.getInfoPostLp({
-      addLiquidity: addLiquidity,
-      notional: prospectiveNotional,
-      fixedLow: fixedLower,
-      fixedHigh: fixedUpper,
-    });
+    let infoPostLpV1: InfoPostLp;
+
+    if (isV1StatelessEnabled()) {
+      // todo: FB once simulate is available
+    } else {
+      infoPostLpV1 = await amm.getInfoPostLp({
+        addLiquidity: addLiquidity,
+        notional: prospectiveNotional,
+        fixedLow: fixedLower,
+        fixedHigh: fixedUpper,
+      });
+    }
 
     return {
       prospectiveNotional,
