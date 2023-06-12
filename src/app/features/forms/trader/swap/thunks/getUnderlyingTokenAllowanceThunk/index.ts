@@ -13,11 +13,12 @@ export const getUnderlyingTokenAllowanceThunkHandler: AsyncThunkPayloadCreator<
   { chainId: SupportedChainId },
   { state: RootState }
 > = async ({ chainId }, thunkAPI) => {
+  const amm = thunkAPI.getState().swapForm.amm;
+  if (!amm || !amm.signer) {
+    return;
+  }
+
   try {
-    const amm = thunkAPI.getState().swapForm.amm;
-    if (!amm || !amm.signer) {
-      return;
-    }
     if (isV1StatelessEnabled()) {
       return await getAllowanceToPeriphery({
         ammId: amm.id,
