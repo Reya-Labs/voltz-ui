@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { editLp, lp } from '@voltz-protocol/sdk-v1-stateless';
+import { editLp as editLpV2, lp as lpV2 } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt } from 'ethers';
 
-import { getAmmProtocol } from '../../../../../../../utilities/amm';
+import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { extractError } from '../../../../../helpers/extract-error';
@@ -63,16 +64,16 @@ export const confirmLpThunk = createAsyncThunk<
   try {
     pushLPTransactionSubmittedEvent(eventParams);
     let result: ContractReceipt;
-    if (isV1StatelessEnabled()) {
+    if (isV2AMM(amm)) {
       if (isEdit) {
-        result = await editLp({
+        result = await editLpV2({
           positionId: positionId!,
           notional,
           margin,
           signer: amm.signer,
         });
       } else {
-        result = await lp({
+        result = await lpV2({
           ammId: amm.id,
           fixedLow,
           fixedHigh,
@@ -82,14 +83,35 @@ export const confirmLpThunk = createAsyncThunk<
         });
       }
     } else {
-      result = await amm.lp({
-        addLiquidity,
-        notional,
-        margin,
-        fixedLow,
-        fixedHigh,
-      });
+      if (isV1StatelessEnabled()) {
+        if (isEdit) {
+          result = await editLp({
+            positionId: positionId!,
+            notional,
+            margin,
+            signer: amm.signer,
+          });
+        } else {
+          result = await lp({
+            ammId: amm.id,
+            fixedLow,
+            fixedHigh,
+            notional,
+            margin,
+            signer: amm.signer,
+          });
+        }
+      } else {
+        result = await amm.lp({
+          addLiquidity,
+          notional,
+          margin,
+          fixedLow,
+          fixedHigh,
+        });
+      }
     }
+
     pushLPTransactionSuccessEvent(eventParams);
     return result;
   } catch (err) {
