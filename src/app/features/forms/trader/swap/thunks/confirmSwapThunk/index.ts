@@ -45,6 +45,8 @@ export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
     pool: getAmmProtocol(amm),
     isFT: prospectiveSwapMode === 'fixed',
   };
+  const notional =
+    prospectiveSwapMode === 'fixed' ? -prospectiveSwapNotional : prospectiveSwapNotional;
 
   try {
     pushSwapTransactionSubmittedEvent(eventParams);
@@ -53,16 +55,14 @@ export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
       if (isEdit) {
         result = await editSwap({
           positionId: positionId,
-          isFT: prospectiveSwapMode === 'fixed',
-          notional: prospectiveSwapNotional,
+          notional,
           margin: prospectiveSwapMargin,
           signer: amm.signer,
         });
       } else {
         result = await swap({
           ammId: amm.id,
-          isFT: prospectiveSwapMode === 'fixed',
-          notional: prospectiveSwapNotional,
+          notional,
           margin: prospectiveSwapMargin,
           signer: amm.signer,
         });

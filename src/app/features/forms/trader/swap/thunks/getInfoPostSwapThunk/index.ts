@@ -52,6 +52,7 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
     }
 
     const notionalAmount = prospectiveSwapNotional;
+    const notional = prospectiveSwapMode === 'fixed' ? -notionalAmount : notionalAmount;
     const positionId = getExistingPositionId(swapFormState);
     const isEdit = positionId !== null;
 
@@ -60,16 +61,14 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
       if (isEdit) {
         infoPostSwapV1 = await simulateEditSwap({
           positionId,
-          isFT: prospectiveSwapMode === 'fixed',
-          notional: prospectiveSwapNotional,
+          notional,
           margin: prospectiveSwapMargin,
           signer: amm.signer!,
         });
       } else {
         infoPostSwapV1 = await simulateSwap({
           ammId: amm.id,
-          isFT: prospectiveSwapMode === 'fixed',
-          notional: prospectiveSwapNotional,
+          notional,
           margin: prospectiveSwapMargin,
           signer: amm.signer!,
         });

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { lp } from '@voltz-protocol/sdk-v1-stateless';
+import { editLp, lp } from '@voltz-protocol/sdk-v1-stateless';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../../../../../utilities/amm';
@@ -48,11 +48,13 @@ export const confirmLpThunk = createAsyncThunk<
     notional = -notional;
   }
   const margin = getProspectiveLpMargin(lpFormState);
+  const positionId = selectedPosition?.id;
+  const isEdit = Boolean(selectedPosition);
   const eventParams: LPEventParams = {
     account,
     notional,
     margin,
-    isEdit: Boolean(selectedPosition),
+    isEdit,
     pool: getAmmProtocol(amm),
     fixedLow: fixedLow,
     fixedHigh: fixedHigh,
@@ -62,15 +64,23 @@ export const confirmLpThunk = createAsyncThunk<
     pushLPTransactionSubmittedEvent(eventParams);
     let result: ContractReceipt;
     if (isV1StatelessEnabled()) {
-      result = await lp({
-        addLiquidity,
-        notional,
-        margin,
-        fixedLow,
-        fixedHigh,
-        ammId: amm.id,
-        signer: amm.signer,
-      });
+      if (isEdit) {
+        result = await editLp({
+          positionId: positionId!,
+          notional,
+          margin,
+          signer: amm.signer,
+        });
+      } else {
+        result = await lp({
+          ammId: amm.id,
+          fixedLow,
+          fixedHigh,
+          notional,
+          margin,
+          signer: amm.signer,
+        });
+      }
     } else {
       result = await amm.lp({
         addLiquidity,

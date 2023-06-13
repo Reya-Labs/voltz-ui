@@ -35,6 +35,8 @@ export const getPoolLpInfoThunk = createAsyncThunk<
       return await getPoolLpInfo({
         ammId: amm.id,
         provider: amm.provider,
+        fixedHigh,
+        fixedLow,
       });
     } else {
       return await amm.getPoolLpInfo(fixedLow, fixedHigh);
