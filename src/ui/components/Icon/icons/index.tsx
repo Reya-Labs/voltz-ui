@@ -5,7 +5,16 @@ type IconProps = {
   'data-testid'?: string;
   className?: string;
 };
-
+export const AlphaPass: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/voyage/alpha-pass.png"
+  />
+);
 // badges
 export { ReactComponent as NoClaimedBadges } from './badges/noClaimedBadges.svg';
 

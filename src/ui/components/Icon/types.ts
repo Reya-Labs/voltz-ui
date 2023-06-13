@@ -2,6 +2,7 @@ import { ElementType } from 'react';
 
 import {
   _0BCMellowLpVault,
+  AlphaPass,
   BeWaterMyFriend,
   DegenStuff,
   DeltaDegen,
@@ -103,6 +104,7 @@ import {
 } from './icons';
 
 export type SupportedIcons =
+  | 'alpha-pass'
   // badges
   | 'noClaimedBadges'
   // season 1 badges
@@ -212,6 +214,7 @@ export type SupportedIcons =
   | 'voyageWeek4';
 
 export const iconMap: Record<SupportedIcons, ElementType> = {
+  'alpha-pass': AlphaPass as ElementType,
   // badges
   noClaimedBadges: NoClaimedBadges as ElementType,
   // badges season 1

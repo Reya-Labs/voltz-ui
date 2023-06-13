@@ -9,6 +9,7 @@ type IconProps = {
 };
 
 const VIEW_BOX_ICON_MAP: Record<SupportedIcons, string> = {
+  'alpha-pass': '',
   s3BeWaterMyFriend: '',
   s3BeWaterMyFriendArbitrum: '',
   s3DegenStuff: '',
