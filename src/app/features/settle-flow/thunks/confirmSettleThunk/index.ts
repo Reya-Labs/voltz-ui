@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { settle } from '@voltz-protocol/sdk-v1-stateless';
+import { settle as settleV2 } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt, providers } from 'ethers';
 
 import { getPoolTrackingName } from '../../../../../utilities/googleAnalytics/get-pool-tracking-name';
@@ -37,10 +38,18 @@ export const confirmSettleThunk = createAsyncThunk<
 
   try {
     pushSettleSubmittedEvent(eventParams);
-    const result = await settle({
-      positionId: position.id,
-      signer,
-    });
+    let result: ContractReceipt;
+    if (position.amm.isV2) {
+      result = await settleV2({
+        positionId: position.id,
+        signer,
+      });
+    } else {
+      result = await settle({
+        positionId: position.id,
+        signer,
+      });
+    }
     pushSettleSuccessEvent(eventParams);
     return result;
   } catch (err) {
