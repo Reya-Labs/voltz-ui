@@ -66,6 +66,7 @@ export const confirmLpThunk = createAsyncThunk<
     let result: ContractReceipt;
     if (isV2AMM(amm)) {
       if (isEdit) {
+        // todo: Ioana, why are fixedLow, fixedHigh required here?
         result = await editLpV2({
           positionId: positionId!,
           notional,

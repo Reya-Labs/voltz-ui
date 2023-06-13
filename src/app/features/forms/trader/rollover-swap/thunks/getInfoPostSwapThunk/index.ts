@@ -1,6 +1,8 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { InfoPostSwapV1 } from '@voltz-protocol/v1-sdk';
 
+import { isV2AMM } from '../../../../../../../utilities/amm';
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 import { isUserInputNotionalError } from '../../../../common/utils';
@@ -44,12 +46,34 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
     }
 
     const notionalAmount = prospectiveSwapNotional;
-    const infoPostSwapV1 = await amm.getInfoPostSwapV1({
-      isFT: prospectiveSwapMode === 'fixed',
-      notional: notionalAmount,
-      fixedLow: 1,
-      fixedHigh: 999,
-    });
+    let infoPostSwapV1: InfoPostSwapV1;
+
+    if (isV2AMM(amm)) {
+      // todo: Integrate once available from sdk-v2
+      infoPostSwapV1 = await amm.getInfoPostSwapV1({
+        isFT: prospectiveSwapMode === 'fixed',
+        notional: notionalAmount,
+        fixedLow: 1,
+        fixedHigh: 999,
+      });
+    } else {
+      if (isV1StatelessEnabled()) {
+        // todo: Integrate once available from sdk-v1
+        infoPostSwapV1 = await amm.getInfoPostSwapV1({
+          isFT: prospectiveSwapMode === 'fixed',
+          notional: notionalAmount,
+          fixedLow: 1,
+          fixedHigh: 999,
+        });
+      } else {
+        infoPostSwapV1 = await amm.getInfoPostSwapV1({
+          isFT: prospectiveSwapMode === 'fixed',
+          notional: notionalAmount,
+          fixedLow: 1,
+          fixedHigh: 999,
+        });
+      }
+    }
 
     // margin requirement is collateral only now
     if (infoPostSwapV1.marginRequirement > infoPostSwapV1.fee) {
