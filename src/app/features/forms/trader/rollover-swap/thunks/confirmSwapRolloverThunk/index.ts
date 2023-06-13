@@ -1,7 +1,9 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { rolloverWithSwap } from '@voltz-protocol/sdk-v1-stateless';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../../../../../utilities/amm';
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { extractError } from '../../../../../helpers/extract-error';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
@@ -42,22 +44,33 @@ export const confirmSwapRolloverThunkHandler: AsyncThunkPayloadCreator<
     pool: getAmmProtocol(amm),
     isFT,
   };
-
+  let result: ContractReceipt;
   try {
     pushRolloverSubmittedEvent(eventParams);
-    const result = await previousAMM.rolloverWithSwap({
-      isFT,
-      notional: prospectiveSwapNotional,
-      margin: prospectiveSwapMargin,
-      fixedLow: 1,
-      fixedHigh: 999,
-      newMarginEngine: amm.marginEngineAddress,
-      rolloverPosition: {
-        tickLower: previousPosition.tickLower,
-        tickUpper: previousPosition.tickUpper,
-        settlementBalance: previousPosition.settlementBalance,
-      },
-    });
+    if (isV1StatelessEnabled()) {
+      result = await rolloverWithSwap({
+        maturedPositionId: previousPosition.id,
+        ammId: amm.id,
+        isFT,
+        notional: prospectiveSwapNotional,
+        margin: prospectiveSwapMargin,
+        signer: amm.signer,
+      });
+    } else {
+      result = await previousAMM.rolloverWithSwap({
+        isFT,
+        notional: prospectiveSwapNotional,
+        margin: prospectiveSwapMargin,
+        fixedLow: 1,
+        fixedHigh: 999,
+        newMarginEngine: amm.marginEngineAddress,
+        rolloverPosition: {
+          tickLower: previousPosition.tickLower,
+          tickUpper: previousPosition.tickUpper,
+          settlementBalance: previousPosition.settlementBalance,
+        },
+      });
+    }
     pushRolloverSuccessEvent(eventParams);
     return result;
   } catch (err) {
