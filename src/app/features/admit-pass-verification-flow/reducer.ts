@@ -17,7 +17,7 @@ const initialState: SliceState = {
 };
 
 const slice = createSlice({
-  name: 'admitPassFlow',
+  name: 'admitPassVerificationFlow',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -39,4 +39,4 @@ const slice = createSlice({
   },
 });
 
-export const admitPassFlowReducer = slice.reducer;
+export const admitPassVerificationFlowReducer = slice.reducer;

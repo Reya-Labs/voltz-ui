@@ -10,7 +10,7 @@ export const verifyAdmitPassThunk = createAsyncThunk<
     signer: providers.JsonRpcSigner | null;
   },
   { state: RootState }
->('admitPassFlow/verifyAdmitPass', async ({ signer }, thunkAPI) => {
+>('admitPassVerificationFlow/verifyAdmitPass', async ({ signer }, thunkAPI) => {
   if (!signer) {
     return false;
   }
