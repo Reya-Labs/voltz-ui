@@ -1,8 +1,9 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { rolloverWithSwap } from '@voltz-protocol/sdk-v1-stateless';
+import { rolloverAnd as rolloverWithSwapV2 } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt } from 'ethers';
 
-import { getAmmProtocol } from '../../../../../../../utilities/amm';
+import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { extractError } from '../../../../../helpers/extract-error';
@@ -47,30 +48,44 @@ export const confirmSwapRolloverThunkHandler: AsyncThunkPayloadCreator<
   let result: ContractReceipt;
   try {
     pushRolloverSubmittedEvent(eventParams);
-    if (isV1StatelessEnabled()) {
-      result = await rolloverWithSwap({
+    if (isV2AMM(amm)) {
+      // todo: check with Ioana, signatures are different than sdk-v1
+      // todo: check with Ioana, name is weird
+      result = await rolloverWithSwapV2({
         maturedPositionId: previousPosition.id,
         ammId: amm.id,
-        isFT,
+        // isFT,
         notional: prospectiveSwapNotional,
         margin: prospectiveSwapMargin,
         signer: amm.signer,
       });
     } else {
-      result = await previousAMM.rolloverWithSwap({
-        isFT,
-        notional: prospectiveSwapNotional,
-        margin: prospectiveSwapMargin,
-        fixedLow: 1,
-        fixedHigh: 999,
-        newMarginEngine: amm.marginEngineAddress,
-        rolloverPosition: {
-          tickLower: previousPosition.tickLower,
-          tickUpper: previousPosition.tickUpper,
-          settlementBalance: previousPosition.settlementBalance,
-        },
-      });
+      if (isV1StatelessEnabled()) {
+        result = await rolloverWithSwap({
+          maturedPositionId: previousPosition.id,
+          ammId: amm.id,
+          isFT,
+          notional: prospectiveSwapNotional,
+          margin: prospectiveSwapMargin,
+          signer: amm.signer,
+        });
+      } else {
+        result = await previousAMM.rolloverWithSwap({
+          isFT,
+          notional: prospectiveSwapNotional,
+          margin: prospectiveSwapMargin,
+          fixedLow: 1,
+          fixedHigh: 999,
+          newMarginEngine: amm.marginEngineAddress,
+          rolloverPosition: {
+            tickLower: previousPosition.tickLower,
+            tickUpper: previousPosition.tickUpper,
+            settlementBalance: previousPosition.settlementBalance,
+          },
+        });
+      }
     }
+
     pushRolloverSuccessEvent(eventParams);
     return result;
   } catch (err) {
