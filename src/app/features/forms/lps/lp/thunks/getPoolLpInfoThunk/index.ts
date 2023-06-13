@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getPoolLpInfo } from '@voltz-protocol/sdk-v1-stateless';
+import { getPoolLpInfo as getPoolLpInfoV2 } from '@voltz-protocol/sdk-v2';
 
+import { isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
@@ -31,15 +33,24 @@ export const getPoolLpInfoThunk = createAsyncThunk<
       fixedLow = getDefaultLpFixedLow(lpFormState);
       fixedHigh = getDefaultLpFixedHigh(lpFormState);
     }
-    if (isV1StatelessEnabled()) {
-      return await getPoolLpInfo({
+    if (isV2AMM(amm)) {
+      return await getPoolLpInfoV2({
         ammId: amm.id,
         provider: amm.provider,
         fixedHigh,
         fixedLow,
       });
     } else {
-      return await amm.getPoolLpInfo(fixedLow, fixedHigh);
+      if (isV1StatelessEnabled()) {
+        return await getPoolLpInfo({
+          ammId: amm.id,
+          provider: amm.provider,
+          fixedHigh,
+          fixedLow,
+        });
+      } else {
+        return await amm.getPoolLpInfo(fixedLow, fixedHigh);
+      }
     }
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
