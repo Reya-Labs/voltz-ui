@@ -1,7 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { simulateEditLp, simulateLp } from '@voltz-protocol/sdk-v1-stateless';
+import {
+  simulateEditLp as simulateEditLpV2,
+  simulateLp as simulateLpV2,
+} from '@voltz-protocol/sdk-v2';
 import { InfoPostLp } from '@voltz-protocol/v1-sdk';
 
+import { isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
@@ -66,17 +71,16 @@ export const getInfoPostLpThunk = createAsyncThunk<
     }
 
     let result: InfoPostLp;
-
-    if (isV1StatelessEnabled()) {
+    if (isV2AMM(amm)) {
       if (isEdit) {
-        result = await simulateEditLp({
+        result = await simulateEditLpV2({
           positionId: positionId!,
           notional,
           margin,
           signer: amm.signer,
         });
       } else {
-        result = await simulateLp({
+        result = await simulateLpV2({
           ammId: amm.id,
           fixedLow,
           fixedHigh,
@@ -86,12 +90,32 @@ export const getInfoPostLpThunk = createAsyncThunk<
         });
       }
     } else {
-      result = await amm.getInfoPostLp({
-        addLiquidity: addLiquidity,
-        notional,
-        fixedLow,
-        fixedHigh,
-      });
+      if (isV1StatelessEnabled()) {
+        if (isEdit) {
+          result = await simulateEditLp({
+            positionId: positionId!,
+            notional,
+            margin,
+            signer: amm.signer,
+          });
+        } else {
+          result = await simulateLp({
+            ammId: amm.id,
+            fixedLow,
+            fixedHigh,
+            notional,
+            margin,
+            signer: amm.signer,
+          });
+        }
+      } else {
+        result = await amm.getInfoPostLp({
+          addLiquidity: addLiquidity,
+          notional,
+          fixedLow,
+          fixedHigh,
+        });
+      }
     }
 
     return {
