@@ -47,6 +47,7 @@ export const VerifyStep: React.FunctionComponent<{
         bottomLeftText={error ? error : ''}
         bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
+        disabled={loading}
         loading={loading}
         variant="primary"
         onClick={handleOnVerifyClick}

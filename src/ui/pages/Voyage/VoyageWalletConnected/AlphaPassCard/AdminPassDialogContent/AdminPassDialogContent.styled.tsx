@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
 
-export const VerifyStepBox = styled('div')`
+export const ContentBox = styled('div')`
   display: flex;
   box-sizing: border-box;
-  width: 316px;
+  width: 240px;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 24px;
+  gap: 16px;
 `;
 
 export const TitleBox = styled('div')`
@@ -18,4 +18,13 @@ export const TitleBox = styled('div')`
   justify-content: space-between;
   align-items: center;
   padding: 0px;
+`;
+
+export const DetailBox = styled('div')`
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 `;

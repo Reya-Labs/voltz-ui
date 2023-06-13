@@ -11,6 +11,7 @@ import { VoyageBadgeUI } from '../../../../app/features/voyage/types';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../routes/paths';
 import { GenericError } from '../../../components/GenericError';
+import { AlphaPassCard } from './AlphaPassCard/AlphaPassCard';
 import { BadgeCard, BadgeCardHandle } from './BadgeCard/BadgeCard';
 import { LearnMoreAboutVoyage } from './LearnMoreAboutVoyage';
 import { NotificationSection } from './NotificationSection';
@@ -107,17 +108,20 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
               Array.from({ length: 4 }, (index) => index).map((_, index) => (
                 <BadgeCard key={index} id={1} loading={loading} status="notAchieved" />
               ))}
-            {!loading &&
-              badges.length !== 0 &&
-              badges.map((badge, index) => (
-                <BadgeCard
-                  key={`${badge.id}${index}`}
-                  ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.id] = ref)}
-                  id={badge.id}
-                  loading={loading}
-                  status={badge.status}
-                />
-              ))}
+            {!loading && badges.length !== 0 ? (
+              <React.Fragment>
+                {badges.map((badge, index) => (
+                  <BadgeCard
+                    key={`${badge.id}${index}`}
+                    ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.id] = ref)}
+                    id={badge.id}
+                    loading={loading}
+                    status={badge.status}
+                  />
+                ))}
+                <AlphaPassCard />
+              </React.Fragment>
+            ) : null}
           </VoyageBadgesGrid>
         </BadgeCollectionBox>
         <VoyageBadgesListBox data-testid="Voyage-AchievedBadgesListBox">
