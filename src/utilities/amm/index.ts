@@ -131,3 +131,7 @@ export const generatePositionIdForRoute = (position: { id: string }) => {
   const id = [info1, info2, info3].map((i) => i.trim().substring(i.length - 4)).join('');
   return id.replace('#', '_');
 };
+
+export const isV2AMM = (amm: AMM) => {
+  return amm.market.tags.isV2;
+};
