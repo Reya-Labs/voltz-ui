@@ -7367,6 +7367,14 @@
     "@google-cloud/bigquery" "6.2.0"
     ethers "5.5.4"
 
+"@voltz-protocol/community-sdk@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/community-sdk/-/community-sdk-1.1.2.tgz#1aa66794e69685b7d99da77cbbfe1c8d29994b21"
+  integrity sha512-hqY92ygBmFq0/ugjozYKZfUx7jTcxsMwora007MTKWB5MWto1SB8923NJRqxnX1dFg6r9yBRLzFt6dgisaNr/Q==
+  dependencies:
+    keccak256 "1.0.6"
+    merkletreejs "^0.3.0"
+
 "@voltz-protocol/sdk-v1-stateless@1.20.2", "@voltz-protocol/sdk-v1-stateless@^1.20.2":
   version "1.20.2"
   resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.20.2.tgz#c66af161c0c32007ee196f6acdf27740f18a6a7b"

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { rolloverAndLp } from '@voltz-protocol/sdk-v1-stateless';
+import { rolloverWithLp as rolloverAndLpV2 } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
@@ -53,19 +54,14 @@ export const confirmLpRolloverThunk = createAsyncThunk<
     pushRolloverSubmittedEvent(eventParams);
     let result: ContractReceipt;
     if (isV2AMM(amm)) {
-      // TODO: Ioana, woooow! The args seem way off and not inlined
-      // TODO: with what we agreed on! Please review and fix!
-      result = await previousAMM.rolloverWithMint({
+      result = await rolloverAndLpV2({
+        maturedPositionId: previousPosition.id,
+        ammId: amm.id,
         fixedLow,
         fixedHigh,
         notional,
         margin,
-        newMarginEngine: amm.marginEngineAddress,
-        rolloverPosition: {
-          tickLower: previousPosition.tickLower,
-          tickUpper: previousPosition.tickUpper,
-          settlementBalance: previousPosition.settlementBalance,
-        },
+        signer: amm.signer,
       });
     } else {
       if (isV1StatelessEnabled()) {
