@@ -69,7 +69,6 @@ export const confirmLpRolloverThunk = createAsyncThunk<
       });
     } else {
       if (isV1StatelessEnabled()) {
-        // todo: Artur, integrate once available via sdk-v1
         result = await rolloverAndLp({
           maturedPositionId: previousPosition.id,
           ammId: amm.id,
