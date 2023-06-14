@@ -1,5 +1,6 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { simulateRolloverWithSwap } from '@voltz-protocol/sdk-v1-stateless';
+import { simulateRolloverWithSwap as simulateRolloverWithSwapV2 } from '@voltz-protocol/sdk-v2';
 import { InfoPostSwapV1 } from '@voltz-protocol/v1-sdk';
 
 import { isV2AMM } from '../../../../../../../utilities/amm';
@@ -63,16 +64,15 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
     let infoPostSwapV1: InfoPostSwapV1;
 
     if (isV2AMM(amm)) {
-      // todo: Integrate once available from sdk-v2
-      infoPostSwapV1 = await amm.getInfoPostSwapV1({
-        isFT: prospectiveSwapMode === 'fixed',
-        notional: notionalAmount,
-        fixedLow: 1,
-        fixedHigh: 999,
+      infoPostSwapV1 = await simulateRolloverWithSwapV2({
+        maturedPositionId: previousPosition.id,
+        ammId: amm.id,
+        notional: prospectiveSwapNotional,
+        margin: prospectiveSwapMargin,
+        signer: amm.signer,
       });
     } else {
       if (isV1StatelessEnabled()) {
-        // todo: Integrate once available from sdk-v1
         infoPostSwapV1 = await simulateRolloverWithSwap({
           maturedPositionId: previousPosition.id,
           ammId: amm.id,
