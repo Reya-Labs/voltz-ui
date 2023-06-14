@@ -7359,18 +7359,18 @@
     "@uniswap/v3-core" "1.0.0"
     "@uniswap/v3-periphery" "^1.0.1"
 
-"@voltz-protocol/commons-v2@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/commons-v2/-/commons-v2-1.4.0.tgz#53f9a4089f8ccbab94abe7dae32ed4f9316e7ccc"
-  integrity sha512-1mrhUEosPcAp41oG7H9jkzgSv2KOWyU5+FozX3j9CU9jupoMZxhnpmbThNsxKzN5bfWnxKT6s8aKP2CKuleLHg==
+"@voltz-protocol/commons-v2@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/commons-v2/-/commons-v2-1.4.2.tgz#88d5d0a2f9ad49f154865f978de52ffff403afcd"
+  integrity sha512-bAqvBlIhvXCQjGjbp9kXtbDbpgviiMh8i8YgwOHD835OP7MBi5B//AAemZUYvzTeEh8zQQaMHEauDaY2/TpFbA==
   dependencies:
     "@google-cloud/bigquery" "6.2.0"
     ethers "5.5.4"
 
-"@voltz-protocol/sdk-v1-stateless@1.20.0", "@voltz-protocol/sdk-v1-stateless@^1.20.0":
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.20.0.tgz#cd0d57ba06a6d12a6eebec147ef455f0e0cebeb6"
-  integrity sha512-eRZ+OK6BEAwVRqinNChA5Oj4LjF2aNDC/Vgj4u1CWVrebnzo7ES6+2wEPfUAPqFw+yqIip9lAXHrgTEqagzVBA==
+"@voltz-protocol/sdk-v1-stateless@1.20.2", "@voltz-protocol/sdk-v1-stateless@^1.20.2":
+  version "1.20.2"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.20.2.tgz#c66af161c0c32007ee196f6acdf27740f18a6a7b"
+  integrity sha512-+864UybdPu1CMAsdbr21jdxMgDNMM3MtvUJZH+uOCVbhF6EavwgUHCS9wYgm7/zto2EF+9hqNglHU4GC1TdqUQ==
   dependencies:
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
@@ -7384,16 +7384,16 @@
     tiny-invariant "1.3.1"
     toformat "2.0.0"
 
-"@voltz-protocol/sdk-v2@1.39.1":
-  version "1.39.1"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.39.1.tgz#452abf2715eeec70daca45a1f2ef76a7550e3f91"
-  integrity sha512-VWEghpipH3uUq9zytNS+6k7qUc/7UDwgiz3TIQVrrhM36PmNp9y3mFKscRrA89HBAV9zoYae2ZGyj2VOkBJNtw==
+"@voltz-protocol/sdk-v2@1.39.3":
+  version "1.39.3"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.39.3.tgz#a3e5771c8b13c8a72ada034eab1773bffeb91465"
+  integrity sha512-D+pfd/zitsEZkn5oD7EKB5i9fWdyopHo8VwqzR6eK8mLAr6Z1FG9gTtoDOkEKS0gkF93tYfQlSR8IUuoEDUOlg==
   dependencies:
     "@types/crypto-js" "4.1.1"
     "@uniswap/sdk-core" "3.2.2"
     "@uniswap/v3-sdk" "3.9.0"
-    "@voltz-protocol/commons-v2" "^1.4.0"
-    "@voltz-protocol/sdk-v1-stateless" "^1.20.0"
+    "@voltz-protocol/commons-v2" "^1.4.2"
+    "@voltz-protocol/sdk-v1-stateless" "^1.20.2"
     crypto-js "4.1.1"
     jsbi "4.3.0"
 
