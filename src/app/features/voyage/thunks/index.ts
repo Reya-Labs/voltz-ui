@@ -1,1 +1,1 @@
-export * from './fetchVoyageBadgesThunk';
+export { fetchVoyageBadgesThunk } from './fetchVoyageBadgesThunk';
