@@ -55,18 +55,18 @@ export const confirmLpRolloverThunk = createAsyncThunk<
     if (isV2AMM(amm)) {
       // TODO: Ioana, woooow! The args seem way off and not inlined
       // TODO: with what we agreed on! Please review and fix!
-      // result = rolloverAndLp({
-      //   fixedLow,
-      //   fixedHigh,
-      //   notional,
-      //   margin,
-      //   newMarginEngine: amm.marginEngineAddress,
-      //   rolloverPosition: {
-      //     tickLower: previousPosition.tickLower,
-      //     tickUpper: previousPosition.tickUpper,
-      //     settlementBalance: previousPosition.settlementBalance,
-      //   },
-      // });
+      result = await previousAMM.rolloverWithMint({
+        fixedLow,
+        fixedHigh,
+        notional,
+        margin,
+        newMarginEngine: amm.marginEngineAddress,
+        rolloverPosition: {
+          tickLower: previousPosition.tickLower,
+          tickUpper: previousPosition.tickUpper,
+          settlementBalance: previousPosition.settlementBalance,
+        },
+      });
     } else {
       if (isV1StatelessEnabled()) {
         // todo: Artur, integrate once available via sdk-v1

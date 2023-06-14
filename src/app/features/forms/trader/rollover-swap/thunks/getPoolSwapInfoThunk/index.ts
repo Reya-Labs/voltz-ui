@@ -24,6 +24,7 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
       // todo: can it be removed not sure why you require it?
       return await getPoolSwapInfoV2({
         ammId: amm.id,
+        isFixedTaker: true,
         provider: amm.provider,
       });
     } else {
