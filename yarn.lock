@@ -7035,10 +7035,10 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/community-sdk@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/community-sdk/-/community-sdk-1.1.0.tgz#e63104b3f3a93cf191d03dc35e7491c7f250d08e"
-  integrity sha512-pVJi1d7PFBVa+xzKkB3tlVU7Vu+pNXqEgQ9Xq4niDn1iHMOFIv36t06RjHIodEfCU/pIlcMQezS2NdH4djJk0w==
+"@voltz-protocol/community-sdk@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/community-sdk/-/community-sdk-1.1.2.tgz#1aa66794e69685b7d99da77cbbfe1c8d29994b21"
+  integrity sha512-hqY92ygBmFq0/ugjozYKZfUx7jTcxsMwora007MTKWB5MWto1SB8923NJRqxnX1dFg6r9yBRLzFt6dgisaNr/Q==
   dependencies:
     keccak256 "1.0.6"
     merkletreejs "^0.3.0"

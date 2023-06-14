@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { verifyAdminPass } from '@voltz-protocol/community-sdk';
+import { verifyAdmitPass } from '@voltz-protocol/community-sdk';
 import { providers } from 'ethers';
 
 import { RootState } from '../../../../store';
@@ -16,7 +16,7 @@ export const verifyAdmitPassThunk = createAsyncThunk<
     return false;
   }
   try {
-    return await verifyAdminPass(signer);
+    return await verifyAdmitPass(signer);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
