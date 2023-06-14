@@ -64,7 +64,6 @@ export const confirmSwapRolloverThunkHandler: AsyncThunkPayloadCreator<
         result = await rolloverWithSwap({
           maturedPositionId: previousPosition.id,
           ammId: amm.id,
-          isFT,
           notional: prospectiveSwapNotional,
           margin: prospectiveSwapMargin,
           signer: amm.signer,
