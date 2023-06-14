@@ -69,6 +69,8 @@ export const confirmLpThunk = createAsyncThunk<
         // todo: Ioana, why are fixedLow, fixedHigh required here?
         result = await editLpV2({
           positionId: positionId!,
+          fixedLow,
+          fixedHigh,
           notional,
           margin,
           signer: amm.signer,

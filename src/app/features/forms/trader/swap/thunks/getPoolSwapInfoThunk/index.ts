@@ -24,6 +24,7 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
       return await getPoolSwapInfoV2({
         ammId: amm.id,
         provider: amm.provider,
+        isFixedTaker: true,
       });
     } else {
       if (isV1StatelessEnabled()) {
