@@ -1,6 +1,7 @@
 import { Dialog, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 
+import { MAX_POOL_CAP } from '../../../../../../../../app/features/aMMs';
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
@@ -129,7 +130,7 @@ export const MaturedPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
               </RealizedPNLBox>
             </RightBox>
           </PositionEntryBox>
-          {isV2 ? <V2EntryInformation poolCap={1000000} /> : null}
+          {isV2 ? <V2EntryInformation poolCap={MAX_POOL_CAP} /> : null}
         </PositionEntryBoxWrapper>
       </React.Fragment>
     );

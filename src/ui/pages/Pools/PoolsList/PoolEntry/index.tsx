@@ -2,6 +2,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ColorTokens, Pill, TokenTypography, TypographyToken } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
+import { MAX_POOL_CAP } from '../../../../../app/features/aMMs';
 import {
   selectChainChangeState,
   selectChainId,
@@ -227,7 +228,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
             </ButtonStyled>
           </RightBox>
         </PoolEntryBox>
-        {isV2 ? <V2EntryInformation poolCap={1000000} /> : null}
+        {isV2 ? <V2EntryInformation poolCap={MAX_POOL_CAP} /> : null}
       </PoolEntryBoxWrapper>
     );
   },
