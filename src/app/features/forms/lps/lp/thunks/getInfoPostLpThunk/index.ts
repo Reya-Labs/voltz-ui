@@ -73,13 +73,10 @@ export const getInfoPostLpThunk = createAsyncThunk<
     let result: InfoPostLp;
     if (isV2AMM(amm)) {
       if (isEdit) {
-        // todo: Ioana, why are fixedLow, fixedHigh required here?
         result = await simulateEditLpV2({
           positionId: positionId!,
           notional,
           margin,
-          fixedLow,
-          fixedHigh,
           signer: amm.signer,
         });
       } else {
