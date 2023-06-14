@@ -1,6 +1,6 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { rolloverWithSwap } from '@voltz-protocol/sdk-v1-stateless';
-import { rolloverAnd as rolloverWithSwapV2 } from '@voltz-protocol/sdk-v2';
+import { rolloverWithSwap as rolloverWithSwapV2 } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
@@ -49,12 +49,9 @@ export const confirmSwapRolloverThunkHandler: AsyncThunkPayloadCreator<
   try {
     pushRolloverSubmittedEvent(eventParams);
     if (isV2AMM(amm)) {
-      // todo: check with Ioana, signatures are different than sdk-v1
-      // todo: check with Ioana, name is weird
       result = await rolloverWithSwapV2({
         maturedPositionId: previousPosition.id,
         ammId: amm.id,
-        // isFT,
         notional: prospectiveSwapNotional,
         margin: prospectiveSwapMargin,
         signer: amm.signer,
