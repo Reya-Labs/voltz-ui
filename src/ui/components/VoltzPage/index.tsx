@@ -27,22 +27,24 @@ export const VoltzPage: React.FunctionComponent<VoltzPageProps> = ({
   pageLoadingSlot,
   leftPanelSubmenu,
 }) => {
-  let pageContent: React.ReactNode = (
-    <MainAndFormSectionBox data-testid="VoltzPage-MainAndFormSectionBox">
-      {mainSlot ? (
-        <MainSectionBox data-testid="VoltzPage-MainSectionBox">{mainSlot}</MainSectionBox>
-      ) : null}
-      {rightSlot ? (
-        <RightSectionBox data-testid="VoltzPage-RightSectionBox">{rightSlot}</RightSectionBox>
-      ) : null}
-    </MainAndFormSectionBox>
-  );
+  let pageContent: React.ReactNode;
   if (notFoundSlot) {
     pageContent = notFoundSlot;
   } else if (pageLoadingSlot) {
     pageContent = pageLoadingSlot;
   } else if (errorSlot) {
     pageContent = errorSlot;
+  } else {
+    pageContent = (
+      <MainAndFormSectionBox data-testid="VoltzPage-MainAndFormSectionBox">
+        {mainSlot ? (
+          <MainSectionBox data-testid="VoltzPage-MainSectionBox">{mainSlot}</MainSectionBox>
+        ) : null}
+        {rightSlot ? (
+          <RightSectionBox data-testid="VoltzPage-RightSectionBox">{rightSlot}</RightSectionBox>
+        ) : null}
+      </MainAndFormSectionBox>
+    );
   }
   const hasSubmenu = Boolean(leftPanelSubmenu);
 

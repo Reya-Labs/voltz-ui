@@ -1,3 +1,4 @@
+import { isV2Live } from '../../../utilities/is-v2-live';
 import { PoolFilterId, PoolFilters, PoolsInformation, PoolSortId, PoolSorting } from './types';
 
 export const initialFilters: PoolFilters = {
@@ -34,7 +35,7 @@ export const FILTER_CONFIG: Record<
   },
   v2: {
     label: 'v2',
-    hidden: true,
+    hidden: !isV2Live(),
   },
   yield: {
     label: 'Yield',

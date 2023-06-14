@@ -2,10 +2,10 @@ import { Button, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
-  selectAdmitPassError,
-  selectAdmitPassStatus,
+  selectAdmitPassVerificationFlowError,
+  selectAdmitPassVerificationFlowStatus,
   verifyAdmitPassThunk,
-} from '../../../../app/features/admit-pass-flow';
+} from '../../../../app/features/admit-pass-verification-flow';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
 import { PoolDetails } from './PoolDetails';
@@ -16,8 +16,8 @@ export const VerifyStep: React.FunctionComponent<{
 }> = ({ poolCap }) => {
   const { signer } = useWallet();
   const dispatch = useAppDispatch();
-  const error = useAppSelector(selectAdmitPassError);
-  const loading = useAppSelector(selectAdmitPassStatus) === 'pending';
+  const error = useAppSelector(selectAdmitPassVerificationFlowError);
+  const loading = useAppSelector(selectAdmitPassVerificationFlowStatus) === 'pending';
   const handleOnVerifyClick = useCallback(() => {
     if (!signer) {
       return;
@@ -47,6 +47,7 @@ export const VerifyStep: React.FunctionComponent<{
         bottomLeftText={error ? error : ''}
         bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
+        disabled={loading}
         loading={loading}
         variant="primary"
         onClick={handleOnVerifyClick}

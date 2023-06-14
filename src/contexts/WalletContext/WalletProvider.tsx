@@ -3,12 +3,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   detectIfNetworkSupported,
+  getDefaultChainId,
   selectChainId,
   setChainIdThunk,
 } from '../../app/features/network';
 import { resetPortfolioStateAction } from '../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
 import { getENSDetails } from '../../utilities/getENSDetails';
 import { getErrorMessage } from '../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../utilities/sentry';

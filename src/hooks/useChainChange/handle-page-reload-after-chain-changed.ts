@@ -2,10 +2,10 @@ import {
   deleteChainId,
   detectIfNetworkSupported,
   getChainId,
+  getDefaultChainId,
   setChainIdThunk,
 } from '../../app/features/network';
 import { useAppDispatch } from '../../app/hooks';
-import { getDefaultChainId } from '../../components/interface/NetworkSelector/get-default-chain-id';
 
 export const handlePageReloadAfterChainChanged = async (
   dispatch: ReturnType<typeof useAppDispatch>,

@@ -87,10 +87,6 @@
           {
             "message": "Import [module] from lodash/[module] instead to avoid bloating bundle size.",
             "name": "lodash"
-          },
-          {
-            "message": "Import [module] from @mui/material/[module] instead to avoid bloating bundle size.",
-            "name": "@mui/material"
           }
         ],
         "patterns": [
