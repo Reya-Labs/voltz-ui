@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { rolloverAndLp } from '@voltz-protocol/sdk-v1-stateless';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
@@ -69,17 +70,14 @@ export const confirmLpRolloverThunk = createAsyncThunk<
     } else {
       if (isV1StatelessEnabled()) {
         // todo: Artur, integrate once available via sdk-v1
-        result = await previousAMM.rolloverWithMint({
+        result = await rolloverAndLp({
+          maturedPositionId: previousPosition.id,
+          ammId: amm.id,
           fixedLow,
           fixedHigh,
           notional,
           margin,
-          newMarginEngine: amm.marginEngineAddress,
-          rolloverPosition: {
-            tickLower: previousPosition.tickLower,
-            tickUpper: previousPosition.tickUpper,
-            settlementBalance: previousPosition.settlementBalance,
-          },
+          signer: amm.signer,
         });
       } else {
         result = await previousAMM.rolloverWithMint({
