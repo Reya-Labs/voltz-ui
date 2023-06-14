@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { MAX_POOL_CAP } from '../../../../app/features/aMMs';
 import {
   selectFixedRateInfo,
   selectLpFormAMM,
@@ -25,7 +26,7 @@ export const Main: React.FunctionComponent = () => {
 
   return (
     <MainBox>
-      {aMM.market.tags.isV2 ? <AdmitPassFlow poolCap={1000000} /> : null}
+      {aMM.market.tags.isV2 ? <AdmitPassFlow poolCap={MAX_POOL_CAP} /> : null}
       <PoolHeader />
       <HistoricalRatesChart
         aMMId={aMM.id}
