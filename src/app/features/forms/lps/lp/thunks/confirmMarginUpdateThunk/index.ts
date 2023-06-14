@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { updateMargin } from '@voltz-protocol/sdk-v1-stateless';
-import { updateMargin as updateMarginV2 } from '@voltz-protocol/sdk-v2/dist/types/services/updateMargin/updateMargin';
+import { updateMargin as updateMarginV2 } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt } from 'ethers';
 
 import { isV2AMM } from '../../../../../../../utilities/amm';

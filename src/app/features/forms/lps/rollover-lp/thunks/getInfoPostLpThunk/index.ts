@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { simulateRolloverWithLp } from '@voltz-protocol/sdk-v1-stateless';
+import { simulateRolloverWithLp as simulateRolloverWithLpV2 } from '@voltz-protocol/sdk-v2';
 import { InfoPostLp } from '@voltz-protocol/v1-sdk';
 
 import { isV2AMM } from '../../../../../../../utilities/amm';
@@ -79,12 +80,14 @@ export const getInfoPostLpThunk = createAsyncThunk<
     let infoPostLpV1: InfoPostLp;
 
     if (isV2AMM(amm)) {
-      // TODO: Ioana missing integration
-      infoPostLpV1 = await amm.getInfoPostLp({
-        addLiquidity: addLiquidity,
-        notional: prospectiveNotional,
+      infoPostLpV1 = await simulateRolloverWithLpV2({
+        maturedPositionId: previousPosition.id,
+        ammId: amm.id,
         fixedLow,
         fixedHigh,
+        notional,
+        margin,
+        signer: amm.signer,
       });
     } else {
       if (isV1StatelessEnabled()) {
