@@ -7035,6 +7035,14 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
+"@voltz-protocol/community-sdk@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/community-sdk/-/community-sdk-1.1.0.tgz#e63104b3f3a93cf191d03dc35e7491c7f250d08e"
+  integrity sha512-pVJi1d7PFBVa+xzKkB3tlVU7Vu+pNXqEgQ9Xq4niDn1iHMOFIv36t06RjHIodEfCU/pIlcMQezS2NdH4djJk0w==
+  dependencies:
+    keccak256 "1.0.6"
+    merkletreejs "^0.3.0"
+
 "@voltz-protocol/sdk-v1-stateless@1.12.3":
   version "1.12.3"
   resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.12.3.tgz#fc67fb1a3b47942388e715f8a972f532d6d03e88"
@@ -16179,7 +16187,7 @@ just-diff@^5.0.1:
   resolved "https://registry.yarnpkg.com/just-diff/-/just-diff-5.1.1.tgz#8da6414342a5ed6d02ccd64f5586cbbed3146202"
   integrity sha512-u8HXJ3HlNrTzY7zrYYKjNEfBlyjqhdBkoyTVdjtn7p02RJD5NvR8rIClzeGA7t+UYP1/7eAkWNLU0+P3QrEqKQ==
 
-keccak256@^1.0.6:
+keccak256@1.0.6, keccak256@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/keccak256/-/keccak256-1.0.6.tgz#dd32fb771558fed51ce4e45a035ae7515573da58"
   integrity sha512-8GLiM01PkdJVGUhR1e6M/AvWnSqYS0HaERI+K/QtStGDGlSTx2B1zTqZk4Zlqu5TxHJNTxWAdP9Y+WI50OApUw==

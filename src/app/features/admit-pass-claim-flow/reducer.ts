@@ -1,19 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { claimAdmitPassThunk } from './thunks';
+import { claimAdmitPassThunk, getAdmitPassCountThunk } from './thunks';
+import { fetchIsAdmitPassClaimedThunk } from './thunks/fetchIsAdmitPassClaimedThunk';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
 export type SliceState = {
-  step: 'claim' | 'claiming' | 'claim-dialog' | 'claimed';
+  step:
+    | 'fetchingClaimError'
+    | 'fetchingClaimStatus'
+    | 'claim'
+    | 'claiming'
+    | 'claim-dialog'
+    | 'claimed';
   status: ThunkStatus;
   error: string | null;
+  totalAdmitPass: number | null;
 };
 
 const initialState: SliceState = {
-  step: 'claim',
+  step: 'fetchingClaimStatus',
   status: 'idle',
   error: null,
+  totalAdmitPass: null,
 };
 
 const slice = createSlice({
@@ -44,6 +53,24 @@ const slice = createSlice({
         state.status = 'success';
         state.step = 'claimed';
         state.error = null;
+      })
+      .addCase(fetchIsAdmitPassClaimedThunk.pending, (state) => {
+        state.step = 'fetchingClaimStatus';
+      })
+      .addCase(fetchIsAdmitPassClaimedThunk.rejected, (state, { payload }) => {
+        state.step = 'fetchingClaimError';
+      })
+      .addCase(fetchIsAdmitPassClaimedThunk.fulfilled, (state, { payload }) => {
+        state.step = payload ? 'claimed' : 'claim';
+      })
+      .addCase(getAdmitPassCountThunk.pending, (state) => {
+        state.totalAdmitPass = null;
+      })
+      .addCase(getAdmitPassCountThunk.rejected, (state, { payload }) => {
+        state.totalAdmitPass = 0;
+      })
+      .addCase(getAdmitPassCountThunk.fulfilled, (state, { payload }) => {
+        state.totalAdmitPass = payload as number;
       });
   },
 });

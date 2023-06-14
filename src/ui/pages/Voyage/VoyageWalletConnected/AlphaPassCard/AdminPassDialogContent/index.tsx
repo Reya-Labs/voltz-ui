@@ -14,11 +14,11 @@ import { ContentBox, DetailBox, TitleBox } from './AdminPassDialogContent.styled
 export const AdminPassDialogContent: React.FunctionComponent<{
   onClose: () => void;
 }> = ({ onClose }) => {
-  const { signer, account } = useWallet();
+  const { signer } = useWallet();
   const dispatch = useAppDispatch();
   const error = useAppSelector(selectAdmitPassClaimFlowError);
   const loading = useAppSelector(selectAdmitPassClaimFlowStatus) === 'pending';
-  const totalPasses = useAppSelector(selectAdmitPassTotalPasses(account!));
+  const totalPasses = useAppSelector(selectAdmitPassTotalPasses);
   const handleOnVerifyClick = useCallback(() => {
     if (!signer) {
       return;

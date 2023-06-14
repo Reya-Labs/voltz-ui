@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { verifyAdminPass } from '@voltz-protocol/community-sdk';
 import { providers } from 'ethers';
 
 import { RootState } from '../../../../store';
@@ -15,11 +16,7 @@ export const verifyAdmitPassThunk = createAsyncThunk<
     return false;
   }
   try {
-    // todo: replace with real admit pass
-    const promise = new Promise((resolve) =>
-      setTimeout(() => (Math.random() > 0.5 ? resolve(true) : resolve(false)), 1500),
-    );
-    return await promise;
+    return await verifyAdminPass(signer);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

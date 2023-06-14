@@ -1,22 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { claimAdmitPass } from '@voltz-protocol/community-sdk';
+import { isAdmitPassClaimed } from '@voltz-protocol/community-sdk';
 import { providers } from 'ethers';
 
 import { RootState } from '../../../../store';
 import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
 
-export const claimAdmitPassThunk = createAsyncThunk<
+export const fetchIsAdmitPassClaimedThunk = createAsyncThunk<
   Awaited<boolean | ReturnType<typeof rejectThunkWithError>>,
   {
     signer: providers.JsonRpcSigner | null;
   },
   { state: RootState }
->('admitPassClaimFlow/claimAdmitPass', async ({ signer }, thunkAPI) => {
+>('admitPassClaimFlow/fetchIsAdmitPassClaimed', async ({ signer }, thunkAPI) => {
   if (!signer) {
     return false;
   }
   try {
-    return await claimAdmitPass(signer);
+    return await isAdmitPassClaimed(signer);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
