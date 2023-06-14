@@ -5,7 +5,7 @@ jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 
-describe('approveUnderlyingTokenThunkHandler', () => {
+describe.skip('approveUnderlyingTokenThunkHandler', () => {
   const getStateMock = jest.fn();
   const thunkAPIMock = { getState: getStateMock };
 

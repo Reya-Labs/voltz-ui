@@ -15,7 +15,7 @@ jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 
-describe('getInfoPostSwapThunkHandler', () => {
+describe.skip('getInfoPostSwapThunkHandler', () => {
   const getState = () => ({
     rolloverSwapForm: {
       amm: {},

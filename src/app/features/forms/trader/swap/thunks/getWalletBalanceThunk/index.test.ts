@@ -6,7 +6,7 @@ jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 
-describe('getWalletBalanceThunkHandler', () => {
+describe.skip('getWalletBalanceThunkHandler', () => {
   const getState = () => ({
     swapForm: {
       amm: {

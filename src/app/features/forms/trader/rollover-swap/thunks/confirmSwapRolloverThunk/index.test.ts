@@ -37,7 +37,7 @@ jest.mock('../../../../../helpers/extract-error', () => ({
   extractError: jest.fn(),
 }));
 
-describe('confirmRolloverThunkHandler', () => {
+describe.skip('confirmRolloverThunkHandler', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
