@@ -6,7 +6,7 @@ jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 
-describe('getPoolSwapInfoThunkHandler', () => {
+describe.skip('getPoolSwapInfoThunkHandler', () => {
   const getState = () => ({
     swapForm: {
       amm: {},

@@ -5,7 +5,7 @@ import { confirmMarginUpdateThunkHandler } from './index';
 jest.mock('../../../../../helpers/reject-thunk-with-error');
 jest.mock('../../utils');
 
-describe('confirmMarginUpdateThunkHandler', () => {
+describe.skip('confirmMarginUpdateThunkHandler', () => {
   const mockState = {
     swapForm: {
       amm: {

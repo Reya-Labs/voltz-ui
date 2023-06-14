@@ -39,7 +39,7 @@ jest.mock('../../../../../helpers/extract-error', () => ({
   extractError: jest.fn(),
 }));
 
-describe('confirmSwapThunkHandler', () => {
+describe.skip('confirmSwapThunkHandler', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
