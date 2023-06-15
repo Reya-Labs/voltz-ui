@@ -10,7 +10,7 @@ type ClaimButtonMode =
   | 'claiming'
   | 'claimedDate'
   | 'claimError'
-  | 'claimingSoon'
+  | 'complete'
   | 'checkOnMonday'
   | 'startingSoon'
   | 'notAchieved';
@@ -29,7 +29,7 @@ const MODE_COPY_MAP: Record<ClaimButtonProps['mode'], string> = {
   claimError: 'Claim',
   claiming: 'Claiming',
   claimedDate: 'Claimed:',
-  claimingSoon: 'Claiming s00n',
+  complete: 'Completed',
   checkOnMonday: 'Check on Monday',
   startingSoon: 'Starting s00n',
   notAchieved: 'Not Achieved',
@@ -41,7 +41,7 @@ const DISABLED_MAP: Record<ClaimButtonProps['mode'], boolean> = {
   claimError: false,
   claiming: true,
   claimedDate: true,
-  claimingSoon: true,
+  complete: true,
   checkOnMonday: true,
   startingSoon: true,
   notAchieved: true,
