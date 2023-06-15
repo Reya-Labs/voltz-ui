@@ -119,7 +119,7 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
                     status={badge.status}
                   />
                 ))}
-                <AlphaPassCard />
+                {chainId === SupportedChainId.arbitrum ? <AlphaPassCard /> : null}
               </React.Fragment>
             ) : null}
           </VoyageBadgesGrid>
