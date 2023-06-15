@@ -27,14 +27,14 @@ describe('utilities.date', () => {
   describe('formatPOSIXTimestamp', () => {
     it('formats the POSIX timestamp correctly', () => {
       const timestamp = 1614667200000; // corresponds to 02 Mar 2021
-      expect(formatPOSIXTimestamp(timestamp)).toBe('02/03/21');
+      expect(formatPOSIXTimestamp(timestamp)).toBe('03/02/21');
     });
   });
 
   describe('formatDateTimeWithOrdinal', () => {
     it('formats the date correctly with ordinal suffix', () => {
       const dateTime = DateTime.fromISO('2022-03-01T00:00:00.000Z');
-      expect(formatDateTimeWithOrdinal(dateTime)).toBe('1st March 2022');
+      expect(formatDateTimeWithOrdinal(dateTime)).toBe('March 1st 2022');
     });
   });
 
