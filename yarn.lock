@@ -7327,10 +7327,10 @@
     tiny-invariant "1.3.1"
     toformat "2.0.0"
 
-"@voltz-protocol/sdk-v2@1.40.2":
-  version "1.40.2"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.40.2.tgz#bef455a90177df20868b7c9581225fa9aca98374"
-  integrity sha512-tDpdEeCd9jleY3qeUc03Pm0QRg1zFyBB5OdayaZBpgGKzZG6ew2VJsXHd2Uhc68hj7KK617iYFh6ZNmcN1zRAA==
+"@voltz-protocol/sdk-v2@1.40.3":
+  version "1.40.3"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.40.3.tgz#ae5b7489ac7585eab58e3423e8b53447f8377737"
+  integrity sha512-tnuFpc9l3P5FJH8cSV8hQ83Mh0+zAs+VFuaSoX5kRSuAre23ZLymRJH4GUaQR8lYDpBQJzG+g2SyRU9t85jqww==
   dependencies:
     "@types/crypto-js" "4.1.1"
     "@uniswap/sdk-core" "3.2.2"
