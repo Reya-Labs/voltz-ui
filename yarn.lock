@@ -7302,18 +7302,18 @@
     "@uniswap/v3-core" "1.0.0"
     "@uniswap/v3-periphery" "^1.0.1"
 
-"@voltz-protocol/community-sdk@1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/community-sdk/-/community-sdk-1.1.2.tgz#1aa66794e69685b7d99da77cbbfe1c8d29994b21"
-  integrity sha512-hqY92ygBmFq0/ugjozYKZfUx7jTcxsMwora007MTKWB5MWto1SB8923NJRqxnX1dFg6r9yBRLzFt6dgisaNr/Q==
+"@voltz-protocol/community-sdk@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/community-sdk/-/community-sdk-1.2.0.tgz#78b0707e03a7dd9d2443d87307540d5777f80619"
+  integrity sha512-o+tgBllq49bpquG6DYOxe0o6oMAOJ71Bu7RsziNopC94au3Y01McdlX5wANScLikJrz/+caqW7yHQ8H3hvJsUg==
   dependencies:
     keccak256 "1.0.6"
     merkletreejs "^0.3.0"
 
-"@voltz-protocol/sdk-v1-stateless@1.20.2", "@voltz-protocol/sdk-v1-stateless@^1.20.2":
-  version "1.20.2"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.20.2.tgz#c66af161c0c32007ee196f6acdf27740f18a6a7b"
-  integrity sha512-+864UybdPu1CMAsdbr21jdxMgDNMM3MtvUJZH+uOCVbhF6EavwgUHCS9wYgm7/zto2EF+9hqNglHU4GC1TdqUQ==
+"@voltz-protocol/sdk-v1-stateless@1.20.3", "@voltz-protocol/sdk-v1-stateless@^1.20.3":
+  version "1.20.3"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.20.3.tgz#347f23257332ea6db0841e970c4d18c3592820e1"
+  integrity sha512-yMj6U6LcZaPbHlCMze5wWsA9n9c2eAS6N7Hxnt8ACA5DXT8VzR1VblKC6LLJSiGtASME4Zk6FN6sz05pBcbi2w==
   dependencies:
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
@@ -7322,22 +7322,22 @@
     ethers "5.5.4"
     evm-bn "1.1.2"
     fraction.js "4.2.0"
-    jsbi "4.3.0"
+    jsbi "3.1.4"
     keccak256 "1.0.6"
     tiny-invariant "1.3.1"
     toformat "2.0.0"
 
-"@voltz-protocol/sdk-v2@1.40.0":
-  version "1.40.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.40.0.tgz#340998c0447536b396c6c22e37301638437c3600"
-  integrity sha512-t0drzRSvl0irfl6juRkLbJlwLNqSwJ57rV1yaTKj/uudFHbBQ8b0FOOX2+GjPv4HSFi0SimXFLesP+pqctUl5A==
+"@voltz-protocol/sdk-v2@1.40.2":
+  version "1.40.2"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.40.2.tgz#bef455a90177df20868b7c9581225fa9aca98374"
+  integrity sha512-tDpdEeCd9jleY3qeUc03Pm0QRg1zFyBB5OdayaZBpgGKzZG6ew2VJsXHd2Uhc68hj7KK617iYFh6ZNmcN1zRAA==
   dependencies:
     "@types/crypto-js" "4.1.1"
     "@uniswap/sdk-core" "3.2.2"
     "@uniswap/v3-sdk" "3.9.0"
-    "@voltz-protocol/sdk-v1-stateless" "^1.20.2"
+    "@voltz-protocol/sdk-v1-stateless" "^1.20.3"
     crypto-js "4.1.1"
-    jsbi "4.3.0"
+    jsbi "3.1.4"
 
 "@voltz-protocol/subgraph-data@1.18.1":
   version "1.18.1"
@@ -7349,10 +7349,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.154.1":
-  version "1.154.1"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.154.1.tgz#26c3ba4867ba6cfc912897f16b16f6ec9b20a105"
-  integrity sha512-wUPTMK/ZKvn0P8l5UauyGZZeSG25sGrkRSvTUv1qoZsZ8EWtCckT6aRIYnSpLu90Ru+k1laVbqT5onQePCDjNA==
+"@voltz-protocol/v1-sdk@1.154.3":
+  version "1.154.3"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.154.3.tgz#b3fefa7a35c2a1819eca841738bdd539a1ebd81a"
+  integrity sha512-XUWqKpQcRwQ8AXexlL4WOhLGihPpwsYeicqbLmurM8pQjCJuQQB8gYjNm3kNSW5mEyjLvn1u/wQlrmcuYrNlHg==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
@@ -16287,20 +16287,20 @@ js-yaml@^4.1.0:
   dependencies:
     argparse "^2.0.1"
 
-jsbi@4.2.0, jsbi@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.npmjs.org/jsbi/-/jsbi-4.2.0.tgz"
-  integrity sha512-JzhwPkH7Ra8O1b5uHmWxl6N8ZumqGvMXgpKcsq0/iWlnB+KkzbekCIcLl3hu3sFGTLNXAuXIqY4STtE0ZfT1zA==
-
-jsbi@4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-4.3.0.tgz#b54ee074fb6fcbc00619559305c8f7e912b04741"
-  integrity sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==
+jsbi@3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-3.1.4.tgz#9654dd02207a66a4911b4e4bb74265bc2cbc9dd0"
+  integrity sha512-52QRRFSsi9impURE8ZUbzAMCLjPm4THO7H2fcuIvaaeFTbSysvkodbQQXIVsNgq/ypDbq6dJiuGKL0vZ/i9hUg==
 
 jsbi@^3.1.4:
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-3.2.5.tgz#b37bb90e0e5c2814c1c2a1bcd8c729888a2e37d6"
   integrity sha512-aBE4n43IPvjaddScbvWRA2YlTzKEynHzu7MqOyTipdHucf/VxS63ViCjxYRg86M8Rxwbt/GfzHl1kKERkt45fQ==
+
+jsbi@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/jsbi/-/jsbi-4.2.0.tgz"
+  integrity sha512-JzhwPkH7Ra8O1b5uHmWxl6N8ZumqGvMXgpKcsq0/iWlnB+KkzbekCIcLl3hu3sFGTLNXAuXIqY4STtE0ZfT1zA==
 
 jsbn@~0.1.0:
   version "0.1.1"

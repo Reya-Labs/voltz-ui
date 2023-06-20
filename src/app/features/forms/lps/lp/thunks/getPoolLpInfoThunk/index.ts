@@ -36,7 +36,7 @@ export const getPoolLpInfoThunk = createAsyncThunk<
     if (isV2AMM(amm)) {
       return await getPoolLpInfoV2({
         ammId: amm.id,
-        provider: amm.provider,
+        signer: amm.signer,
         fixedHigh,
         fixedLow,
       });
