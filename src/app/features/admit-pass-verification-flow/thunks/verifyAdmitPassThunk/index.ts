@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { verifyAdmitPass } from '@voltz-protocol/community-sdk';
 import { providers } from 'ethers';
 
 import { RootState } from '../../../../store';

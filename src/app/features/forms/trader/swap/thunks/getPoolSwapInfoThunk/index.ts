@@ -19,9 +19,14 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
       return;
     }
     if (isV2AMM(amm)) {
+      const signer = amm.signer;
+      /// todo: clean up
+      if (signer == null) {
+        throw new Error();
+      }
       return await getPoolSwapInfoV2({
         ammId: amm.id,
-        provider: amm.provider,
+        signer,
       });
     } else {
       if (isV1StatelessEnabled()) {
