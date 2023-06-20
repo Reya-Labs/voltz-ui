@@ -16,7 +16,9 @@ export const verifyAdmitPassThunk = createAsyncThunk<
     return false;
   }
   try {
-    return await verifyAdmitPass(signer);
+    /// todo: uncomment and remove default true
+    // return await verifyAdmitPass(signer);
+    return Promise.resolve(true);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
