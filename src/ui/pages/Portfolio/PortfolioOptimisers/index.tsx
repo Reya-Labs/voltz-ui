@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { VoltzPage } from '../../../components/VoltzPage';
+import { Page } from '../../../components/Page';
 import { PortfolioSubmenu } from '../PortfolioSubmenu';
 import { Optimisers } from './Optimisers';
 import { PortfolioOptimisersBox } from './PortfolioOptimisers.styled';
 
 export const PortfolioOptimisersPage: React.FunctionComponent = () => {
   return (
-    <VoltzPage
+    <Page
       leftPanelSubmenu={<PortfolioSubmenu />}
       mainSlot={
         <PortfolioOptimisersBox>

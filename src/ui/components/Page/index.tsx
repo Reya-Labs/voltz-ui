@@ -1,4 +1,4 @@
-import { Page } from 'brokoli-ui';
+import { Page as BrokoliPage } from 'brokoli-ui';
 import React from 'react';
 
 import { LeftPanel } from './LeftPanel';
@@ -11,7 +11,7 @@ import {
   RightSectionBox,
 } from './VoltzPage.styled';
 
-type VoltzPageProps = {
+type PageProps = {
   mainSlot: React.ReactNode;
   errorSlot?: React.ReactNode;
   rightSlot?: React.ReactNode;
@@ -19,7 +19,7 @@ type VoltzPageProps = {
   pageLoadingSlot?: React.ReactNode;
   leftPanelSubmenu?: React.ReactNode;
 };
-export const VoltzPage: React.FunctionComponent<VoltzPageProps> = ({
+export const Page: React.FunctionComponent<PageProps> = ({
   mainSlot,
   rightSlot,
   errorSlot,
@@ -49,7 +49,7 @@ export const VoltzPage: React.FunctionComponent<VoltzPageProps> = ({
   const hasSubmenu = Boolean(leftPanelSubmenu);
 
   return (
-    <Page data-testid="VoltzPage">
+    <BrokoliPage data-testid="VoltzPage">
       {hasSubmenu ? <TopPanel showLogo={true} /> : null}
       <PageSectionBox data-testid="VoltzPage-PageSectionBox" hasSubmenu={hasSubmenu}>
         <LeftPanel submenu={leftPanelSubmenu} />
@@ -58,6 +58,6 @@ export const VoltzPage: React.FunctionComponent<VoltzPageProps> = ({
           {pageContent}
         </RightPageSectionBox>
       </PageSectionBox>
-    </Page>
+    </BrokoliPage>
   );
 };

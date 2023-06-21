@@ -5,8 +5,8 @@ import { useAppDispatch } from '../../../app/hooks';
 import { routes } from '../../../routes/paths';
 import { GenericError } from '../../components/GenericError';
 import { NoAMMFound } from '../../components/NoAMMFound';
+import { Page } from '../../components/Page';
 import { PageLoading } from '../../components/PageLoading';
-import { VoltzPage } from '../../components/VoltzPage';
 import { Form } from './Form';
 import { useRolloverLPFormAMM } from './hooks/useRolloverLPFormAMM';
 import { Main } from './Main';
@@ -22,7 +22,7 @@ export const RolloverLPFormPage: React.FunctionComponent = () => {
   }, []);
 
   return (
-    <VoltzPage
+    <Page
       errorSlot={error ? <GenericError to={`/${routes.POOLS}`} /> : undefined}
       mainSlot={<Main />}
       notFoundSlot={noAMMFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}

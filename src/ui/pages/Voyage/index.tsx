@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { VoltzPage } from '../../components/VoltzPage';
+import { Page } from '../../components/Page';
 import { Voyage } from './Voyage';
 
 export const VoyagePage: React.FunctionComponent = () => {
-  return <VoltzPage mainSlot={<Voyage />} />;
+  return <Page mainSlot={<Voyage />} />;
 };

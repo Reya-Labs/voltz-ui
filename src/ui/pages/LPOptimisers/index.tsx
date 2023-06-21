@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { VoltzPage } from '../../components/VoltzPage';
+import { Page } from '../../components/Page';
 import { Vaults } from './Vaults/Vaults';
 
 export const LPOptimisersPage: React.FunctionComponent = () => {
-  return <VoltzPage mainSlot={<Vaults />} />;
+  return <Page mainSlot={<Vaults />} />;
 };
