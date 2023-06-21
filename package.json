@@ -150,7 +150,6 @@
     "ethereumjs-abi": "0.6.8",
     "ethers": "5.5.4",
     "isomorphic-fetch": "3.0.0",
-    "jsbi": "3.1.4",
     "lodash.debounce": "4.0.8",
     "lodash.orderby": "4.6.0",
     "luxon": "2.3.0",

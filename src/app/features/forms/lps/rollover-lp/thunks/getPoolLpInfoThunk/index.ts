@@ -25,16 +25,11 @@ export const getPoolLpInfoThunk = createAsyncThunk<
     const fixedHigh = getDefaultLpFixedHigh(state);
 
     if (isV2AMM(amm)) {
-      const signer = amm.signer;
-      /// todo: clean up
-      if (signer == null) {
-        throw new Error();
-      }
       return await getPoolLpInfoV2({
         ammId: amm.id,
-        signer,
         fixedHigh,
         fixedLow,
+        provider: amm.provider,
       });
     } else {
       if (isV1StatelessEnabled()) {

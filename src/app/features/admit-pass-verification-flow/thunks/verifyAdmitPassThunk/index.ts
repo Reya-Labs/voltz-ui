@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { verifyAdmitPass } from '@voltz-protocol/community-sdk';
 import { providers } from 'ethers';
 
 import { RootState } from '../../../../store';
@@ -15,9 +16,7 @@ export const verifyAdmitPassThunk = createAsyncThunk<
     return false;
   }
   try {
-    /// todo: uncomment and remove default true
-    // return await verifyAdmitPass(signer);
-    return Promise.resolve(true);
+    return await verifyAdmitPass(signer);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
