@@ -4,18 +4,18 @@ import { selectIsSupportedChain } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
 import { ConnectSupportedNetwork } from '../ConnectSupportedNetwork';
 import { NotFoundPageContent } from '../NotFoundPageContent';
-import { VoltzPage } from '../VoltzPage';
+import { Page } from '../Page';
 
-export const NetworkProtectedVoltzPage: React.FunctionComponent<{
+export const NetworkProtectedPage: React.FunctionComponent<{
   hidden?: boolean;
 }> = ({ hidden = false, children }) => {
   const isSupportedChain = useAppSelector(selectIsSupportedChain);
   if (hidden) {
-    return <VoltzPage mainSlot={<NotFoundPageContent />} />;
+    return <Page mainSlot={<NotFoundPageContent />} />;
   }
   if (!isSupportedChain) {
     return (
-      <VoltzPage
+      <Page
         mainSlot={
           <ConnectSupportedNetwork
             heading="⚠️ RESTRICTED"

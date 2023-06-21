@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { VoltzPage } from '../../components/VoltzPage';
+import { Page } from '../../components/Page';
 import { VaultFormRoute } from './VaultFormRoute';
 
 export const LPOptimisersFormPage: React.FunctionComponent = () => {
-  return <VoltzPage mainSlot={<VaultFormRoute />} />;
+  return <Page mainSlot={<VaultFormRoute />} />;
 };

@@ -1,6 +1,6 @@
 {
   "name": "voltz-ui",
-  "version": "1.199.3",
+  "version": "1.200.0",
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
@@ -153,6 +153,7 @@
     "lodash.debounce": "4.0.8",
     "lodash.orderby": "4.6.0",
     "luxon": "2.3.0",
+    "normalize.css": "8.0.1",
     "process": "0.11.10",
     "react": "17.0.2",
     "react-animate-height": "3.1.0",

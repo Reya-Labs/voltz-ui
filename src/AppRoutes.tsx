@@ -1,3 +1,5 @@
+import 'normalize.css';
+
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -8,9 +10,9 @@ import { useChainChange } from './hooks/useChainChange';
 import { useInitializeGoogleTagManager } from './hooks/useInitializeGoogleTagManager';
 import { useReferrer } from './hooks/useReferrer';
 import { routes } from './routes/paths';
-import { NetworkProtectedVoltzPage } from './ui/components/NetworkProtectedVoltzPage';
+import { NetworkProtectedPage } from './ui/components/NetworkProtectedPage';
 import { NotFoundPageContent } from './ui/components/NotFoundPageContent';
-import { VoltzPage } from './ui/components/VoltzPage';
+import { Page } from './ui/components/Page';
 import { LPFormPage } from './ui/pages/LPForm';
 import { LPOptimisersPage } from './ui/pages/LPOptimisers';
 import { LPOptimisersFormPage } from './ui/pages/LPOptimisersForm';
@@ -33,7 +35,7 @@ export const AppRoutes = () => {
 
   return (
     <Routes>
-      <Route element={<VoltzPage mainSlot={<NotFoundPageContent />} />} path="*" />
+      <Route element={<Page mainSlot={<NotFoundPageContent />} />} path="*" />
       <Route path="/">
         <Route element={<Navigate to={routes.POOLS} />} index />
         <Route
@@ -42,121 +44,121 @@ export const AppRoutes = () => {
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage>
+            <NetworkProtectedPage>
               <PoolsPage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.POOLS}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage>
+            <NetworkProtectedPage>
               <PortfolioPositionsPage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.PORTFOLIO_POSITIONS}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage
+            <NetworkProtectedPage
               hidden={
                 isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
               }
             >
               <PortfolioOptimisersPage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.PORTFOLIO_OPTIMISERS}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage
+            <NetworkProtectedPage
               hidden={
                 isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
               }
             >
               <LPOptimisersPage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.LP_OPTIMISERS}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage
+            <NetworkProtectedPage
               hidden={
                 isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
               }
             >
               <LPOptimisersFormPage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.LP_OPTIMISERS_DEPOSIT_FORM}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage>
+            <NetworkProtectedPage>
               <SwapFormPage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.TRADER_SWAP_FORM}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage>
+            <NetworkProtectedPage>
               <RolloverSwapFormPage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.TRADER_ROLLOVER_SWAP_FORM}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage>
+            <NetworkProtectedPage>
               <LPFormPage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.LP_FORM}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage>
+            <NetworkProtectedPage>
               <RolloverLPFormPage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.LP_ROLLOVER_FORM}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage
+            <NetworkProtectedPage
               hidden={
                 isAvalancheChain(chainId) || isArbitrumChain(chainId) || isSpruceChain(chainId)
               }
             >
               <LPOptimisersFormPage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId) || isSpruceChain(chainId)}>
+            <NetworkProtectedPage hidden={isAvalancheChain(chainId) || isSpruceChain(chainId)}>
               <ProfilePage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.PROFILE}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId) || isSpruceChain(chainId)}>
+            <NetworkProtectedPage hidden={isAvalancheChain(chainId) || isSpruceChain(chainId)}>
               <VoyagePage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.VOYAGE}
         />
         <Route
           element={
-            <NetworkProtectedVoltzPage hidden={isAvalancheChain(chainId) || isSpruceChain(chainId)}>
+            <NetworkProtectedPage hidden={isAvalancheChain(chainId) || isSpruceChain(chainId)}>
               <TradingLeaguePage />
-            </NetworkProtectedVoltzPage>
+            </NetworkProtectedPage>
           }
           path={routes.TRADING_LEAGUE}
         />
