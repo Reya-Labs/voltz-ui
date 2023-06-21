@@ -40,7 +40,7 @@ export const BadgeCard = forwardRef<BadgeCardHandle, BadgeCardProps>(
     const [highlight, setHighlight] = useState(false);
     const claimButtonMode: ClaimButtonProps['mode'] =
       status === 'achieved'
-        ? 'claimingSoon'
+        ? 'complete'
         : status === 'notAchieved'
         ? 'notAchieved'
         : status === 'inProgress'
