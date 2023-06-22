@@ -8,6 +8,7 @@ import {
   selectVariableRateInfo,
 } from '../../../../app/features/forms/lps/rollover-lp';
 import { useAppSelector } from '../../../../app/hooks';
+import { isV2AMM } from '../../../../utilities/amm';
 import { AdmitPassFlow } from '../../../components/AdmitPassFlow';
 import { FormTransactionHistory } from '../../../components/FormTransactionHistory';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
@@ -26,7 +27,7 @@ export const Main: React.FunctionComponent = () => {
 
   return (
     <MainBox>
-      {aMM.market.tags.isV2 ? <AdmitPassFlow poolCap={MAX_POOL_CAP} /> : null}
+      {isV2AMM(aMM) ? <AdmitPassFlow poolCap={MAX_POOL_CAP} /> : null}
       <PoolHeader />
       <HistoricalRatesChart
         aMMId={aMM.id}
