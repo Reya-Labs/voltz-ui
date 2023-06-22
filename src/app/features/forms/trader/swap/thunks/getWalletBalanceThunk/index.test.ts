@@ -5,8 +5,11 @@ import { getWalletBalanceThunkHandler } from './index';
 jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
 }));
+jest.mock('../../../../../../../utilities/amm', () => ({
+  isV2AMM: jest.fn().mockReturnValue(false),
+}));
 
-describe.skip('getWalletBalanceThunkHandler', () => {
+describe('getWalletBalanceThunkHandler', () => {
   const getState = () => ({
     swapForm: {
       amm: {
