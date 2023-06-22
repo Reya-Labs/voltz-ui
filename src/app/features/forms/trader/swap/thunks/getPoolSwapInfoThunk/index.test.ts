@@ -10,7 +10,7 @@ jest.mock('../../../../../../../utilities/amm', () => ({
   isV2AMM: jest.fn().mockReturnValue(false),
 }));
 
-describe.skip('getPoolSwapInfoThunkHandler', () => {
+describe('getPoolSwapInfoThunkHandler', () => {
   const getState = () => ({
     swapForm: {
       amm: {},
