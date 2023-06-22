@@ -6,7 +6,11 @@ jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 
-describe.skip('getUnderlyingTokenAllowanceThunkHandler', () => {
+jest.mock('../../../../../../../utilities/amm', () => ({
+  isV2AMM: jest.fn().mockReturnValue(false),
+}));
+
+describe('getUnderlyingTokenAllowanceThunkHandler', () => {
   const getState = () => ({
     swapForm: {
       amm: {
