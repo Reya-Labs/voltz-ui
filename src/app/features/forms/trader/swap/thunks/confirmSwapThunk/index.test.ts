@@ -16,6 +16,7 @@ import { confirmSwapThunkHandler } from './index';
 
 jest.mock('../../../../../../../utilities/amm', () => ({
   getAmmProtocol: jest.fn(),
+  isV2AMM: jest.fn().mockReturnValue(false),
 }));
 
 jest.mock('../../analytics', () => ({
@@ -39,7 +40,7 @@ jest.mock('../../../../../helpers/extract-error', () => ({
   extractError: jest.fn(),
 }));
 
-describe.skip('confirmSwapThunkHandler', () => {
+describe('confirmSwapThunkHandler', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
