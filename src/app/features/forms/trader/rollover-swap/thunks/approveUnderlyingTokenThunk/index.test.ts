@@ -5,7 +5,10 @@ jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 
-describe.skip('approveUnderlyingTokenThunkHandler', () => {
+jest.mock('../../../../../../../utilities/amm', () => ({
+  isV2AMM: jest.fn().mockReturnValue(false),
+}));
+describe('approveUnderlyingTokenThunkHandler', () => {
   const getStateMock = jest.fn();
   const thunkAPIMock = { getState: getStateMock };
 
