@@ -6,7 +6,11 @@ jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 
-describe.skip('getWalletBalanceThunkHandler', () => {
+jest.mock('../../../../../../../utilities/amm', () => ({
+  isV2AMM: jest.fn().mockReturnValue(false),
+}));
+
+describe('getWalletBalanceThunkHandler', () => {
   const getState = () => ({
     rolloverSwapForm: {
       amm: {
