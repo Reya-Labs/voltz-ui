@@ -1,11 +1,11 @@
-import { isUserInputNotionalError } from '../../../../common/utils/isUserInputNotionalError';
+import { isUserInputNotionalError } from '../../../../common';
 import { getExistingPositionMode } from '../getExistingPositionMode';
 import { getExistingPositionNotional } from '../getExistingPositionNotional';
 import { getProspectiveSwapNotional } from './index';
 
 jest.mock('../getExistingPositionMode');
 jest.mock('../getExistingPositionNotional');
-jest.mock('../../../../common/utils/isUserInputNotionalError');
+jest.mock('../../../../common');
 
 describe('getProspectiveSwapNotional', () => {
   let mockState = {

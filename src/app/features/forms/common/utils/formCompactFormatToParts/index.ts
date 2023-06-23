@@ -1,5 +1,5 @@
 import { compactFormatToParts } from '../../../../../../utilities/number';
-import { FormNumberLimits } from '../../index';
+import { FormNumberLimits } from '../../constants';
 
 export const formCompactFormatToParts = (value: number) => {
   if (value < 1) {

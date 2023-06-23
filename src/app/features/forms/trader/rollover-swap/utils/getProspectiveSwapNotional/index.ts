@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { isUserInputNotionalError } from '../../../../common/utils';
+import { isUserInputNotionalError } from '../../../../common';
 import { SliceState } from '../../state';
 
 export const getProspectiveSwapNotional = (state: Draft<SliceState>): number => {

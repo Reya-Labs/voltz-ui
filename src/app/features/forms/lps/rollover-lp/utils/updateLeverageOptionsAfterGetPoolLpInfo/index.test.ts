@@ -1,12 +1,12 @@
 import { formatNumber } from '../../../../../../../utilities/number';
-import { calculateLeverageOptions } from '../../../../common/utils';
+import { calculateLeverageOptions } from '../../../../common';
 import { updateLeverageOptionsAfterGetPoolLpInfo } from './index';
 
 jest.mock('../../../../../../../utilities/number', () => ({
   formatNumber: jest.fn(),
 }));
 
-jest.mock('../../../../common/utils', () => ({
+jest.mock('../../../../common', () => ({
   calculateLeverageOptions: jest.fn(),
 }));
 

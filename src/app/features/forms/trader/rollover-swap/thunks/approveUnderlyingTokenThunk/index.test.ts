@@ -1,4 +1,5 @@
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { approveUnderlyingToken } from '../../../../common';
 import { approveUnderlyingTokenThunkHandler } from './index';
 
 jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
@@ -8,6 +9,9 @@ jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
 jest.mock('../../../../../../../utilities/amm', () => ({
   isV2AMM: jest.fn().mockReturnValue(false),
 }));
+jest.mock('../../../../common', () => ({
+  approveUnderlyingToken: jest.fn(),
+}));
 describe('approveUnderlyingTokenThunkHandler', () => {
   const getStateMock = jest.fn();
   const thunkAPIMock = { getState: getStateMock };
@@ -16,19 +20,17 @@ describe('approveUnderlyingTokenThunkHandler', () => {
     jest.clearAllMocks();
   });
 
-  it('should return the result of amm.approveUnderlyingTokenForPeripheryV1', async () => {
-    const approveUnderlyingTokenForPeripheryV1Mock = jest.fn().mockResolvedValue(123);
-
+  it('should return the result of approveUnderlyingToken', async () => {
+    (approveUnderlyingToken as jest.Mock).mockResolvedValue(123);
     const amm = {
       signer: true,
-      approveUnderlyingTokenForPeripheryV1: approveUnderlyingTokenForPeripheryV1Mock,
     };
     getStateMock.mockReturnValue({ rolloverSwapForm: { amm } });
 
     const result = await approveUnderlyingTokenThunkHandler(null as never, thunkAPIMock as never);
 
     expect(result).toBe(123);
-    expect(approveUnderlyingTokenForPeripheryV1Mock).toHaveBeenCalled();
+    expect(approveUnderlyingToken).toHaveBeenCalled();
     expect(getStateMock).toHaveBeenCalled();
   });
 
@@ -38,27 +40,18 @@ describe('approveUnderlyingTokenThunkHandler', () => {
     (rejectThunkWithError as jest.MockedFunction<typeof rejectThunkWithError>).mockReturnValue(
       rejectThunkWithErrorResult,
     );
+    (approveUnderlyingToken as jest.Mock).mockRejectedValue(error);
 
     const amm = {
       signer: true,
-      approveUnderlyingTokenForPeripheryV1: jest.fn().mockRejectedValue(error),
     };
     getStateMock.mockReturnValue({ rolloverSwapForm: { amm } });
 
     const result = await approveUnderlyingTokenThunkHandler(null as never, thunkAPIMock as never);
 
     expect(result).toBe(rejectThunkWithErrorResult);
+    expect(approveUnderlyingToken).toHaveBeenCalled();
     expect(rejectThunkWithError).toHaveBeenCalledWith(thunkAPIMock, error);
-    expect(getStateMock).toHaveBeenCalled();
-  });
-
-  it('should not call amm.approveUnderlyingTokenForPeripheryV1 if amm or amm.signer are undefined', async () => {
-    const amm = null;
-    getStateMock.mockReturnValue({ rolloverSwapForm: { amm } });
-
-    const result = await approveUnderlyingTokenThunkHandler(null as never, thunkAPIMock as never);
-
-    expect(result).toBeUndefined();
     expect(getStateMock).toHaveBeenCalled();
   });
 });

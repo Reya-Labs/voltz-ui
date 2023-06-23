@@ -1,10 +1,10 @@
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
-import { isUserInputNotionalError } from '../../../../common/utils';
+import { isUserInputNotionalError } from '../../../../common';
 import { getProspectiveSwapMode, getProspectiveSwapNotional } from '../../utils';
 import { getInfoPostSwapThunkHandler } from './index';
 
 // Mock dependencies
-jest.mock('../../../../common/utils', () => ({
+jest.mock('../../../../common', () => ({
   isUserInputNotionalError: jest.fn(),
 }));
 jest.mock('../../utils', () => ({

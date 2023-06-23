@@ -1,10 +1,10 @@
 import { formatNumber } from '../../../../../../../utilities/number';
-import { calculateLeverageOptions } from '../../../../common/utils';
+import { calculateLeverageOptions } from '../../../../common';
 import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
 import { updateLeverageOptionsAfterGetPoolSwapInfo } from './index';
 
 jest.mock('../../../../../../../utilities/number');
-jest.mock('../../../../common/utils');
+jest.mock('../../../../common');
 jest.mock('../getProspectiveSwapMode');
 
 describe('updateLeverageOptionsAfterGetPoolSwapInfo', () => {

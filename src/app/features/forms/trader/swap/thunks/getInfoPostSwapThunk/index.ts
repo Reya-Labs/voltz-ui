@@ -10,7 +10,7 @@ import { isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
-import { isUserInputNotionalError } from '../../../../common/utils';
+import { isUserInputNotionalError } from '../../../../common';
 import { initialState } from '../../state';
 import {
   getExistingPositionId,

@@ -1,7 +1,7 @@
 import { Draft } from '@reduxjs/toolkit';
 
 import { formatNumber } from '../../../../../../../utilities/number';
-import { calculateLeverageOptions } from '../../../../common/utils';
+import { calculateLeverageOptions } from '../../../../common';
 import { SliceState } from '../../state';
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
 

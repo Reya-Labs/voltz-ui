@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { isUserInputMarginError } from '../../../../common/utils';
+import { isUserInputMarginError } from '../../../../common';
 import { SliceState } from '../../state';
 
 export const getProspectiveLpMargin = (state: Draft<SliceState>): number => {

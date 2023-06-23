@@ -1,7 +1,7 @@
-import { isUserInputMarginError } from '../../../../common/utils';
+import { isUserInputMarginError } from '../../../../common';
 import { getProspectiveLpMargin } from './index';
 
-jest.mock('../../../../common/utils');
+jest.mock('../../../../common');
 
 describe('getProspectiveLpMargin', () => {
   afterEach(() => {

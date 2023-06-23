@@ -12,7 +12,6 @@ jest.mock('../../../../../../../utilities/amm', () => ({
 jest.mock('../../../../common', () => ({
   approveUnderlyingToken: jest.fn(),
 }));
-
 describe('approveUnderlyingTokenThunkHandler', () => {
   const getStateMock = jest.fn();
   const thunkAPIMock = { getState: getStateMock };
@@ -26,7 +25,7 @@ describe('approveUnderlyingTokenThunkHandler', () => {
     const amm = {
       signer: true,
     };
-    getStateMock.mockReturnValue({ swapForm: { amm } });
+    getStateMock.mockReturnValue({ rolloverLpForm: { amm } });
 
     const result = await approveUnderlyingTokenThunkHandler(null as never, thunkAPIMock as never);
 
@@ -46,7 +45,7 @@ describe('approveUnderlyingTokenThunkHandler', () => {
     const amm = {
       signer: true,
     };
-    getStateMock.mockReturnValue({ swapForm: { amm } });
+    getStateMock.mockReturnValue({ rolloverLpForm: { amm } });
 
     const result = await approveUnderlyingTokenThunkHandler(null as never, thunkAPIMock as never);
 

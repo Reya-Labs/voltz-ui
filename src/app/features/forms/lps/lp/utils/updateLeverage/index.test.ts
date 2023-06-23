@@ -1,8 +1,8 @@
-import { checkLowLeverageNotification } from '../../../../common/utils';
+import { checkLowLeverageNotification } from '../../../../common';
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
 import { updateLeverage } from './index';
 
-jest.mock('../../../../common/utils', () => ({
+jest.mock('../../../../common', () => ({
   checkLowLeverageNotification: jest.fn(),
 }));
 

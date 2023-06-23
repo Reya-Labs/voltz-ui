@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { checkLowLeverageNotification } from '../../../../common/utils';
+import { checkLowLeverageNotification } from '../../../../common';
 import { SliceState } from '../../state';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 
