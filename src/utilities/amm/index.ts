@@ -61,11 +61,13 @@ export const findCurrentAmm = (
 };
 
 /**
- * Returns AMM pool name and includes borrowing tag
+ * Returns AMM pool name and includes borrowing tag and v2 tag
  * @param amm - the amm
  */
 export const getAmmProtocol = (amm: AMM) => {
-  return amm.protocol + (amm.market.tags.isBorrowing ? '_borrow' : '');
+  return `${amm.protocol}${amm.market.tags.isV2 ? '_v2' : ''}${
+    amm.market.tags.isBorrowing ? '_borrow' : ''
+  }`;
 };
 
 export const getProtocolName = (protocolId: number): string => {
