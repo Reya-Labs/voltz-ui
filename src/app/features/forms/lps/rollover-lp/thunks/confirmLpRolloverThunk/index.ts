@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { rolloverAndLp } from '@voltz-protocol/sdk-v1-stateless';
-import { rolloverWithLp as rolloverAndLpV2 } from '@voltz-protocol/sdk-v2';
+import { rolloverWithLp } from '@voltz-protocol/sdk-v1-stateless';
+import { rolloverWithLp as rolloverWithLpV2 } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
@@ -54,7 +54,7 @@ export const confirmLpRolloverThunk = createAsyncThunk<
     pushRolloverSubmittedEvent(eventParams);
     let result: ContractReceipt;
     if (isV2AMM(amm)) {
-      result = await rolloverAndLpV2({
+      result = await rolloverWithLpV2({
         maturedPositionId: previousPosition.id,
         ammId: amm.id,
         fixedLow,
@@ -65,7 +65,7 @@ export const confirmLpRolloverThunk = createAsyncThunk<
       });
     } else {
       if (isV1StatelessEnabled()) {
-        result = await rolloverAndLp({
+        result = await rolloverWithLp({
           maturedPositionId: previousPosition.id,
           ammId: amm.id,
           fixedLow,
