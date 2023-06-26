@@ -1,5 +1,5 @@
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
-import { approveUnderlyingTokenAction } from '../../../../common';
+import { approveUnderlyingTokenService } from '../../../../common';
 import { approveUnderlyingTokenThunkHandler } from './index';
 
 jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
@@ -10,7 +10,7 @@ jest.mock('../../../../../../../utilities/amm', () => ({
   isV2AMM: jest.fn().mockReturnValue(false),
 }));
 jest.mock('../../../../common', () => ({
-  approveUnderlyingTokenAction: jest.fn(),
+  approveUnderlyingTokenService: jest.fn(),
 }));
 
 describe('approveUnderlyingTokenThunkHandler', () => {
@@ -22,7 +22,7 @@ describe('approveUnderlyingTokenThunkHandler', () => {
   });
 
   it('should return the result of approveUnderlyingToken', async () => {
-    (approveUnderlyingTokenAction as jest.Mock).mockResolvedValue(123);
+    (approveUnderlyingTokenService as jest.Mock).mockResolvedValue(123);
     const amm = {
       signer: true,
     };
@@ -31,7 +31,7 @@ describe('approveUnderlyingTokenThunkHandler', () => {
     const result = await approveUnderlyingTokenThunkHandler(null as never, thunkAPIMock as never);
 
     expect(result).toBe(123);
-    expect(approveUnderlyingTokenAction).toHaveBeenCalled();
+    expect(approveUnderlyingTokenService).toHaveBeenCalled();
     expect(getStateMock).toHaveBeenCalled();
   });
 
@@ -41,7 +41,7 @@ describe('approveUnderlyingTokenThunkHandler', () => {
     (rejectThunkWithError as jest.MockedFunction<typeof rejectThunkWithError>).mockReturnValue(
       rejectThunkWithErrorResult,
     );
-    (approveUnderlyingTokenAction as jest.Mock).mockRejectedValue(error);
+    (approveUnderlyingTokenService as jest.Mock).mockRejectedValue(error);
 
     const amm = {
       signer: true,
@@ -51,7 +51,7 @@ describe('approveUnderlyingTokenThunkHandler', () => {
     const result = await approveUnderlyingTokenThunkHandler(null as never, thunkAPIMock as never);
 
     expect(result).toBe(rejectThunkWithErrorResult);
-    expect(approveUnderlyingTokenAction).toHaveBeenCalled();
+    expect(approveUnderlyingTokenService).toHaveBeenCalled();
     expect(rejectThunkWithError).toHaveBeenCalledWith(thunkAPIMock, error);
     expect(getStateMock).toHaveBeenCalled();
   });
