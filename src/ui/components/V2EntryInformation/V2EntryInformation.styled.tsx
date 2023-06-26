@@ -8,6 +8,7 @@ export const V2Box = styled('div')`
   border-radius: 0px 0px 8px 8px;
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 export const V2DetailBox = styled('div')`
