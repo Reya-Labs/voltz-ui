@@ -1,5 +1,5 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
-import { ColorTokens, Pill, TokenTypography, TypographyToken } from 'brokoli-ui';
+import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
 import { MAX_POOL_CAP } from '../../../../../app/features/aMMs';
@@ -16,6 +16,7 @@ import {
   MarketTokenInformation,
   MarketTokenInformationProps,
 } from '../../../../components/MarketTokenInformation';
+import { TestNetIndicator } from '../../../../components/TestNetIndicator';
 import { V2EntryInformation } from '../../../../components/V2EntryInformation';
 import {
   ButtonStyled,
@@ -48,15 +49,6 @@ type PoolEntryProps = {
   chainId: SupportedChainId;
 };
 
-const TestNetMap: Record<SupportedChainId, boolean> = {
-  [SupportedChainId.mainnet]: false,
-  [SupportedChainId.goerli]: true,
-  [SupportedChainId.arbitrum]: false,
-  [SupportedChainId.arbitrumGoerli]: true,
-  [SupportedChainId.avalanche]: false,
-  [SupportedChainId.avalancheFuji]: true,
-  [SupportedChainId.spruce]: false,
-};
 export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
   (
     {
@@ -154,20 +146,11 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
       }
     };
     const chainIcon = <ChainIcon chainId={poolChainId} />;
+    const testNetIndicator = <TestNetIndicator chainId={poolChainId} />;
     return (
       <PoolEntryBoxWrapper ref={ref}>
         {chainIcon ? <ChainIconContainer>{chainIcon}</ChainIconContainer> : null}
-        {TestNetMap[poolChainId] ? (
-          <TestPillContainer>
-            <Pill
-              colorToken="skyBlueCrayola"
-              typographyToken="primaryBodySmallRegular"
-              variant="compact"
-            >
-              Testnet
-            </Pill>
-          </TestPillContainer>
-        ) : null}
+        {testNetIndicator ? <TestPillContainer>{testNetIndicator}</TestPillContainer> : null}
         <PoolEntryBox
           backgroundColorToken={backgroundColorToken}
           borderColorToken={borderColorToken}
