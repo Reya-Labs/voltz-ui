@@ -124,14 +124,11 @@ export const generatePoolId = (amm: {
 };
 
 export const generateAmmIdForRoute = (amm: { id: string }) => {
-  return amm.id.toLowerCase().substring(amm.id.length - 4);
+  return amm.id.toLowerCase().trim();
 };
 
 export const generatePositionIdForRoute = (position: { id: string }) => {
-  const trimmed = position.id.trim();
-  const [info1, info2, info3] = trimmed.toLowerCase().split('_');
-  const id = [info1, info2, info3].map((i) => i.trim().substring(i.length - 4)).join('');
-  return id.replace('#', '_');
+  return position.id.trim();
 };
 
 export const isV2AMM = (amm: AMM) => {

@@ -441,10 +441,10 @@ describe('swapFormReducer', () => {
         const nextState = swapFormReducer(testsInitialState, {
           type: getPoolSwapInfoThunk.fulfilled.type,
           payload: {
-            availableNotionalFT: 1,
-            availableNotionalVT: 2,
-            maxLeverageFT: 3,
-            maxLeverageVT: 4,
+            availableNotionalFixedTaker: 1,
+            availableNotionalVariableTaker: 2,
+            maxLeverageFixedTaker: 3,
+            maxLeverageVariableTaker: 4,
           },
         });
 
