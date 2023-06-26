@@ -77,3 +77,10 @@ export const ChainIconContainer = styled('div')`
   top: 12px;
   left: -15px;
 `;
+
+export const TestPillContainer = styled('div')`
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: -55px;
+`;
