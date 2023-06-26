@@ -1,9 +1,8 @@
-import { PortfolioPositionAMM } from '@voltz-protocol/v1-sdk';
-
 import { formatPOSIXTimestamp } from '../../../utilities/date';
 import { compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
-import { formFormatNumber } from '../forms/common/utils';
+import { formFormatNumber } from '../forms/common';
+import { PortfolioPositionPool } from './thunks';
 
 export type PositionDetailsUI = {
   id: string;
@@ -19,13 +18,13 @@ export type PositionDetailsUI = {
 
   canEdit: boolean;
   canSettle: boolean;
-  rolloverAmmId: null | string;
+  rolloverPoolId: null | string;
 
   realizedPNLFees: number;
   realizedPNLCashflow: number;
   realizedPNLTotal: number;
 
-  amm: PortfolioPositionAMM;
+  pool: PortfolioPositionPool;
   canRollover: boolean;
   creationTimestampInMSFormatted: string;
   fixLowPercentage: number;
@@ -94,7 +93,7 @@ export const selectPositionDetails =
     if (!detailsValue) {
       return null;
     }
-    const tokenPriceUSD = detailsValue.tokenPriceUSD;
+    const tokenPriceUSD = detailsValue.pool.underlyingToken.priceUSD;
     const notionalUSD = detailsValue.notional * tokenPriceUSD;
     const marginUSD = detailsValue.margin * tokenPriceUSD;
     const realizedPNLTotalUSD = detailsValue.realizedPNLTotal * tokenPriceUSD;
@@ -103,9 +102,10 @@ export const selectPositionDetails =
 
     return {
       ...detailsValue,
+      tokenPriceUSD: detailsValue.pool.underlyingToken.priceUSD,
       fixHighPercentage: detailsValue.fixHigh * 100,
       fixLowPercentage: detailsValue.fixLow * 100,
-      canRollover: Boolean(detailsValue.rolloverAmmId),
+      canRollover: Boolean(detailsValue.rolloverPoolId),
       creationTimestampInMSFormatted: formatPOSIXTimestamp(detailsValue.creationTimestampInMS),
       notionalUSDCompactFormatted: compactFormatToParts(notionalUSD),
       marginUSDCompactFormatted: compactFormatToParts(marginUSD),

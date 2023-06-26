@@ -31,7 +31,7 @@ export const confirmSettleThunk = createAsyncThunk<
     account,
     notional: position.notional,
     margin: position.margin - position.realizedPNLFees,
-    pool: getPoolTrackingName(position.amm),
+    pool: getPoolTrackingName(position.pool),
     isFT: position.type === 'Fixed',
     isTrader: position.type !== 'LP',
   };
@@ -39,7 +39,7 @@ export const confirmSettleThunk = createAsyncThunk<
   try {
     pushSettleSubmittedEvent(eventParams);
     let result: ContractReceipt;
-    if (position.amm.isV2) {
+    if (position.pool.isV2) {
       result = await settleV2({
         positionId: position.id,
         signer,

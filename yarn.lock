@@ -7576,6 +7576,11 @@
     "@uniswap/v3-core" "1.0.0"
     "@uniswap/v3-periphery" "^1.0.1"
 
+"@voltz-protocol/api-v2-types@1.44.0":
+  version "1.44.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/api-v2-types/-/api-v2-types-1.44.0.tgz#41d70594ceb4f6a8d4cbcf537bc286ea0ef7e611"
+  integrity sha512-NZpWCyWga+BHdcSSX8iLemRpwsFmwokT+IDNwmGWRyuGRC+cru3pJ/ZEYJXCtT0F7mlUxmMfbwONoG9ZQcEqAw==
+
 "@voltz-protocol/api-v2@^1.40.3":
   version "1.40.3"
   resolved "https://registry.yarnpkg.com/@voltz-protocol/api-v2/-/api-v2-1.40.3.tgz#27bf881beb938033862b0a8d207f6bda80ffc683"
@@ -7712,15 +7717,16 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.156.2":
-  version "1.156.2"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.156.2.tgz#e28053485ebe399d44db73c5becc929c34d94ce5"
-  integrity sha512-qOVT+GXX0+YOg0uYvhWLi7CUo5zTbNxrXcpVMA2KMJmurBH0u+HDV3tkzn3E3lFSErozc57sEC7huwDktOcHog==
+"@voltz-protocol/v1-sdk@1.157.0":
+  version "1.157.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.157.0.tgz#dcd8259e4fc6a41cdbe4232f481c479934d22255"
+  integrity sha512-o64HtrnyWRWLU3e4MTE2cLsz3xXTMo+SHTXFhKAipA1+XF0WJzD6/mqPUXMUV4xtvr8akrXYEA32dnamRJKdWA==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
+    "@voltz-protocol/api-v2-types" "1.44.0"
     "@voltz-protocol/subgraph-data" "1.18.1"
     axios "^0.27.2"
     big.js "^6.1.1"

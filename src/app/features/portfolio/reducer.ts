@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PortfolioPosition } from '@voltz-protocol/v1-sdk';
 
 import { initialSortingDirection, resetSortingDirection } from './constants';
-import { initialisePortfolioPositionsThunk } from './thunks';
+import { initialisePortfolioPositionsThunk, PortfolioPosition } from './thunks';
 import { PositionSortDirection, PositionSortId, PositionSorting } from './types';
 
 type SliceState = {

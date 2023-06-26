@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, getAMMs, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { AMM, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import {
@@ -98,7 +98,7 @@ const slice = createSlice({
       })
       .addCase(initialiseAMMsThunk.fulfilled, (state, { payload }) => {
         state.aMMsLoadedState = 'succeeded';
-        state.aMMs = payload as Awaited<ReturnType<typeof getAMMs>>['amms'];
+        state.aMMs = payload as AMM[];
       })
       .addCase(fetchPoolsInformationThunk.pending, (state) => {
         state.poolsInformationLoadedState = 'pending';
