@@ -7537,6 +7537,20 @@
     express-rate-limit "^6.7.0"
     rate-limit-redis "^3.0.2"
 
+"@voltz-protocol/api-v2@^1.43.0":
+  version "1.43.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/api-v2/-/api-v2-1.43.0.tgz#7f8de2fc2c46e59d7b1748a8db87ae2dbdc5a2d1"
+  integrity sha512-xNSupdxWYwfn4doqLTU5UIT1lAJwOH/O00b2LkWZI8NlC+I951YA3la7jI/z1Y8h4Z1HYqgdT7MJefj4qb7Ctg==
+  dependencies:
+    "@voltz-protocol/commons-v2" "^1.7.0"
+    "@voltz-protocol/indexer-v1" "^1.8.0"
+    "@voltz-protocol/subgraph-data" "^1.18.1"
+    cors "^2.8.5"
+    ethers "5.5.4"
+    express "^4.18.2"
+    express-rate-limit "^6.7.0"
+    rate-limit-redis "^3.0.2"
+
 "@voltz-protocol/commons-v2@^1.5.2":
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@voltz-protocol/commons-v2/-/commons-v2-1.5.2.tgz#47353d704e5175be073561550bb2624748b14e35"
@@ -7545,6 +7559,13 @@
     "@google-cloud/bigquery" "6.2.0"
     ethers "5.5.4"
     ioredis "5.3.2"
+
+"@voltz-protocol/commons-v2@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/commons-v2/-/commons-v2-1.7.0.tgz#fd0b7e3ab7ccd0d67691bdff8abdd893b329a95d"
+  integrity sha512-8+4LTUxIqo+b0wudjT+NrdzXj8DxH0SmMZkbaWKT0NvYTbzTX0fFi68HJYgjK0Snhay6lr1D+SCEvpZ8XOSfrA==
+  dependencies:
+    ethers "5.5.4"
 
 "@voltz-protocol/community-sdk@1.2.0":
   version "1.2.0"
@@ -7567,7 +7588,39 @@
     ethers "5.5.4"
     ioredis "5.3.2"
 
-"@voltz-protocol/sdk-v1-stateless@1.21.0", "@voltz-protocol/sdk-v1-stateless@^1.21.0":
+"@voltz-protocol/indexer-v1@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/indexer-v1/-/indexer-v1-1.8.0.tgz#9c8d869b8b3593ef864ae8dee0a4a6bc389e9ee2"
+  integrity sha512-rbK/JD5Djg/LFjRlRxGwvwg95WgrjNB0Nyk144RtqFG+F0VGZ3ITBgT3dh5KeTxXrj5ZUnvy2K3ybRfagrX2Gw==
+  dependencies:
+    "@google-cloud/bigquery" "6.2.0"
+    "@google-cloud/bigtable" "4.5.1"
+    "@google-cloud/pubsub" "3.5.2"
+    "@google-cloud/storage" "6.10.0"
+    "@voltz-protocol/commons-v2" "^1.7.0"
+    ethers "5.5.4"
+    ioredis "5.3.2"
+
+"@voltz-protocol/sdk-v1-stateless@1.22.3":
+  version "1.22.3"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.22.3.tgz#b713b5c9f763fedca166abc3abcf323befea0ab6"
+  integrity sha512-QGK3IcJtZDOEK6oxCI+2APqrlnb6czXgvxT5zsuKnUQtHWhZIov6ttaXDrpTW1GKjvw0er9zlYneqcAv6XJIcQ==
+  dependencies:
+    "@sentry/browser" "7.25.0"
+    "@sentry/tracing" "7.25.0"
+    "@voltz-protocol/api-v2" "^1.43.0"
+    "@voltz-protocol/commons-v2" "^1.7.0"
+    big.js "6.2.1"
+    decimal.js-light "2.5.1"
+    ethers "5.5.4"
+    evm-bn "1.1.2"
+    fraction.js "4.2.0"
+    jsbi "3.1.4"
+    keccak256 "1.0.6"
+    tiny-invariant "1.3.1"
+    toformat "2.0.0"
+
+"@voltz-protocol/sdk-v1-stateless@^1.21.0":
   version "1.21.0"
   resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.21.0.tgz#a9b29bcf379956a0f0ed662685b62e4080dcd328"
   integrity sha512-wkr8qHM/l2uGs7Jgv2pEUkamfWRD9+aikY9U7KRjoM7oQmiExKvYel7MJUP7iUb24/HjH11L9abFFt71g2kuLw==
@@ -7606,10 +7659,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.154.3":
-  version "1.154.3"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.154.3.tgz#b3fefa7a35c2a1819eca841738bdd539a1ebd81a"
-  integrity sha512-XUWqKpQcRwQ8AXexlL4WOhLGihPpwsYeicqbLmurM8pQjCJuQQB8gYjNm3kNSW5mEyjLvn1u/wQlrmcuYrNlHg==
+"@voltz-protocol/v1-sdk@1.155.0":
+  version "1.155.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.155.0.tgz#a64c7e223606bc7801e4ebe3dfee14d570b2d715"
+  integrity sha512-ekPEEFko78FkBQV+EsI11vrti3g45Vlq8v+bLKwKNObn6K25r2RI3RIi6hU26Epj29aYggBzPb4CtTAFRt0E+g==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"

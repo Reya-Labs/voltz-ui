@@ -1,9 +1,7 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
-import { getPositions, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { getTraderPositionByPool, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { findCurrentPosition } from '../../../../../../../utilities/amm';
-import { isBorrowingPosition } from '../../../../../../../utilities/borrowAmm';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 import { pushPageViewEvent } from '../../analytics';
@@ -39,19 +37,9 @@ export const setSignerAndPositionForAMMThunkHandler: AsyncThunkPayloadCreator<
     }
 
     const account = await signer.getAddress();
+    const positions = await getTraderPositionByPool(amm.id, account, amm);
+    const position = positions.length > 0 ? positions[0] : null;
 
-    const { positions, error } = await getPositions({
-      chainId,
-      userWalletId: account.toLowerCase(),
-      amms: [amm],
-      type: 'Trader',
-    });
-    if (error) {
-      return rejectThunkWithError(thunkAPI, error);
-    }
-    // TODO: Alex possible to move filter into subgraph level? Discuss
-    const nonBorrowPositions = positions.filter((pos) => !isBorrowingPosition(pos));
-    const position = findCurrentPosition(nonBorrowPositions || [], amm.id) || null;
     pushPageViewEvent({
       account,
       isEdit: Boolean(position),
