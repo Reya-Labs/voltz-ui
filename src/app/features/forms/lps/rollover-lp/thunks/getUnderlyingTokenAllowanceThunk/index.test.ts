@@ -17,7 +17,7 @@ jest.mock('../../../../common', () => ({
 
 describe('getUnderlyingTokenAllowanceThunkHandler', () => {
   const getState = () => ({
-    swapForm: {
+    rolloverLpForm: {
       amm: {
         signer: {},
       },
@@ -48,7 +48,7 @@ describe('getUnderlyingTokenAllowanceThunkHandler', () => {
     // Call function and assert
     const result = await getUnderlyingTokenAllowanceThunkHandler({ chainId: 1 }, {
       getState: () => ({
-        swapForm: { amm },
+        rolloverLpForm: { amm },
       }),
     } as never);
     expect(getUnderlyingTokenAllowanceService).toHaveBeenCalledWith({
@@ -66,7 +66,7 @@ describe('getUnderlyingTokenAllowanceThunkHandler', () => {
     (rejectThunkWithError as jest.Mock).mockReturnValue(rejectThunkWithErrorResult);
     const thunkApiMock = {
       getState: () => ({
-        swapForm: {
+        rolloverLpForm: {
           amm: {
             signer: {},
           },
