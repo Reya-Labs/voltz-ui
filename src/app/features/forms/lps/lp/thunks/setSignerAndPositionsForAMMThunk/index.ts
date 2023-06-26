@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getLpPositionByPool, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { getLpPositionsByPool, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { findCurrentPositionsLp } from '../../../../../../../utilities/amm';
@@ -40,9 +40,9 @@ export const setSignerAndPositionsForAMMThunk = createAsyncThunk<
     }
 
     const userWalletId = (await signer.getAddress()).toLowerCase();
-    const positions = await getLpPositionByPool(amm.id, userWalletId, amm);
+    const positions = await getLpPositionsByPool(amm.id, userWalletId, amm);
 
-    const filteredPositions: Position[] = findCurrentPositionsLp(positions || [], amm.id) || null;
+    const filteredPositions: Position[] = findCurrentPositionsLp(positions, amm.id) || null;
     return {
       signer: signer,
       positions: filteredPositions,

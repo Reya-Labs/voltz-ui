@@ -1,5 +1,5 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
-import { AMM, getLpPositionByPool, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { AMM, getLpPositionsByPool, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { getConfig } from '../../../../../../../hooks/voltz-config/config';
@@ -61,7 +61,11 @@ export const initializeAMMsAndPositionsForRolloverThunkHandler: AsyncThunkPayloa
       };
     }
 
-    const positions = await getLpPositionByPool(previousAMM.id, account.toLowerCase(), previousAMM);
+    const positions = await getLpPositionsByPool(
+      previousAMM.id,
+      account.toLowerCase(),
+      previousAMM,
+    );
 
     const previousPosition = positions.find(
       (p) => generatePositionIdForRoute(p) === routePositionId,

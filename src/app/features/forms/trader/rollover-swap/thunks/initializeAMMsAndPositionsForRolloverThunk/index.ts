@@ -7,7 +7,6 @@ import {
   findCurrentAmm,
   generateAmmIdForRoute,
   generatePoolId,
-  generatePositionIdForRoute,
 } from '../../../../../../../utilities/amm';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
@@ -61,15 +60,12 @@ export const initializeAMMsAndPositionsForRolloverThunkHandler: AsyncThunkPayloa
       };
     }
 
-    const positions = await getTraderPositionByPool(
+    const previousPosition = await getTraderPositionByPool(
       previousAMM.id,
       account.toLowerCase(),
       previousAMM,
     );
 
-    const previousPosition = positions.find(
-      (p) => generatePositionIdForRoute(p) === routePositionId,
-    );
     if (!previousPosition) {
       return {
         aMM: null,

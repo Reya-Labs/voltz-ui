@@ -37,8 +37,7 @@ export const setSignerAndPositionForAMMThunkHandler: AsyncThunkPayloadCreator<
     }
 
     const account = await signer.getAddress();
-    const positions = await getTraderPositionByPool(amm.id, account, amm);
-    const position = positions.length > 0 ? positions[0] : null;
+    const position = await getTraderPositionByPool(amm.id, account, amm);
 
     pushPageViewEvent({
       account,
