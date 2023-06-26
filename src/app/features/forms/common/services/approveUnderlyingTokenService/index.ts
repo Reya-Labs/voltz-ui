@@ -6,7 +6,7 @@ import { Signer } from 'ethers';
 import { isV2AMM } from '../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 
-export const approveUnderlyingTokenAction = async ({
+export const approveUnderlyingTokenService = async ({
   amm,
   signer,
 }: {
