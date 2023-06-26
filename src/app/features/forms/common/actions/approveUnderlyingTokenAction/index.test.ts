@@ -4,7 +4,7 @@ import { Signer } from 'ethers';
 
 import { isV2AMM } from '../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
-import { approveUnderlyingToken } from './index';
+import { approveUnderlyingTokenAction } from './index';
 
 // Mock dependencies
 jest.mock('@voltz-protocol/sdk-v1-stateless', () => ({
@@ -30,7 +30,7 @@ describe('approveUnderlyingToken', () => {
   });
 
   test('should return 0 if amm or signer is not provided', async () => {
-    const result = await approveUnderlyingToken({ amm: null!, signer: null! });
+    const result = await approveUnderlyingTokenAction({ amm: null!, signer: null! });
     expect(result).toBe(0);
   });
 
@@ -39,7 +39,7 @@ describe('approveUnderlyingToken', () => {
     const amm = { id: 'ammId', approveUnderlyingTokenForPeripheryV1: jest.fn() };
     const signer: Signer = {} as Signer;
 
-    await approveUnderlyingToken({ amm, signer } as never);
+    await approveUnderlyingTokenAction({ amm, signer } as never);
 
     expect(approvePeripheryV2).toHaveBeenCalledWith({ signer, ammId: amm.id });
     expect(approvePeriphery).not.toHaveBeenCalled();
@@ -52,7 +52,7 @@ describe('approveUnderlyingToken', () => {
     const amm = { id: 'ammId', approveUnderlyingTokenForPeripheryV1: jest.fn() };
     const signer: Signer = {} as Signer;
 
-    await approveUnderlyingToken({ amm, signer } as never);
+    await approveUnderlyingTokenAction({ amm, signer } as never);
 
     expect(approvePeriphery).toHaveBeenCalledWith({ signer, ammId: amm.id });
     expect(approvePeripheryV2).not.toHaveBeenCalled();
@@ -68,7 +68,7 @@ describe('approveUnderlyingToken', () => {
     };
     const signer: Signer = {} as Signer;
 
-    const result = await approveUnderlyingToken({ amm, signer } as never);
+    const result = await approveUnderlyingTokenAction({ amm, signer } as never);
 
     expect(amm.approveUnderlyingTokenForPeripheryV1).toHaveBeenCalled();
     expect(approvePeriphery).not.toHaveBeenCalled();

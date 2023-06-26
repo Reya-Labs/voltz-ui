@@ -2,7 +2,7 @@ import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
-import { approveUnderlyingToken } from '../../../../common';
+import { approveUnderlyingTokenAction } from '../../../../common';
 
 export const approveUnderlyingTokenThunkHandler: AsyncThunkPayloadCreator<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
@@ -11,7 +11,7 @@ export const approveUnderlyingTokenThunkHandler: AsyncThunkPayloadCreator<
 > = async (_, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().lpForm.amm;
-    return await approveUnderlyingToken({
+    return await approveUnderlyingTokenAction({
       amm: amm!,
       signer: amm!.signer!,
     });
