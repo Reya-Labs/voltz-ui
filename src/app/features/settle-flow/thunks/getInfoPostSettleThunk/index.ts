@@ -22,7 +22,7 @@ export const getInfoPostSettlePositionThunkHandler: AsyncThunkPayloadCreator<
     return {};
   }
   try {
-    if (position.amm.isV2) {
+    if (position.pool.isV2) {
       return await simulateSettleV2({
         positionId: position.id,
         signer,

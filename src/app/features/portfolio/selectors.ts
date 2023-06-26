@@ -20,24 +20,30 @@ export const selectPositions = (state: RootState): PositionUI[] => {
   }
 
   const pools: PositionUI[] = portfolioPositions.map((position) => {
-    const isV2 = position.amm.isV2;
-    const isBorrowing = position.amm.isBorrowing;
-    const market = position.amm.market;
-    const token = position.amm.underlyingToken.name;
-    const notionalUSD = position.notional * position.tokenPriceUSD;
-    const marginUSD = position.margin * position.tokenPriceUSD;
+    const pool = position.pool;
+    const isV2 = pool.isV2;
+    const isBorrowing = pool.isBorrowing;
+    const market = pool.market;
+    const token = pool.underlyingToken.name;
+    const tokenPriceUSD = position.pool.underlyingToken.priceUSD;
+    const notionalUSD = position.notional * tokenPriceUSD;
+    const marginUSD = position.margin * tokenPriceUSD;
     const type = position.type;
-    const unrealizedPNLUSD = position.unrealizedPNL * position.tokenPriceUSD;
-    const realizedPNLTotalUSD = position.realizedPNLTotal * position.tokenPriceUSD;
-    const realizedPNLFeesUSD = position.realizedPNLFees * position.tokenPriceUSD;
-    const realizedPNLCashflowUSD = position.realizedPNLCashflow * position.tokenPriceUSD;
+    const unrealizedPNLUSD = position.unrealizedPNL * tokenPriceUSD;
+    const realizedPNLTotalUSD = position.realizedPNLTotal * tokenPriceUSD;
+    const realizedPNLFeesUSD = position.realizedPNLFees * tokenPriceUSD;
+    const realizedPNLCashflowUSD = position.realizedPNLCashflow * tokenPriceUSD;
     const creationTimestampInMS = position.creationTimestampInMS;
 
     const fixHigh = position.fixHigh * 100;
     const fixLow = position.fixLow * 100;
-    const currentFixed = position.status.currentFixed * 100;
-    const receiving = position.status.receiving * 100;
-    const paying = position.status.paying * 100;
+    const currentFixed = position.poolCurrentFixedRate * 100;
+    const receiving = position.receiving * 100;
+    const paying = position.paying * 100;
+
+    const health = position.health;
+    const variant = position.variant;
+
     return {
       creationTimestampInMS,
       type,
@@ -49,23 +55,23 @@ export const selectPositions = (state: RootState): PositionUI[] => {
       marginUSD,
       notionalUSDCompactFormat: compactFormatToParts(notionalUSD),
       notionalUSD,
-      maturityEndTimestampInMS: position.amm.termEndTimestampInMS,
-      maturityStartTimestampInMS: position.amm.termStartTimestampInMS,
-      maturityFormatted: formatPOSIXTimestamp(position.amm.termEndTimestampInMS),
+      maturityEndTimestampInMS: pool.termEndTimestampInMS,
+      maturityStartTimestampInMS: pool.termStartTimestampInMS,
+      maturityFormatted: formatPOSIXTimestamp(pool.termEndTimestampInMS),
       id: position.id,
-      chainId: position.amm.chainId,
-      routeAmmId: generateAmmIdForRoute(position.amm),
+      chainId: pool.chainId,
+      routeAmmId: generateAmmIdForRoute(pool),
       routePositionId: generatePositionIdForRoute(position),
-      routePoolId: generatePoolId(position.amm),
+      routePoolId: generatePoolId(pool),
       name: `${type} - ${market} - ${token as string}${isBorrowing ? ' - Borrowing' : ''}`,
       status: {
         fixHigh,
         fixLow,
         currentFixed,
-        health: position.status.health,
+        health,
         receiving,
         paying,
-        variant: position.status.variant,
+        variant,
       },
       unrealizedPNLUSD,
       unrealizedPNLUSDCompactFormat: compactFormatToParts(unrealizedPNLUSD),
