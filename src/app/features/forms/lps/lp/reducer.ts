@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, InfoPostLp } from '@voltz-protocol/v1-sdk';
+import { AMM, InfoPostLp, PoolLpInfo } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { stringToBigFloat } from '../../../../../utilities/number';
@@ -272,9 +272,7 @@ const slice = createSlice({
         };
       })
       .addCase(getPoolLpInfoThunk.fulfilled, (state, { payload }) => {
-        let { maxLeverage } = payload as {
-          maxLeverage: number;
-        };
+        let { maxLeverage } = payload as PoolLpInfo;
         maxLeverage = Math.floor((maxLeverage * 99) / 100);
         state.poolLpInfo = {
           maxLeverage: maxLeverage,

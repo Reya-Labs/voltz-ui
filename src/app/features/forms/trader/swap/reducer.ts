@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, InfoPostSwapV1 } from '@voltz-protocol/v1-sdk';
+import { AMM, InfoPostSwapV1, PoolSwapInfo } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { getAmmProtocol } from '../../../../../utilities/amm';
@@ -249,21 +249,20 @@ const slice = createSlice({
         };
       })
       .addCase(getPoolSwapInfoThunk.fulfilled, (state, { payload }) => {
-        const { availableNotionalFT, availableNotionalVT, maxLeverageFT, maxLeverageVT } =
-          payload as {
-            availableNotionalFT: number;
-            availableNotionalVT: number;
-            maxLeverageFT: number;
-            maxLeverageVT: number;
-          };
+        const {
+          availableNotionalFixedTaker,
+          availableNotionalVariableTaker,
+          maxLeverageFixedTaker,
+          maxLeverageVariableTaker,
+        } = payload as PoolSwapInfo;
         state.poolSwapInfo = {
           availableNotional: {
-            fixed: availableNotionalFT,
-            variable: availableNotionalVT,
+            fixed: availableNotionalFixedTaker,
+            variable: availableNotionalVariableTaker,
           },
           maxLeverage: {
-            fixed: maxLeverageFT,
-            variable: maxLeverageVT,
+            fixed: maxLeverageFixedTaker,
+            variable: maxLeverageVariableTaker,
           },
           status: 'success',
         };

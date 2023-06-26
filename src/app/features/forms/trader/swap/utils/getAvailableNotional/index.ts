@@ -12,6 +12,7 @@ export const getAvailableNotional = (state: Draft<SliceState>): number => {
       state.poolSwapInfo.availableNotional[getProspectiveSwapMode(state)],
     );
   }
-
-  return state.poolSwapInfo.availableNotional[getProspectiveSwapMode(state)];
+  const mode = getProspectiveSwapMode(state);
+  const availableNotional = state.poolSwapInfo.availableNotional;
+  return availableNotional[mode];
 };
