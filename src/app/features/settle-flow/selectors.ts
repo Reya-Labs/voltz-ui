@@ -39,7 +39,7 @@ export const selectSettleGasFeeToken = (state: RootState) => {
 
 // todo: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.amm;
+  const aMM = state.settleFlow.positionDetails?.pool;
   if (!aMM) {
     return '';
   }
@@ -48,7 +48,7 @@ export const selectAMMMaturityFormatted = (state: RootState) => {
 
 // todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.amm;
+  const aMM = state.settleFlow.positionDetails?.pool;
   if (!aMM) {
     return '';
   }
@@ -153,7 +153,7 @@ export const selectCompactRealizedPnL = (state: RootState) => {
 };
 
 export const selectAMMMarket = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.amm;
+  const aMM = state.settleFlow.positionDetails?.pool;
   if (!aMM) {
     return '';
   }
@@ -162,7 +162,7 @@ export const selectAMMMarket = (state: RootState) => {
 
 // todo: FB duplicate as in swap form
 export const selectAMMToken = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.amm;
+  const aMM = state.settleFlow.positionDetails?.pool;
   if (!aMM) {
     return '';
   }
