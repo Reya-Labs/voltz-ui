@@ -360,7 +360,100 @@ export const mockBadges: Record<Season['id'], CollectionBadge[]> = {
       achievedAt: new Date('02/02/2022').valueOf(),
     },
   ],
-  4: [],
+  4: [
+    {
+      variant: 's4FixedTrader',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4DeltaDegen',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4LeverageCrowbar',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4IrsConnoisseur',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4SushiRoll',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4DegenStuff',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4TopTrader',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4MaxBidding',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4Yikes',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4Lpoor',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4MoneyMoneyMoney',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4WaterHose',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4RainMaker',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4BeWaterMyFriend',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4MellowLpVaultTier1',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4MellowLpVaultTier2',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4MellowLpVaultTier3',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'governorz',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'senatorz',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'diplomatz',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'whaleWhisperer',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'notionalInfluencer',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'referror',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+  ],
   5: [],
 };
 
@@ -462,6 +555,99 @@ export const mockBadgesArbitrum: Record<Season['id'], CollectionBadge[]> = {
       achievedAt: new Date('02/02/2022').valueOf(),
     },
   ],
-  4: [],
+  4: [
+    {
+      variant: 's4FixedTraderArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4DeltaDegenArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4LeverageCrowbarArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4IrsConnoisseurArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4SushiRollArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4DegenStuffArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4TopTraderArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4MaxBiddingArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4YikesArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4LpoorArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4MoneyMoneyMoneyArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4WaterHoseArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4RainMakerArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4BeWaterMyFriendArbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4MellowLpVaultTier1Arbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4MellowLpVaultTier2Arbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 's4MellowLpVaultTier3Arbitrum',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'governorz',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'senatorz',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'diplomatz',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'whaleWhisperer',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'notionalInfluencer',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+    {
+      variant: 'referror',
+      achievedAt: new Date('02/02/2022').valueOf(),
+    },
+  ],
   5: [],
 };

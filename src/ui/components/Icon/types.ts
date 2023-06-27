@@ -91,6 +91,40 @@ import {
   S3WaterHoseArbitrum,
   S3Yikes,
   S3YikesArbitrum,
+  S4BeWaterMyFriend,
+  S4BeWaterMyFriendArbitrum,
+  S4DegenStuff,
+  S4DegenStuffArbitrum,
+  S4DeltaDegen,
+  S4DeltaDegenArbitrum,
+  S4FixedTrader,
+  S4FixedTraderArbitrum,
+  S4IrsConnoisseur,
+  S4IrsConnoisseurArbitrum,
+  S4LeverageCrowbar,
+  S4LeverageCrowbarArbitrum,
+  S4Lpoor,
+  S4LpoorArbitrum,
+  S4MaxBidding,
+  S4MaxBiddingArbitrum,
+  S4MellowLpVaultTier1,
+  S4MellowLpVaultTier1Arbitrum,
+  S4MellowLpVaultTier2,
+  S4MellowLpVaultTier2Arbitrum,
+  S4MellowLpVaultTier3,
+  S4MellowLpVaultTier3Arbitrum,
+  S4MoneyMoneyMoney,
+  S4MoneyMoneyMoneyArbitrum,
+  S4Rainmaker,
+  S4RainmakerArbitrum,
+  S4SushiRoll,
+  S4SushiRollArbitrum,
+  S4TopTrader,
+  S4TopTraderArbitrum,
+  S4WaterHose,
+  S4WaterHoseArbitrum,
+  S4Yikes,
+  S4YikesArbitrum,
   Senatorz,
   SushiRoll,
   TopTrader,
@@ -207,6 +241,42 @@ export type SupportedIcons =
   | 's3MellowLpVaultTier1Arbitrum'
   | 's3MellowLpVaultTier2Arbitrum'
   | 's3MellowLpVaultTier3Arbitrum'
+  // season 4 badges
+  | 's4DegenStuff'
+  | 's4DeltaDegen'
+  | 's4IrsConnoisseur'
+  | 's4LeverageCrowbar'
+  | 's4FixedTrader'
+  | 's4SushiRoll'
+  | 's4TopTrader'
+  | 's4BeWaterMyFriend'
+  | 's4RainMaker'
+  | 's4WaterHose'
+  | 's4MoneyMoneyMoney'
+  | 's4Lpoor'
+  | 's4Yikes'
+  | 's4MaxBidding'
+  | 's4MellowLpVaultTier1'
+  | 's4MellowLpVaultTier2'
+  | 's4MellowLpVaultTier3'
+  // season 4 badges - arbitrum
+  | 's4DegenStuffArbitrum'
+  | 's4DeltaDegenArbitrum'
+  | 's4IrsConnoisseurArbitrum'
+  | 's4LeverageCrowbarArbitrum'
+  | 's4FixedTraderArbitrum'
+  | 's4SushiRollArbitrum'
+  | 's4TopTraderArbitrum'
+  | 's4BeWaterMyFriendArbitrum'
+  | 's4RainMakerArbitrum'
+  | 's4WaterHoseArbitrum'
+  | 's4MoneyMoneyMoneyArbitrum'
+  | 's4LpoorArbitrum'
+  | 's4YikesArbitrum'
+  | 's4MaxBiddingArbitrum'
+  | 's4MellowLpVaultTier1Arbitrum'
+  | 's4MellowLpVaultTier2Arbitrum'
+  | 's4MellowLpVaultTier3Arbitrum'
   // voyage
   | 'voyageWeek1'
   | 'voyageWeek2'
@@ -318,6 +388,42 @@ export const iconMap: Record<SupportedIcons, ElementType> = {
   s3MellowLpVaultTier1Arbitrum: S3MellowLpVaultTier1Arbitrum as ElementType,
   s3MellowLpVaultTier2Arbitrum: S3MellowLpVaultTier2Arbitrum as ElementType,
   s3MellowLpVaultTier3Arbitrum: S3MellowLpVaultTier3Arbitrum as ElementType,
+  // season4 badges
+  s4DegenStuff: S4DegenStuff as ElementType,
+  s4DeltaDegen: S4DeltaDegen as ElementType,
+  s4IrsConnoisseur: S4IrsConnoisseur as ElementType,
+  s4LeverageCrowbar: S4LeverageCrowbar as ElementType,
+  s4FixedTrader: S4FixedTrader as ElementType,
+  s4SushiRoll: S4SushiRoll as ElementType,
+  s4TopTrader: S4TopTrader as ElementType,
+  s4BeWaterMyFriend: S4BeWaterMyFriend as ElementType,
+  s4RainMaker: S4Rainmaker as ElementType,
+  s4WaterHose: S4WaterHose as ElementType,
+  s4MoneyMoneyMoney: S4MoneyMoneyMoney as ElementType,
+  s4Lpoor: S4Lpoor as ElementType,
+  s4Yikes: S4Yikes as ElementType,
+  s4MaxBidding: S4MaxBidding as ElementType,
+  s4MellowLpVaultTier1: S4MellowLpVaultTier1 as ElementType,
+  s4MellowLpVaultTier2: S4MellowLpVaultTier2 as ElementType,
+  s4MellowLpVaultTier3: S4MellowLpVaultTier3 as ElementType,
+  // season 4 badges - arbitrum
+  s4DegenStuffArbitrum: S4DegenStuffArbitrum as ElementType,
+  s4DeltaDegenArbitrum: S4DeltaDegenArbitrum as ElementType,
+  s4IrsConnoisseurArbitrum: S4IrsConnoisseurArbitrum as ElementType,
+  s4LeverageCrowbarArbitrum: S4LeverageCrowbarArbitrum as ElementType,
+  s4FixedTraderArbitrum: S4FixedTraderArbitrum as ElementType,
+  s4SushiRollArbitrum: S4SushiRollArbitrum as ElementType,
+  s4TopTraderArbitrum: S4TopTraderArbitrum as ElementType,
+  s4BeWaterMyFriendArbitrum: S4BeWaterMyFriendArbitrum as ElementType,
+  s4RainMakerArbitrum: S4RainmakerArbitrum as ElementType,
+  s4WaterHoseArbitrum: S4WaterHoseArbitrum as ElementType,
+  s4MoneyMoneyMoneyArbitrum: S4MoneyMoneyMoneyArbitrum as ElementType,
+  s4LpoorArbitrum: S4LpoorArbitrum as ElementType,
+  s4YikesArbitrum: S4YikesArbitrum as ElementType,
+  s4MaxBiddingArbitrum: S4MaxBiddingArbitrum as ElementType,
+  s4MellowLpVaultTier1Arbitrum: S4MellowLpVaultTier1Arbitrum as ElementType,
+  s4MellowLpVaultTier2Arbitrum: S4MellowLpVaultTier2Arbitrum as ElementType,
+  s4MellowLpVaultTier3Arbitrum: S4MellowLpVaultTier3Arbitrum as ElementType,
   // Voyage
   voyageWeek1: VoyageWeek1 as ElementType,
   voyageWeek2: VoyageWeek2 as ElementType,
