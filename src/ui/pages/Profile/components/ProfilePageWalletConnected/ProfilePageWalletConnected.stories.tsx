@@ -123,6 +123,7 @@ Default.args = {
     SEASONS[SupportedChainId.mainnet][1],
     SEASONS[SupportedChainId.mainnet][2],
     SEASONS[SupportedChainId.mainnet][3],
+    SEASONS[SupportedChainId.mainnet][4],
   ],
   chainId: SupportedChainId.mainnet,
 };
