@@ -1,11 +1,8 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
-import { getBalance } from '@voltz-protocol/sdk-v1-stateless';
-import { getBalance as getBalanceV2 } from '@voltz-protocol/sdk-v2';
 
-import { isV2AMM } from '../../../../../../../utilities/amm';
-import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { getWalletBalanceService } from '../../../../common';
 
 export const getWalletBalanceThunkHandler: AsyncThunkPayloadCreator<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
@@ -14,24 +11,10 @@ export const getWalletBalanceThunkHandler: AsyncThunkPayloadCreator<
 > = async (_, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().rolloverSwapForm.amm;
-    if (!amm || !amm.signer) {
-      return 0;
-    }
-    if (isV2AMM(amm)) {
-      return await getBalanceV2({
-        ammId: amm.id,
-        signer: amm.signer,
-      });
-    } else {
-      if (isV1StatelessEnabled()) {
-        return await getBalance({
-          ammId: amm.id,
-          signer: amm.signer,
-        });
-      } else {
-        return await amm.underlyingTokens();
-      }
-    }
+    return await getWalletBalanceService({
+      amm: amm!,
+      signer: amm!.signer!,
+    });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

@@ -26,7 +26,7 @@ describe('getWalletBalanceThunkHandler', () => {
     };
     (getWalletBalanceService as jest.Mock).mockResolvedValue(underlyingTokensResult);
     const thunkApiMock = {
-      getState: () => ({ rolloverSwapForm: { amm } }),
+      getState: () => ({ lpForm: { amm } }),
     };
 
     // Call function and assert
@@ -47,7 +47,7 @@ describe('getWalletBalanceThunkHandler', () => {
 
     const thunkApiMock = {
       getState: () => ({
-        rolloverSwapForm: { amm },
+        lpForm: { amm },
       }),
     };
 
