@@ -4,7 +4,7 @@ import React from 'react';
 import { ClaimButton } from './ClaimButton';
 
 export default {
-  title: 'Interface/ClaimButton',
+  title: 'Components/ClaimButton',
   component: ClaimButton,
   args: {},
 } as ComponentMeta<typeof ClaimButton>;

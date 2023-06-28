@@ -4,7 +4,7 @@ import React from 'react';
 import { NoVaultFound } from './NoVaultFound';
 
 export default {
-  title: 'Interface/NoVaultFound',
+  title: 'Components/NoVaultFound',
   component: NoVaultFound,
   args: {},
 } as ComponentMeta<typeof NoVaultFound>;

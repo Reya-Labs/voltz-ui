@@ -24,6 +24,7 @@ import {
   TopTextContent,
 } from './NotionalSwap.styled';
 
+// todo: FB same as in Swap
 export const NotionalSwap: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const isGetInfoPostSwapLoading = useAppSelector(selectIsGetInfoPostSwapLoading);

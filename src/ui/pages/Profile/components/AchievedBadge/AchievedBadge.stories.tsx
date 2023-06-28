@@ -4,7 +4,7 @@ import React from 'react';
 import { AchievedBadge } from './AchievedBadge';
 
 export default {
-  title: 'Interface/AchievedBadge',
+  title: 'Components/AchievedBadge',
   component: AchievedBadge,
   args: {},
 } as ComponentMeta<typeof AchievedBadge>;
