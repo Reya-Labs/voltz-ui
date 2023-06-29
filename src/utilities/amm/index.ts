@@ -1,28 +1,6 @@
 import { AMM, NetworkConfiguration, Position } from '@voltz-protocol/v1-sdk';
 
 /**
- * Returns the current positions that the user has for the given amm
- * @param positions - the array of positions the user has
- * @param selectedAmmId - the selected amm id
- */
-export const findCurrentPositionsLp = (positions: Position[], selectedAmmId: string) => {
-  return (positions || []).filter((p) => {
-    return p.amm.id === selectedAmmId;
-  });
-};
-
-/**
- * Returns the current position that the user has for the given amm
- * @param positions - the array of positions the user has
- * @param selectedAmmId - the selected amm id
- */
-export const findCurrentPosition = (positions: Position[], selectedAmmId: string) => {
-  return (positions || []).find((p) => {
-    return p.amm.id === selectedAmmId;
-  });
-};
-
-/**
  * Finds the latest amm that corresponds to the given position.
  * Please note that the returned amm will be for the latest pool, whereas the position amm may correspond to an old (matured) pool.
  * @param amms - the array of available pools
@@ -123,14 +101,8 @@ export const generatePoolId = (amm: {
   ).toLowerCase()}-${amm.underlyingToken.name.toLowerCase()}-${timestamp}`;
 };
 
-export const generateAmmIdForRoute = (amm: { id: string }) => {
-  return amm.id.toLowerCase().trim();
-};
+export const generateAmmIdForRoute = (amm: { id: string }) => amm.id.toLowerCase().trim();
 
-export const generatePositionIdForRoute = (position: { id: string }) => {
-  return position.id.trim();
-};
+export const generatePositionIdForRoute = (position: { id: string }) => position.id.trim();
 
-export const isV2AMM = (amm: AMM) => {
-  return amm.market.tags.isV2;
-};
+export const isV2AMM = (amm: AMM) => amm.market.tags.isV2;

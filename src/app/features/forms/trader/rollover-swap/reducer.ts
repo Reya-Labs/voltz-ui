@@ -4,7 +4,7 @@ import { ContractReceipt, providers } from 'ethers';
 
 import { getAmmProtocol } from '../../../../../utilities/amm';
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common/utils';
+import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common';
 import { pushLeverageChangeEvent } from './analytics';
 import { initialState } from './state';
 import {

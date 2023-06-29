@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getLpPositionsByPool, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { findCurrentPositionsLp } from '../../../../../../../utilities/amm';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 
@@ -41,11 +40,9 @@ export const setSignerAndPositionsForAMMThunk = createAsyncThunk<
 
     const userWalletId = (await signer.getAddress()).toLowerCase();
     const positions = await getLpPositionsByPool(amm.id, userWalletId, amm);
-
-    const filteredPositions: Position[] = findCurrentPositionsLp(positions, amm.id) || null;
     return {
       signer: signer,
-      positions: filteredPositions,
+      positions,
     };
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
