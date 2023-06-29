@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { NotionalSwap } from './index';
 
 export default {
-  title: 'VoltzUI/NotionalSwap',
+  title: 'Components/NotionalSwap',
   component: NotionalSwap,
   args: {},
 } as ComponentMeta<typeof NotionalSwap>;

@@ -28,8 +28,9 @@ export const PoolList: React.FunctionComponent<PoolListProps> = ({ onPoolItemCli
       easing="ease-in"
       height={height}
       id="PoolList"
+      // eslint-disable-next-line react/forbid-component-props
       style={{
-        width: width,
+        width,
       }}
     >
       {pools.map((pool) => (

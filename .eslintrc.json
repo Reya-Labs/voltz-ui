@@ -21,7 +21,8 @@
         "**/*.stories.*"
       ],
       "rules": {
-        "import/no-anonymous-default-export": "off"
+        "import/no-anonymous-default-export": "off",
+        "import/no-default-export": "off"
       }
     }
   ],
@@ -51,9 +52,7 @@
     ],
     "eqeqeq": "error",
     "import/extensions": "off",
-    "import/no-default-export": [
-      "warn"
-    ],
+    "import/no-default-export": "error",
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -70,16 +69,7 @@
     ],
     "import/no-unresolved": "off",
     "import/prefer-default-export": "off",
-    "no-console": [
-      "error",
-      {
-        "allow": [
-          "debug",
-          "warn",
-          "error"
-        ]
-      }
-    ],
+    "no-console": "error",
     "no-restricted-imports": [
       "error",
       {
@@ -107,6 +97,18 @@
               "@voltz-protocol/v1-sdk/**"
             ],
             "message": "Fix the imports in v1-sdk!"
+          },
+          {
+            "group": [
+              "@voltz-protocol/sdk-v1-stateless/**"
+            ],
+            "message": "Fix the imports in sdk-v1-stateless!"
+          },
+          {
+            "group": [
+              "@voltz-protocol/sdk-v2/**"
+            ],
+            "message": "Fix the imports in sdk-v2!"
           }
         ]
       }
@@ -116,7 +118,7 @@
     "no-use-before-define": "off",
     "prefer-template": "error",
     "react/forbid-component-props": [
-      "warn",
+      "error",
       {
         "forbid": [
           {

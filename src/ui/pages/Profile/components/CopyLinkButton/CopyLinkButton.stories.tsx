@@ -4,7 +4,7 @@ import React from 'react';
 import { CopyLinkButton } from './CopyLinkButton';
 
 export default {
-  title: 'Interface/CopyLinkButton',
+  title: 'Components/CopyLinkButton',
   component: CopyLinkButton,
   args: {},
 } as ComponentMeta<typeof CopyLinkButton>;

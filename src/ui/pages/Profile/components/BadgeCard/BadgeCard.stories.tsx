@@ -4,7 +4,7 @@ import React from 'react';
 import { BadgeCard } from './BadgeCard';
 
 export default {
-  title: 'Interface/BadgeCard',
+  title: 'Components/BadgeCard',
   component: BadgeCard,
   args: {},
 } as ComponentMeta<typeof BadgeCard>;
