@@ -3,8 +3,6 @@ import { DateTime } from 'luxon';
 
 import {
   findCurrentAmm,
-  findCurrentPosition,
-  findCurrentPositionsLp,
   generateAmmIdForRoute,
   generatePoolId,
   generatePositionIdForRoute,
@@ -24,114 +22,6 @@ jest.mock('../../hooks/voltz-config/config', () => ({
 }));
 
 describe('utilities/amm', () => {
-  describe('findCurrentPositionsLp', () => {
-    it('returns the correct positions when they exist in the list', () => {
-      const positions = [
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-        {
-          amm: {
-            id: '2',
-            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-          },
-        },
-        {
-          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-      ] as Position[];
-      const selectedAmmId = '2';
-      const result = findCurrentPositionsLp(positions, selectedAmmId);
-      expect(result).toEqual([
-        {
-          amm: {
-            id: '2',
-            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-          },
-        },
-      ]);
-    });
-
-    it('returns empty list when no positions exist in the list', () => {
-      const positions = [
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-        {
-          amm: {
-            id: '2',
-            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-          },
-        },
-        {
-          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-      ] as Position[];
-      const selectedAmmId = '4';
-      const result = findCurrentPositionsLp(positions, selectedAmmId);
-      expect(result).toEqual([]);
-    });
-
-    it('returns underfined when the positions list is empty', () => {
-      const selectedAmmId = '2';
-      const result = findCurrentPosition([], selectedAmmId);
-      expect(result).toBeUndefined();
-    });
-  });
-
-  describe('findCurrentPosition', () => {
-    it('returns the correct position when it exists in the list', () => {
-      const positions = [
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-        {
-          amm: {
-            id: '2',
-            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-          },
-        },
-        {
-          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-      ] as Position[];
-      const selectedAmmId = '2';
-      const result = findCurrentPosition(positions, selectedAmmId);
-      expect(result).toEqual({
-        amm: {
-          id: '2',
-          market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-        },
-      });
-    });
-
-    it('returns undefined when the position does not exist in the list', () => {
-      const positions = [
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-        {
-          amm: {
-            id: '2',
-            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-          },
-        },
-        {
-          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-      ] as Position[];
-      const selectedAmmId = '4';
-      const result = findCurrentPosition(positions, selectedAmmId);
-      expect(result).toBeUndefined();
-    });
-
-    it('returns undefined when the positions list is empty', () => {
-      const selectedAmmId = '2';
-      const result = findCurrentPosition([], selectedAmmId);
-      expect(result).toBeUndefined();
-    });
-  });
-
   describe('findCurrentAmm', () => {
     it('returns the custom rollover AMM when it exists in the config', () => {
       const amms = [
