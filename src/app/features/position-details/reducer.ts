@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { PortfolioPositionDetails } from '@voltz-protocol/v1-sdk';
 
 import { PositionUI } from '../portfolio/types';
-import { fetchPositionDetailsThunk } from './thunks';
+import { fetchPositionDetailsThunk, PortfolioPositionDetails } from './thunks';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 

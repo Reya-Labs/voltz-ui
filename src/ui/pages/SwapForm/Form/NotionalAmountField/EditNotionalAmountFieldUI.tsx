@@ -1,4 +1,3 @@
-import { Position } from '@voltz-protocol/v1-sdk';
 import { TokenFieldProps, TokenSwitchField, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
@@ -16,7 +15,6 @@ type EditNotionalAmountFieldUIProps = {
   handleOnSwitchChange: (value: string) => void;
   localEditMode: 'add' | 'remove';
   localNotional: string | null;
-  position: Position;
   underlyingTokenName: string;
   labelTypographyToken: TypographyToken;
   bottomRightTextTypographyToken: TypographyToken;

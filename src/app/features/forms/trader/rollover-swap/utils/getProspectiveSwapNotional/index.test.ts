@@ -1,7 +1,7 @@
-import { isUserInputNotionalError } from '../../../../common/utils/isUserInputNotionalError';
+import { isUserInputNotionalError } from '../../../../common';
 import { getProspectiveSwapNotional } from './index';
 
-jest.mock('../../../../common/utils/isUserInputNotionalError');
+jest.mock('../../../../common');
 
 describe('getProspectiveSwapNotional', () => {
   let mockState = {

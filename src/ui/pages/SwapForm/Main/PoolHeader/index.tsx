@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { selectPoolsOnCurrentChain } from '../../../../../app/features/aMMs';
+import { MAX_POOL_CAP, selectPoolsOnCurrentChain } from '../../../../../app/features/aMMs';
 import { PoolUI } from '../../../../../app/features/aMMs/types';
 import {
   resetStateAction,
@@ -51,7 +51,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
       isBorrowing={isBorrowing}
       isV2={isV2}
       market={market}
-      poolCap={1000000}
+      poolCap={MAX_POOL_CAP}
       pools={pools.filter((p) => p.id !== aMM.id)}
       token={token}
       variableRate24hDelta={variableRate24hDelta}

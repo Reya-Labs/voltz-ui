@@ -1,7 +1,10 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { editSwap, swap } from '@voltz-protocol/sdk-v1-stateless';
+import { editSwap as editSwapV2, swap as swapV2 } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt } from 'ethers';
 
-import { getAmmProtocol } from '../../../../../../../utilities/amm';
+import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { extractError } from '../../../../../helpers/extract-error';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
@@ -12,10 +15,10 @@ import {
   SwapEventParams,
 } from '../../analytics';
 import {
+  getExistingPositionId,
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
-  hasExistingPosition,
 } from '../../utils';
 
 export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
@@ -32,26 +35,66 @@ export const confirmSwapThunkHandler: AsyncThunkPayloadCreator<
   const account = await amm.signer.getAddress();
   const prospectiveSwapNotional = getProspectiveSwapNotional(swapFormState);
   const prospectiveSwapMargin = getProspectiveSwapMargin(swapFormState);
-  const existingPosition = hasExistingPosition(swapFormState);
+  const positionId = getExistingPositionId(swapFormState);
+  const isEdit = positionId !== null;
   const prospectiveSwapMode = getProspectiveSwapMode(swapFormState);
   const eventParams: SwapEventParams = {
     account,
     notional: prospectiveSwapNotional,
     margin: prospectiveSwapMargin,
-    isEdit: existingPosition,
+    isEdit,
     pool: getAmmProtocol(amm),
     isFT: prospectiveSwapMode === 'fixed',
   };
+  const notional =
+    prospectiveSwapMode === 'fixed' ? -prospectiveSwapNotional : prospectiveSwapNotional;
 
   try {
     pushSwapTransactionSubmittedEvent(eventParams);
-    const result = await amm.swap({
-      isFT: prospectiveSwapMode === 'fixed',
-      notional: prospectiveSwapNotional,
-      margin: prospectiveSwapMargin,
-      fixedLow: 1,
-      fixedHigh: 999,
-    });
+    let result: ContractReceipt;
+    if (isV2AMM(amm)) {
+      if (isEdit) {
+        result = await editSwapV2({
+          positionId: positionId,
+          notional,
+          margin: prospectiveSwapMargin,
+          signer: amm.signer,
+        });
+      } else {
+        result = await swapV2({
+          ammId: amm.id,
+          notional,
+          margin: prospectiveSwapMargin,
+          signer: amm.signer,
+        });
+      }
+    } else {
+      if (isV1StatelessEnabled()) {
+        if (isEdit) {
+          result = await editSwap({
+            positionId: positionId,
+            notional,
+            margin: prospectiveSwapMargin,
+            signer: amm.signer,
+          });
+        } else {
+          result = await swap({
+            ammId: amm.id,
+            notional,
+            margin: prospectiveSwapMargin,
+            signer: amm.signer,
+          });
+        }
+      } else {
+        result = await amm.swap({
+          isFT: prospectiveSwapMode === 'fixed',
+          notional: prospectiveSwapNotional,
+          margin: prospectiveSwapMargin,
+          fixedLow: 1,
+          fixedHigh: 999,
+        });
+      }
+    }
     pushSwapTransactionSuccessEvent(eventParams);
     return result;
   } catch (err) {

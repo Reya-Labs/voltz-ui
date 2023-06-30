@@ -1,8 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getPortfolioPositionDetails, PortfolioPositionDetails } from '@voltz-protocol/v1-sdk';
+import { getPortfolioPositionDetails } from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../../../store';
 import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+
+export type PortfolioPositionDetails = Awaited<ReturnType<typeof getPortfolioPositionDetails>>;
+export type PortfolioPositionPool = NonNullable<PortfolioPositionDetails>['pool'];
 // Define a cache object to store promises
 const positionDetailsCache = new Map<
   string,

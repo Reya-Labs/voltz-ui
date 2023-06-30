@@ -1,9 +1,14 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { getPoolSwapInfo } from '@voltz-protocol/sdk-v1-stateless';
+import { getPoolSwapInfo as getPoolSwapInfoV2 } from '@voltz-protocol/sdk-v2';
 import { PoolSwapInfo } from '@voltz-protocol/v1-sdk';
 
+import { isV2AMM } from '../../../../../../../utilities/amm';
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 
+// todo: FB same as in swap
 export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
   Awaited<PoolSwapInfo | ReturnType<typeof rejectThunkWithError>>,
   void,
@@ -14,8 +19,21 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
     if (!amm) {
       return;
     }
-
-    return await amm.getPoolSwapInfo();
+    if (isV2AMM(amm)) {
+      return await getPoolSwapInfoV2({
+        ammId: amm.id,
+        provider: amm.provider,
+      });
+    } else {
+      if (isV1StatelessEnabled()) {
+        return await getPoolSwapInfo({
+          ammId: amm.id,
+          provider: amm.provider,
+        });
+      } else {
+        return await amm.getPoolSwapInfo();
+      }
+    }
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }

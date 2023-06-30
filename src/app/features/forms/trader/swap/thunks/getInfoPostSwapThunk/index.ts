@@ -1,11 +1,23 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { simulateEditSwap, simulateSwap } from '@voltz-protocol/sdk-v1-stateless';
+import {
+  simulateEditSwap as simulateEditSwapV2,
+  simulateSwap as simulateSwapV2,
+} from '@voltz-protocol/sdk-v2';
 import { InfoPostSwapV1 } from '@voltz-protocol/v1-sdk';
 
+import { isV2AMM } from '../../../../../../../utilities/amm';
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
-import { isUserInputNotionalError } from '../../../../common/utils';
+import { isUserInputNotionalError } from '../../../../common';
 import { initialState } from '../../state';
-import { getProspectiveSwapMode, getProspectiveSwapNotional } from '../../utils';
+import {
+  getExistingPositionId,
+  getProspectiveSwapMargin,
+  getProspectiveSwapMode,
+  getProspectiveSwapNotional,
+} from '../../utils';
 
 export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
   Awaited<
@@ -25,6 +37,7 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
     const amm = swapFormState.amm;
     const prospectiveSwapMode = getProspectiveSwapMode(swapFormState);
     const prospectiveSwapNotional = getProspectiveSwapNotional(swapFormState);
+    const prospectiveSwapMargin = getProspectiveSwapMargin(swapFormState);
     if (!amm || isUserInputNotionalError(swapFormState)) {
       return {
         notionalAmount: NaN,
@@ -44,12 +57,53 @@ export const getInfoPostSwapThunkHandler: AsyncThunkPayloadCreator<
     }
 
     const notionalAmount = prospectiveSwapNotional;
-    const infoPostSwapV1 = await amm.getInfoPostSwapV1({
-      isFT: prospectiveSwapMode === 'fixed',
-      notional: notionalAmount,
-      fixedLow: 1,
-      fixedHigh: 999,
-    });
+    const notional = prospectiveSwapMode === 'fixed' ? -notionalAmount : notionalAmount;
+    const positionId = getExistingPositionId(swapFormState);
+    const isEdit = positionId !== null;
+
+    let infoPostSwapV1: InfoPostSwapV1;
+    if (isV2AMM(amm)) {
+      if (isEdit) {
+        infoPostSwapV1 = await simulateEditSwapV2({
+          positionId,
+          notional,
+          margin: prospectiveSwapMargin,
+          signer: amm.signer!,
+        });
+      } else {
+        infoPostSwapV1 = await simulateSwapV2({
+          ammId: amm.id,
+          notional,
+          margin: prospectiveSwapMargin,
+          signer: amm.signer!,
+        });
+      }
+    } else {
+      if (isV1StatelessEnabled()) {
+        if (isEdit) {
+          infoPostSwapV1 = await simulateEditSwap({
+            positionId,
+            notional,
+            margin: prospectiveSwapMargin,
+            signer: amm.signer!,
+          });
+        } else {
+          infoPostSwapV1 = await simulateSwap({
+            ammId: amm.id,
+            notional,
+            margin: prospectiveSwapMargin,
+            signer: amm.signer!,
+          });
+        }
+      } else {
+        infoPostSwapV1 = await amm.getInfoPostSwapV1({
+          isFT: prospectiveSwapMode === 'fixed',
+          notional: notionalAmount,
+          fixedLow: 1,
+          fixedHigh: 999,
+        });
+      }
+    }
 
     // margin requirement is collateral only now
     if (infoPostSwapV1.marginRequirement > infoPostSwapV1.fee) {

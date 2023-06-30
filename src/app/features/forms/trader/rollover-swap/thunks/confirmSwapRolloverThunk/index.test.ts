@@ -15,6 +15,7 @@ import { confirmSwapRolloverThunkHandler } from './index';
 
 jest.mock('../../../../../../../utilities/amm', () => ({
   getAmmProtocol: jest.fn(),
+  isV2AMM: jest.fn().mockReturnValue(false),
 }));
 
 jest.mock('../../analytics', () => ({

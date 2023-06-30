@@ -1,24 +1,33 @@
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
-import { isUserInputNotionalError } from '../../../../common/utils';
+import { isUserInputNotionalError } from '../../../../common';
 import { getProspectiveSwapMode, getProspectiveSwapNotional } from '../../utils';
 import { getInfoPostSwapThunkHandler } from './index';
 
 // Mock dependencies
-jest.mock('../../../../common/utils', () => ({
+jest.mock('../../../../common', () => ({
   isUserInputNotionalError: jest.fn(),
 }));
 jest.mock('../../utils', () => ({
   getProspectiveSwapMode: jest.fn(),
   getProspectiveSwapNotional: jest.fn(),
+  getProspectiveSwapMargin: jest.fn(),
 }));
 jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 
+jest.mock('../../../../../../../utilities/amm', () => ({
+  isV2AMM: jest.fn().mockReturnValue(false),
+}));
+
 describe('getInfoPostSwapThunkHandler', () => {
   const getState = () => ({
     rolloverSwapForm: {
-      amm: {},
+      amm: {
+        signer: {},
+      },
+      previousAMM: {},
+      previousPosition: {},
     },
   });
 
@@ -101,6 +110,7 @@ describe('getInfoPostSwapThunkHandler', () => {
       gasFeeETH: 0.001,
     };
     const amm = {
+      signer: {},
       getInfoPostSwapV1: jest.fn().mockResolvedValue(getInfoPostSwapV1Result),
     };
     // Call function and assert
@@ -108,6 +118,8 @@ describe('getInfoPostSwapThunkHandler', () => {
       getState: () => ({
         rolloverSwapForm: {
           amm,
+          previousAMM: {},
+          previousPosition: {},
         },
       }),
     } as never);
@@ -143,11 +155,14 @@ describe('getInfoPostSwapThunkHandler', () => {
     (isUserInputNotionalError as jest.Mock).mockReturnValueOnce(false);
     const amm = {
       getInfoPostSwapV1: jest.fn().mockRejectedValue(error),
+      signer: {},
     };
     const thunkAPIMock = {
       getState: () => ({
         rolloverSwapForm: {
           amm,
+          previousAMM: {},
+          previousPosition: {},
         },
       }),
     };

@@ -1,9 +1,11 @@
 import { Dialog, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 
+import { MAX_POOL_CAP } from '../../../../../../../../app/features/aMMs';
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
+import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
 import { V2EntryInformation } from '../../../../../../../components/V2EntryInformation';
 import { HealthIndicator } from '../../HealthIndicator';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
@@ -18,6 +20,7 @@ import {
   RealizedPNLBox,
   RightBox,
   StatusBox,
+  TestPillContainer,
   UnrealizedPNLBox,
 } from '../../PositionEntry.styled';
 import { PositionMargin } from '../../PositionMargin';
@@ -70,6 +73,7 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
     const handleOnClose = () => setTransactionHistoryDialogOpen(false);
 
     const chainIcon = <ChainIcon chainId={chainId} />;
+    const testNetIndicator = <TestNetIndicator chainId={chainId} />;
     return (
       <React.Fragment>
         <Dialog open={transactionHistoryDialogOpen}>
@@ -88,6 +92,7 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
           />
         </Dialog>
         <PositionEntryBoxWrapper ref={ref} onClick={handleOnEntryClick}>
+          {testNetIndicator ? <TestPillContainer>{testNetIndicator}</TestPillContainer> : null}
           {chainIcon ? <ChainIconContainer>{chainIcon}</ChainIconContainer> : null}
           <HealthIndicator health={status.health} />
           <PositionEntryBox backgroundColorToken={backgroundColorToken}>
@@ -148,7 +153,7 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
               </RealizedPNLBox>
             </RightBox>
           </PositionEntryBox>
-          {isV2 ? <V2EntryInformation poolCap={1000000} /> : null}
+          {isV2 ? <V2EntryInformation poolCap={MAX_POOL_CAP} /> : null}
         </PositionEntryBoxWrapper>
       </React.Fragment>
     );

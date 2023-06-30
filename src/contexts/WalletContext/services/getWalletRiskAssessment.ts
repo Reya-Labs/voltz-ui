@@ -35,7 +35,6 @@ export async function getWalletRiskAssessment(walletId: string) {
   } catch (error) {
     // eslint-disable-next-line
     getSentryTracker().captureException(error);
-    console.warn('Wallet screening failed', error);
     throw new Error(UNAVAILABLE_TEXT);
   }
 }

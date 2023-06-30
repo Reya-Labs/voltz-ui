@@ -1,7 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { editLp, lp } from '@voltz-protocol/sdk-v1-stateless';
+import { editLp as editLpV2, lp as lpV2 } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt } from 'ethers';
 
-import { getAmmProtocol } from '../../../../../../../utilities/amm';
+import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { extractError } from '../../../../../helpers/extract-error';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
@@ -26,7 +29,7 @@ export const confirmLpThunk = createAsyncThunk<
   const lpFormState = thunkAPI.getState().lpForm;
   const amm = lpFormState.amm;
   const selectedPosition = lpFormState.selectedPosition;
-  if (!amm) {
+  if (!amm || !amm.signer) {
     return;
   }
 
@@ -36,7 +39,7 @@ export const confirmLpThunk = createAsyncThunk<
   if (fixedLow === null || fixedHigh === null) {
     return;
   }
-  const account = amm.signer ? await amm.signer.getAddress() : '';
+  const account = await amm.signer.getAddress();
 
   let notional: number = getProspectiveLpNotional(lpFormState);
   let addLiquidity: boolean = true;
@@ -46,11 +49,13 @@ export const confirmLpThunk = createAsyncThunk<
     notional = -notional;
   }
   const margin = getProspectiveLpMargin(lpFormState);
+  const positionId = selectedPosition?.id;
+  const isEdit = Boolean(selectedPosition);
   const eventParams: LPEventParams = {
     account,
     notional,
     margin,
-    isEdit: Boolean(selectedPosition),
+    isEdit,
     pool: getAmmProtocol(amm),
     fixedLow: fixedLow,
     fixedHigh: fixedHigh,
@@ -58,13 +63,55 @@ export const confirmLpThunk = createAsyncThunk<
 
   try {
     pushLPTransactionSubmittedEvent(eventParams);
-    const result = await amm.lp({
-      addLiquidity: addLiquidity,
-      notional: notional,
-      margin,
-      fixedLow: fixedLow,
-      fixedHigh: fixedHigh,
-    });
+    let result: ContractReceipt;
+    if (isV2AMM(amm)) {
+      if (isEdit) {
+        result = await editLpV2({
+          positionId: positionId!,
+          notional,
+          margin,
+          signer: amm.signer,
+        });
+      } else {
+        result = await lpV2({
+          ammId: amm.id,
+          fixedLow,
+          fixedHigh,
+          notional,
+          margin,
+          signer: amm.signer,
+        });
+      }
+    } else {
+      if (isV1StatelessEnabled()) {
+        if (isEdit) {
+          result = await editLp({
+            positionId: positionId!,
+            notional,
+            margin,
+            signer: amm.signer,
+          });
+        } else {
+          result = await lp({
+            ammId: amm.id,
+            fixedLow,
+            fixedHigh,
+            notional,
+            margin,
+            signer: amm.signer,
+          });
+        }
+      } else {
+        result = await amm.lp({
+          addLiquidity,
+          notional,
+          margin,
+          fixedLow,
+          fixedHigh,
+        });
+      }
+    }
+
     pushLPTransactionSuccessEvent(eventParams);
     return result;
   } catch (err) {

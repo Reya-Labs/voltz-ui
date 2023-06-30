@@ -1,9 +1,9 @@
-import { Pill } from 'brokoli-ui';
+import { PillSelector } from 'brokoli-ui';
 import React from 'react';
 
 import { Season } from '../../../../../hooks/season/types';
 import { doNothing } from '../../../../../utilities/doNothing';
-import { PillBox, PillsBox } from './SeasonToggle.styled';
+import { PillsBox } from './SeasonToggle.styled';
 
 type SeasonToggleProps = {
   seasons: Season[];
@@ -17,23 +17,15 @@ export const SeasonToggle: React.FunctionComponent<SeasonToggleProps> = ({
 }) => {
   return (
     <PillsBox>
-      {seasons.map((option) => (
-        <PillBox
-          key={option.id}
-          onClick={() => {
-            const activeSeason = seasons.find((s) => s.id === option.id);
-            activeSeason && onChange(activeSeason);
-          }}
-        >
-          <Pill
-            colorToken={option.id === season.id ? 'lavenderWeb' : 'liberty'}
-            typographyToken="primaryBodySmallBold"
-            variant="regular"
-          >
-            {option.label.toUpperCase()}
-          </Pill>
-        </PillBox>
-      ))}
+      <PillSelector
+        activePillId={season.id.toString()}
+        pillOptions={seasons.map((s) => ({ ...s, id: s.id.toString() }))}
+        variant="compact"
+        onPillClick={(nextSeasonId) => {
+          const activeSeason = seasons.find((s) => s.id === parseInt(nextSeasonId, 10));
+          activeSeason && onChange(activeSeason);
+        }}
+      />
     </PillsBox>
   );
 };

@@ -2,7 +2,7 @@ import { Draft } from '@reduxjs/toolkit';
 import { Position } from '@voltz-protocol/v1-sdk';
 
 import { stringToBigFloat } from '../../../../../../../utilities/number';
-import { formLimitAndFormatNumber } from '../../../../common/utils';
+import { formLimitAndFormatNumber } from '../../../../common';
 import { SliceState } from '../../state';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 import { hasExistingPosition } from '../hasExistingPosition';

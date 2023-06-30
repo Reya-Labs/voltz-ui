@@ -12,16 +12,24 @@ export default {
 } as ComponentMeta<typeof React.Fragment>;
 
 const IconWrapperDiv = styled('div')`
-  flex: 1;
+  width: 100px;
+  height: 100px;
+
   & > svg {
-    font-size: 10rem;
+    width: 100%;
+    height: 100%;
+  }
+  & > img {
+    width: 100%;
+    height: 100%;
   }
 `;
 
 const AllIconsWrapperDiv = styled('div')`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  gap: 4px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  justify-content: space-between;
+  gap: 8px;
   background: white;
   z-index: 1;
   position: absolute;

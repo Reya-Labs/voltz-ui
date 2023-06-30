@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { isUserInputMarginError } from '../../../../common/utils';
+import { isUserInputMarginError } from '../../../../common';
 import { SliceState } from '../../state';
 import { getProspectiveLpMargin } from '../getProspectiveLpMargin';
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';

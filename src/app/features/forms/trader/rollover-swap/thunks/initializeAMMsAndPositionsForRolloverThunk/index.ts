@@ -1,5 +1,5 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
-import { AMM, getPositions, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { AMM, getTraderPositionByPool, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { getConfig } from '../../../../../../../hooks/voltz-config/config';
@@ -7,7 +7,6 @@ import {
   findCurrentAmm,
   generateAmmIdForRoute,
   generatePoolId,
-  generatePositionIdForRoute,
 } from '../../../../../../../utilities/amm';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
@@ -61,18 +60,12 @@ export const initializeAMMsAndPositionsForRolloverThunkHandler: AsyncThunkPayloa
       };
     }
 
-    const { positions, error } = await getPositions({
-      chainId,
-      userWalletId: account.toLowerCase(),
-      amms: [previousAMM],
-      type: 'Trader',
-    });
-    if (error) {
-      return rejectThunkWithError(thunkAPI, error);
-    }
-    const previousPosition = positions.find(
-      (p) => generatePositionIdForRoute(p) === routePositionId,
+    const previousPosition = await getTraderPositionByPool(
+      previousAMM.id,
+      account.toLowerCase(),
+      previousAMM,
     );
+
     if (!previousPosition) {
       return {
         aMM: null,

@@ -1,11 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { simulateEditLp, simulateLp } from '@voltz-protocol/sdk-v1-stateless';
+import {
+  simulateEditLp as simulateEditLpV2,
+  simulateLp as simulateLpV2,
+} from '@voltz-protocol/sdk-v2';
 import { InfoPostLp } from '@voltz-protocol/v1-sdk';
 
+import { isV2AMM } from '../../../../../../../utilities/amm';
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
-import { isUserInputNotionalError } from '../../../../common/utils';
+import { isUserInputNotionalError } from '../../../../common';
 import { initialState } from '../../state';
-import { getProspectiveLpNotional } from '../../utils';
+import { getProspectiveLpMargin, getProspectiveLpNotional } from '../../utils';
 
 export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<
@@ -23,10 +30,10 @@ export const getInfoPostLpThunk = createAsyncThunk<
   try {
     const lpFormState = thunkAPI.getState().lpForm;
 
-    const fixedLower = lpFormState.userInput.fixedRange.lower;
-    const fixedUpper = lpFormState.userInput.fixedRange.upper;
+    const fixedLow = lpFormState.userInput.fixedRange.lower;
+    const fixedHigh = lpFormState.userInput.fixedRange.upper;
 
-    if (fixedLower === null || fixedUpper === null) {
+    if (fixedLow === null || fixedHigh === null) {
       return {
         notionalAmount: NaN,
         infoPostLp: {},
@@ -35,7 +42,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
     }
 
     const amm = lpFormState.amm;
-    if (!amm || isUserInputNotionalError(lpFormState)) {
+    if (!amm || !amm.signer || isUserInputNotionalError(lpFormState)) {
       return {
         notionalAmount: NaN,
         infoPostLp: {},
@@ -43,32 +50,77 @@ export const getInfoPostLpThunk = createAsyncThunk<
       };
     }
 
-    if (getProspectiveLpNotional(lpFormState) === 0) {
+    let notional: number = getProspectiveLpNotional(lpFormState);
+    if (notional === 0) {
       return {
         notionalAmount: 0,
         infoPostLp: initialState.prospectiveLp.infoPostLp.value,
         earlyReturn: false,
       };
     }
+    const margin = getProspectiveLpMargin(lpFormState);
+    const selectedPosition = lpFormState.selectedPosition;
+    const positionId = selectedPosition?.id;
+    const isEdit = Boolean(selectedPosition);
 
-    let prospectiveNotional: number = getProspectiveLpNotional(lpFormState);
     let addLiquidity: boolean = true;
 
-    if (prospectiveNotional < 0) {
+    if (notional < 0) {
       addLiquidity = false;
-      prospectiveNotional = -prospectiveNotional;
+      notional = -notional;
     }
 
-    const infoPostLpV1: InfoPostLp = await amm.getInfoPostLp({
-      addLiquidity: addLiquidity,
-      notional: prospectiveNotional,
-      fixedLow: fixedLower,
-      fixedHigh: fixedUpper,
-    });
+    let result: InfoPostLp;
+    if (isV2AMM(amm)) {
+      if (isEdit) {
+        result = await simulateEditLpV2({
+          positionId: positionId!,
+          notional,
+          margin,
+          signer: amm.signer,
+        });
+      } else {
+        result = await simulateLpV2({
+          ammId: amm.id,
+          fixedLow,
+          fixedHigh,
+          notional,
+          margin,
+          signer: amm.signer,
+        });
+      }
+    } else {
+      if (isV1StatelessEnabled()) {
+        if (isEdit) {
+          result = await simulateEditLp({
+            positionId: positionId!,
+            notional,
+            margin,
+            signer: amm.signer,
+          });
+        } else {
+          result = await simulateLp({
+            ammId: amm.id,
+            fixedLow,
+            fixedHigh,
+            notional,
+            margin,
+            signer: amm.signer,
+          });
+        }
+      } else {
+        result = await amm.getInfoPostLp({
+          addLiquidity: addLiquidity,
+          notional,
+          fixedLow,
+          fixedHigh,
+        });
+      }
+    }
 
     return {
-      prospectiveNotional,
-      infoPostLp: infoPostLpV1,
+      prospectiveNotional: notional,
+      infoPostLp: result,
       earlyReturn: false,
     };
   } catch (err) {

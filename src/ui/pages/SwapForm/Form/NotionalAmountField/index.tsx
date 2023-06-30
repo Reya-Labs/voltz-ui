@@ -110,7 +110,6 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       labelTypographyToken={labelTypographyToken}
       localEditMode={localEditMode}
       localNotional={localNotional}
-      position={position}
       underlyingTokenName={aMM.underlyingToken.name}
     />
   );

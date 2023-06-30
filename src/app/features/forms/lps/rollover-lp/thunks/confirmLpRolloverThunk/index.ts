@@ -1,7 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { rolloverWithLp } from '@voltz-protocol/sdk-v1-stateless';
+import { rolloverWithLp as rolloverWithLpV2 } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt } from 'ethers';
 
-import { getAmmProtocol } from '../../../../../../../utilities/amm';
+import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { extractError } from '../../../../../helpers/extract-error';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
@@ -49,18 +52,43 @@ export const confirmLpRolloverThunk = createAsyncThunk<
 
   try {
     pushRolloverSubmittedEvent(eventParams);
-    const result = await previousAMM.rolloverWithMint({
-      fixedLow,
-      fixedHigh,
-      notional,
-      margin,
-      newMarginEngine: amm.marginEngineAddress,
-      rolloverPosition: {
-        tickLower: previousPosition.tickLower,
-        tickUpper: previousPosition.tickUpper,
-        settlementBalance: previousPosition.settlementBalance,
-      },
-    });
+    let result: ContractReceipt;
+    if (isV2AMM(amm)) {
+      result = await rolloverWithLpV2({
+        maturedPositionId: previousPosition.id,
+        ammId: amm.id,
+        fixedLow,
+        fixedHigh,
+        notional,
+        margin,
+        signer: amm.signer,
+      });
+    } else {
+      if (isV1StatelessEnabled()) {
+        result = await rolloverWithLp({
+          maturedPositionId: previousPosition.id,
+          ammId: amm.id,
+          fixedLow,
+          fixedHigh,
+          notional,
+          margin,
+          signer: amm.signer,
+        });
+      } else {
+        result = await previousAMM.rolloverWithMint({
+          fixedLow,
+          fixedHigh,
+          notional,
+          margin,
+          newMarginEngine: amm.marginEngineAddress,
+          rolloverPosition: {
+            tickLower: previousPosition.tickLower,
+            tickUpper: previousPosition.tickUpper,
+            settlementBalance: previousPosition.settlementBalance,
+          },
+        });
+      }
+    }
     pushRolloverSuccessEvent(eventParams);
     return result;
   } catch (err) {

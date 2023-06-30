@@ -1,28 +1,6 @@
 import { AMM, NetworkConfiguration, Position } from '@voltz-protocol/v1-sdk';
 
 /**
- * Returns the current positions that the user has for the given amm
- * @param positions - the array of positions the user has
- * @param selectedAmmId - the selected amm id
- */
-export const findCurrentPositionsLp = (positions: Position[], selectedAmmId: string) => {
-  return (positions || []).filter((p) => {
-    return p.amm.id === selectedAmmId;
-  });
-};
-
-/**
- * Returns the current position that the user has for the given amm
- * @param positions - the array of positions the user has
- * @param selectedAmmId - the selected amm id
- */
-export const findCurrentPosition = (positions: Position[], selectedAmmId: string) => {
-  return (positions || []).find((p) => {
-    return p.amm.id === selectedAmmId;
-  });
-};
-
-/**
  * Finds the latest amm that corresponds to the given position.
  * Please note that the returned amm will be for the latest pool, whereas the position amm may correspond to an old (matured) pool.
  * @param amms - the array of available pools
@@ -61,11 +39,13 @@ export const findCurrentAmm = (
 };
 
 /**
- * Returns AMM pool name and includes borrowing tag
+ * Returns AMM pool name and includes borrowing tag and v2 tag
  * @param amm - the amm
  */
 export const getAmmProtocol = (amm: AMM) => {
-  return amm.protocol + (amm.market.tags.isBorrowing ? '_borrow' : '');
+  return `${amm.protocol}${amm.market.tags.isV2 ? '_v2' : ''}${
+    amm.market.tags.isBorrowing ? '_borrow' : ''
+  }`;
 };
 
 export const getProtocolName = (protocolId: number): string => {
@@ -121,13 +101,8 @@ export const generatePoolId = (amm: {
   ).toLowerCase()}-${amm.underlyingToken.name.toLowerCase()}-${timestamp}`;
 };
 
-export const generateAmmIdForRoute = (amm: { id: string }) => {
-  return amm.id.toLowerCase().substring(amm.id.length - 4);
-};
+export const generateAmmIdForRoute = (amm: { id: string }) => amm.id.toLowerCase().trim();
 
-export const generatePositionIdForRoute = (position: { id: string }) => {
-  const trimmed = position.id.trim();
-  const [info1, info2, info3] = trimmed.toLowerCase().split('_');
-  const id = [info1, info2, info3].map((i) => i.trim().substring(i.length - 4)).join('');
-  return id.replace('#', '_');
-};
+export const generatePositionIdForRoute = (position: { id: string }) => position.id.trim();
+
+export const isV2AMM = (amm: AMM) => amm.market.tags.isV2;

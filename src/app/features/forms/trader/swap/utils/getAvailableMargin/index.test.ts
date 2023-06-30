@@ -1,4 +1,4 @@
-import { formLimitAndFormatNumber } from '../../../../common/utils';
+import { formLimitAndFormatNumber } from '../../../../common';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 import { hasExistingPosition } from '../hasExistingPosition';
 import { getAvailableMargin } from './index';
@@ -11,7 +11,7 @@ jest.mock('../hasExistingPosition', () => ({
   hasExistingPosition: jest.fn(),
 }));
 
-jest.mock('../../../../common/utils/formLimitAndFormatNumber', () => ({
+jest.mock('../../../../common', () => ({
   formLimitAndFormatNumber: jest.fn(),
 }));
 

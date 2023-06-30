@@ -3,8 +3,6 @@ import { DateTime } from 'luxon';
 
 import {
   findCurrentAmm,
-  findCurrentPosition,
-  findCurrentPositionsLp,
   generateAmmIdForRoute,
   generatePoolId,
   generatePositionIdForRoute,
@@ -24,114 +22,6 @@ jest.mock('../../hooks/voltz-config/config', () => ({
 }));
 
 describe('utilities/amm', () => {
-  describe('findCurrentPositionsLp', () => {
-    it('returns the correct positions when they exist in the list', () => {
-      const positions = [
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-        {
-          amm: {
-            id: '2',
-            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-          },
-        },
-        {
-          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-      ] as Position[];
-      const selectedAmmId = '2';
-      const result = findCurrentPositionsLp(positions, selectedAmmId);
-      expect(result).toEqual([
-        {
-          amm: {
-            id: '2',
-            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-          },
-        },
-      ]);
-    });
-
-    it('returns empty list when no positions exist in the list', () => {
-      const positions = [
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-        {
-          amm: {
-            id: '2',
-            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-          },
-        },
-        {
-          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-      ] as Position[];
-      const selectedAmmId = '4';
-      const result = findCurrentPositionsLp(positions, selectedAmmId);
-      expect(result).toEqual([]);
-    });
-
-    it('returns underfined when the positions list is empty', () => {
-      const selectedAmmId = '2';
-      const result = findCurrentPosition([], selectedAmmId);
-      expect(result).toBeUndefined();
-    });
-  });
-
-  describe('findCurrentPosition', () => {
-    it('returns the correct position when it exists in the list', () => {
-      const positions = [
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-        {
-          amm: {
-            id: '2',
-            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-          },
-        },
-        {
-          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-      ] as Position[];
-      const selectedAmmId = '2';
-      const result = findCurrentPosition(positions, selectedAmmId);
-      expect(result).toEqual({
-        amm: {
-          id: '2',
-          market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-        },
-      });
-    });
-
-    it('returns undefined when the position does not exist in the list', () => {
-      const positions = [
-        {
-          amm: { id: '1', market: { name: 'Aave', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-        {
-          amm: {
-            id: '2',
-            market: { name: 'Compound', tags: { isBorrowing: false, isAaveV3: false } },
-          },
-        },
-        {
-          amm: { id: '3', market: { name: 'Lido', tags: { isBorrowing: false, isAaveV3: false } } },
-        },
-      ] as Position[];
-      const selectedAmmId = '4';
-      const result = findCurrentPosition(positions, selectedAmmId);
-      expect(result).toBeUndefined();
-    });
-
-    it('returns undefined when the positions list is empty', () => {
-      const selectedAmmId = '2';
-      const result = findCurrentPosition([], selectedAmmId);
-      expect(result).toBeUndefined();
-    });
-  });
-
   describe('findCurrentAmm', () => {
     it('returns the custom rollover AMM when it exists in the config', () => {
       const amms = [
@@ -326,7 +216,7 @@ describe('utilities/amm', () => {
 
   describe('generateAmmIdForRoute', () => {
     const mockAMM: AMM = {
-      id: '0x1234567890abcdef',
+      id: '1_0xe8ddb4676eec36acffdffa6707f422e23a8dfc12_v1',
       underlyingToken: {
         name: 'Token1',
         symbol: 'TK1',
@@ -339,7 +229,7 @@ describe('utilities/amm', () => {
     } as never;
 
     it('should generate the correct AMM id for route', () => {
-      const expectedAmmIdForRoute = 'cdef';
+      const expectedAmmIdForRoute = '1_0xe8ddb4676eec36acffdffa6707f422e23a8dfc12_v1';
       const actualAmmIdForRoute = generateAmmIdForRoute(mockAMM);
       expect(actualAmmIdForRoute).toEqual(expectedAmmIdForRoute);
     });
@@ -351,7 +241,8 @@ describe('utilities/amm', () => {
     } as never;
 
     it('should generate the correct Position id for route', () => {
-      const expectedAmmIdForRoute = '2161d2af6961';
+      const expectedAmmIdForRoute =
+        '42161_0x1aac6232b7c7cd6c8479077844eb0302cca0d2af_0x22b908c2fea7a1e6043ffcdbc77d660d4d326961_-36900_-27060';
       const actualAmmIdForRoute = generatePositionIdForRoute(mockPosition);
       expect(actualAmmIdForRoute).toEqual(expectedAmmIdForRoute);
     });

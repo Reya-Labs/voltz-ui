@@ -1,4 +1,4 @@
-import { isUserInputMarginError } from '../../../../common/utils';
+import { isUserInputMarginError } from '../../../../common';
 import { getProspectiveSwapMargin } from '../getProspectiveSwapMargin';
 import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
@@ -18,7 +18,7 @@ jest.mock('../getProspectiveSwapMode', () => ({
 jest.mock('../getProspectiveSwapNotional', () => ({
   getProspectiveSwapNotional: jest.fn(),
 }));
-jest.mock('../../../../common/utils', () => ({
+jest.mock('../../../../common', () => ({
   isUserInputMarginError: jest.fn(),
 }));
 

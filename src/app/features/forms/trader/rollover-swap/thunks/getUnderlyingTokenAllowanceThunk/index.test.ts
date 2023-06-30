@@ -1,9 +1,18 @@
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { getUnderlyingTokenAllowanceService } from '../../../../common';
 import { getUnderlyingTokenAllowanceThunkHandler } from './index';
 
 // Mock dependencies
 jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
+}));
+
+jest.mock('../../../../../../../utilities/amm', () => ({
+  isV2AMM: jest.fn().mockReturnValue(false),
+}));
+
+jest.mock('../../../../common', () => ({
+  getUnderlyingTokenAllowanceService: jest.fn(),
 }));
 
 describe('getUnderlyingTokenAllowanceThunkHandler', () => {
@@ -32,20 +41,20 @@ describe('getUnderlyingTokenAllowanceThunkHandler', () => {
     const getUnderlyingTokenAllowanceResult = 100;
     const amm = {
       signer: {},
-      getUnderlyingTokenAllowance: jest.fn().mockResolvedValue(getUnderlyingTokenAllowanceResult),
     };
-
+    (getUnderlyingTokenAllowanceService as jest.Mock).mockResolvedValue(
+      getUnderlyingTokenAllowanceResult,
+    );
     // Call function and assert
     const result = await getUnderlyingTokenAllowanceThunkHandler({ chainId: 1 }, {
       getState: () => ({
         rolloverSwapForm: { amm },
       }),
     } as never);
-    expect(amm.getUnderlyingTokenAllowance).toHaveBeenCalledWith({
-      forceErc20Check: false,
+    expect(getUnderlyingTokenAllowanceService).toHaveBeenCalledWith({
+      amm,
+      signer: amm.signer,
       chainId: 1,
-      alchemyApiKey: '',
-      infuraApiKey: '',
     });
     expect(result).toBe(getUnderlyingTokenAllowanceResult);
   });
@@ -60,11 +69,11 @@ describe('getUnderlyingTokenAllowanceThunkHandler', () => {
         rolloverSwapForm: {
           amm: {
             signer: {},
-            getUnderlyingTokenAllowance: jest.fn().mockRejectedValue(error),
           },
         },
       }),
     };
+    (getUnderlyingTokenAllowanceService as jest.Mock).mockRejectedValue(error);
 
     // Call function and assert
     const result = await getUnderlyingTokenAllowanceThunkHandler(

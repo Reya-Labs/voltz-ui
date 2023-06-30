@@ -10,6 +10,13 @@ export const PositionTransactionHistory: React.FunctionComponent<{
 }> = ({ positionId }) => {
   const { positionDetails, positionDetailsLoadingState } = usePositionDetails({ positionId });
 
+  if (!positionDetails && positionDetailsLoadingState === 'error') {
+    return (
+      <Typography colorToken="wildStrawberry" typographyToken="primaryBodyMediumBold">
+        Something went wrong while fetching history...
+      </Typography>
+    );
+  }
   if (
     !positionDetails &&
     (positionDetailsLoadingState === 'pending' || positionDetailsLoadingState === 'idle')
@@ -18,13 +25,6 @@ export const PositionTransactionHistory: React.FunctionComponent<{
       <RainbowLoaderBox>
         <RainbowLoader height={2} text="Fetching history..." />
       </RainbowLoaderBox>
-    );
-  }
-  if (!positionDetails && positionDetailsLoadingState === 'error') {
-    return (
-      <Typography colorToken="wildStrawberry" typographyToken="primaryBodyMediumBold">
-        Something went wrong while fetching history...
-      </Typography>
     );
   }
   if (!positionDetails) {

@@ -1,8 +1,16 @@
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { approveUnderlyingTokenService } from '../../../../common';
 import { approveUnderlyingTokenThunkHandler } from './index';
 
 jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
   rejectThunkWithError: jest.fn(),
+}));
+
+jest.mock('../../../../../../../utilities/amm', () => ({
+  isV2AMM: jest.fn().mockReturnValue(false),
+}));
+jest.mock('../../../../common', () => ({
+  approveUnderlyingTokenService: jest.fn(),
 }));
 
 describe('approveUnderlyingTokenThunkHandler', () => {
@@ -13,19 +21,17 @@ describe('approveUnderlyingTokenThunkHandler', () => {
     jest.clearAllMocks();
   });
 
-  it('should return the result of amm.approveUnderlyingTokenForPeripheryV1', async () => {
-    const approveUnderlyingTokenForPeripheryV1Mock = jest.fn().mockResolvedValue(123);
-
+  it('should return the result of approveUnderlyingToken', async () => {
+    (approveUnderlyingTokenService as jest.Mock).mockResolvedValue(123);
     const amm = {
       signer: true,
-      approveUnderlyingTokenForPeripheryV1: approveUnderlyingTokenForPeripheryV1Mock,
     };
     getStateMock.mockReturnValue({ swapForm: { amm } });
 
     const result = await approveUnderlyingTokenThunkHandler(null as never, thunkAPIMock as never);
 
     expect(result).toBe(123);
-    expect(approveUnderlyingTokenForPeripheryV1Mock).toHaveBeenCalled();
+    expect(approveUnderlyingTokenService).toHaveBeenCalled();
     expect(getStateMock).toHaveBeenCalled();
   });
 
@@ -35,27 +41,18 @@ describe('approveUnderlyingTokenThunkHandler', () => {
     (rejectThunkWithError as jest.MockedFunction<typeof rejectThunkWithError>).mockReturnValue(
       rejectThunkWithErrorResult,
     );
+    (approveUnderlyingTokenService as jest.Mock).mockRejectedValue(error);
 
     const amm = {
       signer: true,
-      approveUnderlyingTokenForPeripheryV1: jest.fn().mockRejectedValue(error),
     };
     getStateMock.mockReturnValue({ swapForm: { amm } });
 
     const result = await approveUnderlyingTokenThunkHandler(null as never, thunkAPIMock as never);
 
     expect(result).toBe(rejectThunkWithErrorResult);
+    expect(approveUnderlyingTokenService).toHaveBeenCalled();
     expect(rejectThunkWithError).toHaveBeenCalledWith(thunkAPIMock, error);
-    expect(getStateMock).toHaveBeenCalled();
-  });
-
-  it('should not call amm.approveUnderlyingTokenForPeripheryV1 if amm or amm.signer are undefined', async () => {
-    const amm = null;
-    getStateMock.mockReturnValue({ swapForm: { amm } });
-
-    const result = await approveUnderlyingTokenThunkHandler(null as never, thunkAPIMock as never);
-
-    expect(result).toBeUndefined();
     expect(getStateMock).toHaveBeenCalled();
   });
 });

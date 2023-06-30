@@ -1,11 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { simulateRolloverWithLp } from '@voltz-protocol/sdk-v1-stateless';
+import { simulateRolloverWithLp as simulateRolloverWithLpV2 } from '@voltz-protocol/sdk-v2';
 import { InfoPostLp } from '@voltz-protocol/v1-sdk';
 
+import { isV2AMM } from '../../../../../../../utilities/amm';
+import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
-import { isUserInputNotionalError } from '../../../../common/utils';
+import { isUserInputNotionalError } from '../../../../common';
 import { initialState } from '../../state';
-import { getProspectiveLpNotional } from '../../utils';
+import {
+  getProspectiveLpFixedHigh,
+  getProspectiveLpFixedLow,
+  getProspectiveLpMargin,
+  getProspectiveLpNotional,
+} from '../../utils';
 
 export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<
@@ -21,12 +30,17 @@ export const getInfoPostLpThunk = createAsyncThunk<
   { state: RootState }
 >('rolloverLpForm/getInfoPostLp', async (_, thunkAPI) => {
   try {
-    const lpFormState = thunkAPI.getState().rolloverLpForm;
+    const state = thunkAPI.getState().rolloverLpForm;
 
-    const fixedLower = lpFormState.userInput.fixedRange.lower;
-    const fixedUpper = lpFormState.userInput.fixedRange.upper;
+    const fixedLow = getProspectiveLpFixedLow(state);
+    const fixedHigh = getProspectiveLpFixedHigh(state);
+    const notional = getProspectiveLpNotional(state);
+    const margin = getProspectiveLpMargin(state);
+    const previousAMM = state.previousAMM;
+    const previousPosition = state.previousPosition;
+    const amm = state.amm;
 
-    if (fixedLower === null || fixedUpper === null) {
+    if (fixedLow === null || fixedHigh === null) {
       return {
         notionalAmount: NaN,
         infoPostLp: {},
@@ -34,8 +48,13 @@ export const getInfoPostLpThunk = createAsyncThunk<
       };
     }
 
-    const amm = lpFormState.amm;
-    if (!amm || isUserInputNotionalError(lpFormState)) {
+    if (
+      !amm ||
+      !previousAMM ||
+      !amm.signer ||
+      !previousPosition ||
+      isUserInputNotionalError(state)
+    ) {
       return {
         notionalAmount: NaN,
         infoPostLp: {},
@@ -43,7 +62,7 @@ export const getInfoPostLpThunk = createAsyncThunk<
       };
     }
 
-    if (getProspectiveLpNotional(lpFormState) === 0) {
+    if (getProspectiveLpNotional(state) === 0) {
       return {
         notionalAmount: 0,
         infoPostLp: initialState.prospectiveLp.infoPostLp.value,
@@ -51,20 +70,45 @@ export const getInfoPostLpThunk = createAsyncThunk<
       };
     }
 
-    let prospectiveNotional: number = getProspectiveLpNotional(lpFormState);
+    let prospectiveNotional: number = getProspectiveLpNotional(state);
     let addLiquidity: boolean = true;
 
     if (prospectiveNotional < 0) {
       addLiquidity = false;
       prospectiveNotional = -prospectiveNotional;
     }
+    let infoPostLpV1: InfoPostLp;
 
-    const infoPostLpV1: InfoPostLp = await amm.getInfoPostLp({
-      addLiquidity: addLiquidity,
-      notional: prospectiveNotional,
-      fixedLow: fixedLower,
-      fixedHigh: fixedUpper,
-    });
+    if (isV2AMM(amm)) {
+      infoPostLpV1 = await simulateRolloverWithLpV2({
+        maturedPositionId: previousPosition.id,
+        ammId: amm.id,
+        fixedLow,
+        fixedHigh,
+        notional,
+        margin,
+        signer: amm.signer,
+      });
+    } else {
+      if (isV1StatelessEnabled()) {
+        infoPostLpV1 = await simulateRolloverWithLp({
+          maturedPositionId: previousPosition.id,
+          ammId: amm.id,
+          fixedLow,
+          fixedHigh,
+          notional,
+          margin,
+          signer: amm.signer,
+        });
+      } else {
+        infoPostLpV1 = await amm.getInfoPostLp({
+          addLiquidity: addLiquidity,
+          notional: prospectiveNotional,
+          fixedLow,
+          fixedHigh,
+        });
+      }
+    }
 
     return {
       prospectiveNotional,

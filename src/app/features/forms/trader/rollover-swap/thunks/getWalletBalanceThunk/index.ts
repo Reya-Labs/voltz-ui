@@ -2,6 +2,7 @@ import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { getWalletBalanceService } from '../../../../common';
 
 export const getWalletBalanceThunkHandler: AsyncThunkPayloadCreator<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
@@ -10,11 +11,10 @@ export const getWalletBalanceThunkHandler: AsyncThunkPayloadCreator<
 > = async (_, thunkAPI) => {
   try {
     const amm = thunkAPI.getState().rolloverSwapForm.amm;
-    if (!amm || !amm.signer) {
-      return 0;
-    }
-
-    return await amm.underlyingTokens();
+    return await getWalletBalanceService({
+      amm: amm!,
+      signer: amm!.signer!,
+    });
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
