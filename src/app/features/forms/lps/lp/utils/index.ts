@@ -2,6 +2,7 @@ export * from './getAvailableMargin';
 export * from './getDefaultLpFixedHigh';
 export * from './getDefaultLpFixedLow';
 export * from './getEditPositionNotional';
+export * from './getExistingPositionId';
 export * from './getProspectiveLpFixedHigh';
 export * from './getProspectiveLpFixedLow';
 export * from './getProspectiveLpMargin';

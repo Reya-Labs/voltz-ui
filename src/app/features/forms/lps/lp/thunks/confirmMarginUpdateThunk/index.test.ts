@@ -1,6 +1,11 @@
 import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
 import { updateMarginService } from '../../../../common';
-import { getExistingPositionId, getProspectiveSwapMargin } from '../../utils';
+import {
+  getExistingPositionId,
+  getProspectiveLpFixedHigh,
+  getProspectiveLpFixedLow,
+  getProspectiveLpMargin,
+} from '../../utils';
 import { confirmMarginUpdateThunkHandler } from './index';
 
 jest.mock('../../../../../helpers/reject-thunk-with-error');
@@ -13,7 +18,7 @@ jest.mock('../../../../../../../utilities/amm', () => ({
 
 describe('confirmMarginUpdateThunkHandler', () => {
   const mockState = {
-    swapForm: {
+    lpForm: {
       amm: {
         updatePositionMargin: jest.fn(),
         signer: jest.fn(),
@@ -33,10 +38,12 @@ describe('confirmMarginUpdateThunkHandler', () => {
 
   it('should call updateMarginService with the correct arguments', async () => {
     const margin = 123;
+    const fixedLow = 456;
+    const fixedHigh = 987;
     const positionId = 1;
     const mockSigner = jest.fn();
     const getState = jest.fn(() => ({
-      swapForm: {
+      lpForm: {
         amm: {
           signer: mockSigner,
         },
@@ -44,21 +51,23 @@ describe('confirmMarginUpdateThunkHandler', () => {
     }));
 
     const expectedArgs = {
-      fixedLow: 1,
-      fixedHigh: 999,
+      fixedLow,
+      fixedHigh,
       margin,
-      amm: getState().swapForm.amm,
-      signer: getState().swapForm.amm.signer,
+      amm: getState().lpForm.amm,
+      signer: getState().lpForm.amm.signer,
       positionId,
     };
 
-    (getProspectiveSwapMargin as jest.Mock).mockReturnValue(margin);
+    (getProspectiveLpMargin as jest.Mock).mockReturnValue(margin);
+    (getProspectiveLpFixedHigh as jest.Mock).mockReturnValue(fixedHigh);
+    (getProspectiveLpFixedLow as jest.Mock).mockReturnValue(fixedLow);
     (getExistingPositionId as jest.Mock).mockReturnValue(positionId);
     (updateMarginService as jest.Mock).mockReturnValue({ txHash: '0x123' });
 
     const result = await confirmMarginUpdateThunkHandler(null as never, { getState } as never);
 
-    expect(getProspectiveSwapMargin).toHaveBeenCalledWith(getState().swapForm);
+    expect(getProspectiveLpMargin).toHaveBeenCalledWith(getState().lpForm);
     expect(updateMarginService).toHaveBeenCalledWith(expectedArgs);
     expect(result).toEqual({ txHash: '0x123' });
   });
