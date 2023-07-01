@@ -93,7 +93,6 @@ export const initializeAMMsAndPositionsForRolloverThunkHandler: AsyncThunkPayloa
   }
 };
 
-// TODO: FB same as in rollover-swap
 export const initializeAMMsAndPositionsForRolloverThunk = createAsyncThunk<
   Awaited<
     InitializeAMMsAndPositionsForRolloverThunkSuccess | ReturnType<typeof rejectThunkWithError>
