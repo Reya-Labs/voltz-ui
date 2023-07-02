@@ -169,7 +169,6 @@ export const selectAMMToken = (state: RootState) => {
   return aMM.underlyingToken.name;
 };
 
-
 export const selectIsGLP28June = (state: RootState): boolean => {
   const aMM = state.settleFlow.positionDetails?.pool;
 
@@ -179,8 +178,8 @@ export const selectIsGLP28June = (state: RootState): boolean => {
 
   const marginEngineAddress = aMM.marginEngineAddress;
 
-  const isGLP28Jun2023: boolean = marginEngineAddress === '0xbe958ba49be73d3020cb62e512619da953a2bab1';
+  const isGLP28Jun2023: boolean =
+    marginEngineAddress === '0xbe958ba49be73d3020cb62e512619da953a2bab1';
 
   return isGLP28Jun2023;
-
 };
