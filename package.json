@@ -141,7 +141,7 @@
     "@voltz-protocol/community-sdk": "1.2.0",
     "@voltz-protocol/sdk-v1-stateless": "1.24.6",
     "@voltz-protocol/sdk-v2": "1.46.3",
-    "@voltz-protocol/v1-sdk": "1.160.1",
+    "@voltz-protocol/v1-sdk": "1.162.0",
     "@walletconnect/ethereum-provider": "1.8.0",
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.44",
