@@ -1,6 +1,6 @@
 {
   "name": "voltz-ui",
-  "version": "1.206.1",
+  "version": "1.209.0",
   "description": "A UI client for the Voltz Protocol",
   "license": "MIT",
   "scripts": {
@@ -141,7 +141,7 @@
     "@voltz-protocol/community-sdk": "1.2.0",
     "@voltz-protocol/sdk-v1-stateless": "1.24.6",
     "@voltz-protocol/sdk-v2": "1.46.3",
-    "@voltz-protocol/v1-sdk": "1.160.1",
+    "@voltz-protocol/v1-sdk": "1.166.0",
     "@walletconnect/ethereum-provider": "1.8.0",
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.44",

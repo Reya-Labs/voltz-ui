@@ -63,8 +63,10 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
     const { account } = useWallet();
     const canEdit = positionDetails?.canEdit;
     const canRollover = positionDetails?.canRollover;
-    const canSettle = positionDetails?.canSettle;
     const variant = status.variant;
+    const canSettle = variant === 'matured';
+    const isGLP28June = routePoolId === 'gmxglp-eth-2023-06-28';
+
     const navigateToLPFormPage = () => {
       navigate.toLPFormPage({
         ammId: routeAmmId,
@@ -186,7 +188,7 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
 
     return (
       <React.Fragment>
-        <SettleFlow />
+        {canSettle ? <SettleFlow /> : null}
         <ContentBox>
           <TitleBox>
             <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
@@ -204,7 +206,8 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
             token={token}
             type={type}
           />
-          <PositionTransactionHistory positionId={id} />
+          {!isGLP28June ? <PositionTransactionHistory positionId={id} /> : null}
+
           {canEdit || canRollover || canSettle ? (
             <ButtonsBox>
               {canEdit ? (
