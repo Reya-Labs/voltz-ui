@@ -159,20 +159,20 @@ export const SettleDetails: React.FunctionComponent = () => {
   } else {
     return (
       <DetailsBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           Warning: Settlement for the GLP pool will take place in line with the decisions made by
           the community in the following &nbsp;
           <ExternalLink
             colorToken="skyBlueCrayola"
             href="https://www.voltz.xyz/voltz-snapshot"
-            typographyToken="primaryHeader3Bold"
+            typographyToken="primaryBodySmallRegular"
           >
             Vote
           </ExternalLink>
           <br />
           <br />
         </Typography>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodyXSmallRegular">
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           By settling you are confirming agreement to these settlement terms, and fully releasing
           any and all claims you have or may have had against Voltz Labs Technology Limited or its
           subsidiaries, affiliates, or personnel in connection with these matters. For more
@@ -181,7 +181,7 @@ export const SettleDetails: React.FunctionComponent = () => {
           <ExternalLink
             colorToken="skyBlueCrayola"
             href="http://voltz.xyz/t-cs"
-            typographyToken="primaryBodyXSmallRegular"
+            typographyToken="primaryBodySmallRegular"
           >
             Terms and Conditions
           </ExternalLink>{' '}
