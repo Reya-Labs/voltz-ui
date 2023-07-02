@@ -32,3 +32,5 @@ amplifytools.xcconfig
 .yalc
 yalc.lock
 coverage
+
+.idea/
