@@ -8,9 +8,7 @@ import {
   setChainIdThunk,
 } from '../../../../../../../../app/features/network';
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
-import {
-  initializeSettleFlowAction,
-} from '../../../../../../../../app/features/settle-flow';
+import { initializeSettleFlowAction } from '../../../../../../../../app/features/settle-flow';
 import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
 import { usePositionDetails } from '../../../../../../../../hooks/usePositionDetails';
