@@ -1,4 +1,4 @@
-import { TokenTypography, Typography, TypographyWithTooltip } from 'brokoli-ui';
+import { TokenTypography, Typography, TypographyWithTooltip, ExternalLink } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -159,9 +159,31 @@ export const SettleDetails: React.FunctionComponent = () => {
   } else {
     return (
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-        Warning: Settlement for the GLP pool will take place in line with the decisions made by the community in the following vote: https://www.voltz.xyz/voltz-snapshot
+        Warning: Settlement for the GLP pool will take place in line with the decisions made by the community in the following &nbsp;
 
-        By settling you are confirming agreement to these settlement terms. [AWAITING LEGAL INPUT]
+        <ExternalLink
+          colorToken="skyBlueCrayola"
+          href="https://www.voltz.xyz/voltz-snapshot"
+          typographyToken="primaryBodyMediumRegular"
+        >
+          Vote
+        </ExternalLink><br /><br />
+
+        By settling you are confirming agreement to these settlement terms,
+        and fully releasing any and all claims you have or may have had against
+        Voltz Labs Technology Limited or its subsidiaries, affiliates,
+        or personnel in connection with these matters. <br /><br />
+
+        For more information on our terms and conditions,
+        and our limitations on liability and indemnification, see
+
+        <ExternalLink
+          colorToken="skyBlueCrayola"
+          href="http://voltz.xyz/t-cs"
+          typographyToken="primaryBodyMediumRegular"
+        >
+          Terms and Conditions
+        </ExternalLink> the terms of which apply.
       </Typography>
     )
   }
