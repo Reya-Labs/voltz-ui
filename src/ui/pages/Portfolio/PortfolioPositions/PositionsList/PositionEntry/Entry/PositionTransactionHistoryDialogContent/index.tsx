@@ -8,7 +8,9 @@ import {
   setChainIdThunk,
 } from '../../../../../../../../app/features/network';
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
-import { initializeSettleFlowAction } from '../../../../../../../../app/features/settle-flow';
+import {
+  initializeSettleFlowAction,
+} from '../../../../../../../../app/features/settle-flow';
 import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
 import { usePositionDetails } from '../../../../../../../../hooks/usePositionDetails';
@@ -65,6 +67,8 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
     const canRollover = positionDetails?.canRollover;
     const canSettle = positionDetails?.canSettle;
     const variant = status.variant;
+    const isGLP28June = routePoolId === 'gmxglp-eth-2023-06-28';
+
     const navigateToLPFormPage = () => {
       navigate.toLPFormPage({
         ammId: routeAmmId,
@@ -204,7 +208,8 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
             token={token}
             type={type}
           />
-          <PositionTransactionHistory positionId={id} />
+          {!isGLP28June ? <PositionTransactionHistory positionId={id} /> : null}
+
           {canEdit || canRollover || canSettle ? (
             <ButtonsBox>
               {canEdit ? (
