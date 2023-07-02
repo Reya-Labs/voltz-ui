@@ -35,7 +35,6 @@ export const initialisePortfolioPositionsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-
       const positions = await getPortfolioPositions(chainIds, account.toLowerCase());
       return positions;
     } catch (err) {

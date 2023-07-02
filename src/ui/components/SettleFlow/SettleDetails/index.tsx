@@ -1,4 +1,4 @@
-import { TokenTypography, Typography, TypographyWithTooltip, ExternalLink } from 'brokoli-ui';
+import { ExternalLink, TokenTypography, Typography, TypographyWithTooltip } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -11,8 +11,8 @@ import {
   selectCompactRealizedPnL,
   selectFixedLower,
   selectFixedUpper,
+  selectIsGLP28June,
   selectSettleVariant,
-  selectIsGLP28June
 } from '../../../../app/features/settle-flow';
 import { useAppSelector } from '../../../../app/hooks';
 import { RealizedPNLDetails } from '../../RealizedPNLDetails';
@@ -113,8 +113,8 @@ export const SettleDetails: React.FunctionComponent = () => {
               compactRealizedPnL.compactRealizedPnLTotal === '--'
                 ? 'lavenderWeb'
                 : compactRealizedPnL.compactRealizedPnLTotal.indexOf('-') !== -1
-                  ? 'wildStrawberry'
-                  : 'skyBlueCrayola'
+                ? 'wildStrawberry'
+                : 'skyBlueCrayola'
             }
             token={`${compactRealizedPnL.compactRealizedPnLSuffix}${tokenFormatted}`}
             typographyToken="secondaryBodySmallRegular"
@@ -135,8 +135,8 @@ export const SettleDetails: React.FunctionComponent = () => {
               compactNetBalance.compactNetBalanceNumber === '--'
                 ? 'lavenderWeb'
                 : compactNetBalance.compactNetBalanceNumber.indexOf('-') !== -1
-                  ? 'wildStrawberry'
-                  : 'skyBlueCrayola'
+                ? 'wildStrawberry'
+                : 'skyBlueCrayola'
             }
             token={`${compactNetBalance.compactNetBalanceSuffix}${tokenFormatted}`}
             typographyToken="secondaryBodySmallRegular"
@@ -159,40 +159,35 @@ export const SettleDetails: React.FunctionComponent = () => {
   } else {
     return (
       <DetailsBox>
-
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          Warning: Settlement for the GLP pool will take place in line with the decisions made by the community in the following &nbsp;
-
+        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+          Warning: Settlement for the GLP pool will take place in line with the decisions made by
+          the community in the following &nbsp;
           <ExternalLink
             colorToken="skyBlueCrayola"
             href="https://www.voltz.xyz/voltz-snapshot"
-            typographyToken="primaryBodySmallRegular"
+            typographyToken="primaryHeader3Bold"
           >
             Vote
-          </ExternalLink><br /><br />
+          </ExternalLink>
+          <br />
+          <br />
         </Typography>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodyXSmallRegular">
-
-          By settling you are confirming agreement to these settlement terms,
-          and fully releasing any and all claims you have or may have had against
-          Voltz Labs Technology Limited or its subsidiaries, affiliates,
-          or personnel in connection with these matters. <br /><br />
-
-          For more information on our terms and conditions,
-          and our limitations on liability and indemnification, see
-
+          By settling you are confirming agreement to these settlement terms, and fully releasing
+          any and all claims you have or may have had against Voltz Labs Technology Limited or its
+          subsidiaries, affiliates, or personnel in connection with these matters. For more
+          information on our terms and conditions, and our limitations on liability and
+          indemnification, see
           <ExternalLink
             colorToken="skyBlueCrayola"
             href="http://voltz.xyz/t-cs"
             typographyToken="primaryBodyXSmallRegular"
           >
             Terms and Conditions
-          </ExternalLink> the terms of which apply.
+          </ExternalLink>{' '}
+          the terms of which apply.
         </Typography>
       </DetailsBox>
-
-    )
+    );
   }
-
-
 };
