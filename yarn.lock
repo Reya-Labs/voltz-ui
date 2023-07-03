@@ -7226,30 +7226,30 @@
   resolved "https://registry.yarnpkg.com/@voltz-protocol/api-v2-types/-/api-v2-types-1.46.1.tgz#a46bddb13a33e54c08ecb037f36772f455cb9037"
   integrity sha512-jpZq4S7gPzLXGkIr4wz1AvG+6rJzyRNNc4hRMJWBvqHqjwpbmFKNAz9i/x6kz8FvH1JN8lfqlw0EnVDfHTzPLA==
 
-"@voltz-protocol/commons-v2@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/commons-v2/-/commons-v2-1.10.0.tgz#28d4029e5298b31a817ce9bc761548aafbc86675"
-  integrity sha512-eN7TjgcFEbKjBDeaRKx4QJ+4IcVO5Y9W0gvlkZDo4ioARaznjaYwQYxhLNQ5nUkhxfLPDOXRIHS9SVM45oUqjg==
+"@voltz-protocol/commons-v2@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/commons-v2/-/commons-v2-1.10.1.tgz#c900eb2f96c0f4ec448459730220b02f00802cc4"
+  integrity sha512-re08cV3MsL2lFp6+xbt1QcuIbMjnd6fKjREmsFk0Y271ci+Gds41qQQK3o0LdVUsMw46U2eiKqOS2ljjkedVPg==
   dependencies:
     ethers "5.5.4"
 
-"@voltz-protocol/community-sdk@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/community-sdk/-/community-sdk-1.2.0.tgz#78b0707e03a7dd9d2443d87307540d5777f80619"
-  integrity sha512-o+tgBllq49bpquG6DYOxe0o6oMAOJ71Bu7RsziNopC94au3Y01McdlX5wANScLikJrz/+caqW7yHQ8H3hvJsUg==
+"@voltz-protocol/community-sdk@1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/community-sdk/-/community-sdk-1.3.2.tgz#713ccae5818693e7b9179a873c7defb7fd075268"
+  integrity sha512-OBZ1/wzL+IIk2f68ue+3msUXafUGWaQ8z1dcfKtEOJZkhN2VgJ40yWrPb427JyuFg63esGzPmdi5H+jZoKjQIw==
   dependencies:
     keccak256 "1.0.6"
     merkletreejs "^0.3.0"
 
-"@voltz-protocol/sdk-v1-stateless@1.24.6", "@voltz-protocol/sdk-v1-stateless@^1.24.6":
-  version "1.24.6"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.24.6.tgz#af0fb3b77a16f70f82b4368b9e07d168625f401c"
-  integrity sha512-VqWa10CvF/2NHffTqdF6EmJGnXCWrzpWDDrA0ZtBMEV2au3AbfB9QabgHSWVWw6SyUAWyyrZk/TmcyU1mv+M2g==
+"@voltz-protocol/sdk-v1-stateless@1.25.2", "@voltz-protocol/sdk-v1-stateless@^1.25.2":
+  version "1.25.2"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.25.2.tgz#c55212b417c8f7e7f356ffed1c4bce19d1dcc05b"
+  integrity sha512-o2q6DrVR5ajxfv3Re/GGBNyDTASCLD26v+vSY2X5rVA+hv3ds7CMyE6Nwrt6qExvI7WWuUZXrAoWQVnwUhpxrw==
   dependencies:
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
     "@voltz-protocol/api-v2-types" "^1.46.1"
-    "@voltz-protocol/commons-v2" "^1.10.0"
+    "@voltz-protocol/commons-v2" "^1.10.1"
     big.js "6.2.1"
     decimal.js-light "2.5.1"
     ethers "5.5.4"
@@ -7260,15 +7260,16 @@
     tiny-invariant "1.3.1"
     toformat "2.0.0"
 
-"@voltz-protocol/sdk-v2@1.46.3":
-  version "1.46.3"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.46.3.tgz#f0017aeecbcdda31a178a83e57d9aae4eeb33bfb"
-  integrity sha512-g2r9iPH83TZpUn4fmMzE6nADPUTE9U9nsp1gIhgBEWudR7lAIF78z4Ol9Mdl1u3b/62yNvCJoQDj9h2UcRnZ/w==
+"@voltz-protocol/sdk-v2@1.48.0":
+  version "1.48.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.48.0.tgz#b9f96405d763babe2e5cb4a0b55101d12661ce83"
+  integrity sha512-dGK7COCtgHqhkYjzRvdAZit7mql0opAl6glYiDHAWaqS9xg+TAQrzSdoRRTerziO1vsnhG2Bl5+ueupqAgkzSg==
   dependencies:
     "@uniswap/sdk-core" "3.2.2"
     "@uniswap/v3-sdk" "3.9.0"
     "@voltz-protocol/api-v2-types" "^1.46.1"
-    "@voltz-protocol/sdk-v1-stateless" "^1.24.6"
+    "@voltz-protocol/commons-v2" "^1.10.1"
+    "@voltz-protocol/sdk-v1-stateless" "^1.25.2"
     crypto-js "4.1.1"
     jsbi "3.1.4"
 
@@ -7282,10 +7283,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.160.1":
-  version "1.160.1"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.160.1.tgz#18c3c507475f4a28624a54d94b7a0dc5547e9afb"
-  integrity sha512-66EgVtsM0HOEtIAfhSANhhGrUDgyfOUwco0w7hLawu9SkqEB7EzNbUS9QIhuj9s2Uiv9QW+XHFdkX0jSPE2nGQ==
+"@voltz-protocol/v1-sdk@1.166.0":
+  version "1.166.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.166.0.tgz#7244fd22d9129c563943a61906bd350e5ccca3e3"
+  integrity sha512-pgHVBKNBlGUacFcP1JH3dsAI3SBR7AdVqK6SeRtjelSP/gyXE0ExDCNElm2CHtVT4E++h+dAfc9sfHt1WmJTbA==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
