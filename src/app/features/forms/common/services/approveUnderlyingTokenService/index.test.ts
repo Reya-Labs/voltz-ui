@@ -38,11 +38,12 @@ describe('approveUnderlyingToken', () => {
     (isV2AMM as jest.Mock).mockReturnValue(true);
     const amm = { id: 'ammId', approveUnderlyingTokenForPeripheryV1: jest.fn() };
     const signer: Signer = {} as Signer;
-
-    await approveUnderlyingTokenService({ amm, signer } as never);
+    (approvePeripheryV2 as jest.Mock).mockResolvedValue(123);
+    const result = await approveUnderlyingTokenService({ amm, signer } as never);
 
     expect(approvePeripheryV2).toHaveBeenCalledWith({ signer, ammId: amm.id });
     expect(approvePeriphery).not.toHaveBeenCalled();
+    expect(result).toEqual(123);
     expect(amm.approveUnderlyingTokenForPeripheryV1).not.toHaveBeenCalled();
   });
 
