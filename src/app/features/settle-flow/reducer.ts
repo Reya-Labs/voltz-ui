@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { InfoPostSettlePosition, Position } from '@voltz-protocol/v1-sdk';
+import { InfoPostSettlePosition } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { PositionDetailsUI } from '../position-details';
@@ -9,9 +9,7 @@ import { confirmSettleThunk, getInfoPostSettlePositionThunk } from './thunks';
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
 export type SliceState = {
-  // todo: FB deprecated after portfolio launch
-  position: Position | null;
-  positionDetails: PositionDetailsUI | null;
+  position: PositionDetailsUI | null;
   step: 'confirmation' | 'waitingForConfirmation' | 'completed' | null;
   error: string | null;
   txHash: string | null;
@@ -22,9 +20,7 @@ export type SliceState = {
 };
 
 const initialState: SliceState = {
-  // todo: FB deprecated after portfolio launch
   position: null,
-  positionDetails: null,
   step: null,
   error: null,
   txHash: null,
@@ -46,30 +42,22 @@ const slice = createSlice({
     initializeSettleFlowAction: (
       state,
       {
-        payload: { position, positionDetails, account },
+        payload: { position, account },
       }: PayloadAction<{
-        position: Position | null;
-        positionDetails: PositionDetailsUI | null;
+        position: PositionDetailsUI | null;
         account: null | string;
       }>,
     ) => {
       if (position) {
         pushPageViewEvent({
           account: account || '',
-          isTrader: position.positionType !== 3,
-        });
-      }
-      if (positionDetails) {
-        pushPageViewEvent({
-          account: account || '',
-          isTrader: positionDetails.type !== 'LP',
+          isTrader: position.type !== 'LP',
         });
       }
       state.step = 'confirmation';
       state.error = null;
       state.txHash = null;
       state.position = position;
-      state.positionDetails = positionDetails;
     },
     closeSettleFlowAction: () => initialState,
   },

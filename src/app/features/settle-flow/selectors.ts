@@ -6,14 +6,11 @@ import { RootState } from '../../store';
 import { formCompactFormatToParts, formFormatNumber } from '../forms/common/utils';
 
 export const selectSettlePosition = (state: RootState) => {
-  return state.settleFlow.positionDetails;
+  return state.settleFlow.position;
 };
 export const selectSettleVariant = (state: RootState) => {
   if (state.settleFlow.position) {
-    return state.settleFlow.position.positionType === 3 ? 'lp' : 'trader';
-  }
-  if (state.settleFlow.positionDetails) {
-    return state.settleFlow.positionDetails.type === 'LP' ? 'lp' : 'trader';
+    return state.settleFlow.position.type === 'LP' ? 'lp' : 'trader';
   }
   return null;
 };
@@ -39,16 +36,16 @@ export const selectSettleGasFeeToken = (state: RootState) => {
 
 // todo: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.pool;
-  if (!aMM) {
+  const pool = state.settleFlow.position?.pool;
+  if (!pool) {
     return '';
   }
-  return formatTimestamp(aMM.termEndTimestampInMS);
+  return formatTimestamp(pool.termEndTimestampInMS);
 };
 
 // todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.pool;
+  const aMM = state.settleFlow.position?.pool;
   if (!aMM) {
     return '';
   }
@@ -153,33 +150,28 @@ export const selectCompactRealizedPnL = (state: RootState) => {
 };
 
 export const selectAMMMarket = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.pool;
-  if (!aMM) {
+  const pool = state.settleFlow.position?.pool;
+  if (!pool) {
     return '';
   }
-  return aMM.market;
+  return pool.market;
 };
 
 // todo: FB duplicate as in swap form
 export const selectAMMToken = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.pool;
-  if (!aMM) {
+  const pool = state.settleFlow.position?.pool;
+  if (!pool) {
     return '';
   }
-  return aMM.underlyingToken.name;
+  return pool.underlyingToken.name;
 };
 
 export const selectIsGLP28June = (state: RootState): boolean => {
-  const aMM = state.settleFlow.positionDetails?.pool;
+  const pool = state.settleFlow.position?.pool;
 
-  if (!aMM) {
+  if (!pool) {
     return false;
   }
 
-  const marginEngineAddress = aMM.marginEngineAddress;
-
-  const isGLP28Jun2023: boolean =
-    marginEngineAddress === '0xbe958ba49be73d3020cb62e512619da953a2bab1';
-
-  return isGLP28Jun2023;
+  return pool.flags.isGLP28Jun2023;
 };

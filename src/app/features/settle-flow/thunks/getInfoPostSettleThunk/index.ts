@@ -17,7 +17,7 @@ export const getInfoPostSettlePositionThunkHandler: AsyncThunkPayloadCreator<
   { state: RootState }
 > = async ({ signer }, thunkAPI) => {
   const state = thunkAPI.getState();
-  const position = state.settleFlow.positionDetails;
+  const position = state.settleFlow.position;
   if (!position || !signer) {
     return {};
   }
