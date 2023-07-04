@@ -1,7 +1,7 @@
 import { CurrencyField, Typography, TypographyWithTooltip } from 'brokoli-ui';
-import { DateTime } from 'luxon';
 import React, { useState } from 'react';
 
+import { formatPOSIXTimestampWithHoursMinutesUTC } from '../../../../../../utilities/date';
 import { doNothing } from '../../../../../../utilities/doNothing';
 import {
   DistributionBox,
@@ -70,7 +70,7 @@ export const MaturityDistributionEntry: React.FunctionComponent<MaturityDistribu
           typographyToken="primaryBodySmallRegular"
         >
           {notCompleted
-            ? DateTime.fromMillis(maturityTimestamp).toFormat('dd LLL yyyy')
+            ? `${formatPOSIXTimestampWithHoursMinutesUTC(maturityTimestamp)} UTC`
             : 'Completed'}
         </Typography>
       </MaturityBox>

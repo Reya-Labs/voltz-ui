@@ -1,5 +1,3 @@
-import { DateTime } from 'luxon';
-
 const shortMonths = [
   'Jan',
   'Feb',
@@ -14,16 +12,6 @@ const shortMonths = [
   'Nov',
   'Dec',
 ];
-
-/**
- * Takes a Luxon DateTime and returns a string representation: 01 Mar 2022
- * @param dateTime - The DateTime to process
- */
-export const formatDateTime = (dateTime: DateTime) => {
-  return `${dateTime.day.toString().padStart(2, '0')} ${shortMonths[dateTime.month - 1]} ${
-    dateTime.year
-  }`;
-};
 
 /**
  * Takes a timestamp and returns a string representation: 01 Mar 2022
@@ -42,7 +30,7 @@ export const formatTimestamp = (timestampInMS: number) => {
  * @param timestamp - The POSIX timestamp to process
  */
 export const formatPOSIXTimestamp = (timestamp: number): string => {
-  return DateTime.fromMillis(timestamp || 0).toLocaleString({
+  return new Date(timestamp || 0).toLocaleDateString(undefined, {
     day: '2-digit',
     month: '2-digit',
     year: '2-digit',
@@ -55,7 +43,8 @@ export const formatPOSIXTimestamp = (timestamp: number): string => {
  * @param timestamp - The POSIX timestamp to process
  */
 export const formatPOSIXTimestampWithHoursMinutesUTC = (timestamp: number): string => {
-  return DateTime.fromMillis(timestamp || 0).toLocaleString({
+  const jsDate = new Date(timestamp || 0);
+  return jsDate.toLocaleString(undefined, {
     day: '2-digit',
     month: '2-digit',
     year: '2-digit',
@@ -66,13 +55,19 @@ export const formatPOSIXTimestampWithHoursMinutesUTC = (timestamp: number): stri
 };
 
 /**
- * It takes a DateTime object and returns a string with the ordinal suffix added to the day of the month
- * @param {DateTime} dateTime - The DateTime object to format
+ * It takes a timestamp and returns a string with the ordinal suffix added to the day of the month
+ * @param {number} timestamp - The timestamp to format
  * @returns A string
  */
-export const formatDateTimeWithOrdinal = (dateTime: DateTime): string => {
-  const formatted = dateTime.toFormat('DDD');
+export const formatDateTimeWithOrdinal = (timestamp: number): string => {
+  const dateTime = new Date(timestamp);
+  const formatted = dateTime.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
   const formatParts = formatted.split(' ');
+
   if (formatParts.length === 3) {
     return formatParts
       .map((p) =>
@@ -82,6 +77,7 @@ export const formatDateTimeWithOrdinal = (dateTime: DateTime): string => {
       )
       .join(' ');
   }
+
   return formatted;
 };
 
@@ -93,23 +89,15 @@ export const formatDateTimeWithOrdinal = (dateTime: DateTime): string => {
  * @returns the suffix of a number.
  */
 export function getNumberSuffix(num: number): string {
-  const th = 'th';
-  const rd = 'rd';
-  const nd = 'nd';
-  const st = 'st';
-
-  if (num === 11 || num === 12 || num === 13) return th;
-
-  const lastDigit = num.toString().slice(-1);
-
-  switch (lastDigit) {
-    case '1':
-      return st;
-    case '2':
-      return nd;
-    case '3':
-      return rd;
-    default:
-      return th;
-  }
+  const suffixes = ['th', 'st', 'nd', 'rd'];
+  const suffixIndex = num % 100;
+  return suffixes[(suffixIndex - 20) % 10] || suffixes[suffixIndex] || suffixes[0];
 }
+
+export const getStartOfTodayTimestamp = (): number => {
+  return new Date().setHours(0, 0, 0, 0).valueOf();
+};
+
+export const getEndOfTodayTimestamp = (): number => {
+  return new Date().setHours(23, 59, 59, 999).valueOf();
+};

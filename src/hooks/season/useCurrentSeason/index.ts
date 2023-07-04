@@ -12,8 +12,8 @@ export const useCurrentSeason = (
   }
   const seasons = SEASONS[chainId];
   for (const season of seasons) {
-    const seasonStartDate = season.startDate.toMillis();
-    const seasonEndDate = season.endDate.toMillis();
+    const seasonStartDate = season.startDate;
+    const seasonEndDate = season.endDate;
     if (seasonStartDate <= now && now <= seasonEndDate) {
       return season;
     }

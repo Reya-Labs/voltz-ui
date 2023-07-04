@@ -1,6 +1,5 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import copy from 'copy-to-clipboard';
-import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 
 import { selectChainId } from '../../../app/features/network';
@@ -9,6 +8,7 @@ import { Season } from '../../../hooks/season/types';
 import { useCurrentSeason } from '../../../hooks/season/useCurrentSeason';
 import { usePastSeasons } from '../../../hooks/season/usePastSeasons';
 import { useWallet } from '../../../hooks/useWallet';
+import { getEndOfTodayTimestamp, getStartOfTodayTimestamp } from '../../../utilities/date';
 import { setPageTitle } from '../../../utilities/page';
 import { getSentryTracker } from '../../../utilities/sentry';
 import { ConnectWallet } from '../../components/ConnectWallet';
@@ -93,21 +93,21 @@ export const Profile: React.FunctionComponent = () => {
     }
     setCollectionBadges(result);
     setClaimButtonBulkMode('claim');
+    const startOfToday = getStartOfTodayTimestamp();
+    const endOfToday = getEndOfTodayTimestamp();
     const claimedTodayVariants = chainSeasonBadgeVariants.filter((badgeVariant) =>
       result!.find(
         ({ claimedAt, variant }) =>
           variant === badgeVariant &&
           claimedAt &&
-          DateTime.now().startOf('day').valueOf() <= claimedAt &&
-          claimedAt <= DateTime.now().endOf('day').valueOf(),
+          startOfToday <= claimedAt &&
+          claimedAt <= endOfToday,
       ),
     );
     const claimedInThePastVariants = chainSeasonBadgeVariants.filter((badgeVariant) =>
       result!.find(
         ({ claimedAt, variant }) =>
-          variant === badgeVariant &&
-          claimedAt &&
-          claimedAt < DateTime.now().startOf('day').valueOf(),
+          variant === badgeVariant && claimedAt && claimedAt < startOfToday,
       ),
     );
     const notClaimedVariants = chainSeasonBadgeVariants.filter((badgeVariant) =>

@@ -11,5 +11,5 @@ export const usePastSeasons = (
     return [];
   }
   const seasons = SEASONS[chainId];
-  return seasons.filter((season) => season.endDate.toMillis() < now);
+  return seasons.filter((season) => season.endDate < now);
 };
