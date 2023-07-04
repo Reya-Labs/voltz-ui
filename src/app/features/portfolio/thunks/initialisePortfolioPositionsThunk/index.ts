@@ -3,6 +3,7 @@ import { getPortfolioPositions } from '@voltz-protocol/v1-sdk';
 
 import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
 import { getAllowedChainIds } from '../../../network';
+
 export type PortfolioPosition = Awaited<ReturnType<typeof getPortfolioPositions>>[0];
 
 // Define a cache object to store promises
@@ -35,8 +36,7 @@ export const initialisePortfolioPositionsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      const positions = await getPortfolioPositions(chainIds, account.toLowerCase());
-      return positions;
+      return await getPortfolioPositions(chainIds, account.toLowerCase());
     } catch (err) {
       return rejectThunkWithError(thunkAPI, err);
     }
