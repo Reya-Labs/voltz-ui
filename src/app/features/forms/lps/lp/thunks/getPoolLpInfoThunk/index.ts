@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getPoolLpInfo } from '@voltz-protocol/sdk-v1-stateless';
 import { getPoolLpInfo as getPoolLpInfoV2 } from '@voltz-protocol/sdk-v2';
+import { PoolLpInfo } from '@voltz-protocol/v1-sdk';
 
 import { isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
@@ -14,7 +15,7 @@ import {
 } from '../../utils';
 
 export const getPoolLpInfoThunk = createAsyncThunk<
-  Awaited<number | ReturnType<typeof rejectThunkWithError>>,
+  Awaited<PoolLpInfo | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
 >('lpForm/getPoolLpInfo', async (_, thunkAPI) => {
