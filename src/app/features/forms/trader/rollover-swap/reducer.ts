@@ -266,7 +266,7 @@ const slice = createSlice({
         };
       })
       .addCase(getInfoPostSwapThunk.fulfilled, (state, { payload }) => {
-        const { notionalAmount, swapMode, infoPostSwap, earlyReturn } = payload as {
+        const { infoPostSwap, earlyReturn } = payload as {
           notionalAmount: number;
           swapMode: 'fixed' | 'variable';
           infoPostSwap: InfoPostSwapV1;
@@ -285,9 +285,6 @@ const slice = createSlice({
           value: infoPostSwap,
           status: 'success',
         };
-        if (infoPostSwap.availableNotional < notionalAmount) {
-          state.poolSwapInfo.availableNotional[swapMode] = infoPostSwap.availableNotional;
-        }
 
         updateLeverageOptionsAfterGetInfoPostSwap(state);
         validateUserInputAndUpdateSubmitButton(state);
