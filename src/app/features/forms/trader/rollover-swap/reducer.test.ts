@@ -112,15 +112,11 @@ describe('rolloverSwapFormReducer', () => {
         expect(nextState.userInput.mode).toEqual('variable');
         expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
           value: {
-            availableNotional: 0,
             marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
-            fixedTokenDeltaBalance: 0,
             variableTokenDeltaBalance: 0,
-            fixedTokenDeltaUnbalanced: 0,
             fee: 0,
-            slippage: 0,
             gasFee: {
               value: 0,
               token: 'ETH',
@@ -415,15 +411,11 @@ describe('rolloverSwapFormReducer', () => {
         });
         expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
           value: {
-            availableNotional: 0,
             marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
-            fixedTokenDeltaBalance: 0,
             variableTokenDeltaBalance: 0,
-            fixedTokenDeltaUnbalanced: 0,
             fee: 0,
-            slippage: 0,
             gasFee: {
               value: 0,
               token: 'ETH',
@@ -439,15 +431,11 @@ describe('rolloverSwapFormReducer', () => {
         });
         expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
           value: {
-            availableNotional: 0,
             marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
-            fixedTokenDeltaBalance: 0,
             variableTokenDeltaBalance: 0,
-            fixedTokenDeltaUnbalanced: 0,
             fee: 0,
-            slippage: 0,
             gasFee: {
               value: 0,
               token: 'ETH',
@@ -455,53 +443,6 @@ describe('rolloverSwapFormReducer', () => {
           },
           status: 'error',
         });
-      });
-
-      it('should update prospectiveSwap.infoPostSwap and poolSwapInfo.availableNotional and status to "success" when getInfoPostSwapThunk is fulfilled & early return is false, also make sure validateUserInputAndUpdateSubmitButton and updateLeverageOptionsAfterGetInfoPostSwap is called', () => {
-        const mockedInfoPostSwap = {
-          marginRequirement: 1,
-          maxMarginWithdrawable: 2,
-          availableNotional: 3,
-          fee: 4,
-          slippage: 5,
-          averageFixedRate: 6,
-          fixedTokenDeltaBalance: 7,
-          variableTokenDeltaBalance: 8,
-          fixedTokenDeltaUnbalanced: 9,
-          gasFee: {
-            value: 10,
-            token: 'ETH',
-          },
-        };
-
-        const nextState = rolloverSwapFormReducer(testsInitialState, {
-          type: getInfoPostSwapThunk.fulfilled.type,
-          payload: {
-            notionalAmount: 11,
-            swapMode: 'fixed',
-            infoPostSwap: mockedInfoPostSwap,
-            earlyReturn: false,
-          },
-        });
-
-        expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
-        expect(updateLeverageOptionsAfterGetInfoPostSwap).toHaveBeenCalledTimes(1);
-        expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
-          value: {
-            availableNotional: mockedInfoPostSwap.availableNotional,
-            marginRequirement: mockedInfoPostSwap.marginRequirement,
-            maxMarginWithdrawable: mockedInfoPostSwap.maxMarginWithdrawable,
-            averageFixedRate: mockedInfoPostSwap.averageFixedRate,
-            fixedTokenDeltaBalance: mockedInfoPostSwap.fixedTokenDeltaBalance,
-            variableTokenDeltaBalance: mockedInfoPostSwap.variableTokenDeltaBalance,
-            fixedTokenDeltaUnbalanced: mockedInfoPostSwap.fixedTokenDeltaUnbalanced,
-            fee: mockedInfoPostSwap.fee,
-            slippage: mockedInfoPostSwap.slippage,
-            gasFee: mockedInfoPostSwap.gasFee,
-          },
-          status: 'success',
-        });
-        expect(nextState.poolSwapInfo.availableNotional['fixed']).toEqual(3);
       });
 
       it('should update prospectiveSwap.infoPostSwap status to "success" when getInfoPostSwapThunk is fulfilled & early return is true, also make sure validateUserInputAndUpdateSubmitButton and updateLeverageOptionsAfterGetInfoPostSwap are not called', () => {
@@ -516,15 +457,11 @@ describe('rolloverSwapFormReducer', () => {
         expect(updateLeverageOptionsAfterGetInfoPostSwap).toHaveBeenCalledTimes(0);
         expect(nextState.prospectiveSwap.infoPostSwap).toEqual({
           value: {
-            availableNotional: 0,
             marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
-            fixedTokenDeltaBalance: 0,
             variableTokenDeltaBalance: 0,
-            fixedTokenDeltaUnbalanced: 0,
             fee: 0,
-            slippage: 0,
             gasFee: {
               value: 0,
               token: 'ETH',
