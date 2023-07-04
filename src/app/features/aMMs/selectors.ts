@@ -199,10 +199,6 @@ export const selectPoolSortOptions = (
   }));
 };
 
-export const selectTraderAMMs = (state: RootState): AMM[] => {
-  return state.aMMs.aMMs.filter((amm) => amm.traderVisible);
-};
-
 export const selectAMMsLoadedState = (state: RootState) => {
   return state.aMMs.aMMsLoadedState;
 };
