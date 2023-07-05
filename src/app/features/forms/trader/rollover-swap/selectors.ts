@@ -8,7 +8,8 @@ import {
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
-} from '../../common/utils';
+  isLeverageHidden,
+} from '../../common';
 import {
   getAvailableNotional,
   getNewPositionFixedRate,
@@ -282,6 +283,10 @@ export const selectSubmitButtonText = (state: RootState) => {
 
 export const selectIsLeverageDisabled = (state: RootState) => {
   return getProspectiveSwapNotional(state.rolloverSwapForm) === 0;
+};
+
+export const selectIsLeverageHidden = (state: RootState) => {
+  return isLeverageHidden(state.rolloverSwapForm.amm);
 };
 
 export const selectShowLeverageNotification = (state: RootState) =>

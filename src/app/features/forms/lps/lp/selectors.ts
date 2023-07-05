@@ -8,7 +8,8 @@ import {
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
-} from '../../common/utils';
+  isLeverageHidden,
+} from '../../common';
 import {
   getAvailableMargin,
   getEditPositionNotional,
@@ -265,6 +266,10 @@ export const selectIsLeverageDisabled = (state: RootState) => {
   }
 
   return true;
+};
+
+export const selectIsLeverageHidden = (state: RootState) => {
+  return isLeverageHidden(state.lpForm.amm);
 };
 
 export const selectUserInputNotionalAmountEditMode = (state: RootState) => {

@@ -4,5 +4,6 @@ export * from './formCompactFormat';
 export * from './formCompactFormatToParts';
 export * from './formFormatNumber';
 export * from './formLimitAndFormatNumber';
+export * from './isLeverageHidden';
 export * from './isUserInputMarginError';
 export * from './isUserInputNotionalError';

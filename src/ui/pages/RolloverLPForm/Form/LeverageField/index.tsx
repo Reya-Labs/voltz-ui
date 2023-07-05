@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   selectIsLeverageDisabled,
+  selectIsLeverageHidden,
   selectLeverage,
   selectLeverageOptions,
   selectShowLeverageNotification,
@@ -12,12 +13,14 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { stringToBigFloat } from '../../../../../utilities/number';
 import { LeverageField as LeverageFieldComponent } from '../../../../components/LeverageField';
+
 type NotionalAmountProps = {};
 
 export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () => {
   const dispatch = useAppDispatch();
   const leverage = useAppSelector(selectLeverage);
   const isLeverageDisabled = useAppSelector(selectIsLeverageDisabled);
+  const isLeverageHidden = useAppSelector(selectIsLeverageHidden);
   const [notificationRead, setNotificationRead] = useState(false);
   const { maxLeverage, leverageOptions } = useAppSelector(selectLeverageOptions);
 
@@ -72,6 +75,10 @@ export const LeverageField: React.FunctionComponent<NotionalAmountProps> = () =>
       debouncedSetLeverage.cancel();
     };
   }, []);
+
+  if (isLeverageHidden) {
+    return null;
+  }
 
   return (
     <LeverageFieldComponent
