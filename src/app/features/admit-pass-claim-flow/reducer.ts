@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { claimAdmitPassThunk, getAdmitPassCountThunk } from './thunks';
-import { fetchIsAdmitPassClaimedThunk } from './thunks/fetchIsAdmitPassClaimedThunk';
+import {
+  claimAdmitPassThunk,
+  fetchIsAdmitPassClaimedThunk,
+  getAdmitPassCountThunk,
+} from './thunks';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
