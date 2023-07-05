@@ -3,7 +3,7 @@ import { AMM, InfoPostLp, PoolLpInfo } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common/utils';
+import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common';
 import { pushPageViewEvent } from './analytics';
 import { initialState } from './state';
 import {
