@@ -8,6 +8,7 @@ import {
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
+  getGasInfoFormatted,
   getVariableRate24hDelta,
   isLeverageHidden,
 } from '../../common';
@@ -337,22 +338,10 @@ export const selectMarginRequirementFormatted = (state: RootState) => {
     : '--';
 };
 
-// todo: FB same in swap form
-export const selectGasFeeToken = (state: RootState) => {
+export const selectGasInfoFormatted = (state: RootState) => {
   const infoPostLp = state.lpForm.prospectiveLp.infoPostLp;
-  if (infoPostLp.status === 'success') {
-    return infoPostLp.value.gasFee.token;
-  }
-
-  return '--';
-};
-
-// todo: FB same in swap form
-export const selectGasFeeFormatted = (state: RootState) => {
-  const infoPostLp = state.lpForm.prospectiveLp.infoPostLp;
-  if (infoPostLp.status === 'success') {
-    return formatNumber(infoPostLp.value.gasFee.value, 2, 4);
-  }
-
-  return '--';
+  return getGasInfoFormatted({
+    status: infoPostLp.status,
+    gasDetails: infoPostLp.value.gasFee,
+  });
 };

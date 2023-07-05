@@ -3,8 +3,7 @@ import React from 'react';
 
 import {
   selectAMMTokenFormatted,
-  selectGasFeeFormatted,
-  selectGasFeeToken,
+  selectGasInfoFormatted,
   selectProspectiveSwapFeeFormatted,
   selectSlippageFormatted,
   selectSubmitButtonInfo,
@@ -20,8 +19,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
   const submitButtonInfo = useAppSelector(selectSubmitButtonInfo);
   const slippageFormatted = useAppSelector(selectSlippageFormatted);
   const feeFormatted = useAppSelector(selectProspectiveSwapFeeFormatted);
-  const gasFeeFormatted = useAppSelector(selectGasFeeFormatted);
-  const gasFeeToken = useAppSelector(selectGasFeeToken);
+  const { gasFeeFormatted, gasTokenFormatted } = useAppSelector(selectGasInfoFormatted);
 
   const hideFees = submitButtonInfo.state === 'margin-update';
   const hideSlippage = submitButtonInfo.state === 'margin-update';
@@ -63,7 +61,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </IconTextWrapper>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={` ${gasFeeToken}`}
+          token={` ${gasTokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={gasFeeFormatted}
         />

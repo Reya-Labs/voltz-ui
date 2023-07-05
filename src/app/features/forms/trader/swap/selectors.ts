@@ -8,6 +8,7 @@ import {
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
+  getGasInfoFormatted,
   getVariableRate24hDelta,
   isLeverageHidden,
 } from '../../common';
@@ -104,22 +105,12 @@ export const selectProspectiveSwapFeeFormatted = (state: RootState) => {
   return '--';
 };
 
-export const selectGasFeeToken = (state: RootState) => {
+export const selectGasInfoFormatted = (state: RootState) => {
   const infoPostSwap = state.swapForm.prospectiveSwap.infoPostSwap;
-  if (infoPostSwap.status === 'success') {
-    return infoPostSwap.value.gasFee.token;
-  }
-
-  return '--';
-};
-
-export const selectGasFeeFormatted = (state: RootState) => {
-  const infoPostSwap = state.swapForm.prospectiveSwap.infoPostSwap;
-  if (infoPostSwap.status === 'success') {
-    return formatNumber(infoPostSwap.value.gasFee.value, 2, 4);
-  }
-
-  return '--';
+  return getGasInfoFormatted({
+    status: infoPostSwap.status,
+    gasDetails: infoPostSwap.value.gasFee,
+  });
 };
 
 export const selectLeverage = (state: RootState) => state.swapForm.userInput.leverage;
