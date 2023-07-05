@@ -1,13 +1,14 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatTimestamp } from '../../../../../utilities/date';
-import { formatNumber, stringToBigFloat } from '../../../../../utilities/number';
+import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
 import {
   formCompactFormat,
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
+  getVariableRate24hDelta,
   isLeverageHidden,
 } from '../../common';
 import {
@@ -224,14 +225,8 @@ export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState
   );
 };
 
-// todo: FB duplicate as in swap form
 export const selectVariableRate24hDelta = (state: RootState) => {
-  if (!state.lpForm.amm) {
-    return undefined;
-  }
-  return stringToBigFloat(
-    formatNumber(state.lpForm.amm.variableApy - state.lpForm.amm.variableApy24Ago, 0, 3),
-  );
+  return getVariableRate24hDelta(state.lpForm.amm);
 };
 
 export const selectSubmitButtonText = (state: RootState) => {

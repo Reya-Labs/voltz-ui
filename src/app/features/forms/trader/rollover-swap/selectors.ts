@@ -1,13 +1,14 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatTimestamp } from '../../../../../utilities/date';
-import { formatNumber, stringToBigFloat } from '../../../../../utilities/number';
+import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
 import {
   formCompactFormat,
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
+  getVariableRate24hDelta,
   isLeverageHidden,
 } from '../../common';
 import {
@@ -249,17 +250,7 @@ export const selectRolloverConfirmationFlowEtherscanLink = (state: RootState) =>
 };
 
 export const selectVariableRate24hDelta = (state: RootState) => {
-  if (!state.rolloverSwapForm.amm) {
-    return undefined;
-  }
-
-  return stringToBigFloat(
-    formatNumber(
-      state.rolloverSwapForm.amm.variableApy - state.rolloverSwapForm.amm.variableApy24Ago,
-      0,
-      3,
-    ),
-  );
+  return getVariableRate24hDelta(state.rolloverSwapForm.amm);
 };
 
 export const selectSubmitButtonText = (state: RootState) => {

@@ -1,6 +1,6 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatNumber, stringToBigFloat } from '../../../../../utilities/number';
+import { formatNumber } from '../../../../../utilities/number';
 import { formCompactFormat, formCompactFormatToParts, formFormatNumber } from '../../common/utils';
 import {
   selectAMMMaturityFormatted,
@@ -37,7 +37,6 @@ import {
   selectUserInputMarginInfo,
   selectUserInputMode,
   selectUserInputNotionalInfo,
-  selectVariableRate24hDelta,
   selectVariableRateInfo,
   selectVariableRateValueFormatted,
   selectWalletBalance,
@@ -1031,54 +1030,6 @@ describe('swap-form.selectors', () => {
       const result = selectRolloverConfirmationFlowEtherscanLink(state as never);
       expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
       expect(result).toEqual('https://etherscan.io/tx/0xabc123');
-    });
-  });
-
-  describe('selectVariableRate24hDelta', () => {
-    beforeEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it('calls formatNumber and stringToBigFloat with the correct arguments', () => {
-      const state = {
-        rolloverSwapForm: {
-          amm: {
-            variableApy: 150,
-            variableApy24Ago: 100,
-          },
-        },
-      };
-      (formatNumber as jest.Mock).mockReturnValueOnce('50');
-      selectVariableRate24hDelta(state as never);
-
-      expect(formatNumber).toHaveBeenCalledWith(50, 0, 3);
-      expect(stringToBigFloat).toHaveBeenCalledWith('50');
-    });
-
-    it('returns undefined if amm is null', () => {
-      const state = {
-        rolloverSwapForm: {
-          amm: null,
-        },
-      };
-
-      expect(selectVariableRate24hDelta(state as never)).toBeUndefined();
-    });
-
-    it('returns the correct value', () => {
-      (formatNumber as jest.Mock).mockReturnValueOnce('50');
-      (stringToBigFloat as jest.Mock).mockReturnValueOnce(50);
-
-      const state = {
-        rolloverSwapForm: {
-          amm: {
-            variableApy: 150,
-            variableApy24Ago: 100,
-          },
-        },
-      };
-
-      expect(selectVariableRate24hDelta(state as never)).toEqual(50);
     });
   });
 

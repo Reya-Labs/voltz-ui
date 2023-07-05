@@ -1,4 +1,3 @@
-import { formatNumber, stringToBigFloat } from '../../../../../utilities/number';
 import {
   formCompactFormat,
   formCompactFormatToParts,
@@ -23,7 +22,6 @@ import {
   selectSubmitButtonText,
   selectUserInputMarginInfo,
   selectUserInputNotionalInfo,
-  selectVariableRate24hDelta,
   selectWalletBalance,
 } from './index';
 import {
@@ -693,54 +691,6 @@ describe('lp-form.selectors', () => {
         compactNotionalSuffix: 'ETH',
         compactNotionalNumber: '1',
       });
-    });
-  });
-
-  describe('selectVariableRate24hDelta', () => {
-    beforeEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it('calls formatNumber and stringToBigFloat with the correct arguments', () => {
-      const state = {
-        lpForm: {
-          amm: {
-            variableApy: 150,
-            variableApy24Ago: 100,
-          },
-        },
-      };
-      (formatNumber as jest.Mock).mockReturnValueOnce('50');
-      selectVariableRate24hDelta(state as never);
-
-      expect(formatNumber).toHaveBeenCalledWith(50, 0, 3);
-      expect(stringToBigFloat).toHaveBeenCalledWith('50');
-    });
-
-    it('returns undefined if amm is null', () => {
-      const state = {
-        lpForm: {
-          amm: null,
-        },
-      };
-
-      expect(selectVariableRate24hDelta(state as never)).toBeUndefined();
-    });
-
-    it('returns the correct value', () => {
-      (formatNumber as jest.Mock).mockReturnValueOnce('50');
-      (stringToBigFloat as jest.Mock).mockReturnValueOnce(50);
-
-      const state = {
-        lpForm: {
-          amm: {
-            variableApy: 150,
-            variableApy24Ago: 100,
-          },
-        },
-      };
-
-      expect(selectVariableRate24hDelta(state as never)).toEqual(50);
     });
   });
 
