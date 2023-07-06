@@ -1,4 +1,4 @@
-import { PositionSortId, PositionSorting } from './types';
+import { PositionSortId, PositionSorting, PositionsSummaryFormatted } from './types';
 
 export const resetSortingDirection: PositionSorting = {
   maturity: 'noSort',
@@ -50,4 +50,36 @@ export const SORT_CONFIG: Record<
     text: 'Maturity',
     disabled: true,
   },
+};
+
+export const defaultPositionsSummaryFormatted: PositionsSummaryFormatted = {
+  positionsLength: '--',
+  activePositionsLength: '--',
+  settledPositionsLength: '--',
+  maturedPositionsLength: '--',
+  healthyPositionsLength: '--',
+  warningPositionsLength: '--',
+  dangerPositionsLength: '--',
+  totalPortfolioValueUSDFormatted: '--',
+  totalPortfolioMarginValueUSDFormatted: '--',
+  totalPortfolioRealizedPNLValueUSDFormatted: '--',
+  totalPortfolioUnrealizedPNLValueUSDFormatted: '--',
+  totalPortfolioNotionalValueUSDCompactFormatted: {
+    compactNumber: '--',
+    compactSuffix: '',
+  },
+  filterOptions: [
+    {
+      id: 'active',
+      label: 'Active',
+    },
+    {
+      id: 'matured',
+      label: 'To settle',
+    },
+    {
+      id: 'settled',
+      label: 'Settled',
+    },
+  ],
 };

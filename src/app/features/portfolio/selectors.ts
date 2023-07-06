@@ -1,16 +1,15 @@
-import { PositionsFilterId } from '../../../ui/pages/Portfolio/PortfolioPositions/PositionsList';
-import {
-  generateAmmIdForRoute,
-  generatePoolId,
-  generatePositionIdForRoute,
-} from '../../../utilities/amm';
-import { formatPOSIXTimestamp } from '../../../utilities/date';
 import { compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
-import { formFormatNumber } from '../forms/common/utils';
-import { SORT_CONFIG } from './constants';
-import { sortPositions } from './helpers/sortPositions';
-import { PositionSortDirection, PositionSortId, PositionUI } from './types';
+import { formFormatNumber } from '../forms/common';
+import { defaultPositionsSummaryFormatted, SORT_CONFIG } from './constants';
+import { mapPortfolioPositionToPortfolioUI, sortPositions } from './helpers';
+import { getPositionsSummary } from './helpers/getPositionsSummary';
+import {
+  PositionSortDirection,
+  PositionSortId,
+  PositionsSummaryFormatted,
+  PositionUI,
+} from './types';
 
 export const selectPositions = (state: RootState): PositionUI[] => {
   const portfolioPositions = state.portfolio.positions;
@@ -19,70 +18,7 @@ export const selectPositions = (state: RootState): PositionUI[] => {
     return [];
   }
 
-  const pools: PositionUI[] = portfolioPositions.map((position) => {
-    const pool = position.pool;
-    const isV2 = pool.isV2;
-    const isBorrowing = pool.isBorrowing;
-    const market = pool.market;
-    const token = pool.underlyingToken.name;
-    const tokenPriceUSD = position.pool.underlyingToken.priceUSD;
-    const notionalUSD = position.notional * tokenPriceUSD;
-    const marginUSD = position.margin * tokenPriceUSD;
-    const type = position.type;
-    const unrealizedPNLUSD = position.unrealizedPNL * tokenPriceUSD;
-    const realizedPNLTotalUSD = position.realizedPNLTotal * tokenPriceUSD;
-    const realizedPNLFeesUSD = position.realizedPNLFees * tokenPriceUSD;
-    const realizedPNLCashflowUSD = position.realizedPNLCashflow * tokenPriceUSD;
-    const creationTimestampInMS = position.creationTimestampInMS;
-
-    const fixHigh = position.fixHigh * 100;
-    const fixLow = position.fixLow * 100;
-    const currentFixed = position.poolCurrentFixedRate * 100;
-    const receiving = position.receiving * 100;
-    const paying = position.paying * 100;
-
-    const health = position.health;
-    const variant = position.variant;
-
-    return {
-      creationTimestampInMS,
-      type,
-      market,
-      token,
-      isBorrowing,
-      isV2,
-      marginUSDCompactFormat: compactFormatToParts(marginUSD),
-      marginUSD,
-      notionalUSDCompactFormat: compactFormatToParts(notionalUSD),
-      notionalUSD,
-      maturityEndTimestampInMS: pool.termEndTimestampInMS,
-      maturityStartTimestampInMS: pool.termStartTimestampInMS,
-      maturityFormatted: formatPOSIXTimestamp(pool.termEndTimestampInMS),
-      id: position.id,
-      chainId: pool.chainId,
-      routeAmmId: generateAmmIdForRoute(pool),
-      routePositionId: generatePositionIdForRoute(position),
-      routePoolId: generatePoolId(pool),
-      name: `${type} - ${market} - ${token as string}${isBorrowing ? ' - Borrowing' : ''}`,
-      status: {
-        fixHigh,
-        fixLow,
-        currentFixed,
-        health,
-        receiving,
-        paying,
-        variant,
-      },
-      unrealizedPNLUSD,
-      unrealizedPNLUSDCompactFormat: compactFormatToParts(unrealizedPNLUSD),
-      realizedPNLTotalUSD,
-      realizedPNLTotalUSDCompactFormat: compactFormatToParts(realizedPNLTotalUSD),
-      realizedPNLFeesUSD,
-      realizedPNLFeesUSDCompactFormat: compactFormatToParts(realizedPNLFeesUSD),
-      realizedPNLCashflowUSD,
-      realizedPNLCashflowUSDCompactFormat: compactFormatToParts(realizedPNLCashflowUSD),
-    };
-  });
+  const pools: PositionUI[] = portfolioPositions.map(mapPortfolioPositionToPortfolioUI);
 
   return sortPositions(pools, {
     marginSortingDirection: appliedSortingDirection['margin'],
@@ -100,69 +36,11 @@ export const selectPositionsLoading = (state: RootState): boolean => {
   return loadedState === 'idle' || loadedState === 'pending';
 };
 
-export const selectPositionsSummary = (
-  state: RootState,
-): {
-  maturedPositionsLength: string;
-  settledPositionsLength: string;
-  activePositionsLength: string;
-  positionsLength: string;
-  healthyPositionsLength: string;
-  warningPositionsLength: string;
-  dangerPositionsLength: string;
-  totalPortfolioValueUSDFormatted: string;
-  totalPortfolioMarginValueUSDFormatted: string;
-  totalPortfolioRealizedPNLValueUSDFormatted: string;
-  totalPortfolioUnrealizedPNLValueUSDFormatted: string;
-  totalPortfolioNotionalValueUSDCompactFormatted: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-  filterOptions: {
-    id: PositionsFilterId;
-    label: string;
-    attentionPrefixText?: string;
-  }[];
-} => {
-  const filterOptions: {
-    id: PositionsFilterId;
-    label: string;
-    attentionPrefixText?: string;
-  }[] = [
-    {
-      id: 'active',
-      label: 'Active',
-    },
-    {
-      id: 'matured',
-      label: 'To settle',
-    },
-    {
-      id: 'settled',
-      label: 'Settled',
-    },
-  ];
-
+export const selectPositionsSummary = (state: RootState): PositionsSummaryFormatted => {
   if (selectPositionsLoading(state)) {
-    return {
-      positionsLength: '--',
-      activePositionsLength: '--',
-      settledPositionsLength: '--',
-      maturedPositionsLength: '--',
-      healthyPositionsLength: '--',
-      warningPositionsLength: '--',
-      dangerPositionsLength: '--',
-      totalPortfolioValueUSDFormatted: '--',
-      totalPortfolioMarginValueUSDFormatted: '--',
-      totalPortfolioRealizedPNLValueUSDFormatted: '--',
-      totalPortfolioUnrealizedPNLValueUSDFormatted: '--',
-      totalPortfolioNotionalValueUSDCompactFormatted: {
-        compactNumber: '--',
-        compactSuffix: '',
-      },
-      filterOptions,
-    };
+    return defaultPositionsSummaryFormatted;
   }
+
   const positions = selectPositions(state);
   const {
     maturedPositionsLength,
@@ -175,59 +53,8 @@ export const selectPositionsSummary = (
     totalPortfolioRealizedPNLValueUSD,
     totalPortfolioNotionalValueUSD,
     totalPortfolioUnrealizedPNLValueUSD,
-  } = positions.reduce(
-    (summary, position) => {
-      const variant = position.status.variant;
-      const health = position.status.health;
+  } = getPositionsSummary(positions);
 
-      if (variant === 'active') {
-        summary.activePositionsLength++;
-        summary.totalPortfolioNotionalValueUSD += position.notionalUSD;
-        if (position.type !== 'LP') {
-          summary.totalPortfolioUnrealizedPNLValueUSD += position.unrealizedPNLUSD;
-        }
-
-        if (health === 'healthy') {
-          summary.healthyPositionsLength++;
-        } else if (health === 'danger') {
-          summary.dangerPositionsLength++;
-        } else if (health === 'warning') {
-          summary.warningPositionsLength++;
-        }
-      }
-
-      if (variant === 'matured') {
-        summary.maturedPositionsLength++;
-      }
-
-      if (variant === 'settled') {
-        summary.settledPositionsLength++;
-      }
-
-      if (variant === 'active' || variant === 'matured') {
-        summary.totalPortfolioRealizedPNLValueUSD += position.realizedPNLTotalUSD;
-        summary.totalPortfolioMarginValueUSD += position.marginUSD;
-      }
-
-      return summary;
-    },
-    {
-      maturedPositionsLength: 0,
-      activePositionsLength: 0,
-      settledPositionsLength: 0,
-      healthyPositionsLength: 0,
-      dangerPositionsLength: 0,
-      warningPositionsLength: 0,
-      totalPortfolioMarginValueUSD: 0,
-      totalPortfolioRealizedPNLValueUSD: 0,
-      totalPortfolioNotionalValueUSD: 0,
-      totalPortfolioUnrealizedPNLValueUSD: 0,
-    },
-  );
-
-  filterOptions[0].attentionPrefixText = activePositionsLength.toString();
-  filterOptions[1].attentionPrefixText = maturedPositionsLength.toString();
-  filterOptions[2].attentionPrefixText = settledPositionsLength.toString();
   return {
     positionsLength: positions.length.toString(),
     activePositionsLength: activePositionsLength.toString(),
@@ -249,7 +76,23 @@ export const selectPositionsSummary = (
         totalPortfolioUnrealizedPNLValueUSD +
         totalPortfolioRealizedPNLValueUSD,
     ),
-    filterOptions,
+    filterOptions: [
+      {
+        id: 'active',
+        label: 'Active',
+        attentionPrefixText: activePositionsLength.toString(),
+      },
+      {
+        id: 'matured',
+        label: 'To settle',
+        attentionPrefixText: maturedPositionsLength.toString(),
+      },
+      {
+        id: 'settled',
+        label: 'Settled',
+        attentionPrefixText: settledPositionsLength.toString(),
+      },
+    ],
   };
 };
 

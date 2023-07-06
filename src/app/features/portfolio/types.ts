@@ -1,5 +1,6 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
+import { PositionsFilterId } from '../../../ui/pages/Portfolio/PortfolioPositions/PositionsList';
 import { PortfolioPosition } from './thunks';
 
 export type SliceState = {
@@ -75,3 +76,25 @@ export type PositionSortId =
   | 'realizedPNL';
 export type PositionSortDirection = 'noSort' | 'ascending' | 'descending';
 export type PositionSorting = Record<PositionSortId, PositionSortDirection>;
+export type PositionsSummaryFormatted = {
+  maturedPositionsLength: string;
+  settledPositionsLength: string;
+  activePositionsLength: string;
+  positionsLength: string;
+  healthyPositionsLength: string;
+  warningPositionsLength: string;
+  dangerPositionsLength: string;
+  totalPortfolioValueUSDFormatted: string;
+  totalPortfolioMarginValueUSDFormatted: string;
+  totalPortfolioRealizedPNLValueUSDFormatted: string;
+  totalPortfolioUnrealizedPNLValueUSDFormatted: string;
+  totalPortfolioNotionalValueUSDCompactFormatted: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  filterOptions: {
+    id: PositionsFilterId;
+    label: string;
+    attentionPrefixText?: string;
+  }[];
+};

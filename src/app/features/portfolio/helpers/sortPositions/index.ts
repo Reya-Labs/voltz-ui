@@ -1,6 +1,6 @@
 import orderBy from 'lodash.orderby';
 
-import { PositionSortDirection, PositionUI } from '../types';
+import { PositionSortDirection, PositionUI } from '../../types';
 
 export const sortPositions = (
   positions: PositionUI[],
