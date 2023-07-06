@@ -4,36 +4,8 @@ import { ContractReceipt } from 'ethers';
 
 import { PositionDetailsUI } from '../position-details';
 import { pushPageViewEvent } from './analytics';
+import { initialState } from './state';
 import { confirmSettleThunk, getInfoPostSettlePositionThunk } from './thunks';
-
-type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
-
-export type SliceState = {
-  position: PositionDetailsUI | null;
-  step: 'confirmation' | 'waitingForConfirmation' | 'completed' | null;
-  error: string | null;
-  txHash: string | null;
-  infoPostSettlePosition: {
-    value: InfoPostSettlePosition;
-    status: ThunkStatus;
-  };
-};
-
-const initialState: SliceState = {
-  position: null,
-  step: null,
-  error: null,
-  txHash: null,
-  infoPostSettlePosition: {
-    value: {
-      gasFee: {
-        value: 0,
-        token: 'ETH',
-      },
-    },
-    status: 'idle',
-  },
-};
 
 const slice = createSlice({
   name: 'settleFlow',
