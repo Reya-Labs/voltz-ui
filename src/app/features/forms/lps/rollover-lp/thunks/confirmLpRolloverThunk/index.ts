@@ -6,8 +6,7 @@ import { ContractReceipt } from 'ethers';
 import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
-import { extractError } from '../../../../../helpers/extract-error';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { extractError, rejectThunkWithError } from '../../../../../helpers';
 import {
   pushRolloverFailedEvent,
   pushRolloverSubmittedEvent,

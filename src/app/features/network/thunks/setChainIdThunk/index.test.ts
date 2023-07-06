@@ -1,9 +1,9 @@
 import { getChainInfo, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 import { setChainIdThunkHandler, WindowEthereumType } from '.';
 
-jest.mock('../../../helpers/reject-thunk-with-error', () => ({
+jest.mock('../../../helpers', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 

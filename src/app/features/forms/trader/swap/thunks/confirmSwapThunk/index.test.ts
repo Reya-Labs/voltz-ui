@@ -1,6 +1,5 @@
 import { getAmmProtocol } from '../../../../../../../utilities/amm';
-import { extractError } from '../../../../../helpers/extract-error';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { extractError, rejectThunkWithError } from '../../../../../helpers';
 import {
   pushSwapTransactionFailedEvent,
   pushSwapTransactionSubmittedEvent,
@@ -25,8 +24,9 @@ jest.mock('../../analytics', () => ({
   pushSwapTransactionFailedEvent: jest.fn(),
 }));
 
-jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
+jest.mock('../../../../../helpers', () => ({
   rejectThunkWithError: jest.fn(),
+  extractError: jest.fn(),
 }));
 
 jest.mock('../../utils', () => ({
@@ -34,10 +34,6 @@ jest.mock('../../utils', () => ({
   getProspectiveSwapMode: jest.fn(),
   getProspectiveSwapNotional: jest.fn(),
   getExistingPositionId: jest.fn(),
-}));
-
-jest.mock('../../../../../helpers/extract-error', () => ({
-  extractError: jest.fn(),
 }));
 
 describe('confirmSwapThunkHandler', () => {

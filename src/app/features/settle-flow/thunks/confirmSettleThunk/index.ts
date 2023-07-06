@@ -5,8 +5,7 @@ import { ContractReceipt, providers } from 'ethers';
 
 import { getPoolTrackingName } from '../../../../../utilities/googleAnalytics/get-pool-tracking-name';
 import { RootState } from '../../../../store';
-import { extractError } from '../../../helpers/extract-error';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { extractError, rejectThunkWithError } from '../../../helpers';
 import {
   pushSettleFailedEvent,
   pushSettleSubmittedEvent,

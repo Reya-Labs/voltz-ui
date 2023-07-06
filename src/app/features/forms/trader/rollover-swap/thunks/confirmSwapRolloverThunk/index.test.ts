@@ -1,6 +1,5 @@
 import { getAmmProtocol } from '../../../../../../../utilities/amm';
-import { extractError } from '../../../../../helpers/extract-error';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { extractError, rejectThunkWithError } from '../../../../../helpers';
 import {
   pushRolloverFailedEvent,
   pushRolloverSubmittedEvent,
@@ -24,18 +23,15 @@ jest.mock('../../analytics', () => ({
   pushRolloverSuccessEvent: jest.fn(),
 }));
 
-jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
+jest.mock('../../../../../helpers', () => ({
   rejectThunkWithError: jest.fn(),
+  extractError: jest.fn(),
 }));
 
 jest.mock('../../utils', () => ({
   getProspectiveSwapMargin: jest.fn(),
   getProspectiveSwapMode: jest.fn(),
   getProspectiveSwapNotional: jest.fn(),
-}));
-
-jest.mock('../../../../../helpers/extract-error', () => ({
-  extractError: jest.fn(),
 }));
 
 describe('confirmRolloverThunkHandler', () => {

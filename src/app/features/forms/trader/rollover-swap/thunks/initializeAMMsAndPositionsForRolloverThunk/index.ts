@@ -9,7 +9,7 @@ import {
   generatePoolId,
 } from '../../../../../../../utilities/amm';
 import { RootState } from '../../../../../../store';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
 import { pushPageViewEvent } from '../../analytics';
 
 export type InitializeAMMsAndPositionsForRolloverThunkSuccess = {

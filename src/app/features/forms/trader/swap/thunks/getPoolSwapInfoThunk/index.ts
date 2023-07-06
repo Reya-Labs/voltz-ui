@@ -6,7 +6,7 @@ import { PoolSwapInfo } from '@voltz-protocol/v1-sdk';
 import { isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
 
 export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
   Awaited<PoolSwapInfo | ReturnType<typeof rejectThunkWithError>>,

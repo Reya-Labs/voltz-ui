@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
+import { getNextSortDirection } from '../helpers';
 import {
   initialFilters,
   initialPoolsInformation,
@@ -9,14 +10,7 @@ import {
   resetSortingDirection,
 } from './constants';
 import { fetchPoolsInformationThunk, initialiseAMMsThunk } from './thunks';
-import {
-  PoolFilterId,
-  PoolFilters,
-  PoolsInformation,
-  PoolSortDirection,
-  PoolSortId,
-  PoolSorting,
-} from './types';
+import { PoolFilterId, PoolFilters, PoolsInformation, PoolSortId, PoolSorting } from './types';
 
 type SliceState = {
   aMMsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -69,21 +63,9 @@ const slice = createSlice({
         sortId: PoolSortId;
       }>,
     ) => {
-      let nextSort: PoolSortDirection = 'noSort';
-      const currentSort = state.sortingDirection[sortId];
-      if (currentSort === 'noSort') {
-        nextSort = 'ascending';
-      }
-      if (currentSort === 'ascending') {
-        nextSort = 'descending';
-      }
-      if (currentSort === 'descending') {
-        nextSort = 'ascending';
-      }
-
       state.sortingDirection = {
         ...resetSortingDirection,
-        [sortId]: nextSort,
+        [sortId]: getNextSortDirection(state.sortingDirection[sortId]),
       };
     },
   },

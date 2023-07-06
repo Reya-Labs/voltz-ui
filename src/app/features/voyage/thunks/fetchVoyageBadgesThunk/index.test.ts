@@ -1,10 +1,10 @@
 import { getVoyages } from '@voltz-protocol/v1-sdk';
 
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 import { fetchVoyageBadgesThunkHandler } from '.';
 
 jest.mock('@voltz-protocol/v1-sdk');
-jest.mock('../../../helpers/reject-thunk-with-error');
+jest.mock('../../../helpers');
 
 describe('fetchVoyageBadgesThunkHandler', () => {
   const mockAccount = '0x123';

@@ -1,7 +1,7 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { getVoyages, SupportedChainId, Voyage } from '@voltz-protocol/v1-sdk';
 
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 
 export const fetchVoyageBadgesThunkHandler: AsyncThunkPayloadCreator<
   Awaited<Voyage[] | ReturnType<typeof rejectThunkWithError>>,

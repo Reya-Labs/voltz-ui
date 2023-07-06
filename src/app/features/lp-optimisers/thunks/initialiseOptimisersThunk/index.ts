@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 
 import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../../utilities/getInfuraKey';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 import { OptimiserInfo } from '../../types';
 
 export const initialiseOptimisersThunk = createAsyncThunk<

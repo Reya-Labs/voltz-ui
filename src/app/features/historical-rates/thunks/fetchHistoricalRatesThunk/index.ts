@@ -2,7 +2,7 @@ import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { getHistoricalRates, Granularity, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../../../store';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 import { CACHE, getCacheId } from './cache';
 
 export type FetchHistoricalRatesThunkParams = {

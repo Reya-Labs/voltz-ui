@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getPortfolioPositions } from '@voltz-protocol/v1-sdk';
 
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 import { getAllowedChainIds } from '../../../network';
 
 export type PortfolioPosition = Awaited<ReturnType<typeof getPortfolioPositions>>[0];

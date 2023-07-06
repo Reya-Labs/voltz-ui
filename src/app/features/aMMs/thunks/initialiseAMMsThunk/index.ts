@@ -3,7 +3,7 @@ import { getV1V2AMMs } from '@voltz-protocol/v1-sdk';
 
 import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../../utilities/getInfuraKey';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 import { getAllowedChainIds } from '../../../network/';
 
 export const initialiseAMMsThunk = createAsyncThunk<

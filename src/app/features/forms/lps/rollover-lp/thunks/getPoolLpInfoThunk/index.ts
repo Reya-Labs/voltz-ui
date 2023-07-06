@@ -5,7 +5,7 @@ import { getPoolLpInfo as getPoolLpInfoV2 } from '@voltz-protocol/sdk-v2';
 import { isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
 import { getDefaultLpFixedHigh, getDefaultLpFixedLow } from '../../utils';
 
 export const getPoolLpInfoThunk = createAsyncThunk<

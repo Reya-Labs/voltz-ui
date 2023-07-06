@@ -1,7 +1,7 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { RootState } from '../../../../../../store';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
 import { getWalletBalanceService } from '../../../../common';
 
 export const getWalletBalanceThunkHandler: AsyncThunkPayloadCreator<

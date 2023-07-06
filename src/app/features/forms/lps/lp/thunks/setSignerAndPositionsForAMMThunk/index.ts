@@ -3,7 +3,7 @@ import { getLpPositionsByPool, Position, SupportedChainId } from '@voltz-protoco
 import { providers } from 'ethers';
 
 import { RootState } from '../../../../../../store';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
 
 export type SetSignerAndPositionsForAMMThunkSuccess = {
   signer: providers.JsonRpcSigner | null;

@@ -1,9 +1,9 @@
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
 import { getUnderlyingTokenAllowanceService } from '../../../../common';
 import { getUnderlyingTokenAllowanceThunkHandler } from './index';
 
 // Mock dependencies
-jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
+jest.mock('../../../../../helpers', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 

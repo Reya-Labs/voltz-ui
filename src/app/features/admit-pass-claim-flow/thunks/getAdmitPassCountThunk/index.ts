@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getAdmitPassCount } from '@voltz-protocol/community-sdk';
 
 import { RootState } from '../../../../store';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 
 export const getAdmitPassCountThunk = createAsyncThunk<
   Awaited<boolean | ReturnType<typeof rejectThunkWithError>>,

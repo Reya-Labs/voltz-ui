@@ -1,6 +1,6 @@
 import { getHistoricalRates, Granularity, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 import { CACHE, getCacheId } from './cache';
 import { fetchHistoricalRatesThunkHandler } from './index';
 
@@ -17,7 +17,7 @@ jest.mock('@voltz-protocol/v1-sdk', () => ({
 }));
 
 // Mock rejectThunkWithError function
-jest.mock('../../../helpers/reject-thunk-with-error', () => ({
+jest.mock('../../../helpers', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 

@@ -4,7 +4,7 @@ import { providers } from 'ethers';
 
 import { Season } from '../../../../../hooks/season/types';
 import { getCommunitySbt } from '../../../../../ui/pages/Profile/helpers';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 
 export const fetchRankingsThunk = createAsyncThunk<
   Awaited<RankType[] | ReturnType<typeof rejectThunkWithError>>,
