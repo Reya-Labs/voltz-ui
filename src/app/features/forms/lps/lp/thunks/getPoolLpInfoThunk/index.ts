@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getPoolLpInfo } from '@voltz-protocol/sdk-v1-stateless';
-import { getPoolLpInfo as getPoolLpInfoV2 } from '@voltz-protocol/sdk-v2';
 import { PoolLpInfo } from '@voltz-protocol/v1-sdk';
 
 import { isV2AMM } from '../../../../../../../utilities/amm';
@@ -34,13 +33,12 @@ export const getPoolLpInfoThunk = createAsyncThunk<
       fixedLow = getDefaultLpFixedLow(lpFormState);
       fixedHigh = getDefaultLpFixedHigh(lpFormState);
     }
+
+    // todo: when deprecating v1, checks against max leverages should be removed
     if (isV2AMM(amm)) {
-      return await getPoolLpInfoV2({
-        ammId: amm.id,
-        fixedHigh,
-        fixedLow,
-        provider: amm.provider,
-      });
+      return {
+        maxLeverage: Number.MAX_SAFE_INTEGER,
+      }
     } else {
       if (isV1StatelessEnabled()) {
         return await getPoolLpInfo({

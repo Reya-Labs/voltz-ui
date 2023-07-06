@@ -19,10 +19,14 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
       return;
     }
     if (isV2AMM(amm)) {
-      return await getPoolSwapInfoV2({
-        ammId: amm.id,
-        provider: amm.provider,
-      });
+      const availableNotional = await getPoolSwapInfoV2(amm.id);
+
+      // todo: when deprecating v1, checks against max leverages should be removed
+      return {
+        ...availableNotional,
+        maxLeverageFixedTaker: Number.MAX_SAFE_INTEGER,
+        maxLeverageVariableTaker: Number.MAX_SAFE_INTEGER,
+      }
     } else {
       if (isV1StatelessEnabled()) {
         return await getPoolSwapInfo({
