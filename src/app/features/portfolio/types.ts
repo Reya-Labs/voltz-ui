@@ -1,5 +1,13 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
+import { PortfolioPosition } from './thunks';
+
+export type SliceState = {
+  positionsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  positions: PortfolioPosition[];
+  sortingDirection: PositionSorting;
+};
+
 export type PositionUI = {
   id: string;
   creationTimestampInMS: number;

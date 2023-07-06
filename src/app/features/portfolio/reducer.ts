@@ -1,21 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { getNextSortDirection } from '../helpers';
-import { initialSortingDirection, resetSortingDirection } from './constants';
+import { resetSortingDirection } from './constants';
+import { initialState } from './state';
 import { initialisePortfolioPositionsThunk, PortfolioPosition } from './thunks';
-import { PositionSortId, PositionSorting } from './types';
-
-type SliceState = {
-  positionsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
-  positions: PortfolioPosition[];
-  sortingDirection: PositionSorting;
-};
-
-const initialState: SliceState = {
-  positionsLoadedState: 'idle',
-  positions: [],
-  sortingDirection: { ...initialSortingDirection },
-};
+import { PositionSortId } from './types';
 
 const slice = createSlice({
   name: 'portfolio',
