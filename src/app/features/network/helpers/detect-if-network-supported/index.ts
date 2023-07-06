@@ -1,6 +1,6 @@
 import { detectNetworkWithChainId, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { getChainsFromProcessEnv } from './get-chains-from-process-env';
+import { getChainsFromProcessEnv } from '../get-chains-from-process-env';
 type SupportedChainIds = keyof typeof SupportedChainId;
 
 /**

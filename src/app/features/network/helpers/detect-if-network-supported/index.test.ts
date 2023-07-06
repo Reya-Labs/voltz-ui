@@ -1,6 +1,6 @@
 import { detectNetworkWithChainId, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { detectIfNetworkSupported } from './detect-if-network-supported';
+import { detectIfNetworkSupported } from './index';
 
 jest.mock('@voltz-protocol/v1-sdk', () => ({
   ...jest.requireActual('@voltz-protocol/v1-sdk'),
