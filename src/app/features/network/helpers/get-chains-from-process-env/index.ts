@@ -1,4 +1,4 @@
-import { isEnvVarProvided } from '../../../../utilities/isEnvVarProvided';
+import { isEnvVarProvided } from '../../../../../utilities/isEnvVarProvided';
 
 type NetworkConfigFromProcessENV = {
   network: string;
@@ -12,23 +12,22 @@ const cachedNetworkConfigs: Record<string, NetworkConfigFromProcessENV[] | undef
  */
 export const getChainsFromProcessEnv = (
   networkConfigurationString = process.env.REACT_APP_NETWORK_SELECTOR_NETWORKS,
-): {
-  network: string;
-}[] => {
+): { network: string }[] => {
   if (!networkConfigurationString || !isEnvVarProvided(networkConfigurationString)) {
     return [];
   }
-  if (cachedNetworkConfigs[networkConfigurationString]) {
-    return cachedNetworkConfigs[networkConfigurationString]!;
+
+  const cachedConfig = cachedNetworkConfigs[networkConfigurationString];
+  if (cachedConfig) {
+    return cachedConfig;
   }
 
-  cachedNetworkConfigs[networkConfigurationString] = networkConfigurationString
+  const networks = networkConfigurationString
     .split(',')
     .filter((s) => s.trim())
-    .map((s) => ({
-      network: s,
-    }))
+    .map((s) => ({ network: s }))
     .filter(({ network }) => network);
 
-  return cachedNetworkConfigs[networkConfigurationString]!;
+  cachedNetworkConfigs[networkConfigurationString] = networks;
+  return networks;
 };
