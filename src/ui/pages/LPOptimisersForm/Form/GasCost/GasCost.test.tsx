@@ -12,6 +12,6 @@ describe('<GasCost />', () => {
   test('displays the gas cost in USD when gasCost prop is positive', () => {
     render(<GasCost gasCost={10.7} />);
     const gasCostUSD = screen.getByTestId('GasCost-GasCostUSD');
-    expect(gasCostUSD).toHaveTextContent('10.70');
+    expect(gasCostUSD).toHaveTextContent('$10.7');
   });
 });

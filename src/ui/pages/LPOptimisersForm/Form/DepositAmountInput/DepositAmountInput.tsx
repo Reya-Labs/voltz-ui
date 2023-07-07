@@ -1,10 +1,10 @@
 import { TokenField, TokenFieldProps } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { FormNumberLimits } from '../../../../../app/features/forms/common';
+import { formFormatNumber, FormNumberLimits } from '../../../../../app/features/forms/common';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { localeParseFloat } from '../../../../../utilities/localeParseFloat';
-import { formatCurrency, toUSFormat } from '../../../../../utilities/number';
+import { toUSFormat } from '../../../../../utilities/number';
 import { DepositionAmountInputBox } from './DepositAmountInput.styled';
 
 type Props = {
@@ -30,9 +30,7 @@ export const DepositAmountInput: React.FunctionComponent<Props> = ({
     setInputValue(toUSFormat(nextValue.toString()));
   };
   const subtext = `Wallet Balance: ${
-    walletBalance === undefined
-      ? '---'
-      : `${formatCurrency(walletBalance, true)} ${tokenName || ''}`
+    walletBalance === undefined ? '---' : `${formFormatNumber(walletBalance)} ${tokenName || ''}`
   }`;
 
   return (

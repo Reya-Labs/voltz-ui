@@ -15,10 +15,11 @@ import {
   setCashflowAMMAction,
   setEstimatedApyAction,
 } from '../../../app/features/cashflow-calculator';
+import { formFormatNumber } from '../../../app/features/forms/common';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import { useWallet } from '../../../hooks/useWallet';
-import { formatCurrency, stringToBigFloat } from '../../../utilities/number';
+import { stringToBigFloat } from '../../../utilities/number';
 import {
   AdditionalCashFlowBox,
   CashFlowCalculatorBox,
@@ -174,14 +175,11 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             label="Additional Cashflow"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
+            prefixToken={additionalCashflow !== null ? (additionalCashflow > 0 ? '+' : '-') : ''}
             token={token}
             tooltip="This shows the cashflow you could generate from your new position."
             typographyToken={typographyToken}
-            value={
-              additionalCashflow !== null
-                ? formatCurrency(additionalCashflow, true, true, 2, 4)
-                : '--'
-            }
+            value={additionalCashflow !== null ? formFormatNumber(additionalCashflow) : '--'}
           />
         </AdditionalCashFlowBox>
         <TotalCashFlowBox>
@@ -190,10 +188,11 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             label="Total Cashflow"
             labelColorToken="lavenderWeb3"
             labelTypographyToken={labelTypographyToken}
+            prefixToken={totalCashflow !== null ? (totalCashflow > 0 ? '+' : '-') : ''}
             token={token}
             tooltip="This shows the combined cashflow you could generate from your new position and your existing."
             typographyToken={typographyToken}
-            value={totalCashflow !== null ? formatCurrency(totalCashflow, true, true, 2, 4) : '--'}
+            value={totalCashflow !== null ? formFormatNumber(totalCashflow) : '--'}
           />
         </TotalCashFlowBox>
       </CashFlowCalculatorRightBox>
