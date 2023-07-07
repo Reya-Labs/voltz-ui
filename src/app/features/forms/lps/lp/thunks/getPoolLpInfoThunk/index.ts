@@ -38,7 +38,7 @@ export const getPoolLpInfoThunk = createAsyncThunk<
     if (isV2AMM(amm)) {
       return {
         maxLeverage: Number.MAX_SAFE_INTEGER,
-      }
+      };
     } else {
       if (isV1StatelessEnabled()) {
         return await getPoolLpInfo({

@@ -28,7 +28,7 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
         ...availableNotional,
         maxLeverageFixedTaker: Number.MAX_SAFE_INTEGER,
         maxLeverageVariableTaker: Number.MAX_SAFE_INTEGER,
-      }
+      };
     } else {
       if (isV1StatelessEnabled()) {
         return await getPoolSwapInfo({
