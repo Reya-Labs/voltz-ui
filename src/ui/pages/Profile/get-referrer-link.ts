@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 
+import { WELCOME } from '../../../app/features/redirects';
 import { REFERRAL_AND_SIGNATURES_URL } from '../../../contexts/WalletContext/services/constants';
-import { routes } from '../../../routes/paths';
 import { REFERRER_QUERY_PARAM_KEY } from '../../../utilities/referrer-store/constants';
 import { getSentryTracker } from '../../../utilities/sentry';
 
@@ -30,7 +30,7 @@ export const getReferrerLink = async (account: string) => {
     if (!data?.refers_with_code) {
       return undefined;
     }
-    const link = `${window.location.origin}/#/${routes.WELCOME}?${REFERRER_QUERY_PARAM_KEY}=${data.refers_with_code}`;
+    const link = `${window.location.origin}/#/${WELCOME}?${REFERRER_QUERY_PARAM_KEY}=${data.refers_with_code}`;
     cached[account] = link;
     return link;
   } catch (error) {

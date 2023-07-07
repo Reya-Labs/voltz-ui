@@ -14,6 +14,7 @@ import { lpOptimisersReducer } from './features/lp-optimisers';
 import { networkReducer } from './features/network';
 import { portfolioReducer } from './features/portfolio';
 import { positionDetailsReducer } from './features/position-details';
+import { redirectsReducer } from './features/redirects';
 import { settleFlowReducer } from './features/settle-flow';
 import { tradingLeagueReducer } from './features/trading-league';
 import { voyageReducer } from './features/voyage';
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   voyage: voyageReducer,
   portfolio: portfolioReducer,
   positionDetails: positionDetailsReducer,
+  redirects: redirectsReducer,
   adminPassClaimFlow: admitPassClaimFlowReducer,
   admitPassVerificationFlow: admitPassVerificationFlowReducer,
 });
