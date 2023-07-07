@@ -3,7 +3,6 @@ import { Draft } from '@reduxjs/toolkit';
 import { isUserInputMarginError } from '../../../../common';
 import { SliceState } from '../../state';
 import { getProspectiveSwapMargin } from '../getProspectiveSwapMargin';
-import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 import { hasExistingPosition } from '../hasExistingPosition';
 import { validateUserInput } from '../validateUserInput';
@@ -23,11 +22,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   const isProspectiveSwapMarginValid = existingPosition || prospectiveSwapMargin > 0;
   const isProspectiveSwapNotionalMarginValid =
     prospectiveSwapNotional !== 0 || prospectiveSwapMargin !== 0;
-  const isInfoPostSwapLoaded =
-    state.prospectiveSwap.infoPostSwap.status === 'success' &&
-    state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance *
-      (getProspectiveSwapMode(state) === 'fixed' ? -1 : 1) ===
-      prospectiveSwapNotional;
+  const isInfoPostSwapLoaded = state.prospectiveSwap.infoPostSwap.status === 'success';
   const isWalletBalanceLoaded = state.walletBalance.status === 'success';
   const isWalletTokenAllowanceLoaded = state.walletTokenAllowance.status === 'success';
 
