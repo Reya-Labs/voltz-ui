@@ -12,6 +12,7 @@ import {
   getVariableRate24hDelta,
   isLeverageHidden,
 } from '../../common';
+import { getAvailableMargin } from '../../lps/rollover-lp/utils';
 import {
   getAvailableNotional,
   getNewPositionFixedRate,
@@ -31,20 +32,12 @@ export const selectRolloverSwapFormPreviousPosition = (state: RootState) =>
   state.rolloverSwapForm.previousPosition;
 
 export const selectWalletBalance = (state: RootState) => {
-  if (state.rolloverSwapForm.walletBalance.status !== 'success') {
+  const availableMargin = getAvailableMargin(state.rolloverLpForm);
+  if (availableMargin === null) {
     return '--';
   }
 
-  if (state.rolloverSwapForm.previousPosition === null) {
-    return '--';
-  }
-
-  return formCompactFormat(
-    state.rolloverSwapForm.walletBalance.value +
-      state.rolloverSwapForm.previousPosition.settlementCashflow +
-      state.rolloverSwapForm.previousPosition.margin +
-      state.rolloverSwapForm.previousPosition.fees,
-  );
+  return formCompactFormat(availableMargin);
 };
 export const selectFixedRateInfo = (state: RootState) => state.rolloverSwapForm.amm?.fixedApr;
 export const selectVariableRateInfo = (state: RootState) => state.rolloverSwapForm.amm?.variableApy;

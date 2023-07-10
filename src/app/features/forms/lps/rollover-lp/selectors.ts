@@ -13,6 +13,7 @@ import {
   isLeverageHidden,
 } from '../../common';
 import {
+  getAvailableMargin,
   getPreviousPositionRealizedPnLFromFees,
   getPreviousPositionRealizedPnLFromSwaps,
   getProspectiveLpMargin,
@@ -28,20 +29,12 @@ export const selectRolloverLpFormPreviousPosition = (state: RootState) =>
 
 // todo: FB duplicate logic same as rollover-swap-form, move to common
 export const selectWalletBalance = (state: RootState) => {
-  if (state.rolloverLpForm.walletBalance.status !== 'success') {
+  const availableMargin = getAvailableMargin(state.rolloverLpForm);
+  if (availableMargin === null) {
     return '--';
   }
 
-  if (state.rolloverLpForm.previousPosition === null) {
-    return '--';
-  }
-
-  return formCompactFormat(
-    state.rolloverLpForm.walletBalance.value +
-      state.rolloverLpForm.previousPosition.settlementCashflow +
-      state.rolloverLpForm.previousPosition.margin +
-      state.rolloverLpForm.previousPosition.fees,
-  );
+  return formCompactFormat(availableMargin);
 };
 export const selectPoolLpInfoStatus = (state: RootState) => state.rolloverLpForm.poolLpInfo.status;
 
