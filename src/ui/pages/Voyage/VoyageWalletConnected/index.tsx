@@ -101,7 +101,7 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
       <BadgesBox>
         <BadgeCollectionBox data-testid="Voyage-BadgeCollectionBox">
           <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
-            Voltz v2 Voyage
+            Voltz Protocol v2 Voyage
           </Typography>
           <VoyageBadgesGrid itemsPerRow={3}>
             {loading &&

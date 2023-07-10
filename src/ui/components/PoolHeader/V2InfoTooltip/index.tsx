@@ -13,9 +13,9 @@ export const V2InfoTooltip: React.FunctionComponent<{
   return (
     <V2InfoTooltipBox>
       <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-        This pool is a new pool operating on Voltz v2. The v2 contracts haven’t been audited yet, so
-        it is only tradable in an Alpha state where aggregate margin that can be deployed into the
-        pool is capped.
+        This pool is a new pool operating on Voltz Protocol v2. The v2 contracts haven’t been
+        audited yet, so trading is only available in an Alpha State. This means there’s a cap on the
+        margin that can be deployed into the pool.
       </Typography>
       <RowsBox>
         <RowBox>

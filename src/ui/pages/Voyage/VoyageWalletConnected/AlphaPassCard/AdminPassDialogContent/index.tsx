@@ -34,7 +34,7 @@ export const AdminPassDialogContent: React.FunctionComponent<{
     <ContentBox>
       <TitleBox>
         <Typography colorToken="rainbow" typographyToken="primaryHeader3Bold">
-          Voltz v2 Alpha Pass
+          Voltz Protocol v2 Alpha Pass
         </Typography>
         <CloseButton onClick={onClose} />
       </TitleBox>

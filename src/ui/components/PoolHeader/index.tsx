@@ -123,7 +123,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
               tooltip={<V2InfoTooltip poolCap={poolCap} />}
               typographyToken={typographyToken}
             >
-              Voltz v2 Alpha Launch
+              Voltz Protocol v2 Alpha Launch
             </TypographyWithTooltip>
           </V2InfoBox>
         ) : null}

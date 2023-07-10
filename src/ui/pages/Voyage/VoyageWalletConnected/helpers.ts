@@ -13,8 +13,8 @@ export const STATUS_DESCRIPTION_COPY_MAP: Record<VoyageBadgeUI['status'], string
   notAchieved: 'Don’t worry, more opportunities await.',
   notStarted: 'The voyage has yet to be started! s00n...',
   achieved:
-    'Congratulations, you earned the Voltz v2 Voyage Badge. This will have a number of unique benefits, including early access to Voltz v2.',
-  inProgress: 'Trade or LP to try achieve Voltz v2 Status.',
+    'Congratulations, you earned the Voltz Protocol v2 Voyage Badge. This will have a number of unique benefits, including early access to Voltz Protocol v2.',
+  inProgress: 'Trade or LP to try achieve Voltz Protocol v2 Status.',
 };
 
 export const STATUS_TEXT_MAP: Record<VoyageBadgeUI['status'], string> = {

@@ -38,10 +38,11 @@ export const VerifyStep: React.FunctionComponent<{
         </Typography>
       </TitleBox>
       <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-        In order to start trading on Voltz v2 you need to verify ownership of the Voltz Alpha Pass.
+        In order to start trading on Voltz Protocol v2 you need to verify ownership of the Voltz
+        Alpha Pass.
       </Typography>
       <Typography colorToken="rainbow" typographyToken="primaryBodyXSmallRegular">
-        Voltz v2 Alpha Launch
+        Voltz Protocol v2 Alpha Launch
       </Typography>
       <PoolDetails poolCap={poolCap} />
       <Button
