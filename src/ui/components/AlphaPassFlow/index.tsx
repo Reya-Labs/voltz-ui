@@ -12,6 +12,9 @@ export const AlphaPassFlow: React.FunctionComponent<{
 }> = ({ poolCap }) => {
   const { account } = useWallet();
   const step = useAppSelector(selectAlphaPassVerificationFlowStep(account));
+  if (!step) {
+    return null;
+  }
   if (step === 'alpha-pass-found') {
     return null;
   }
