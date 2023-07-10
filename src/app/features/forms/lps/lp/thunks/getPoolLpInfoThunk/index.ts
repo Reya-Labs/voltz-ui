@@ -6,12 +6,8 @@ import { isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers';
-import {
-  getDefaultLpFixedHigh,
-  getDefaultLpFixedLow,
-  getProspectiveLpFixedHigh,
-  getProspectiveLpFixedLow,
-} from '../../utils';
+import { getProspectiveLpFixedHigh, getProspectiveLpFixedLow } from '../../../../common';
+import { getDefaultLpFixedHigh, getDefaultLpFixedLow } from '../../utils';
 
 export const getPoolLpInfoThunk = createAsyncThunk<
   Awaited<PoolLpInfo | ReturnType<typeof rejectThunkWithError>>,

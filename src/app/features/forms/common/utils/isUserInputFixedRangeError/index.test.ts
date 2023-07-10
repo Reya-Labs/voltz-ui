@@ -1,4 +1,4 @@
-import { isUserInputFixedRangeError } from './index';
+import { isUserInputFixedRangeError } from '.';
 
 describe('isUserInputFixedRangeError', () => {
   it('should return false when userInput.fixedRange.error is null', () => {
