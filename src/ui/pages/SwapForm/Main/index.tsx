@@ -12,7 +12,7 @@ import {
 } from '../../../../app/features/forms/trader/swap';
 import { useAppSelector } from '../../../../app/hooks';
 import { isV2AMM } from '../../../../utilities/amm';
-import { AdmitPassFlow } from '../../../components/AdmitPassFlow';
+import { AlphaPassFlow } from '../../../components/AlphaPassFlow';
 import { CashFlowCalculator } from '../../../components/CashflowCalculator';
 import { FormTransactionHistory } from '../../../components/FormTransactionHistory';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
@@ -34,7 +34,7 @@ export const Main: React.FunctionComponent = () => {
 
   return (
     <MainBox>
-      {isV2AMM(aMM) ? <AdmitPassFlow poolCap={MAX_POOL_CAP} /> : null}
+      {isV2AMM(aMM) ? <AlphaPassFlow poolCap={MAX_POOL_CAP} /> : null}
       <PoolHeader />
       <HistoricalRatesChart
         aMMId={aMM.id}

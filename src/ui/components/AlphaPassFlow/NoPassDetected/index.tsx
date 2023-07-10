@@ -14,7 +14,7 @@ export const NoPassDetected: React.FunctionComponent = () => {
         </Typography>
       </TitleBox>
       <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-        Unfortunately we couldn’t verify your Voltz Admit Pass in your wallet. Check out other v1
+        Unfortunately we couldn’t verify your Voltz Alpha Pass in your wallet. Check out other v1
         pools until the v2 pools are opened to all.{' '}
       </Typography>
       <Button variant="primary" onClick={navigate.toPoolsPage}>

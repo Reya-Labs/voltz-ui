@@ -2,11 +2,11 @@ import { Button, CloseButton, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
-  claimAdmitPassThunk,
-  selectAdmitPassClaimFlowError,
-  selectAdmitPassClaimFlowStatus,
-  selectAdmitPassTotalPasses,
-} from '../../../../../../app/features/admit-pass-claim-flow';
+  claimAlphaPassThunk,
+  selectAlphaPassClaimFlowError,
+  selectAlphaPassClaimFlowStatus,
+  selectAlphaPassTotalPasses,
+} from '../../../../../../app/features/alpha-pass-claim-flow';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { useWallet } from '../../../../../../hooks/useWallet';
 import { ContentBox, DetailBox, TitleBox } from './AdminPassDialogContent.styled';
@@ -16,15 +16,15 @@ export const AdminPassDialogContent: React.FunctionComponent<{
 }> = ({ onClose }) => {
   const { signer } = useWallet();
   const dispatch = useAppDispatch();
-  const error = useAppSelector(selectAdmitPassClaimFlowError);
-  const loading = useAppSelector(selectAdmitPassClaimFlowStatus) === 'pending';
-  const totalPasses = useAppSelector(selectAdmitPassTotalPasses);
+  const error = useAppSelector(selectAlphaPassClaimFlowError);
+  const loading = useAppSelector(selectAlphaPassClaimFlowStatus) === 'pending';
+  const totalPasses = useAppSelector(selectAlphaPassTotalPasses);
   const handleOnVerifyClick = useCallback(() => {
     if (!signer) {
       return;
     }
     void dispatch(
-      claimAdmitPassThunk({
+      claimAlphaPassThunk({
         signer,
       }),
     );

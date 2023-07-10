@@ -3,15 +3,14 @@ import React, { useEffect } from 'react';
 
 import {
   closeClaimDialogAction,
-  fetchIsAdmitPassClaimedThunk,
-  getAdmitPassCountThunk,
+  fetchIsAlphaPassClaimedThunk,
+  getAlphaPassCountThunk,
   openClaimDialogAction,
-  selectAdmitPassClaimFlowStep,
-  selectAdmitPassTotalPasses,
-} from '../../../../../app/features/admit-pass-claim-flow';
+  selectAlphaPassClaimFlowStep,
+  selectAlphaPassTotalPasses,
+} from '../../../../../app/features/alpha-pass-claim-flow';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useWallet } from '../../../../../hooks/useWallet';
-import { isAdmitPassLive } from '../../../../../utilities/is-admit-pass-live';
 import { AdminPassDialogContent } from './AdminPassDialogContent';
 import {
   BadgeBox,
@@ -27,17 +26,17 @@ type AlphaPassCardProps = {};
 export const AlphaPassCard: React.FunctionComponent<AlphaPassCardProps> = () => {
   const { signer, account } = useWallet();
   const dispatch = useAppDispatch();
-  const step = useAppSelector(selectAdmitPassClaimFlowStep);
-  const totalPasses = useAppSelector(selectAdmitPassTotalPasses);
+  const step = useAppSelector(selectAlphaPassClaimFlowStep);
+  const totalPasses = useAppSelector(selectAlphaPassTotalPasses);
 
   useEffect(() => {
     void dispatch(
-      fetchIsAdmitPassClaimedThunk({
+      fetchIsAlphaPassClaimedThunk({
         signer,
       }),
     );
     void dispatch(
-      getAdmitPassCountThunk({
+      getAlphaPassCountThunk({
         account,
       }),
     );
@@ -48,7 +47,7 @@ export const AlphaPassCard: React.FunctionComponent<AlphaPassCardProps> = () => 
   const handleOnClose = () => {
     dispatch(closeClaimDialogAction());
   };
-  if (!isAdmitPassLive() || totalPasses === 0 || totalPasses === null) {
+  if (totalPasses === 0 || totalPasses === null) {
     return null;
   }
   return (

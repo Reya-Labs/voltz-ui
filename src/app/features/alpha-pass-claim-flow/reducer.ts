@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import {
-  claimAdmitPassThunk,
-  fetchIsAdmitPassClaimedThunk,
-  getAdmitPassCountThunk,
+  claimAlphaPassThunk,
+  fetchIsAlphaPassClaimedThunk,
+  getAlphaPassCountThunk,
 } from './thunks';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
@@ -18,18 +18,18 @@ export type SliceState = {
     | 'claimed';
   status: ThunkStatus;
   error: string | null;
-  totalAdmitPass: number | null;
+  totalAlphaPass: number | null;
 };
 
 const initialState: SliceState = {
   step: 'fetchingClaimStatus',
   status: 'idle',
   error: null,
-  totalAdmitPass: null,
+  totalAlphaPass: null,
 };
 
 const slice = createSlice({
-  name: 'admitPassClaimFlow',
+  name: 'alphaPassClaimFlow',
   initialState,
   reducers: {
     openClaimDialogAction: (state) => {
@@ -43,40 +43,40 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(claimAdmitPassThunk.pending, (state) => {
+      .addCase(claimAlphaPassThunk.pending, (state) => {
         state.status = 'pending';
         state.error = null;
       })
-      .addCase(claimAdmitPassThunk.rejected, (state, { payload }) => {
+      .addCase(claimAlphaPassThunk.rejected, (state, { payload }) => {
         state.status = 'error';
         state.step = 'claim-dialog';
         state.error = payload as string;
       })
-      .addCase(claimAdmitPassThunk.fulfilled, (state, { payload }) => {
+      .addCase(claimAlphaPassThunk.fulfilled, (state, { payload }) => {
         state.status = 'success';
         state.step = 'claimed';
         state.error = null;
       })
-      .addCase(fetchIsAdmitPassClaimedThunk.pending, (state) => {
+      .addCase(fetchIsAlphaPassClaimedThunk.pending, (state) => {
         state.step = 'fetchingClaimStatus';
       })
-      .addCase(fetchIsAdmitPassClaimedThunk.rejected, (state, { payload }) => {
+      .addCase(fetchIsAlphaPassClaimedThunk.rejected, (state, { payload }) => {
         state.step = 'fetchingClaimError';
       })
-      .addCase(fetchIsAdmitPassClaimedThunk.fulfilled, (state, { payload }) => {
+      .addCase(fetchIsAlphaPassClaimedThunk.fulfilled, (state, { payload }) => {
         state.step = payload ? 'claimed' : 'claim';
       })
-      .addCase(getAdmitPassCountThunk.pending, (state) => {
-        state.totalAdmitPass = null;
+      .addCase(getAlphaPassCountThunk.pending, (state) => {
+        state.totalAlphaPass = null;
       })
-      .addCase(getAdmitPassCountThunk.rejected, (state, { payload }) => {
-        state.totalAdmitPass = 0;
+      .addCase(getAlphaPassCountThunk.rejected, (state, { payload }) => {
+        state.totalAlphaPass = 0;
       })
-      .addCase(getAdmitPassCountThunk.fulfilled, (state, { payload }) => {
-        state.totalAdmitPass = payload as number;
+      .addCase(getAlphaPassCountThunk.fulfilled, (state, { payload }) => {
+        state.totalAlphaPass = payload as number;
       });
   },
 });
 
 export const { closeClaimDialogAction, openClaimDialogAction } = slice.actions;
-export const admitPassClaimFlowReducer = slice.reducer;
+export const alphaPassClaimFlowReducer = slice.reducer;

@@ -1,21 +1,21 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAdmitPassCount } from '@voltz-protocol/community-sdk';
+import { getAdmitPassCount as getAlphaPassCount } from '@voltz-protocol/community-sdk';
 
 import { RootState } from '../../../../store';
 import { rejectThunkWithError } from '../../../helpers';
 
-export const getAdmitPassCountThunk = createAsyncThunk<
+export const getAlphaPassCountThunk = createAsyncThunk<
   Awaited<boolean | ReturnType<typeof rejectThunkWithError>>,
   {
     account: string | null;
   },
   { state: RootState }
->('admitPassClaimFlow/getAdmitPassCount', async ({ account }, thunkAPI) => {
+>('alphaPassClaimFlow/getAlphaPassCount', async ({ account }, thunkAPI) => {
   if (!account) {
     return 0;
   }
   try {
-    return await getAdmitPassCount(account);
+    return await getAlphaPassCount(account);
   } catch (err) {
     return rejectThunkWithError(thunkAPI, err);
   }
