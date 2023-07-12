@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { MAX_POOL_CAP } from '../../../../app/features/aMMs';
 import {
   selectFixedRateInfo,
   selectInfoPostSwapAverageFixedRate,
@@ -34,7 +33,7 @@ export const Main: React.FunctionComponent = () => {
 
   return (
     <MainBox>
-      {isV2AMM(aMM) ? <AlphaPassFlow poolCap={MAX_POOL_CAP} /> : null}
+      {isV2AMM(aMM) ? <AlphaPassFlow /> : null}
       <PoolHeader />
       <HistoricalRatesChart
         aMMId={aMM.id}

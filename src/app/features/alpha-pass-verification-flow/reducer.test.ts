@@ -8,8 +8,7 @@ describe('alphaPassVerificationFlowReducer', () => {
     // Set up initial state
     const account = 'fake-account';
     const initialState: SliceState = {
-      step: { [account]: 'verify' },
-      status: { [account]: 'idle' },
+      step: { [account]: 'idle' },
       error: { [account]: null },
     };
 
@@ -23,7 +22,7 @@ describe('alphaPassVerificationFlowReducer', () => {
     const newState = alphaPassVerificationFlowReducer(initialState, action);
 
     // Assert the expected changes in the state
-    expect(newState.status).toEqual({ [account]: 'pending' });
+    expect(newState.step).toEqual({ [account]: 'verifying' });
     expect(newState.error).toEqual({ [account]: null });
   });
 
@@ -31,8 +30,7 @@ describe('alphaPassVerificationFlowReducer', () => {
     // Set up initial state
     const account = 'fake-account';
     const initialState: SliceState = {
-      step: { [account]: 'verify' },
-      status: { [account]: 'pending' },
+      step: { [account]: 'idle' },
       error: { [account]: null },
     };
 
@@ -48,8 +46,7 @@ describe('alphaPassVerificationFlowReducer', () => {
     const newState = alphaPassVerificationFlowReducer(initialState, action);
 
     // Assert the expected changes in the state
-    expect(newState.status).toEqual({ [account]: 'error' });
-    expect(newState.step).toEqual({ [account]: 'verify' });
+    expect(newState.step).toEqual({ [account]: 'verification-error' });
     expect(newState.error).toEqual({ [account]: payload });
   });
 
@@ -57,8 +54,7 @@ describe('alphaPassVerificationFlowReducer', () => {
     // Set up initial state
     const account = 'fake-account';
     const initialState: SliceState = {
-      step: { [account]: 'verify' },
-      status: { [account]: 'pending' },
+      step: { [account]: 'idle' },
       error: { [account]: null },
     };
 
@@ -74,8 +70,7 @@ describe('alphaPassVerificationFlowReducer', () => {
     const newState = alphaPassVerificationFlowReducer(initialState, action);
 
     // Assert the expected changes in the state
-    expect(newState.status).toEqual({ [account]: 'success' });
-    expect(newState.step).toEqual({ [account]: 'alpha-pass-found' });
+    expect(newState.step).toEqual({ [account]: 'verified' });
     expect(newState.error).toEqual({ [account]: null });
   });
 });

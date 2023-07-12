@@ -1,27 +1,39 @@
 import { Dialog } from 'brokoli-ui';
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { selectAlphaPassVerificationFlowStep } from '../../../app/features/alpha-pass-verification-flow';
-import { useAppSelector } from '../../../app/hooks';
+import {
+  selectAlphaPassVerificationFlowStep,
+  verifyAlphaPassThunk,
+} from '../../../app/features/alpha-pass-verification-flow';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
 import { NoPassDetected } from './NoPassDetected';
-import { VerifyStep } from './VerifyStep';
 
-export const AlphaPassFlow: React.FunctionComponent<{
-  poolCap: number;
-}> = ({ poolCap }) => {
-  const { account } = useWallet();
+export const AlphaPassFlow: React.FunctionComponent = () => {
+  const { signer, account } = useWallet();
+  const dispatch = useAppDispatch();
   const step = useAppSelector(selectAlphaPassVerificationFlowStep(account));
+  useEffect(() => {
+    if (!signer || !account) {
+      return;
+    }
+    if (step !== 'idle') {
+      return;
+    }
+    void dispatch(
+      verifyAlphaPassThunk({
+        signer,
+        account,
+      }),
+    );
+  }, [step, signer, account, dispatch]);
   if (!step) {
     return null;
   }
-  if (step === 'alpha-pass-found') {
+  if (step === 'verified' || step === 'verification-error') {
     return null;
   }
   return (
-    <Dialog open={step !== null}>
-      {step === 'verify' ? <VerifyStep poolCap={poolCap} /> : null}
-      {step === 'no-alpha-pass-found' ? <NoPassDetected /> : null}
-    </Dialog>
+    <Dialog open={step !== null}>{step === 'not-verified' ? <NoPassDetected /> : null}</Dialog>
   );
 };
