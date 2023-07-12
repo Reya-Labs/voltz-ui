@@ -39,10 +39,8 @@ describe('fetchHistoricalRatesThunkHandler', () => {
   it('should return cached data if available', async () => {
     // Arrange
     const payload = {
-      chainId: SupportedChainId.mainnet,
       isFixed: true,
-      aMMId: 'ammId1',
-      aMMRateOracleId: 'rateOracleId1',
+      poolId: 'ammId1',
       timeframeMs: 60 * 60 * 1000, // 1 hour
       granularity: Granularity.ONE_DAY,
     };
@@ -62,10 +60,8 @@ describe('fetchHistoricalRatesThunkHandler', () => {
   it('should call getHistoricalRates and update CACHE with new data', async () => {
     // Arrange
     const payload = {
-      chainId: SupportedChainId.mainnet,
       isFixed: true,
-      aMMId: 'ammId1',
-      aMMRateOracleId: 'rateOracleId1',
+      poolId: 'ammId1',
       timeframeMs: 60 * 60 * 1000, // 1 hour
       granularity: Granularity.ONE_WEEK,
     };
@@ -99,10 +95,8 @@ describe('fetchHistoricalRatesThunkHandler', () => {
   it('should call rejectThunkWithError if getHistoricalRates throws an error', async () => {
     // Arrange
     const payload = {
-      chainId: SupportedChainId.mainnet,
       isFixed: true,
-      aMMId: 'ammId1',
-      aMMRateOracleId: 'rateOracleId1',
+      poolId: 'ammId1',
       timeframeMs: 60 * 60 * 1000, // 1 hour
       granularity: Granularity.ONE_HOUR,
     };
