@@ -45,7 +45,7 @@ export const VoyageBadgeEntry: React.FunctionComponent<VoyageBadgeEntryProps> = 
       <BadgePillBox>
         <div>
           <Pill colorToken="rainbow" typographyToken="primaryBodySmallRegular" variant="regular">
-            {`Voltz v2 - ${BADGE_ID_PILL_TEXT_MAP[variant]}`}
+            {`Voltz Protocol v2 - ${BADGE_ID_PILL_TEXT_MAP[variant]}`}
           </Pill>
         </div>
       </BadgePillBox>

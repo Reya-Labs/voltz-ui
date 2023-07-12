@@ -52,6 +52,10 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   const typographyToken: TypographyToken = isLargeDesktopDevice
     ? 'secondaryBodyLargeBold'
     : 'secondaryBodyMediumBold';
+
+  const v2TypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'secondaryBodyMediumBold'
+    : 'secondaryBodySmallBold';
   const [isToggleCaretOpen, setIsToggleCaretOpen] = useState(false);
   const handleOnToggleCaretClick = () => setIsToggleCaretOpen(!isToggleCaretOpen);
   const handleOnClickOutside = () => setIsToggleCaretOpen(false);
@@ -121,9 +125,9 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
             <TypographyWithTooltip
               colorToken="rainbow"
               tooltip={<V2InfoTooltip poolCap={poolCap} />}
-              typographyToken={typographyToken}
+              typographyToken={v2TypographyToken}
             >
-              Voltz v2 Alpha Launch
+              Voltz Protocol v2 Alpha Launch
             </TypographyWithTooltip>
           </V2InfoBox>
         ) : null}

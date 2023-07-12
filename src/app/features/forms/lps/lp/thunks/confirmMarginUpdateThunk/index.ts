@@ -3,13 +3,12 @@ import { ContractReceipt } from 'ethers';
 
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers';
-import { updateMarginService } from '../../../../common';
 import {
-  getExistingPositionId,
   getProspectiveLpFixedHigh,
   getProspectiveLpFixedLow,
-  getProspectiveLpMargin,
-} from '../../utils';
+  updateMarginService,
+} from '../../../../common';
+import { getExistingPositionId, getProspectiveLpMargin } from '../../utils';
 
 export const confirmMarginUpdateThunkHandler: AsyncThunkPayloadCreator<
   Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,

@@ -106,63 +106,28 @@ describe('rollover-lp-form.selectors', () => {
       jest.clearAllMocks();
     });
 
-    it('returns "--" if wallet balance status is not "success"', () => {
+    it('returns "--" when getAvailableMargin returns null"', () => {
       const state = {
-        rolloverLpForm: {
-          walletBalance: {
-            status: 'failure',
-            value: 0,
-          },
-          previousPosition: {
-            settlementCashflow: 100,
-          },
-        },
-      } as never;
-
-      expect(selectWalletBalance(state)).toEqual('--');
+        rolloverLpForm: {},
+      };
+      (getAvailableMargin as jest.Mock).mockReturnValue(null);
+      const result = selectWalletBalance(state as never);
+      expect(getAvailableMargin).toHaveBeenCalledWith(state.rolloverLpForm);
+      expect(result).toEqual('--');
     });
 
-    it('calls formCompactFormat with wallet balance value if status is "success"', () => {
+    it('calls formCompactFormat when getAvailableMargin returns value', () => {
       const state = {
-        rolloverLpForm: {
-          walletBalance: {
-            status: 'success',
-            value: 1000,
-          },
-          previousPosition: {
-            settlementCashflow: 100,
-            margin: 200,
-            fees: 300,
-          },
-        },
-      } as never;
+        rolloverLpForm: {},
+      };
+      (getAvailableMargin as jest.Mock).mockReturnValue(1600);
 
       // Call selectWalletBalance function
-      selectWalletBalance(state);
+      selectWalletBalance(state as never);
 
+      expect(getAvailableMargin).toHaveBeenCalledWith(state.rolloverLpForm);
       // Assert that formCompactFormat is called with wallet balance value
       expect(formCompactFormat).toHaveBeenCalledWith(1600);
-    });
-
-    it('returns formatted wallet balance if status is "success"', () => {
-      const state = {
-        rolloverLpForm: {
-          walletBalance: {
-            status: 'success',
-            value: 1000,
-          },
-          previousPosition: {
-            settlementCashflow: 100,
-            margin: 200,
-            fees: 300,
-          },
-        },
-      } as never;
-
-      // Mock return value of formCompactFormat
-      (formCompactFormat as jest.Mock).mockReturnValue('$1,600');
-
-      expect(selectWalletBalance(state)).toEqual('$1,600');
     });
   });
 

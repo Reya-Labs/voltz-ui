@@ -1,7 +1,7 @@
 import { ExclaimTooltip, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { formatCurrency } from '../../../../../utilities/number';
+import { formFormatNumber } from '../../../../../app/features/forms/common';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import { GasCostBox } from './GasCost.styled';
 
@@ -27,7 +27,7 @@ export const GasCost = ({ gasCost }: GasCostProps) => (
         prefixToken="$"
         token=""
         typographyToken="primaryBodyMediumRegular"
-        value={formatCurrency(gasCost)}
+        value={formFormatNumber(gasCost)}
       />
     )}
     <ExclaimTooltip>

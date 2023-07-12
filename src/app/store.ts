@@ -1,8 +1,8 @@
 import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
-import { admitPassClaimFlowReducer } from './features/admit-pass-claim-flow';
-import { admitPassVerificationFlowReducer } from './features/admit-pass-verification-flow';
+import { alphaPassClaimFlowReducer } from './features/alpha-pass-claim-flow';
+import { alphaPassVerificationFlowReducer } from './features/alpha-pass-verification-flow';
 import { aMMsReducer } from './features/aMMs';
 import { cashflowCalculatorReducer } from './features/cashflow-calculator';
 import { lpFormReducer } from './features/forms/lps/lp';
@@ -35,8 +35,8 @@ const rootReducer = combineReducers({
   portfolio: portfolioReducer,
   positionDetails: positionDetailsReducer,
   redirects: redirectsReducer,
-  adminPassClaimFlow: admitPassClaimFlowReducer,
-  admitPassVerificationFlow: admitPassVerificationFlowReducer,
+  alphaPassClaimFlow: alphaPassClaimFlowReducer,
+  alphaPassVerificationFlow: alphaPassVerificationFlowReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>

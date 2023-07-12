@@ -7,18 +7,14 @@ import { getAmmProtocol, isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
 import { extractError, rejectThunkWithError } from '../../../../../helpers';
+import { getProspectiveLpFixedHigh, getProspectiveLpFixedLow } from '../../../../common';
 import {
   pushRolloverFailedEvent,
   pushRolloverSubmittedEvent,
   pushRolloverSuccessEvent,
   RolloverEventParams,
 } from '../../analytics';
-import {
-  getProspectiveLpFixedHigh,
-  getProspectiveLpFixedLow,
-  getProspectiveLpMargin,
-  getProspectiveLpNotional,
-} from '../../utils';
+import { getProspectiveLpMargin, getProspectiveLpNotional } from '../../utils';
 
 export const confirmLpRolloverThunk = createAsyncThunk<
   Awaited<ContractReceipt | ReturnType<typeof rejectThunkWithError>>,
