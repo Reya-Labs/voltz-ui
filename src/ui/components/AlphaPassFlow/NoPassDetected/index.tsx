@@ -10,7 +10,7 @@ export const NoPassDetected: React.FunctionComponent = () => {
     <NoPassDetectedBox>
       <TitleBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          No pass detected
+          No Pass Detected
         </Typography>
       </TitleBox>
       <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
