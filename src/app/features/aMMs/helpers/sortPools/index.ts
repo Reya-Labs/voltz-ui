@@ -1,6 +1,6 @@
 import orderBy from 'lodash.orderby';
 
-import { PoolSortDirection, PoolUI } from '../types';
+import { PoolSortDirection, PoolUI } from '../../types';
 
 export const sortPools = (
   pools: PoolUI[],

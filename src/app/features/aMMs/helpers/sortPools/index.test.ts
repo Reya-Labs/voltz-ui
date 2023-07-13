@@ -1,4 +1,4 @@
-import { sortPools } from './sortPools';
+import { sortPools } from './index';
 
 describe('sortPools function', () => {
   describe('single property sort', () => {

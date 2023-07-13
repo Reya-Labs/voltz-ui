@@ -27,31 +27,38 @@ export const FILTER_CONFIG: Record<
   {
     label: string;
     hidden: boolean;
+    sortOrder: number;
   }
 > = {
   borrow: {
     label: 'Borrow',
     hidden: false,
-  },
-  v2: {
-    label: 'v2',
-    hidden: !isV2Live(),
+    sortOrder: 1,
   },
   yield: {
     label: 'Yield',
     hidden: false,
+    sortOrder: 2,
+  },
+  v2: {
+    label: 'v2',
+    hidden: !isV2Live(),
+    sortOrder: 3,
   },
   ethereum: {
     label: 'Ethereum',
     hidden: false,
+    sortOrder: 4,
   },
   arbitrum: {
     label: 'Arbitrum',
     hidden: false,
+    sortOrder: 5,
   },
   avalanche: {
     label: 'Avalanche',
     hidden: false,
+    sortOrder: 6,
   },
 };
 
