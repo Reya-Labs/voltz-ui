@@ -29,7 +29,7 @@ voltz-ui is a frontend repository powered by React. It is the home of all the pa
 
 | Statements                  | Branches                | Functions                 | Lines             |
 | --------------------------- | ----------------------- | ------------------------- | ----------------- |
-| ![Statements](https://img.shields.io/badge/statements-38.12%25-red.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-28.72%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-36.3%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-38.19%25-red.svg?style=flat) |
+| ![Statements](https://img.shields.io/badge/statements-38.04%25-red.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-28.59%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-36.33%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-38.11%25-red.svg?style=flat) |
 
 # Installation
 
