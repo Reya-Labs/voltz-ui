@@ -2,7 +2,7 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
-import { formatPoolMaturity } from '../../../helpers/formatters/formatPoolMaturity';
+import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
 import {
   formCompactFormat,
   formCompactFormatToParts,
@@ -38,13 +38,8 @@ export const selectWalletBalance = (state: RootState) => {
 };
 export const selectPoolLpInfoStatus = (state: RootState) => state.rolloverLpForm.poolLpInfo.status;
 
-// todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = selectRolloverLpFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+  return formatUnderlyingTokenName(selectRolloverLpFormAMM(state));
 };
 
 // todo: FB duplicate as in swap form

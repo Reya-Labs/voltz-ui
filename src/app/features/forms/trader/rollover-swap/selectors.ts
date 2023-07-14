@@ -2,7 +2,7 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
-import { formatPoolMaturity } from '../../../helpers/formatters/formatPoolMaturity';
+import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
 import {
   formCompactFormat,
   formCompactFormatToParts,
@@ -45,11 +45,7 @@ export const selectPoolSwapInfoStatus = (state: RootState) =>
   state.rolloverSwapForm.poolSwapInfo.status;
 
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = selectRolloverSwapFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+  return formatUnderlyingTokenName(selectRolloverSwapFormAMM(state));
 };
 
 export const selectAMMMaturityFormatted = (state: RootState) => {

@@ -2,7 +2,7 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
-import { formatPoolMaturity } from '../../../helpers/formatters/formatPoolMaturity';
+import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
 import {
   formCompactFormat,
   formCompactFormatToParts,
@@ -43,13 +43,8 @@ export const selectLpFormSelectedPosition = (state: RootState) => {
   return state.lpForm.selectedPosition;
 };
 
-// todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = selectLpFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+  return formatUnderlyingTokenName(selectLpFormAMM(state));
 };
 
 export const selectAMMMaturityFormatted = (state: RootState) => {

@@ -6,8 +6,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   getExpectedCashflowInfoThunk,
   selectAdditionalCashflow,
+  selectAMMTokenFormatted,
   selectCashflowAMM,
-  selectCashflowAMMTokenFormatted,
   selectCashflowInfoStatus,
   selectEstimatedApy,
   selectTotalCashflow,
@@ -46,7 +46,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
 }) => {
   const dispatch = useAppDispatch();
   const cashflowAMM = useAppSelector(selectCashflowAMM);
-  const token = useAppSelector(selectCashflowAMMTokenFormatted);
+  const token = useAppSelector(selectAMMTokenFormatted);
   const { isLargeDesktopDevice } = useResponsiveQuery();
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const estimatedApy = useAppSelector(selectEstimatedApy);

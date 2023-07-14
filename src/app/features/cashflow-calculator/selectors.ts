@@ -1,13 +1,10 @@
 import { RootState } from '../../store';
+import { formatUnderlyingTokenName } from '../helpers';
 
 export const selectCashflowAMM = (state: RootState) => state.cashflowCalculator.aMM;
 
-export const selectCashflowAMMTokenFormatted = (state: RootState) => {
-  const aMM = selectCashflowAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+export const selectAMMTokenFormatted = (state: RootState) => {
+  return formatUnderlyingTokenName(selectCashflowAMM(state));
 };
 
 export const selectCashflowInfoStatus = (state: RootState) =>

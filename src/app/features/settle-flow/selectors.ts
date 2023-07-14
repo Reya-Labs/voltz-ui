@@ -2,8 +2,8 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatNumber } from '../../../utilities/number';
 import { RootState } from '../../store';
-import { formCompactFormatToParts, formFormatNumber } from '../forms/common/utils';
-import { formatPoolMaturity } from '../helpers/formatters/formatPoolMaturity';
+import { formCompactFormatToParts, formFormatNumber } from '../forms/common';
+import { formatPoolMaturity, formatUnderlyingTokenName } from '../helpers';
 
 export const selectSettlePosition = (state: RootState) => {
   return state.settleFlow.position;
@@ -38,13 +38,8 @@ export const selectAMMMaturityFormatted = (state: RootState) => {
   return formatPoolMaturity(state.settleFlow.position?.pool);
 };
 
-// todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = state.settleFlow.position?.pool;
-  if (!aMM) {
-    return '';
-  }
-  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+  return formatUnderlyingTokenName(state.settleFlow.position?.pool);
 };
 
 export const selectFixedLower = (state: RootState) => {
