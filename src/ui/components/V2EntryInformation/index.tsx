@@ -1,7 +1,7 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { formCompactFormatToParts } from '../../../app/features/forms/common/utils';
+import { formCompactFormatToParts } from '../../../app/features/forms/common';
 import { V2BorderDetailBox, V2Box, V2DetailBox } from './V2EntryInformation.styled';
 
 export const V2EntryInformation: React.FunctionComponent<{
