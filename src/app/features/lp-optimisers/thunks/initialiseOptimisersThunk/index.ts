@@ -13,7 +13,7 @@ export const initialiseOptimisersThunk = createAsyncThunk<
     signer: ethers.Signer | null;
     chainId: SupportedChainId;
   }
->('lp-optimisers/getProducts', async ({ chainId, signer }, thunkAPI) => {
+>('lp-optimisers/initialiseOptimisersThunk', async ({ chainId, signer }, thunkAPI) => {
   try {
     const mappedRouters: OptimiserInfo[] = await getAllMellowProducts({
       signer,

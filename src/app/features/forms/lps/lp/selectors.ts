@@ -1,8 +1,8 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatTimestamp } from '../../../../../utilities/date';
 import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
+import { formatPoolMaturity } from '../../../helpers/formatters/formatPoolMaturity';
 import {
   formCompactFormat,
   formCompactFormatToParts,
@@ -52,13 +52,8 @@ export const selectAMMTokenFormatted = (state: RootState) => {
   return ` ${aMM.underlyingToken.name.toUpperCase()}`;
 };
 
-// todo: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = selectLpFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return formatTimestamp(aMM.termEndTimestampInMS);
+  return formatPoolMaturity(selectLpFormAMM(state));
 };
 
 // todo: FB duplicate as in swap form

@@ -1,9 +1,9 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatTimestamp } from '../../../utilities/date';
 import { formatNumber } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { formCompactFormatToParts, formFormatNumber } from '../forms/common/utils';
+import { formatPoolMaturity } from '../helpers/formatters/formatPoolMaturity';
 
 export const selectSettlePosition = (state: RootState) => {
   return state.settleFlow.position;
@@ -34,13 +34,8 @@ export const selectSettleGasFeeToken = (state: RootState) => {
   return infoPostSettlePosition.value.gasFee.token;
 };
 
-// todo: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const pool = state.settleFlow.position?.pool;
-  if (!pool) {
-    return '';
-  }
-  return formatTimestamp(pool.termEndTimestampInMS);
+  return formatPoolMaturity(state.settleFlow.position?.pool);
 };
 
 // todo: FB duplicate as in swap form

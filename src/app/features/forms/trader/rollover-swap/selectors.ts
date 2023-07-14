@@ -1,8 +1,8 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatTimestamp } from '../../../../../utilities/date';
 import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
+import { formatPoolMaturity } from '../../../helpers/formatters/formatPoolMaturity';
 import {
   formCompactFormat,
   formCompactFormatToParts,
@@ -53,11 +53,7 @@ export const selectAMMTokenFormatted = (state: RootState) => {
 };
 
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = selectRolloverSwapFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return formatTimestamp(aMM.termEndTimestampInMS);
+  return formatPoolMaturity(selectRolloverSwapFormAMM(state));
 };
 
 export const selectMarginAccountName = (state: RootState) => {
