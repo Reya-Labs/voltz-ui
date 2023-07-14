@@ -2,13 +2,8 @@ import { Typography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
-import {
-  AscendingSortIcon,
-  DescendingSortIcon,
-  NoSortIcon,
-  RowsBox,
-  TypographyWithIcon,
-} from './SortHeader.styled';
+import { DirectionIcon } from './DirectionIcon';
+import { RowsBox, TypographyWithIcon } from './SortHeader.styled';
 
 type SortHeaderProps = {
   text: string;
@@ -33,34 +28,40 @@ export const SortHeader: React.FunctionComponent<SortHeaderProps> = ({
     ? 'primaryBodySmallRegular'
     : 'primaryBodyXSmallRegular';
 
-  const DirectionIcon =
-    direction === 'noSort'
-      ? NoSortIcon
-      : direction === 'ascending'
-      ? AscendingSortIcon
-      : DescendingSortIcon;
-
+  const computedDisabled = loading || disabled;
+  const handleOnRowClick = () => {
+    if (computedDisabled) {
+      return;
+    }
+    onClick && onClick();
+  };
   return (
     <RowsBox
-      disabled={loading || disabled}
-      onClick={() => {
-        if (loading || disabled) {
-          return;
-        }
-        onClick && onClick();
-      }}
+      data-testid={`SortHeader-${computedDisabled ? 'disabled' : 'enabled'}`}
+      disabled={computedDisabled}
+      onClick={handleOnRowClick}
     >
-      <TypographyWithIcon colorToken="lavenderWeb3" typographyToken={typographyToken}>
+      <TypographyWithIcon
+        colorToken="lavenderWeb3"
+        data-testid={`SortHeader-TypographyWithIcon-${
+          disabled ? 'WithDirectionIcon' : 'WithoutDirectionIcon'
+        }`}
+        typographyToken={typographyToken}
+      >
         {text}
         {disabled ? null : (
           <React.Fragment>
             &nbsp;
-            <DirectionIcon />
+            <DirectionIcon direction={direction} />
           </React.Fragment>
         )}
       </TypographyWithIcon>
       {subtext ? (
-        <Typography colorToken="lavenderWeb5" typographyToken={typographyToken}>
+        <Typography
+          colorToken="lavenderWeb5"
+          data-testid="SortHeader-SubtextTypography"
+          typographyToken={typographyToken}
+        >
           {subtext}
         </Typography>
       ) : null}
