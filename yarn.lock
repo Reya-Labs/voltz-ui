@@ -7009,10 +7009,10 @@
     tiny-invariant "1.3.1"
     toformat "2.0.0"
 
-"@voltz-protocol/sdk-v2@1.51.4":
-  version "1.51.4"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.51.4.tgz#873868a4d29902c2b30725a8a8b14daf139cd9ff"
-  integrity sha512-1CeQ9HVaF0amwuT6XwgOaoqSE1fuyE02ojAt/17p1Yaot5hJt3VMtVVbdy3dEfEALqaFMhbHTAXDKcB1nj2PSw==
+"@voltz-protocol/sdk-v2@1.52.0":
+  version "1.52.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.52.0.tgz#9dbcc6bbfc8636e562846adc494a101161e6a75d"
+  integrity sha512-2qtr41FxGA1UDjaydKni/ihclOxhBp4vlickkRqkLQpmavvAgdl9TQvrxqRAotwNMhio3BT33FphQOCDRGT1SQ==
   dependencies:
     "@voltz-protocol/api-v2-types" "^1.48.3"
     "@voltz-protocol/commons-v2" "^1.12.4"
@@ -7029,10 +7029,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.169.1":
-  version "1.169.1"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.169.1.tgz#e9a9a7fd25b26b2e7a8d8090f36b4d28f7e5a4bc"
-  integrity sha512-kcXnCqNhtvkxtjB51axbCJdXkM3IZOdTTY1uNpvR2XQdj/X7enH2wWo/NJ8kkkMJBv7dUE8o6mL6JZkF7jsHyQ==
+"@voltz-protocol/v1-sdk@1.170.0":
+  version "1.170.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.170.0.tgz#ecdb2b76e1d68d2f1088521342516cf25a328e7f"
+  integrity sha512-7Rbp0WLe/o//cpKGYHZleXx+5c5vlXBi2ajvY3SSGlqY5mjPQZGUQ7yBJdjnPIW7MgzVZEbDjT3w2fiupsVMfA==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
