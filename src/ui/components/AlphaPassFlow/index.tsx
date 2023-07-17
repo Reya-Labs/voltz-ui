@@ -7,6 +7,7 @@ import {
 } from '../../../app/features/alpha-pass-verification-flow';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
+import { ConfirmV2Warning } from './ConfirmV2Warning';
 import { NoPassDetected } from './NoPassDetected';
 
 export const AlphaPassFlow: React.FunctionComponent = () => {
@@ -30,10 +31,13 @@ export const AlphaPassFlow: React.FunctionComponent = () => {
   if (!step) {
     return null;
   }
-  if (step === 'verified' || step === 'verification-error') {
+  if (step === 'verified-and-confirmed' || step === 'verification-error') {
     return null;
   }
   return (
-    <Dialog open={step !== null}>{step === 'not-verified' ? <NoPassDetected /> : null}</Dialog>
+    <Dialog open={step !== null}>
+      {step === 'not-verified' ? <NoPassDetected /> : null}{' '}
+      {step === 'verified' ? <ConfirmV2Warning /> : null}
+    </Dialog>
   );
 };

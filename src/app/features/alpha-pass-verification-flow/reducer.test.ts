@@ -1,9 +1,31 @@
 import { AnyAction } from '@reduxjs/toolkit';
 
-import { alphaPassVerificationFlowReducer, SliceState } from './reducer';
+import { alphaPassVerificationFlowReducer, confirmV2WarningAction, SliceState } from './reducer';
 import { verifyAlphaPassThunk } from './thunks';
 
 describe('alphaPassVerificationFlowReducer', () => {
+  it('should handle confirmV2WarningAction', () => {
+    // Set up initial state
+    const account = 'fake-account';
+    const initialState: SliceState = {
+      step: { [account]: 'idle' },
+      error: { [account]: null },
+    };
+
+    // Create a mock action with the pending type
+    const action: AnyAction = {
+      payload: { account },
+      type: confirmV2WarningAction.type,
+    };
+
+    // Call the reducer function with the initial state and the action
+    const newState = alphaPassVerificationFlowReducer(initialState, action);
+
+    // Assert the expected changes in the state
+    expect(newState.step).toEqual({ [account]: 'verified-and-confirmed' });
+    expect(newState.error).toEqual({ [account]: null });
+  });
+
   it('should handle verifyAlphaPassThunk.pending', () => {
     // Set up initial state
     const account = 'fake-account';

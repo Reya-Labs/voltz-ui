@@ -1,9 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { verifyAlphaPassThunk } from './thunks';
 
 export type SliceState = {
-  step: Record<string, 'idle' | 'verifying' | 'verified' | 'verification-error' | 'not-verified'>;
+  step: Record<
+    string,
+    | 'idle'
+    | 'verifying'
+    | 'verified'
+    | 'verified-and-confirmed'
+    | 'verification-error'
+    | 'not-verified'
+  >;
   error: Record<string, string | null>;
 };
 
@@ -15,7 +23,18 @@ const initialState: SliceState = {
 const slice = createSlice({
   name: 'alphaPassVerificationFlow',
   initialState,
-  reducers: {},
+  reducers: {
+    confirmV2WarningAction: (
+      state,
+      {
+        payload: { account },
+      }: PayloadAction<{
+        account: string;
+      }>,
+    ) => {
+      state.step[account] = 'verified-and-confirmed';
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(verifyAlphaPassThunk.pending, (state, { meta }) => {
@@ -33,4 +52,5 @@ const slice = createSlice({
   },
 });
 
+export const { confirmV2WarningAction } = slice.actions;
 export const alphaPassVerificationFlowReducer = slice.reducer;
