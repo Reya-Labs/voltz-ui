@@ -5,12 +5,12 @@ import { providers } from 'ethers';
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers';
 
-export type SetSignerAndPositionsForAMMThunkSuccess = {
+export type SetSignerAndGetPositionsForLPThunkSuccess = {
   signer: providers.JsonRpcSigner | null;
   positions: Position[] | null;
 };
-export const setSignerAndPositionsForAMMThunk = createAsyncThunk<
-  Awaited<SetSignerAndPositionsForAMMThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
+export const setSignerAndGetPositionsForLPThunk = createAsyncThunk<
+  Awaited<SetSignerAndGetPositionsForLPThunkSuccess | ReturnType<typeof rejectThunkWithError>>,
   { signer: providers.JsonRpcSigner | null; chainId: SupportedChainId },
   { state: RootState }
 >('lpForm/setSignerAndPositionsForAMM', async ({ signer, chainId }, thunkAPI) => {

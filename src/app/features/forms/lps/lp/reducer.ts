@@ -14,8 +14,8 @@ import {
   getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
-  setSignerAndPositionsForAMMThunk,
-  SetSignerAndPositionsForAMMThunkSuccess,
+  setSignerAndGetPositionsForLPThunk,
+  SetSignerAndGetPositionsForLPThunkSuccess,
 } from './thunks';
 import {
   getProspectiveLpNotional,
@@ -321,7 +321,7 @@ const slice = createSlice({
         updateLeverageOptionsAfterGetInfoPostLp(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(setSignerAndPositionsForAMMThunk.pending, (state) => {
+      .addCase(setSignerAndGetPositionsForLPThunk.pending, (state) => {
         if (state.amm === null) {
           return;
         }
@@ -329,7 +329,7 @@ const slice = createSlice({
         state.positions.status = 'pending';
         state.amm.signer = null;
       })
-      .addCase(setSignerAndPositionsForAMMThunk.rejected, (state) => {
+      .addCase(setSignerAndGetPositionsForLPThunk.rejected, (state) => {
         if (state.amm === null) {
           return;
         }
@@ -337,13 +337,13 @@ const slice = createSlice({
         state.positions.status = 'error';
         state.amm.signer = null;
       })
-      .addCase(setSignerAndPositionsForAMMThunk.fulfilled, (state, { payload }) => {
+      .addCase(setSignerAndGetPositionsForLPThunk.fulfilled, (state, { payload }) => {
         if (state.amm === null) {
           return;
         }
-        state.positions.value = (payload as SetSignerAndPositionsForAMMThunkSuccess).positions;
+        state.positions.value = (payload as SetSignerAndGetPositionsForLPThunkSuccess).positions;
         state.positions.status = 'success';
-        state.amm.signer = (payload as SetSignerAndPositionsForAMMThunkSuccess).signer;
+        state.amm.signer = (payload as SetSignerAndGetPositionsForLPThunkSuccess).signer;
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(confirmLpThunk.pending, (state) => {

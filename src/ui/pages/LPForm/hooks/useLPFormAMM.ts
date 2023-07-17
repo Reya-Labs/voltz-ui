@@ -3,18 +3,14 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
-  getInfoPostLpThunk,
   getPoolLpInfoThunk,
-  getUnderlyingTokenAllowanceThunk,
-  getWalletBalanceThunk,
   selectLpFormAMM,
   selectLpFormPositionsFetchingStatus,
-  selectLpFormSelectedPosition,
   selectPoolLpInfoStatus,
   selectUserInputFixedLower,
   selectUserInputFixedUpper,
   setLpFormAMMAction,
-  setSignerAndPositionsForAMMThunk,
+  setSignerAndGetPositionsForLPThunk,
   setUserInputFixedLowerAction,
   setUserInputFixedUpperAction,
   trackPageViewAction,
@@ -25,6 +21,8 @@ import { useAMMs } from '../../../../hooks/useAMMs';
 import { useAppSearchParams } from '../../../../hooks/useAppSearchParams';
 import { useWallet } from '../../../../hooks/useWallet';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
+import { useGetInfoPostLP } from './useGetInfoPostLP';
+import { useGetWalletBalanceAndUnderlyingTokenAllowance } from './useGetWalletBalanceAndUnderlyingTokenAllowance';
 
 export type UseLPFormAMMResult = {
   aMM: AMM | null;
@@ -38,7 +36,6 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
   const aMM = useAppSelector(selectLpFormAMM);
-  const selectedPosition = useAppSelector(selectLpFormSelectedPosition);
   const positionsFetchingStatus = useAppSelector(selectLpFormPositionsFetchingStatus);
   const poolLpInfoStatus = useAppSelector(selectPoolLpInfoStatus);
   const chainId = useAppSelector(selectChainId);
@@ -99,7 +96,7 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
       return;
     }
     void dispatch(
-      setSignerAndPositionsForAMMThunk({
+      setSignerAndGetPositionsForLPThunk({
         signer,
         chainId,
       }),
@@ -143,18 +140,8 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
     );
   }, [dispatch, positionsFetchingStatus, queryFixedLower, queryFixedUpper]);
 
-  useEffect(() => {
-    if (!aMM || !aMM.signer || !chainId || aMMsLoading) {
-      return;
-    }
-
-    void dispatch(getWalletBalanceThunk());
-    void dispatch(getUnderlyingTokenAllowanceThunk({ chainId }));
-  }, [dispatch, aMM, aMMsLoading, aMM?.signer, chainId]);
-
-  useEffect(() => {
-    void dispatch(getInfoPostLpThunk());
-  }, [dispatch, aMM, aMM?.signer, selectedPosition]);
+  useGetWalletBalanceAndUnderlyingTokenAllowance();
+  useGetInfoPostLP();
 
   return {
     aMM,

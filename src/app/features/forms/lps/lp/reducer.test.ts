@@ -28,7 +28,7 @@ import {
   getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
-  setSignerAndPositionsForAMMThunk,
+  setSignerAndGetPositionsForLPThunk,
 } from './thunks';
 jest.mock('./analytics');
 jest.mock('./utils');
@@ -492,7 +492,7 @@ describe('lpFormReducer', () => {
     expect(newState.prospectiveLp.infoPostLp.status).toBe('success');
   });
 
-  it('should handle setSignerAndPositionsForAMMThunk.pending', () => {
+  it('should handle setSignerAndGetPositionsForLPThunk.pending', () => {
     const state = createState({
       amm: {
         signer: jest.fn(),
@@ -500,20 +500,20 @@ describe('lpFormReducer', () => {
     } as never);
 
     const newState = lpFormReducer(state, {
-      type: setSignerAndPositionsForAMMThunk.pending,
+      type: setSignerAndGetPositionsForLPThunk.pending,
     });
 
     expect(newState.positions.value).toBe(null);
     expect(newState.positions.status).toBe('pending');
   });
 
-  it('should handle setSignerAndPositionsForAMMThunk.rejected', () => {
+  it('should handle setSignerAndGetPositionsForLPThunk.rejected', () => {
     const state = createState({
       amm: jest.fn(),
     } as never);
 
     const newState = lpFormReducer(state, {
-      type: setSignerAndPositionsForAMMThunk.rejected,
+      type: setSignerAndGetPositionsForLPThunk.rejected,
     });
 
     expect(newState.positions.value).toBe(null);

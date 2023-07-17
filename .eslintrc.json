@@ -177,6 +177,7 @@
     "unused-imports/no-unused-imports-ts": "error",
     "no-debugger": "error",
     "testing-library/no-node-access": "warn",
-    "testing-library/prefer-find-by": "off"
+    "testing-library/prefer-find-by": "off",
+    "jest/no-conditional-expect": "off"
   }
 }
