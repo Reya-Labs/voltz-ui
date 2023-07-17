@@ -2,8 +2,7 @@ import { compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { formFormatNumber } from '../forms/common';
 import { defaultPositionsSummaryFormatted, SORT_CONFIG } from './constants';
-import { mapPortfolioPositionToPortfolioUI, sortPositions } from './helpers';
-import { getPositionsSummary } from './helpers/getPositionsSummary';
+import { getPositionsSummary, mapPortfolioPositionToPortfolioUI, sortPositions } from './helpers';
 import {
   PositionSortDirection,
   PositionSortId,
