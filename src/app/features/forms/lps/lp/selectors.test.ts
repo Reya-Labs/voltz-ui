@@ -2,7 +2,7 @@ import {
   formCompactFormat,
   formCompactFormatToParts,
   formLimitAndFormatNumber,
-} from '../../common/utils';
+} from '../../common';
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,

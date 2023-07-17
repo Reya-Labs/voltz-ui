@@ -1,7 +1,7 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { formFormatNumber } from '../../../../../../app/features/forms/common/utils';
+import { formFormatNumber } from '../../../../../../app/features/forms/common';
 import {
   DepositButton,
   MellowPositionBox,

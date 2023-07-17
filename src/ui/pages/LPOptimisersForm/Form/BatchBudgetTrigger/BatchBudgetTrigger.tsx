@@ -2,7 +2,7 @@ import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
 import { Button, Dialog, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useEffect, useReducer, useState } from 'react';
 
-import { formFormatNumber } from '../../../../../app/features/forms/common/utils';
+import { formFormatNumber } from '../../../../../app/features/forms/common';
 import {
   OptimiserInfo,
   updateOptimiserStateAction,
