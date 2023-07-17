@@ -1,6 +1,6 @@
 import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import {
   getInfoPostLpThunk,
@@ -22,6 +22,7 @@ import {
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';
+import { useAppSearchParams } from '../../../../hooks/useAppSearchParams';
 import { useWallet } from '../../../../hooks/useWallet';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
 
@@ -33,7 +34,6 @@ export type UseLPFormAMMResult = {
 };
 
 export const useLPFormAMM = (): UseLPFormAMMResult => {
-  const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const { ammId, poolId } = useParams();
   const { aMMs, loading: aMMsLoading, error, idle } = useAMMs();
@@ -42,8 +42,7 @@ export const useLPFormAMM = (): UseLPFormAMMResult => {
   const positionsFetchingStatus = useAppSelector(selectLpFormPositionsFetchingStatus);
   const poolLpInfoStatus = useAppSelector(selectPoolLpInfoStatus);
   const chainId = useAppSelector(selectChainId);
-  const queryFixedLower = searchParams.get('fixedLower');
-  const queryFixedUpper = searchParams.get('fixedUpper');
+  const [queryFixedLower, queryFixedUpper] = useAppSearchParams(['fixedLower', 'fixedUpper']);
 
   const fixedRateLower = useAppSelector(selectUserInputFixedLower);
   const fixedRateUpper = useAppSelector(selectUserInputFixedUpper);

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 import {
   deleteReferrer,
@@ -9,10 +8,10 @@ import {
   setReferrer,
 } from '../../utilities/referrer-store';
 import { REFERRER_QUERY_PARAM_KEY } from '../../utilities/referrer-store/constants';
+import { useAppSearchParams } from '../useAppSearchParams';
 
 export const useReferrer = () => {
-  const [searchParams] = useSearchParams();
-  const searchParamsReferrer = searchParams.get(REFERRER_QUERY_PARAM_KEY);
+  const [searchParamsReferrer] = useAppSearchParams([REFERRER_QUERY_PARAM_KEY]);
 
   // referrer logic - run everytime params change for ${REFERRER_QUERY_PARAM_KEY}
   useEffect(() => {
