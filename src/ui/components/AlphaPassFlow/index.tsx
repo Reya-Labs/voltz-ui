@@ -31,9 +31,10 @@ export const AlphaPassFlow: React.FunctionComponent = () => {
   if (!step) {
     return null;
   }
-  if (step === 'verified-and-confirmed' || step === 'verification-error') {
+  if (step === 'idle' || step === 'verified-and-confirmed' || step === 'verification-error') {
     return null;
   }
+
   return (
     <Dialog open={step !== null}>
       {step === 'not-verified' ? <NoPassDetected /> : null}{' '}
