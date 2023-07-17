@@ -143,8 +143,8 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
     : 'primaryBodyXSmallRegular';
 
   const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodySmallRegular'
-    : 'secondaryBodyMediumRegular';
+    ? 'secondaryBodyMediumRegular'
+    : 'secondaryBodySmallRegular';
 
   return (
     <CashFlowCalculatorBox>

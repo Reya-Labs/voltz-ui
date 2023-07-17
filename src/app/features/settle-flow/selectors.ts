@@ -1,8 +1,7 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatNumber } from '../../../utilities/number';
 import { RootState } from '../../store';
-import { formCompactFormatToParts, formFormatNumber } from '../forms/common';
+import { formCompactFormatToParts, formFormatNumber, getGasInfoFormatted } from '../forms/common';
 import { formatPoolMaturity, formatUnderlyingTokenName } from '../helpers';
 
 export const selectSettlePosition = (state: RootState) => {
@@ -19,19 +18,13 @@ export const selectSettleStep = (state: RootState) => state.settleFlow.step;
 export const selectConfirmationFlowEtherscanLink = (state: RootState) => {
   return getViewOnEtherScanLink(state.network.chainId, state.settleFlow.txHash || '');
 };
-export const selectSettleGasFee = (state: RootState) => {
+
+export const selectGasInfoFormatted = (state: RootState) => {
   const infoPostSettlePosition = state.settleFlow.infoPostSettlePosition;
-  if (infoPostSettlePosition.status !== 'success') {
-    return '--';
-  }
-  return formatNumber(infoPostSettlePosition.value.gasFee.value, 2, 4);
-};
-export const selectSettleGasFeeToken = (state: RootState) => {
-  const infoPostSettlePosition = state.settleFlow.infoPostSettlePosition;
-  if (infoPostSettlePosition.status !== 'success') {
-    return '--';
-  }
-  return infoPostSettlePosition.value.gasFee.token;
+  return getGasInfoFormatted({
+    status: infoPostSettlePosition.status,
+    gasDetails: infoPostSettlePosition.value.gasFee,
+  });
 };
 
 export const selectAMMMaturityFormatted = (state: RootState) => {
