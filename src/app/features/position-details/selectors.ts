@@ -1,4 +1,7 @@
-import { formatPOSIXTimestamp } from '../../../utilities/date';
+import {
+  formatPOSIXTimestamp,
+  formatPOSIXTimestampWithHoursMinutes,
+} from '../../../utilities/date';
 import { compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { formFormatNumber } from '../forms/common';
@@ -119,7 +122,9 @@ export const selectPositionDetails =
         const fixedRatePercentage = historyItem.fixedRate * 100;
         return {
           ...historyItem,
-          creationTimestampInMSFormatted: formatPOSIXTimestamp(historyItem.creationTimestampInMS),
+          creationTimestampInMSFormatted: formatPOSIXTimestampWithHoursMinutes(
+            historyItem.creationTimestampInMS,
+          ),
           notionalUSDCompactFormat: compactFormatToParts(itemNotionalUSD),
           paidFeesUSDCompactFormat: compactFormatToParts(paidFeesUSD),
           fixedRatePercentage: formFormatNumber(fixedRatePercentage),

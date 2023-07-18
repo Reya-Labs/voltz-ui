@@ -38,6 +38,22 @@ export const formatPOSIXTimestamp = (timestamp: number): string => {
 };
 
 /**
+ * Takes a POSIX timestamp and returns a string representation: 10/12/22 (DD/MM/YY)
+ * or 12/10/22 (MM/DD/YY) depending on locale
+ * @param timestamp - The POSIX timestamp to process
+ */
+export const formatPOSIXTimestampWithHoursMinutes = (timestamp: number): string => {
+  return new Date(timestamp || 0).toLocaleDateString(undefined, {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+};
+
+/**
  * Takes a POSIX timestamp and returns a string representation: 10/12/22 04:30 (DD/MM/YY)
  * or 12/10/22 04:30 (MM/DD/YY) depending on locale in UTC
  * @param timestamp - The POSIX timestamp to process
