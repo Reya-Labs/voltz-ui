@@ -179,7 +179,9 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             token={token}
             tooltip="This shows the cashflow you could generate from your new position."
             typographyToken={typographyToken}
-            value={additionalCashflow !== null ? formFormatNumber(additionalCashflow) : '--'}
+            value={
+              additionalCashflow !== null ? formFormatNumber(Math.abs(additionalCashflow)) : '--'
+            }
           />
         </AdditionalCashFlowBox>
         <TotalCashFlowBox>
@@ -192,7 +194,7 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
             token={token}
             tooltip="This shows the combined cashflow you could generate from your new position and your existing."
             typographyToken={typographyToken}
-            value={totalCashflow !== null ? formFormatNumber(totalCashflow) : '--'}
+            value={totalCashflow !== null ? formFormatNumber(Math.abs(totalCashflow)) : '--'}
           />
         </TotalCashFlowBox>
       </CashFlowCalculatorRightBox>
