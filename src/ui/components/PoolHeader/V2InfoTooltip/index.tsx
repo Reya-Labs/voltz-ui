@@ -22,7 +22,7 @@ export const V2InfoTooltip: React.FunctionComponent<{
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
             Contracts
           </Typography>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="orangeYellow" typographyToken="primaryBodySmallRegular">
             Unaudited
           </Typography>
         </RowBox>
