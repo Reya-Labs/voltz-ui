@@ -36,13 +36,8 @@ export const confirmLpThunk = createAsyncThunk<
   }
   const account = await amm.signer.getAddress();
 
-  let notional: number = getProspectiveLpNotional(lpFormState);
-  let addLiquidity: boolean = true;
+  const notional: number = getProspectiveLpNotional(lpFormState);
 
-  if (notional < 0) {
-    addLiquidity = false;
-    notional = -notional;
-  }
   const margin = getProspectiveLpMargin(lpFormState);
   const positionId = selectedPosition?.id;
   const isEdit = Boolean(selectedPosition);
@@ -98,8 +93,8 @@ export const confirmLpThunk = createAsyncThunk<
         }
       } else {
         result = await amm.lp({
-          addLiquidity,
-          notional,
+          addLiquidity: notional >= 0,
+          notional: Math.abs(notional),
           margin,
           fixedLow,
           fixedHigh,
