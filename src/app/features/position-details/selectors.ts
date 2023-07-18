@@ -110,11 +110,11 @@ export const selectPositionDetails =
       fixLowPercentage: detailsValue.fixLow * 100,
       canRollover: Boolean(detailsValue.rolloverPoolId),
       creationTimestampInMSFormatted: formatPOSIXTimestamp(detailsValue.creationTimestampInMS),
-      notionalUSDCompactFormatted: compactFormatToParts(notionalUSD),
-      marginUSDCompactFormatted: compactFormatToParts(marginUSD),
-      realizedPNLFeesUSDCompactFormat: compactFormatToParts(realizedPNLFeesUSD),
-      realizedPNLCashflowUSDCompactFormat: compactFormatToParts(realizedPNLCashflowUSD),
-      realizedPNLTotalUSDCompactFormat: compactFormatToParts(realizedPNLTotalUSD),
+      notionalUSDCompactFormatted: compactFormatToParts(notionalUSD, 2, 2),
+      marginUSDCompactFormatted: compactFormatToParts(marginUSD, 2, 2),
+      realizedPNLFeesUSDCompactFormat: compactFormatToParts(realizedPNLFeesUSD, 2, 2),
+      realizedPNLCashflowUSDCompactFormat: compactFormatToParts(realizedPNLCashflowUSD, 2, 2),
+      realizedPNLTotalUSDCompactFormat: compactFormatToParts(realizedPNLTotalUSD, 2, 2),
       history: detailsValue.history.map((historyItem) => {
         const itemNotionalUSD = historyItem.notional * tokenPriceUSD;
         const paidFeesUSD = historyItem.paidFees * tokenPriceUSD;
@@ -125,10 +125,10 @@ export const selectPositionDetails =
           creationTimestampInMSFormatted: formatPOSIXTimestampWithHoursMinutes(
             historyItem.creationTimestampInMS,
           ),
-          notionalUSDCompactFormat: compactFormatToParts(itemNotionalUSD),
-          paidFeesUSDCompactFormat: compactFormatToParts(paidFeesUSD),
+          notionalUSDCompactFormat: compactFormatToParts(itemNotionalUSD, 2, 2),
+          paidFeesUSDCompactFormat: compactFormatToParts(paidFeesUSD, 2, 2),
           fixedRatePercentage: formFormatNumber(fixedRatePercentage),
-          marginDeltaUSDCompactFormat: compactFormatToParts(marginDeltaUSD),
+          marginDeltaUSDCompactFormat: compactFormatToParts(marginDeltaUSD, 2, 2),
         };
       }),
     };

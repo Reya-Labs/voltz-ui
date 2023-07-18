@@ -110,21 +110,33 @@ describe('mapPortfolioPositionToPortfolioUI', () => {
     expect(formatPOSIXTimestamp).toHaveBeenCalledWith(position.pool.termEndTimestampInMS);
     expect(compactFormatToParts).toHaveBeenCalledWith(
       position.margin * position.pool.underlyingToken.priceUSD,
+      2,
+      2,
     );
     expect(compactFormatToParts).toHaveBeenCalledWith(
       position.notional * position.pool.underlyingToken.priceUSD,
+      2,
+      2,
     );
     expect(compactFormatToParts).toHaveBeenCalledWith(
       position.unrealizedPNL * position.pool.underlyingToken.priceUSD,
+      2,
+      2,
     );
     expect(compactFormatToParts).toHaveBeenCalledWith(
       position.realizedPNLTotal * position.pool.underlyingToken.priceUSD,
+      2,
+      2,
     );
     expect(compactFormatToParts).toHaveBeenCalledWith(
       position.realizedPNLFees * position.pool.underlyingToken.priceUSD,
+      2,
+      2,
     );
     expect(compactFormatToParts).toHaveBeenCalledWith(
       position.realizedPNLCashflow * position.pool.underlyingToken.priceUSD,
+      2,
+      2,
     );
   });
 });
