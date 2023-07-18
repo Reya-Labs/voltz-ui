@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import {
   getInfoPostSwapThunk,
@@ -19,14 +19,17 @@ export const NotionalSwap: React.FunctionComponent = () => {
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const mode = useAppSelector(selectUserInputMode);
 
-  const handleOnModeChange = (value: 'fixed' | 'variable') => {
-    dispatch(
-      setUserInputModeAction({
-        value,
-      }),
-    );
-    void dispatch(getInfoPostSwapThunk());
-  };
+  const handleOnModeChange = useCallback(
+    (value: 'fixed' | 'variable') => {
+      dispatch(
+        setUserInputModeAction({
+          value,
+        }),
+      );
+      void dispatch(getInfoPostSwapThunk());
+    },
+    [dispatch],
+  );
 
   return (
     <NotionalSwapUI
