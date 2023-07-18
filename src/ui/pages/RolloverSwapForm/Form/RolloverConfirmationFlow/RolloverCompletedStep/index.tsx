@@ -1,4 +1,4 @@
-import { Button, Confetti, ExternalLink, Typography } from 'brokoli-ui';
+import { Button, Confetti, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ import {
 import { resetPortfolioStateAction } from '../../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../routes/paths';
+import { ExplorerLink } from '../../../../../components/ExplorerLink';
 import { RolloverDetails } from '../RolloverDetails';
 import { RolloverCompletedStepBox } from './RolloverCompletedStep.styled';
 
@@ -31,13 +32,7 @@ export const RolloverCompletedStep: React.FunctionComponent = () => {
       </Confetti>
       <RolloverDetails />
       <Confetti>
-        <ExternalLink
-          colorToken="lavenderWeb"
-          href={etherscanLink}
-          typographyToken="primaryBodyXSmallRegular"
-        >
-          Open transaction on Etherscan
-        </ExternalLink>
+        <ExplorerLink link={etherscanLink} />
       </Confetti>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
         Your position will be available in few minutes. You can track it from your your portfolio.
