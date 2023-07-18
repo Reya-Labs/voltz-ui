@@ -9359,16 +9359,16 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.82.3:
-  version "1.82.3"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.82.3.tgz#16abdacb7c2f66f366a4acb0f45bb87747977af2"
-  integrity sha512-+xahbMn0riXVfaE3Aw4xraXIpIzPOVOO2lXzBGxl6Ro3iaiFG2dr7JaaIwzoYFGvR9NAfYte6uPzceuh56QVgw==
+brokoli-ui@1.82.5:
+  version "1.82.5"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.82.5.tgz#e9b6e0ea7b4e9113a8deee7bb040d2e6a0e3c2d8"
+  integrity sha512-NVpi6gasjUECexk3pbdWJKA8i9NV2eykgWOrYQuDVPVsE4nf+6BuB0CTL0Nb+yGGXBoiEtmwJHmjw+Pl1t+3oA==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"
     "@nivo/line" "0.80.0"
     react-animate-height "3.1.0"
-    react-currency-input-field "3.6.4"
+    react-currency-input-field "3.6.11"
     react-metamask-avatar "1.2.0"
     react-tiny-popover "7.2.0"
     react-toastify "8.2.0"
@@ -20024,10 +20024,10 @@ react-countup@6.3.2:
   dependencies:
     countup.js "^2.2.0"
 
-react-currency-input-field@3.6.4:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/react-currency-input-field/-/react-currency-input-field-3.6.4.tgz#8063f9a445ba246063f0254ced4015210c90593a"
-  integrity sha512-0SifhqMirGt5+inzHslfbf71ZYoBt420pkMM6oBSGS40CsuPcLIOV19B1LPSCz7dWPGYi/kw5TOFQ0qALrn6Wg==
+react-currency-input-field@3.6.11:
+  version "3.6.11"
+  resolved "https://registry.yarnpkg.com/react-currency-input-field/-/react-currency-input-field-3.6.11.tgz#5e0c94b85c78c51ddfa33e4b60608accfa123366"
+  integrity sha512-M9vOx1eaioSaYWirm7W2WSBi4bpLg+LK4Gf7C1kNhy6MvoSoOzd0mYZPxA78OC9UBIQ2nM080Wu9D1CwTY6n3w==
 
 react-dev-utils@12.0.1:
   version "12.0.1"
