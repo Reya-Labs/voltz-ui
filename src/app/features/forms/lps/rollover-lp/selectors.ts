@@ -317,3 +317,7 @@ export const selectPreviousPositionId = (state: RootState) => {
   }
   return state.rolloverLpForm.previousPosition.id;
 };
+
+export const selectIsGetInfoPostLpLoading = (state: RootState) => {
+  return state.rolloverLpForm.prospectiveLp.infoPostLp.status === 'pending';
+};

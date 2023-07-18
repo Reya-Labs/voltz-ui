@@ -335,3 +335,7 @@ export const selectGasInfoFormatted = (state: RootState) => {
     gasDetails: infoPostLp.value.gasFee,
   });
 };
+
+export const selectIsGetInfoPostLpLoading = (state: RootState) => {
+  return state.lpForm.prospectiveLp.infoPostLp.status === 'pending';
+};

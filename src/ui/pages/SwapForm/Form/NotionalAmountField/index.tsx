@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostSwapThunk,
+  selectIsGetInfoPostSwapLoading,
   selectSwapFormAMM,
   selectSwapFormPosition,
   selectUserInputNotionalInfo,
@@ -18,6 +19,7 @@ import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 type NotionalAmountProps = {};
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
+  const isGetInfoPostSwapLoading = useAppSelector(selectIsGetInfoPostSwapLoading);
   const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
   const [localNotional, setLocalNotional] = useState<string | null>(
     notionalAmount.value.toString(),
@@ -46,15 +48,17 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     [dispatch],
   );
 
-  const handleOnNotionalChange = useCallback(
-    (value?: string) => {
-      setLocalNotional(value ?? null);
+  const handleOnNotionalChange = useCallback((value?: string) => {
+    setLocalNotional(value ?? null);
+  }, []);
 
-      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
-      debouncedGetInfoPostSwap(valueAsNumber, undefined);
-    },
-    [debouncedGetInfoPostSwap],
-  );
+  const handleOnNotionalBlur = useCallback(() => {
+    const valueAsNumber =
+      localNotional !== undefined && localNotional !== null
+        ? stringToBigFloat(localNotional)
+        : null;
+    debouncedGetInfoPostSwap(valueAsNumber, undefined);
+  }, [localNotional, debouncedGetInfoPostSwap]);
 
   const handleOnSwitchChange = useCallback(
     (value: string) => {
@@ -96,6 +100,8 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     <NewNotionalAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
+      disabled={isGetInfoPostSwapLoading}
+      handleOnNotionalBlur={handleOnNotionalBlur}
       handleOnNotionalChange={handleOnNotionalChange}
       labelTypographyToken={labelTypographyToken}
       localNotional={localNotional}
@@ -105,6 +111,8 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     <EditNotionalAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
+      disabled={isGetInfoPostSwapLoading}
+      handleOnNotionalBlur={handleOnNotionalBlur}
       handleOnNotionalChange={handleOnNotionalChange}
       handleOnSwitchChange={handleOnSwitchChange}
       labelTypographyToken={labelTypographyToken}

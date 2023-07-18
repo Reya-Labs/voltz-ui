@@ -12,6 +12,7 @@ import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 
 type EditNotionalAmountFieldUIProps = {
   handleOnNotionalChange: (value?: string) => void;
+  handleOnNotionalBlur: () => void;
   handleOnSwitchChange: (value: string) => void;
   localEditMode: 'add' | 'remove';
   localNotional: string | null;
@@ -19,13 +20,16 @@ type EditNotionalAmountFieldUIProps = {
   labelTypographyToken: TypographyToken;
   bottomRightTextTypographyToken: TypographyToken;
   bottomLeftTextTypographyToken: TypographyToken;
+  disabled: boolean;
 };
 
 export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmountFieldUIProps> = ({
   handleOnNotionalChange,
+  handleOnNotionalBlur,
   handleOnSwitchChange,
   localEditMode,
   localNotional,
+  disabled,
   underlyingTokenName,
   labelTypographyToken,
   bottomRightTextTypographyToken,
@@ -51,6 +55,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={formatNumber(notionalAvailable)}
         decimalsLimit={FormNumberLimits.decimalLimit}
+        disabled={disabled}
         error={notionalAmount.error !== null}
         label="Notional Amount"
         labelTypographyToken={labelTypographyToken}
@@ -63,6 +68,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When trading rates, the amount you receive and pay is calculated as a percentage of the notional value you choose."
         value={localNotional !== null ? localNotional : undefined}
+        onBlur={handleOnNotionalBlur}
         onChange={handleOnNotionalChange}
         onSwitchChange={handleOnSwitchChange}
       />

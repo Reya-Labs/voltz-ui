@@ -13,6 +13,8 @@ import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 type EditNotionalAmountFieldUIProps = {
   handleOnNotionalChange: (value?: string) => void;
   handleOnSwitchChange: (value: string) => void;
+  handleOnNotionalBlur: () => void;
+  disabled: boolean;
   localNotional: string | null;
   underlyingTokenName: string;
   labelTypographyToken: TypographyToken;
@@ -28,6 +30,8 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
   labelTypographyToken,
   bottomRightTextTypographyToken,
   bottomLeftTextTypographyToken,
+  disabled,
+  handleOnNotionalBlur,
 }) => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
 
@@ -52,6 +56,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={bottomRightText}
         decimalsLimit={FormNumberLimits.decimalLimit}
+        disabled={disabled}
         error={notionalAmount.error !== null}
         label="Notional Amount"
         labelTypographyToken={labelTypographyToken}
@@ -64,6 +69,7 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When providing liquidity, your profit or loss, generated from fees and funding rate cashflow, is calculated as a percentage of the notional value you choose."
         value={localNotional !== null ? localNotional : undefined}
+        onBlur={handleOnNotionalBlur}
         onChange={handleOnNotionalChange}
         onSwitchChange={handleOnSwitchChange}
       />

@@ -13,6 +13,8 @@ type NewNotionalAmountFieldUIProps = {
   labelTypographyToken: TypographyToken;
   bottomRightTextTypographyToken: TypographyToken;
   bottomLeftTextTypographyToken: TypographyToken;
+  handleOnNotionalBlur: () => void;
+  disabled: boolean;
 };
 
 export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmountFieldUIProps> = ({
@@ -22,6 +24,8 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
   labelTypographyToken,
   bottomRightTextTypographyToken,
   bottomLeftTextTypographyToken,
+  disabled,
+  handleOnNotionalBlur,
 }) => {
   const notionalInfo = useAppSelector(selectUserInputNotionalInfo);
 
@@ -34,8 +38,8 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-        // bottomRightTextValue={formatNumber(notionalAvailable)}
         decimalsLimit={FormNumberLimits.decimalLimit}
+        disabled={disabled}
         error={notionalInfo.error !== null}
         label="Notional Amount"
         labelTypographyToken={labelTypographyToken}
@@ -43,6 +47,7 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When providing liquidity, your profit or loss, generated from fees and funding rate cashflow, is calculated as a percentage of the notional value you choose."
         value={localNotional !== null ? localNotional : undefined}
+        onBlur={handleOnNotionalBlur}
         onChange={handleOnNotionalChange}
       />
     </NotionalAmountFieldBox>

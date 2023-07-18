@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostLpThunk,
+  selectIsGetInfoPostLpLoading,
   selectRolloverLpFormAMM,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
@@ -16,6 +17,7 @@ import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 type NotionalAmountProps = {};
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
+  const isGetInfoPostLpLoading = useAppSelector(selectIsGetInfoPostLpLoading);
   const [localNotional, setLocalNotional] = useState<string | null>(
     notionalAmount.value.toString(),
   );
@@ -51,6 +53,14 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     [debouncedGetInfoPostLp],
   );
 
+  const handleOnNotionalBlur = useCallback(() => {
+    const valueAsNumber =
+      localNotional !== undefined && localNotional !== null
+        ? stringToBigFloat(localNotional)
+        : null;
+    debouncedGetInfoPostLp(valueAsNumber);
+  }, [localNotional, debouncedGetInfoPostLp]);
+
   // Stop the invocation of the debounced function
   // after unmounting
   useEffect(() => {
@@ -79,6 +89,8 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     <NewNotionalAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
+      disabled={isGetInfoPostLpLoading}
+      handleOnNotionalBlur={handleOnNotionalBlur}
       handleOnNotionalChange={handleOnNotionalChange}
       labelTypographyToken={labelTypographyToken}
       localNotional={localNotional}
