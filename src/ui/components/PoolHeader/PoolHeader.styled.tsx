@@ -55,4 +55,5 @@ export const V2InfoBox = styled('div')`
   align-items: center;
   padding: 0 12px;
   border-left: 1px solid ${colors.lavenderWeb7};
+  width: 160px;
 `;

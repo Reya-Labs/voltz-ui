@@ -37,7 +37,7 @@ const InfoBox = styled('div')`
 `;
 
 export const DateBox = styled(InfoBox)`
-  width: 80px;
+  width: 125px;
 `;
 export const ActionBox = styled(InfoBox)`
   width: 140px;
