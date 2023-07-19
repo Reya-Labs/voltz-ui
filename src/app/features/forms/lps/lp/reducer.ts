@@ -116,16 +116,23 @@ const slice = createSlice({
         editMode?: 'add' | 'remove';
       }>,
     ) => {
-      if (value !== undefined) {
-        state.userInput.notionalAmount.value = value;
-      }
+      if (value !== undefined || editMode !== undefined) {
+        if (value !== undefined) {
+          state.userInput.notionalAmount.value = value;
+        }
 
-      if (editMode !== undefined) {
-        state.userInput.notionalAmount.editMode = editMode;
-      }
+        if (editMode !== undefined) {
+          state.userInput.notionalAmount.editMode = editMode;
+        }
 
-      updateLeverage(state);
-      validateUserInputAndUpdateSubmitButton(state);
+        updateLeverage(state);
+        validateUserInputAndUpdateSubmitButton(state);
+      }
+    },
+    resetInfoPostLpAction: (state) => {
+      state.prospectiveLp.infoPostLp = {
+        ...initialState.prospectiveLp.infoPostLp,
+      };
     },
     setMarginAmountAction: (
       state,
@@ -414,5 +421,6 @@ export const {
   openMarginUpdateConfirmationFlowAction,
   closeMarginUpdateConfirmationFlowAction,
   trackPageViewAction,
+  resetInfoPostLpAction,
 } = slice.actions;
 export const lpFormReducer = slice.reducer;

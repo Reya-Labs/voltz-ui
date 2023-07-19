@@ -78,16 +78,21 @@ const slice = createSlice({
         editMode?: 'add' | 'remove';
       }>,
     ) => {
-      if (value !== undefined) {
-        state.userInput.notionalAmount.value = value;
+      if (value !== undefined || editMode !== undefined) {
+        if (value !== undefined) {
+          state.userInput.notionalAmount.value = value;
+        }
+        if (editMode !== undefined) {
+          state.userInput.notionalAmount.editMode = editMode;
+        }
+        updateLeverage(state);
+        validateUserInputAndUpdateSubmitButton(state);
       }
-
-      if (editMode !== undefined) {
-        state.userInput.notionalAmount.editMode = editMode;
-      }
-
-      updateLeverage(state);
-      validateUserInputAndUpdateSubmitButton(state);
+    },
+    resetInfoPostSwapAction: (state) => {
+      state.prospectiveSwap.infoPostSwap = {
+        ...initialState.prospectiveSwap.infoPostSwap,
+      };
     },
     setMarginAmountAction: (
       state,
@@ -388,5 +393,6 @@ export const {
   closeSwapConfirmationFlowAction,
   openMarginUpdateConfirmationFlowAction,
   closeMarginUpdateConfirmationFlowAction,
+  resetInfoPostSwapAction,
 } = slice.actions;
 export const swapFormReducer = slice.reducer;

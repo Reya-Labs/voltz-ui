@@ -82,10 +82,15 @@ const slice = createSlice({
     ) => {
       if (value !== undefined) {
         state.userInput.notionalAmount.value = value;
-      }
 
-      updateLeverage(state);
-      validateUserInputAndUpdateSubmitButton(state);
+        updateLeverage(state);
+        validateUserInputAndUpdateSubmitButton(state);
+      }
+    },
+    resetInfoPostSwapAction: (state) => {
+      state.prospectiveSwap.infoPostSwap = {
+        ...initialState.prospectiveSwap.infoPostSwap,
+      };
     },
     setMarginAmountAction: (
       state,
@@ -356,5 +361,6 @@ export const {
   openRolloverConfirmationFlowAction,
   closeRolloverConfirmationFlowAction,
   setSignerForRolloverSwapFormAction,
+  resetInfoPostSwapAction,
 } = slice.actions;
 export const rolloverSwapFormReducer = slice.reducer;
