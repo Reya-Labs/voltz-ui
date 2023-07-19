@@ -1,10 +1,12 @@
 import { isUserInputNotionalError } from '../../../../common';
+import { getAdjustedSwapNotional } from '../getAdjustedSwapNotional';
 import { getExistingPositionMode } from '../getExistingPositionMode';
 import { getExistingPositionNotional } from '../getExistingPositionNotional';
 import { getProspectiveSwapNotional } from './index';
 
 jest.mock('../getExistingPositionMode');
 jest.mock('../getExistingPositionNotional');
+jest.mock('../getAdjustedSwapNotional');
 jest.mock('../../../../common');
 
 describe('getProspectiveSwapNotional', () => {
@@ -48,42 +50,15 @@ describe('getProspectiveSwapNotional', () => {
     expect(getExistingPositionMode).not.toHaveBeenCalled();
   });
 
-  it('should return value when there is no existing position', () => {
+  it('should return value from getAdjustedSwapNotional', () => {
     (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
-    (getExistingPositionNotional as jest.Mock).mockReturnValue(null);
+    (getAdjustedSwapNotional as jest.Mock).mockReturnValue(
+      mockState.userInput.notionalAmount.value,
+    );
 
     const result = getProspectiveSwapNotional(mockState as never);
 
     expect(result).toEqual(mockState.userInput.notionalAmount.value);
-    expect(isUserInputNotionalError).toHaveBeenCalledWith(mockState);
-    expect(getExistingPositionNotional).toHaveBeenCalledWith(mockState);
-    expect(getExistingPositionMode).not.toHaveBeenCalled();
-  });
-
-  it('should return the calculated value when there is an existing position and editMode is add', () => {
-    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
-    (getExistingPositionNotional as jest.Mock).mockReturnValue(50);
-    (getExistingPositionMode as jest.Mock).mockReturnValue('fixed');
-
-    const result = getProspectiveSwapNotional(mockState as never);
-
-    expect(result).toEqual(2 * 50 + mockState.userInput.notionalAmount.value);
-    expect(isUserInputNotionalError).toHaveBeenCalledWith(mockState);
-    expect(getExistingPositionNotional).toHaveBeenCalledWith(mockState);
-    expect(getExistingPositionMode).toHaveBeenCalledWith(mockState);
-  });
-
-  it('should return the calculated value when there is an existing position and editMode is subtract', () => {
-    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
-    (getExistingPositionNotional as jest.Mock).mockReturnValue(50);
-    (getExistingPositionMode as jest.Mock).mockReturnValue('different mode');
-    mockState.userInput.notionalAmount.editMode = 'subtract';
-
-    const result = getProspectiveSwapNotional(mockState as never);
-
-    expect(result).toEqual(2 * 50 - mockState.userInput.notionalAmount.value);
-    expect(isUserInputNotionalError).toHaveBeenCalledWith(mockState);
-    expect(getExistingPositionNotional).toHaveBeenCalledWith(mockState);
-    expect(getExistingPositionMode).toHaveBeenCalledWith(mockState);
+    expect(getAdjustedSwapNotional).toHaveBeenCalled();
   });
 });
