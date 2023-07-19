@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostLpThunk,
+  resetInfoPostLpAction,
   selectIsGetInfoPostLpLoading,
   selectLpFormAMM,
   selectLpFormSelectedPosition,
@@ -36,6 +37,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const debouncedGetInfoPostLp = useMemo(
     () =>
       debounce((value: number | null | undefined, editMode: 'add' | 'remove' | undefined) => {
+        dispatch(resetInfoPostLpAction());
         dispatch(
           setNotionalAmountAction({
             value: value === undefined ? undefined : value ?? 0,
@@ -56,8 +58,12 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       localNotional !== undefined && localNotional !== null
         ? stringToBigFloat(localNotional)
         : null;
+    if (notionalAmount.value === valueAsNumber) {
+      return;
+    }
+
     debouncedGetInfoPostLp(valueAsNumber, undefined);
-  }, [localNotional, debouncedGetInfoPostLp]);
+  }, [notionalAmount.value, localNotional, debouncedGetInfoPostLp]);
 
   const handleOnSwitchChange = useCallback(
     (value: string) => {

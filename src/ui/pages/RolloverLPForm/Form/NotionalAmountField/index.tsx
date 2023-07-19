@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostLpThunk,
+  resetInfoPostLpAction,
   selectIsGetInfoPostLpLoading,
   selectRolloverLpFormAMM,
   selectUserInputNotionalInfo,
@@ -33,6 +34,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const debouncedGetInfoPostLp = useMemo(
     () =>
       debounce((value: number | null | undefined) => {
+        dispatch(resetInfoPostLpAction());
         dispatch(
           setNotionalAmountAction({
             value: value === undefined ? undefined : value ?? 0,
@@ -58,8 +60,12 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       localNotional !== undefined && localNotional !== null
         ? stringToBigFloat(localNotional)
         : null;
+    if (notionalAmount.value === valueAsNumber) {
+      return;
+    }
+
     debouncedGetInfoPostLp(valueAsNumber);
-  }, [localNotional, debouncedGetInfoPostLp]);
+  }, [notionalAmount.value, localNotional, debouncedGetInfoPostLp]);
 
   // Stop the invocation of the debounced function
   // after unmounting

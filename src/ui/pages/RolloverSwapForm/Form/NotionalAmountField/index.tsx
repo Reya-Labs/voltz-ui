@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostSwapThunk,
+  resetInfoPostSwapAction,
   selectIsGetInfoPostSwapLoading,
   selectRolloverSwapFormAMM,
   selectUserInputNotionalInfo,
@@ -33,6 +34,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const debouncedGetInfoPostSwap = useMemo(
     () =>
       debounce((value: number | null | undefined) => {
+        dispatch(resetInfoPostSwapAction());
         dispatch(
           setNotionalAmountAction({
             value: value === undefined ? undefined : value ?? 0,
@@ -52,8 +54,12 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       localNotional !== undefined && localNotional !== null
         ? stringToBigFloat(localNotional)
         : null;
+    if (notionalAmount.value === valueAsNumber) {
+      return;
+    }
+
     debouncedGetInfoPostSwap(valueAsNumber);
-  }, [localNotional, debouncedGetInfoPostSwap]);
+  }, [notionalAmount.value, localNotional, debouncedGetInfoPostSwap]);
 
   // Stop the invocation of the debounced function
   // after unmounting
