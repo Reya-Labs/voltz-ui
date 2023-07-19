@@ -22,6 +22,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const [localNotional, setLocalNotional] = useState<string | null>(
     notionalAmount.value.toString(),
   );
+  const [getInfoPostSwapNotional, setGetInfoPostSwapNotional] = useState<string | null>(null);
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const dispatch = useAppDispatch();
@@ -31,41 +32,52 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     setLocalNotional(notionalAmount.value.toString());
   }, [notionalAmount.value]);
 
-  const debouncedGetInfoPostSwap = useMemo(
+  const getInfoPostSwap = useCallback(() => {
+    setGetInfoPostSwapNotional(localNotional);
+    dispatch(resetInfoPostSwapAction());
+    void dispatch(getInfoPostSwapThunk());
+  }, [localNotional, dispatch]);
+
+  const debouncedSetNotionalAmount = useMemo(
     () =>
       debounce((value: number | null | undefined) => {
-        dispatch(resetInfoPostSwapAction());
         dispatch(
           setNotionalAmountAction({
             value: value === undefined ? undefined : value ?? 0,
           }),
         );
-        void dispatch(getInfoPostSwapThunk());
       }, 300),
     [dispatch],
   );
 
-  const handleOnNotionalChange = useCallback((value?: string) => {
-    setLocalNotional(value ?? null);
-  }, []);
+  const handleOnNotionalChange = useCallback(
+    (value?: string) => {
+      const valueAsNumber = value !== undefined && value !== null ? stringToBigFloat(value) : null;
+      if (notionalAmount.value === valueAsNumber) {
+        return;
+      }
+      setLocalNotional(value ?? null);
+      debouncedSetNotionalAmount(valueAsNumber);
+    },
+    [notionalAmount.value, debouncedSetNotionalAmount],
+  );
 
   const handleOnNotionalBlur = useCallback(() => {
-    const valueAsNumber =
-      localNotional !== undefined && localNotional !== null
-        ? stringToBigFloat(localNotional)
-        : null;
-    if (notionalAmount.value === valueAsNumber) {
+    if (
+      getInfoPostSwapNotional !== null &&
+      localNotional !== null &&
+      getInfoPostSwapNotional === localNotional
+    ) {
       return;
     }
-
-    debouncedGetInfoPostSwap(valueAsNumber);
-  }, [notionalAmount.value, localNotional, debouncedGetInfoPostSwap]);
+    getInfoPostSwap();
+  }, [getInfoPostSwapNotional, localNotional, getInfoPostSwap]);
 
   // Stop the invocation of the debounced function
   // after unmounting
   useEffect(() => {
     return () => {
-      debouncedGetInfoPostSwap.cancel();
+      debouncedSetNotionalAmount.cancel();
     };
   }, []);
 

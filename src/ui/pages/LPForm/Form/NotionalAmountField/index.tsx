@@ -21,9 +21,11 @@ type NotionalAmountProps = {};
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
   const isGetInfoPostLpLoading = useAppSelector(selectIsGetInfoPostLpLoading);
+  const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
   const [localNotional, setLocalNotional] = useState<string | null>(
     notionalAmount.value.toString(),
   );
+  const [getInfoPostLpNotional, setGetInfoPostLpNotional] = useState<string | null>(null);
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const dispatch = useAppDispatch();
@@ -34,53 +36,69 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     setLocalNotional(notionalAmount.value.toString());
   }, [notionalAmount.value]);
 
-  const debouncedGetInfoPostLp = useMemo(
+  const getInfoPostLp = useCallback(() => {
+    setGetInfoPostLpNotional(localNotional);
+    dispatch(resetInfoPostLpAction());
+    void dispatch(getInfoPostLpThunk());
+  }, [localNotional, dispatch]);
+
+  const debouncedSetNotionalAmount = useMemo(
     () =>
       debounce((value: number | null | undefined, editMode: 'add' | 'remove' | undefined) => {
-        dispatch(resetInfoPostLpAction());
         dispatch(
           setNotionalAmountAction({
             value: value === undefined ? undefined : value ?? 0,
             editMode: editMode,
           }),
         );
-        void dispatch(getInfoPostLpThunk());
       }, 300),
     [dispatch],
   );
 
-  const handleOnNotionalChange = useCallback((value?: string) => {
-    setLocalNotional(value ?? null);
-  }, []);
+  const handleOnNotionalChange = useCallback(
+    (value?: string) => {
+      const valueAsNumber = value !== undefined && value !== null ? stringToBigFloat(value) : null;
+      if (notionalAmount.value === valueAsNumber) {
+        return;
+      }
+      setLocalNotional(value ?? null);
+      debouncedSetNotionalAmount(valueAsNumber, undefined);
+    },
+    [notionalAmount.value, debouncedSetNotionalAmount],
+  );
 
   const handleOnNotionalBlur = useCallback(() => {
-    const valueAsNumber =
-      localNotional !== undefined && localNotional !== null
-        ? stringToBigFloat(localNotional)
-        : null;
-    if (notionalAmount.value === valueAsNumber) {
+    if (
+      getInfoPostLpNotional !== null &&
+      localNotional !== null &&
+      getInfoPostLpNotional === localNotional
+    ) {
       return;
     }
-
-    debouncedGetInfoPostLp(valueAsNumber, undefined);
-  }, [notionalAmount.value, localNotional, debouncedGetInfoPostLp]);
+    getInfoPostLp();
+  }, [getInfoPostLpNotional, localNotional, getInfoPostLp]);
 
   const handleOnSwitchChange = useCallback(
     (value: string) => {
       if (value !== 'add' && value !== 'remove') {
         return;
       }
+      if (localEditMode === value) {
+        return;
+      }
 
-      debouncedGetInfoPostLp(undefined, value);
+      setLocalEditMode(value);
+      debouncedSetNotionalAmount(undefined, value);
+      getInfoPostLp();
     },
-    [debouncedGetInfoPostLp],
+    [localEditMode, debouncedSetNotionalAmount, getInfoPostLp],
   );
 
   // Stop the invocation of the debounced function
   // after unmounting
   useEffect(() => {
     return () => {
-      debouncedGetInfoPostLp.cancel();
+      debouncedSetNotionalAmount.cancel();
     };
   }, []);
 

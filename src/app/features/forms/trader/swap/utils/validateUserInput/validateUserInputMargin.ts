@@ -1,5 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
+import { isUserInputNotionalError } from '../../../../common';
 import { SliceState } from '../../state';
 import { getAvailableMargin } from '../getAvailableMargin';
 
@@ -10,20 +11,21 @@ export const validateUserInputMargin = (state: Draft<SliceState>): void => {
   const { editMode, value: marginValue } = state.userInput.marginAmount;
   const { marginRequirement } = state.prospectiveSwap.infoPostSwap.value;
   let error = null;
-
-  if (editMode === 'add') {
-    if (hasMargin && marginValue > availableMargin) {
-      error = 'WLT';
-    } else if (hasSwap && marginValue < marginRequirement) {
-      error = 'Margin too low. Additional margin required:';
+  if (!isUserInputNotionalError(state)) {
+    if (editMode === 'add') {
+      if (hasMargin && marginValue > availableMargin) {
+        error = 'WLT';
+      } else if (hasSwap && marginValue < marginRequirement) {
+        error = 'Margin too low. Additional margin required:';
+      }
     }
-  }
 
-  if (editMode === 'remove') {
-    if (hasMargin && marginValue > availableMargin) {
-      error = 'Not enough margin. Available margin:';
-    } else if (hasSwap && marginRequirement > 0 && marginValue === 0) {
-      error = 'You must add margin. Available margin:';
+    if (editMode === 'remove') {
+      if (hasMargin && marginValue > availableMargin) {
+        error = 'Not enough margin. Available margin:';
+      } else if (hasSwap && marginRequirement > 0 && marginValue === 0) {
+        error = 'You must add margin. Available margin:';
+      }
     }
   }
 

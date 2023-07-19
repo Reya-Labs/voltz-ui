@@ -1,13 +1,12 @@
+import { isUserInputNotionalError } from '../../../../common';
 import { getAvailableMargin } from '../getAvailableMargin';
 import { hasExistingPosition } from '../hasExistingPosition';
 import { validateUserInputMargin } from './validateUserInputMargin';
 
-jest.mock('../getAvailableMargin', () => ({
-  getAvailableMargin: jest.fn(),
-}));
-
-jest.mock('../hasExistingPosition', () => ({
-  hasExistingPosition: jest.fn(),
+jest.mock('../getAvailableMargin');
+jest.mock('../hasExistingPosition');
+jest.mock('../../../../common', () => ({
+  isUserInputNotionalError: jest.fn(),
 }));
 
 describe('validateUserInputMargin', () => {
@@ -36,6 +35,7 @@ describe('validateUserInputMargin', () => {
     };
     (getAvailableMargin as jest.Mock).mockReturnValue(availableMargin);
     (hasExistingPosition as jest.Mock).mockReturnValue(false);
+    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
 
     validateUserInputMargin(state as never);
 
@@ -63,6 +63,7 @@ describe('validateUserInputMargin', () => {
     };
     (getAvailableMargin as jest.Mock).mockReturnValue(null);
     (hasExistingPosition as jest.Mock).mockReturnValue(false);
+    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
 
     validateUserInputMargin(state as never);
 
@@ -95,6 +96,7 @@ describe('validateUserInputMargin', () => {
     };
     (getAvailableMargin as jest.Mock).mockReturnValue(availableMargin);
     (hasExistingPosition as jest.Mock).mockReturnValue(true);
+    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
 
     validateUserInputMargin(state as never);
 
@@ -122,6 +124,7 @@ describe('validateUserInputMargin', () => {
     };
     (getAvailableMargin as jest.Mock).mockReturnValue(0);
     (hasExistingPosition as jest.Mock).mockReturnValue(true);
+    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
 
     validateUserInputMargin(state as never);
 
