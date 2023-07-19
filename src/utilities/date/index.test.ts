@@ -25,8 +25,8 @@ describe('utilities.date', () => {
 
   describe('formatPOSIXTimestampWithHoursMinutes', () => {
     it('formats the POSIX timestamp correctly with hours and minutes', () => {
-      const timestamp = 1614667200000; // corresponds to 02 Mar 2021, 07:40 AM
-      expect(formatPOSIXTimestampWithHoursMinutes(timestamp)).toBe('03/02/21, 07:40');
+      const timestamp = 1614667200000; // corresponds to 02 Mar 2021, 06:40 AM UTC
+      expect(formatPOSIXTimestampWithHoursMinutes(timestamp)).toBe('03/02/21, 06:40');
     });
   });
 

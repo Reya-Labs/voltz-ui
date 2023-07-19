@@ -19,9 +19,9 @@
     "release": "semantic-release",
     "start": "GENERATE_SOURCEMAP=false node scripts/start.js",
     "storybook": "start-storybook -p 6006",
-    "test": "jest --silent",
+    "test": "TZ=UTC jest --silent",
     "test:coverage": "yarn test --coverage",
-    "test:watch": "jest --watch",
+    "test:watch": "TZ=UTC jest --watch",
     "generate:coverage-badges": "npx istanbul-badges-readme --silent",
     "code-quality:check": "npx concurrently 'yarn ts:check' 'yarn prettier:check' 'yarn lint:check --quiet'",
     "git:create-release-branch": "git checkout main && git pull && git checkout develop && git pull && git checkout -b release/$FEATURE && git checkout release/$FEATURE && git merge main --no-edit"
