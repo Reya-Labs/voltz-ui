@@ -12,7 +12,7 @@ describe('ConfirmBatchBudgetModalContent', () => {
   const submitText = 'CONFIRM BATCH BUDGET';
   const token = 'ETH';
 
-  test('displays the batch budget in USD and underlying token', () => {
+  it('displays the batch budget in USD and underlying token', () => {
     render(
       <ConfirmBatchBudgetModalContent
         batchBudgetUnderlying={2}
@@ -40,7 +40,7 @@ describe('ConfirmBatchBudgetModalContent', () => {
     expect(batchBudgetTextTypography).toHaveTextContent('$10 USD');
   });
 
-  test('displays loading when the batch budget is -1', () => {
+  it('displays loading when the batch budget is -1', () => {
     render(
       <ConfirmBatchBudgetModalContent
         batchBudgetUnderlying={-1}
@@ -63,7 +63,7 @@ describe('ConfirmBatchBudgetModalContent', () => {
     expect(batchBudgetLoading).toHaveTextContent('---');
   });
 
-  test('calls the onProceed function when the Confirm Batch Budget button is clicked', () => {
+  it('calls the onProceed function when the Confirm Batch Budget button is clicked', () => {
     render(
       <ConfirmBatchBudgetModalContent
         batchBudgetUnderlying={2}
@@ -88,7 +88,7 @@ describe('ConfirmBatchBudgetModalContent', () => {
     expect(onProceedMock).toHaveBeenCalled();
   });
 
-  test('calls the onCancel function when the Cancel button is clicked', () => {
+  it('calls the onCancel function when the Cancel button is clicked', () => {
     render(
       <ConfirmBatchBudgetModalContent
         batchBudgetUnderlying={2}

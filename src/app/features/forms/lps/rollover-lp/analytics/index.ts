@@ -75,3 +75,23 @@ export const pushRolloverFailedEvent = ({
     agent: 'Liquidity Provider',
   });
 };
+
+type EstimatedLeverageChangeEventParams = {
+  leverage: number;
+  pool: string;
+  account: string;
+  changeType: 'button' | 'input';
+};
+export const pushLeverageChangeEvent = ({
+  account,
+  leverage,
+  pool,
+  changeType,
+}: EstimatedLeverageChangeEventParams) => {
+  pushEvent(account ?? '', {
+    event: changeType === 'input' ? 'leverage_change_input' : 'leverage_change_button',
+    eventValue: leverage,
+    pool,
+    agent: 'Liquidity Provider',
+  });
+};

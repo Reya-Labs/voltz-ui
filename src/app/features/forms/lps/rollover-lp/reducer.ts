@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { InfoPostLp } from '@voltz-protocol/v1-sdk';
+import { AMM, InfoPostLp } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt, providers } from 'ethers';
 
+import { getAmmProtocol } from '../../../../../utilities/amm';
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common/utils';
+import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common';
+import { pushLeverageChangeEvent } from './analytics';
 import { initialState } from './state';
 import {
   approveUnderlyingTokenThunk,
@@ -134,9 +136,11 @@ const slice = createSlice({
     setLeverageAction: (
       state,
       {
-        payload: { value },
+        payload: { value, account, changeType },
       }: PayloadAction<{
         value: number;
+        account: string;
+        changeType: 'button' | 'input';
       }>,
     ) => {
       if (getProspectiveLpNotional(state) === 0 || isNaN(value) || value === 0) {
@@ -147,6 +151,14 @@ const slice = createSlice({
       }
 
       state.userInput.leverage = value;
+      if (!isNaN(value)) {
+        pushLeverageChangeEvent({
+          leverage: value,
+          account,
+          pool: getAmmProtocol(state.amm as AMM),
+          changeType,
+        });
+      }
       state.userInput.marginAmount.value = stringToBigFloat(
         formLimitAndFormatNumber(getProspectiveLpNotional(state) / value, 'ceil'),
       );

@@ -34,6 +34,7 @@ jest.mock('./analytics');
 jest.mock('./utils');
 jest.mock('../../common');
 jest.mock('../../../../../utilities/number');
+jest.mock('../../../../../utilities/amm');
 
 describe('lpFormReducer', () => {
   beforeEach(() => {

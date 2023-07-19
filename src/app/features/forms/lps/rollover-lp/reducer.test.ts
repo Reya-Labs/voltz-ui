@@ -1,4 +1,5 @@
 import { stringToBigFloat } from '../../../../../utilities/number';
+import { checkLowLeverageNotification } from '../../common';
 import {
   closeRolloverConfirmationFlowAction,
   openRolloverConfirmationFlowAction,
@@ -26,7 +27,7 @@ jest.mock('./analytics');
 jest.mock('./utils');
 jest.mock('../../common');
 jest.mock('../../../../../utilities/number');
-
+jest.mock('../../../../../utilities/amm');
 describe('rolloverLpFormReducer', () => {
   it('should return the initial state', () => {
     expect(rolloverLpFormReducer(undefined, {} as never)).toEqual(initialState);
@@ -75,7 +76,8 @@ describe('rolloverLpFormReducer', () => {
   it('should handle setLeverageAction', () => {
     const value = 5;
     (stringToBigFloat as jest.Mock).mockReturnValue(15);
-    const action = setLeverageAction({ value });
+    (checkLowLeverageNotification as jest.Mock).mockReturnValue(false);
+    const action = setLeverageAction({ value, account: '0x123', changeType: 'input' });
     const expectedState = {
       ...initialState,
       userInput: {

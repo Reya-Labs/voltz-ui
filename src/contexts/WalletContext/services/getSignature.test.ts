@@ -23,7 +23,7 @@ describe('getSignature', () => {
     jest.resetAllMocks();
   });
 
-  test('retrieves signature data successfully', async () => {
+  it('retrieves signature data successfully', async () => {
     mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve(mockSignatureResponse) });
     const result = await getSignature('0x1234567890');
     expect(result).toEqual(mockSignatureResponse);
@@ -35,7 +35,7 @@ describe('getSignature', () => {
     );
   });
 
-  test('throws error when response is not ok', async () => {
+  it('throws error when response is not ok', async () => {
     mockFetch.mockResolvedValue({ ok: false, status: 500 });
     await expect(getSignature('0x1234567890')).rejects.toThrow(UNAVAILABLE_TEXT);
     expect(mockFetch).toHaveBeenCalledWith(
@@ -46,7 +46,7 @@ describe('getSignature', () => {
     );
   });
 
-  test('throws error when 404 status code is returned', async () => {
+  it('throws error when 404 status code is returned', async () => {
     mockFetch.mockResolvedValue({ ok: false, status: 404 });
     const result = await getSignature('0x1234567890');
     expect(result).toBeUndefined();
@@ -58,7 +58,7 @@ describe('getSignature', () => {
     );
   });
 
-  test('throws error and captures exception when fetch fails', async () => {
+  it('throws error and captures exception when fetch fails', async () => {
     mockFetch.mockRejectedValue(new Error('fetch failed'));
     await expect(getSignature('0x1234567890')).rejects.toThrow(UNAVAILABLE_TEXT);
   });
