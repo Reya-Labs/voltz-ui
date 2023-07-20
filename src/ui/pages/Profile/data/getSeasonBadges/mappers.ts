@@ -80,7 +80,6 @@ const ethereumBadgeTypeBadgeVariantMap: BadgeTypeBadgeVariant = {
   '86': 's3MellowLpVaultTier1',
   '87': 's3MellowLpVaultTier2',
   '88': 's3MellowLpVaultTier3',
-  // TODO: Ioana change to proper values
   // season 4
   '89': 's4FixedTrader',
   '90': 's4DeltaDegen',
@@ -119,7 +118,6 @@ const ethereumBadgeTypeBadgeVariantMap: BadgeTypeBadgeVariant = {
   '83': 'referror',
   '84': 'notionalInfluencer',
   '85': 'whaleWhisperer',
-  // TODO: Ioana change to proper values
   // season4
   '104': 'governorz',
   '103': 'diplomatz',
@@ -147,7 +145,6 @@ const arbitrumTypeBadgeVariantMap: BadgeTypeBadgeVariant = {
   '86': 's3MellowLpVaultTier1Arbitrum',
   '87': 's3MellowLpVaultTier2Arbitrum',
   '88': 's3MellowLpVaultTier3Arbitrum',
-  // TODO: Ioana change to proper values
   // season 4
   '89': 's4FixedTraderArbitrum',
   '90': 's4DeltaDegenArbitrum',

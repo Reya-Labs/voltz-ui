@@ -5,8 +5,7 @@ import { ContractReceipt, providers } from 'ethers';
 
 import { getPoolTrackingName } from '../../../../../utilities/googleAnalytics/get-pool-tracking-name';
 import { RootState } from '../../../../store';
-import { extractError } from '../../../helpers/extract-error';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { extractError, rejectThunkWithError } from '../../../helpers';
 import {
   pushSettleFailedEvent,
   pushSettleSubmittedEvent,
@@ -22,7 +21,7 @@ export const confirmSettleThunk = createAsyncThunk<
   { state: RootState }
 >('settleFlow/confirmSettle', async ({ signer }, thunkAPI) => {
   const state = thunkAPI.getState();
-  const position = state.settleFlow.positionDetails;
+  const position = state.settleFlow.position;
   if (!position || !signer) {
     return {};
   }

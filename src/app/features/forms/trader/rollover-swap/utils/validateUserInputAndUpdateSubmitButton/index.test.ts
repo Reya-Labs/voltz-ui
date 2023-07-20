@@ -20,6 +20,7 @@ jest.mock('../getProspectiveSwapNotional', () => ({
 }));
 jest.mock('../../../../common', () => ({
   isUserInputMarginError: jest.fn(),
+  isUserInputNotionalError: jest.fn(),
 }));
 
 describe('validateUserInputAndUpdateSubmitButton', () => {

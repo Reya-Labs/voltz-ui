@@ -5,6 +5,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { isArbitrumChain, isAvalancheChain, selectChainId } from './app/features/network';
 import { isSpruceChain } from './app/features/network/helpers/is-spruce-chain';
+import { selectRedirects } from './app/features/redirects';
 import { useAppSelector } from './app/hooks';
 import { useChainChange } from './hooks/useChainChange';
 import { useInitializeGoogleTagManager } from './hooks/useInitializeGoogleTagManager';
@@ -28,6 +29,7 @@ import { VoyagePage } from './ui/pages/Voyage';
 
 export const AppRoutes = () => {
   const chainId = useAppSelector(selectChainId);
+  const redirects = useAppSelector(selectRedirects);
 
   useInitializeGoogleTagManager();
   useChainChange();
@@ -38,10 +40,6 @@ export const AppRoutes = () => {
       <Route element={<Page mainSlot={<NotFoundPageContent />} />} path="*" />
       <Route path="/">
         <Route element={<Navigate to={routes.POOLS} />} index />
-        <Route
-          element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
-          path={routes.WELCOME}
-        />
         <Route
           element={
             <NetworkProtectedPage>
@@ -163,30 +161,13 @@ export const AppRoutes = () => {
           path={routes.TRADING_LEAGUE}
         />
         {/*deprecated redirects*/}
-        <Route
-          element={<Navigate replace={true} to={`/${routes.LP_OPTIMISERS}`} />}
-          path={routes.DEPRECATED_PRODUCTS}
-        />
-        <Route
-          element={<Navigate replace={true} to={`/${routes.DEPRECATED_LP_PORTFOLIO_2}`} />}
-          path={routes.DEPRECATED_LP_PORTFOLIO}
-        />
-        <Route
-          element={<Navigate replace={true} to={`/${routes.PORTFOLIO_POSITIONS}`} />}
-          path={routes.DEPRECATED_PORTFOLIO}
-        />
-        <Route
-          element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
-          path={routes.DEPRECATED_TRADER_POOLS}
-        />
-        <Route
-          element={<Navigate replace={true} to={`/${routes.POOLS}`} />}
-          path={routes.DEPRECATED_LP_POOLS}
-        />
-        <Route
-          element={<Navigate replace={true} to={`/${routes.PORTFOLIO_POSITIONS}`} />}
-          path={routes.DEPRECATED_LP_PORTFOLIO_2}
-        />
+        {redirects.map(({ path, redirectsTo }) => (
+          <Route
+            key={path}
+            element={<Navigate replace={true} to={`/${redirectsTo}`} />}
+            path={path}
+          />
+        ))}
       </Route>
     </Routes>
   );

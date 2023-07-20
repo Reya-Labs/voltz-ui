@@ -78,16 +78,21 @@ const slice = createSlice({
         editMode?: 'add' | 'remove';
       }>,
     ) => {
-      if (value !== undefined) {
-        state.userInput.notionalAmount.value = value;
+      if (value !== undefined || editMode !== undefined) {
+        if (value !== undefined) {
+          state.userInput.notionalAmount.value = value;
+        }
+        if (editMode !== undefined) {
+          state.userInput.notionalAmount.editMode = editMode;
+        }
+        updateLeverage(state);
+        validateUserInputAndUpdateSubmitButton(state);
       }
-
-      if (editMode !== undefined) {
-        state.userInput.notionalAmount.editMode = editMode;
-      }
-
-      updateLeverage(state);
-      validateUserInputAndUpdateSubmitButton(state);
+    },
+    resetInfoPostSwapAction: (state) => {
+      state.prospectiveSwap.infoPostSwap = {
+        ...initialState.prospectiveSwap.infoPostSwap,
+      };
     },
     setMarginAmountAction: (
       state,
@@ -282,7 +287,7 @@ const slice = createSlice({
         };
       })
       .addCase(getInfoPostSwapThunk.fulfilled, (state, { payload }) => {
-        const { notionalAmount, swapMode, infoPostSwap, earlyReturn } = payload as {
+        const { infoPostSwap, earlyReturn } = payload as {
           notionalAmount: number;
           swapMode: 'fixed' | 'variable';
           infoPostSwap: InfoPostSwapV1;
@@ -301,9 +306,6 @@ const slice = createSlice({
           value: infoPostSwap,
           status: 'success',
         };
-        if (infoPostSwap.availableNotional < notionalAmount) {
-          state.poolSwapInfo.availableNotional[swapMode] = infoPostSwap.availableNotional;
-        }
 
         updateLeverageOptionsAfterGetInfoPostSwap(state);
         validateUserInputAndUpdateSubmitButton(state);
@@ -391,5 +393,6 @@ export const {
   closeSwapConfirmationFlowAction,
   openMarginUpdateConfirmationFlowAction,
   closeMarginUpdateConfirmationFlowAction,
+  resetInfoPostSwapAction,
 } = slice.actions;
 export const swapFormReducer = slice.reducer;

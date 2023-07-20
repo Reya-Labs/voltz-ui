@@ -3,8 +3,6 @@ export * from './getDefaultLpFixedHigh';
 export * from './getDefaultLpFixedLow';
 export * from './getPreviousPositionRealizedPnLFromFees';
 export * from './getPreviousPositionRealizedPnLFromSwaps';
-export * from './getProspectiveLpFixedHigh';
-export * from './getProspectiveLpFixedLow';
 export * from './getProspectiveLpMargin';
 export * from './getProspectiveLpNotional';
 export * from './getSelectedPositionNotional';

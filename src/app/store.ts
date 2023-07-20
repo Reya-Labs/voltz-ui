@@ -1,8 +1,8 @@
 import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
-import { admitPassClaimFlowReducer } from './features/admit-pass-claim-flow';
-import { admitPassVerificationFlowReducer } from './features/admit-pass-verification-flow';
+import { alphaPassClaimFlowReducer } from './features/alpha-pass-claim-flow';
+import { alphaPassVerificationFlowReducer } from './features/alpha-pass-verification-flow';
 import { aMMsReducer } from './features/aMMs';
 import { cashflowCalculatorReducer } from './features/cashflow-calculator';
 import { lpFormReducer } from './features/forms/lps/lp';
@@ -14,6 +14,7 @@ import { lpOptimisersReducer } from './features/lp-optimisers';
 import { networkReducer } from './features/network';
 import { portfolioReducer } from './features/portfolio';
 import { positionDetailsReducer } from './features/position-details';
+import { redirectsReducer } from './features/redirects';
 import { settleFlowReducer } from './features/settle-flow';
 import { tradingLeagueReducer } from './features/trading-league';
 import { voyageReducer } from './features/voyage';
@@ -33,8 +34,9 @@ const rootReducer = combineReducers({
   voyage: voyageReducer,
   portfolio: portfolioReducer,
   positionDetails: positionDetailsReducer,
-  adminPassClaimFlow: admitPassClaimFlowReducer,
-  admitPassVerificationFlow: admitPassVerificationFlowReducer,
+  redirects: redirectsReducer,
+  alphaPassClaimFlow: alphaPassClaimFlowReducer,
+  alphaPassVerificationFlow: alphaPassVerificationFlowReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>

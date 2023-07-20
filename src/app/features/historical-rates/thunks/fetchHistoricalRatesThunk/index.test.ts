@@ -1,6 +1,6 @@
-import { getHistoricalRates, Granularity, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { getHistoricalRates, Granularity } from '@voltz-protocol/v1-sdk';
 
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 import { CACHE, getCacheId } from './cache';
 import { fetchHistoricalRatesThunkHandler } from './index';
 
@@ -17,7 +17,7 @@ jest.mock('@voltz-protocol/v1-sdk', () => ({
 }));
 
 // Mock rejectThunkWithError function
-jest.mock('../../../helpers/reject-thunk-with-error', () => ({
+jest.mock('../../../helpers', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 
@@ -39,10 +39,8 @@ describe('fetchHistoricalRatesThunkHandler', () => {
   it('should return cached data if available', async () => {
     // Arrange
     const payload = {
-      chainId: SupportedChainId.mainnet,
       isFixed: true,
-      aMMId: 'ammId1',
-      aMMRateOracleId: 'rateOracleId1',
+      poolId: 'ammId1',
       timeframeMs: 60 * 60 * 1000, // 1 hour
       granularity: Granularity.ONE_DAY,
     };
@@ -62,10 +60,8 @@ describe('fetchHistoricalRatesThunkHandler', () => {
   it('should call getHistoricalRates and update CACHE with new data', async () => {
     // Arrange
     const payload = {
-      chainId: SupportedChainId.mainnet,
       isFixed: true,
-      aMMId: 'ammId1',
-      aMMRateOracleId: 'rateOracleId1',
+      poolId: 'ammId1',
       timeframeMs: 60 * 60 * 1000, // 1 hour
       granularity: Granularity.ONE_WEEK,
     };
@@ -82,14 +78,12 @@ describe('fetchHistoricalRatesThunkHandler', () => {
     // Assert
     expect(getCacheId).toHaveBeenCalledWith(payload);
     expect(getHistoricalRates).toHaveBeenCalledWith({
-      chainId: SupportedChainId.mainnet,
       isFixed: true,
       filters: {
         granularity: Granularity.ONE_WEEK,
         timeframeMs: 60 * 60 * 1000,
       },
-      ammId: 'ammId1',
-      rateOracleId: 'rateOracleId1',
+      poolId: 'ammId1',
     });
     expect(rejectThunkWithError).not.toHaveBeenCalled();
     expect(CACHE['cacheId3600000604800000']).toEqual(expectedOutput);
@@ -99,10 +93,8 @@ describe('fetchHistoricalRatesThunkHandler', () => {
   it('should call rejectThunkWithError if getHistoricalRates throws an error', async () => {
     // Arrange
     const payload = {
-      chainId: SupportedChainId.mainnet,
       isFixed: true,
-      aMMId: 'ammId1',
-      aMMRateOracleId: 'rateOracleId1',
+      poolId: 'ammId1',
       timeframeMs: 60 * 60 * 1000, // 1 hour
       granularity: Granularity.ONE_HOUR,
     };
@@ -116,14 +108,12 @@ describe('fetchHistoricalRatesThunkHandler', () => {
     // Assert
     expect(getCacheId).toHaveBeenCalledWith(payload);
     expect(getHistoricalRates).toHaveBeenCalledWith({
-      chainId: SupportedChainId.mainnet,
       isFixed: true,
       filters: {
         granularity: Granularity.ONE_HOUR,
         timeframeMs: 60 * 60 * 1000,
       },
-      ammId: 'ammId1',
-      rateOracleId: 'rateOracleId1',
+      poolId: 'ammId1',
     });
     expect(rejectThunkWithError).toHaveBeenCalledWith(thunkAPI, error);
     expect(result).toBeInstanceOf(Error);

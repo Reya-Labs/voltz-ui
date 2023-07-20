@@ -1,9 +1,11 @@
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
+import { updateMarginService } from '../../../../common';
 import { getExistingPositionId, getProspectiveSwapMargin } from '../../utils';
 import { confirmMarginUpdateThunkHandler } from './index';
 
-jest.mock('../../../../../helpers/reject-thunk-with-error');
+jest.mock('../../../../../helpers');
 jest.mock('../../utils');
+jest.mock('../../../../common');
 
 jest.mock('../../../../../../../utilities/amm', () => ({
   isV2AMM: jest.fn().mockReturnValue(false),
@@ -29,40 +31,43 @@ describe('confirmMarginUpdateThunkHandler', () => {
     expect(result).toBeUndefined();
   });
 
-  it('should call updatePositionMargin with the correct arguments', async () => {
-    const marginDelta = 123;
+  it('should call updateMarginService with the correct arguments', async () => {
+    const margin = 123;
     const positionId = 1;
-    const expectedArgs = {
-      fixedLow: 1,
-      fixedHigh: 999,
-      marginDelta,
-    };
-    const updatePositionMarginResult = { txHash: '0x123' };
-    const updatePositionMarginMock = jest.fn(() => updatePositionMarginResult);
     const mockSigner = jest.fn();
     const getState = jest.fn(() => ({
       swapForm: {
         amm: {
           signer: mockSigner,
-          updatePositionMargin: updatePositionMarginMock,
         },
       },
     }));
-    (getProspectiveSwapMargin as jest.Mock).mockReturnValue(marginDelta);
+
+    const expectedArgs = {
+      fixedLow: 1,
+      fixedHigh: 999,
+      margin,
+      amm: getState().swapForm.amm,
+      signer: getState().swapForm.amm.signer,
+      positionId,
+    };
+
+    (getProspectiveSwapMargin as jest.Mock).mockReturnValue(margin);
     (getExistingPositionId as jest.Mock).mockReturnValue(positionId);
+    (updateMarginService as jest.Mock).mockReturnValue({ txHash: '0x123' });
 
     const result = await confirmMarginUpdateThunkHandler(null as never, { getState } as never);
 
     expect(getProspectiveSwapMargin).toHaveBeenCalledWith(getState().swapForm);
-    expect(updatePositionMarginMock).toHaveBeenCalledWith(expectedArgs);
-    expect(result).toBe(updatePositionMarginResult);
+    expect(updateMarginService).toHaveBeenCalledWith(expectedArgs);
+    expect(result).toEqual({ txHash: '0x123' });
   });
 
   it('should call rejectThunkWithError when an error is thrown', async () => {
     const positionId = 1;
     const error = new Error('test error');
     const getState = jest.fn(() => mockState);
-    mockState.swapForm.amm.updatePositionMargin.mockRejectedValue(error);
+    (updateMarginService as jest.Mock).mockRejectedValue(error);
     (getExistingPositionId as jest.Mock).mockReturnValue(positionId);
 
     await confirmMarginUpdateThunkHandler(null as never, { getState } as never);

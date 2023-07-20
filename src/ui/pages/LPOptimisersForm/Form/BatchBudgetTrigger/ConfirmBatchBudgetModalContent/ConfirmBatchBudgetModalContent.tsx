@@ -1,7 +1,7 @@
 import { Button, CloseButton, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { formFormatNumber } from '../../../../../../app/features/forms/common/utils';
+import { formFormatNumber } from '../../../../../../app/features/forms/common';
 import { TitleBox } from '../../../../../components/SettleFlow/SettleConfirmationStep/SettleConfirmationStep.styled';
 import { GasCost } from '../../GasCost/GasCost';
 import { HintText } from '../../HintText/HintText';

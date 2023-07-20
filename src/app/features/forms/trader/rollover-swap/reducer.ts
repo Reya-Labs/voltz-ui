@@ -82,10 +82,15 @@ const slice = createSlice({
     ) => {
       if (value !== undefined) {
         state.userInput.notionalAmount.value = value;
-      }
 
-      updateLeverage(state);
-      validateUserInputAndUpdateSubmitButton(state);
+        updateLeverage(state);
+        validateUserInputAndUpdateSubmitButton(state);
+      }
+    },
+    resetInfoPostSwapAction: (state) => {
+      state.prospectiveSwap.infoPostSwap = {
+        ...initialState.prospectiveSwap.infoPostSwap,
+      };
     },
     setMarginAmountAction: (
       state,
@@ -265,7 +270,7 @@ const slice = createSlice({
         };
       })
       .addCase(getInfoPostSwapThunk.fulfilled, (state, { payload }) => {
-        const { notionalAmount, swapMode, infoPostSwap, earlyReturn } = payload as {
+        const { infoPostSwap, earlyReturn } = payload as {
           notionalAmount: number;
           swapMode: 'fixed' | 'variable';
           infoPostSwap: InfoPostSwapV1;
@@ -284,9 +289,6 @@ const slice = createSlice({
           value: infoPostSwap,
           status: 'success',
         };
-        if (infoPostSwap.availableNotional < notionalAmount) {
-          state.poolSwapInfo.availableNotional[swapMode] = infoPostSwap.availableNotional;
-        }
 
         updateLeverageOptionsAfterGetInfoPostSwap(state);
         validateUserInputAndUpdateSubmitButton(state);
@@ -359,5 +361,6 @@ export const {
   openRolloverConfirmationFlowAction,
   closeRolloverConfirmationFlowAction,
   setSignerForRolloverSwapFormAction,
+  resetInfoPostSwapAction,
 } = slice.actions;
 export const rolloverSwapFormReducer = slice.reducer;

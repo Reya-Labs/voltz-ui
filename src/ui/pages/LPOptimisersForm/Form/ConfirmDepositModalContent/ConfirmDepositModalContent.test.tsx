@@ -14,7 +14,7 @@ describe('<ConfirmDepositModalContent />', () => {
     jest.clearAllMocks();
   });
 
-  test('displays the correct title', () => {
+  it('displays the correct title', () => {
     render(
       <ConfirmDepositModalContent
         depositFeeUnderlying={-1}
@@ -37,7 +37,7 @@ describe('<ConfirmDepositModalContent />', () => {
     expect(title).toHaveTextContent('Deposit');
   });
 
-  test('displays loading text when gasCost, depositFeeUSD and depositFeeUnderlying prop is -1', () => {
+  it('displays loading text when gasCost, depositFeeUSD and depositFeeUnderlying prop is -1', () => {
     render(
       <ConfirmDepositModalContent
         depositFeeUnderlying={-1}
@@ -60,7 +60,7 @@ describe('<ConfirmDepositModalContent />', () => {
     expect(depositFeeLoading).toHaveTextContent('---');
   });
 
-  test('displays the deposit fee in USD and underlying token', () => {
+  it('displays the deposit fee in USD and underlying token', () => {
     render(
       <ConfirmDepositModalContent
         depositFeeUnderlying={2}
@@ -89,7 +89,7 @@ describe('<ConfirmDepositModalContent />', () => {
     expect(depositBudgetTextTypography).toHaveTextContent('$10 USD');
   });
 
-  test('calls the onProceed function when the Confirm Deposit button is clicked', () => {
+  it('calls the onProceed function when the Confirm Deposit button is clicked', () => {
     render(
       <ConfirmDepositModalContent
         depositFeeUnderlying={2}
@@ -113,7 +113,7 @@ describe('<ConfirmDepositModalContent />', () => {
     expect(onProceedMock).toHaveBeenCalled();
   });
 
-  test('calls the onCancel function when the Cancel button is clicked', () => {
+  it('calls the onCancel function when the Cancel button is clicked', () => {
     render(
       <ConfirmDepositModalContent
         depositFeeUnderlying={2}

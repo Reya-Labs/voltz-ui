@@ -24,8 +24,8 @@ export async function getSeasonBadges({
     const badges = await sbt.getSeasonBadges({
       userId: userId,
       seasonId: season.id,
-      seasonStart: season.startDate.toSeconds(),
-      seasonEnd: season.endDate.toSeconds(),
+      seasonStart: season.startDate / 1000,
+      seasonEnd: season.endDate / 1000,
     });
 
     return CHAIN_SEASON_BADGE_VARIANTS[chainId][season.id].map((badgeVariant) => {

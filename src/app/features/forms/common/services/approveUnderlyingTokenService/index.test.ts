@@ -29,24 +29,25 @@ describe('approveUnderlyingToken', () => {
     jest.clearAllMocks();
   });
 
-  test('should return 0 if amm or signer is not provided', async () => {
+  it('should return 0 if amm or signer is not provided', async () => {
     const result = await approveUnderlyingTokenService({ amm: null!, signer: null! });
     expect(result).toBe(0);
   });
 
-  test('should call approvePeripheryV2 if isV2AMM returns true', async () => {
+  it('should call approvePeripheryV2 if isV2AMM returns true', async () => {
     (isV2AMM as jest.Mock).mockReturnValue(true);
     const amm = { id: 'ammId', approveUnderlyingTokenForPeripheryV1: jest.fn() };
     const signer: Signer = {} as Signer;
-
-    await approveUnderlyingTokenService({ amm, signer } as never);
+    (approvePeripheryV2 as jest.Mock).mockResolvedValue(123);
+    const result = await approveUnderlyingTokenService({ amm, signer } as never);
 
     expect(approvePeripheryV2).toHaveBeenCalledWith({ signer, ammId: amm.id });
     expect(approvePeriphery).not.toHaveBeenCalled();
+    expect(result).toEqual(123);
     expect(amm.approveUnderlyingTokenForPeripheryV1).not.toHaveBeenCalled();
   });
 
-  test('should call approvePeriphery if isV2AMM returns false and isV1StatelessEnabled returns true', async () => {
+  it('should call approvePeriphery if isV2AMM returns false and isV1StatelessEnabled returns true', async () => {
     (isV2AMM as jest.Mock).mockReturnValue(false);
     (isV1StatelessEnabled as jest.Mock).mockReturnValue(true);
     const amm = { id: 'ammId', approveUnderlyingTokenForPeripheryV1: jest.fn() };
@@ -59,7 +60,7 @@ describe('approveUnderlyingToken', () => {
     expect(amm.approveUnderlyingTokenForPeripheryV1).not.toHaveBeenCalled();
   });
 
-  test('should call amm.approveUnderlyingTokenForPeripheryV1 if isV2AMM and isV1StatelessEnabled return false', async () => {
+  it('should call amm.approveUnderlyingTokenForPeripheryV1 if isV2AMM and isV1StatelessEnabled return false', async () => {
     (isV2AMM as jest.Mock).mockReturnValue(false);
     (isV1StatelessEnabled as jest.Mock).mockReturnValue(false);
     const amm = {

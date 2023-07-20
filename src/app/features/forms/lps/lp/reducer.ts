@@ -2,9 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, InfoPostLp, PoolLpInfo } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt } from 'ethers';
 
+import { getAmmProtocol } from '../../../../../utilities/amm';
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common/utils';
-import { pushPageViewEvent } from './analytics';
+import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common';
+import { pushLeverageChangeEvent, pushPageViewEvent } from './analytics';
 import { initialState } from './state';
 import {
   approveUnderlyingTokenThunk,
@@ -14,8 +15,8 @@ import {
   getPoolLpInfoThunk,
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
-  setSignerAndPositionsForAMMThunk,
-  SetSignerAndPositionsForAMMThunkSuccess,
+  setSignerAndGetPositionsForLPThunk,
+  SetSignerAndGetPositionsForLPThunkSuccess,
 } from './thunks';
 import {
   getProspectiveLpNotional,
@@ -115,16 +116,23 @@ const slice = createSlice({
         editMode?: 'add' | 'remove';
       }>,
     ) => {
-      if (value !== undefined) {
-        state.userInput.notionalAmount.value = value;
-      }
+      if (value !== undefined || editMode !== undefined) {
+        if (value !== undefined) {
+          state.userInput.notionalAmount.value = value;
+        }
 
-      if (editMode !== undefined) {
-        state.userInput.notionalAmount.editMode = editMode;
-      }
+        if (editMode !== undefined) {
+          state.userInput.notionalAmount.editMode = editMode;
+        }
 
-      updateLeverage(state);
-      validateUserInputAndUpdateSubmitButton(state);
+        updateLeverage(state);
+        validateUserInputAndUpdateSubmitButton(state);
+      }
+    },
+    resetInfoPostLpAction: (state) => {
+      state.prospectiveLp.infoPostLp = {
+        ...initialState.prospectiveLp.infoPostLp,
+      };
     },
     setMarginAmountAction: (
       state,
@@ -149,9 +157,11 @@ const slice = createSlice({
     setLeverageAction: (
       state,
       {
-        payload: { value },
+        payload: { value, account, changeType },
       }: PayloadAction<{
         value: number;
+        account: string;
+        changeType: 'button' | 'input';
       }>,
     ) => {
       if (getProspectiveLpNotional(state) === 0 || isNaN(value) || value === 0) {
@@ -162,6 +172,14 @@ const slice = createSlice({
       }
 
       state.userInput.leverage = value;
+      if (!isNaN(value)) {
+        pushLeverageChangeEvent({
+          leverage: value,
+          account,
+          pool: getAmmProtocol(state.amm as AMM),
+          changeType,
+        });
+      }
       state.userInput.marginAmount.value = stringToBigFloat(
         formLimitAndFormatNumber(getProspectiveLpNotional(state) / value, 'ceil'),
       );
@@ -321,7 +339,7 @@ const slice = createSlice({
         updateLeverageOptionsAfterGetInfoPostLp(state);
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(setSignerAndPositionsForAMMThunk.pending, (state) => {
+      .addCase(setSignerAndGetPositionsForLPThunk.pending, (state) => {
         if (state.amm === null) {
           return;
         }
@@ -329,7 +347,7 @@ const slice = createSlice({
         state.positions.status = 'pending';
         state.amm.signer = null;
       })
-      .addCase(setSignerAndPositionsForAMMThunk.rejected, (state) => {
+      .addCase(setSignerAndGetPositionsForLPThunk.rejected, (state) => {
         if (state.amm === null) {
           return;
         }
@@ -337,13 +355,13 @@ const slice = createSlice({
         state.positions.status = 'error';
         state.amm.signer = null;
       })
-      .addCase(setSignerAndPositionsForAMMThunk.fulfilled, (state, { payload }) => {
+      .addCase(setSignerAndGetPositionsForLPThunk.fulfilled, (state, { payload }) => {
         if (state.amm === null) {
           return;
         }
-        state.positions.value = (payload as SetSignerAndPositionsForAMMThunkSuccess).positions;
+        state.positions.value = (payload as SetSignerAndGetPositionsForLPThunkSuccess).positions;
         state.positions.status = 'success';
-        state.amm.signer = (payload as SetSignerAndPositionsForAMMThunkSuccess).signer;
+        state.amm.signer = (payload as SetSignerAndGetPositionsForLPThunkSuccess).signer;
         validateUserInputAndUpdateSubmitButton(state);
       })
       .addCase(confirmLpThunk.pending, (state) => {
@@ -403,5 +421,6 @@ export const {
   openMarginUpdateConfirmationFlowAction,
   closeMarginUpdateConfirmationFlowAction,
   trackPageViewAction,
+  resetInfoPostLpAction,
 } = slice.actions;
 export const lpFormReducer = slice.reducer;

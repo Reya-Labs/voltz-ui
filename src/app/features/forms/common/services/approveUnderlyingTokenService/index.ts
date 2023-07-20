@@ -17,19 +17,17 @@ export const approveUnderlyingTokenService = async ({
     return 0;
   }
   if (isV2AMM(amm)) {
-    await approvePeripheryV2({
+    return await approvePeripheryV2({
       signer,
       ammId: amm.id,
     });
-    // todo: FB remove 0 after SDKs are fixed
-    return 0;
   } else {
     if (isV1StatelessEnabled()) {
       await approvePeriphery({
         signer,
         ammId: amm.id,
       });
-      // todo: FB remove 0 after SDKs are fixed
+      // TODO: FB remove 0 after SDKs are fixed
       return 0;
     } else {
       return await amm.approveUnderlyingTokenForPeripheryV1();

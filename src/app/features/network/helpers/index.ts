@@ -5,3 +5,4 @@ export * from './get-chains-from-process-env';
 export * from './get-default-chain-id';
 export * from './is-arbitrum-chain';
 export * from './is-avalanche-chain';
+export * from './is-testnet';

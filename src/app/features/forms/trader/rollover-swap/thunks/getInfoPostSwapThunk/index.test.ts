@@ -1,4 +1,4 @@
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
 import { isUserInputNotionalError } from '../../../../common';
 import { getProspectiveSwapMode, getProspectiveSwapNotional } from '../../utils';
 import { getInfoPostSwapThunkHandler } from './index';
@@ -12,7 +12,7 @@ jest.mock('../../utils', () => ({
   getProspectiveSwapNotional: jest.fn(),
   getProspectiveSwapMargin: jest.fn(),
 }));
-jest.mock('../../../../../helpers/reject-thunk-with-error', () => ({
+jest.mock('../../../../../helpers', () => ({
   rejectThunkWithError: jest.fn(),
 }));
 
@@ -75,15 +75,11 @@ describe('getInfoPostSwapThunkHandler', () => {
       notionalAmount: 0,
       swapMode: undefined,
       infoPostSwap: {
-        availableNotional: 0,
         marginRequirement: 0,
         maxMarginWithdrawable: 0,
         averageFixedRate: 0,
-        fixedTokenDeltaBalance: 0,
         variableTokenDeltaBalance: 0,
-        fixedTokenDeltaUnbalanced: 0,
         fee: 0,
-        slippage: 0,
         gasFee: {
           value: 0,
           token: 'ETH',
@@ -102,11 +98,9 @@ describe('getInfoPostSwapThunkHandler', () => {
       marginRequirement: 0.05,
       maxMarginWithdrawable: 1,
       averageFixedRate: 0.1,
-      fixedTokenDeltaBalance: 1,
       variableTokenDeltaBalance: 2,
       fixedTokenDeltaUnbalanced: 3,
       fee: 0.01,
-      slippage: 0.02,
       gasFeeETH: 0.001,
     };
     const amm = {
@@ -136,11 +130,9 @@ describe('getInfoPostSwapThunkHandler', () => {
         marginRequirement: 0.04,
         maxMarginWithdrawable: 1,
         averageFixedRate: 0.1,
-        fixedTokenDeltaBalance: 1,
         variableTokenDeltaBalance: 2,
         fixedTokenDeltaUnbalanced: 3,
         fee: 0.01,
-        slippage: 0.02,
         gasFeeETH: 0.001,
       },
       earlyReturn: false,

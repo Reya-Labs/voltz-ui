@@ -6,15 +6,14 @@ import { InfoPostLp } from '@voltz-protocol/v1-sdk';
 import { isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
-import { isUserInputNotionalError } from '../../../../common';
-import { initialState } from '../../state';
+import { rejectThunkWithError } from '../../../../../helpers';
 import {
   getProspectiveLpFixedHigh,
   getProspectiveLpFixedLow,
-  getProspectiveLpMargin,
-  getProspectiveLpNotional,
-} from '../../utils';
+  isUserInputNotionalError,
+} from '../../../../common';
+import { initialState } from '../../state';
+import { getProspectiveLpMargin, getProspectiveLpNotional } from '../../utils';
 
 export const getInfoPostLpThunk = createAsyncThunk<
   Awaited<

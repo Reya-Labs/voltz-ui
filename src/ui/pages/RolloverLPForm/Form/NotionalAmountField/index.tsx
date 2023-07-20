@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   getInfoPostLpThunk,
+  resetInfoPostLpAction,
+  selectIsGetInfoPostLpLoading,
   selectRolloverLpFormAMM,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
@@ -16,9 +18,11 @@ import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 type NotionalAmountProps = {};
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
+  const isGetInfoPostLpLoading = useAppSelector(selectIsGetInfoPostLpLoading);
   const [localNotional, setLocalNotional] = useState<string | null>(
     notionalAmount.value.toString(),
   );
+  const [getInfoPostLpNotional, setGetInfoPostLpNotional] = useState<string | null>(null);
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const dispatch = useAppDispatch();
@@ -28,7 +32,13 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     setLocalNotional(notionalAmount.value.toString());
   }, [notionalAmount.value]);
 
-  const debouncedGetInfoPostLp = useMemo(
+  const getInfoPostLp = useCallback(() => {
+    setGetInfoPostLpNotional(localNotional);
+    dispatch(resetInfoPostLpAction());
+    void dispatch(getInfoPostLpThunk());
+  }, [localNotional, dispatch]);
+
+  const debouncedSetNotionalAmount = useMemo(
     () =>
       debounce((value: number | null | undefined) => {
         dispatch(
@@ -36,26 +46,38 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
             value: value === undefined ? undefined : value ?? 0,
           }),
         );
-        void dispatch(getInfoPostLpThunk());
       }, 300),
     [dispatch],
   );
 
   const handleOnNotionalChange = useCallback(
     (value?: string) => {
+      const valueAsNumber = value !== undefined && value !== null ? stringToBigFloat(value) : null;
+      if (notionalAmount.value === valueAsNumber) {
+        return;
+      }
       setLocalNotional(value ?? null);
-
-      const valueAsNumber = value !== undefined ? stringToBigFloat(value) : null;
-      debouncedGetInfoPostLp(valueAsNumber);
+      debouncedSetNotionalAmount(valueAsNumber);
     },
-    [debouncedGetInfoPostLp],
+    [notionalAmount.value, debouncedSetNotionalAmount],
   );
+
+  const handleOnNotionalBlur = useCallback(() => {
+    if (
+      getInfoPostLpNotional !== null &&
+      localNotional !== null &&
+      getInfoPostLpNotional === localNotional
+    ) {
+      return;
+    }
+    getInfoPostLp();
+  }, [getInfoPostLpNotional, localNotional, getInfoPostLp]);
 
   // Stop the invocation of the debounced function
   // after unmounting
   useEffect(() => {
     return () => {
-      debouncedGetInfoPostLp.cancel();
+      debouncedSetNotionalAmount.cancel();
     };
   }, []);
 
@@ -79,6 +101,8 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     <NewNotionalAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
+      disabled={isGetInfoPostLpLoading}
+      handleOnNotionalBlur={handleOnNotionalBlur}
       handleOnNotionalChange={handleOnNotionalChange}
       labelTypographyToken={labelTypographyToken}
       localNotional={localNotional}

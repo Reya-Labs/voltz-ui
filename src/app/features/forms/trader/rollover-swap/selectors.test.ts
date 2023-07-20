@@ -1,6 +1,6 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatNumber, stringToBigFloat } from '../../../../../utilities/number';
+import { formatNumber } from '../../../../../utilities/number';
 import { formCompactFormat, formCompactFormatToParts, formFormatNumber } from '../../common/utils';
 import {
   selectAMMMaturityFormatted,
@@ -37,12 +37,12 @@ import {
   selectUserInputMarginInfo,
   selectUserInputMode,
   selectUserInputNotionalInfo,
-  selectVariableRate24hDelta,
   selectVariableRateInfo,
   selectVariableRateValueFormatted,
   selectWalletBalance,
 } from './selectors';
 import {
+  getAvailableMargin,
   getAvailableNotional,
   getNewPositionFixedRate,
   getProspectiveSwapMargin,
@@ -149,60 +149,28 @@ describe('swap-form.selectors', () => {
       jest.clearAllMocks();
     });
 
-    it('returns "--" if wallet balance status is not "success"', () => {
+    it('returns "--" when getAvailableMargin returns null"', () => {
       const state = {
-        rolloverSwapForm: {
-          walletBalance: {
-            status: 'failure',
-            value: 0,
-          },
-        },
-      } as never;
-
-      expect(selectWalletBalance(state)).toEqual('--');
+        rolloverSwapForm: {},
+      };
+      (getAvailableMargin as jest.Mock).mockReturnValue(null);
+      const result = selectWalletBalance(state as never);
+      expect(getAvailableMargin).toHaveBeenCalledWith(state.rolloverSwapForm);
+      expect(result).toEqual('--');
     });
 
-    it('calls formCompactFormat with wallet balance value if status is "success"', () => {
+    it('calls formCompactFormat when getAvailableMargin returns value', () => {
       const state = {
-        rolloverSwapForm: {
-          walletBalance: {
-            status: 'success',
-            value: 1000,
-          },
-          previousPosition: {
-            settlementCashflow: 100,
-            margin: 200,
-            fees: 300,
-          },
-        },
-      } as never;
+        rolloverSwapForm: {},
+      };
+      (getAvailableMargin as jest.Mock).mockReturnValue(1600);
 
       // Call selectWalletBalance function
-      selectWalletBalance(state);
+      selectWalletBalance(state as never);
 
+      expect(getAvailableMargin).toHaveBeenCalledWith(state.rolloverSwapForm);
       // Assert that formCompactFormat is called with wallet balance value
       expect(formCompactFormat).toHaveBeenCalledWith(1600);
-    });
-
-    it('returns formatted wallet balance if status is "success"', () => {
-      const state = {
-        rolloverSwapForm: {
-          walletBalance: {
-            status: 'success',
-            value: 1000,
-          },
-          previousPosition: {
-            settlementCashflow: 100,
-            margin: 200,
-            fees: 300,
-          },
-        },
-      } as never;
-
-      // Mock return value of formCompactFormat
-      (formCompactFormat as jest.Mock).mockReturnValue('$1,600');
-
-      expect(selectWalletBalance(state)).toEqual('$1,600');
     });
   });
 
@@ -1031,54 +999,6 @@ describe('swap-form.selectors', () => {
       const result = selectRolloverConfirmationFlowEtherscanLink(state as never);
       expect(getViewOnEtherScanLink).toHaveBeenCalledWith(1, '0xabc123');
       expect(result).toEqual('https://etherscan.io/tx/0xabc123');
-    });
-  });
-
-  describe('selectVariableRate24hDelta', () => {
-    beforeEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it('calls formatNumber and stringToBigFloat with the correct arguments', () => {
-      const state = {
-        rolloverSwapForm: {
-          amm: {
-            variableApy: 150,
-            variableApy24Ago: 100,
-          },
-        },
-      };
-      (formatNumber as jest.Mock).mockReturnValueOnce('50');
-      selectVariableRate24hDelta(state as never);
-
-      expect(formatNumber).toHaveBeenCalledWith(50, 0, 3);
-      expect(stringToBigFloat).toHaveBeenCalledWith('50');
-    });
-
-    it('returns undefined if amm is null', () => {
-      const state = {
-        rolloverSwapForm: {
-          amm: null,
-        },
-      };
-
-      expect(selectVariableRate24hDelta(state as never)).toBeUndefined();
-    });
-
-    it('returns the correct value', () => {
-      (formatNumber as jest.Mock).mockReturnValueOnce('50');
-      (stringToBigFloat as jest.Mock).mockReturnValueOnce(50);
-
-      const state = {
-        rolloverSwapForm: {
-          amm: {
-            variableApy: 150,
-            variableApy24Ago: 100,
-          },
-        },
-      };
-
-      expect(selectVariableRate24hDelta(state as never)).toEqual(50);
     });
   });
 

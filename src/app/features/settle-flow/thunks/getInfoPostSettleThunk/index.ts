@@ -5,7 +5,7 @@ import { InfoPostSettlePosition } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { RootState } from '../../../../store';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 
 export const getInfoPostSettlePositionThunkHandler: AsyncThunkPayloadCreator<
   Awaited<
@@ -17,7 +17,7 @@ export const getInfoPostSettlePositionThunkHandler: AsyncThunkPayloadCreator<
   { state: RootState }
 > = async ({ signer }, thunkAPI) => {
   const state = thunkAPI.getState();
-  const position = state.settleFlow.positionDetails;
+  const position = state.settleFlow.position;
   if (!position || !signer) {
     return {};
   }

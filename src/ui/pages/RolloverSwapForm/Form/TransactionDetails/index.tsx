@@ -3,8 +3,7 @@ import React from 'react';
 
 import {
   selectAMMTokenFormatted,
-  selectGasFeeFormatted,
-  selectGasFeeToken,
+  selectGasInfoFormatted,
   selectProspectiveSwapFeeFormatted,
   selectSlippageFormatted,
 } from '../../../../../app/features/forms/trader/rollover-swap';
@@ -18,8 +17,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
   const token = useAppSelector(selectAMMTokenFormatted);
   const slippageFormatted = useAppSelector(selectSlippageFormatted);
   const feeFormatted = useAppSelector(selectProspectiveSwapFeeFormatted);
-  const gasFeeFormatted = useAppSelector(selectGasFeeFormatted);
-  const gasFeeToken = useAppSelector(selectGasFeeToken);
+  const { gasFeeFormatted, gasTokenFormatted } = useAppSelector(selectGasInfoFormatted);
 
   return (
     <React.Fragment>
@@ -54,7 +52,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </IconTextWrapper>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={` ${gasFeeToken}`}
+          token={` ${gasTokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={gasFeeFormatted}
         />

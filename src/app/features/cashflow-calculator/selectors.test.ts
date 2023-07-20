@@ -1,7 +1,7 @@
 import {
   selectAdditionalCashflow,
+  selectAMMTokenFormatted,
   selectCashflowAMM,
-  selectCashflowAMMTokenFormatted,
   selectCashflowInfoStatus,
   selectEstimatedApy,
   selectTotalCashflow,
@@ -29,7 +29,7 @@ describe('cashflow-calculator.selectors', () => {
     });
   });
 
-  describe('selectCashflowAMMTokenFormatted', () => {
+  describe('selectAMMTokenFormatted', () => {
     const mockState = {
       cashflowCalculator: {
         aMM: {
@@ -42,7 +42,7 @@ describe('cashflow-calculator.selectors', () => {
     } as never;
 
     it('returns the formatted AMM token name when aMM is defined', () => {
-      const result = selectCashflowAMMTokenFormatted(mockState);
+      const result = selectAMMTokenFormatted(mockState);
       expect(result).toBe(' USDC');
     });
 
@@ -53,7 +53,7 @@ describe('cashflow-calculator.selectors', () => {
         },
       } as never;
 
-      const result = selectCashflowAMMTokenFormatted(emptyState);
+      const result = selectAMMTokenFormatted(emptyState);
 
       expect(result).toBe('');
     });

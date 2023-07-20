@@ -75,7 +75,7 @@ export const VoyageBadge: React.FunctionComponent<VoyageBadgeProps> = ({
     <VoyageBadgeBox>
       <VoyagePillBox>
         <Pill colorToken="rainbow" typographyToken="primaryBodySmallRegular" variant="compact">
-          Voltz v2
+          Voltz Protocol v2
         </Pill>
       </VoyagePillBox>
       <VoyageBadgeImageBox completed={completed}>
@@ -95,8 +95,8 @@ export const VoyageBadge: React.FunctionComponent<VoyageBadgeProps> = ({
         </VoyageBadgeHeaderBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           {completed
-            ? 'Congratulations, you earned the Voltz v2 Voyage Badge. This will have a number of unique benefits, including early access to Voltz v2.'
-            : 'Keep trading and LPing to achieve Voltz v2 Status'}
+            ? 'Congratulations, you earned the Voltz Protocol v2 Voyage Badge. This will have a number of unique benefits, including early access to Voltz Protocol v2.'
+            : 'Keep trading and LPing to achieve Voltz Protocol v2 Status'}
         </Typography>
       </VoyageBadgeTextBox>
       <VoyageButtonBox>

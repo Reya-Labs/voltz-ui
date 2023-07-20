@@ -17,5 +17,5 @@ export const ChainIcon: React.FunctionComponent<{ chainId: SupportedChainId }> =
   if (!ChainIconSvg) {
     return null;
   }
-  return <ChainIconSvg />;
+  return <ChainIconSvg data-testid={`ChainIconSvg-${chainId}`} />;
 };

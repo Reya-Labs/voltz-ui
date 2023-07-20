@@ -1,7 +1,7 @@
 import { HorizontalLine, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { formFormatNumber } from '../../../../../../../../app/features/forms/common/utils';
+import { formFormatNumber } from '../../../../../../../../app/features/forms/common';
 import { InRange } from '../InRange';
 import { OutOfRange } from '../OutOfRange';
 import { LPStatusDetailsBox, RowBox, RowsBox } from './LPStatusDetails.styled';

@@ -211,7 +211,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
             </ButtonStyled>
           </RightBox>
         </PoolEntryBox>
-        {isV2 ? <V2EntryInformation poolCap={MAX_POOL_CAP} /> : null}
+        {isV2 ? <V2EntryInformation chainId={poolChainId} poolCap={MAX_POOL_CAP} /> : null}
       </PoolEntryBoxWrapper>
     );
   },

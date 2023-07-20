@@ -120,13 +120,13 @@ export const useRolloverLPFormAMM = (): UseRolloverLPFormAMMResult => {
   }, [previousAMM?.id, aMM?.id, dispatch, aMMsLoading, error, signer]);
 
   useEffect(() => {
-    if (!aMM || !aMM.signer || !chainId) {
+    if (!aMM || !aMM.signer || !chainId || aMMsLoading) {
       return;
     }
 
     void dispatch(getWalletBalanceThunk());
     void dispatch(getUnderlyingTokenAllowanceThunk({ chainId }));
-  }, [dispatch, aMM, aMM?.signer, chainId]);
+  }, [dispatch, aMM, aMMsLoading, aMM?.signer, chainId]);
 
   return {
     aMM,

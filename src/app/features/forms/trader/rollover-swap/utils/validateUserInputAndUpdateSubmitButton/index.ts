@@ -1,10 +1,9 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { isUserInputMarginError } from '../../../../common';
+import { isUserInputMarginError, isUserInputNotionalError } from '../../../../common';
 import { SliceState } from '../../state';
 import { getAvailableMargin } from '../getAvailableMargin';
 import { getProspectiveSwapMargin } from '../getProspectiveSwapMargin';
-import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 import { validateUserInput } from '../validateUserInput';
 
@@ -16,16 +15,13 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   const userInputMarginAmount = state.userInput.marginAmount.value;
   const fee = state.prospectiveSwap.infoPostSwap.value.fee;
   const marginError = isUserInputMarginError(state);
+  const notionalError = isUserInputNotionalError(state);
 
   const isProspectiveSwapNotionalValid = prospectiveSwapNotional > 0;
   const isProspectiveSwapMarginValid = prospectiveSwapMargin > 0;
   const isProspectiveSwapNotionalMarginValid =
     prospectiveSwapNotional !== 0 || prospectiveSwapMargin !== 0;
-  const isInfoPostSwapLoaded =
-    state.prospectiveSwap.infoPostSwap.status === 'success' &&
-    state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance *
-      (getProspectiveSwapMode(state) === 'fixed' ? -1 : 1) ===
-      prospectiveSwapNotional;
+  const isInfoPostSwapLoaded = state.prospectiveSwap.infoPostSwap.status === 'success';
   const isWalletBalanceLoaded = state.walletBalance.status === 'success';
   const isWalletTokenAllowanceLoaded = state.walletTokenAllowance.status === 'success';
 
@@ -57,7 +53,11 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       return;
     }
 
-    if (isInfoPostSwapLoaded && walletTokenAllowance < userInputMarginAmount + fee) {
+    if (
+      !notionalError &&
+      isInfoPostSwapLoaded &&
+      walletTokenAllowance < userInputMarginAmount + fee
+    ) {
       state.submitButton = {
         state: 'approve',
         disabled: false,
@@ -84,7 +84,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       return;
     }
 
-    if (isInfoPostSwapLoaded && userInputMarginAmount + fee > allowedBalance) {
+    if (!notionalError && isInfoPostSwapLoaded && userInputMarginAmount + fee > allowedBalance) {
       state.submitButton = {
         state: 'not-enough-balance',
         disabled: true,
@@ -98,6 +98,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   }
 
   if (
+    !notionalError &&
     !marginError &&
     isProspectiveSwapNotionalValid &&
     isProspectiveSwapMarginValid &&

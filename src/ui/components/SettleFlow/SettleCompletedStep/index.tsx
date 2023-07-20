@@ -1,4 +1,4 @@
-import { Button, Confetti, ExternalLink, Typography } from 'brokoli-ui';
+import { Button, Confetti, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
 import {
@@ -6,6 +6,7 @@ import {
   selectConfirmationFlowEtherscanLink,
 } from '../../../../app/features/settle-flow';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { ExplorerLink } from '../../ExplorerLink';
 import { SettleDetails } from '../SettleDetails';
 import { SettleCompletedStepBox } from './SettleCompletedStep.styled';
 
@@ -26,13 +27,7 @@ export const SettleCompletedStep: React.FunctionComponent = () => {
       </Confetti>
       <SettleDetails />
       <Confetti>
-        <ExternalLink
-          colorToken="lavenderWeb"
-          href={etherscanLink}
-          typographyToken="primaryBodyXSmallRegular"
-        >
-          Open transaction on Etherscan
-        </ExternalLink>
+        <ExplorerLink link={etherscanLink} />
       </Confetti>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
         Your position will be settled in few minutes. You can track it from your your portfolio.

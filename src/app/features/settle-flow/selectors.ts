@@ -1,19 +1,15 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatTimestamp } from '../../../utilities/date';
-import { formatNumber } from '../../../utilities/number';
 import { RootState } from '../../store';
-import { formCompactFormatToParts, formFormatNumber } from '../forms/common/utils';
+import { formCompactFormatToParts, formFormatNumber, getGasInfoFormatted } from '../forms/common';
+import { formatPoolMaturity, formatUnderlyingTokenName } from '../helpers';
 
 export const selectSettlePosition = (state: RootState) => {
-  return state.settleFlow.positionDetails;
+  return state.settleFlow.position;
 };
 export const selectSettleVariant = (state: RootState) => {
   if (state.settleFlow.position) {
-    return state.settleFlow.position.positionType === 3 ? 'lp' : 'trader';
-  }
-  if (state.settleFlow.positionDetails) {
-    return state.settleFlow.positionDetails.type === 'LP' ? 'lp' : 'trader';
+    return state.settleFlow.position.type === 'LP' ? 'lp' : 'trader';
   }
   return null;
 };
@@ -22,37 +18,21 @@ export const selectSettleStep = (state: RootState) => state.settleFlow.step;
 export const selectConfirmationFlowEtherscanLink = (state: RootState) => {
   return getViewOnEtherScanLink(state.network.chainId, state.settleFlow.txHash || '');
 };
-export const selectSettleGasFee = (state: RootState) => {
+
+export const selectGasInfoFormatted = (state: RootState) => {
   const infoPostSettlePosition = state.settleFlow.infoPostSettlePosition;
-  if (infoPostSettlePosition.status !== 'success') {
-    return '--';
-  }
-  return formatNumber(infoPostSettlePosition.value.gasFee.value, 2, 4);
-};
-export const selectSettleGasFeeToken = (state: RootState) => {
-  const infoPostSettlePosition = state.settleFlow.infoPostSettlePosition;
-  if (infoPostSettlePosition.status !== 'success') {
-    return '--';
-  }
-  return infoPostSettlePosition.value.gasFee.token;
+  return getGasInfoFormatted({
+    status: infoPostSettlePosition.status,
+    gasDetails: infoPostSettlePosition.value.gasFee,
+  });
 };
 
-// todo: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.pool;
-  if (!aMM) {
-    return '';
-  }
-  return formatTimestamp(aMM.termEndTimestampInMS);
+  return formatPoolMaturity(state.settleFlow.position?.pool);
 };
 
-// todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.pool;
-  if (!aMM) {
-    return '';
-  }
-  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+  return formatUnderlyingTokenName(state.settleFlow.position?.pool);
 };
 
 export const selectFixedLower = (state: RootState) => {
@@ -153,33 +133,28 @@ export const selectCompactRealizedPnL = (state: RootState) => {
 };
 
 export const selectAMMMarket = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.pool;
-  if (!aMM) {
+  const pool = state.settleFlow.position?.pool;
+  if (!pool) {
     return '';
   }
-  return aMM.market;
+  return pool.market;
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectAMMToken = (state: RootState) => {
-  const aMM = state.settleFlow.positionDetails?.pool;
-  if (!aMM) {
+  const pool = state.settleFlow.position?.pool;
+  if (!pool) {
     return '';
   }
-  return aMM.underlyingToken.name;
+  return pool.underlyingToken.name;
 };
 
 export const selectIsGLP28June = (state: RootState): boolean => {
-  const aMM = state.settleFlow.positionDetails?.pool;
+  const pool = state.settleFlow.position?.pool;
 
-  if (!aMM) {
+  if (!pool) {
     return false;
   }
 
-  const marginEngineAddress = aMM.marginEngineAddress;
-
-  const isGLP28Jun2023: boolean =
-    marginEngineAddress === '0xbe958ba49be73d3020cb62e512619da953a2bab1';
-
-  return isGLP28Jun2023;
+  return pool.flags.isGLP28Jun2023;
 };

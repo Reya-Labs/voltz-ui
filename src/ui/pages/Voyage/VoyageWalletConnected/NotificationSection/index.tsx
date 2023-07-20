@@ -20,7 +20,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
       <NotificationBox>
         <ProfileNotification
           pillColorToken="orangeYellow"
-          pillText="Voltz v2 Voyage"
+          pillText="Voltz Protocol v2 Voyage"
           text="Time to go on a trip"
         />
       </NotificationBox>

@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 
 import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../../utilities/getInfuraKey';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 import { OptimiserInfo } from '../../types';
 
 export const initialiseOptimisersThunk = createAsyncThunk<
@@ -13,7 +13,7 @@ export const initialiseOptimisersThunk = createAsyncThunk<
     signer: ethers.Signer | null;
     chainId: SupportedChainId;
   }
->('lp-optimisers/getProducts', async ({ chainId, signer }, thunkAPI) => {
+>('lp-optimisers/initialiseOptimisersThunk', async ({ chainId, signer }, thunkAPI) => {
   try {
     const mappedRouters: OptimiserInfo[] = await getAllMellowProducts({
       signer,

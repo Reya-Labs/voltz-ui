@@ -7,6 +7,7 @@ import {
   ChartFiltersBox,
   Underline,
 } from './ChartFilters.styled';
+
 export type ChartFiltersProps = {
   activeTimeRangeId: string;
   activeModeId: string;
@@ -30,29 +31,44 @@ export const ChartFilters: React.FunctionComponent<ChartFiltersProps> = ({
   disabled,
 }) => (
   <ChartFiltersBox data-testid="ChartFilters-ChartFiltersBox">
-    {filterOptions.map(({ id, isMode, label, underlineColorToken }) => (
-      <ChartFilterButtonBox
-        key={`${id}_${label}`}
-        active={id === activeModeId || id === activeTimeRangeId}
-        disabled={disabled}
-        onClick={() => {
-          if (disabled) {
-            return;
-          }
-          if (isMode) {
-            onModeChange(id);
-          } else {
-            onTimeRangeChange(id);
-          }
-        }}
-      >
-        <ChartFilterButton disabled={disabled}>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-            {label}
-          </Typography>
-        </ChartFilterButton>
-        {underlineColorToken ? <Underline color={getColorFromToken(underlineColorToken)} /> : null}
-      </ChartFilterButtonBox>
-    ))}
+    {filterOptions.map(({ id, isMode, label, underlineColorToken }) => {
+      const active = id === activeModeId || id === activeTimeRangeId;
+      return (
+        <ChartFilterButtonBox
+          key={`${id}_${label}`}
+          active={active}
+          data-testid={`ChartFilters-ChartFilterButtonBox-${disabled ? 'disabled' : 'enabled'}-${
+            active ? 'active' : 'notactive'
+          }`}
+          disabled={disabled}
+          onClick={() => {
+            if (disabled) {
+              return;
+            }
+            if (isMode) {
+              onModeChange(id);
+            } else {
+              onTimeRangeChange(id);
+            }
+          }}
+        >
+          <ChartFilterButton disabled={disabled}>
+            <Typography
+              colorToken="lavenderWeb"
+              data-testid="ChartFilterButtonBox-TypographyLabel"
+              typographyToken="primaryBodySmallRegular"
+            >
+              {label}
+            </Typography>
+          </ChartFilterButton>
+          {underlineColorToken ? (
+            <Underline
+              color={getColorFromToken(underlineColorToken)}
+              data-testid="ChartFilterButtonBox-Underline"
+            />
+          ) : null}
+        </ChartFilterButtonBox>
+      );
+    })}
   </ChartFiltersBox>
 );

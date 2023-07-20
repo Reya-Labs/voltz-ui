@@ -3,7 +3,7 @@ import { getTraderPositionByPool, Position, SupportedChainId } from '@voltz-prot
 import { providers } from 'ethers';
 
 import { RootState } from '../../../../../../store';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
 import { pushPageViewEvent } from '../../analytics';
 
 export type SetSignerAndPositionForAMMThunkSuccess = {

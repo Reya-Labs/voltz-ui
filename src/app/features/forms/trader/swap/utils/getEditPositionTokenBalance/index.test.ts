@@ -6,7 +6,6 @@ describe('getEditPositionTokenBalance', () => {
       position: {
         status: 'success',
         value: {
-          fixedTokenBalance: 100,
           variableTokenBalance: 200,
         },
       },
@@ -14,7 +13,6 @@ describe('getEditPositionTokenBalance', () => {
         infoPostSwap: {
           status: 'success',
           value: {
-            fixedTokenDeltaBalance: -50,
             variableTokenDeltaBalance: 100,
           },
         },
@@ -22,7 +20,6 @@ describe('getEditPositionTokenBalance', () => {
     } as never;
 
     const expectedTokenBalance = {
-      fixedTokenBalance: 50,
       variableTokenBalance: 300,
     };
 
@@ -41,7 +38,6 @@ describe('getEditPositionTokenBalance', () => {
         infoPostSwap: {
           status: 'success',
           value: {
-            fixedTokenDeltaBalance: -50,
             variableTokenDeltaBalance: 100,
           },
         },
@@ -49,7 +45,6 @@ describe('getEditPositionTokenBalance', () => {
     } as never;
 
     const expectedTokenBalance = {
-      fixedTokenBalance: -50,
       variableTokenBalance: 100,
     };
 
@@ -63,7 +58,6 @@ describe('getEditPositionTokenBalance', () => {
       position: {
         status: 'success',
         value: {
-          fixedTokenBalance: 100,
           variableTokenBalance: 200,
         },
       },
@@ -76,7 +70,6 @@ describe('getEditPositionTokenBalance', () => {
     } as never;
 
     const expectedTokenBalance = {
-      fixedTokenBalance: 100,
       variableTokenBalance: 200,
     };
 
@@ -100,7 +93,6 @@ describe('getEditPositionTokenBalance', () => {
     } as never;
 
     const expectedTokenBalance = {
-      fixedTokenBalance: 0,
       variableTokenBalance: 0,
     };
 

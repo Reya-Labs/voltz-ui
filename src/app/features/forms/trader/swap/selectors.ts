@@ -1,14 +1,17 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatTimestamp } from '../../../../../utilities/date';
-import { formatNumber, stringToBigFloat } from '../../../../../utilities/number';
+import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
+import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
 import {
   formCompactFormat,
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
-} from '../../common/utils';
+  getGasInfoFormatted,
+  getVariableRate24hDelta,
+  isLeverageHidden,
+} from '../../common';
 import {
   getAvailableMargin,
   getAvailableNotional,
@@ -50,19 +53,11 @@ export const selectSwapFormMode = (state: RootState): 'new' | 'edit' => {
 };
 
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = selectSwapFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+  return formatUnderlyingTokenName(selectSwapFormAMM(state));
 };
 
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = selectSwapFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return formatTimestamp(aMM.termEndTimestampInMS);
+  return formatPoolMaturity(selectSwapFormAMM(state));
 };
 
 export const selectMarginAccountName = (state: RootState) => {
@@ -102,22 +97,12 @@ export const selectProspectiveSwapFeeFormatted = (state: RootState) => {
   return '--';
 };
 
-export const selectGasFeeToken = (state: RootState) => {
+export const selectGasInfoFormatted = (state: RootState) => {
   const infoPostSwap = state.swapForm.prospectiveSwap.infoPostSwap;
-  if (infoPostSwap.status === 'success') {
-    return infoPostSwap.value.gasFee.token;
-  }
-
-  return '--';
-};
-
-export const selectGasFeeFormatted = (state: RootState) => {
-  const infoPostSwap = state.swapForm.prospectiveSwap.infoPostSwap;
-  if (infoPostSwap.status === 'success') {
-    return formatNumber(infoPostSwap.value.gasFee.value, 2, 4);
-  }
-
-  return '--';
+  return getGasInfoFormatted({
+    status: infoPostSwap.status,
+    gasDetails: infoPostSwap.value.gasFee,
+  });
 };
 
 export const selectLeverage = (state: RootState) => state.swapForm.userInput.leverage;
@@ -318,13 +303,7 @@ export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState
 };
 
 export const selectVariableRate24hDelta = (state: RootState) => {
-  if (!state.swapForm.amm) {
-    return undefined;
-  }
-
-  return stringToBigFloat(
-    formatNumber(state.swapForm.amm.variableApy - state.swapForm.amm.variableApy24Ago, 0, 3),
-  );
+  return getVariableRate24hDelta(state.swapForm.amm);
 };
 
 export const selectSubmitButtonText = (state: RootState) => {
@@ -348,6 +327,10 @@ export const selectSubmitButtonText = (state: RootState) => {
 
 export const selectIsLeverageDisabled = (state: RootState) => {
   return getProspectiveSwapNotional(state.swapForm) === 0;
+};
+
+export const selectIsLeverageHidden = (state: RootState) => {
+  return isLeverageHidden(state.swapForm.amm);
 };
 
 export const selectShowLeverageNotification = (state: RootState) =>

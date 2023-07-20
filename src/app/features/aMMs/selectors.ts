@@ -1,17 +1,21 @@
-import { AMM, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { AMM } from '@voltz-protocol/v1-sdk';
 
 import { MarketTokenInformationProps } from '../../../ui/components/MarketTokenInformation';
-import { generateAmmIdForRoute, generatePoolId } from '../../../utilities/amm';
+import { generateAmmIdForRoute, generatePoolId, isV2AMM } from '../../../utilities/amm';
 import { formatPOSIXTimestamp } from '../../../utilities/date';
+import { isOnlyV2PoolsPositions } from '../../../utilities/is-only-v2-pools-positions';
 import { getMaturityWindow } from '../../../utilities/maturityWindow';
 import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { selectChainId } from '../network';
 import { FILTER_CONFIG, SORT_CONFIG } from './constants';
-import { sortPools } from './helpers/sortPools';
+import { filterByChain, filterByTag, sortPools } from './helpers';
 import { PoolFilterId, PoolSortDirection, PoolSortId, PoolUI } from './types';
 
 export const selectAMMs = (state: RootState): AMM[] => {
+  if (isOnlyV2PoolsPositions()) {
+    return state.aMMs.aMMs.filter((amm) => isV2AMM(amm));
+  }
   return state.aMMs.aMMs;
 };
 
@@ -38,41 +42,8 @@ export const selectPools = (state: RootState): PoolUI[] => {
         Date.now().valueOf() + getMaturityWindow(amm.rateOracle.protocolId) <
         amm.endDateTime.toMillis(),
     )
-    .filter((amm) => {
-      if (
-        appliedFilters['ethereum'] &&
-        (amm.chainId === SupportedChainId.mainnet || amm.chainId === SupportedChainId.goerli)
-      ) {
-        return true;
-      }
-      if (
-        appliedFilters['arbitrum'] &&
-        (amm.chainId === SupportedChainId.arbitrum ||
-          amm.chainId === SupportedChainId.arbitrumGoerli)
-      ) {
-        return true;
-      }
-      if (
-        appliedFilters['avalanche'] &&
-        (amm.chainId === SupportedChainId.avalanche ||
-          amm.chainId === SupportedChainId.avalancheFuji)
-      ) {
-        return true;
-      }
-      return false;
-    })
-    .filter((amm) => {
-      if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
-        return true;
-      }
-      if (appliedFilters['v2'] && amm.market.tags.isV2) {
-        return true;
-      }
-      if (appliedFilters['yield'] && amm.market.tags.isYield) {
-        return true;
-      }
-      return false;
-    })
+    .filter((amm) => filterByChain(amm, appliedFilters))
+    .filter((amm) => filterByTag(amm, appliedFilters))
     .map((aMM) => {
       const isV2 = aMM.market.tags.isV2;
       const isAaveV3 = aMM.market.tags.isAaveV3;
@@ -173,6 +144,11 @@ export const selectPoolFilterOptions = (
   const filters = state.aMMs.filters;
   return Object.keys(filters)
     .filter((filterKey) => !FILTER_CONFIG[filterKey as PoolFilterId].hidden)
+    .sort(
+      (filterKeyA, filterKeyB) =>
+        FILTER_CONFIG[filterKeyA as PoolFilterId].sortOrder -
+        FILTER_CONFIG[filterKeyB as PoolFilterId].sortOrder,
+    )
     .map((filterKey) => ({
       id: filterKey as PoolFilterId,
       label: FILTER_CONFIG[filterKey as PoolFilterId].label,
@@ -197,10 +173,6 @@ export const selectPoolSortOptions = (
     direction: sortingDirection[sortKey as PoolSortId],
     disabled: SORT_CONFIG[sortKey as PoolSortId].disabled,
   }));
-};
-
-export const selectTraderAMMs = (state: RootState): AMM[] => {
-  return state.aMMs.aMMs.filter((amm) => amm.traderVisible);
 };
 
 export const selectAMMsLoadedState = (state: RootState) => {

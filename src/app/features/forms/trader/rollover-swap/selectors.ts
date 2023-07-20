@@ -1,15 +1,19 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatTimestamp } from '../../../../../utilities/date';
-import { formatNumber, stringToBigFloat } from '../../../../../utilities/number';
+import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
+import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
 import {
   formCompactFormat,
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
-} from '../../common/utils';
+  getGasInfoFormatted,
+  getVariableRate24hDelta,
+  isLeverageHidden,
+} from '../../common';
 import {
+  getAvailableMargin,
   getAvailableNotional,
   getNewPositionFixedRate,
   getPreviousPositionRealizedPnLFromFees,
@@ -28,20 +32,12 @@ export const selectRolloverSwapFormPreviousPosition = (state: RootState) =>
   state.rolloverSwapForm.previousPosition;
 
 export const selectWalletBalance = (state: RootState) => {
-  if (state.rolloverSwapForm.walletBalance.status !== 'success') {
+  const availableMargin = getAvailableMargin(state.rolloverSwapForm);
+  if (availableMargin === null) {
     return '--';
   }
 
-  if (state.rolloverSwapForm.previousPosition === null) {
-    return '--';
-  }
-
-  return formCompactFormat(
-    state.rolloverSwapForm.walletBalance.value +
-      state.rolloverSwapForm.previousPosition.settlementCashflow +
-      state.rolloverSwapForm.previousPosition.margin +
-      state.rolloverSwapForm.previousPosition.fees,
-  );
+  return formCompactFormat(availableMargin);
 };
 export const selectFixedRateInfo = (state: RootState) => state.rolloverSwapForm.amm?.fixedApr;
 export const selectVariableRateInfo = (state: RootState) => state.rolloverSwapForm.amm?.variableApy;
@@ -49,19 +45,11 @@ export const selectPoolSwapInfoStatus = (state: RootState) =>
   state.rolloverSwapForm.poolSwapInfo.status;
 
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = selectRolloverSwapFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+  return formatUnderlyingTokenName(selectRolloverSwapFormAMM(state));
 };
 
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = selectRolloverSwapFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return formatTimestamp(aMM.termEndTimestampInMS);
+  return formatPoolMaturity(selectRolloverSwapFormAMM(state));
 };
 
 export const selectMarginAccountName = (state: RootState) => {
@@ -248,17 +236,7 @@ export const selectRolloverConfirmationFlowEtherscanLink = (state: RootState) =>
 };
 
 export const selectVariableRate24hDelta = (state: RootState) => {
-  if (!state.rolloverSwapForm.amm) {
-    return undefined;
-  }
-
-  return stringToBigFloat(
-    formatNumber(
-      state.rolloverSwapForm.amm.variableApy - state.rolloverSwapForm.amm.variableApy24Ago,
-      0,
-      3,
-    ),
-  );
+  return getVariableRate24hDelta(state.rolloverSwapForm.amm);
 };
 
 export const selectSubmitButtonText = (state: RootState) => {
@@ -282,6 +260,10 @@ export const selectSubmitButtonText = (state: RootState) => {
 
 export const selectIsLeverageDisabled = (state: RootState) => {
   return getProspectiveSwapNotional(state.rolloverSwapForm) === 0;
+};
+
+export const selectIsLeverageHidden = (state: RootState) => {
+  return isLeverageHidden(state.rolloverSwapForm.amm);
 };
 
 export const selectShowLeverageNotification = (state: RootState) =>
@@ -345,22 +327,11 @@ export const selectPreviousPositionRealizedPnLFromSwapsFormatted = (state: RootS
 
   return realizedPnLFromSwaps === null ? '--' : formFormatNumber(realizedPnLFromSwaps);
 };
-// todo: FB same as in swap
-export const selectGasFeeToken = (state: RootState) => {
+
+export const selectGasInfoFormatted = (state: RootState) => {
   const infoPostSwap = state.rolloverSwapForm.prospectiveSwap.infoPostSwap;
-  if (infoPostSwap.status === 'success') {
-    return infoPostSwap.value.gasFee.token;
-  }
-
-  return '--';
-};
-
-// todo: FB same as in swap
-export const selectGasFeeFormatted = (state: RootState) => {
-  const infoPostSwap = state.rolloverSwapForm.prospectiveSwap.infoPostSwap;
-  if (infoPostSwap.status === 'success') {
-    return formatNumber(infoPostSwap.value.gasFee.value, 2, 4);
-  }
-
-  return '--';
+  return getGasInfoFormatted({
+    status: infoPostSwap.status,
+    gasDetails: infoPostSwap.value.gasFee,
+  });
 };

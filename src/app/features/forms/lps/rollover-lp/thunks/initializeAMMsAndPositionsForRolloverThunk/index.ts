@@ -10,7 +10,7 @@ import {
   generatePositionIdForRoute,
 } from '../../../../../../../utilities/amm';
 import { RootState } from '../../../../../../store';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
 import { pushPageViewEvent } from '../../analytics';
 
 export type InitializeAMMsAndPositionsForRolloverThunkSuccess = {
@@ -93,7 +93,6 @@ export const initializeAMMsAndPositionsForRolloverThunkHandler: AsyncThunkPayloa
   }
 };
 
-// TODO: FB same as in rollover-swap
 export const initializeAMMsAndPositionsForRolloverThunk = createAsyncThunk<
   Awaited<
     InitializeAMMsAndPositionsForRolloverThunkSuccess | ReturnType<typeof rejectThunkWithError>

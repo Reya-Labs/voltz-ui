@@ -1,15 +1,13 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
-import { getHistoricalRates, Granularity, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { getHistoricalRates, Granularity } from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../../../store';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 import { CACHE, getCacheId } from './cache';
 
 export type FetchHistoricalRatesThunkParams = {
-  chainId: SupportedChainId;
   isFixed: boolean;
-  aMMId: string;
-  aMMRateOracleId: string;
+  poolId: string;
   timeframeMs: number;
   granularity: Granularity;
 };
@@ -17,10 +15,8 @@ export type FetchHistoricalRatesThunkParams = {
 export const fetchHistoricalRatesThunkHandler: AsyncThunkPayloadCreator<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
   {
-    chainId: SupportedChainId;
     isFixed: boolean;
-    aMMId: string;
-    aMMRateOracleId: string;
+    poolId: string;
     timeframeMs: number;
     granularity: Granularity;
   },
@@ -30,17 +26,15 @@ export const fetchHistoricalRatesThunkHandler: AsyncThunkPayloadCreator<
   if (CACHE[cacheId] && CACHE[cacheId].historicalRates.length !== 0) {
     return CACHE[cacheId];
   }
-  const { timeframeMs, granularity, chainId, aMMId, aMMRateOracleId, isFixed } = payload;
+  const { timeframeMs, granularity, poolId, isFixed } = payload;
   try {
     const { historicalRates } = await getHistoricalRates({
-      chainId,
+      poolId,
       isFixed,
       filters: {
         granularity,
         timeframeMs,
       },
-      ammId: aMMId,
-      rateOracleId: aMMRateOracleId,
     });
 
     CACHE[cacheId] = {
@@ -54,13 +48,6 @@ export const fetchHistoricalRatesThunkHandler: AsyncThunkPayloadCreator<
 
 export const fetchHistoricalRatesThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  {
-    chainId: SupportedChainId;
-    isFixed: boolean;
-    aMMId: string;
-    aMMRateOracleId: string;
-    timeframeMs: number;
-    granularity: Granularity;
-  },
+  FetchHistoricalRatesThunkParams,
   { state: RootState }
 >('historicalRates/fetch', fetchHistoricalRatesThunkHandler);

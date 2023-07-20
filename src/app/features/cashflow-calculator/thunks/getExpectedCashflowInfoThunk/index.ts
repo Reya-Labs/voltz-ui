@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ExpectedCashflowInfo, Position } from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../../../store';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 
 export const getExpectedCashflowInfoThunk = createAsyncThunk<
   Awaited<ExpectedCashflowInfo | ReturnType<typeof rejectThunkWithError>>,

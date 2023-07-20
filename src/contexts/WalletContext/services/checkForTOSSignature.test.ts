@@ -46,7 +46,7 @@ const mockSigner = {
 };
 
 describe('checkForTOSSignature', () => {
-  test('throws an error if checkForTOSSignature throws error', async () => {
+  it('throws an error if checkForTOSSignature throws error', async () => {
     (saveSignatureWithTOS as jest.Mock).mockRejectedValue('Error happened');
     await expect(checkForTOSSignature(mockSigner as never)).rejects.toThrow(
       'Error processing signature',
@@ -54,7 +54,7 @@ describe('checkForTOSSignature', () => {
     expect(getSentryTracker).toHaveBeenCalledTimes(1);
   });
 
-  test('does not throw an error if the user signs the TOS', async () => {
+  it('does not throw an error if the user signs the TOS', async () => {
     (isMessageEIP1271Signed as jest.Mock).mockResolvedValue(true);
     (getSignature as jest.Mock).mockResolvedValue({
       walletAddress: '0x1234567890',

@@ -1,8 +1,10 @@
+import { isUserInputNotionalError } from '../../../../common';
 import { getAvailableMargin } from '../getAvailableMargin';
 import { validateUserInputMargin } from './validateUserInputMargin';
 
-jest.mock('../getAvailableMargin', () => ({
-  getAvailableMargin: jest.fn(),
+jest.mock('../getAvailableMargin');
+jest.mock('../../../../common', () => ({
+  isUserInputNotionalError: jest.fn(),
 }));
 
 describe('validateUserInputMargin', () => {
@@ -29,6 +31,7 @@ describe('validateUserInputMargin', () => {
       },
     };
     (getAvailableMargin as jest.Mock).mockReturnValue(availableMargin);
+    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
 
     validateUserInputMargin(state as never);
 
@@ -54,6 +57,7 @@ describe('validateUserInputMargin', () => {
       },
     };
     (getAvailableMargin as jest.Mock).mockReturnValue(null);
+    (isUserInputNotionalError as jest.Mock).mockReturnValue(false);
 
     validateUserInputMargin(state as never);
 

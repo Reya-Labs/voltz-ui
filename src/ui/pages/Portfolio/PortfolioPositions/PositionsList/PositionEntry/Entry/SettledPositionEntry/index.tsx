@@ -114,7 +114,7 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
               </StatusBox>
             </RightBox>
           </PositionEntryBox>
-          {isV2 ? <V2EntryInformation poolCap={MAX_POOL_CAP} /> : null}
+          {isV2 ? <V2EntryInformation chainId={chainId} poolCap={MAX_POOL_CAP} /> : null}
         </PositionEntryBoxWrapper>
       </React.Fragment>
     );

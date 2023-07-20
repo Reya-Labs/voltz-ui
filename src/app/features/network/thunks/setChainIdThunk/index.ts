@@ -1,7 +1,7 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { getChainInfo, SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 
 export type WindowEthereumType = {
   request: (param: { params?: { chainId: string }[]; method: string }) => Promise<string>;

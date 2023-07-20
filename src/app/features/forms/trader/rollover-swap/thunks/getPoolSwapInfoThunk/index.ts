@@ -6,9 +6,9 @@ import { PoolSwapInfo } from '@voltz-protocol/v1-sdk';
 import { isV2AMM } from '../../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
 import { RootState } from '../../../../../../store';
-import { rejectThunkWithError } from '../../../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../../../helpers';
 
-// todo: FB same as in swap
+// TODO: FB same as in swap
 export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
   Awaited<PoolSwapInfo | ReturnType<typeof rejectThunkWithError>>,
   void,
@@ -19,11 +19,16 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
     if (!amm) {
       return;
     }
+
     if (isV2AMM(amm)) {
-      return await getPoolSwapInfoV2({
-        ammId: amm.id,
-        provider: amm.provider,
-      });
+      const availableNotional = await getPoolSwapInfoV2(amm.id);
+
+      // TODO: when deprecating v1, checks against max leverages should be removed
+      return {
+        ...availableNotional,
+        maxLeverageFixedTaker: Number.MAX_SAFE_INTEGER,
+        maxLeverageVariableTaker: Number.MAX_SAFE_INTEGER,
+      };
     } else {
       if (isV1StatelessEnabled()) {
         return await getPoolSwapInfo({

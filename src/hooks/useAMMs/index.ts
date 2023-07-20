@@ -5,7 +5,6 @@ import {
   initialiseAMMsThunk,
   selectAMMs,
   selectAMMsLoadedState,
-  selectTraderAMMs,
   setSignerForAMMsAction,
 } from '../../app/features/aMMs';
 import { selectChainId } from '../../app/features/network';
@@ -14,7 +13,6 @@ import { useWallet } from '../useWallet';
 
 type UseAMMsResult = {
   aMMs: AMM[];
-  traderAMMs: AMM[];
   loading: boolean;
   error: boolean;
   idle: boolean;
@@ -27,7 +25,6 @@ export const useAMMs = (): UseAMMsResult => {
   const chainId = useAppSelector(selectChainId);
   const aMMsLoadedState = useAppSelector(selectAMMsLoadedState);
   const aMMs = useAppSelector(selectAMMs);
-  const traderAMMs = useAppSelector(selectTraderAMMs);
 
   useEffect(() => {
     // only fetch aMMs once per network
@@ -55,7 +52,6 @@ export const useAMMs = (): UseAMMsResult => {
 
   return {
     aMMs,
-    traderAMMs,
     idle: aMMsLoadedState === 'idle',
     loading: aMMsLoadedState === 'pending',
     error: aMMsLoadedState === 'failed',

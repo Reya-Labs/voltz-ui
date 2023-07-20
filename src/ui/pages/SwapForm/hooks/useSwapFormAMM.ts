@@ -98,13 +98,13 @@ export const useSwapFormAMM = (): UseSwapFormAMMResult => {
   }, [aMM?.id, dispatch, aMMsLoading, error, chainId, signer]);
 
   useEffect(() => {
-    if (!aMM || !aMM.signer || !chainId) {
+    if (!aMM || !aMM.signer || !chainId || aMMsLoading) {
       return;
     }
 
     void dispatch(getWalletBalanceThunk());
     void dispatch(getUnderlyingTokenAllowanceThunk({ chainId }));
-  }, [dispatch, aMM, aMM?.signer, chainId]);
+  }, [dispatch, aMM, aMMsLoading, aMM?.signer, chainId]);
 
   useEffect(() => {
     if (!position) {

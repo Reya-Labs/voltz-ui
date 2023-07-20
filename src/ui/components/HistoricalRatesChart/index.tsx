@@ -93,12 +93,10 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
     }
     void dispatch(
       fetchHistoricalRatesThunk({
-        chainId,
         isFixed,
         granularity,
         timeframeMs: timeframe * 24 * 60 * 60 * 1000,
-        aMMId: aMMId,
-        aMMRateOracleId: aMMRateOracleId,
+        poolId: aMMId,
       }),
     );
   }, [dispatch, timeframe, isFixed, granularity, chainId, aMMId, aMMRateOracleId]);

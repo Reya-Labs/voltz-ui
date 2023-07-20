@@ -1,15 +1,19 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatTimestamp } from '../../../../../utilities/date';
-import { formatNumber, stringToBigFloat } from '../../../../../utilities/number';
+import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
+import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
 import {
   formCompactFormat,
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
-} from '../../common/utils';
+  getGasInfoFormatted,
+  getVariableRate24hDelta,
+  isLeverageHidden,
+} from '../../common';
 import {
+  getAvailableMargin,
   getPreviousPositionRealizedPnLFromFees,
   getPreviousPositionRealizedPnLFromSwaps,
   getProspectiveLpMargin,
@@ -23,44 +27,27 @@ export const selectRolloverLpFormPreviousAMM = (state: RootState) =>
 export const selectRolloverLpFormPreviousPosition = (state: RootState) =>
   state.rolloverLpForm.previousPosition;
 
-// todo: FB duplicate logic same as rollover-swap-form, move to common
+// TODO: FB duplicate logic same as rollover-swap-form, move to common
 export const selectWalletBalance = (state: RootState) => {
-  if (state.rolloverLpForm.walletBalance.status !== 'success') {
+  const availableMargin = getAvailableMargin(state.rolloverLpForm);
+  if (availableMargin === null) {
     return '--';
   }
 
-  if (state.rolloverLpForm.previousPosition === null) {
-    return '--';
-  }
-
-  return formCompactFormat(
-    state.rolloverLpForm.walletBalance.value +
-      state.rolloverLpForm.previousPosition.settlementCashflow +
-      state.rolloverLpForm.previousPosition.margin +
-      state.rolloverLpForm.previousPosition.fees,
-  );
+  return formCompactFormat(availableMargin);
 };
 export const selectPoolLpInfoStatus = (state: RootState) => state.rolloverLpForm.poolLpInfo.status;
 
-// todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = selectRolloverLpFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+  return formatUnderlyingTokenName(selectRolloverLpFormAMM(state));
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = selectRolloverLpFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return formatTimestamp(aMM.termEndTimestampInMS);
+  return formatPoolMaturity(selectRolloverLpFormAMM(state));
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectMarginAccountName = (state: RootState) => {
   const aMM = selectRolloverLpFormAMM(state);
   if (!aMM) {
@@ -84,18 +71,18 @@ export const selectProspectiveLpMarginFormatted = (state: RootState) => {
 
 export const selectLeverage = (state: RootState) => state.rolloverLpForm.userInput.leverage;
 export const selectInfoPostLp = (state: RootState) => state.rolloverLpForm.prospectiveLp.infoPostLp;
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectIsMarginRequiredError = (state: RootState) => {
   return (
     state.rolloverLpForm.userInput.marginAmount.error !== null &&
     state.rolloverLpForm.userInput.marginAmount.error !== 'WLT'
   );
 };
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectIsWalletMarginError = (state: RootState) => {
   return state.rolloverLpForm.userInput.marginAmount.error === 'WLT';
 };
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectBottomRightMarginNumber = (state: RootState) => {
   const lpFormState = state.rolloverLpForm;
 
@@ -109,7 +96,7 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
   return null;
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.rolloverLpForm.userInput.notionalAmount.error) return null;
 
@@ -132,18 +119,8 @@ export const selectRolloverConfirmationFlowEtherscanLink = (state: RootState) =>
   );
 };
 
-// todo: FB duplicate as in swap form
 export const selectVariableRate24hDelta = (state: RootState) => {
-  if (!state.rolloverLpForm.amm) {
-    return undefined;
-  }
-  return stringToBigFloat(
-    formatNumber(
-      state.rolloverLpForm.amm.variableApy - state.rolloverLpForm.amm.variableApy24Ago,
-      0,
-      3,
-    ),
-  );
+  return getVariableRate24hDelta(state.rolloverLpForm.amm);
 };
 
 export const selectSubmitButtonText = (state: RootState) => {
@@ -173,6 +150,10 @@ export const selectIsLeverageDisabled = (state: RootState) => {
   }
 
   return true;
+};
+
+export const selectIsLeverageHidden = (state: RootState) => {
+  return isLeverageHidden(state.rolloverLpForm.amm);
 };
 
 export const selectShowLeverageNotification = (state: RootState) =>
@@ -234,7 +215,7 @@ export const selectMarginRequirementFormatted = (state: RootState) => {
     : '--';
 };
 
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionCompactNotional = (state: RootState) => {
   if (!state.rolloverLpForm.previousPosition) {
     return null;
@@ -247,7 +228,7 @@ export const selectPreviousPositionCompactNotional = (state: RootState) => {
   };
 };
 
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionDepositedMargin = (state: RootState) => {
   if (!state.rolloverLpForm.previousPosition) {
     return null;
@@ -263,7 +244,7 @@ export const selectPreviousPositionDepositedMargin = (state: RootState) => {
   };
 };
 
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionSettlingBalance = (state: RootState) => {
   const position = state.rolloverLpForm.previousPosition;
   if (!position) {
@@ -279,7 +260,7 @@ export const selectPreviousPositionSettlingBalance = (state: RootState) => {
 };
 
 // TODO: verify what we use in the portfolio
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState) => {
   const realizedPnLFromFees = getPreviousPositionRealizedPnLFromFees(state.rolloverLpForm);
   const realizedPnLFromSwaps = getPreviousPositionRealizedPnLFromSwaps(state.rolloverLpForm);
@@ -292,14 +273,14 @@ export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState
   return realizedPnLTotal === null ? '--' : formFormatNumber(realizedPnLTotal);
 };
 
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
   const realizedPnLFromFees = getPreviousPositionRealizedPnLFromFees(state.rolloverLpForm);
 
   return realizedPnLFromFees === null ? '--' : formFormatNumber(realizedPnLFromFees);
 };
 
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
   const realizedPnLFromSwaps = getPreviousPositionRealizedPnLFromSwaps(state.rolloverLpForm);
 
@@ -322,24 +303,12 @@ export const selectPreviousPositionFixedUpper = (state: RootState) => {
   return formFormatNumber(position.fixedRateUpper.toNumber());
 };
 
-// todo: FB same in lp form
-export const selectGasFeeToken = (state: RootState) => {
+export const selectGasInfoFormatted = (state: RootState) => {
   const infoPostLp = state.rolloverLpForm.prospectiveLp.infoPostLp;
-  if (infoPostLp.status === 'success') {
-    return infoPostLp.value.gasFee.token;
-  }
-
-  return '--';
-};
-
-// todo: FB same in lp form
-export const selectGasFeeFormatted = (state: RootState) => {
-  const infoPostLp = state.rolloverLpForm.prospectiveLp.infoPostLp;
-  if (infoPostLp.status === 'success') {
-    return formatNumber(infoPostLp.value.gasFee.value, 2, 4);
-  }
-
-  return '--';
+  return getGasInfoFormatted({
+    status: infoPostLp.status,
+    gasDetails: infoPostLp.value.gasFee,
+  });
 };
 
 export const selectPreviousPositionId = (state: RootState) => {
@@ -347,4 +316,8 @@ export const selectPreviousPositionId = (state: RootState) => {
     return null;
   }
   return state.rolloverLpForm.previousPosition.id;
+};
+
+export const selectIsGetInfoPostLpLoading = (state: RootState) => {
+  return state.rolloverLpForm.prospectiveLp.infoPostLp.status === 'pending';
 };

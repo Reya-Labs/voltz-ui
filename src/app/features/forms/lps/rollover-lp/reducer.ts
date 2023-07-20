@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { InfoPostLp } from '@voltz-protocol/v1-sdk';
+import { AMM, InfoPostLp } from '@voltz-protocol/v1-sdk';
 import { ContractReceipt, providers } from 'ethers';
 
+import { getAmmProtocol } from '../../../../../utilities/amm';
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common/utils';
+import { checkLowLeverageNotification, formLimitAndFormatNumber } from '../../common';
+import { pushLeverageChangeEvent } from './analytics';
 import { initialState } from './state';
 import {
   approveUnderlyingTokenThunk,
@@ -111,10 +113,15 @@ const slice = createSlice({
     ) => {
       if (value !== undefined) {
         state.userInput.notionalAmount.value = value;
-      }
 
-      updateLeverage(state);
-      validateUserInputAndUpdateSubmitButton(state);
+        updateLeverage(state);
+        validateUserInputAndUpdateSubmitButton(state);
+      }
+    },
+    resetInfoPostLpAction: (state) => {
+      state.prospectiveLp.infoPostLp = {
+        ...initialState.prospectiveLp.infoPostLp,
+      };
     },
     setMarginAmountAction: (
       state,
@@ -134,9 +141,11 @@ const slice = createSlice({
     setLeverageAction: (
       state,
       {
-        payload: { value },
+        payload: { value, account, changeType },
       }: PayloadAction<{
         value: number;
+        account: string;
+        changeType: 'button' | 'input';
       }>,
     ) => {
       if (getProspectiveLpNotional(state) === 0 || isNaN(value) || value === 0) {
@@ -147,6 +156,14 @@ const slice = createSlice({
       }
 
       state.userInput.leverage = value;
+      if (!isNaN(value)) {
+        pushLeverageChangeEvent({
+          leverage: value,
+          account,
+          pool: getAmmProtocol(state.amm as AMM),
+          changeType,
+        });
+      }
       state.userInput.marginAmount.value = stringToBigFloat(
         formLimitAndFormatNumber(getProspectiveLpNotional(state) / value, 'ceil'),
       );
@@ -359,5 +376,6 @@ export const {
   openRolloverConfirmationFlowAction,
   closeRolloverConfirmationFlowAction,
   setSignerForRolloverLpFormAction,
+  resetInfoPostLpAction,
 } = slice.actions;
 export const rolloverLpFormReducer = slice.reducer;

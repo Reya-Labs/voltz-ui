@@ -1,14 +1,17 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatTimestamp } from '../../../../../utilities/date';
-import { formatNumber, stringToBigFloat } from '../../../../../utilities/number';
+import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
+import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
 import {
   formCompactFormat,
   formCompactFormatToParts,
   formFormatNumber,
   formLimitAndFormatNumber,
-} from '../../common/utils';
+  getGasInfoFormatted,
+  getVariableRate24hDelta,
+  isLeverageHidden,
+} from '../../common';
 import {
   getAvailableMargin,
   getEditPositionNotional,
@@ -23,7 +26,7 @@ export const selectSubmitButtonInfo = (state: RootState) => state.lpForm.submitB
 export const selectLpFormAMM = (state: RootState) => state.lpForm.amm;
 export const selectLpFormPositionsFetchingStatus = (state: RootState) =>
   state.lpForm.positions.status;
-// todo: FB duplicate logic same as swap-form, move to common
+// TODO: FB duplicate logic same as swap-form, move to common
 export const selectWalletBalance = (state: RootState) => {
   if (state.lpForm.walletBalance.status !== 'success') {
     return '--';
@@ -40,25 +43,15 @@ export const selectLpFormSelectedPosition = (state: RootState) => {
   return state.lpForm.selectedPosition;
 };
 
-// todo: FB duplicate as in swap form
 export const selectAMMTokenFormatted = (state: RootState) => {
-  const aMM = selectLpFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return ` ${aMM.underlyingToken.name.toUpperCase()}`;
+  return formatUnderlyingTokenName(selectLpFormAMM(state));
 };
 
-// todo: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
-  const aMM = selectLpFormAMM(state);
-  if (!aMM) {
-    return '';
-  }
-  return formatTimestamp(aMM.termEndTimestampInMS);
+  return formatPoolMaturity(selectLpFormAMM(state));
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectMarginAccountName = (state: RootState) => {
   const aMM = selectLpFormAMM(state);
   if (!aMM) {
@@ -81,18 +74,18 @@ export const selectProspectiveLpMarginFormatted = (state: RootState) => {
 
 export const selectLeverage = (state: RootState) => state.lpForm.userInput.leverage;
 export const selectInfoPostLp = (state: RootState) => state.lpForm.prospectiveLp.infoPostLp;
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectIsMarginRequiredError = (state: RootState) => {
   return (
     state.lpForm.userInput.marginAmount.error !== null &&
     state.lpForm.userInput.marginAmount.error !== 'WLT'
   );
 };
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectIsWalletMarginError = (state: RootState) => {
   return state.lpForm.userInput.marginAmount.error === 'WLT';
 };
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectBottomRightMarginNumber = (state: RootState) => {
   const lpFormState = state.lpForm;
 
@@ -114,7 +107,7 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
   return null;
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.lpForm.userInput.notionalAmount.error) return null;
 
@@ -126,7 +119,7 @@ export const selectNewPositionCompactNotional = (state: RootState) => {
   };
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectExistingPositionCompactNotional = (state: RootState) => {
   if (state.lpForm.selectedPosition === null) {
     return null;
@@ -223,14 +216,8 @@ export const selectMarginUpdateConfirmationFlowEtherscanLink = (state: RootState
   );
 };
 
-// todo: FB duplicate as in swap form
 export const selectVariableRate24hDelta = (state: RootState) => {
-  if (!state.lpForm.amm) {
-    return undefined;
-  }
-  return stringToBigFloat(
-    formatNumber(state.lpForm.amm.variableApy - state.lpForm.amm.variableApy24Ago, 0, 3),
-  );
+  return getVariableRate24hDelta(state.lpForm.amm);
 };
 
 export const selectSubmitButtonText = (state: RootState) => {
@@ -265,6 +252,10 @@ export const selectIsLeverageDisabled = (state: RootState) => {
   }
 
   return true;
+};
+
+export const selectIsLeverageHidden = (state: RootState) => {
+  return isLeverageHidden(state.lpForm.amm);
 };
 
 export const selectUserInputNotionalAmountEditMode = (state: RootState) => {
@@ -337,22 +328,14 @@ export const selectMarginRequirementFormatted = (state: RootState) => {
     : '--';
 };
 
-// todo: FB same in swap form
-export const selectGasFeeToken = (state: RootState) => {
+export const selectGasInfoFormatted = (state: RootState) => {
   const infoPostLp = state.lpForm.prospectiveLp.infoPostLp;
-  if (infoPostLp.status === 'success') {
-    return infoPostLp.value.gasFee.token;
-  }
-
-  return '--';
+  return getGasInfoFormatted({
+    status: infoPostLp.status,
+    gasDetails: infoPostLp.value.gasFee,
+  });
 };
 
-// todo: FB same in swap form
-export const selectGasFeeFormatted = (state: RootState) => {
-  const infoPostLp = state.lpForm.prospectiveLp.infoPostLp;
-  if (infoPostLp.status === 'success') {
-    return formatNumber(infoPostLp.value.gasFee.value, 2, 4);
-  }
-
-  return '--';
+export const selectIsGetInfoPostLpLoading = (state: RootState) => {
+  return state.lpForm.prospectiveLp.infoPostLp.status === 'pending';
 };

@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getPortfolioPositionDetails } from '@voltz-protocol/v1-sdk';
 
 import { RootState } from '../../../../store';
-import { rejectThunkWithError } from '../../../helpers/reject-thunk-with-error';
+import { rejectThunkWithError } from '../../../helpers';
 
 export type PortfolioPositionDetails = Awaited<ReturnType<typeof getPortfolioPositionDetails>>;
 export type PortfolioPositionPool = NonNullable<PortfolioPositionDetails>['pool'];

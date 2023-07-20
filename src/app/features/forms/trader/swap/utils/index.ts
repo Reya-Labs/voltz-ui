@@ -1,3 +1,4 @@
+export * from './getAdjustedSwapNotional';
 export * from './getAvailableMargin';
 export * from './getAvailableNotional';
 export * from './getEditPositionFixedRate';

@@ -1,3 +1,4 @@
+import { formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
 
 export const selectHistoricalRates = (
@@ -8,6 +9,6 @@ export const selectHistoricalRates = (
 }[] =>
   state.historicalRates.historicalRates.map((d) => ({
     x: new Date(d.timestampInMs),
-    y: d.value * 100,
+    y: stringToBigFloat(formatNumber(d.value * 100)),
   }));
 export const selectHistoricalRatesStatus = (state: RootState) => state.historicalRates.status;

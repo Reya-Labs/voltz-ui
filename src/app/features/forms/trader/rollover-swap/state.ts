@@ -116,15 +116,11 @@ export const initialState: SliceState = {
     },
     infoPostSwap: {
       value: {
-        availableNotional: 0,
         marginRequirement: 0,
         maxMarginWithdrawable: 0,
         averageFixedRate: 0,
-        fixedTokenDeltaBalance: 0,
         variableTokenDeltaBalance: 0,
-        fixedTokenDeltaUnbalanced: 0,
         fee: 0,
-        slippage: 0,
         gasFee: {
           value: 0,
           token: 'ETH',
