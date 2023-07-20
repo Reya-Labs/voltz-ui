@@ -33,7 +33,7 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
     <NotionalAmountFieldBox>
       <TokenField
         allowNegativeValue={false}
-        bottomLeftText={notionalInfo.error ? notionalInfo.error : 'Liquidity Available'}
+        bottomLeftText={notionalInfo.error ? notionalInfo.error : ''}
         bottomLeftTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb3'}
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb'}
