@@ -21,7 +21,7 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
     if (isV2AMM(amm)) {
       const availableNotional = await getPoolSwapInfoV2(amm.id);
 
-      // todo: when deprecating v1, checks against max leverages should be removed
+      // TODO: when deprecating v1, checks against max leverages should be removed
       return {
         ...availableNotional,
         maxLeverageFixedTaker: Number.MAX_SAFE_INTEGER,

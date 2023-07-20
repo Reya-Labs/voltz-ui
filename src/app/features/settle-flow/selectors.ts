@@ -140,7 +140,7 @@ export const selectAMMMarket = (state: RootState) => {
   return pool.market;
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectAMMToken = (state: RootState) => {
   const pool = state.settleFlow.position?.pool;
   if (!pool) {

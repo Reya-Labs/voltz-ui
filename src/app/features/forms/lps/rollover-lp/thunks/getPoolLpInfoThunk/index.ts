@@ -23,7 +23,7 @@ export const getPoolLpInfoThunk = createAsyncThunk<
     const fixedLow = getDefaultLpFixedLow(state);
     const fixedHigh = getDefaultLpFixedHigh(state);
 
-    // todo: when deprecating v1, checks against max leverages should be removed
+    // TODO: when deprecating v1, checks against max leverages should be removed
     if (isV2AMM(amm)) {
       return {
         maxLeverage: Number.MAX_SAFE_INTEGER,

@@ -8,7 +8,7 @@ import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarPro
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers';
 
-// todo: FB same as in swap
+// TODO: FB same as in swap
 export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
   Awaited<PoolSwapInfo | ReturnType<typeof rejectThunkWithError>>,
   void,
@@ -23,7 +23,7 @@ export const getPoolSwapInfoThunkHandler: AsyncThunkPayloadCreator<
     if (isV2AMM(amm)) {
       const availableNotional = await getPoolSwapInfoV2(amm.id);
 
-      // todo: when deprecating v1, checks against max leverages should be removed
+      // TODO: when deprecating v1, checks against max leverages should be removed
       return {
         ...availableNotional,
         maxLeverageFixedTaker: Number.MAX_SAFE_INTEGER,

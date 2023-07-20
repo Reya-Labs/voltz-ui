@@ -27,7 +27,7 @@ export const selectRolloverLpFormPreviousAMM = (state: RootState) =>
 export const selectRolloverLpFormPreviousPosition = (state: RootState) =>
   state.rolloverLpForm.previousPosition;
 
-// todo: FB duplicate logic same as rollover-swap-form, move to common
+// TODO: FB duplicate logic same as rollover-swap-form, move to common
 export const selectWalletBalance = (state: RootState) => {
   const availableMargin = getAvailableMargin(state.rolloverLpForm);
   if (availableMargin === null) {
@@ -42,12 +42,12 @@ export const selectAMMTokenFormatted = (state: RootState) => {
   return formatUnderlyingTokenName(selectRolloverLpFormAMM(state));
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectAMMMaturityFormatted = (state: RootState) => {
   return formatPoolMaturity(selectRolloverLpFormAMM(state));
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectMarginAccountName = (state: RootState) => {
   const aMM = selectRolloverLpFormAMM(state);
   if (!aMM) {
@@ -71,18 +71,18 @@ export const selectProspectiveLpMarginFormatted = (state: RootState) => {
 
 export const selectLeverage = (state: RootState) => state.rolloverLpForm.userInput.leverage;
 export const selectInfoPostLp = (state: RootState) => state.rolloverLpForm.prospectiveLp.infoPostLp;
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectIsMarginRequiredError = (state: RootState) => {
   return (
     state.rolloverLpForm.userInput.marginAmount.error !== null &&
     state.rolloverLpForm.userInput.marginAmount.error !== 'WLT'
   );
 };
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectIsWalletMarginError = (state: RootState) => {
   return state.rolloverLpForm.userInput.marginAmount.error === 'WLT';
 };
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectBottomRightMarginNumber = (state: RootState) => {
   const lpFormState = state.rolloverLpForm;
 
@@ -96,7 +96,7 @@ export const selectBottomRightMarginNumber = (state: RootState) => {
   return null;
 };
 
-// todo: FB duplicate as in swap form
+// TODO: FB duplicate as in swap form
 export const selectNewPositionCompactNotional = (state: RootState) => {
   if (state.rolloverLpForm.userInput.notionalAmount.error) return null;
 
@@ -215,7 +215,7 @@ export const selectMarginRequirementFormatted = (state: RootState) => {
     : '--';
 };
 
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionCompactNotional = (state: RootState) => {
   if (!state.rolloverLpForm.previousPosition) {
     return null;
@@ -228,7 +228,7 @@ export const selectPreviousPositionCompactNotional = (state: RootState) => {
   };
 };
 
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionDepositedMargin = (state: RootState) => {
   if (!state.rolloverLpForm.previousPosition) {
     return null;
@@ -244,7 +244,7 @@ export const selectPreviousPositionDepositedMargin = (state: RootState) => {
   };
 };
 
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionSettlingBalance = (state: RootState) => {
   const position = state.rolloverLpForm.previousPosition;
   if (!position) {
@@ -260,7 +260,7 @@ export const selectPreviousPositionSettlingBalance = (state: RootState) => {
 };
 
 // TODO: verify what we use in the portfolio
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState) => {
   const realizedPnLFromFees = getPreviousPositionRealizedPnLFromFees(state.rolloverLpForm);
   const realizedPnLFromSwaps = getPreviousPositionRealizedPnLFromSwaps(state.rolloverLpForm);
@@ -273,14 +273,14 @@ export const selectPreviousPositionRealizedPnLTotalFormatted = (state: RootState
   return realizedPnLTotal === null ? '--' : formFormatNumber(realizedPnLTotal);
 };
 
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionRealizedPnLFromFeesFormatted = (state: RootState) => {
   const realizedPnLFromFees = getPreviousPositionRealizedPnLFromFees(state.rolloverLpForm);
 
   return realizedPnLFromFees === null ? '--' : formFormatNumber(realizedPnLFromFees);
 };
 
-// todo: FB duplicate in rollover-swap
+// TODO: FB duplicate in rollover-swap
 export const selectPreviousPositionRealizedPnLFromSwapsFormatted = (state: RootState) => {
   const realizedPnLFromSwaps = getPreviousPositionRealizedPnLFromSwaps(state.rolloverLpForm);
 

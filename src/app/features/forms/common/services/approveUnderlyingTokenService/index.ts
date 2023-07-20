@@ -27,7 +27,7 @@ export const approveUnderlyingTokenService = async ({
         signer,
         ammId: amm.id,
       });
-      // todo: FB remove 0 after SDKs are fixed
+      // TODO: FB remove 0 after SDKs are fixed
       return 0;
     } else {
       return await amm.approveUnderlyingTokenForPeripheryV1();
