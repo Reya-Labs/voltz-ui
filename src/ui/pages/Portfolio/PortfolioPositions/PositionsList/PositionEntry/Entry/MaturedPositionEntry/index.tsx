@@ -134,7 +134,7 @@ export const MaturedPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
               </RealizedPNLBox>
             </RightBox>
           </PositionEntryBox>
-          {isV2 ? <V2EntryInformation poolCap={MAX_POOL_CAP} /> : null}
+          {isV2 ? <V2EntryInformation chainId={chainId} poolCap={MAX_POOL_CAP} /> : null}
         </PositionEntryBoxWrapper>
       </React.Fragment>
     );

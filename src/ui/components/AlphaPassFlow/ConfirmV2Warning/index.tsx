@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Button, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
@@ -8,7 +9,9 @@ import { useWallet } from '../../../../hooks/useWallet';
 import { ConfirmV2WarningBox, TitleBox } from './ConfirmV2Warning.styled';
 import { PoolDetails } from './PoolDetails';
 
-export const ConfirmV2Warning: React.FunctionComponent = () => {
+export const ConfirmV2Warning: React.FunctionComponent<{ chainId: SupportedChainId }> = ({
+  chainId,
+}) => {
   const { signer, account } = useWallet();
   const dispatch = useAppDispatch();
   const handleOnContinueClick = useCallback(() => {
@@ -35,7 +38,7 @@ export const ConfirmV2Warning: React.FunctionComponent = () => {
         it's important to reiterate that, though you cannot ever rely on the accuracy or performance
         of any software completely, non-audited software may present heightened risks.
       </Typography>
-      <PoolDetails poolCap={MAX_POOL_CAP} />
+      <PoolDetails chainId={chainId} poolCap={MAX_POOL_CAP} />
       <Button variant="primary" onClick={handleOnContinueClick}>
         Continue
       </Button>

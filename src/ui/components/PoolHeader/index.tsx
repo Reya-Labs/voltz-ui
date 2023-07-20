@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { LabelTokenTypography, Popover, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import React, { useState } from 'react';
 
@@ -27,11 +28,13 @@ type PoolHeaderProps = {
   onPoolItemClick: PoolListProps['onPoolItemClick'];
   pools: PoolListProps['pools'];
   poolCap: number;
+  chainId: SupportedChainId;
 };
 
 export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   isAaveV3,
   isBorrowing,
+  chainId,
   market,
   token,
   fixedRateFormatted,
@@ -124,7 +127,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
           <V2InfoBox>
             <TypographyWithTooltip
               colorToken="rainbow"
-              tooltip={<V2InfoTooltip poolCap={poolCap} />}
+              tooltip={<V2InfoTooltip chainId={chainId} poolCap={poolCap} />}
               typographyToken={v2TypographyToken}
             >
               Voltz Protocol v2 Alpha Launch

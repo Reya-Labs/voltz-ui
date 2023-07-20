@@ -26,7 +26,7 @@ export const Main: React.FunctionComponent = () => {
 
   return (
     <MainBox>
-      {isV2AMM(aMM) ? <AlphaPassFlow /> : null}
+      {isV2AMM(aMM) ? <AlphaPassFlow chainId={aMM.chainId} /> : null}
       <PoolHeader />
       <HistoricalRatesChart
         aMMId={aMM.id}

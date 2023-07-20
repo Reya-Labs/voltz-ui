@@ -1,8 +1,9 @@
 import { AMM } from '@voltz-protocol/v1-sdk';
 
 import { MarketTokenInformationProps } from '../../../ui/components/MarketTokenInformation';
-import { generateAmmIdForRoute, generatePoolId } from '../../../utilities/amm';
+import { generateAmmIdForRoute, generatePoolId, isV2AMM } from '../../../utilities/amm';
 import { formatPOSIXTimestamp } from '../../../utilities/date';
+import { isOnlyV2PoolsPositions } from '../../../utilities/is-only-v2-pools-positions';
 import { getMaturityWindow } from '../../../utilities/maturityWindow';
 import { compactFormatToParts, formatNumber, stringToBigFloat } from '../../../utilities/number';
 import { RootState } from '../../store';
@@ -12,6 +13,9 @@ import { filterByChain, filterByTag, sortPools } from './helpers';
 import { PoolFilterId, PoolSortDirection, PoolSortId, PoolUI } from './types';
 
 export const selectAMMs = (state: RootState): AMM[] => {
+  if (isOnlyV2PoolsPositions()) {
+    return state.aMMs.aMMs.filter((amm) => isV2AMM(amm));
+  }
   return state.aMMs.aMMs;
 };
 

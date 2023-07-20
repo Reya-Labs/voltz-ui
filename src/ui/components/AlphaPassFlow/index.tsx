@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Dialog } from 'brokoli-ui';
 import React, { useEffect } from 'react';
 
@@ -10,7 +11,9 @@ import { useWallet } from '../../../hooks/useWallet';
 import { ConfirmV2Warning } from './ConfirmV2Warning';
 import { NoPassDetected } from './NoPassDetected';
 
-export const AlphaPassFlow: React.FunctionComponent = () => {
+export const AlphaPassFlow: React.FunctionComponent<{ chainId: SupportedChainId }> = ({
+  chainId,
+}) => {
   const { signer, account } = useWallet();
   const dispatch = useAppDispatch();
   const step = useAppSelector(selectAlphaPassVerificationFlowStep(account));
@@ -42,7 +45,7 @@ export const AlphaPassFlow: React.FunctionComponent = () => {
   return (
     <Dialog open={step !== null}>
       {step === 'not-verified' ? <NoPassDetected /> : null}{' '}
-      {step === 'verified' ? <ConfirmV2Warning /> : null}
+      {step === 'verified' ? <ConfirmV2Warning chainId={chainId} /> : null}
     </Dialog>
   );
 };

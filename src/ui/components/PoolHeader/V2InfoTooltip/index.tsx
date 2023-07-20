@@ -1,13 +1,16 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { formCompactFormatToParts } from '../../../../app/features/forms/common/utils';
+import { isTestnet } from '../../../../app/features/network';
 import { RowBox, RowsBox } from '../../RealizedPNLDetails/RealizedPnLDetails.styled';
 import { V2InfoTooltipBox } from './V2InfoTooltip.styled';
 
 export const V2InfoTooltip: React.FunctionComponent<{
   poolCap: number;
-}> = ({ poolCap }) => {
+  chainId: SupportedChainId;
+}> = ({ poolCap, chainId }) => {
   const { compactNumber, compactSuffix } = formCompactFormatToParts(poolCap);
 
   return (
@@ -26,18 +29,20 @@ export const V2InfoTooltip: React.FunctionComponent<{
             Unaudited
           </Typography>
         </RowBox>
-        <RowBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-            Pool cap
-          </Typography>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            prefixToken="Pool cap: $"
-            token={compactSuffix}
-            typographyToken="primaryBodySmallRegular"
-            value={compactNumber}
-          />
-        </RowBox>
+        {isTestnet(chainId) ? null : (
+          <RowBox>
+            <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+              Pool cap
+            </Typography>
+            <TokenTypography
+              colorToken="lavenderWeb"
+              prefixToken="$"
+              token={compactSuffix}
+              typographyToken="primaryBodySmallRegular"
+              value={compactNumber}
+            />
+          </RowBox>
+        )}
       </RowsBox>
     </V2InfoTooltipBox>
   );

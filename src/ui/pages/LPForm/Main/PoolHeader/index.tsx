@@ -47,6 +47,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   return (
     <PoolHeaderComponent
       aMMMaturity={aMMMaturity}
+      chainId={aMM.chainId}
       fixedRateFormatted={fixedRateFormatted}
       isAaveV3={isAaveV3}
       isBorrowing={isBorrowing}

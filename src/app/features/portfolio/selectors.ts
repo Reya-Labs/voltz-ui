@@ -1,3 +1,4 @@
+import { isOnlyV2PoolsPositions } from '../../../utilities/is-only-v2-pools-positions';
 import { compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { formFormatNumber } from '../forms/common';
@@ -17,7 +18,9 @@ export const selectPositions = (state: RootState): PositionUI[] => {
     return [];
   }
 
-  const pools: PositionUI[] = portfolioPositions.map(mapPortfolioPositionToPortfolioUI);
+  const pools: PositionUI[] = portfolioPositions
+    .filter((p) => (isOnlyV2PoolsPositions() ? p.pool.isV2 : true))
+    .map(mapPortfolioPositionToPortfolioUI);
 
   return sortPositions(pools, {
     marginSortingDirection: appliedSortingDirection['margin'],
