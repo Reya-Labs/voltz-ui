@@ -9365,10 +9365,10 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.82.5:
-  version "1.82.5"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.82.5.tgz#e9b6e0ea7b4e9113a8deee7bb040d2e6a0e3c2d8"
-  integrity sha512-NVpi6gasjUECexk3pbdWJKA8i9NV2eykgWOrYQuDVPVsE4nf+6BuB0CTL0Nb+yGGXBoiEtmwJHmjw+Pl1t+3oA==
+brokoli-ui@1.83.0:
+  version "1.83.0"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.83.0.tgz#e9fa342b23cdd0ee499691d149c23a686a30c227"
+  integrity sha512-EXAuw638Su7x+mwspf8JFXU6v6BERTco7Bkb95j1Lhw67dLF91z/CD82TNfMbp0tn0ddsbwAJcYnEiuYj3PwWg==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"

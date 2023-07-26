@@ -144,7 +144,7 @@
     "@walletconnect/ethereum-provider": "1.8.0",
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.44",
-    "brokoli-ui": "1.82.5",
+    "brokoli-ui": "1.83.0",
     "copy-to-clipboard": "3.3.3",
     "ethers": "5.5.4",
     "isomorphic-fetch": "3.0.0",
