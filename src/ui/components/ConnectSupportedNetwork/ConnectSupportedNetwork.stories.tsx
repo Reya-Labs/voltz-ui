@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { ConnectSupportedNetwork } from './index';
+import { ConnectSupportedNetwork } from '.';
 
 export default {
   title: 'ui/components/ConnectSupportedNetwork',

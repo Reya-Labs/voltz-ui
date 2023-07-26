@@ -1,4 +1,4 @@
-import { getPreviousPositionRealizedPnLFromFees } from './index';
+import { getPreviousPositionRealizedPnLFromFees } from '.';
 
 describe('getPreviousPositionRealizedPnLFromFees', () => {
   it('should return null when position value is null', () => {

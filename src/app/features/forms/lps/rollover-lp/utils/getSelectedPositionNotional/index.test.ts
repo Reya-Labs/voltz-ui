@@ -1,4 +1,4 @@
-import { getPreviousPositionNotional } from './index';
+import { getPreviousPositionNotional } from '.';
 
 describe('getPreviousPositionNotional', () => {
   it('should return 0 when selectedPosition is null', () => {

@@ -1,4 +1,4 @@
-import { sortPositions } from './index';
+import { sortPositions } from '.';
 
 describe('sortPositions function', () => {
   describe('single property sort', () => {

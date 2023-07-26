@@ -1,5 +1,5 @@
 import { getEditPositionTokenBalance } from '../getEditPositionTokenBalance';
-import { getEditPositionNotional } from './index';
+import { getEditPositionNotional } from '.';
 
 jest.mock('../getEditPositionTokenBalance', () => ({
   getEditPositionTokenBalance: jest.fn(),

@@ -1,6 +1,6 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { usePastSeasons } from './index';
+import { usePastSeasons } from '.';
 
 describe('usePastSeasons', () => {
   test.each([

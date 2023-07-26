@@ -4,7 +4,7 @@ import { Signer } from 'ethers';
 
 import { isV2AMM } from '../../../../../../utilities/amm';
 import { isV1StatelessEnabled } from '../../../../../../utilities/isEnvVarProvided/is-v1-stateless-enabled';
-import { approveUnderlyingTokenService } from './index';
+import { approveUnderlyingTokenService } from '.';
 
 // Mock dependencies
 jest.mock('@voltz-protocol/sdk-v1-stateless', () => ({

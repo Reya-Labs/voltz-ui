@@ -1,4 +1,4 @@
-import { getENSDetails } from './index';
+import { getENSDetails } from '.';
 
 jest.mock('ethers', () => ({
   ethers: {

@@ -4,7 +4,7 @@ import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 import { hasExistingPosition } from '../hasExistingPosition';
 import { validateUserInput } from '../validateUserInput';
-import { validateUserInputAndUpdateSubmitButton } from './index';
+import { validateUserInputAndUpdateSubmitButton } from '.';
 
 // Mock the dependencies
 jest.mock('../hasExistingPosition', () => ({

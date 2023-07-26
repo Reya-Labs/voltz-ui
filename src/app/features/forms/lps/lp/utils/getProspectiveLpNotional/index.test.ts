@@ -1,5 +1,5 @@
 import { isUserInputNotionalError } from '../../../../common';
-import { getProspectiveLpNotional } from './index';
+import { getProspectiveLpNotional } from '.';
 
 jest.mock('../../../../common');
 

@@ -1,4 +1,4 @@
-import { getNewPositionFixedRate } from './index';
+import { getNewPositionFixedRate } from '.';
 
 describe('getNewPositionFixedRate', () => {
   const state = {

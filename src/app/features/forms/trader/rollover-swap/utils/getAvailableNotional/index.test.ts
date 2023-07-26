@@ -1,5 +1,5 @@
 import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
-import { getAvailableNotional } from './index';
+import { getAvailableNotional } from '.';
 
 jest.mock('../getProspectiveSwapMode', () => {
   return {

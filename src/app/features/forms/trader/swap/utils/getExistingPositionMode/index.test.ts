@@ -1,4 +1,4 @@
-import { getExistingPositionMode } from './index';
+import { getExistingPositionMode } from '.';
 
 describe('getExistingPositionMode', () => {
   it('should return null when position is not fetched successfully', () => {

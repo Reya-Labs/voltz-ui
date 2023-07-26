@@ -1,8 +1,8 @@
 import { getHistoricalRates, Granularity } from '@voltz-protocol/v1-sdk';
 
 import { rejectThunkWithError } from '../../../helpers';
+import { fetchHistoricalRatesThunkHandler } from '.';
 import { CACHE, getCacheId } from './cache';
-import { fetchHistoricalRatesThunkHandler } from './index';
 
 // Mock CACHE object
 const mockCache = {

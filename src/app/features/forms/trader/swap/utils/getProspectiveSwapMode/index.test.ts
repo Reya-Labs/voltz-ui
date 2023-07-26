@@ -1,5 +1,5 @@
 import { getExistingPositionMode } from '../getExistingPositionMode';
-import { getProspectiveSwapMode } from './index';
+import { getProspectiveSwapMode } from '.';
 
 jest.mock('../getExistingPositionMode');
 

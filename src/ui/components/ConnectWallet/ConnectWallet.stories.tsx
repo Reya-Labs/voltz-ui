@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { ConnectWallet } from './index';
+import { ConnectWallet } from '.';
 
 export default {
   title: 'ui/components/ConnectWallet',

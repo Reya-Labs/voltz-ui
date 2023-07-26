@@ -7,7 +7,7 @@ import {
 } from '../../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useAMMs } from '../../../../../hooks/useAMMs';
-import { useGetWalletBalanceAndUnderlyingTokenAllowance } from './index';
+import { useGetWalletBalanceAndUnderlyingTokenAllowance } from '.';
 
 jest.mock('../../../../../app/features/forms/lps/lp', () => ({
   getWalletBalanceThunk: jest.fn(),

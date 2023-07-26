@@ -1,6 +1,6 @@
 import { getExistingPositionMode } from '../getExistingPositionMode';
 import { getExistingPositionNotional } from '../getExistingPositionNotional';
-import { getAdjustedSwapNotional } from './index';
+import { getAdjustedSwapNotional } from '.';
 
 jest.mock('../getExistingPositionMode');
 jest.mock('../getExistingPositionNotional');

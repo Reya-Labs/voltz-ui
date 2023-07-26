@@ -6,7 +6,7 @@ import {
   roundIntegerNumber,
   stringToBigFloat,
   toUSFormat,
-} from './index';
+} from '.';
 
 describe('number', () => {
   describe('formatNumber', () => {

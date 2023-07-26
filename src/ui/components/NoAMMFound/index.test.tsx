@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { HashRouter } from 'react-router-dom';
 
-import { NoAMMFound } from './index';
+import { NoAMMFound } from '.';
 
 describe('<NoAMMFound />', () => {
   const mockTo = '/pools';

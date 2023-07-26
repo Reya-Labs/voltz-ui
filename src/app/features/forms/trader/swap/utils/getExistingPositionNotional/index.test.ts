@@ -1,4 +1,4 @@
-import { getExistingPositionNotional } from './index';
+import { getExistingPositionNotional } from '.';
 
 describe('getExistingPositionNotional', () => {
   it('should return null when position is not fetched successfully', () => {

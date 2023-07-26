@@ -22,7 +22,7 @@ import {
   selectUserInputMarginInfo,
   selectUserInputNotionalInfo,
   selectWalletBalance,
-} from './index';
+} from '.';
 import { getAvailableMargin, getProspectiveLpMargin, getProspectiveLpNotional } from './utils';
 
 // Mock number utils

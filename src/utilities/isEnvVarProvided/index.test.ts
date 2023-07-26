@@ -1,4 +1,4 @@
-import { isEnvVarProvided } from './index';
+import { isEnvVarProvided } from '.';
 
 describe('isEnvVarProvided', () => {
   it('returns true if envVarValue is provided', () => {

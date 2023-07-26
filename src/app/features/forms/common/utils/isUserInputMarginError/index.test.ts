@@ -1,4 +1,4 @@
-import { isUserInputMarginError } from './index';
+import { isUserInputMarginError } from '.';
 
 describe('isUserInputMarginError', () => {
   it('should return true when margin amount has an error', () => {

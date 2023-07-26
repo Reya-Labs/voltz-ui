@@ -1,4 +1,4 @@
-import { localeParseFloat } from './index';
+import { localeParseFloat } from '.';
 
 describe('localeParseFloat', () => {
   test.each([

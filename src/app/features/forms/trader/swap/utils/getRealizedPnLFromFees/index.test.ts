@@ -1,4 +1,4 @@
-import { getRealizedPnLFromFees } from './index';
+import { getRealizedPnLFromFees } from '.';
 
 describe('getRealizedPnLFromFees', () => {
   it('should return null when position status is not success', () => {

@@ -1,6 +1,6 @@
 import { checkLowLeverageNotification } from '../../../../common';
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
-import { updateLeverage } from './index';
+import { updateLeverage } from '.';
 
 jest.mock('../../../../common', () => ({
   checkLowLeverageNotification: jest.fn(),

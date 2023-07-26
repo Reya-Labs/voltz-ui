@@ -1,4 +1,4 @@
-import { getProspectiveSwapMargin } from './index';
+import { getProspectiveSwapMargin } from '.';
 
 describe('getProspectiveSwapMargin', () => {
   const state = {

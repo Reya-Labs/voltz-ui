@@ -1,6 +1,6 @@
 import { getExistingPositionMode } from '../getExistingPositionMode';
 import { getExistingPositionNotional } from '../getExistingPositionNotional';
-import { getExistingPositionFixedRate } from './index';
+import { getExistingPositionFixedRate } from '.';
 
 jest.mock('../getExistingPositionNotional', () => ({
   getExistingPositionNotional: jest.fn(),

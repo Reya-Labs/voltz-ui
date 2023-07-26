@@ -1,4 +1,4 @@
-import { isUserInputNotionalError } from './index';
+import { isUserInputNotionalError } from '.';
 
 describe('isUserInputNotionalError', () => {
   it('should return true when notional amount has an error', () => {

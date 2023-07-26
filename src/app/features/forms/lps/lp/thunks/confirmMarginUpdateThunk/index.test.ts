@@ -5,7 +5,7 @@ import {
   updateMarginService,
 } from '../../../../common';
 import { getExistingPositionId, getProspectiveLpMargin } from '../../utils';
-import { confirmMarginUpdateThunkHandler } from './index';
+import { confirmMarginUpdateThunkHandler } from '.';
 
 jest.mock('../../../../../helpers');
 jest.mock('../../utils');

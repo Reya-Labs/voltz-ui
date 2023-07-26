@@ -1,6 +1,6 @@
 import { rejectThunkWithError } from '../../../../../helpers';
 import { getWalletBalanceService } from '../../../../common';
-import { getWalletBalanceThunkHandler } from './index';
+import { getWalletBalanceThunkHandler } from '.';
 
 // Mock dependencies
 jest.mock('../../../../../helpers', () => ({

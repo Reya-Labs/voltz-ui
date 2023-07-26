@@ -1,4 +1,4 @@
-import { resetNotionalAndMarginEditMode } from './index';
+import { resetNotionalAndMarginEditMode } from '.';
 
 describe('resetNotionalAndMarginEditMode', () => {
   it('should set notionalAmount.editMode and marginAmount.editMode to "add"', () => {

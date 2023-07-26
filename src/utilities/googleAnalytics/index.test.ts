@@ -1,4 +1,4 @@
-import { pushEvent } from './index';
+import { pushEvent } from '.';
 
 jest.mock('uuid', () => {
   return {

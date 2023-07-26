@@ -1,6 +1,6 @@
 import { getEditPositionNotional } from '../getEditPositionNotional';
 import { getVariableRate } from '../getVariableRate';
-import { getEditPositionVariableRate } from './index';
+import { getEditPositionVariableRate } from '.';
 
 jest.mock('../getEditPositionNotional');
 jest.mock('../getVariableRate');

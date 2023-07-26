@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PositionsFilterId } from '../index';
+import { PositionsFilterId } from '../';
 import { ActivePositionsHeader } from './ActivePositionsHeader';
 import { MaturedPositionsHeader } from './MaturedPositionsHeader';
 import { SettledPositionsHeader } from './SettledPositionsHeader';

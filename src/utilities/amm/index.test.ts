@@ -8,7 +8,7 @@ import {
   generatePositionIdForRoute,
   getAmmProtocol,
   getProtocolName,
-} from './index';
+} from '.';
 
 jest.mock('../../hooks/voltz-config/config', () => ({
   getConfig: function () {
