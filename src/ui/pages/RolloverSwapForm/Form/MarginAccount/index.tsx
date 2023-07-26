@@ -6,16 +6,14 @@ import {
   selectPositionMarginFormatted,
 } from '../../../../../app/features/forms/trader/rollover-swap';
 import { useAppSelector } from '../../../../../app/hooks';
-import { MarginAccount as MarginAccountComponent } from '../../../../components/MarginAccount';
+import { MarginAccountFormPreview } from '../../../../components/MarginAccountFormPreview';
 
-type MarginAccountProps = {};
-
-export const MarginAccount: React.FunctionComponent<MarginAccountProps> = () => {
+export const MarginAccount: React.FunctionComponent = () => {
   const token = useAppSelector(selectAMMTokenFormatted);
   const accountName = useAppSelector(selectMarginAccountName);
   const balanceValue = useAppSelector(selectPositionMarginFormatted);
 
   return (
-    <MarginAccountComponent accountName={accountName} balanceValue={balanceValue} token={token} />
+    <MarginAccountFormPreview accountName={accountName} balanceValue={balanceValue} token={token} />
   );
 };

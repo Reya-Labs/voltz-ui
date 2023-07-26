@@ -6,7 +6,7 @@ import {
   selectPositionMarginFormatted,
 } from '../../../../../app/features/forms/lps/rollover-lp';
 import { useAppSelector } from '../../../../../app/hooks';
-import { MarginAccount as MarginAccountComponent } from '../../../../components/MarginAccount';
+import { MarginAccountFormPreview } from '../../../../components/MarginAccountFormPreview';
 
 type MarginAccountProps = {};
 
@@ -16,6 +16,6 @@ export const MarginAccount: React.FunctionComponent<MarginAccountProps> = () => 
   const balanceValue = useAppSelector(selectPositionMarginFormatted);
 
   return (
-    <MarginAccountComponent accountName={accountName} balanceValue={balanceValue} token={token} />
+    <MarginAccountFormPreview accountName={accountName} balanceValue={balanceValue} token={token} />
   );
 };
