@@ -1,5 +1,4 @@
-import { Typography } from 'brokoli-ui';
-import { TokenIcon } from 'brokoli-ui/dist';
+import { TokenIcon, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { LeftSide, RightSide, Row } from './CollateralDistributionRow.styled';
@@ -11,7 +10,7 @@ const labelMap: Record<CollateralDistributionRowProps['token'], string> = {
   usdc: 'USDC',
 };
 export type CollateralDistributionRowProps = {
-  token: 'dai' | 'eth' | 'other' | 'usdc';
+  token: 'dai' | 'eth' | 'other' | 'usdc' | string;
   percentage: number;
   distribution: number;
   distributionUSD: number;
@@ -26,7 +25,7 @@ export const CollateralDistributionRow: React.FunctionComponent<CollateralDistri
   return (
     <Row>
       <LeftSide>
-        <TokenIcon token={token} />
+        <TokenIcon size={20} token={token} />
         <Typography colorToken="lavenderWeb2" typographyToken="secondaryBodyMediumRegular">
           {percentage}%
         </Typography>

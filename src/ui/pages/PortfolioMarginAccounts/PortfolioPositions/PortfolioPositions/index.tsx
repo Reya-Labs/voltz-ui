@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { selectChainId } from '../../../../../app/features/network';
 import {
+  fetchPortfolioSummaryThunk,
   initialisePortfolioPositionsThunk,
   selectPositionsLoadedState,
 } from '../../../../../app/features/portfolio';
@@ -33,6 +34,21 @@ export const PortfolioPositions: React.FunctionComponent = () => {
       }),
     );
   }, [positionsLoadedState, account, chainId, dispatch]);
+
+  useEffect(() => {
+    if (!chainId) {
+      return;
+    }
+    if (!account) {
+      return;
+    }
+    void dispatch(
+      fetchPortfolioSummaryThunk({
+        account,
+      }),
+    );
+  }, [account, chainId, dispatch]);
+
   if (!chainId) {
     return null;
   }
