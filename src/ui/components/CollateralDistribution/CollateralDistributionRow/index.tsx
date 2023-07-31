@@ -1,22 +1,9 @@
 import { Typography } from 'brokoli-ui';
+import { TokenIcon } from 'brokoli-ui/dist';
 import React from 'react';
 
-import {
-  DaiIcon,
-  EthIcon,
-  LeftSide,
-  OtherIcon,
-  RightSide,
-  Row,
-  UsdcIcon,
-} from './CollateralDistributionRow.styled';
+import { LeftSide, RightSide, Row } from './CollateralDistributionRow.styled';
 
-const iconMap: Record<CollateralDistributionRowProps['token'], React.FunctionComponent> = {
-  dai: DaiIcon,
-  eth: EthIcon,
-  other: OtherIcon,
-  usdc: UsdcIcon,
-};
 const labelMap: Record<CollateralDistributionRowProps['token'], string> = {
   dai: 'DAI',
   eth: 'ETH',
@@ -35,14 +22,13 @@ export const CollateralDistributionRow: React.FunctionComponent<CollateralDistri
   distributionUSD,
   distribution,
 }) => {
-  const Icon = iconMap[token] || React.Fragment;
   const label = labelMap[token] || 'Unknown';
   return (
     <Row>
       <LeftSide>
-        <Icon />
+        <TokenIcon token={token} />
         <Typography colorToken="lavenderWeb2" typographyToken="secondaryBodyMediumRegular">
-          {percentage}
+          {percentage}%
         </Typography>
         <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
           {label}
@@ -53,7 +39,7 @@ export const CollateralDistributionRow: React.FunctionComponent<CollateralDistri
           {distribution}
         </Typography>
         <Typography colorToken="lavenderWeb3" typographyToken="secondaryBodyXSmallRegular">
-          ({token === 'other' ? 'Multiple Token' : distributionUSD})
+          ({token === 'other' ? 'Multiple Token' : `$${distributionUSD}`})
         </Typography>
       </RightSide>
     </Row>

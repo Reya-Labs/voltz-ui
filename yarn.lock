@@ -9365,15 +9365,15 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.84.1:
-  version "1.84.1"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.84.1.tgz#d8255d95707a2f1e7e4be64a4e3194ddb59a0cdb"
-  integrity sha512-LaZNHBa0vbgqse6OGXRswcqf0GyCN1/WqEfcwY17UAinK2Q8Nf4loeIkKYRtguDaMRxQi7yk2q1nVkMGUZ3U8Q==
+brokoli-ui@1.87.1:
+  version "1.87.1"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.87.1.tgz#71064c2018ba4b32e0a29802814c8e40efea35fe"
+  integrity sha512-14ebQWV0d5A6bwdY1x33rWu6H2wfqrZF5eEsgqEn9GAF0s1dt8UBjoo7KiW+jDNOVhR8iJNzpZ+ymvs2waTKBg==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"
     "@nivo/line" "0.80.0"
-    react-animate-height "3.1.0"
+    react-animate-height "3.2.2"
     react-currency-input-field "3.6.11"
     react-metamask-avatar "1.2.0"
     react-tiny-popover "7.2.0"
@@ -20005,11 +20005,6 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.8:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
-
-react-animate-height@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/react-animate-height/-/react-animate-height-3.1.0.tgz#f7def40acfe857f936621fe9d7bad601467d0e31"
-  integrity sha512-+0pW2OzB8PzVn10dpTB9q5jFI+GwQTnCDLbzyqPBUzKXJfpBrlWW954uud/59Mreo+laRN/fPzvckuA+WTptXA==
 
 react-animate-height@3.2.2:
   version "3.2.2"

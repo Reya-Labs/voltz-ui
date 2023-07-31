@@ -6,7 +6,7 @@ import { Icon } from './Icon';
 import { iconMap, SupportedIcons } from './types';
 
 export default {
-  title: 'Atomic/Icon',
+  title: 'Components/Profile/Icon',
   component: Icon,
   args: {},
 } as ComponentMeta<typeof React.Fragment>;
