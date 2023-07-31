@@ -3,7 +3,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getNextSortDirection } from '../helpers';
 import { resetSortingDirection } from './constants';
 import { initialState } from './state';
-import { initialisePortfolioPositionsThunk, PortfolioPosition } from './thunks';
+import {
+  fetchPortfolioSummaryThunk,
+  initialisePortfolioPositionsThunk,
+  PortfolioPosition,
+  PortfolioSummary,
+} from './thunks';
 import { PositionSortId } from './types';
 
 const slice = createSlice({
@@ -38,6 +43,18 @@ const slice = createSlice({
       .addCase(initialisePortfolioPositionsThunk.fulfilled, (state, { payload }) => {
         state.positionsLoadedState = 'succeeded';
         state.positions = payload as PortfolioPosition[];
+      })
+      .addCase(fetchPortfolioSummaryThunk.pending, (state) => {
+        state.portfolioSummaryLoadedState = 'pending';
+        state.portfolioSummary = null;
+      })
+      .addCase(fetchPortfolioSummaryThunk.rejected, (state) => {
+        state.portfolioSummaryLoadedState = 'failed';
+        state.portfolioSummary = null;
+      })
+      .addCase(fetchPortfolioSummaryThunk.fulfilled, (state, { payload }) => {
+        state.portfolioSummaryLoadedState = 'succeeded';
+        state.portfolioSummary = payload as PortfolioSummary;
       });
   },
 });

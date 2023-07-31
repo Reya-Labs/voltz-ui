@@ -1,4 +1,9 @@
-import { PositionSortId, PositionSorting, PositionsSummaryFormatted } from './types';
+import {
+  PortfolioSummaryFormatted,
+  PositionSortId,
+  PositionSorting,
+  PositionsSummaryFormatted,
+} from './types';
 
 export const resetSortingDirection: PositionSorting = {
   maturity: 'noSort',
@@ -82,4 +87,23 @@ export const defaultPositionsSummaryFormatted: PositionsSummaryFormatted = {
       label: 'Settled',
     },
   ],
+};
+
+export const defaultPortfolioSummaryFormatted: PortfolioSummaryFormatted = {
+  healthyPositionsLength: '--',
+  warningPositionsLength: '--',
+  dangerPositionsLength: '--',
+  totalPortfolioValueUSDFormatted: '--',
+  totalPortfolioMarginValueUSDFormatted: '--',
+  totalPortfolioRealizedPNLValueUSDFormatted: '--',
+  totalPortfolioUnrealizedPNLValueUSDFormatted: '--',
+  totalPortfolioNotionalValueUSDCompactFormatted: {
+    compactNumber: '--',
+    compactSuffix: '',
+  },
+  totalPortfolioCollateralUSDCompactFormatted: {
+    compactNumber: '--',
+    compactSuffix: '',
+  },
+  distributions: [],
 };

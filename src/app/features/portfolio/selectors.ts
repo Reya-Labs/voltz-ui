@@ -2,9 +2,14 @@ import { isOnlyV2PoolsPositions } from '../../../utilities/is-only-v2-pools-posi
 import { compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { formFormatNumber } from '../forms/common';
-import { defaultPositionsSummaryFormatted, SORT_CONFIG } from './constants';
+import {
+  defaultPortfolioSummaryFormatted,
+  defaultPositionsSummaryFormatted,
+  SORT_CONFIG,
+} from './constants';
 import { getPositionsSummary, mapPortfolioPositionToPortfolioUI, sortPositions } from './helpers';
 import {
+  PortfolioSummaryFormatted,
   PositionSortDirection,
   PositionSortId,
   PositionsSummaryFormatted,
@@ -119,4 +124,57 @@ export const selectPositionsSortOptions = (
 
 export const selectPositionsLoadedState = (state: RootState) => {
   return state.portfolio.positionsLoadedState;
+};
+
+export const selectPortfolioSummaryLoadedState = (state: RootState) => {
+  return state.portfolio.portfolioSummaryLoadedState;
+};
+
+export const selectPortfolioSummaryLoading = (state: RootState): boolean => {
+  const loadedState = selectPortfolioSummaryLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectPortfolioSummary = (state: RootState) => {
+  return state.portfolio.portfolioSummary;
+};
+
+export const selectPortfolioSummaryFormatted = (state: RootState): PortfolioSummaryFormatted => {
+  const summary = selectPortfolioSummary(state);
+  if (summary === null || selectPortfolioSummaryLoading(state)) {
+    return defaultPortfolioSummaryFormatted;
+  }
+  const {
+    healthyPositionsLength,
+    warningPositionsLength,
+    dangerPositionsLength,
+    totalPortfolioCollateralValueUSD,
+    totalPortfolioRealizedPNLValueUSD,
+    totalPortfolioMarginValueUSD,
+    totalPortfolioNotionalValueUSD,
+    totalPortfolioUnrealizedPNLValueUSD,
+    distributions,
+  } = summary;
+  return {
+    healthyPositionsLength: healthyPositionsLength.toString(),
+    dangerPositionsLength: dangerPositionsLength.toString(),
+    warningPositionsLength: warningPositionsLength.toString(),
+    totalPortfolioMarginValueUSDFormatted: formFormatNumber(totalPortfolioMarginValueUSD),
+    totalPortfolioNotionalValueUSDCompactFormatted: compactFormatToParts(
+      totalPortfolioNotionalValueUSD,
+    ),
+    totalPortfolioRealizedPNLValueUSDFormatted: formFormatNumber(totalPortfolioRealizedPNLValueUSD),
+    totalPortfolioUnrealizedPNLValueUSDFormatted: formFormatNumber(
+      totalPortfolioUnrealizedPNLValueUSD,
+    ),
+    totalPortfolioValueUSDFormatted: formFormatNumber(
+      totalPortfolioMarginValueUSD +
+        totalPortfolioUnrealizedPNLValueUSD +
+        totalPortfolioRealizedPNLValueUSD,
+    ),
+    totalPortfolioCollateralUSDCompactFormatted: compactFormatToParts(
+      totalPortfolioCollateralValueUSD,
+    ),
+    distributions: distributions.slice(),
+  };
 };
