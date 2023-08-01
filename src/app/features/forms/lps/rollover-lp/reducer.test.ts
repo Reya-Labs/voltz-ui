@@ -291,7 +291,7 @@ describe('rolloverLpFormReducer', () => {
         disabled: true,
         message: {
           text: 'Waiting for confirmation...',
-          isError: false,
+          type: 'info',
         },
       },
     };
@@ -309,7 +309,7 @@ describe('rolloverLpFormReducer', () => {
         disabled: false,
         message: {
           text: payload,
-          isError: true,
+          type: 'error',
         },
       },
     };

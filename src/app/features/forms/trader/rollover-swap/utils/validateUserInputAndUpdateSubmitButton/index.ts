@@ -1,5 +1,5 @@
 import { Draft } from '@reduxjs/toolkit';
-import { AMM } from '@voltz-protocol/v1-sdk/dist/types';
+import { AMM } from '@voltz-protocol/v1-sdk';
 
 import { isAMMPaused } from '../../../../../../../utilities/amm';
 import { isUserInputMarginError, isUserInputNotionalError } from '../../../../common';
