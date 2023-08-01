@@ -109,5 +109,6 @@ export const generatePositionIdForRoute = (position: { id: string }) => position
 
 export const isV2AMM = (amm: AMM) => amm.market.tags.isV2;
 
-export const isAMMPaused = (amm: AMM) => (!amm ? false : false);
-export const isAMMPausedPortfolio = (amm: PortfolioPositionPool) => (!amm ? false : false);
+export const isAMMPaused = (amm: AMM) => (!amm ? false : amm.isPaused);
+export const isAMMPausedPortfolio = (amm: PortfolioPositionPool) =>
+  !amm ? false : amm.flags.isPaused;
