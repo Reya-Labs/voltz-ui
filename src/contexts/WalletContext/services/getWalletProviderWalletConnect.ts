@@ -1,6 +1,8 @@
-import WalletConnectProvider from '@walletconnect/ethereum-provider';
+import { EthereumProvider } from '@walletconnect/ethereum-provider';
 import { ethers } from 'ethers';
 
+import { getAllowedChainIds } from '../../../app/features/network';
+import { isEnvVarProvided } from '../../../utilities/isEnvVarProvided';
 import { getSentryTracker } from '../../../utilities/sentry';
 
 /**
@@ -8,13 +10,20 @@ import { getSentryTracker } from '../../../utilities/sentry';
  */
 export const getWalletProviderWalletConnect = async () => {
   window.localStorage.removeItem('walletconnect');
+  const projectId = process.env.REACT_APP_WALLECTCONNECT_PROJECT_ID;
+  if (!projectId || !isEnvVarProvided(projectId)) {
+    // projectId not provided, we cannot perform WalletConnect operations
+    throw new Error('WalletConnect not available');
+  }
   let provider;
 
   // Try to init WalletConnect - could fail if INFURA_ID is incorrect
   try {
-    provider = new WalletConnectProvider({
-      infuraId: process.env.REACT_APP_WALLETCONNECT_INFURA_ID,
-    });
+    provider = await EthereumProvider.init({
+      projectId,
+      chains: getAllowedChainIds(),
+      showQrModal: true,
+    } as never);
   } catch (error) {
     getSentryTracker().captureException(error);
     throw new Error('WalletConnect not available');
@@ -22,10 +31,12 @@ export const getWalletProviderWalletConnect = async () => {
 
   // Now try and get the user to log into their wallet
   try {
-    await provider.connect(); //  Enable session (triggers QR Code modal)
+    //  Enable session (triggers QR Code modal)
+    await provider.connect();
   } catch (error) {
     getSentryTracker().captureException(error);
-    return undefined; // assume user cancelled login
+    // assume user cancelled login
+    return undefined;
   }
 
   if (provider) {
