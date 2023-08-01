@@ -4,7 +4,7 @@ import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 import { hasExistingPosition } from '../hasExistingPosition';
 import { validateUserInput } from '../validateUserInput';
-import { validateUserInputAndUpdateSubmitButton } from './index';
+import { validateUserInputAndUpdateSubmitButton } from '.';
 
 // Mock the dependencies
 jest.mock('../hasExistingPosition', () => ({
@@ -72,7 +72,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       disabled: true,
       message: {
         text: 'Almost ready',
-        isError: false,
+        type: 'info',
       },
     };
     validateUserInputAndUpdateSubmitButton(state as never);
@@ -121,7 +121,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       disabled: true,
       message: {
         text: 'Almost ready',
-        isError: false,
+        type: 'info',
       },
     };
     validateUserInputAndUpdateSubmitButton(state as never);
@@ -183,7 +183,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       disabled: false,
       message: {
         text: 'Please approve USDC',
-        isError: false,
+        type: 'info',
       },
     });
   });
@@ -243,7 +243,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       disabled: true,
       message: {
         text: '',
-        isError: false,
+        type: 'info',
       },
     });
   });
@@ -303,7 +303,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       disabled: false,
       message: {
         text: 'Please approve USDC. Approval amount must cover for both the margin and the fees.',
-        isError: false,
+        type: 'info',
       },
     });
   });
@@ -363,7 +363,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
       disabled: false,
       message: {
         text: "Token approved, let's trade",
-        isError: false,
+        type: 'info',
       },
     });
   });

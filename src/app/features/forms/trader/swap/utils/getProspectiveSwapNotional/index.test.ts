@@ -2,7 +2,7 @@ import { isUserInputNotionalError } from '../../../../common';
 import { getAdjustedSwapNotional } from '../getAdjustedSwapNotional';
 import { getExistingPositionMode } from '../getExistingPositionMode';
 import { getExistingPositionNotional } from '../getExistingPositionNotional';
-import { getProspectiveSwapNotional } from './index';
+import { getProspectiveSwapNotional } from '.';
 
 jest.mock('../getExistingPositionMode');
 jest.mock('../getExistingPositionNotional');

@@ -5,6 +5,7 @@ import {
   closeSettleFlowAction,
   confirmSettleThunk,
   selectAMMMarket,
+  selectAMMPaused,
   selectAMMToken,
   selectSettleError,
 } from '../../../../app/features/settle-flow';
@@ -24,6 +25,8 @@ import {
 export const SettleConfirmationStep: React.FunctionComponent = () => {
   const market = useAppSelector(selectAMMMarket);
   const token = useAppSelector(selectAMMToken);
+  const error = useAppSelector(selectSettleError);
+  const isAMMPaused = useAppSelector(selectAMMPaused);
   const { signer } = useWallet();
   const dispatch = useAppDispatch();
   const handleConfirm = useCallback(() => {
@@ -36,7 +39,6 @@ export const SettleConfirmationStep: React.FunctionComponent = () => {
       }),
     );
   }, [signer, dispatch]);
-  const error = useAppSelector(selectSettleError);
   const handleCloseButtonClick = useCallback(() => {
     dispatch(closeSettleFlowAction());
   }, [dispatch]);
@@ -61,13 +63,22 @@ export const SettleConfirmationStep: React.FunctionComponent = () => {
         <TransactionDetails />
       </FeeDetailsBox>
       <Button
-        bottomLeftText={error ? error : ''}
-        bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
+        bottomLeftText={
+          isAMMPaused
+            ? 'Pool paused until further notice. Check Discord for updates.'
+            : error
+            ? error
+            : ''
+        }
+        bottomLeftTextColorToken={
+          isAMMPaused ? 'orangeYellow' : error ? 'wildStrawberry' : undefined
+        }
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
+        disabled={isAMMPaused}
         variant="primary"
         onClick={handleConfirm}
       >
-        Confirm
+        {isAMMPaused ? 'Paused' : 'Confirm'}
       </Button>
     </ConfirmationStepBox>
   );

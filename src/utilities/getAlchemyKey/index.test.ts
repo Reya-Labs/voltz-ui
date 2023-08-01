@@ -1,4 +1,4 @@
-import { getAlchemyKey } from './index';
+import { getAlchemyKey } from '.';
 
 describe('getAlchemyKey', () => {
   it('should return an empty string if the process environment variable is not provided', () => {

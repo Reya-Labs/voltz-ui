@@ -1,4 +1,3 @@
-import * as constants from './constants';
 import {
   deleteReferrer,
   getReferrer,
@@ -6,7 +5,8 @@ import {
   isValidReferrerStored,
   isValidReferrerValue,
   setReferrer,
-} from './index';
+} from '.';
+import * as constants from './constants';
 
 describe('referrer-store', () => {
   describe('getReferrer', () => {

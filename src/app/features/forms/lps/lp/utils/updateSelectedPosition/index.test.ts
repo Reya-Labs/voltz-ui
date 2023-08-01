@@ -1,4 +1,4 @@
-import { updateSelectedPosition } from './index';
+import { updateSelectedPosition } from '.';
 
 describe('updateSelectedPosition', () => {
   it('does not update selected position if positions status is not "success"', () => {

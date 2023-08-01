@@ -23,7 +23,7 @@ import {
   selectUserInputMarginInfo,
   selectUserInputNotionalInfo,
   selectWalletBalance,
-} from './index';
+} from '.';
 import {
   getAvailableMargin,
   getProspectiveLpMargin,
@@ -695,6 +695,17 @@ describe('lp-form.selectors', () => {
   });
 
   describe('selectSubmitButtonText', () => {
+    it('returns the correct text for the "paused" state', () => {
+      const state = {
+        lpForm: {
+          submitButton: {
+            state: 'paused',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Paused');
+    });
+
     it('returns the correct text for the "lp" state', () => {
       expect(
         selectSubmitButtonText({

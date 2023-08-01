@@ -5,7 +5,7 @@ import {
   pushSwapTransactionFailedEvent,
   pushSwapTransactionSubmittedEvent,
   pushSwapTransactionSuccessEvent,
-} from './index';
+} from '.';
 
 jest.mock('../../../../../../utilities/googleAnalytics', () => ({
   pushEvent: jest.fn(),

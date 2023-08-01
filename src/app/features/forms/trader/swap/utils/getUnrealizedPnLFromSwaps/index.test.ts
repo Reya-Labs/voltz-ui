@@ -1,4 +1,4 @@
-import { getUnrealizedPnLFromSwaps } from './index';
+import { getUnrealizedPnLFromSwaps } from '.';
 
 describe('getUnrealizedPnLFromSwaps', () => {
   it('should return null when position status is not success', () => {

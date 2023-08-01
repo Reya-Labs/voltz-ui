@@ -1,5 +1,5 @@
+import { deleteChainId, getChainId, setChainId } from '.';
 import * as constants from './constants';
-import { deleteChainId, getChainId, setChainId } from './index';
 
 describe('chain-store', () => {
   describe('getChainId', () => {

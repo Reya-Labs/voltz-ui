@@ -366,7 +366,7 @@ describe('swapFormReducer', () => {
           disabled: true,
           message: {
             text: 'Waiting for confirmation...',
-            isError: false,
+            type: 'info',
           },
         });
       });
@@ -381,7 +381,7 @@ describe('swapFormReducer', () => {
           disabled: false,
           message: {
             text: 'Error happened',
-            isError: true,
+            type: 'error',
           },
         });
       });

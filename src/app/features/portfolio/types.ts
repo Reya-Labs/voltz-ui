@@ -1,11 +1,13 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { PositionsFilterId } from '../../../ui/pages/Portfolio/PortfolioPositions/PositionsList';
-import { PortfolioPosition } from './thunks';
+import { PortfolioPosition, PortfolioSummary } from './thunks';
 
 export type SliceState = {
   positionsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   positions: PortfolioPosition[];
+  portfolioSummaryLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  portfolioSummary: PortfolioSummary | null;
   sortingDirection: PositionSorting;
 };
 
@@ -97,4 +99,22 @@ export type PositionsSummaryFormatted = {
     label: string;
     attentionPrefixText?: string;
   }[];
+};
+export type PortfolioSummaryFormatted = {
+  healthyPositionsLength: string;
+  warningPositionsLength: string;
+  dangerPositionsLength: string;
+  totalPortfolioValueUSDFormatted: string;
+  totalPortfolioMarginValueUSDFormatted: string;
+  totalPortfolioRealizedPNLValueUSDFormatted: string;
+  totalPortfolioUnrealizedPNLValueUSDFormatted: string;
+  totalPortfolioNotionalValueUSDCompactFormatted: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  totalPortfolioCollateralUSDCompactFormatted: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  distributions: PortfolioSummary['distributions'];
 };

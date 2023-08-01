@@ -1,6 +1,6 @@
 import { getProspectiveLpNotional } from '../getProspectiveLpNotional';
 import { hasExistingPosition } from '../hasExistingPosition';
-import { getAvailableMargin } from './index';
+import { getAvailableMargin } from '.';
 
 jest.mock('../getProspectiveLpNotional');
 jest.mock('../hasExistingPosition');

@@ -1,6 +1,6 @@
 import { formatNumber } from '../../../../../../../utilities/number';
 import { calculateLeverageOptions } from '../../../../common';
-import { updateLeverageOptionsAfterGetPoolLpInfo } from './index';
+import { updateLeverageOptionsAfterGetPoolLpInfo } from '.';
 
 jest.mock('../../../../../../../utilities/number', () => ({
   formatNumber: jest.fn(),

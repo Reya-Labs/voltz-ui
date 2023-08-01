@@ -310,7 +310,7 @@ describe('rolloverSwapFormReducer', () => {
           disabled: true,
           message: {
             text: 'Waiting for confirmation...',
-            isError: false,
+            type: 'info',
           },
         });
       });
@@ -325,7 +325,7 @@ describe('rolloverSwapFormReducer', () => {
           disabled: false,
           message: {
             text: 'Error happened',
-            isError: true,
+            type: 'error',
           },
         });
       });

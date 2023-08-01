@@ -4,7 +4,7 @@ import {
   pushLPTransactionSubmittedEvent,
   pushLPTransactionSuccessEvent,
   pushPageViewEvent,
-} from './index';
+} from '.';
 
 jest.mock('../../../../../../utilities/googleAnalytics', () => ({
   pushEvent: jest.fn(),

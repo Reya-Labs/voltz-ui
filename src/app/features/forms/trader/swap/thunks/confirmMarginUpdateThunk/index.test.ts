@@ -1,7 +1,7 @@
 import { rejectThunkWithError } from '../../../../../helpers';
 import { updateMarginService } from '../../../../common';
 import { getExistingPositionId, getProspectiveSwapMargin } from '../../utils';
-import { confirmMarginUpdateThunkHandler } from './index';
+import { confirmMarginUpdateThunkHandler } from '.';
 
 jest.mock('../../../../../helpers');
 jest.mock('../../utils');

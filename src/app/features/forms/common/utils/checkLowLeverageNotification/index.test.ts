@@ -1,4 +1,4 @@
-import { checkLowLeverageNotification } from './index';
+import { checkLowLeverageNotification } from '.';
 
 describe('checkLowLeverageNotification', () => {
   it('returns true when leverage is below minimum allowed and notification is not shown', () => {

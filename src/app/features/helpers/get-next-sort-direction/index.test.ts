@@ -1,4 +1,4 @@
-import { getNextSortDirection } from './index';
+import { getNextSortDirection } from '.';
 
 describe('getNextSortDirection', () => {
   it('should return "ascending" when currentSort is "noSort"', () => {

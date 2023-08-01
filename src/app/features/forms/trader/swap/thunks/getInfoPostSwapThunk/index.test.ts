@@ -1,7 +1,7 @@
 import { rejectThunkWithError } from '../../../../../helpers';
 import { isUserInputNotionalError } from '../../../../common';
 import { getProspectiveSwapMode, getProspectiveSwapNotional } from '../../utils';
-import { getInfoPostSwapThunkHandler } from './index';
+import { getInfoPostSwapThunkHandler } from '.';
 
 // Mock dependencies
 jest.mock('../../../../common', () => ({

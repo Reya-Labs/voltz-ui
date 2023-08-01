@@ -1,5 +1,5 @@
 import { hasExistingPosition } from '../hasExistingPosition';
-import { getRealizedPnLFromSwaps } from './index';
+import { getRealizedPnLFromSwaps } from '.';
 
 jest.mock('../hasExistingPosition');
 

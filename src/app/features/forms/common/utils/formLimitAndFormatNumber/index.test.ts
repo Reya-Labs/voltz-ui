@@ -1,6 +1,6 @@
 import { limitAndFormatNumber } from '../../../../../../utilities/number';
 import { FormNumberLimits } from '../../constants';
-import { formLimitAndFormatNumber } from './index';
+import { formLimitAndFormatNumber } from '.';
 
 jest.mock('../../../../../../utilities/number', () => {
   return {

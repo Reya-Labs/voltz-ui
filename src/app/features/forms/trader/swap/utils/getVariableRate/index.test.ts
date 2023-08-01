@@ -1,4 +1,4 @@
-import { getVariableRate } from './index';
+import { getVariableRate } from '.';
 
 describe('getVariableRate', () => {
   it('should return null when variableRate status is not success', () => {

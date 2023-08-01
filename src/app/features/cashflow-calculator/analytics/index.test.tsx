@@ -1,5 +1,5 @@
 import { pushEvent } from '../../../../utilities/googleAnalytics';
-import { pushEstimatedApyChangeEvent } from './index';
+import { pushEstimatedApyChangeEvent } from '.';
 
 jest.mock('../../../../utilities/googleAnalytics', () => ({
   pushEvent: jest.fn(),

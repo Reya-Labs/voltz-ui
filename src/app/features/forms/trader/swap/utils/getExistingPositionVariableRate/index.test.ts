@@ -1,6 +1,6 @@
 import { getExistingPositionNotional } from '../getExistingPositionNotional';
 import { getVariableRate } from '../getVariableRate';
-import { getExistingPositionVariableRate } from './index';
+import { getExistingPositionVariableRate } from '.';
 
 jest.mock('../getExistingPositionNotional');
 jest.mock('../getVariableRate');

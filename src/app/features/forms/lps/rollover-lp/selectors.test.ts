@@ -22,7 +22,7 @@ import {
   selectUserInputMarginInfo,
   selectUserInputNotionalInfo,
   selectWalletBalance,
-} from './index';
+} from '.';
 import { getAvailableMargin, getProspectiveLpMargin, getProspectiveLpNotional } from './utils';
 
 // Mock number utils
@@ -557,6 +557,17 @@ describe('rollover-lp-form.selectors', () => {
   });
 
   describe('selectSubmitButtonText', () => {
+    it('returns the correct text for the "paused" state', () => {
+      const state = {
+        rolloverLpForm: {
+          submitButton: {
+            state: 'paused',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Paused');
+    });
+
     it('returns the correct text for the "rollover" state', () => {
       expect(
         selectSubmitButtonText({

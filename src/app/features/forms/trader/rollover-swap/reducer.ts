@@ -189,7 +189,7 @@ const slice = createSlice({
           disabled: true,
           message: {
             text: 'Waiting for confirmation...',
-            isError: false,
+            type: 'info',
           },
         };
       })
@@ -199,7 +199,7 @@ const slice = createSlice({
           disabled: false,
           message: {
             text: payload as string,
-            isError: true,
+            type: 'error',
           },
         };
       })

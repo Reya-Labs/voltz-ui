@@ -1,6 +1,6 @@
 import { compactFormatToParts } from '../../../../../../utilities/number';
 import { FormNumberLimits } from '../../constants';
-import { formCompactFormatToParts } from './index';
+import { formCompactFormatToParts } from '.';
 
 jest.mock('../../../../../../utilities/number', () => {
   return {

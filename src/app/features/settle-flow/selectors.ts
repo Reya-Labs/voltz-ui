@@ -1,8 +1,10 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
+import { isAMMPausedPortfolio } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import { formCompactFormatToParts, formFormatNumber, getGasInfoFormatted } from '../forms/common';
 import { formatPoolMaturity, formatUnderlyingTokenName } from '../helpers';
+import { PortfolioPositionPool } from '../position-details';
 
 export const selectSettlePosition = (state: RootState) => {
   return state.settleFlow.position;
@@ -14,6 +16,8 @@ export const selectSettleVariant = (state: RootState) => {
   return null;
 };
 export const selectSettleError = (state: RootState) => state.settleFlow.error;
+export const selectAMMPaused = (state: RootState) =>
+  isAMMPausedPortfolio(state.settleFlow.position?.pool as PortfolioPositionPool);
 export const selectSettleStep = (state: RootState) => state.settleFlow.step;
 export const selectConfirmationFlowEtherscanLink = (state: RootState) => {
   return getViewOnEtherScanLink(state.network.chainId, state.settleFlow.txHash || '');

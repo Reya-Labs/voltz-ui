@@ -1,5 +1,5 @@
 import { getEditPositionNotional } from '../getEditPositionNotional';
-import { getEditPositionFixedRate } from './index';
+import { getEditPositionFixedRate } from '.';
 
 jest.mock('../getEditPositionNotional');
 

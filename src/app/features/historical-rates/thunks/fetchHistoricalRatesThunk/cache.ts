@@ -1,6 +1,6 @@
 import { RatesData } from '@voltz-protocol/v1-sdk';
 
-import { FetchHistoricalRatesThunkParams } from './index';
+import { FetchHistoricalRatesThunkParams } from '.';
 
 export const getCacheId = ({
   isFixed,

@@ -1624,6 +1624,17 @@ describe('swap-form.selectors', () => {
   });
 
   describe('selectSubmitButtonText', () => {
+    it('returns the correct text for the "paused" state', () => {
+      const state = {
+        swapForm: {
+          submitButton: {
+            state: 'paused',
+          },
+        },
+      };
+      expect(selectSubmitButtonText(state as never)).toBe('Paused');
+    });
+
     it('returns the correct text for the "swap" state', () => {
       const state = {
         swapForm: {

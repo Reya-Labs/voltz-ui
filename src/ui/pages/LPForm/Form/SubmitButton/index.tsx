@@ -43,7 +43,11 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
     <FormSubmitButton
       bottomLeftText={submitButtonInfo.message.text || undefined}
       bottomLeftTextColorToken={
-        submitButtonInfo.message.isError ? 'wildStrawberry' : 'lavenderWeb2'
+        submitButtonInfo.message.type === 'error'
+          ? 'wildStrawberry'
+          : submitButtonInfo.message.type === 'warning'
+          ? 'orangeYellow'
+          : 'lavenderWeb2'
       }
       disabled={submitButtonInfo.disabled}
       loading={infoPostLp.status === 'pending'}

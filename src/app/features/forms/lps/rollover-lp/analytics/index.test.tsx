@@ -4,7 +4,7 @@ import {
   pushRolloverFailedEvent,
   pushRolloverSubmittedEvent,
   pushRolloverSuccessEvent,
-} from './index';
+} from '.';
 
 jest.mock('../../../../../../utilities/googleAnalytics', () => ({
   pushEvent: jest.fn(),

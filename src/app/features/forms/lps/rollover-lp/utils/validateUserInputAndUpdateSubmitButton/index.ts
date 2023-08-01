@@ -1,5 +1,7 @@
 import { Draft } from '@reduxjs/toolkit';
+import { AMM } from '@voltz-protocol/v1-sdk';
 
+import { isAMMPaused } from '../../../../../../../utilities/amm';
 import { isUserInputMarginError } from '../../../../common';
 import { SliceState } from '../../state';
 import { getAvailableMargin } from '../getAvailableMargin';
@@ -27,7 +29,19 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       disabled: true,
       message: {
         text: 'Almost ready',
-        isError: false,
+        type: 'info',
+      },
+    };
+    return;
+  }
+
+  if (isAMMPaused(state.amm as AMM)) {
+    state.submitButton = {
+      state: 'paused',
+      disabled: true,
+      message: {
+        text: 'Pool paused until further notice. Check Discord for updates.',
+        type: 'warning',
       },
     };
     return;
@@ -43,7 +57,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       disabled: false,
       message: {
         text: `Please approve ${state.amm.underlyingToken.name.toUpperCase()}`,
-        isError: false,
+        type: 'info',
       },
     };
     return;
@@ -56,7 +70,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
         disabled: true,
         message: {
           text: '',
-          isError: false,
+          type: 'info',
         },
       };
       return;
@@ -71,7 +85,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
         disabled: true,
         message: {
           text: `Insufficient ${state.amm.underlyingToken.name.toUpperCase()} balance to cover for margin.`,
-          isError: true,
+          type: 'error',
         },
       };
       return;
@@ -84,7 +98,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       disabled: true,
       message: {
         text: state.userInput.fixedRange.error,
-        isError: true,
+        type: 'error',
       },
     };
     return;
@@ -104,7 +118,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       disabled: false,
       message: {
         text: 'Token approved',
-        isError: false,
+        type: 'info',
       },
     };
     return;
@@ -115,7 +129,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     disabled: true,
     message: {
       text: 'Almost ready',
-      isError: false,
+      type: 'info',
     },
   };
 };

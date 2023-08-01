@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { HashRouter } from 'react-router-dom';
 
-import { GenericError } from './index';
+import { GenericError } from '.';
 
 describe('<GenericError />', () => {
   const mockTo = '/pools';

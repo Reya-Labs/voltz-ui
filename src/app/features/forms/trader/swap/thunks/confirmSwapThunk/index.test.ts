@@ -11,7 +11,7 @@ import {
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
 } from '../../utils';
-import { confirmSwapThunkHandler } from './index';
+import { confirmSwapThunkHandler } from '.';
 
 jest.mock('../../../../../../../utilities/amm', () => ({
   getAmmProtocol: jest.fn(),

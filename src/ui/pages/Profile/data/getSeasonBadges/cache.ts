@@ -1,4 +1,4 @@
-import { GetProfileBadgesResponse } from './index';
+import { GetProfileBadgesResponse } from '.';
 
 let SEASON_BADGE_CACHE: Record<string, GetProfileBadgesResponse | undefined> = {};
 

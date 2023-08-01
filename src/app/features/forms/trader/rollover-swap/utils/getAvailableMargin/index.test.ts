@@ -1,4 +1,4 @@
-import { getAvailableMargin } from './index';
+import { getAvailableMargin } from '.';
 
 jest.mock('../../../../common', () => ({
   formLimitAndFormatNumber: jest.fn(),

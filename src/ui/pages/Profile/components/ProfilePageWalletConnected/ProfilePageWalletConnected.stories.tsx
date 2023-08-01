@@ -14,7 +14,7 @@ import {
 import { mockBadges, mockBadgesArbitrum } from './ProfilePageWalletConnected.mocks';
 
 export default {
-  title: 'Interface/ProfilePageWalletConnected',
+  title: 'Components/Profile/ProfilePageWalletConnected',
   component: ProfilePageWalletConnected,
   args: {},
 } as ComponentMeta<typeof ProfilePageWalletConnected>;

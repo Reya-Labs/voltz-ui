@@ -20,12 +20,14 @@ import { LPOptimisersFormPage } from './ui/pages/LPOptimisersForm';
 import { PoolsPage } from './ui/pages/Pools';
 import { PortfolioOptimisersPage } from './ui/pages/Portfolio/PortfolioOptimisers';
 import { PortfolioPositionsPage } from './ui/pages/Portfolio/PortfolioPositions';
+import { PortfolioMarginAccountsPositionsPage } from './ui/pages/PortfolioMarginAccounts/PortfolioPositions';
 import { ProfilePage } from './ui/pages/Profile';
 import { RolloverLPFormPage } from './ui/pages/RolloverLPForm';
 import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
 import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { VoyagePage } from './ui/pages/Voyage';
+import { isMarginAccountsLive } from './utilities/is-margin-accounts-live';
 
 export const AppRoutes = () => {
   const chainId = useAppSelector(selectChainId);
@@ -51,7 +53,11 @@ export const AppRoutes = () => {
         <Route
           element={
             <NetworkProtectedPage>
-              <PortfolioPositionsPage />
+              {isMarginAccountsLive() ? (
+                <PortfolioMarginAccountsPositionsPage />
+              ) : (
+                <PortfolioPositionsPage />
+              )}
             </NetworkProtectedPage>
           }
           path={routes.PORTFOLIO_POSITIONS}

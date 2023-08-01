@@ -1,6 +1,6 @@
 import { rejectThunkWithError } from '../../../../../helpers';
 import { approveUnderlyingTokenService } from '../../../../common';
-import { approveUnderlyingTokenThunkHandler } from './index';
+import { approveUnderlyingTokenThunkHandler } from '.';
 
 jest.mock('../../../../../helpers', () => ({
   rejectThunkWithError: jest.fn(),

@@ -1,5 +1,5 @@
 import { isUserInputMarginError } from '../../../../common';
-import { getProspectiveLpMargin } from './index';
+import { getProspectiveLpMargin } from '.';
 
 jest.mock('../../../../common');
 

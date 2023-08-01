@@ -1,11 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SupportedChainId, Voyage } from '@voltz-protocol/v1-sdk';
+import { Voyage } from '@voltz-protocol/v1-sdk';
 
+import { getVoyageId } from './helpers';
 import { initialState } from './state';
 import { fetchVoyageBadgesThunk } from './thunks';
-
-export const getVoyageId = ({ chainId, account }: { chainId: SupportedChainId; account: string }) =>
-  `${chainId}-${account}`;
 
 const slice = createSlice({
   name: 'voyage',

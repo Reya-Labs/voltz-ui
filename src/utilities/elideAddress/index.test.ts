@@ -1,4 +1,4 @@
-import { elideAddress } from './index';
+import { elideAddress } from '.';
 
 describe('elideAddress', () => {
   test.each([

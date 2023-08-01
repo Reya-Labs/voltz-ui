@@ -1,5 +1,5 @@
 import { isUserInputNotionalError } from '../../../../common';
-import { getProspectiveSwapNotional } from './index';
+import { getProspectiveSwapNotional } from '.';
 
 jest.mock('../../../../common');
 

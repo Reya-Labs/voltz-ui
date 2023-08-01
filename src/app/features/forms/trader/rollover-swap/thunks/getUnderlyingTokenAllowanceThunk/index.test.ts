@@ -1,6 +1,6 @@
 import { rejectThunkWithError } from '../../../../../helpers';
 import { getUnderlyingTokenAllowanceService } from '../../../../common';
-import { getUnderlyingTokenAllowanceThunkHandler } from './index';
+import { getUnderlyingTokenAllowanceThunkHandler } from '.';
 
 // Mock dependencies
 jest.mock('../../../../../helpers', () => ({

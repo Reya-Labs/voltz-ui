@@ -2,19 +2,22 @@ import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
+type SubmitButtonState =
+  | 'swap'
+  | 'margin-update'
+  | 'not-enough-balance'
+  | 'connect-wallet'
+  | 'approve'
+  | 'approving'
+  | 'paused';
+
 export type SliceState = {
   submitButton: {
-    state:
-      | 'swap'
-      | 'margin-update'
-      | 'not-enough-balance'
-      | 'connect-wallet'
-      | 'approve'
-      | 'approving';
+    state: SubmitButtonState;
     disabled: boolean;
     message: {
       text: string | null;
-      isError: boolean;
+      type: 'error' | 'warning' | 'info';
     };
   };
   amm: AMM | null;
@@ -88,7 +91,7 @@ export const initialState: SliceState = {
     disabled: true,
     message: {
       text: null,
-      isError: false,
+      type: 'info',
     },
   },
   amm: null,

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { FormSubmitButton } from './index';
+import { FormSubmitButton } from '.';
 
 describe('<FormSubmitButton />', () => {
   it('renders correctly with the given props', () => {

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { Pagination } from './index';
+import { Pagination } from '.';
 
 describe('<Pagination />', () => {
   it('renders pagination with correct number of pages', () => {

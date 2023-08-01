@@ -1,5 +1,5 @@
 import { rejectThunkWithError } from '../../../../../helpers';
-import { getPoolSwapInfoThunkHandler } from './index';
+import { getPoolSwapInfoThunkHandler } from '.';
 
 // Mock dependencies
 jest.mock('../../../../../helpers', () => ({

@@ -1,7 +1,7 @@
 import { formLimitAndFormatNumber } from '../../../../common';
 import { getProspectiveSwapNotional } from '../getProspectiveSwapNotional';
 import { hasExistingPosition } from '../hasExistingPosition';
-import { getAvailableMargin } from './index';
+import { getAvailableMargin } from '.';
 
 jest.mock('../getProspectiveSwapNotional', () => ({
   getProspectiveSwapNotional: jest.fn(),

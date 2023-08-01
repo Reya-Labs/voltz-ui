@@ -125,6 +125,8 @@ export const selectVariableRate24hDelta = (state: RootState) => {
 
 export const selectSubmitButtonText = (state: RootState) => {
   switch (state.rolloverLpForm.submitButton.state) {
+    case 'paused':
+      return 'Paused';
     case 'rollover':
       return 'Rollover';
     case 'fixed-range-error':

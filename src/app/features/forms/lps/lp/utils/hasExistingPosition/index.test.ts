@@ -1,4 +1,4 @@
-import { hasExistingPosition } from './index';
+import { hasExistingPosition } from '.';
 
 describe('hasExistingPosition', () => {
   it('should return false when selectedPosition is null', () => {

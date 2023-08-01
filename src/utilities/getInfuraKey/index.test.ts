@@ -1,4 +1,4 @@
-import { getInfuraKey } from './index';
+import { getInfuraKey } from '.';
 
 describe('getInfuraKey', () => {
   it('should return an empty string if the process environment variable is not provided', () => {

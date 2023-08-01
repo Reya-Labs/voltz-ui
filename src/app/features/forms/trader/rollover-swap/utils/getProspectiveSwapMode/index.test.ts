@@ -1,4 +1,4 @@
-import { getProspectiveSwapMode } from './index';
+import { getProspectiveSwapMode } from '.';
 
 describe('getProspectiveSwapMode', () => {
   const mockState = {

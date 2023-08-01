@@ -1,6 +1,6 @@
 import { getProspectiveSwapMode } from '../getProspectiveSwapMode';
 import { hasExistingPosition } from '../hasExistingPosition';
-import { getAvailableNotional } from './index';
+import { getAvailableNotional } from '.';
 
 jest.mock('../hasExistingPosition', () => {
   return {

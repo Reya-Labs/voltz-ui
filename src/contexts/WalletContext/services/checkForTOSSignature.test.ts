@@ -1,5 +1,5 @@
 import { getSentryTracker } from '../../../utilities/sentry';
-import { getSignature, isMessageEIP1271Signed, saveSignatureWithTOS } from './';
+import { getSignature, isMessageEIP1271Signed, saveSignatureWithTOS } from '.';
 import { checkForTOSSignature } from './checkForTOSSignature';
 
 jest.mock('../../../utilities/sentry', () => {

@@ -362,7 +362,7 @@ describe('lpFormReducer', () => {
     expect(newState.submitButton.state).toBe('approving');
     expect(newState.submitButton.disabled).toBe(true);
     expect(newState.submitButton.message.text).toBe('Waiting for confirmation...');
-    expect(newState.submitButton.message.isError).toBe(false);
+    expect(newState.submitButton.message.type).toBe('info');
   });
 
   it('should handle approveUnderlyingTokenThunk.rejected', () => {
@@ -378,7 +378,7 @@ describe('lpFormReducer', () => {
     expect(newState.submitButton.state).toBe('approve');
     expect(newState.submitButton.disabled).toBe(false);
     expect(newState.submitButton.message.text).toBe(payload);
-    expect(newState.submitButton.message.isError).toBe(true);
+    expect(newState.submitButton.message.type).toBe('error');
   });
 
   it('should handle approveUnderlyingTokenThunk.fulfilled', () => {

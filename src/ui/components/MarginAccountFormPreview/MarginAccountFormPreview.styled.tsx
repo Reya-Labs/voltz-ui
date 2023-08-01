@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const MarginAccountBox = styled('div')`
+export const Box = styled('div')`
   box-sizing: border-box;
 
   display: flex;

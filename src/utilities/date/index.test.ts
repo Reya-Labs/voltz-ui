@@ -5,7 +5,7 @@ import {
   formatPOSIXTimestampWithHoursMinutesUTC,
   formatTimestamp,
   getNumberSuffix,
-} from './index';
+} from '.';
 
 describe('utilities.date', () => {
   describe('formatTimestamp', () => {
