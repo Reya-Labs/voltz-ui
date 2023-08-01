@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 
 import { selectChainId } from '../../../../../app/features/network';
 import {
+  fetchPortfolioMarginAccountsThunk,
   fetchPortfolioSummaryThunk,
-  initialisePortfolioPositionsThunk,
-  selectPositionsLoadedState,
 } from '../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useWallet } from '../../../../../hooks/useWallet';
@@ -15,25 +14,7 @@ import { PortfolioPositionsBox } from './PortfolioPositions.styled';
 export const PortfolioPositions: React.FunctionComponent = () => {
   const { account, signer } = useWallet();
   const chainId = useAppSelector(selectChainId);
-  const positionsLoadedState = useAppSelector(selectPositionsLoadedState);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (!chainId) {
-      return;
-    }
-    if (!account) {
-      return;
-    }
-    if (positionsLoadedState === 'succeeded') {
-      return;
-    }
-    void dispatch(
-      initialisePortfolioPositionsThunk({
-        account,
-      }),
-    );
-  }, [positionsLoadedState, account, chainId, dispatch]);
 
   useEffect(() => {
     if (!chainId) {
@@ -44,6 +25,11 @@ export const PortfolioPositions: React.FunctionComponent = () => {
     }
     void dispatch(
       fetchPortfolioSummaryThunk({
+        account,
+      }),
+    );
+    void dispatch(
+      fetchPortfolioMarginAccountsThunk({
         account,
       }),
     );
