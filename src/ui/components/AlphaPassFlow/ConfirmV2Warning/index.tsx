@@ -34,7 +34,7 @@ export const ConfirmV2Warning: React.FunctionComponent<{ chainId: SupportedChain
       </TitleBox>
       <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
         We want to remind you that Voltz Protocol v2 has not yet undergone an audit by an
-        independant third-party. Whilst rigorous security measures and best practices have been used
+        independent third-party. Whilst rigorous security measures and best practices have been used
         it's important to reiterate that, though you cannot ever rely on the accuracy or performance
         of any software completely, non-audited software may present heightened risks.
       </Typography>
