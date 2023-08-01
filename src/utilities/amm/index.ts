@@ -1,5 +1,7 @@
 import { AMM, NetworkConfiguration, Position } from '@voltz-protocol/v1-sdk';
 
+import { PortfolioPositionPool } from '../../app/features/position-details';
+
 /**
  * Finds the latest amm that corresponds to the given position.
  * Please note that the returned amm will be for the latest pool, whereas the position amm may correspond to an old (matured) pool.
@@ -106,3 +108,6 @@ export const generateAmmIdForRoute = (amm: { id: string }) => amm.id.toLowerCase
 export const generatePositionIdForRoute = (position: { id: string }) => position.id.trim();
 
 export const isV2AMM = (amm: AMM) => amm.market.tags.isV2;
+
+export const isAMMPaused = (amm: AMM) => (!amm ? false : false);
+export const isAMMPausedPortfolio = (amm: PortfolioPositionPool) => (!amm ? false : false);

@@ -228,6 +228,8 @@ export const selectSubmitButtonText = (state: RootState) => {
       return `${addRemoveString} Liquidity`;
     case 'fixed-range-error':
       return 'Invalid Fixed Range';
+    case 'paused':
+      return 'Paused';
     case 'margin-update':
       return 'Update margin';
     case 'not-enough-balance':

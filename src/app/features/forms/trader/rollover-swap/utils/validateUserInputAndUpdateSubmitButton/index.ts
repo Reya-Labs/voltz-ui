@@ -1,5 +1,7 @@
 import { Draft } from '@reduxjs/toolkit';
+import { AMM } from '@voltz-protocol/v1-sdk/dist/types';
 
+import { isAMMPaused } from '../../../../../../../utilities/amm';
 import { isUserInputMarginError, isUserInputNotionalError } from '../../../../common';
 import { SliceState } from '../../state';
 import { getAvailableMargin } from '../getAvailableMargin';
@@ -31,7 +33,19 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       disabled: true,
       message: {
         text: 'Almost ready',
-        isError: false,
+        type: 'info',
+      },
+    };
+    return;
+  }
+
+  if (isAMMPaused(state.amm as AMM)) {
+    state.submitButton = {
+      state: 'paused',
+      disabled: true,
+      message: {
+        text: 'Pool paused until further notice. Check Discord for updates.',
+        type: 'warning',
       },
     };
     return;
@@ -47,7 +61,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
         disabled: false,
         message: {
           text: `Please approve ${ammToken}`,
-          isError: false,
+          type: 'info',
         },
       };
       return;
@@ -63,7 +77,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
         disabled: false,
         message: {
           text: `Please approve ${ammToken}. Approval amount must cover for both the margin and the fees.`,
-          isError: false,
+          type: 'info',
         },
       };
       return;
@@ -78,7 +92,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
         disabled: true,
         message: {
           text: '',
-          isError: false,
+          type: 'info',
         },
       };
       return;
@@ -90,7 +104,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
         disabled: true,
         message: {
           text: `Insufficient ${ammToken} balance to cover for both the margin and the fees.`,
-          isError: true,
+          type: 'error',
         },
       };
       return;
@@ -112,7 +126,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
       disabled: false,
       message: {
         text: "Token approved, let's trade",
-        isError: false,
+        type: 'info',
       },
     };
     return;
@@ -123,7 +137,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     disabled: true,
     message: {
       text: 'Almost ready',
-      isError: false,
+      type: 'info',
     },
   };
 };

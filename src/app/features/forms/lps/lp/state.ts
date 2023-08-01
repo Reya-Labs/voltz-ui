@@ -2,20 +2,23 @@ import { AMM, InfoPostLp, Position } from '@voltz-protocol/v1-sdk';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
+type SubmitButtonState =
+  | 'lp'
+  | 'margin-update'
+  | 'not-enough-balance'
+  | 'connect-wallet'
+  | 'fixed-range-error'
+  | 'approve'
+  | 'approving'
+  | 'paused';
+
 export type SliceState = {
   submitButton: {
-    state:
-      | 'lp'
-      | 'margin-update'
-      | 'not-enough-balance'
-      | 'connect-wallet'
-      | 'fixed-range-error'
-      | 'approve'
-      | 'approving';
+    state: SubmitButtonState;
     disabled: boolean;
     message: {
       text: string | null;
-      isError: boolean;
+      type: 'error' | 'warning' | 'info';
     };
   };
   amm: AMM | null;
@@ -100,7 +103,7 @@ export const initialState: SliceState = {
     disabled: true,
     message: {
       text: null,
-      isError: false,
+      type: 'info',
     },
   },
   amm: null,

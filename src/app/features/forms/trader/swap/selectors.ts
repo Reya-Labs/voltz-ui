@@ -314,6 +314,8 @@ export const selectSubmitButtonText = (state: RootState) => {
       return 'Update margin';
     case 'not-enough-balance':
       return 'Not enough balance';
+    case 'paused':
+      return 'Paused';
     case 'approve':
       return `Approve ${
         state.swapForm.amm ? state.swapForm.amm.underlyingToken.name.toUpperCase() : ''
