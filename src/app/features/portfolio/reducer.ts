@@ -7,9 +7,9 @@ import {
   fetchPortfolioMarginAccountsThunk,
   fetchPortfolioSummaryThunk,
   initialisePortfolioPositionsThunk,
-  PortfolioMarginAccount,
   PortfolioPosition,
   PortfolioSummary,
+  ReturnTypeFetchMarginAccounts,
 } from './thunks';
 import { PositionSortId } from './types';
 
@@ -68,7 +68,9 @@ const slice = createSlice({
       })
       .addCase(fetchPortfolioMarginAccountsThunk.fulfilled, (state, { meta, payload }) => {
         state.marginAccountsLoadedState = 'succeeded';
-        state.marginAccounts = payload as PortfolioMarginAccount[];
+        const { marginAccounts, totalMarginAccounts } = payload as ReturnTypeFetchMarginAccounts;
+        state.marginAccounts = marginAccounts;
+        state.totalMarginAccounts = totalMarginAccounts;
         if (meta.arg.sortId) {
           state.marginAccountsSortingDirection = {
             ...resetMarginAccountsSortingDirection,

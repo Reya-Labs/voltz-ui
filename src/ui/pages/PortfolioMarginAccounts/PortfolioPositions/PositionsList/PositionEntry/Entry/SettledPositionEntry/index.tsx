@@ -1,8 +1,8 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Dialog, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 
 import { MAX_POOL_CAP } from '../../../../../../../../app/features/aMMs';
-import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
@@ -61,7 +61,12 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
       ? 'primaryBodyMediumRegular'
       : 'primaryBodySmallRegular';
 
-    const chainIcon = <ChainIcon chainId={chainId} />;
+    const chainIcon = (
+      <ChainIcon
+        chainId={chainId}
+        hideForChains={[SupportedChainId.mainnet, SupportedChainId.goerli]}
+      />
+    );
     const testNetIndicator = <TestNetIndicator chainId={chainId} />;
     const handleOnEntryClick = () => setTransactionHistoryDialogOpen(true);
     const handleOnClose = () => setTransactionHistoryDialogOpen(false);
@@ -72,7 +77,7 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
             chainId={chainId}
             id={id}
             isBorrowing={isBorrowing}
-            market={market as PositionUI['market']}
+            market={market}
             routeAmmId={routeAmmId}
             routePoolId={routePoolId}
             routePositionId={routePositionId}

@@ -72,6 +72,19 @@ export type PositionUI = {
   };
 };
 
+export type MarginAccountUI = {
+  id: string;
+  chainId: SupportedChainId;
+  name: string;
+  balanceCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  positionsCount: string;
+  marginRatioPercentage: number;
+  marginRatioHealth: 'danger' | 'warning' | 'healthy';
+};
+
 export type PositionSortId =
   | 'name'
   | 'notional'

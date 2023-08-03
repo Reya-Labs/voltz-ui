@@ -9,8 +9,10 @@ import {
   POSITIONS_SORT_CONFIG,
 } from './constants';
 import { getPositionsSummary, mapPortfolioPositionToPortfolioUI, sortPositions } from './helpers';
+import { mapMarginAccountToMarginAccountUI } from './helpers/mapMarginAccountToMarginAccountUI';
 import {
   MarginAccountSortId,
+  MarginAccountUI,
   PortfolioSummaryFormatted,
   PositionSortId,
   PositionsSummaryFormatted,
@@ -205,7 +207,16 @@ export const selectMarginAccountsLoading = (state: RootState): boolean => {
   return loadedState === 'idle' || loadedState === 'pending';
 };
 
-export const selectTotalMarginAccounts = (state: RootState): string => {
+export const selectTotalMarginAccountsFormatted = (state: RootState): string => {
   const isLoading = selectMarginAccountsLoading(state);
   return isLoading ? '--' : state.portfolio.totalMarginAccounts.toString();
+};
+
+export const selectTotalMarginAccounts = (state: RootState): number => {
+  return state.portfolio.totalMarginAccounts;
+};
+
+export const selectMarginAccounts = (state: RootState): MarginAccountUI[] => {
+  const isLoading = selectMarginAccountsLoading(state);
+  return isLoading ? [] : state.portfolio.marginAccounts.map(mapMarginAccountToMarginAccountUI);
 };

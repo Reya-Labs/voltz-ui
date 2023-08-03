@@ -48,7 +48,7 @@ describe('portfolio.selectors', () => {
         marginAccountsSortingDirection: {
           balance: 'noSort',
           positionsLength: 'noSort',
-          marginRation: 'noSort',
+          marginRatio: 'noSort',
         },
         positionsLoadedState: 'idle',
       },
@@ -176,21 +176,18 @@ describe('portfolio.selectors', () => {
       expect(result).toEqual([
         {
           direction: 'noSort',
-          disabled: false,
           id: 'balance',
-          text: 'Balance',
+          label: 'Balance',
         },
         {
           direction: 'noSort',
-          disabled: false,
-          id: 'marginRatio',
-          text: 'Margin Ratio',
-        },
-        {
-          direction: 'noSort',
-          disabled: false,
           id: 'positionsLength',
-          text: '# Positions',
+          label: '# Positions',
+        },
+        {
+          direction: 'noSort',
+          id: 'marginRatio',
+          label: 'Margin Ratio',
         },
       ]);
     });

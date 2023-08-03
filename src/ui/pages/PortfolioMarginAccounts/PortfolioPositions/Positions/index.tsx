@@ -1,8 +1,9 @@
 import { Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { selectTotalMarginAccounts } from '../../../../../app/features/portfolio';
+import { selectTotalMarginAccountsFormatted } from '../../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../../app/hooks';
+import { MarginAccountList } from '../MarginAccountList';
 import { MarginAccountsSortOptions } from '../MarginAccountsSortOptions';
 import { PortfolioHeader } from './PortfolioHeader';
 import {
@@ -14,7 +15,7 @@ import {
 } from './Positions.styled';
 
 export const Positions: React.FunctionComponent = () => {
-  const totalMarginAccounts = useAppSelector(selectTotalMarginAccounts);
+  const totalMarginAccounts = useAppSelector(selectTotalMarginAccountsFormatted);
 
   return (
     <PositionsBox>
@@ -33,6 +34,7 @@ export const Positions: React.FunctionComponent = () => {
             <MarginAccountsSortOptions />
           </RightBox>
         </PositionsSelectorBox>
+        <MarginAccountList />
       </BottomBox>
     </PositionsBox>
   );

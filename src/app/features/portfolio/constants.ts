@@ -75,7 +75,7 @@ export const MARGIN_ACCOUNTS_SORT_CONFIG: Record<
     text: string;
   }
 > = {
-  marginRatio: { text: 'Margin Ration' },
+  marginRatio: { text: 'Margin Ratio' },
   positionsLength: { text: '# Positions' },
   balance: { text: 'Balance' },
 };
