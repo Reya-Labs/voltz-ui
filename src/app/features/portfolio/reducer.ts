@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { getNextSortDirection } from '../helpers';
-import { resetSortingDirection } from './constants';
+import { resetMarginAccountsSortingDirection, resetPositionsSortingDirection } from './constants';
 import { initialState } from './state';
 import {
+  fetchPortfolioMarginAccountsThunk,
   fetchPortfolioSummaryThunk,
   initialisePortfolioPositionsThunk,
+  PortfolioMarginAccount,
   PortfolioPosition,
   PortfolioSummary,
 } from './thunks';
@@ -25,7 +27,7 @@ const slice = createSlice({
       }>,
     ) => {
       state.sortingDirection = {
-        ...resetSortingDirection,
+        ...resetPositionsSortingDirection,
         [sortId]: getNextSortDirection(state.sortingDirection[sortId]),
       };
     },
@@ -55,6 +57,24 @@ const slice = createSlice({
       .addCase(fetchPortfolioSummaryThunk.fulfilled, (state, { payload }) => {
         state.portfolioSummaryLoadedState = 'succeeded';
         state.portfolioSummary = payload as PortfolioSummary;
+      })
+      .addCase(fetchPortfolioMarginAccountsThunk.pending, (state) => {
+        state.marginAccountsLoadedState = 'pending';
+        state.marginAccounts = [];
+      })
+      .addCase(fetchPortfolioMarginAccountsThunk.rejected, (state) => {
+        state.marginAccountsLoadedState = 'failed';
+        state.marginAccounts = [];
+      })
+      .addCase(fetchPortfolioMarginAccountsThunk.fulfilled, (state, { meta, payload }) => {
+        state.marginAccountsLoadedState = 'succeeded';
+        state.marginAccounts = payload as PortfolioMarginAccount[];
+        if (meta.arg.sortId) {
+          state.marginAccountsSortingDirection = {
+            ...resetMarginAccountsSortingDirection,
+            [meta.arg.sortId]: 'descending',
+          };
+        }
       });
   },
 });

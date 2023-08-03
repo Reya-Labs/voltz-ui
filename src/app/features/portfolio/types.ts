@@ -1,7 +1,7 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { PositionsFilterId } from '../../../ui/pages/Portfolio/PortfolioPositions/PositionsList';
-import { PortfolioPosition, PortfolioSummary } from './thunks';
+import { PortfolioMarginAccount, PortfolioPosition, PortfolioSummary } from './thunks';
+export type PositionsFilterId = 'active' | 'matured' | 'settled';
 
 export type SliceState = {
   positionsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -9,6 +9,10 @@ export type SliceState = {
   portfolioSummaryLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   portfolioSummary: PortfolioSummary | null;
   sortingDirection: PositionSorting;
+  marginAccountsSortingDirection: MarginAccountsSorting;
+  marginAccounts: PortfolioMarginAccount[];
+  marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  totalMarginAccounts: number;
 };
 
 export type PositionUI = {
@@ -76,8 +80,10 @@ export type PositionSortId =
   | 'status'
   | 'unrealizedPNL'
   | 'realizedPNL';
-export type PositionSortDirection = 'noSort' | 'ascending' | 'descending';
-export type PositionSorting = Record<PositionSortId, PositionSortDirection>;
+export type MarginAccountSortId = 'balance' | 'marginRatio' | 'positionsLength';
+export type SortDirection = 'noSort' | 'ascending' | 'descending';
+export type PositionSorting = Record<PositionSortId, SortDirection>;
+export type MarginAccountsSorting = Record<MarginAccountSortId, SortDirection>;
 export type PositionsSummaryFormatted = {
   maturedPositionsLength: string;
   settledPositionsLength: string;

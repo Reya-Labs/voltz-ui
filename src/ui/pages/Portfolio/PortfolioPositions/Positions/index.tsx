@@ -2,9 +2,10 @@ import { LabelTokenTypography, PillSelector, TokenTypography, Typography } from 
 import React, { useState } from 'react';
 
 import { selectPositionsSummary } from '../../../../../app/features/portfolio';
+import { PositionsFilterId } from '../../../../../app/features/portfolio/types';
 import { useAppSelector } from '../../../../../app/hooks';
 import { capitalize } from '../../../../../utilities/capitalize';
-import { PositionsFilterId, PositionsList } from '../PositionsList';
+import { PositionsList } from '../PositionsList';
 import {
   BottomBox,
   HealthBox,

@@ -30,3 +30,11 @@ export const PositionsSelectorBox = styled('div')`
   flex-direction: row;
   justify-content: space-between;
 `;
+
+export const LeftBox = styled('div')``;
+export const RightBox = styled('div')`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+`;

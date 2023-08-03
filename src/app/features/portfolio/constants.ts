@@ -1,11 +1,13 @@
 import {
+  MarginAccountSortId,
+  MarginAccountsSorting,
   PortfolioSummaryFormatted,
   PositionSortId,
   PositionSorting,
   PositionsSummaryFormatted,
 } from './types';
 
-export const resetSortingDirection: PositionSorting = {
+export const resetPositionsSortingDirection: PositionSorting = {
   maturity: 'noSort',
   realizedPNL: 'noSort',
   status: 'noSort',
@@ -15,11 +17,21 @@ export const resetSortingDirection: PositionSorting = {
   name: 'noSort',
 };
 
-export const initialSortingDirection: PositionSorting = {
-  ...resetSortingDirection,
+export const resetMarginAccountsSortingDirection: MarginAccountsSorting = {
+  balance: 'noSort',
+  marginRatio: 'noSort',
+  positionsLength: 'noSort',
 };
 
-export const SORT_CONFIG: Record<
+export const initialPositionsSortingDirection: PositionSorting = {
+  ...resetPositionsSortingDirection,
+};
+
+export const initialMarginAccountsSortingDirection: MarginAccountsSorting = {
+  ...resetMarginAccountsSortingDirection,
+};
+
+export const POSITIONS_SORT_CONFIG: Record<
   PositionSortId,
   {
     text: string;
@@ -55,6 +67,17 @@ export const SORT_CONFIG: Record<
     text: 'Maturity',
     disabled: true,
   },
+};
+
+export const MARGIN_ACCOUNTS_SORT_CONFIG: Record<
+  MarginAccountSortId,
+  {
+    text: string;
+  }
+> = {
+  marginRatio: { text: 'Margin Ration' },
+  positionsLength: { text: '# Positions' },
+  balance: { text: 'Balance' },
 };
 
 export const defaultPositionsSummaryFormatted: PositionsSummaryFormatted = {

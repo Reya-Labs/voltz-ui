@@ -2,6 +2,7 @@ import { AppLink, Typography } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
 import { selectPositions, selectPositionsLoading } from '../../../../../app/features/portfolio';
+import { PositionsFilterId } from '../../../../../app/features/portfolio/types';
 import { useAppSelector } from '../../../../../app/hooks';
 import { routes } from '../../../../../routes/paths';
 import { Pagination } from '../../../../components/Pagination';
@@ -22,7 +23,6 @@ type PositionsListProps = {
 };
 const PER_PAGE = 8;
 
-export type PositionsFilterId = 'active' | 'matured' | 'settled';
 export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
   positionsFilterId,
 }) => {

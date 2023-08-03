@@ -3,8 +3,13 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { rejectThunkWithError } from '../../../helpers';
 import { getAllowedChainIds } from '../../../network';
+import { MarginAccountSortId } from '../../types';
 
-const fetchPortfolioMarginAccounts = async (chainIds: SupportedChainId[], ownerAddress: string) => {
+const fetchPortfolioMarginAccounts = async (
+  chainIds: SupportedChainId[],
+  ownerAddress: string,
+  sortId?: MarginAccountSortId,
+) => {
   await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
@@ -144,8 +149,9 @@ export const fetchPortfolioMarginAccountsThunk = createAsyncThunk<
   Awaited<PortfolioMarginAccount[] | ReturnType<typeof rejectThunkWithError>>,
   {
     account: string;
+    sortId?: MarginAccountSortId;
   }
->('portfolio/fetchPortfolioMarginAccounts', async ({ account }, thunkAPI) => {
+>('portfolio/fetchPortfolioMarginAccounts', async ({ account, sortId }, thunkAPI) => {
   if (!account) {
     return [];
   }
@@ -155,7 +161,7 @@ export const fetchPortfolioMarginAccountsThunk = createAsyncThunk<
   }
 
   // Check if the promise is already cached
-  const cacheId = `${account.toLowerCase()}-${chainIds.join(',')}`;
+  const cacheId = `${account.toLowerCase()}-${chainIds.join(',')}${sortId ? `-${sortId}` : ''}`;
   const cachedPromise = positionsCache.get(cacheId);
   if (cachedPromise) {
     return await cachedPromise;
@@ -164,7 +170,7 @@ export const fetchPortfolioMarginAccountsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      return await fetchPortfolioMarginAccounts(chainIds, account.toLowerCase());
+      return await fetchPortfolioMarginAccounts(chainIds, account.toLowerCase(), sortId);
     } catch (err) {
       return rejectThunkWithError(thunkAPI, err);
     }
