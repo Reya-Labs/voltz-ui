@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { EthereumProvider } from '@walletconnect/ethereum-provider';
 import { ethers } from 'ethers';
 
@@ -21,7 +22,8 @@ export const getWalletProviderWalletConnect = async () => {
   try {
     provider = await EthereumProvider.init({
       projectId,
-      chains: getAllowedChainIds(),
+      chains: [SupportedChainId.mainnet],
+      optionalChains: getAllowedChainIds(),
       showQrModal: true,
     } as never);
   } catch (error) {
