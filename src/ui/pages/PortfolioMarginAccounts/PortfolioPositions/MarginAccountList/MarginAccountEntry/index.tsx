@@ -1,5 +1,5 @@
-import { ColorTokens, TokenTypography, Typography, TypographyToken } from 'brokoli-ui';
-import React from 'react';
+import { ColorTokens, ToggleCaret, TokenTypography, Typography, TypographyToken } from 'brokoli-ui';
+import React, { useState } from 'react';
 
 import { MarginAccountUI } from '../../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../../hooks/useResponsiveQuery';
@@ -15,10 +15,12 @@ import {
   PositionsCountBox,
   RightBox,
   TestPillContainer,
+  ToggleCaretBox,
   ViewDetailsBox,
   ViewDetailsButton,
 } from './MarginAccountEntry.styled';
 import { MarginRatioDonut } from './MarginRatioDonut';
+import { PositionsList } from './PositionsList';
 
 type MarginAccountEntryProps = MarginAccountUI & {
   backgroundColorToken: ColorTokens;
@@ -38,6 +40,7 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
     },
     ref,
   ) => {
+    const [isPositionListShown, setIsPositionListShown] = useState(false);
     const { isLargeDesktopDevice } = useResponsiveQuery();
     const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
       ? 'secondaryBodyMediumRegular'
@@ -47,7 +50,7 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
       : 'primaryBodySmallRegular';
 
     const handleOnEntryClick = () => {
-      alert('todo');
+      setIsPositionListShown(!isPositionListShown);
     };
     const handleOnViewDetailsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
@@ -67,6 +70,9 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
                 <Typography colorToken="lavenderWeb" typographyToken={textsTypographyToken}>
                   {name}
                 </Typography>
+                <ToggleCaretBox>
+                  <ToggleCaret isOpen={isPositionListShown} />
+                </ToggleCaretBox>
               </ChainIconAndNameContainer>
             </LeftBox>
             <RightBox>
@@ -111,6 +117,7 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
             </RightBox>
           </MarginAccountEntryBox>
         </MarginAccountEntryBoxWrapper>
+        <PositionsList isShown={isPositionListShown} />
       </React.Fragment>
     );
   },

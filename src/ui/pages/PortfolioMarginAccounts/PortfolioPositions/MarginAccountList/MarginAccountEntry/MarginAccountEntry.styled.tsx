@@ -84,3 +84,13 @@ export const TestPillContainer = styled('div')`
 export const ViewDetailsButton = styled(Button)`
   padding: 4px 8px;
 `;
+
+export const ToggleCaretBox = styled('div')`
+  color: ${colors.lavenderWeb};
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+`;
