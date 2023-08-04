@@ -11,6 +11,13 @@ export type SliceState = {
   sortingDirection: PositionSorting;
   marginAccountsSortingDirection: MarginAccountsSorting;
   marginAccounts: PortfolioMarginAccount[];
+  marginAccountsPositions: Record<
+    PortfolioMarginAccount['id'],
+    {
+      status: 'idle' | 'pending' | 'succeeded' | 'failed';
+      positions: PortfolioPosition[];
+    }
+  >;
   marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   totalMarginAccounts: number;
 };

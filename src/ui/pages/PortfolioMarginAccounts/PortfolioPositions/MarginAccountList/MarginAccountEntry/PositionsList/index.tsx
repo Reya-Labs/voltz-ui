@@ -1,12 +1,15 @@
 import { AppLink, Typography } from 'brokoli-ui';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import AnimateHeight from 'react-animate-height';
 
 import {
-  selectPositions,
-  selectPositionsLoading,
+  fetchMarginAccountPositionsThunk,
+  selectMarginAccountPositions,
+  selectMarginAccountPositionsLoadedState,
+  selectMarginAccountPositionsLoading,
 } from '../../../../../../../app/features/portfolio';
-import { useAppSelector } from '../../../../../../../app/hooks';
+import { MarginAccountUI } from '../../../../../../../app/features/portfolio/types';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { routes } from '../../../../../../../routes/paths';
 import { PositionEntry } from './PositionEntry';
 import { PositionsHeader } from './PositionsHeader';
@@ -19,15 +22,31 @@ import {
 
 export const PositionsList: React.FunctionComponent<{
   isShown: boolean;
-}> = ({ isShown }) => {
-  // todo: fetch from MarginAccount
-  const loading = useAppSelector(selectPositionsLoading);
-  const positions = useAppSelector(selectPositions);
+  marginAccountId: MarginAccountUI['id'];
+}> = ({ marginAccountId, isShown }) => {
+  const loading = useAppSelector(selectMarginAccountPositionsLoading(marginAccountId));
+  const loadedState = useAppSelector(selectMarginAccountPositionsLoadedState(marginAccountId));
+  const positions = useAppSelector(selectMarginAccountPositions(marginAccountId));
   const [height, setHeight] = useState<'auto' | number>(0);
+  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     setHeight(isShown ? 'auto' : 0);
   }, [isShown]);
+
+  useEffect(() => {
+    if (!isShown) {
+      return;
+    }
+    if (loadedState === 'succeeded') {
+      return;
+    }
+    void dispatch(
+      fetchMarginAccountPositionsThunk({
+        id: marginAccountId,
+      }),
+    );
+  }, [dispatch, isShown, loadedState, marginAccountId]);
 
   return (
     <AnimateHeight duration={300} easing="ease-in" height={height}>

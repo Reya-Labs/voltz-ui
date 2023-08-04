@@ -6,6 +6,7 @@ import { SliceState } from './types';
 
 export const initialState: SliceState = {
   marginAccounts: [],
+  marginAccountsPositions: {},
   totalMarginAccounts: 0,
   marginAccountsLoadedState: 'idle',
   positionsLoadedState: 'idle',

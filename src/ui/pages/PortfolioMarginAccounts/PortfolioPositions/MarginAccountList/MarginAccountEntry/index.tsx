@@ -117,7 +117,7 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
             </RightBox>
           </MarginAccountEntryBox>
         </MarginAccountEntryBoxWrapper>
-        <PositionsList isShown={isPositionListShown} />
+        <PositionsList isShown={isPositionListShown} marginAccountId={id} />
       </React.Fragment>
     );
   },

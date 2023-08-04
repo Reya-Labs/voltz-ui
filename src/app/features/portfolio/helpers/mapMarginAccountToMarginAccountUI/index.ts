@@ -12,11 +12,6 @@ export const mapMarginAccountToMarginAccountUI = (
     name: marginAccount.name,
     positionsCount: marginAccount.positionsCount.toString(),
     balanceCompactFormat: compactFormatToParts(marginAccount.balance, 2, 2),
-    marginRatioHealth:
-      marginAccount.marginRatioPercentage < 20
-        ? 'danger'
-        : marginAccount.marginRatioPercentage < 60
-        ? 'warning'
-        : 'healthy',
+    marginRatioHealth: marginAccount.marginRatioHealth as MarginAccountUI['marginRatioHealth'],
   };
 };

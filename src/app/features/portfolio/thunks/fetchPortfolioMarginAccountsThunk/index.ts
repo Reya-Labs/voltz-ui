@@ -22,6 +22,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 123456,
         positionsCount: 1,
         marginRatioPercentage: 15,
+        marginRatioHealth: 'healthy',
       },
       {
         id: '2',
@@ -30,6 +31,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 98765,
         positionsCount: 2,
         marginRatioPercentage: 30,
+        marginRatioHealth: 'healthy',
       },
       {
         id: '3',
@@ -38,6 +40,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 65432,
         positionsCount: 3,
         marginRatioPercentage: 45,
+        marginRatioHealth: 'warning',
       },
       {
         id: '4',
@@ -46,6 +49,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 54321,
         positionsCount: 4,
         marginRatioPercentage: 60,
+        marginRatioHealth: 'warning',
       },
       {
         id: '5',
@@ -54,6 +58,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 87654,
         positionsCount: 5,
         marginRatioPercentage: 75,
+        marginRatioHealth: 'warning',
       },
       {
         id: '6',
@@ -62,6 +67,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 23456,
         positionsCount: 6,
         marginRatioPercentage: 90,
+        marginRatioHealth: 'danger',
       },
       {
         id: '7',
@@ -70,6 +76,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 34567,
         positionsCount: 7,
         marginRatioPercentage: 20,
+        marginRatioHealth: 'healthy',
       },
       {
         id: '8',
@@ -78,6 +85,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 45678,
         positionsCount: 8,
         marginRatioPercentage: 35,
+        marginRatioHealth: 'healthy',
       },
       {
         id: '9',
@@ -86,6 +94,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 56789,
         positionsCount: 9,
         marginRatioPercentage: 50,
+        marginRatioHealth: 'warning',
       },
       {
         id: '10',
@@ -94,6 +103,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 78901,
         positionsCount: 10,
         marginRatioPercentage: 65,
+        marginRatioHealth: 'warning',
       },
       {
         id: '11',
@@ -102,6 +112,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 34567,
         positionsCount: 11,
         marginRatioPercentage: 80,
+        marginRatioHealth: 'warning',
       },
       {
         id: '12',
@@ -110,6 +121,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 23456,
         positionsCount: 12,
         marginRatioPercentage: 10,
+        marginRatioHealth: 'healthy',
       },
       {
         id: '13',
@@ -118,6 +130,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 87654,
         positionsCount: 13,
         marginRatioPercentage: 25,
+        marginRatioHealth: 'healthy',
       },
       {
         id: '14',
@@ -126,6 +139,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 76543,
         positionsCount: 14,
         marginRatioPercentage: 40,
+        marginRatioHealth: 'healthy',
       },
       {
         id: '15',
@@ -134,6 +148,7 @@ const fetchPortfolioMarginAccounts = async (
         balance: 65432,
         positionsCount: 15,
         marginRatioPercentage: 55,
+        marginRatioHealth: 'warning',
       },
     ],
     totalMarginAccounts: 15,

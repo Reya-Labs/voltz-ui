@@ -10,6 +10,7 @@ import {
 } from './constants';
 import { getPositionsSummary, mapPortfolioPositionToPortfolioUI, sortPositions } from './helpers';
 import { mapMarginAccountToMarginAccountUI } from './helpers/mapMarginAccountToMarginAccountUI';
+import { PortfolioMarginAccount } from './thunks';
 import {
   MarginAccountSortId,
   MarginAccountUI,
@@ -220,3 +221,28 @@ export const selectMarginAccounts = (state: RootState): MarginAccountUI[] => {
   const isLoading = selectMarginAccountsLoading(state);
   return isLoading ? [] : state.portfolio.marginAccounts.map(mapMarginAccountToMarginAccountUI);
 };
+
+export const selectMarginAccountPositionsLoadedState =
+  (id: PortfolioMarginAccount['id']) => (state: RootState) => {
+    const marginAccountsPositions = state.portfolio.marginAccountsPositions[id];
+    if (!marginAccountsPositions) {
+      return 'idle';
+    }
+    return marginAccountsPositions.status;
+  };
+
+export const selectMarginAccountPositionsLoading =
+  (id: PortfolioMarginAccount['id']) =>
+  (state: RootState): boolean => {
+    const loadedState = selectMarginAccountPositionsLoadedState(id)(state);
+    return loadedState === 'idle' || loadedState === 'pending';
+  };
+
+export const selectMarginAccountPositions =
+  (id: PortfolioMarginAccount['id']) => (state: RootState) => {
+    const marginAccountsPositions = state.portfolio.marginAccountsPositions[id];
+    if (!marginAccountsPositions) {
+      return [];
+    }
+    return marginAccountsPositions.positions.map(mapPortfolioPositionToPortfolioUI);
+  };
