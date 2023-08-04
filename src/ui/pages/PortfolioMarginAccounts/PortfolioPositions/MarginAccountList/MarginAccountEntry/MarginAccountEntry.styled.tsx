@@ -40,7 +40,7 @@ const InfoBox = styled('div')`
 
 const BorderBox = styled(InfoBox)`
   justify-content: center;
-  padding: 4px 8px;
+  padding: 4px 4px;
   align-items: center;
 `;
 
@@ -55,7 +55,8 @@ export const RightBox = styled('div')`
 `;
 
 export const BalanceBox = styled(InfoBox)`
-  padding: 0px 8px;
+  padding: 0px 4px;
+  width: 100px;
 `;
 export const PositionsCountBox = styled(BorderBox)`
   width: 80px;
@@ -63,7 +64,7 @@ export const PositionsCountBox = styled(BorderBox)`
 export const MarginRatioBox = styled(BorderBox)``;
 
 export const ViewDetailsBox = styled(BorderBox)`
-  padding: 0px 8px;
+  padding: 0px 0px 0px 8px;
 `;
 
 export const ChainIconAndNameContainer = styled('div')`

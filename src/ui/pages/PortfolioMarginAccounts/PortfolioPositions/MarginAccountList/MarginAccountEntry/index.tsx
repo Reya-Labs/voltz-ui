@@ -49,7 +49,8 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
     const handleOnEntryClick = () => {
       alert('todo');
     };
-    const handleOnViewDetailsClick = () => {
+    const handleOnViewDetailsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation();
       alert('todo');
     };
 
