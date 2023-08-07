@@ -77,7 +77,7 @@ export const ChainIconAndNameContainer = styled('div')`
 export const TestPillContainer = styled('div')`
   position: absolute;
   z-index: 2;
-  top: 12px;
+  top: 10px;
   right: -55px;
 `;
 

@@ -5,7 +5,7 @@ import { rejectThunkWithError } from '../../../helpers';
 import { getAllowedChainIds } from '../../../network';
 import { MarginAccountSortId } from '../../types';
 
-const fetchPortfolioMarginAccounts = async (
+const fetchMarginAccounts = async (
   chainIds: SupportedChainId[],
   ownerAddress: string,
   sortId?: MarginAccountSortId,
@@ -89,7 +89,7 @@ const fetchPortfolioMarginAccounts = async (
       },
       {
         id: '9',
-        chainId: SupportedChainId.mainnet,
+        chainId: SupportedChainId.goerli,
         name: 'Robot DJ 🤖🎧',
         balance: 56789,
         positionsCount: 9,
@@ -107,7 +107,7 @@ const fetchPortfolioMarginAccounts = async (
       },
       {
         id: '11',
-        chainId: SupportedChainId.mainnet,
+        chainId: SupportedChainId.goerli,
         name: 'Ninja Turtle 🐢🥷',
         balance: 34567,
         positionsCount: 11,
@@ -156,11 +156,9 @@ const fetchPortfolioMarginAccounts = async (
 };
 
 export type PortfolioMarginAccount = Awaited<
-  ReturnType<typeof fetchPortfolioMarginAccounts>
+  ReturnType<typeof fetchMarginAccounts>
 >['marginAccounts'][0];
-export type ReturnTypeFetchMarginAccounts = Awaited<
-  ReturnType<typeof fetchPortfolioMarginAccounts>
->;
+export type ReturnTypeFetchMarginAccounts = Awaited<ReturnType<typeof fetchMarginAccounts>>;
 
 // Define a cache object to store promises
 const positionsCache = new Map<
@@ -168,13 +166,13 @@ const positionsCache = new Map<
   Promise<PortfolioMarginAccount[] | ReturnType<typeof rejectThunkWithError>>
 >();
 
-export const fetchPortfolioMarginAccountsThunk = createAsyncThunk<
+export const fetchMarginAccountsThunk = createAsyncThunk<
   Awaited<PortfolioMarginAccount[] | ReturnType<typeof rejectThunkWithError>>,
   {
     account: string;
     sortId?: MarginAccountSortId;
   }
->('portfolio/fetchPortfolioMarginAccounts', async ({ account, sortId }, thunkAPI) => {
+>('portfolio/fetchMarginAccounts', async ({ account, sortId }, thunkAPI) => {
   if (!account) {
     return [];
   }
@@ -193,7 +191,7 @@ export const fetchPortfolioMarginAccountsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      return await fetchPortfolioMarginAccounts(chainIds, account.toLowerCase(), sortId);
+      return await fetchMarginAccounts(chainIds, account.toLowerCase(), sortId);
     } catch (err) {
       return rejectThunkWithError(thunkAPI, err);
     }

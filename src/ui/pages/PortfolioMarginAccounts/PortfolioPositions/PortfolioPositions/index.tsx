@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { selectChainId } from '../../../../../app/features/network';
 import {
-  fetchPortfolioMarginAccountsThunk,
+  fetchMarginAccountsThunk,
   fetchPortfolioSummaryThunk,
 } from '../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -29,7 +29,7 @@ export const PortfolioPositions: React.FunctionComponent = () => {
       }),
     );
     void dispatch(
-      fetchPortfolioMarginAccountsThunk({
+      fetchMarginAccountsThunk({
         account,
       }),
     );

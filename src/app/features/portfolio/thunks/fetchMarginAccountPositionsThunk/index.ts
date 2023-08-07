@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { rejectThunkWithError } from '../../../helpers';
 import { getAllowedChainIds } from '../../../network';
-import { PortfolioMarginAccount } from '../fetchPortfolioMarginAccountsThunk';
+import { PortfolioMarginAccount } from '../fetchMarginAccountsThunk';
 import { PortfolioPosition } from '../initialisePortfolioPositionsThunk';
 import { getPositionsMock } from './mock';
 

@@ -5,7 +5,7 @@ import { resetMarginAccountsSortingDirection, resetPositionsSortingDirection } f
 import { initialState } from './state';
 import {
   fetchMarginAccountPositionsThunk,
-  fetchPortfolioMarginAccountsThunk,
+  fetchMarginAccountsThunk,
   fetchPortfolioSummaryThunk,
   initialisePortfolioPositionsThunk,
   PortfolioPosition,
@@ -59,15 +59,15 @@ const slice = createSlice({
         state.portfolioSummaryLoadedState = 'succeeded';
         state.portfolioSummary = payload as PortfolioSummary;
       })
-      .addCase(fetchPortfolioMarginAccountsThunk.pending, (state) => {
+      .addCase(fetchMarginAccountsThunk.pending, (state) => {
         state.marginAccountsLoadedState = 'pending';
         state.marginAccounts = [];
       })
-      .addCase(fetchPortfolioMarginAccountsThunk.rejected, (state) => {
+      .addCase(fetchMarginAccountsThunk.rejected, (state) => {
         state.marginAccountsLoadedState = 'failed';
         state.marginAccounts = [];
       })
-      .addCase(fetchPortfolioMarginAccountsThunk.fulfilled, (state, { meta, payload }) => {
+      .addCase(fetchMarginAccountsThunk.fulfilled, (state, { meta, payload }) => {
         state.marginAccountsLoadedState = 'succeeded';
         const { marginAccounts, totalMarginAccounts } = payload as ReturnTypeFetchMarginAccounts;
         state.marginAccounts = marginAccounts;

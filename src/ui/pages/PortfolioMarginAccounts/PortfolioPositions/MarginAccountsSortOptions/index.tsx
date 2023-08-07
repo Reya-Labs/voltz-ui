@@ -2,7 +2,7 @@ import { PillSelector } from 'brokoli-ui';
 import React from 'react';
 
 import {
-  fetchPortfolioMarginAccountsThunk,
+  fetchMarginAccountsThunk,
   selectMarginAccountsLoading,
   selectMarginAccountsSortOptions,
 } from '../../../../../app/features/portfolio';
@@ -25,7 +25,7 @@ export const MarginAccountsSortOptions: React.FunctionComponent = () => {
       return;
     }
     void dispatch(
-      fetchPortfolioMarginAccountsThunk({
+      fetchMarginAccountsThunk({
         account,
         sortId: id as MarginAccountSortId,
       }),
