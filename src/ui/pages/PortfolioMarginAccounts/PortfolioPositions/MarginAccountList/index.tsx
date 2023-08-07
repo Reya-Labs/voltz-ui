@@ -2,6 +2,7 @@ import { AppLink, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
 import {
+  MARGIN_ACCOUNTS_PER_PAGE,
   selectMarginAccounts,
   selectMarginAccountsLoading,
   selectTotalMarginAccounts,
@@ -18,8 +19,6 @@ import {
   PaginationBox,
 } from './MarginAccountList.styled';
 
-const PER_PAGE = 8;
-
 export const MarginAccountList: React.FunctionComponent = () => {
   const [page, setPage] = useState<number>(0);
   const loading = useAppSelector(selectMarginAccountsLoading);
@@ -27,9 +26,12 @@ export const MarginAccountList: React.FunctionComponent = () => {
   const totalMarginAccounts = useAppSelector(selectTotalMarginAccounts);
   const hasPagination = totalMarginAccounts > 12;
   const slicedMarginAccounts = hasPagination
-    ? marginAccounts.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE)
+    ? marginAccounts.slice(
+        page * MARGIN_ACCOUNTS_PER_PAGE,
+        page * MARGIN_ACCOUNTS_PER_PAGE + MARGIN_ACCOUNTS_PER_PAGE,
+      )
     : marginAccounts;
-  const maxPages = Math.floor(marginAccounts.length / PER_PAGE) + 1;
+  const maxPages = Math.floor(marginAccounts.length / MARGIN_ACCOUNTS_PER_PAGE) + 1;
 
   const handleOnNextPage = () => {
     if (page + 1 < maxPages) {

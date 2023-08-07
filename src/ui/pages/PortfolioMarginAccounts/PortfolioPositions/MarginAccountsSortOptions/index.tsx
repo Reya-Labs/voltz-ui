@@ -3,6 +3,7 @@ import React from 'react';
 
 import {
   fetchMarginAccountsThunk,
+  MARGIN_ACCOUNTS_PER_PAGE,
   selectMarginAccountsLoading,
   selectMarginAccountsSortOptions,
 } from '../../../../../app/features/portfolio';
@@ -24,10 +25,16 @@ export const MarginAccountsSortOptions: React.FunctionComponent = () => {
     if (activeSort?.id === id) {
       return;
     }
+
     void dispatch(
       fetchMarginAccountsThunk({
         account,
-        sortId: id as MarginAccountSortId,
+        sort: {
+          id: id as MarginAccountSortId,
+          direction: 'descending',
+        },
+        page: 1,
+        perPage: MARGIN_ACCOUNTS_PER_PAGE,
       }),
     );
   };

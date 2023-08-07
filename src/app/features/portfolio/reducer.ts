@@ -72,10 +72,11 @@ const slice = createSlice({
         const { marginAccounts, totalMarginAccounts } = payload as ReturnTypeFetchMarginAccounts;
         state.marginAccounts = marginAccounts;
         state.totalMarginAccounts = totalMarginAccounts;
-        if (meta.arg.sortId) {
+        if (meta.arg.sort) {
+          const { id, direction } = meta.arg.sort;
           state.marginAccountsSortingDirection = {
             ...resetMarginAccountsSortingDirection,
-            [meta.arg.sortId]: 'descending',
+            [id]: direction,
           };
         }
       })

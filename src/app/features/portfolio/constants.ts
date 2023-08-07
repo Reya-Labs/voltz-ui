@@ -130,3 +130,5 @@ export const defaultPortfolioSummaryFormatted: PortfolioSummaryFormatted = {
   },
   distributions: [],
 };
+
+export const MARGIN_ACCOUNTS_PER_PAGE = 8;
