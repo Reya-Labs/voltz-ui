@@ -3,8 +3,8 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { rejectThunkWithError } from '../../../helpers';
 import { getAllowedChainIds } from '../../../network';
-
-const fetchPortfolioSummary = async (chainIds: SupportedChainId[], ownerAddress: string) => {
+type FetchPortfolioSummaryArgs = { chainIds: SupportedChainId[]; ownerAddress: string };
+const fetchPortfolioSummary = async ({ chainIds, ownerAddress }: FetchPortfolioSummaryArgs) => {
   await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
@@ -58,7 +58,7 @@ export const fetchPortfolioSummaryThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      return await fetchPortfolioSummary(chainIds, account.toLowerCase());
+      return await fetchPortfolioSummary({ chainIds, ownerAddress: account.toLowerCase() });
     } catch (err) {
       return rejectThunkWithError(thunkAPI, err);
     }

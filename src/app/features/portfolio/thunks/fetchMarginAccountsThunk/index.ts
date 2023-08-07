@@ -5,11 +5,12 @@ import { rejectThunkWithError } from '../../../helpers';
 import { getAllowedChainIds } from '../../../network';
 import { MarginAccountSortId } from '../../types';
 
-const fetchMarginAccounts = async (
-  chainIds: SupportedChainId[],
-  ownerAddress: string,
-  sortId?: MarginAccountSortId,
-) => {
+type FetchMarginAccountsArgs = {
+  chainIds: SupportedChainId[];
+  ownerAddress: string;
+  sortId?: MarginAccountSortId;
+};
+const fetchMarginAccounts = async ({ chainIds, sortId, ownerAddress }: FetchMarginAccountsArgs) => {
   await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
@@ -191,7 +192,7 @@ export const fetchMarginAccountsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      return await fetchMarginAccounts(chainIds, account.toLowerCase(), sortId);
+      return await fetchMarginAccounts({ chainIds, ownerAddress: account.toLowerCase(), sortId });
     } catch (err) {
       return rejectThunkWithError(thunkAPI, err);
     }

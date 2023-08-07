@@ -6,7 +6,8 @@ import { PortfolioMarginAccount } from '../fetchMarginAccountsThunk';
 import { PortfolioPosition } from '../initialisePortfolioPositionsThunk';
 import { getPositionsMock } from './mock';
 
-const fetchMarginAccountPositions = async (id: PortfolioMarginAccount['id']) => {
+type FetchMarginAccountPositionsArgs = { id: PortfolioMarginAccount['id'] };
+const fetchMarginAccountPositions = async ({ id }: FetchMarginAccountPositionsArgs) => {
   await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
@@ -43,7 +44,7 @@ export const fetchMarginAccountPositionsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      return await fetchMarginAccountPositions(id);
+      return await fetchMarginAccountPositions({ id });
     } catch (err) {
       return rejectThunkWithError(thunkAPI, err);
     }
