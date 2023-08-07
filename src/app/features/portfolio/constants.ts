@@ -18,7 +18,7 @@ export const resetPositionsSortingDirection: PositionSorting = {
 };
 
 export const resetMarginAccountsSortingDirection: MarginAccountsSorting = {
-  balance: 'descending',
+  balance: 'noSort',
   marginRatio: 'noSort',
   positionsLength: 'noSort',
 };

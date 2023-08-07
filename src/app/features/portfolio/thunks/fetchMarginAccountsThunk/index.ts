@@ -9,7 +9,7 @@ import { mockGetMarginAccountsPage1, mockGetMarginAccountsPage2 } from './mocks'
 type FetchMarginAccountsArgs = {
   chainIds: SupportedChainId[];
   ownerAddress: string;
-  sort?: {
+  sort: {
     id: MarginAccountSortId;
     direction: SortDirection;
   };
@@ -53,7 +53,7 @@ export const fetchMarginAccountsThunk = createAsyncThunk<
   Awaited<PortfolioMarginAccount[] | ReturnType<typeof rejectThunkWithError>>,
   {
     account: string;
-    sort?: {
+    sort: {
       id: MarginAccountSortId;
       direction: SortDirection;
     };
@@ -70,9 +70,7 @@ export const fetchMarginAccountsThunk = createAsyncThunk<
   }
 
   // Check if the promise is already cached
-  const cacheId = `${account.toLowerCase()}-${chainIds.join(',')}${
-    sort ? `-${sort.id}${sort.direction}` : ''
-  }`;
+  const cacheId = `${account.toLowerCase()}-${chainIds.join(',')}${`-${sort.id}${sort.direction}`}`;
   const cachedPromise = positionsCache.get(cacheId);
   if (cachedPromise) {
     return await cachedPromise;

@@ -34,6 +34,10 @@ export const PortfolioPositions: React.FunctionComponent = () => {
         account,
         page: 1,
         perPage: MARGIN_ACCOUNTS_PER_PAGE,
+        sort: {
+          id: 'balance',
+          direction: 'descending',
+        },
       }),
     );
   }, [account, chainId, dispatch]);
