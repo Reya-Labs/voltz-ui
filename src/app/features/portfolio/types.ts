@@ -9,8 +9,6 @@ export type SliceState = {
   portfolioSummaryLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   portfolioSummary: PortfolioSummary | null;
   sortingDirection: PositionSorting;
-  marginAccountsSortingDirection: MarginAccountsSorting;
-  marginAccounts: PortfolioMarginAccount[];
   marginAccountsPositions: Record<
     PortfolioMarginAccount['id'],
     {
@@ -18,6 +16,8 @@ export type SliceState = {
       positions: PortfolioPosition[];
     }
   >;
+  marginAccountsSortingDirection: MarginAccountsSorting;
+  marginAccounts: PortfolioMarginAccount[];
   marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   totalMarginAccounts: number;
 };
