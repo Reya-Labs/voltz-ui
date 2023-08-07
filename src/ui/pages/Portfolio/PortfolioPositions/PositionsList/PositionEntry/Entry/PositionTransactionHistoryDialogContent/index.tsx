@@ -1,5 +1,5 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
-import { Button, CloseButton, Typography } from 'brokoli-ui';
+import { Button, CloseButton, Typography, TypographyToken } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
 import {
@@ -12,6 +12,7 @@ import { initializeSettleFlowAction } from '../../../../../../../../app/features
 import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
 import { usePositionDetails } from '../../../../../../../../hooks/usePositionDetails';
+import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { useWallet } from '../../../../../../../../hooks/useWallet';
 import { PositionTransactionHistory } from '../../../../../../../components/PositionTransactionHistory';
 import { SettleFlow } from '../../../../../../../components/SettleFlow';
@@ -52,6 +53,7 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
     market,
     routePositionId,
   }) => {
+    const { isLargeDesktopDevice } = useResponsiveQuery();
     const dispatch = useAppDispatch();
     const [waitingOnNetworkChange, setWaitingOnNetworkChange] =
       useState<null | SwitchNetworkParams>(null);
@@ -65,6 +67,9 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
     const canRollover = positionDetails?.canRollover;
     const canSettle = positionDetails?.canSettle;
     const variant = status.variant;
+    const textsTypographyToken: TypographyToken = isLargeDesktopDevice
+      ? 'primaryBodyMediumRegular'
+      : 'primaryBodySmallRegular';
 
     const navigateToLPFormPage = () => {
       navigate.toLPFormPage({
@@ -203,6 +208,7 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<Po
             market={market}
             token={token}
             type={type}
+            typographyToken={textsTypographyToken}
           />
           <PositionTransactionHistory positionId={id} />
           {canEdit || canRollover || canSettle ? (

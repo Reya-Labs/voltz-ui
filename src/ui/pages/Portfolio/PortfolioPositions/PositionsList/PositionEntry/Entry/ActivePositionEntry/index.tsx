@@ -108,6 +108,7 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
                 market={market}
                 token={token}
                 type={type}
+                typographyToken={textsTypographyToken}
               />
             </LeftBox>
             <RightBox>

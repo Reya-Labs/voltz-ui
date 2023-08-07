@@ -1,4 +1,4 @@
-import { MarketToken, MarketTokenProps } from 'brokoli-ui';
+import { MarketToken, MarketTokenProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import { MarketTokenBox } from './MarketTokenInformation.styled';
@@ -8,6 +8,7 @@ export type MarketTokenInformationProps = {
   token: MarketTokenProps['token'];
   isBorrowing: boolean;
   type: 'LP' | 'Variable' | 'Fixed';
+  typographyToken: TypographyToken;
 };
 
 export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformationProps> = ({
@@ -15,6 +16,7 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
   token,
   isBorrowing,
   type,
+  typographyToken,
 }) => {
   return (
     <MarketTokenBox data-testid="MarketTokenInformation-MarketTokenBox">
@@ -31,7 +33,7 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
         )}
         market={market}
         token={token}
-        typographyToken="primaryBodyMediumRegular"
+        typographyToken={typographyToken}
       />
     </MarketTokenBox>
   );
