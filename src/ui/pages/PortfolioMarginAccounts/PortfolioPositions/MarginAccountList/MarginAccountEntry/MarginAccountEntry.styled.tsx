@@ -6,9 +6,10 @@ export const MarginAccountEntryBoxWrapper = styled('div')`
 `;
 
 export const MarginAccountEntryBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'backgroundColorToken',
+  shouldForwardProp: (prop) => prop !== 'backgroundColorToken' && prop !== 'isPositionListShown',
 })<{
   backgroundColorToken: ColorTokens;
+  isPositionListShown: boolean;
 }>`
   position: relative;
   z-index: 1;
@@ -21,7 +22,7 @@ export const MarginAccountEntryBox = styled('div', {
   box-shadow: -2px 0px 8px 0px ${colors.liberty8};
   background-color: ${({ backgroundColorToken }) => getColorFromToken(backgroundColorToken)};
   border: 1px solid ${colors.lavenderWeb7};
-  border-radius: 8px;
+  border-radius: ${({ isPositionListShown }) => (isPositionListShown ? '8px 8px 0px 0px' : '8px')};
   transition: all 200ms ease-in;
 
   &:hover {

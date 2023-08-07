@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { getColorFromToken, Skeleton } from 'brokoli-ui';
+import { colors, getColorFromToken, Skeleton } from 'brokoli-ui';
 import FlipMove from 'react-flip-move';
 
 export const PositionsListBox = styled(FlipMove)`
@@ -14,7 +14,10 @@ export const PositionsHeaderAndListBox = styled('div')`
   gap: 8px;
   width: 100%;
   box-sizing: border-box;
-  border-radius: 8px;
+  border-radius: 0px 0px 8px 8px;
+  padding: 8px 4px;
+  border: 1px solid ${colors.lavenderWeb7};
+  border-top: 0px;
 `;
 
 export const PositionEntrySkeleton = styled(Skeleton)`
