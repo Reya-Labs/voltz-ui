@@ -20,6 +20,8 @@ export type SliceState = {
   marginAccounts: PortfolioMarginAccount[];
   marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   totalMarginAccounts: number;
+  // 0-based, see MARGIN_ACCOUNTS_INITIAL_PAGE
+  page: number;
 };
 
 export type PositionUI = {

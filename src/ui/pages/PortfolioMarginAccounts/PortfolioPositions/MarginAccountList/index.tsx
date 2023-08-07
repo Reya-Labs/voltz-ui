@@ -1,13 +1,17 @@
 import { AppLink, Typography } from 'brokoli-ui';
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
+  fetchMarginAccountsThunk,
   MARGIN_ACCOUNTS_PER_PAGE,
   selectMarginAccounts,
   selectMarginAccountsLoading,
+  selectMarginAccountsPage,
+  selectMarginAccountsSortOptions,
   selectTotalMarginAccounts,
 } from '../../../../../app/features/portfolio';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { useWallet } from '../../../../../hooks/useWallet';
 import { routes } from '../../../../../routes/paths';
 import { Pagination } from '../../../../components/Pagination';
 import { MarginAccountEntry } from './MarginAccountEntry';
@@ -20,30 +24,37 @@ import {
 } from './MarginAccountList.styled';
 
 export const MarginAccountList: React.FunctionComponent = () => {
-  const [page, setPage] = useState<number>(0);
+  const dispatch = useAppDispatch();
   const loading = useAppSelector(selectMarginAccountsLoading);
   const marginAccounts = useAppSelector(selectMarginAccounts);
   const totalMarginAccounts = useAppSelector(selectTotalMarginAccounts);
-  const hasPagination = totalMarginAccounts > 12;
-  const slicedMarginAccounts = hasPagination
-    ? marginAccounts.slice(
-        page * MARGIN_ACCOUNTS_PER_PAGE,
-        page * MARGIN_ACCOUNTS_PER_PAGE + MARGIN_ACCOUNTS_PER_PAGE,
-      )
-    : marginAccounts;
-  const maxPages = Math.floor(marginAccounts.length / MARGIN_ACCOUNTS_PER_PAGE) + 1;
+  const page = useAppSelector(selectMarginAccountsPage);
+  const hasPagination = totalMarginAccounts > MARGIN_ACCOUNTS_PER_PAGE;
+  const maxPages = Math.floor(totalMarginAccounts / MARGIN_ACCOUNTS_PER_PAGE) + 1;
+  const { account } = useWallet();
+  const sortOptions = useAppSelector(selectMarginAccountsSortOptions);
+  const activeSort = sortOptions.find((sO) => sO.direction !== 'noSort');
 
-  const handleOnNextPage = () => {
-    if (page + 1 < maxPages) {
-      setPage(page + 1);
+  const fetchMarginAccountsForPage = (nextPage: number) => {
+    if (!account || !activeSort) {
+      return;
     }
+
+    void dispatch(
+      fetchMarginAccountsThunk({
+        account,
+        sort: {
+          id: activeSort.id,
+          direction: activeSort.direction,
+        },
+        page: nextPage,
+        perPage: MARGIN_ACCOUNTS_PER_PAGE,
+      }),
+    );
   };
 
-  const handleOnPrevPage = () => {
-    if (page - 1 > -1) {
-      setPage(page - 1);
-    }
-  };
+  const handleOnNextPage = () => fetchMarginAccountsForPage(page + 1);
+  const handleOnPrevPage = () => fetchMarginAccountsForPage(page - 1);
 
   return (
     <MarginAccountsPaginationAndListBox>
@@ -69,7 +80,7 @@ export const MarginAccountList: React.FunctionComponent = () => {
             staggerDurationBy={7}
           >
             {marginAccounts.length > 0
-              ? slicedMarginAccounts.map((marginAccount, index) => {
+              ? marginAccounts.map((marginAccount, index) => {
                   const backgroundColorToken = index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8';
 
                   return (

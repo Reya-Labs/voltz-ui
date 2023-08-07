@@ -26,10 +26,10 @@ const fetchMarginAccounts = async ({
   await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
-  if (page === 1) {
+  if (page === 0) {
     return mockGetMarginAccountsPage1;
   }
-  if (page === 2) {
+  if (page === 1) {
     return mockGetMarginAccountsPage2;
   }
   return {
@@ -70,7 +70,9 @@ export const fetchMarginAccountsThunk = createAsyncThunk<
   }
 
   // Check if the promise is already cached
-  const cacheId = `${account.toLowerCase()}-${chainIds.join(',')}${`-${sort.id}${sort.direction}`}`;
+  const cacheId = `${account.toLowerCase()}-${chainIds.join(',')}-${sort.id}${
+    sort.direction
+  }-${page}`;
   const cachedPromise = positionsCache.get(cacheId);
   if (cachedPromise) {
     return await cachedPromise;

@@ -4,6 +4,7 @@ import { selectChainId } from '../../../../../app/features/network';
 import {
   fetchMarginAccountsThunk,
   fetchPortfolioSummaryThunk,
+  MARGIN_ACCOUNTS_INITIAL_PAGE,
   MARGIN_ACCOUNTS_PER_PAGE,
 } from '../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -32,7 +33,7 @@ export const PortfolioPositions: React.FunctionComponent = () => {
     void dispatch(
       fetchMarginAccountsThunk({
         account,
-        page: 1,
+        page: MARGIN_ACCOUNTS_INITIAL_PAGE,
         perPage: MARGIN_ACCOUNTS_PER_PAGE,
         sort: {
           id: 'balance',

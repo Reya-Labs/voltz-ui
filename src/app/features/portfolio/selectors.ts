@@ -217,6 +217,10 @@ export const selectTotalMarginAccounts = (state: RootState): number => {
   return state.portfolio.totalMarginAccounts;
 };
 
+export const selectMarginAccountsPage = (state: RootState): number => {
+  return state.portfolio.page;
+};
+
 export const selectMarginAccounts = (state: RootState): MarginAccountUI[] => {
   const isLoading = selectMarginAccountsLoading(state);
   return isLoading ? [] : state.portfolio.marginAccounts.map(mapMarginAccountToMarginAccountUI);

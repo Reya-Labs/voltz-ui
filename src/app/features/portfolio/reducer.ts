@@ -63,15 +63,17 @@ const slice = createSlice({
         state.marginAccountsLoadedState = 'pending';
         state.marginAccounts = [];
       })
-      .addCase(fetchMarginAccountsThunk.rejected, (state) => {
+      .addCase(fetchMarginAccountsThunk.rejected, (state, { meta }) => {
         state.marginAccountsLoadedState = 'failed';
         state.marginAccounts = [];
+        state.page = meta.arg.page;
       })
       .addCase(fetchMarginAccountsThunk.fulfilled, (state, { meta, payload }) => {
         state.marginAccountsLoadedState = 'succeeded';
         const { marginAccounts, totalMarginAccounts } = payload as ReturnTypeFetchMarginAccounts;
         state.marginAccounts = marginAccounts;
         state.totalMarginAccounts = totalMarginAccounts;
+        state.page = meta.arg.page;
         if (meta.arg.sort) {
           const { id, direction } = meta.arg.sort;
           state.marginAccountsSortingDirection = {
