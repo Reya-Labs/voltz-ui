@@ -36,8 +36,6 @@ export const fetchMarginAccountPositionsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      const positions = await getMarginAccountPositions({ id });
-      console.log('#### positions', positions);
       return await getMarginAccountPositions({ id });
     } catch (err) {
       return rejectThunkWithError(thunkAPI, err);

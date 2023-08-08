@@ -18,9 +18,9 @@ import { LPFormPage } from './ui/pages/LPForm';
 import { LPOptimisersPage } from './ui/pages/LPOptimisers';
 import { LPOptimisersFormPage } from './ui/pages/LPOptimisersForm';
 import { PoolsPage } from './ui/pages/Pools';
+import { PortfolioMarginAccountsPage } from './ui/pages/Portfolio/MarginAccounts';
 import { PortfolioOptimisersPage } from './ui/pages/Portfolio/PortfolioOptimisers';
 import { PortfolioPositionsPage } from './ui/pages/Portfolio/PortfolioPositions';
-import { PortfolioMarginAccountsPositionsPage } from './ui/pages/PortfolioMarginAccounts/PortfolioPositions';
 import { ProfilePage } from './ui/pages/Profile';
 import { RolloverLPFormPage } from './ui/pages/RolloverLPForm';
 import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
@@ -50,18 +50,25 @@ export const AppRoutes = () => {
           }
           path={routes.POOLS}
         />
-        <Route
-          element={
-            <NetworkProtectedPage>
-              {isMarginAccountsLive() ? (
-                <PortfolioMarginAccountsPositionsPage />
-              ) : (
+        {isMarginAccountsLive() ? (
+          <Route
+            element={
+              <NetworkProtectedPage>
+                <PortfolioMarginAccountsPage />
+              </NetworkProtectedPage>
+            }
+            path={routes.PORTFOLIO_OVERVIEW}
+          />
+        ) : (
+          <Route
+            element={
+              <NetworkProtectedPage>
                 <PortfolioPositionsPage />
-              )}
-            </NetworkProtectedPage>
-          }
-          path={routes.PORTFOLIO_POSITIONS}
-        />
+              </NetworkProtectedPage>
+            }
+            path={routes.PORTFOLIO_POSITIONS}
+          />
+        )}
         <Route
           element={
             <NetworkProtectedPage
