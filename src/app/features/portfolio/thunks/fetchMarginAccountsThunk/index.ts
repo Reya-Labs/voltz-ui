@@ -1,47 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { getMarginAccounts } from '@voltz-protocol/api-sdk-v2';
 
 import { rejectThunkWithError } from '../../../helpers';
 import { getAllowedChainIds } from '../../../network';
 import { MarginAccountSortId, SortDirection } from '../../types';
-import { mockGetMarginAccountsPage1, mockGetMarginAccountsPage2 } from './mocks';
-
-type FetchMarginAccountsArgs = {
-  chainIds: SupportedChainId[];
-  ownerAddress: string;
-  sort: {
-    id: MarginAccountSortId;
-    direction: SortDirection;
-  };
-  page: number;
-  perPage: number;
-};
-const fetchMarginAccounts = async ({
-  chainIds,
-  sort,
-  ownerAddress,
-  page,
-  perPage,
-}: FetchMarginAccountsArgs) => {
-  await new Promise((resolve) => {
-    setTimeout(resolve, 1000);
-  });
-  if (page === 0) {
-    return mockGetMarginAccountsPage1;
-  }
-  if (page === 1) {
-    return mockGetMarginAccountsPage2;
-  }
-  return {
-    marginAccounts: [],
-    totalMarginAccounts: 15,
-  };
-};
 
 export type PortfolioMarginAccount = Awaited<
-  ReturnType<typeof fetchMarginAccounts>
+  ReturnType<typeof getMarginAccounts>
 >['marginAccounts'][0];
-export type ReturnTypeFetchMarginAccounts = Awaited<ReturnType<typeof fetchMarginAccounts>>;
+export type ReturnTypeFetchMarginAccounts = Awaited<ReturnType<typeof getMarginAccounts>>;
 
 // Define a cache object to store promises
 const positionsCache = new Map<
@@ -81,7 +48,7 @@ export const fetchMarginAccountsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      return await fetchMarginAccounts({
+      return await getMarginAccounts({
         chainIds,
         ownerAddress: account.toLowerCase(),
         sort,

@@ -1,18 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { getMarginAccountPositions } from '@voltz-protocol/api-sdk-v2';
 
 import { rejectThunkWithError } from '../../../helpers';
 import { getAllowedChainIds } from '../../../network';
 import { PortfolioMarginAccount } from '../fetchMarginAccountsThunk';
 import { PortfolioPosition } from '../initialisePortfolioPositionsThunk';
-import { getPositionsMock } from './mock';
-
-type FetchMarginAccountPositionsArgs = { id: PortfolioMarginAccount['id'] };
-const fetchMarginAccountPositions = async ({ id }: FetchMarginAccountPositionsArgs) => {
-  await new Promise((resolve) => {
-    setTimeout(resolve, 1000);
-  });
-  return getPositionsMock();
-};
 
 // Define a cache object to store promises
 const positionsCache = new Map<
@@ -44,7 +36,9 @@ export const fetchMarginAccountPositionsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      return await fetchMarginAccountPositions({ id });
+      const positions = await getMarginAccountPositions({ id });
+      console.log('#### positions', positions);
+      return await getMarginAccountPositions({ id });
     } catch (err) {
       return rejectThunkWithError(thunkAPI, err);
     }

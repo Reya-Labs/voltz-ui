@@ -17,6 +17,7 @@ export const TraderStatusDetails: React.FunctionComponent<TraderStatusDetailsPro
   paying,
   positionRate,
 }) => {
+  console.log('### paying', paying);
   return (
     <TraderStatusDetailsBox>
       <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallBold">
