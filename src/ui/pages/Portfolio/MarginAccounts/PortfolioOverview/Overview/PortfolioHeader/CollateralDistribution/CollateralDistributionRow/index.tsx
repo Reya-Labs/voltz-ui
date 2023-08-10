@@ -1,16 +1,20 @@
-import { TokenIcon, Typography } from 'brokoli-ui';
+import { TokenIcon, TokenIconProps, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { LeftSide, RightSide, Row } from './CollateralDistributionRow.styled';
 
-const labelMap: Record<CollateralDistributionRowProps['token'], string> = {
+const labelMap: Record<TokenIconProps['token'], string> = {
   dai: 'DAI',
   eth: 'ETH',
-  other: 'Other',
   usdc: 'USDC',
+  reth: 'rETH',
+  steth: 'stETH',
+  usdt: 'USDT',
+  other: 'Other',
 };
+
 export type CollateralDistributionRowProps = {
-  token: 'dai' | 'eth' | 'other' | 'usdc' | string;
+  token: TokenIconProps['token'] | string;
   percentage: number;
   distribution: number;
   distributionUSD: number;

@@ -12,16 +12,22 @@ type CollateralDistributionProps = {
 };
 
 const sortOrder: Record<CollateralDistributionRowProps['token'], number> = {
-  eth: -1, // 'eth' will have priority and will be on top (-1)
-  other: 1, // 'other' will be last (1)
-  dai: 0, // 'dai' and 'usdc' will be in any order (0)
-  usdc: 0,
+  // 'eth' will have priority and will be on top (-1)
+  eth: -3,
+  steth: -2,
+  reth: -1,
+  dai: 0,
+  usdc: 1,
+  usdt: 2,
+  // 'other' will be last (3)
+  other: 3,
 };
 
 const distributionSorter = (
   dA: CollateralDistributionRowProps,
   dB: CollateralDistributionRowProps,
 ) => sortOrder[dA.token] - sortOrder[dB.token];
+
 export const CollateralDistribution: React.FunctionComponent<CollateralDistributionProps> = ({
   distributions,
 }) => (

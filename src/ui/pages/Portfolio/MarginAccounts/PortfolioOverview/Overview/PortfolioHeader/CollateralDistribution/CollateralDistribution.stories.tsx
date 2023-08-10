@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { CollateralDistribution } from '.';
+import { CollateralDistribution } from './index';
 
 export default {
   title: 'Components/CollateralDistribution',
