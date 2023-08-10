@@ -295,8 +295,8 @@ export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant, string> = {
   s4MellowLpVaultTier3Arbitrum: 'WHALE VAULTOOOR',
   s4Tatsu: 'Voltz Hero',
   s4UK: 'Voltz Hero',
-  s4VoltzGlp: 'GLP Resolution',
-  s4VoltzAave: 'Aave Resolution',
+  s4VoltzGlp: 'GLP',
+  s4VoltzAave: 'Aave',
   // season1, season2, season3, season4 & og non-programmatic badges
   governorz: 'GOVERNORZ',
   diplomatz: 'DIPLOMATZ',
@@ -440,8 +440,8 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   s4MellowLpVaultTier3Arbitrum: 'Largest fish in the vaults.',
   s4UK: 'Forever Voltz OG',
   s4Tatsu: 'Forever Voltz OG',
-  s4VoltzAave: 'As part of Aave Pool Resolution process',
-  s4VoltzGlp: 'As part of GLP Pool Resolution process',
+  s4VoltzAave: 'The community will always remember',
+  s4VoltzGlp: 'The community will always remember',
   // season1, season2, season3, season4 & og non-programmatic badges
   diplomatz: 'For those supporting thousands speaking in different languages.',
   senatorz: 'For supporting Voltz community beyond the unthinkable.',
