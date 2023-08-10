@@ -258,3 +258,7 @@ export const selectCreateMarginAccountLoadedState = (state: RootState) => {
 export const selectCreateMarginAccountError = (state: RootState) => {
   return state.portfolio.createMarginAccountError;
 };
+
+export const selectCreateMarginAccountDialogState = (state: RootState) => {
+  return state.portfolio.createMarginAccountDialogState;
+};

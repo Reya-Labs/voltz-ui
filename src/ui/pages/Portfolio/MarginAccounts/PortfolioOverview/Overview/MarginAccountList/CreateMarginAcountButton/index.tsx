@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 
+import {
+  closeCreateMarginAccountDialogAction,
+  openCreateMarginAccountDialogAction,
+  selectCreateMarginAccountDialogState,
+} from '../../../../../../../../app/features/portfolio';
+import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { CreateMarginAccountDialog } from './CreateMarginAccountDialog';
 import { CreateMarginAcountButtonStyled } from './CreateMarginAcountButton.styled';
 
 export const CreateMarginAccountButton: React.FunctionComponent = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const openDialog = () => setIsOpen(true);
-  const closeDialog = () => setIsOpen(false);
+  const isOpen = useAppSelector(selectCreateMarginAccountDialogState) === 'opened';
+  const dispatch = useAppDispatch();
+  const openDialog = () => {
+    dispatch(openCreateMarginAccountDialogAction());
+  };
+  const closeDialog = () => {
+    dispatch(closeCreateMarginAccountDialogAction());
+  };
   return (
     <React.Fragment>
       <CreateMarginAccountDialog open={isOpen} onCloseClick={closeDialog} />

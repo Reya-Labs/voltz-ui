@@ -20,6 +20,12 @@ const slice = createSlice({
   initialState,
   reducers: {
     resetPortfolioStateAction: () => initialState,
+    openCreateMarginAccountDialogAction: (state) => {
+      state.createMarginAccountDialogState = 'opened';
+    },
+    closeCreateMarginAccountDialogAction: (state) => {
+      state.createMarginAccountDialogState = 'closed';
+    },
     togglePositionSortingDirectionAction: (
       state,
       {
@@ -112,9 +118,15 @@ const slice = createSlice({
       .addCase(createMarginAccountThunk.fulfilled, (state, { meta, payload }) => {
         state.createMarginAccountLoadedState = 'succeeded';
         state.createMarginAccountError = '';
+        state.createMarginAccountDialogState = 'closed';
       });
   },
 });
 
-export const { resetPortfolioStateAction, togglePositionSortingDirectionAction } = slice.actions;
+export const {
+  closeCreateMarginAccountDialogAction,
+  openCreateMarginAccountDialogAction,
+  resetPortfolioStateAction,
+  togglePositionSortingDirectionAction,
+} = slice.actions;
 export const portfolioReducer = slice.reducer;
