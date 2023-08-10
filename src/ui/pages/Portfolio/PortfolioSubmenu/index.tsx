@@ -9,7 +9,8 @@ import { ReactComponent as MarginAccountsIcon } from './assets/margin-accounts.s
 import { ReactComponent as OptimisersIcon } from './assets/optimisers.svg';
 import { ReactComponent as OverviewIcon } from './assets/overview.svg';
 import { ReactComponent as PositionsIcon } from './assets/positions.svg';
-import { PortfolioSubmenuBox } from './PortfolioSubmenu.styled';
+import { PortfolioSubmenuBox, SubpagesBox } from './PortfolioSubmenu.styled';
+import { SubmenuActionButtons } from './SubmenuActionButtons';
 import { SubmenuLink } from './SubmenuLink';
 
 export const PortfolioSubmenu: React.FunctionComponent = () => {
@@ -51,13 +52,16 @@ export const PortfolioSubmenu: React.FunctionComponent = () => {
 
   return (
     <PortfolioSubmenuBox>
-      {subpages
-        .filter(({ hidden }) => !hidden)
-        .map(({ label, Icon, to }) => (
-          <SubmenuLink key={to} Icon={Icon} isActive={pathname.indexOf(to) !== -1} to={to}>
-            {label}
-          </SubmenuLink>
-        ))}
+      <SubpagesBox>
+        {subpages
+          .filter(({ hidden }) => !hidden)
+          .map(({ label, Icon, to }) => (
+            <SubmenuLink key={to} Icon={Icon} isActive={pathname.indexOf(to) !== -1} to={to}>
+              {label}
+            </SubmenuLink>
+          ))}
+      </SubpagesBox>
+      <SubmenuActionButtons />
     </PortfolioSubmenuBox>
   );
 };
