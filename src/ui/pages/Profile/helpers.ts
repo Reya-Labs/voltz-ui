@@ -124,6 +124,10 @@ export const BADGE_VARIANT_TRADER_LP_MAP: Record<BadgeVariant, 'trader' | 'lp' |
   s4MellowLpVaultTier1: 'lp',
   s4MellowLpVaultTier2: 'lp',
   s4MellowLpVaultTier3: 'lp',
+  s4Tatsu: 'trader',
+  s4UK: 'trader',
+  s4VoltzAave: 'trader',
+  s4VoltzGlp: 'trader',
   // season 4 arbitrum
   s4DegenStuffArbitrum: 'trader',
   s4DeltaDegenArbitrum: 'trader',
@@ -289,6 +293,10 @@ export const BADGE_VARIANT_TITLE_COPY_MAP: Record<BadgeVariant, string> = {
   s4MellowLpVaultTier1Arbitrum: 'VAULTOOOR',
   s4MellowLpVaultTier2Arbitrum: 'MIDDLEWEIGHT VAULTOOOR',
   s4MellowLpVaultTier3Arbitrum: 'WHALE VAULTOOOR',
+  s4Tatsu: 'Voltz Hero',
+  s4UK: 'Voltz Hero',
+  s4VoltzGlp: 'GLP Resolution',
+  s4VoltzAave: 'Aave Resolution',
   // season1, season2, season3, season4 & og non-programmatic badges
   governorz: 'GOVERNORZ',
   diplomatz: 'DIPLOMATZ',
@@ -430,6 +438,10 @@ export const BADGE_VARIANT_DESCRIPTION_COPY_MAP: Record<BadgeVariant, string> = 
   s4MellowLpVaultTier1Arbitrum: 'LP, sit back and relax.',
   s4MellowLpVaultTier2Arbitrum: 'Easy LPing with LP Optimisers.',
   s4MellowLpVaultTier3Arbitrum: 'Largest fish in the vaults.',
+  s4UK: 'Forever Voltz OG',
+  s4Tatsu: 'Forever Voltz OG',
+  s4VoltzAave: 'As part of Aave Pool Resolution process',
+  s4VoltzGlp: 'As part of GLP Pool Resolution process',
   // season1, season2, season3, season4 & og non-programmatic badges
   diplomatz: 'For those supporting thousands speaking in different languages.',
   senatorz: 'For supporting Voltz community beyond the unthinkable.',
@@ -572,6 +584,10 @@ export const BADGE_VARIANT_TIER_MAP: Record<BadgeVariant, BadgeTier> = {
   s4MellowLpVaultTier1Arbitrum: 'tier1',
   s4MellowLpVaultTier2Arbitrum: 'tier2',
   s4MellowLpVaultTier3Arbitrum: 'tier3',
+  s4Tatsu: 'legendary',
+  s4UK: 'legendary',
+  s4VoltzGlp: 'tier3',
+  s4VoltzAave: 'tier3',
   // season1, season2, season3 & og non-programmatic badges
   governorz: 'tier1',
   diplomatz: 'tier2',

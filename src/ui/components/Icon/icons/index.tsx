@@ -1119,6 +1119,49 @@ export const S4SushiRoll: React.FunctionComponent<IconProps> = ({
   />
 );
 
+export const S4Tatsu: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season4/ethereum/s4Tatsu.svg"
+  />
+);
+
+export const S4UK: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season4/ethereum/s4UK.svg"
+  />
+);
+
+export const S4VoltzGlp: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season4/ethereum/s4VoltzGlp.svg"
+  />
+);
+export const S4VoltzAave: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => (
+  <IconImage
+    className={className}
+    data-testid={dataTestId}
+    src="/images/badges/season4/ethereum/s4VoltzAave.svg"
+  />
+);
+
 export const S4TopTrader: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
   className,

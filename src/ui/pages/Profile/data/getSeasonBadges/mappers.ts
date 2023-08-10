@@ -98,6 +98,11 @@ const ethereumBadgeTypeBadgeVariantMap: BadgeTypeBadgeVariant = {
   '109': 's4MellowLpVaultTier1',
   '110': 's4MellowLpVaultTier2',
   '111': 's4MellowLpVaultTier3',
+  // TODO: Ioana add the BE ids
+  '-1': 's4UK',
+  '-2': 's4VoltzGlp',
+  '-3': 's4VoltzAave',
+  '-4': 's4Tatsu',
   // season1, season2 & og non-programmatic badges
   '34': 'governorz',
   '33': 'diplomatz',
@@ -292,6 +297,10 @@ const etherumChainSeasonBadgeVariants: SeasonBadgeVariants = {
     's4MellowLpVaultTier1',
     's4MellowLpVaultTier2',
     's4MellowLpVaultTier3',
+    's4Tatsu',
+    's4UK',
+    's4VoltzAave',
+    's4VoltzGlp',
     ...NON_PROGRAMMATIC_BADGES,
   ],
   5: [],
