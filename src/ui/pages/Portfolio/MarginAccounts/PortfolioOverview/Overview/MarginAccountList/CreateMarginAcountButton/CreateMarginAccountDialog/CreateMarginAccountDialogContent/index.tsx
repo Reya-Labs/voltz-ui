@@ -1,13 +1,32 @@
 import { Button, CloseButton, TextField, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
+import {
+  createMarginAccountThunk,
+  selectCreateMarginAccountError,
+  selectCreateMarginAccountLoadedState,
+} from '../../../../../../../../../../app/features/portfolio';
+import { useAppDispatch, useAppSelector } from '../../../../../../../../../../app/hooks';
+import { useWallet } from '../../../../../../../../../../hooks/useWallet';
 import { ContentBox, TitleBox } from './CreateMarginAccountDialogContent.styled';
 
-export const CreateMarginAccountDialogContent: React.FunctionComponent = () => {
-  const error = '';
-  const loading = false;
-  const handleOnVerifyClick = () => {};
-  const handleOnClose = () => {};
+export const CreateMarginAccountDialogContent: React.FunctionComponent<{
+  onCloseClick: () => void;
+}> = ({ onCloseClick }) => {
+  const { signer } = useWallet();
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector(selectCreateMarginAccountLoadedState) === 'pending';
+  const error = useAppSelector(selectCreateMarginAccountError);
+  const [name, setName] = useState('');
+
+  const handleOnVerifyClick = () => {
+    void dispatch(
+      createMarginAccountThunk({
+        signer,
+        name,
+      }),
+    );
+  };
   const handleOnNameChange = (value: string | undefined) => {
     if (value === undefined) {
       setName('');
@@ -21,14 +40,13 @@ export const CreateMarginAccountDialogContent: React.FunctionComponent = () => {
 
     setName(cleanedValue);
   };
-  const [name, setName] = useState('');
   return (
     <ContentBox>
       <TitleBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
           Create a Margin Account
         </Typography>
-        <CloseButton onClick={handleOnClose} />
+        <CloseButton onClick={onCloseClick} />
       </TitleBox>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia

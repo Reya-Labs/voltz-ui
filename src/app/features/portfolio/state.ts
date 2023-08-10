@@ -6,6 +6,8 @@ import {
 import { SliceState } from './types';
 
 export const initialState: SliceState = {
+  createMarginAccountError: '',
+  createMarginAccountLoadedState: 'idle',
   marginAccounts: [],
   marginAccountsPositions: {},
   totalMarginAccounts: 0,

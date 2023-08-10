@@ -4,6 +4,7 @@ import { getNextSortDirection } from '../helpers';
 import { resetMarginAccountsSortingDirection, resetPositionsSortingDirection } from './constants';
 import { initialState } from './state';
 import {
+  createMarginAccountThunk,
   fetchMarginAccountPositionsThunk,
   fetchMarginAccountsThunk,
   fetchPortfolioSummaryThunk,
@@ -99,6 +100,18 @@ const slice = createSlice({
           status: 'succeeded',
           positions: payload as PortfolioPosition[],
         };
+      })
+      .addCase(createMarginAccountThunk.pending, (state) => {
+        state.createMarginAccountLoadedState = 'pending';
+        state.createMarginAccountError = '';
+      })
+      .addCase(createMarginAccountThunk.rejected, (state, { payload }) => {
+        state.createMarginAccountLoadedState = 'failed';
+        state.createMarginAccountError = payload as string;
+      })
+      .addCase(createMarginAccountThunk.fulfilled, (state, { meta, payload }) => {
+        state.createMarginAccountLoadedState = 'succeeded';
+        state.createMarginAccountError = '';
       });
   },
 });

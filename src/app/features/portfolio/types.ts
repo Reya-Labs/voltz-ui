@@ -5,6 +5,8 @@ export type PositionsFilterId = 'active' | 'matured' | 'settled';
 
 export type SliceState = {
   positionsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  createMarginAccountLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  createMarginAccountError: string;
   positions: PortfolioPosition[];
   portfolioSummaryLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   portfolioSummary: PortfolioSummary | null;

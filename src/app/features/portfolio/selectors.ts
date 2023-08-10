@@ -250,3 +250,11 @@ export const selectMarginAccountPositions =
     }
     return marginAccountsPositions.positions.map(mapPortfolioPositionToPortfolioUI);
   };
+
+export const selectCreateMarginAccountLoadedState = (state: RootState) => {
+  return state.portfolio.createMarginAccountLoadedState;
+};
+
+export const selectCreateMarginAccountError = (state: RootState) => {
+  return state.portfolio.createMarginAccountError;
+};

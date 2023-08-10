@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { CreateMarginAccountDialog } from '.';
+import { CreateMarginAccountDialog } from './index';
 
 export default {
   title: 'Components/CreateMarginAccountDialog',
@@ -14,5 +14,8 @@ const Template: ComponentStory<typeof CreateMarginAccountDialog> = (args) => (
 );
 
 export const Default = Template.bind({});
-const args: React.ComponentProps<typeof CreateMarginAccountDialog> = {};
+const args: React.ComponentProps<typeof CreateMarginAccountDialog> = {
+  open: false,
+  onCloseClick: () => {},
+};
 Default.args = args;

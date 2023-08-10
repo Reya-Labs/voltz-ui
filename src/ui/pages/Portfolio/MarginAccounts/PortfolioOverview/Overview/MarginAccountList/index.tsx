@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { useWallet } from '../../../../../../../hooks/useWallet';
 import { routes } from '../../../../../../../routes/paths';
 import { Pagination } from '../../../../../../components/Pagination';
+import { CreateMarginAccountButton } from './CreateMarginAcountButton';
 import { MarginAccountEntry } from './MarginAccountEntry';
 import {
   MarginAccountEntrySkeleton,
@@ -110,6 +111,7 @@ export const MarginAccountList: React.FunctionComponent = () => {
               </NoMarginAccountsFoundBox>
             ) : null}
           </MarginAccountsListBox>
+          <CreateMarginAccountButton />
           {hasPagination ? (
             <PaginationBox>
               <Pagination
