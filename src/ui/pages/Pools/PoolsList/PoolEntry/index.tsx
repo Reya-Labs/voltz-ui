@@ -145,7 +145,12 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
         switchNetwork('swapForm');
       }
     };
-    const chainIcon = <ChainIcon chainId={poolChainId} />;
+    const chainIcon = (
+      <ChainIcon
+        chainId={poolChainId}
+        hideForChains={[SupportedChainId.mainnet, SupportedChainId.goerli]}
+      />
+    );
     const testNetIndicator = <TestNetIndicator chainId={poolChainId} />;
     return (
       <PoolEntryBoxWrapper ref={ref}>

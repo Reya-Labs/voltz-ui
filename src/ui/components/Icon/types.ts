@@ -107,8 +107,12 @@ import {
   S4RainmakerArbitrum,
   S4SushiRoll,
   S4SushiRollArbitrum,
+  S4Tatsu,
   S4TopTrader,
   S4TopTraderArbitrum,
+  S4UK,
+  S4VoltzAave,
+  S4VoltzGlp,
   S4WaterHose,
   S4WaterHoseArbitrum,
   S4Yikes,
@@ -265,6 +269,10 @@ export type SupportedIcons =
   | 's4MellowLpVaultTier1Arbitrum'
   | 's4MellowLpVaultTier2Arbitrum'
   | 's4MellowLpVaultTier3Arbitrum'
+  | 's4Tatsu'
+  | 's4UK'
+  | 's4VoltzGlp'
+  | 's4VoltzAave'
   // voyage
   | 'voyageWeek1'
   | 'voyageWeek2'
@@ -383,6 +391,10 @@ export const iconMap: Record<SupportedIcons, ElementType> = {
   s4LeverageCrowbar: S4LeverageCrowbar as ElementType,
   s4FixedTrader: S4FixedTrader as ElementType,
   s4SushiRoll: S4SushiRoll as ElementType,
+  s4Tatsu: S4Tatsu as ElementType,
+  s4UK: S4UK as ElementType,
+  s4VoltzGlp: S4VoltzGlp as ElementType,
+  s4VoltzAave: S4VoltzAave as ElementType,
   s4TopTrader: S4TopTrader as ElementType,
   s4BeWaterMyFriend: S4BeWaterMyFriend as ElementType,
   s4RainMaker: S4Rainmaker as ElementType,

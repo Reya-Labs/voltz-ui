@@ -1,6 +1,6 @@
 import orderBy from 'lodash.orderby';
 
-import { PositionSortDirection, PositionUI } from '../../types';
+import { PositionUI, SortDirection } from '../../types';
 
 export const sortPositions = (
   positions: PositionUI[],
@@ -13,13 +13,13 @@ export const sortPositions = (
     realizedPNLSortingDirection,
     unrealizedPNLSortingDirection,
   }: {
-    marginSortingDirection: PositionSortDirection;
-    notionalSortingDirection: PositionSortDirection;
-    statusSortingDirection: PositionSortDirection;
-    nameSortingDirection: PositionSortDirection;
-    maturitySortingDirection: PositionSortDirection;
-    unrealizedPNLSortingDirection: PositionSortDirection;
-    realizedPNLSortingDirection: PositionSortDirection;
+    marginSortingDirection: SortDirection;
+    notionalSortingDirection: SortDirection;
+    statusSortingDirection: SortDirection;
+    nameSortingDirection: SortDirection;
+    maturitySortingDirection: SortDirection;
+    unrealizedPNLSortingDirection: SortDirection;
+    realizedPNLSortingDirection: SortDirection;
   },
 ) => {
   const fields = [];

@@ -2,6 +2,8 @@ export const routes = {
   POOLS: 'pools',
   PORTFOLIO_POSITIONS: 'portfolio/positions',
   PORTFOLIO_OPTIMISERS: 'portfolio/optimisers',
+  PORTFOLIO_OVERVIEW: 'portfolio/overview',
+  PORTFOLIO_MARGIN_ACCOUNTS: 'portfolio/margin-accounts',
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
   VOYAGE: 'voyage',

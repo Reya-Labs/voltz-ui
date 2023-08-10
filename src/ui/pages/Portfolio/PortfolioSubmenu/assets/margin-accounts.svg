@@ -1,0 +1,16 @@
+<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Interface Dashboard Layout 2" clip-path="url(#clip0_1071_4274)">
+<g id="Group">
+<path id="Vector" d="M11.9999 1.07089H14.2856C14.5887 1.07089 14.8794 1.1913 15.0937 1.40563C15.3081 1.61996 15.4285 1.91065 15.4285 2.21375V4.49947" stroke="#857EA5" stroke-width="0.666669" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M0.571411 4.49935V2.21363C0.571411 1.91053 0.691819 1.61983 0.906147 1.40551C1.12048 1.19118 1.41117 1.07077 1.71427 1.07077H3.99999" stroke="#857EA5" stroke-width="0.666669" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M11.9999 15.9276H14.2856C14.5887 15.9276 14.8794 15.8072 15.0937 15.5928C15.3081 15.3785 15.4285 15.0878 15.4285 14.7847V12.499" stroke="#857EA5" stroke-width="0.666669" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M0.571411 12.499V14.7847C0.571411 15.0878 0.691819 15.3785 0.906147 15.5928C1.12048 15.8072 1.41117 15.9276 1.71427 15.9276H3.99999" stroke="#857EA5" stroke-width="0.666669" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_5" d="M7.99995 12.4995C10.2091 12.4995 12 10.7087 12 8.49952C12 6.29038 10.2091 4.49951 7.99995 4.49951C5.79081 4.49951 3.99994 6.29038 3.99994 8.49952C3.99994 10.7087 5.79081 12.4995 7.99995 12.4995Z" stroke="#857EA5" stroke-width="0.666669" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_1071_4274">
+<rect width="16" height="16" fill="white" transform="translate(0 0.499969)"/>
+</clipPath>
+</defs>
+</svg>

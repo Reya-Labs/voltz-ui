@@ -1,3 +1,4 @@
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Dialog, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 
@@ -61,7 +62,12 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
       ? 'primaryBodyMediumRegular'
       : 'primaryBodySmallRegular';
 
-    const chainIcon = <ChainIcon chainId={chainId} />;
+    const chainIcon = (
+      <ChainIcon
+        chainId={chainId}
+        hideForChains={[SupportedChainId.mainnet, SupportedChainId.goerli]}
+      />
+    );
     const testNetIndicator = <TestNetIndicator chainId={chainId} />;
     const handleOnEntryClick = () => setTransactionHistoryDialogOpen(true);
     const handleOnClose = () => setTransactionHistoryDialogOpen(false);
@@ -93,6 +99,7 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
                 market={market}
                 token={token}
                 type={type}
+                typographyToken={textsTypographyToken}
               />
             </LeftBox>
             <RightBox>

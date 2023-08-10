@@ -2,6 +2,7 @@ import { RootState } from '../../store';
 import { defaultPositionsSummaryFormatted } from './constants';
 import { mapPortfolioPositionToPortfolioUI, sortPositions } from './helpers';
 import {
+  selectMarginAccountsSortOptions,
   selectPositions,
   selectPositionsLoadedState,
   selectPositionsLoading,
@@ -43,6 +44,11 @@ describe('portfolio.selectors', () => {
           maturity: 'ascending',
           unrealizedPNL: 'ascending',
           realizedPNL: 'ascending',
+        },
+        marginAccountsSortingDirection: {
+          balance: 'noSort',
+          positionsLength: 'noSort',
+          marginRatio: 'noSort',
         },
         positionsLoadedState: 'idle',
       },
@@ -161,6 +167,29 @@ describe('portfolio.selectors', () => {
       const result = selectPositionsLoadedState(state);
 
       expect(result).toBe(loadedState);
+    });
+  });
+
+  describe('selectMarginAccountsSortOptions', () => {
+    it('should return an array of sort options', () => {
+      const result = selectMarginAccountsSortOptions(state);
+      expect(result).toEqual([
+        {
+          direction: 'noSort',
+          id: 'balance',
+          label: 'Balance',
+        },
+        {
+          direction: 'noSort',
+          id: 'positionsLength',
+          label: '# Positions',
+        },
+        {
+          direction: 'noSort',
+          id: 'marginRatio',
+          label: 'Margin Ratio',
+        },
+      ]);
     });
   });
 });

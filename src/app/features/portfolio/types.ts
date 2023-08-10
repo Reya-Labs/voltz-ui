@@ -1,14 +1,30 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { PositionsFilterId } from '../../../ui/pages/Portfolio/PortfolioPositions/PositionsList';
-import { PortfolioPosition, PortfolioSummary } from './thunks';
+import { PortfolioMarginAccount, PortfolioPosition, PortfolioSummary } from './thunks';
+export type PositionsFilterId = 'active' | 'matured' | 'settled';
 
 export type SliceState = {
   positionsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  createMarginAccountLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  createMarginAccountError: string;
+  createMarginAccountDialogState: 'opened' | 'closed';
   positions: PortfolioPosition[];
   portfolioSummaryLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   portfolioSummary: PortfolioSummary | null;
   sortingDirection: PositionSorting;
+  marginAccountsPositions: Record<
+    PortfolioMarginAccount['id'],
+    {
+      status: 'idle' | 'pending' | 'succeeded' | 'failed';
+      positions: PortfolioPosition[];
+    }
+  >;
+  marginAccountsSortingDirection: MarginAccountsSorting;
+  marginAccounts: PortfolioMarginAccount[];
+  marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  totalMarginAccounts: number;
+  // 0-based, see MARGIN_ACCOUNTS_INITIAL_PAGE
+  page: number;
 };
 
 export type PositionUI = {
@@ -68,6 +84,19 @@ export type PositionUI = {
   };
 };
 
+export type MarginAccountUI = {
+  id: string;
+  chainId: SupportedChainId;
+  name: string;
+  balanceCompactFormat: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  positionsCount: string;
+  marginRatioPercentage: number;
+  marginRatioHealth: 'danger' | 'warning' | 'healthy';
+};
+
 export type PositionSortId =
   | 'name'
   | 'notional'
@@ -76,8 +105,10 @@ export type PositionSortId =
   | 'status'
   | 'unrealizedPNL'
   | 'realizedPNL';
-export type PositionSortDirection = 'noSort' | 'ascending' | 'descending';
-export type PositionSorting = Record<PositionSortId, PositionSortDirection>;
+export type MarginAccountSortId = 'balance' | 'marginRatio' | 'positionsLength';
+export type SortDirection = 'noSort' | 'ascending' | 'descending';
+export type PositionSorting = Record<PositionSortId, SortDirection>;
+export type MarginAccountsSorting = Record<MarginAccountSortId, SortDirection>;
 export type PositionsSummaryFormatted = {
   maturedPositionsLength: string;
   settledPositionsLength: string;

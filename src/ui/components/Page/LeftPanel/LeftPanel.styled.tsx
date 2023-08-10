@@ -8,7 +8,7 @@ export const PanelBox = styled('div')`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 0px 8px 0px;
+  padding: 0px 0px 8px 16px;
 
   width: 63px;
   height: 100%;
@@ -22,8 +22,10 @@ export const PanelBox = styled('div')`
 export const CraftedByBox = styled('div')`
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  gap: 4px;
+  width: 100%;
+  margin-top: 16px;
 `;
 
 export const VoltzLogoBox = styled('div')`

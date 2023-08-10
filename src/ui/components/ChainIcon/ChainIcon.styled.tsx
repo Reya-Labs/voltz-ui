@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 import { ReactComponent as Arbitrum } from './assets/arbitrum.svg';
 import { ReactComponent as Avalanche } from './assets/avalanche.svg';
+import { ReactComponent as Ethereum } from './assets/ethereum.svg';
 
 export const ArbitrumIcon = styled(Arbitrum)`
   width: 20px;
@@ -9,6 +10,11 @@ export const ArbitrumIcon = styled(Arbitrum)`
 `;
 
 export const AvalancheIcon = styled(Avalanche)`
+  width: 20px;
+  height: 20px;
+`;
+
+export const EthereumIcon = styled(Ethereum)`
   width: 20px;
   height: 20px;
 `;

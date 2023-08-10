@@ -1,13 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { getNextSortDirection } from '../helpers';
-import { resetSortingDirection } from './constants';
+import { resetMarginAccountsSortingDirection, resetPositionsSortingDirection } from './constants';
 import { initialState } from './state';
 import {
+  createMarginAccountThunk,
+  fetchMarginAccountPositionsThunk,
+  fetchMarginAccountsThunk,
   fetchPortfolioSummaryThunk,
   initialisePortfolioPositionsThunk,
   PortfolioPosition,
   PortfolioSummary,
+  ReturnTypeFetchMarginAccounts,
 } from './thunks';
 import { PositionSortId } from './types';
 
@@ -16,6 +20,12 @@ const slice = createSlice({
   initialState,
   reducers: {
     resetPortfolioStateAction: () => initialState,
+    openCreateMarginAccountDialogAction: (state) => {
+      state.createMarginAccountDialogState = 'opened';
+    },
+    closeCreateMarginAccountDialogAction: (state) => {
+      state.createMarginAccountDialogState = 'closed';
+    },
     togglePositionSortingDirectionAction: (
       state,
       {
@@ -25,7 +35,7 @@ const slice = createSlice({
       }>,
     ) => {
       state.sortingDirection = {
-        ...resetSortingDirection,
+        ...resetPositionsSortingDirection,
         [sortId]: getNextSortDirection(state.sortingDirection[sortId]),
       };
     },
@@ -55,9 +65,68 @@ const slice = createSlice({
       .addCase(fetchPortfolioSummaryThunk.fulfilled, (state, { payload }) => {
         state.portfolioSummaryLoadedState = 'succeeded';
         state.portfolioSummary = payload as PortfolioSummary;
+      })
+      .addCase(fetchMarginAccountsThunk.pending, (state) => {
+        state.marginAccountsLoadedState = 'pending';
+        state.marginAccounts = [];
+      })
+      .addCase(fetchMarginAccountsThunk.rejected, (state, { meta }) => {
+        state.marginAccountsLoadedState = 'failed';
+        state.marginAccounts = [];
+        state.page = meta.arg.page;
+      })
+      .addCase(fetchMarginAccountsThunk.fulfilled, (state, { meta, payload }) => {
+        state.marginAccountsLoadedState = 'succeeded';
+        const { marginAccounts, totalMarginAccounts } = payload as ReturnTypeFetchMarginAccounts;
+        state.marginAccounts = marginAccounts;
+        state.totalMarginAccounts = totalMarginAccounts;
+        state.page = meta.arg.page;
+        if (meta.arg.sort) {
+          const { id, direction } = meta.arg.sort;
+          state.marginAccountsSortingDirection = {
+            ...resetMarginAccountsSortingDirection,
+            [id]: direction,
+          };
+        }
+      })
+      .addCase(fetchMarginAccountPositionsThunk.pending, (state, { meta }) => {
+        state.marginAccountsPositions[meta.arg.id] = {
+          status: 'pending',
+          positions: [],
+        };
+      })
+      .addCase(fetchMarginAccountPositionsThunk.rejected, (state, { meta }) => {
+        state.marginAccountsPositions[meta.arg.id] = {
+          status: 'failed',
+          positions: [],
+        };
+      })
+      .addCase(fetchMarginAccountPositionsThunk.fulfilled, (state, { meta, payload }) => {
+        state.marginAccountsPositions[meta.arg.id] = {
+          status: 'succeeded',
+          positions: payload as PortfolioPosition[],
+        };
+      })
+      .addCase(createMarginAccountThunk.pending, (state) => {
+        state.createMarginAccountLoadedState = 'pending';
+        state.createMarginAccountError = '';
+      })
+      .addCase(createMarginAccountThunk.rejected, (state, { payload }) => {
+        state.createMarginAccountLoadedState = 'failed';
+        state.createMarginAccountError = payload as string;
+      })
+      .addCase(createMarginAccountThunk.fulfilled, (state, { meta, payload }) => {
+        state.createMarginAccountLoadedState = 'succeeded';
+        state.createMarginAccountError = '';
+        state.createMarginAccountDialogState = 'closed';
       });
   },
 });
 
-export const { resetPortfolioStateAction, togglePositionSortingDirectionAction } = slice.actions;
+export const {
+  closeCreateMarginAccountDialogAction,
+  openCreateMarginAccountDialogAction,
+  resetPortfolioStateAction,
+  togglePositionSortingDirectionAction,
+} = slice.actions;
 export const portfolioReducer = slice.reducer;
