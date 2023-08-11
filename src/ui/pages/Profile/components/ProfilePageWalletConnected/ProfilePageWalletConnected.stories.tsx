@@ -133,7 +133,7 @@ ArbitrumSeason.args = {
   account: '0xb01F14d1C9000D453241221EB54648F1C378c970',
   badges: mockBadgesArbitrum[3],
   season: SEASONS[SupportedChainId.arbitrum][0],
-  seasonOptions: [SEASONS[SupportedChainId.arbitrum][0]],
+  seasonOptions: [SEASONS[SupportedChainId.arbitrum][0], SEASONS[SupportedChainId.arbitrum][1]],
   chainId: SupportedChainId.arbitrum,
 };
 
