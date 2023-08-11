@@ -163,11 +163,10 @@ const arbitrumTypeBadgeVariantMap: BadgeTypeBadgeVariant = {
   '109': 's4MellowLpVaultTier1Arbitrum',
   '110': 's4MellowLpVaultTier2Arbitrum',
   '111': 's4MellowLpVaultTier3Arbitrum',
-  // TODO: Ioana add the BE ids
-  '-1': 's4UK',
-  '-2': 's4VoltzGlp',
-  '-3': 's4VoltzAave',
-  '-4': 's4Tatsu',
+  '112': 's4VoltzGlp',
+  '113': 's4VoltzAave',
+  '114': 's4Tatsu',
+  '115': 's4UK',
 };
 const avalancheTypeBadgeVariantMap: BadgeTypeBadgeVariant = {};
 const spruceTypeBadgeVariantMap: BadgeTypeBadgeVariant = {};
