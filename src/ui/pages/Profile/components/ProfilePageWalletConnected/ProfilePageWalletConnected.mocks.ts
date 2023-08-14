@@ -652,18 +652,18 @@ export const mockBadgesArbitrum: Record<Season['id'], CollectionBadge[]> = {
       variant: 's4UK',
       achievedAt: new Date('02/02/2022').valueOf(),
     },
-    {
-      variant: 's4Tatsu',
-      achievedAt: new Date('02/02/2022').valueOf(),
-    },
-    {
-      variant: 's4VoltzAave',
-      achievedAt: new Date('02/02/2022').valueOf(),
-    },
-    {
-      variant: 's4VoltzGlp',
-      achievedAt: new Date('02/02/2022').valueOf(),
-    },
+    // {
+    //   variant: 's4Tatsu',
+    //   achievedAt: new Date('02/02/2022').valueOf(),
+    // },
+    // {
+    //   variant: 's4VoltzAave',
+    //   achievedAt: new Date('02/02/2022').valueOf(),
+    // },
+    // {
+    //   variant: 's4VoltzGlp',
+    //   achievedAt: new Date('02/02/2022').valueOf(),
+    // },
   ],
   5: [],
 };

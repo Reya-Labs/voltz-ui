@@ -191,6 +191,9 @@ export const NON_PROGRAMMATIC_BADGES: NonProgrammaticBadges[] = [
   'referror',
   'notionalInfluencer',
   'whaleWhisperer',
+];
+
+export const INSOLVENCY_ARBITRUM_BADGES: NonProgrammaticBadges[] = [
   's4VoltzAave',
   's4VoltzGlp',
   's4UK',
@@ -339,10 +342,7 @@ const arbitrumChainSeasonBadgeVariants: SeasonBadgeVariants = {
     's4YikesArbitrum',
     's4MaxBiddingArbitrum',
     's4TopTraderArbitrum',
-    's4Tatsu',
-    's4UK',
-    's4VoltzAave',
-    's4VoltzGlp',
+    ...INSOLVENCY_ARBITRUM_BADGES,
   ],
   5: [],
 };
