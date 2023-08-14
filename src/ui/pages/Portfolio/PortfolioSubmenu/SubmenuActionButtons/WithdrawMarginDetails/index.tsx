@@ -1,8 +1,13 @@
-import { TokenTypography, Typography } from 'brokoli-ui';
+import { HorizontalLine, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { ReactComponent as GasIcon } from './gas-icon.svg';
-import { IconTextWrapper, TransactionDetailBox } from './WithdrawMarginDetails.styled';
+import {
+  IconTextWrapper,
+  TransactionDetailBox,
+  WithdrawMarginDetailsBox,
+  WithdrawMarginDetailsWrapperBox,
+} from './WithdrawMarginDetails.styled';
 
 type TransactionDetailsProps = {};
 
@@ -16,40 +21,43 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
   };
 
   return (
-    <React.Fragment>
-      <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-          Account margin
-        </Typography>
-        <TokenTypography
-          colorToken="lavenderWeb"
-          token={token}
-          typographyToken="secondaryBodySmallRegular"
-          value={feeFormatted}
-        />
-      </TransactionDetailBox>
-      <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-          Available to withdraw
-        </Typography>
-        <TokenTypography
-          colorToken="lavenderWeb"
-          token="%"
-          typographyToken="secondaryBodySmallRegular"
-          value={slippageFormatted}
-        />
-      </TransactionDetailBox>
-      <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-          Account Margin Ratio
-        </Typography>
-        <TokenTypography
-          colorToken="lavenderWeb"
-          token="%"
-          typographyToken="secondaryBodySmallRegular"
-          value={slippageFormatted}
-        />
-      </TransactionDetailBox>
+    <WithdrawMarginDetailsWrapperBox>
+      <WithdrawMarginDetailsBox>
+        <TransactionDetailBox>
+          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+            Account margin
+          </Typography>
+          <TokenTypography
+            colorToken="lavenderWeb"
+            token={token}
+            typographyToken="secondaryBodySmallRegular"
+            value={feeFormatted}
+          />
+        </TransactionDetailBox>
+        <TransactionDetailBox>
+          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+            Available to withdraw
+          </Typography>
+          <TokenTypography
+            colorToken="lavenderWeb"
+            token="%"
+            typographyToken="secondaryBodySmallRegular"
+            value={slippageFormatted}
+          />
+        </TransactionDetailBox>
+        <TransactionDetailBox>
+          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+            Account Margin Ratio
+          </Typography>
+          <TokenTypography
+            colorToken="lavenderWeb"
+            token="%"
+            typographyToken="secondaryBodySmallRegular"
+            value={slippageFormatted}
+          />
+        </TransactionDetailBox>
+      </WithdrawMarginDetailsBox>
+      <HorizontalLine />
       <TransactionDetailBox>
         <IconTextWrapper>
           <GasIcon />
@@ -64,6 +72,6 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
           value={gasFeeFormatted}
         />
       </TransactionDetailBox>
-    </React.Fragment>
+    </WithdrawMarginDetailsWrapperBox>
   );
 };

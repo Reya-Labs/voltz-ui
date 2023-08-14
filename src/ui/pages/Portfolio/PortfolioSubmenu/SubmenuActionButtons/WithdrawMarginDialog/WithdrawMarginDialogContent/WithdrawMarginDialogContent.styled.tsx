@@ -28,3 +28,11 @@ export const DetailBox = styled('div')`
   justify-content: space-between;
   width: 100%;
 `;
+
+export const MidBox = styled('div')`
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  flex-direction: column;
+  gap: 16px;
+`;
