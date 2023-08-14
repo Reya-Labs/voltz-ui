@@ -7149,7 +7149,7 @@
     "@typescript-eslint/types" "5.10.0"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/api-sdk-v2@1.16.0", "@voltz-protocol/api-sdk-v2@1.18.1", "@voltz-protocol/api-sdk-v2@^1.18.1":
+"@voltz-protocol/api-sdk-v2@1.18.1", "@voltz-protocol/api-sdk-v2@1.19.1", "@voltz-protocol/api-sdk-v2@^1.18.1":
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/@voltz-protocol/api-sdk-v2/-/api-sdk-v2-1.18.1.tgz#1d37adb9569e48183593ae54edb5e4286cd251de"
   integrity sha512-bltI+OcGyVha5saoz0pFYe8MHrHytNcnKvlXNQzvFc/M0JJ4LRGAISc8tHOGonLaQAa0IWAiNVHuK8H6Lk35gg==
@@ -7213,16 +7213,16 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.175.0":
-  version "1.175.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.175.0.tgz#343aa9be9905607ce284d74045d8ad3ae0ad021d"
-  integrity sha512-tRKzsOhpkvbMC7LdmQTZk3hOwPG03qj6FFpVkYRQRGhIqfhQQovg5nFyFezHggydRxq1O18+Aaqv+RgWlUBTpw==
+"@voltz-protocol/v1-sdk@1.176.0":
+  version "1.176.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.176.0.tgz#d957ff38fda3da4637ba5108332c44e2f2252206"
+  integrity sha512-Uu/YLA3HS0p4NsdwG7jAmKQun8Zhs6MJuz0ZsxexwRGom3+xtZPewhMex4RMoftRSn0KrXncn+Al/jpdPZAsQw==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
-    "@voltz-protocol/api-sdk-v2" "1.16.0"
+    "@voltz-protocol/api-sdk-v2" "1.19.1"
     "@voltz-protocol/subgraph-data" "1.18.1"
     axios "^0.27.2"
     big.js "^6.1.1"

@@ -112,3 +112,6 @@ export const isV2AMM = (amm: AMM) => amm.market.tags.isV2;
 export const isAMMPaused = (amm: AMM) => (!amm ? false : amm.isPaused);
 export const isAMMPausedPortfolio = (amm: PortfolioPositionPool) =>
   !amm ? false : amm.flags.isPaused;
+
+export const isSettlementAllowed = (amm: PortfolioPositionPool) =>
+  !amm ? false : !amm.flags.isPaused || amm.flags.isSettlementAllowedWhenPaused;
