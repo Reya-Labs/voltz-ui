@@ -65,7 +65,7 @@ export const SettleConfirmationStep: React.FunctionComponent = () => {
       <Button
         bottomLeftText={
           !isSettlementAllowed
-            ? 'Pool paused until further notice. Check Discord for updates.'
+            ? 'Pool settlement paused until further notice. Check Discord for updates.'
             : error
             ? error
             : ''
