@@ -165,13 +165,12 @@ export const selectIsGLP28June = (state: RootState): boolean => {
   return pool.flags.isGLP28Jun2023;
 };
 
-export const selectIsAaveAugust = (state: RootState): boolean => {
+export const selectIsSettlementAllowedWhenPaused = (state: RootState): boolean => {
   const pool = state.settleFlow.position?.pool;
 
   if (!pool) {
     return false;
   }
 
-  // todo: rename this flag
   return pool.flags.isSettlementAllowedWhenPaused;
 };
