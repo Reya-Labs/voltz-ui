@@ -1,50 +1,26 @@
-import { Button, CloseButton, TextField, Typography } from 'brokoli-ui';
-import React, { useState } from 'react';
+import { Button, CloseButton, Typography } from 'brokoli-ui';
+import React from 'react';
 
 import {
-  createMarginAccountThunk,
   selectCreateMarginAccountError,
   selectCreateMarginAccountLoadedState,
 } from '../../../../../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { useWallet } from '../../../../../../../hooks/useWallet';
+import { useAppSelector } from '../../../../../../../app/hooks';
 import { MarginAccountsSearchField } from '../../MarginAccountsSearchField';
+import { MarginAmountField } from '../../MarginAmountField';
 import { WithdrawMarginDetails } from '../../WithdrawMarginDetails';
-import { ContentBox, TitleBox } from './WithdrawMarginDialogContent.styled';
+import { ContentBox, MidBox, TitleBox } from './WithdrawMarginDialogContent.styled';
 
 export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
-  const { signer } = useWallet();
-  const dispatch = useAppDispatch();
   const loading = useAppSelector(selectCreateMarginAccountLoadedState) === 'pending';
   const error = useAppSelector(selectCreateMarginAccountError);
-  const [name, setName] = useState('');
   const handleOnCloseClick = () => {};
-  const handleOnVerifyClick = () => {
-    void dispatch(
-      createMarginAccountThunk({
-        signer,
-        name,
-      }),
-    );
-  };
-  const handleOnNameChange = (value: string | undefined) => {
-    if (value === undefined) {
-      setName('');
-      return;
-    }
-    // Use a regular expression to match anything that is not a digit or a letter
-    const regex = /[^a-zA-Z\d]/g;
-
-    // Remove unwanted characters using the replace method
-    const cleanedValue = value.replace(regex, '');
-
-    setName(cleanedValue);
-  };
+  const handleOnVerifyClick = () => {};
   return (
     <ContentBox>
       <TitleBox>
         <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-          Withdraw
+          Withdraw Margin
         </Typography>
         <CloseButton onClick={handleOnCloseClick} />
       </TitleBox>
@@ -52,18 +28,11 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia
         consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
       </Typography>
-      <TextField
-        label="Amount to withdraw"
-        labelColorToken="lavenderWeb3"
-        labelTypographyToken="primaryBodySmallRegular"
-        placeHolder="Example Name"
-        type="text"
-        typographyToken="secondaryBodyMediumBold"
-        value={name}
-        onChange={handleOnNameChange}
-      />
-      <MarginAccountsSearchField />
-      <WithdrawMarginDetails />
+      <MidBox>
+        <MarginAccountsSearchField />
+        <MarginAmountField />
+        <WithdrawMarginDetails />
+      </MidBox>
       <Button
         bottomLeftText={error ? error : ''}
         bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
@@ -73,7 +42,7 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
         variant="primary"
         onClick={handleOnVerifyClick}
       >
-        Withdraw
+        Withdraw Margin
       </Button>
     </ContentBox>
   );
