@@ -1,6 +1,6 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { isAMMPausedPortfolio } from '../../../utilities/amm';
+import { isAMMPausedPortfolio, isSettlementAllowed } from '../../../utilities/amm';
 import { RootState } from '../../store';
 import { formCompactFormatToParts, formFormatNumber, getGasInfoFormatted } from '../forms/common';
 import { formatPoolMaturity, formatUnderlyingTokenName } from '../helpers';
@@ -18,6 +18,8 @@ export const selectSettleVariant = (state: RootState) => {
 export const selectSettleError = (state: RootState) => state.settleFlow.error;
 export const selectAMMPaused = (state: RootState) =>
   isAMMPausedPortfolio(state.settleFlow.position?.pool as PortfolioPositionPool);
+export const selectSettlementAllowed = (state: RootState) =>
+  isSettlementAllowed(state.settleFlow.position?.pool as PortfolioPositionPool);
 export const selectSettleStep = (state: RootState) => state.settleFlow.step;
 export const selectConfirmationFlowEtherscanLink = (state: RootState) => {
   return getViewOnEtherScanLink(state.network.chainId, state.settleFlow.txHash || '');
@@ -161,4 +163,15 @@ export const selectIsGLP28June = (state: RootState): boolean => {
   }
 
   return pool.flags.isGLP28Jun2023;
+};
+
+export const selectIsAaveAugust = (state: RootState): boolean => {
+  const pool = state.settleFlow.position?.pool;
+
+  if (!pool) {
+    return false;
+  }
+
+  // todo: rename this flag
+  return pool.flags.isSettlementAllowedWhenPaused;
 };
