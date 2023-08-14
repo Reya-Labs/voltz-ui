@@ -7,6 +7,7 @@ import { formatDateTimeWithOrdinal } from '../../../../../utilities/date';
 import { doNothing } from '../../../../../utilities/doNothing';
 import {
   BadgeVariant,
+  INSOLVENCY_ARBITRUM_BADGES,
   NON_PROGRAMMATIC_BADGES,
   NonProgrammaticBadges,
 } from '../../data/getSeasonBadges';
@@ -92,6 +93,11 @@ export const ProfilePageWalletConnected: React.FunctionComponent<ProfilePageWall
       return seasonBadgeVariants
         .map((variant) => badges.find((c) => c.variant === variant))
         .filter((b) => b)
+        .filter((b) =>
+          INSOLVENCY_ARBITRUM_BADGES.indexOf(b!.variant as NonProgrammaticBadges) !== -1
+            ? b!.achievedAt
+            : true,
+        )
         .filter((b) =>
           BADGE_VARIANT_TIER_MAP[b!.variant] === 'easterEgg' ? b!.achievedAt : true,
         ) as AchievedBadgeProps[];
