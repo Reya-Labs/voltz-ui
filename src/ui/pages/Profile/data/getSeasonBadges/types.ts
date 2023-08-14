@@ -136,11 +136,7 @@ export type ProgrammaticBadges =
   | 's4MaxBiddingArbitrum'
   | 's4MellowLpVaultTier1Arbitrum'
   | 's4MellowLpVaultTier2Arbitrum'
-  | 's4MellowLpVaultTier3Arbitrum'
-  | 's4VoltzAave'
-  | 's4VoltzGlp'
-  | 's4UK'
-  | 's4Tatsu';
+  | 's4MellowLpVaultTier3Arbitrum';
 
 export type NonProgrammaticBadges =
   | 'governorz'
@@ -148,6 +144,10 @@ export type NonProgrammaticBadges =
   | 'senatorz'
   | 'whaleWhisperer'
   | 'notionalInfluencer'
-  | 'referror';
+  | 'referror'
+  | 's4VoltzAave'
+  | 's4VoltzGlp'
+  | 's4UK'
+  | 's4Tatsu';
 
 export type BadgeVariant = ProgrammaticBadges | NonProgrammaticBadges;

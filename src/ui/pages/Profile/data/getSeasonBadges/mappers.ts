@@ -191,6 +191,10 @@ export const NON_PROGRAMMATIC_BADGES: NonProgrammaticBadges[] = [
   'referror',
   'notionalInfluencer',
   'whaleWhisperer',
+  's4VoltzAave',
+  's4VoltzGlp',
+  's4UK',
+  's4Tatsu',
 ];
 
 type SeasonBadgeVariants = Record<`${Season['id']}`, string[]>;
