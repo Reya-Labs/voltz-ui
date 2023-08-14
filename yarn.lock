@@ -7685,10 +7685,10 @@
     "@typescript-eslint/types" "5.62.0"
     eslint-visitor-keys "^3.3.0"
 
-"@voltz-protocol/api-sdk-v2@1.18.1", "@voltz-protocol/api-sdk-v2@1.19.1", "@voltz-protocol/api-sdk-v2@^1.19.1":
-  version "1.18.1"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/api-sdk-v2/-/api-sdk-v2-1.18.1.tgz#1d37adb9569e48183593ae54edb5e4286cd251de"
-  integrity sha512-bltI+OcGyVha5saoz0pFYe8MHrHytNcnKvlXNQzvFc/M0JJ4LRGAISc8tHOGonLaQAa0IWAiNVHuK8H6Lk35gg==
+"@voltz-protocol/api-sdk-v2@1.19.1", "@voltz-protocol/api-sdk-v2@^1.19.1":
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/api-sdk-v2/-/api-sdk-v2-1.19.1.tgz#cf87c950aeb41eced49e02a7a4c2f0349d8872cd"
+  integrity sha512-Bw9Wc0XCTFVdHLjIRNVlQjvOcNEZRhvmnnVZXzw9LmFSL8smdnJeri6LhOzaGEBAoZk93+fCtKHh1Hi/2uKH3A==
   dependencies:
     "@voltz-protocol/commons-v2" "^1.15.0"
     ethers "5.5.4"
