@@ -11,8 +11,8 @@ import {
   selectCompactRealizedPnL,
   selectFixedLower,
   selectFixedUpper,
+  selectIsArbAaveAugust,
   selectIsGLP28June,
-  selectIsSettlementAllowedWhenPaused,
   selectSettleVariant,
 } from '../../../../app/features/settle-flow';
 import { useAppSelector } from '../../../../app/hooks';
@@ -31,7 +31,7 @@ export const SettleDetails: React.FunctionComponent = () => {
   const variant = useAppSelector(selectSettleVariant);
   const token = useAppSelector(selectAMMToken);
   const isGLP28June = useAppSelector(selectIsGLP28June);
-  const isAaveAugust = useAppSelector(selectIsSettlementAllowedWhenPaused);
+  const isArbAaveAugust = useAppSelector(selectIsArbAaveAugust);
 
   if (!variant || !token) {
     return null;
@@ -70,7 +70,7 @@ export const SettleDetails: React.FunctionComponent = () => {
         </Typography>
       </DetailsBox>
     );
-  } else if (isAaveAugust) {
+  } else if (isArbAaveAugust) {
     return (
       <DetailsBox>
         <DetailBox>
