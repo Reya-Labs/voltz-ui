@@ -1,33 +1,32 @@
-import { TextField } from 'brokoli-ui';
-import React, { useState } from 'react';
+import { MarginAmountTokenField, MarginAmountTokenFieldProps } from 'brokoli-ui';
+import React from 'react';
 
-export const MarginAmountField: React.FunctionComponent = () => {
-  const [name, setName] = useState('');
+export type MarginAmountFieldProps = {
+  marginAmountOptions: MarginAmountTokenFieldProps['marginAmountOptions'];
+  onTokenChange?: MarginAmountTokenFieldProps['onTokenChange'];
+  onChange?: MarginAmountTokenFieldProps['onChange'];
+  value: MarginAmountTokenFieldProps['value'];
+  token: MarginAmountTokenFieldProps['token'];
+};
 
-  const handleOnNameChange = (value: string | undefined) => {
-    if (value === undefined) {
-      setName('');
-      return;
-    }
-    // Use a regular expression to match anything that is not a digit or a letter
-    const regex = /[^a-zA-Z\d]/g;
-
-    // Remove unwanted characters using the replace method
-    const cleanedValue = value.replace(regex, '');
-
-    setName(cleanedValue);
-  };
-
+export const MarginAmountField: React.FunctionComponent<MarginAmountFieldProps> = ({
+  onTokenChange,
+  onChange,
+  marginAmountOptions,
+  value,
+  token,
+}) => {
   return (
-    <TextField
+    <MarginAmountTokenField
       label="Amount to withdraw"
       labelColorToken="lavenderWeb3"
       labelTypographyToken="primaryBodySmallRegular"
-      placeHolder="Example Name"
-      type="text"
+      marginAmountOptions={marginAmountOptions}
+      token={token}
       typographyToken="secondaryBodyMediumBold"
-      value={name}
-      onChange={handleOnNameChange}
+      value={value}
+      onChange={onChange}
+      onTokenChange={onTokenChange}
     />
   );
 };
