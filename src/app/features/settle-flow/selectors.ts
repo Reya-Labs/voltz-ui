@@ -165,12 +165,12 @@ export const selectIsGLP28June = (state: RootState): boolean => {
   return pool.flags.isGLP28Jun2023;
 };
 
-export const selectIsSettlementAllowedWhenPaused = (state: RootState): boolean => {
+export const selectIsArbAaveAugust = (state: RootState): boolean => {
   const pool = state.settleFlow.position?.pool;
 
   if (!pool) {
     return false;
   }
 
-  return pool.flags.isSettlementAllowedWhenPaused;
+  return pool.flags.isArbAaveAugust;
 };
