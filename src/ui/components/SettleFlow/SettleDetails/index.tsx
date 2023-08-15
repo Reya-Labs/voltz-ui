@@ -12,6 +12,7 @@ import {
   selectFixedLower,
   selectFixedUpper,
   selectIsGLP28June,
+  selectIsSettlementAllowedWhenPaused,
   selectSettleVariant,
 } from '../../../../app/features/settle-flow';
 import { useAppSelector } from '../../../../app/hooks';
@@ -30,12 +31,96 @@ export const SettleDetails: React.FunctionComponent = () => {
   const variant = useAppSelector(selectSettleVariant);
   const token = useAppSelector(selectAMMToken);
   const isGLP28June = useAppSelector(selectIsGLP28June);
+  const isAaveAugust = useAppSelector(selectIsSettlementAllowedWhenPaused);
 
   if (!variant || !token) {
     return null;
   }
 
-  if (!isGLP28June) {
+  if (isGLP28June) {
+    return (
+      <DetailsBox>
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+          Warning: Settlement for the GLP pool will take place in line with the decisions made by
+          the community in the following &nbsp;
+          <ExternalLink
+            colorToken="skyBlueCrayola"
+            href="https://www.voltz.xyz/voltz-snapshot"
+            typographyToken="primaryBodySmallRegular"
+          >
+            Vote
+          </ExternalLink>
+          <br />
+          <br />
+        </Typography>
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+          By settling you are confirming agreement to these settlement terms, and fully releasing
+          any and all claims you have or may have had against Voltz Labs Technology Limited or its
+          subsidiaries, affiliates, or personnel in connection with these matters. For more
+          information on our terms and conditions, and our limitations on liability and
+          indemnification, see
+          <ExternalLink
+            colorToken="skyBlueCrayola"
+            href="http://voltz.xyz/t-cs"
+            typographyToken="primaryBodySmallRegular"
+          >
+            Terms and Conditions
+          </ExternalLink>{' '}
+          the terms of which apply.
+        </Typography>
+      </DetailsBox>
+    );
+  } else if (isAaveAugust) {
+    return (
+      <DetailsBox>
+        <DetailBox>
+          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+            Settling Balance
+          </Typography>
+          <TokenTypography
+            colorToken={
+              compactNetBalance.compactNetBalanceNumber === '--'
+                ? 'lavenderWeb'
+                : compactNetBalance.compactNetBalanceNumber.indexOf('-') !== -1
+                ? 'wildStrawberry'
+                : 'skyBlueCrayola'
+            }
+            token={`${compactNetBalance.compactNetBalanceSuffix}${tokenFormatted}`}
+            typographyToken="secondaryBodySmallRegular"
+            value={compactNetBalance.compactNetBalanceNumber}
+          />
+        </DetailBox>
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+          Settlement for the Aave pool will take place in line with the decisions made by the
+          community in the following &nbsp;
+          <ExternalLink
+            colorToken="skyBlueCrayola"
+            href="https://www.voltz.xyz/voltz-snapshot"
+            typographyToken="primaryBodySmallRegular"
+          >
+            Vote
+          </ExternalLink>
+          <br />
+          <br />
+        </Typography>
+        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+          By settling you are confirming agreement to these settlement terms, and fully releasing
+          any and all claims you have or may have had against Voltz Labs Technology Limited or its
+          subsidiaries, affiliates, or personnel in connection with these matters. For more
+          information on our terms and conditions, and our limitations on liability and
+          indemnification, see
+          <ExternalLink
+            colorToken="skyBlueCrayola"
+            href="http://voltz.xyz/t-cs"
+            typographyToken="primaryBodySmallRegular"
+          >
+            Terms and Conditions
+          </ExternalLink>{' '}
+          the terms of which apply.
+        </Typography>
+      </DetailsBox>
+    );
+  } else {
     return (
       <DetailsBox>
         <DetailBox>
@@ -154,39 +239,6 @@ export const SettleDetails: React.FunctionComponent = () => {
             value={aMMMaturity}
           />
         </DetailBox>
-      </DetailsBox>
-    );
-  } else {
-    return (
-      <DetailsBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          Warning: Settlement for the GLP pool will take place in line with the decisions made by
-          the community in the following &nbsp;
-          <ExternalLink
-            colorToken="skyBlueCrayola"
-            href="https://www.voltz.xyz/voltz-snapshot"
-            typographyToken="primaryBodySmallRegular"
-          >
-            Vote
-          </ExternalLink>
-          <br />
-          <br />
-        </Typography>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
-          By settling you are confirming agreement to these settlement terms, and fully releasing
-          any and all claims you have or may have had against Voltz Labs Technology Limited or its
-          subsidiaries, affiliates, or personnel in connection with these matters. For more
-          information on our terms and conditions, and our limitations on liability and
-          indemnification, see
-          <ExternalLink
-            colorToken="skyBlueCrayola"
-            href="http://voltz.xyz/t-cs"
-            typographyToken="primaryBodySmallRegular"
-          >
-            Terms and Conditions
-          </ExternalLink>{' '}
-          the terms of which apply.
-        </Typography>
       </DetailsBox>
     );
   }
