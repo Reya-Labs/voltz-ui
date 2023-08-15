@@ -114,4 +114,4 @@ export const isAMMPausedPortfolio = (amm: PortfolioPositionPool) =>
   !amm ? false : amm.flags.isPaused;
 
 export const isSettlementAllowed = (amm: PortfolioPositionPool) =>
-  !amm ? false : !amm.flags.isPaused || amm.flags.isSettlementAllowedWhenPaused;
+  !amm ? false : !amm.flags.isPaused || amm.flags.isArbAaveAugust;
