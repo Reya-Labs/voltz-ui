@@ -11,8 +11,8 @@ import {
   selectCompactRealizedPnL,
   selectFixedLower,
   selectFixedUpper,
-  selectIsSettlementAllowedWhenPaused,
   selectIsGLP28June,
+  selectIsSettlementAllowedWhenPaused,
   selectSettleVariant,
 } from '../../../../app/features/settle-flow';
 import { useAppSelector } from '../../../../app/hooks';
