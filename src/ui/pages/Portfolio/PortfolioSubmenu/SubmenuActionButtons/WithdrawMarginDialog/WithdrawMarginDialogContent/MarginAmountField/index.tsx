@@ -3,7 +3,6 @@ import React from 'react';
 
 export type MarginAmountFieldProps = {
   marginAmountOptions: MarginAmountTokenFieldProps['marginAmountOptions'];
-  onTokenChange?: MarginAmountTokenFieldProps['onTokenChange'];
   onChange?: MarginAmountTokenFieldProps['onChange'];
   value: MarginAmountTokenFieldProps['value'];
   token: MarginAmountTokenFieldProps['token'];
@@ -11,7 +10,6 @@ export type MarginAmountFieldProps = {
 };
 
 export const MarginAmountField: React.FunctionComponent<MarginAmountFieldProps> = ({
-  onTokenChange,
   disabled,
   onChange,
   marginAmountOptions,
@@ -29,7 +27,6 @@ export const MarginAmountField: React.FunctionComponent<MarginAmountFieldProps> 
       typographyToken="secondaryBodyMediumBold"
       value={value}
       onChange={onChange}
-      onTokenChange={onTokenChange}
     />
   );
 };

@@ -51,7 +51,7 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
   }: {
     value: string | undefined;
     changeVia: 'input' | 'selection' | 'maxButton';
-    token: string;
+    token?: string | undefined;
   }) => {
     let maxAmount;
     let maxAmountUSD;
