@@ -1,6 +1,13 @@
-import { HorizontalLine, TokenTypography, Typography } from 'brokoli-ui';
+import { FromToTokenTypography, HorizontalLine, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import {
+  selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
+  selectMarginAccountWithdrawFlowSimulationValueFormatted,
+} from '../../../../../../../../app/features/portfolio';
+import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
+import { useAppSelector } from '../../../../../../../../app/hooks';
+import { MARGIN_RATIO_COLOR_MAP } from '../../../../../MarginAccounts/PortfolioOverview/Overview/MarginAccountList/MarginAccountEntry/MarginRatioDonut/constants';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import {
   IconTextWrapper,
@@ -15,10 +22,14 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
   const token = 'eth';
   const slippageFormatted = '123';
   const feeFormatted = '456';
-  const { gasFeeFormatted, gasTokenFormatted } = {
-    gasFeeFormatted: '123',
-    gasTokenFormatted: 'K',
-  };
+  const {
+    gasFeeUSDFormatted,
+    marginRatioHealth: simulationMarginRatioHealth,
+    marginRatioPercentage: simulationMarginRatioPercentage,
+  } = useAppSelector(selectMarginAccountWithdrawFlowSimulationValueFormatted);
+  const { marginRatioHealth, marginRatioPercentage } = useAppSelector(
+    selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
+  );
 
   return (
     <WithdrawMarginDetailsWrapperBox>
@@ -49,12 +60,24 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
             Account Margin Ratio
           </Typography>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            token="%"
-            typographyToken="secondaryBodySmallRegular"
-            value={slippageFormatted}
-          />
+          {marginRatioHealth !== '--' &&
+          marginRatioPercentage !== '--' &&
+          simulationMarginRatioHealth !== '--' &&
+          simulationMarginRatioPercentage !== '--' ? (
+            <FromToTokenTypography
+              fromColorToken={
+                MARGIN_RATIO_COLOR_MAP[marginRatioHealth as MarginAccountUI['marginRatioHealth']]
+              }
+              fromValue={marginRatioPercentage}
+              toColorToken={
+                MARGIN_RATIO_COLOR_MAP[
+                  simulationMarginRatioHealth as MarginAccountUI['marginRatioHealth']
+                ]
+              }
+              toValue={simulationMarginRatioPercentage}
+              typographyToken="secondaryBodySmallRegular"
+            />
+          ) : null}
         </TransactionDetailBox>
       </WithdrawMarginDetailsBox>
       <HorizontalLine />
@@ -67,9 +90,10 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
         </IconTextWrapper>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={` ${gasTokenFormatted}`}
+          prefixToken="$"
+          token={` ${gasFeeUSDFormatted.compactSuffix}`}
           typographyToken="secondaryBodySmallRegular"
-          value={gasFeeFormatted}
+          value={gasFeeUSDFormatted.compactNumber}
         />
       </TransactionDetailBox>
     </WithdrawMarginDetailsWrapperBox>

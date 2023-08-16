@@ -10,9 +10,9 @@ import {
 import { fetchMarginAccountsForWithdrawThunk } from '../../../../../../../app/features/portfolio/thunks/fetchMarginAccountsForWithdrawThunk';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { useWallet } from '../../../../../../../hooks/useWallet';
-import { MarginAccountsSearchField } from '../../MarginAccountsSearchField';
-import { MarginAmountField, MarginAmountFieldProps } from '../../MarginAmountField';
-import { WithdrawMarginDetails } from '../../WithdrawMarginDetails';
+import { MarginAccountsSearchField } from './MarginAccountsSearchField';
+import { MarginAmountField, MarginAmountFieldProps } from './MarginAmountField';
+import { WithdrawMarginDetails } from './WithdrawMarginDetails';
 import { ContentBox, MidBox, TitleBox } from './WithdrawMarginDialogContent.styled';
 
 // TODO: should be sorted by value

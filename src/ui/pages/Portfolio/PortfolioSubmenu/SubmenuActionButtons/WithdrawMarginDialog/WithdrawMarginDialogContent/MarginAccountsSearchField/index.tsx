@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Highlight, SearchField, SearchFieldProps, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { MarginAccountUI } from '../../../../../../app/features/portfolio/types';
+import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
 
 type MarginAccountListItemProps = SearchFieldProps['items'][0] & MarginAccountUI;
 
