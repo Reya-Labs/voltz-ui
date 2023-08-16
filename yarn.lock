@@ -7213,10 +7213,10 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.176.1":
-  version "1.176.1"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.176.1.tgz#3416b5e7c39b3ddda27c23e2832c284a8377fe35"
-  integrity sha512-sGxKCCDKAxRqRcrmFR9mj0KyRMSEQtvmb8uyfJyHe3HRCOM1GZJgZFP2vwexzKAxIDnm72CiaX3HU8/MblStWA==
+"@voltz-protocol/v1-sdk@1.176.2":
+  version "1.176.2"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.176.2.tgz#acee0e8f338851582fb9d9b9d3b10c667a29c277"
+  integrity sha512-2GE6ZHy5qyNBNL5Z5F9j0TdvGq2kWF9y2VOhflEJujrDC/lB9UdR9PQnM7efgyysEaHbxwyJqQE5agESRJaxYw==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
@@ -9758,10 +9758,10 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.90.1:
-  version "1.90.1"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.90.1.tgz#6bfa3146248c483971a13689a076e46996210c35"
-  integrity sha512-uGlL+UphM1Ht/rj+Ijhbpz1rD8KZGJ9eG45K3U486CtMrw5t58hib6DnqhJ/utCos/aqVtpjf6bKjJyIopEEUw==
+brokoli-ui@1.92.1:
+  version "1.92.1"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.92.1.tgz#82ccab08706344184e0b8325da31fa7ea91ad575"
+  integrity sha512-LV0GyiahoYhGcPunli31XMY06QrHrIVG5rDoLV2ftSWFIQPho6Xg1yAxhxe004QfRPJd6riY+y+h++nL/G926Q==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"

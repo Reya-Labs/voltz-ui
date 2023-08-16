@@ -7,9 +7,49 @@ import {
 } from '../../../../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../../../../app/hooks';
 import { MarginAccountsSearchField } from '../../MarginAccountsSearchField';
-import { MarginAmountField } from '../../MarginAmountField';
+import { MarginAmountField, MarginAmountFieldProps } from '../../MarginAmountField';
 import { WithdrawMarginDetails } from '../../WithdrawMarginDetails';
 import { ContentBox, MidBox, TitleBox } from './WithdrawMarginDialogContent.styled';
+
+// TODO: should be sorted by value
+const marginAmountOptions: MarginAmountFieldProps['marginAmountOptions'] = [
+  {
+    token: 'dai',
+    value: 1230000,
+    valueFormatted: '1.23',
+    valueSuffix: 'M',
+  },
+  {
+    token: 'eth',
+    value: 456000,
+    valueFormatted: '456',
+    valueSuffix: 'k',
+  },
+  {
+    token: 'reth',
+    value: 789,
+    valueFormatted: '789',
+    valueSuffix: '',
+  },
+  {
+    token: 'steth',
+    value: 12340,
+    valueFormatted: '12.34',
+    valueSuffix: 'k',
+  },
+  {
+    token: 'usdc',
+    value: 567000000,
+    valueFormatted: '567',
+    valueSuffix: 'M',
+  },
+  {
+    token: 'usdt',
+    value: 890000000,
+    valueFormatted: '890',
+    valueSuffix: 'M',
+  },
+];
 
 export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
   const loading = useAppSelector(selectCreateMarginAccountLoadedState) === 'pending';
@@ -30,7 +70,11 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
       </Typography>
       <MidBox>
         <MarginAccountsSearchField />
-        <MarginAmountField />
+        <MarginAmountField
+          marginAmountOptions={marginAmountOptions}
+          token={marginAmountOptions[0].token}
+          value={'0'}
+        />
         <WithdrawMarginDetails />
       </MidBox>
       <Button
