@@ -352,5 +352,9 @@ export const selectMarginAccountWithdrawFlowMarginAccountsLoading = (state: Root
 
 export const selectMarginAccountWithdrawFlowMarginAccounts = (state: RootState) => {
   const isLoading = selectMarginAccountsLoading(state);
-  return isLoading ? [] : state.portfolio.marginAccounts.map(mapMarginAccountToMarginAccountUI);
+  return isLoading
+    ? []
+    : state.portfolio.marginAccountWithdrawMarginFlow.marginAccounts.map(
+        mapMarginAccountToMarginAccountUI,
+      );
 };

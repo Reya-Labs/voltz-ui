@@ -42,7 +42,7 @@ export const fetchMarginAccountsForWithdrawThunk = createAsyncThunk<
           id: 'balance',
           direction: 'descending',
         },
-        page: 1,
+        page: 0,
         perPage: 1000,
       });
     } catch (err) {

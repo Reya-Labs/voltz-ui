@@ -138,6 +138,7 @@ const slice = createSlice({
       .addCase(fetchMarginAccountsForWithdrawThunk.fulfilled, (state, { payload }) => {
         state.marginAccountWithdrawMarginFlow.marginAccountsLoadedState = 'succeeded';
         const { marginAccounts } = payload as ReturnTypeFetchMarginAccounts;
+        console.log('### payload', payload);
         state.marginAccountWithdrawMarginFlow.marginAccounts = marginAccounts;
       });
   },
