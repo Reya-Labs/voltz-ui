@@ -25,6 +25,34 @@ export type SliceState = {
   totalMarginAccounts: number;
   // 0-based, see MARGIN_ACCOUNTS_INITIAL_PAGE
   page: number;
+  // margin account - withdraw flow
+  marginAccountWithdrawMarginFlow: {
+    // margin accounts for the selector
+    marginAccounts: PortfolioMarginAccount[];
+    marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+    step: 'closed' | 'opened' | 'withdrawing' | 'withdraw-success' | 'withdraw-error';
+    selectedMarginAccount: null | {
+      id: PortfolioMarginAccount['id'];
+      marginRatioPercentage: PortfolioMarginAccount['marginRatioPercentage'];
+      marginRatioHealth: PortfolioMarginAccount['marginRatioHealth'];
+      balance: PortfolioMarginAccount['balance'];
+    };
+    error: string | null;
+    simulation: {
+      status: 'idle' | 'pending' | 'succeeded' | 'failed';
+      value: null | {
+        gasFeeUSD: number;
+        marginRatioPercentage: PortfolioMarginAccount['marginRatioPercentage'];
+        marginRatioHealth: PortfolioMarginAccount['marginRatioHealth'];
+      };
+    };
+    userInput: {
+      amount: 0;
+      maxAmount: 0;
+      maxAmountUSD: 0;
+      token: undefined | 'dai' | 'eth' | 'reth' | 'steth' | 'usdc' | 'usdt';
+    };
+  };
 };
 
 export type PositionUI = {

@@ -13,6 +13,7 @@ import {
   PortfolioSummary,
   ReturnTypeFetchMarginAccounts,
 } from './thunks';
+import { fetchMarginAccountsForWithdrawThunk } from './thunks/fetchMarginAccountsForWithdrawThunk';
 import { PositionSortId } from './types';
 
 const slice = createSlice({
@@ -20,6 +21,12 @@ const slice = createSlice({
   initialState,
   reducers: {
     resetPortfolioStateAction: () => initialState,
+    openMarginAccountWithdrawFlowAction: (state) => {
+      state.marginAccountWithdrawMarginFlow.step = 'opened';
+    },
+    closeMarginAccountWithdrawFlowAction: (state) => {
+      state.marginAccountWithdrawMarginFlow.step = 'closed';
+    },
     openCreateMarginAccountDialogAction: (state) => {
       state.createMarginAccountDialogState = 'opened';
     },
@@ -119,6 +126,19 @@ const slice = createSlice({
         state.createMarginAccountLoadedState = 'succeeded';
         state.createMarginAccountError = '';
         state.createMarginAccountDialogState = 'closed';
+      })
+      .addCase(fetchMarginAccountsForWithdrawThunk.pending, (state) => {
+        state.marginAccountWithdrawMarginFlow.marginAccountsLoadedState = 'pending';
+        state.marginAccountWithdrawMarginFlow.marginAccounts = [];
+      })
+      .addCase(fetchMarginAccountsForWithdrawThunk.rejected, (state) => {
+        state.marginAccountWithdrawMarginFlow.marginAccountsLoadedState = 'failed';
+        state.marginAccountWithdrawMarginFlow.marginAccounts = [];
+      })
+      .addCase(fetchMarginAccountsForWithdrawThunk.fulfilled, (state, { payload }) => {
+        state.marginAccountWithdrawMarginFlow.marginAccountsLoadedState = 'succeeded';
+        const { marginAccounts } = payload as ReturnTypeFetchMarginAccounts;
+        state.marginAccountWithdrawMarginFlow.marginAccounts = marginAccounts;
       });
   },
 });
@@ -128,5 +148,7 @@ export const {
   openCreateMarginAccountDialogAction,
   resetPortfolioStateAction,
   togglePositionSortingDirectionAction,
+  openMarginAccountWithdrawFlowAction,
+  closeMarginAccountWithdrawFlowAction,
 } = slice.actions;
 export const portfolioReducer = slice.reducer;

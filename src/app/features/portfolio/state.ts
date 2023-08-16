@@ -20,4 +20,19 @@ export const initialState: SliceState = {
   portfolioSummary: null,
   sortingDirection: { ...initialPositionsSortingDirection },
   marginAccountsSortingDirection: { ...initialMarginAccountsSortingDirection },
+  marginAccountWithdrawMarginFlow: {
+    step: 'closed',
+    selectedMarginAccount: null,
+    error: null,
+    simulation: {
+      status: 'idle',
+      value: null,
+    },
+    userInput: {
+      amount: 0,
+      maxAmount: 0,
+      maxAmountUSD: 0,
+      token: undefined,
+    },
+  },
 };

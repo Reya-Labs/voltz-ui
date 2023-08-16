@@ -1,5 +1,5 @@
 import { isOnlyV2PoolsPositions } from '../../../utilities/is-only-v2-pools-positions';
-import { compactFormatToParts } from '../../../utilities/number';
+import { compactFormat, compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { formFormatNumber } from '../forms/common';
 import {
@@ -8,8 +8,12 @@ import {
   MARGIN_ACCOUNTS_SORT_CONFIG,
   POSITIONS_SORT_CONFIG,
 } from './constants';
-import { getPositionsSummary, mapPortfolioPositionToPortfolioUI, sortPositions } from './helpers';
-import { mapMarginAccountToMarginAccountUI } from './helpers/mapMarginAccountToMarginAccountUI';
+import {
+  getPositionsSummary,
+  mapMarginAccountToMarginAccountUI,
+  mapPortfolioPositionToPortfolioUI,
+  sortPositions,
+} from './helpers';
 import { PortfolioMarginAccount } from './thunks';
 import {
   MarginAccountSortId,
@@ -261,4 +265,92 @@ export const selectCreateMarginAccountError = (state: RootState) => {
 
 export const selectCreateMarginAccountDialogState = (state: RootState) => {
   return state.portfolio.createMarginAccountDialogState;
+};
+
+export const selectMarginAccountWithdrawFlowStep = (state: RootState) => {
+  return state.portfolio.marginAccountWithdrawMarginFlow.step;
+};
+
+export const selectMarginAccountWithdrawFlowError = (state: RootState) => {
+  return state.portfolio.marginAccountWithdrawMarginFlow.error;
+};
+
+export const selectMarginAccountWithdrawFlowSimulationStatus = (state: RootState) => {
+  return state.portfolio.marginAccountWithdrawMarginFlow.simulation.status;
+};
+
+export const selectMarginAccountWithdrawFlowSimulationIsLoading = (state: RootState) => {
+  return (
+    state.portfolio.marginAccountWithdrawMarginFlow.simulation.status === 'pending' ||
+    state.portfolio.marginAccountWithdrawMarginFlow.simulation.status === 'idle'
+  );
+};
+
+export const selectMarginAccountWithdrawFlowSimulationValueFormatted = (state: RootState) => {
+  const simulationValue = state.portfolio.marginAccountWithdrawMarginFlow.simulation.value;
+  if (selectMarginAccountWithdrawFlowSimulationIsLoading(state) || simulationValue === null) {
+    return {
+      gasFeeUSDFormatted: {
+        compactNumber: '--',
+        compactSuffix: '',
+      },
+      marginRatioPercentage: '--',
+      marginRatioHealth: '--',
+    };
+  }
+
+  return {
+    gasFeeUSDFormatted: compactFormatToParts(simulationValue.gasFeeUSD),
+    marginRatioPercentage: simulationValue.marginRatioPercentage,
+    marginRatioHealth: simulationValue.marginRatioHealth,
+  };
+};
+
+export const selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted = (state: RootState) => {
+  const selectedMarginAccount =
+    state.portfolio.marginAccountWithdrawMarginFlow.selectedMarginAccount;
+  if (selectedMarginAccount === null) {
+    return {
+      id: '',
+      marginRatioPercentage: '--',
+      marginRatioHealth: '--',
+      balanceCompactFormat: {
+        compactNumber: '--',
+        compactSuffix: '',
+      },
+    };
+  }
+
+  return {
+    id: selectedMarginAccount.id,
+    marginRatioPercentage: selectedMarginAccount.marginRatioPercentage,
+    marginRatioHealth: selectedMarginAccount.marginRatioHealth,
+    balanceCompactFormat: compactFormatToParts(selectedMarginAccount.balance),
+  };
+};
+
+export const selectMarginAccountWithdrawFlowUserInputFormatted = (state: RootState) => {
+  const userInput = state.portfolio.marginAccountWithdrawMarginFlow.userInput;
+
+  return {
+    amount: userInput.amount,
+    maxAmount: userInput.maxAmount,
+    maxAmountFormatted: compactFormat(userInput.maxAmount),
+    maxAmountUSDFormatted: compactFormat(userInput.maxAmountUSD),
+    token: userInput.token,
+  };
+};
+
+export const selectMarginAccountWithdrawFlowMarginAccountsLoadedState = (state: RootState) => {
+  return state.portfolio.marginAccountsLoadedState;
+};
+
+export const selectMarginAccountWithdrawFlowMarginAccountsLoading = (state: RootState): boolean => {
+  const loadedState = selectMarginAccountWithdrawFlowMarginAccountsLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectMarginAccountWithdrawFlowMarginAccounts = (state: RootState) => {
+  const isLoading = selectMarginAccountsLoading(state);
+  return isLoading ? [] : state.portfolio.marginAccounts.map(mapMarginAccountToMarginAccountUI);
 };
