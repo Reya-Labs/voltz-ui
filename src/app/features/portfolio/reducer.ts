@@ -15,6 +15,8 @@ import {
   PortfolioSummary,
   ReturnTypeFetchAvailableAmountsToWithdrawForMarginAccount,
   ReturnTypeFetchMarginAccounts,
+  ReturnTypeSimulateWithdrawMargin,
+  simulateWithdrawMarginFromMarginAccountThunk,
 } from './thunks';
 import { fetchMarginAccountsForWithdrawThunk } from './thunks/fetchMarginAccountsForWithdrawThunk';
 import { PositionSortId } from './types';
@@ -191,11 +193,32 @@ const slice = createSlice({
       .addCase(
         fetchAvailableAmountsToWithdrawForMarginAccountThunk.fulfilled,
         (state, { payload }) => {
-          state.marginAccountWithdrawMarginFlow.availableAmountsLoadedState = 'succeeded';
-          state.marginAccountWithdrawMarginFlow.availableAmounts =
+          const availableAmounts =
             payload as ReturnTypeFetchAvailableAmountsToWithdrawForMarginAccount;
+          state.marginAccountWithdrawMarginFlow.availableAmountsLoadedState = 'succeeded';
+          state.marginAccountWithdrawMarginFlow.availableAmounts = availableAmounts;
+          if (availableAmounts.length > 0) {
+            state.marginAccountWithdrawMarginFlow.userInput.token = availableAmounts[0].token;
+            state.marginAccountWithdrawMarginFlow.userInput.maxAmount = availableAmounts[0].value;
+            state.marginAccountWithdrawMarginFlow.userInput.maxAmountUSD =
+              availableAmounts[0].valueUSD;
+          }
         },
-      );
+      )
+      .addCase(simulateWithdrawMarginFromMarginAccountThunk.pending, (state) => {
+        state.marginAccountWithdrawMarginFlow.simulation.status = 'pending';
+        state.marginAccountWithdrawMarginFlow.simulation.value = null;
+      })
+      .addCase(simulateWithdrawMarginFromMarginAccountThunk.rejected, (state) => {
+        state.marginAccountWithdrawMarginFlow.simulation.status = 'failed';
+        state.marginAccountWithdrawMarginFlow.simulation.value = null;
+      })
+      .addCase(simulateWithdrawMarginFromMarginAccountThunk.fulfilled, (state, { payload }) => {
+        state.marginAccountWithdrawMarginFlow.simulation.status = 'succeeded';
+        state.marginAccountWithdrawMarginFlow.simulation.value =
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+          payload as ReturnTypeSimulateWithdrawMargin;
+      });
   },
 });
 

@@ -61,24 +61,25 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
             Account Margin Ratio
           </Typography>
-          {marginRatioHealth !== '--' &&
-          marginRatioPercentage !== '--' &&
-          simulationMarginRatioHealth !== '--' &&
-          simulationMarginRatioPercentage !== '--' ? (
-            <FromToTokenTypography
-              fromColorToken={
-                MARGIN_RATIO_COLOR_MAP[marginRatioHealth as MarginAccountUI['marginRatioHealth']]
-              }
-              fromValue={marginRatioPercentage}
-              toColorToken={
-                MARGIN_RATIO_COLOR_MAP[
-                  simulationMarginRatioHealth as MarginAccountUI['marginRatioHealth']
-                ]
-              }
-              toValue={simulationMarginRatioPercentage}
-              typographyToken="secondaryBodySmallRegular"
-            />
-          ) : null}
+          <FromToTokenTypography
+            fromColorToken={
+              marginRatioHealth !== '--'
+                ? MARGIN_RATIO_COLOR_MAP[marginRatioHealth as MarginAccountUI['marginRatioHealth']]
+                : 'lavenderWeb'
+            }
+            fromToken="%"
+            fromValue={marginRatioPercentage}
+            toColorToken={
+              simulationMarginRatioHealth !== '--'
+                ? MARGIN_RATIO_COLOR_MAP[
+                    simulationMarginRatioHealth as MarginAccountUI['marginRatioHealth']
+                  ]
+                : 'lavenderWeb'
+            }
+            toToken="%"
+            toValue={simulationMarginRatioPercentage}
+            typographyToken="secondaryBodySmallRegular"
+          />
         </TransactionDetailBox>
       </WithdrawMarginDetailsBox>
       <HorizontalLine />

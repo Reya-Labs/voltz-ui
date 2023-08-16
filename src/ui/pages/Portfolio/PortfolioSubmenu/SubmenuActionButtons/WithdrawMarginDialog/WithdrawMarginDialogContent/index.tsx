@@ -1,5 +1,6 @@
 import { Button, CloseButton, Typography } from 'brokoli-ui';
-import React, { useEffect } from 'react';
+import debounce from 'lodash.debounce';
+import React, { useEffect, useMemo } from 'react';
 
 import {
   closeMarginAccountWithdrawFlowAction,
@@ -15,6 +16,7 @@ import {
   selectMarginAccountWithdrawFlowMarginAccountsLoading,
   selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
   selectMarginAccountWithdrawFlowUserInputFormatted,
+  simulateWithdrawMarginFromMarginAccountThunk,
 } from '../../../../../../../app/features/portfolio';
 import { AvailableAmountsUI } from '../../../../../../../app/features/portfolio/types';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
@@ -44,6 +46,23 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
   const availableAmounts = useAppSelector(selectMarginAccountWithdrawFlowAvailableAmounts);
   const handleOnCloseClick = () => dispatch(closeMarginAccountWithdrawFlowAction());
   const handleOnVerifyClick = () => {};
+
+  const debouncedWithdrawSimulation = useMemo(
+    () =>
+      debounce(
+        (nextAmount: number, nextToken: AvailableAmountsUI['token'], marginAccountId: string) => {
+          void dispatch(
+            simulateWithdrawMarginFromMarginAccountThunk({
+              amount: nextAmount,
+              token: nextToken,
+              marginAccountId,
+            }),
+          );
+        },
+        300,
+      ),
+    [dispatch],
+  );
   const handleMarginAmountOnChange = ({
     value = '',
     changeVia,
@@ -55,7 +74,7 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
   }) => {
     let maxAmount;
     let maxAmountUSD;
-    const valueNumber = localeParseFloat(value);
+    const valueNumber = value ? localeParseFloat(value) : 0;
     if (changeVia === 'selection' || changeVia === 'maxButton') {
       const availableAmount = availableAmounts.find(
         (aM) => aM.value === valueNumber && aM.token === nextToken,
@@ -73,6 +92,12 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
         maxAmountUSD,
         token: nextToken as AvailableAmountsUI['token'],
       }),
+    );
+
+    debouncedWithdrawSimulation(
+      valueNumber,
+      nextToken as AvailableAmountsUI['token'],
+      selectedMarginAccountId,
     );
   };
 
@@ -106,7 +131,14 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
     );
   }, [dispatch, selectedMarginAccountId]);
 
-  const computedToken = token || availableAmounts[0]?.token;
+  // Stop the invocation of the debounced function
+  // after unmounting
+  useEffect(() => {
+    return () => {
+      debouncedWithdrawSimulation.cancel();
+    };
+  }, []);
+
   return (
     <ContentBox>
       <TitleBox>
@@ -129,7 +161,7 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
         <MarginAmountField
           disabled={availableAmountsLoading || !selectedMarginAccountId}
           marginAmountOptions={availableAmounts}
-          token={computedToken}
+          token={token}
           value={amount.toString()}
           onChange={handleMarginAmountOnChange}
         />
