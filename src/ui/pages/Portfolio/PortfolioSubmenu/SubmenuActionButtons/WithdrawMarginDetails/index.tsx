@@ -25,7 +25,7 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
       <WithdrawMarginDetailsBox>
         <TransactionDetailBox>
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-            Account margin
+            Account Margin
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
@@ -36,7 +36,7 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
         </TransactionDetailBox>
         <TransactionDetailBox>
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-            Available to withdraw
+            Available To Withdraw
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"

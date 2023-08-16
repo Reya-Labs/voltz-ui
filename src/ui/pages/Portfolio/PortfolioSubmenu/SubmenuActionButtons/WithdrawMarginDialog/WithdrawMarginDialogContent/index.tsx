@@ -1,11 +1,15 @@
 import { Button, CloseButton, Typography } from 'brokoli-ui';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
+  closeMarginAccountWithdrawFlowAction,
   selectCreateMarginAccountError,
   selectCreateMarginAccountLoadedState,
+  selectMarginAccountWithdrawFlowMarginAccounts,
 } from '../../../../../../../app/features/portfolio';
-import { useAppSelector } from '../../../../../../../app/hooks';
+import { fetchMarginAccountsForWithdrawThunk } from '../../../../../../../app/features/portfolio/thunks/fetchMarginAccountsForWithdrawThunk';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
+import { useWallet } from '../../../../../../../hooks/useWallet';
 import { MarginAccountsSearchField } from '../../MarginAccountsSearchField';
 import { MarginAmountField, MarginAmountFieldProps } from '../../MarginAmountField';
 import { WithdrawMarginDetails } from '../../WithdrawMarginDetails';
@@ -52,10 +56,26 @@ const marginAmountOptions: MarginAmountFieldProps['marginAmountOptions'] = [
 ];
 
 export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
+  const { account } = useWallet();
+  const dispatch = useAppDispatch();
   const loading = useAppSelector(selectCreateMarginAccountLoadedState) === 'pending';
   const error = useAppSelector(selectCreateMarginAccountError);
-  const handleOnCloseClick = () => {};
+  const marginAccounts = useAppSelector(selectMarginAccountWithdrawFlowMarginAccounts);
+  const handleOnCloseClick = () => dispatch(closeMarginAccountWithdrawFlowAction());
   const handleOnVerifyClick = () => {};
+
+  useEffect(() => {
+    if (!account) {
+      return;
+    }
+
+    void dispatch(
+      fetchMarginAccountsForWithdrawThunk({
+        account,
+      }),
+    );
+  }, [dispatch, account]);
+
   return (
     <ContentBox>
       <TitleBox>
@@ -69,7 +89,7 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
         consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
       </Typography>
       <MidBox>
-        <MarginAccountsSearchField />
+        <MarginAccountsSearchField marginAccounts={marginAccounts} />
         <MarginAmountField
           marginAmountOptions={marginAmountOptions}
           token={marginAmountOptions[0].token}
