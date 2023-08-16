@@ -3,57 +3,27 @@ import React, { useEffect } from 'react';
 
 import {
   closeMarginAccountWithdrawFlowAction,
+  fetchAvailableAmountsToWithdrawForMarginAccountThunk,
+  fetchMarginAccountsForWithdrawThunk,
+  marginAmountWithdrawFlowValueChangeAction,
   selectCreateMarginAccountError,
   selectCreateMarginAccountLoadedState,
+  selectMarginAccountWithdrawFlowAction,
+  selectMarginAccountWithdrawFlowAvailableAmounts,
+  selectMarginAccountWithdrawFlowAvailableAmountsLoading,
   selectMarginAccountWithdrawFlowMarginAccounts,
+  selectMarginAccountWithdrawFlowMarginAccountsLoading,
+  selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
+  selectMarginAccountWithdrawFlowUserInputFormatted,
 } from '../../../../../../../app/features/portfolio';
-import { fetchMarginAccountsForWithdrawThunk } from '../../../../../../../app/features/portfolio/thunks/fetchMarginAccountsForWithdrawThunk';
+import { AvailableAmountsUI } from '../../../../../../../app/features/portfolio/types';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { useWallet } from '../../../../../../../hooks/useWallet';
+import { localeParseFloat } from '../../../../../../../utilities/localeParseFloat';
 import { MarginAccountsSearchField } from './MarginAccountsSearchField';
-import { MarginAmountField, MarginAmountFieldProps } from './MarginAmountField';
+import { MarginAmountField } from './MarginAmountField';
 import { WithdrawMarginDetails } from './WithdrawMarginDetails';
 import { ContentBox, MidBox, TitleBox } from './WithdrawMarginDialogContent.styled';
-
-// TODO: should be sorted by value
-const marginAmountOptions: MarginAmountFieldProps['marginAmountOptions'] = [
-  {
-    token: 'dai',
-    value: 1230000,
-    valueFormatted: '1.23',
-    valueSuffix: 'M',
-  },
-  {
-    token: 'eth',
-    value: 456000,
-    valueFormatted: '456',
-    valueSuffix: 'k',
-  },
-  {
-    token: 'reth',
-    value: 789,
-    valueFormatted: '789',
-    valueSuffix: '',
-  },
-  {
-    token: 'steth',
-    value: 12340,
-    valueFormatted: '12.34',
-    valueSuffix: 'k',
-  },
-  {
-    token: 'usdc',
-    value: 567000000,
-    valueFormatted: '567',
-    valueSuffix: 'M',
-  },
-  {
-    token: 'usdt',
-    value: 890000000,
-    valueFormatted: '890',
-    valueSuffix: 'M',
-  },
-];
 
 export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
   const { account } = useWallet();
@@ -61,9 +31,58 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
   const loading = useAppSelector(selectCreateMarginAccountLoadedState) === 'pending';
   const error = useAppSelector(selectCreateMarginAccountError);
   const marginAccounts = useAppSelector(selectMarginAccountWithdrawFlowMarginAccounts);
+  const marginAccountsLoading = useAppSelector(
+    selectMarginAccountWithdrawFlowMarginAccountsLoading,
+  );
+  const { id: selectedMarginAccountId } = useAppSelector(
+    selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
+  );
+  const { token, amount } = useAppSelector(selectMarginAccountWithdrawFlowUserInputFormatted);
+  const availableAmountsLoading = useAppSelector(
+    selectMarginAccountWithdrawFlowAvailableAmountsLoading,
+  );
+  const availableAmounts = useAppSelector(selectMarginAccountWithdrawFlowAvailableAmounts);
   const handleOnCloseClick = () => dispatch(closeMarginAccountWithdrawFlowAction());
   const handleOnVerifyClick = () => {};
+  const handleMarginAmountOnChange = ({
+    value = '',
+    changeVia,
+    token: nextToken,
+  }: {
+    value: string | undefined;
+    changeVia: 'input' | 'selection' | 'maxButton';
+    token: string;
+  }) => {
+    let maxAmount;
+    let maxAmountUSD;
+    const valueNumber = localeParseFloat(value);
+    if (changeVia === 'selection' || changeVia === 'maxButton') {
+      const availableAmount = availableAmounts.find(
+        (aM) => aM.value === valueNumber && aM.token === nextToken,
+      );
+      if (availableAmount) {
+        maxAmount = availableAmount.value;
+        maxAmountUSD = availableAmount.valueUSD;
+      }
+    }
 
+    dispatch(
+      marginAmountWithdrawFlowValueChangeAction({
+        value: valueNumber,
+        maxAmount,
+        maxAmountUSD,
+        token: nextToken as AvailableAmountsUI['token'],
+      }),
+    );
+  };
+
+  const handleOnMarginAccountClick = (id: string) => {
+    dispatch(
+      selectMarginAccountWithdrawFlowAction({
+        id,
+      }),
+    );
+  };
   useEffect(() => {
     if (!account) {
       return;
@@ -76,6 +95,18 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
     );
   }, [dispatch, account]);
 
+  useEffect(() => {
+    if (!selectedMarginAccountId) {
+      return;
+    }
+    void dispatch(
+      fetchAvailableAmountsToWithdrawForMarginAccountThunk({
+        id: selectedMarginAccountId,
+      }),
+    );
+  }, [dispatch, selectedMarginAccountId]);
+
+  const computedToken = token || availableAmounts[0]?.token;
   return (
     <ContentBox>
       <TitleBox>
@@ -89,11 +120,18 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
         consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
       </Typography>
       <MidBox>
-        <MarginAccountsSearchField marginAccounts={marginAccounts} />
+        <MarginAccountsSearchField
+          disabled={marginAccountsLoading}
+          marginAccounts={marginAccounts}
+          selectedMarginAccountId={selectedMarginAccountId}
+          onMarginAccountClick={handleOnMarginAccountClick}
+        />
         <MarginAmountField
-          marginAmountOptions={marginAmountOptions}
-          token={marginAmountOptions[0].token}
-          value={'0'}
+          disabled={availableAmountsLoading || !selectedMarginAccountId}
+          marginAmountOptions={availableAmounts}
+          token={computedToken}
+          value={amount.toString()}
+          onChange={handleMarginAmountOnChange}
         />
         <WithdrawMarginDetails />
       </MidBox>

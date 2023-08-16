@@ -7,10 +7,12 @@ export type MarginAmountFieldProps = {
   onChange?: MarginAmountTokenFieldProps['onChange'];
   value: MarginAmountTokenFieldProps['value'];
   token: MarginAmountTokenFieldProps['token'];
+  disabled: boolean;
 };
 
 export const MarginAmountField: React.FunctionComponent<MarginAmountFieldProps> = ({
   onTokenChange,
+  disabled,
   onChange,
   marginAmountOptions,
   value,
@@ -18,6 +20,7 @@ export const MarginAmountField: React.FunctionComponent<MarginAmountFieldProps> 
 }) => {
   return (
     <MarginAmountTokenField
+      disabled={disabled}
       label="Amount to withdraw"
       labelColorToken="lavenderWeb3"
       labelTypographyToken="primaryBodySmallRegular"

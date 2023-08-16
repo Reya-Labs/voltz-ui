@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Highlight, SearchField, SearchFieldProps, TokenTypography, Typography } from 'brokoli-ui';
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
 
@@ -29,7 +29,7 @@ const MarginAccountListItem: SearchFieldProps['itemRenderer'] = (props) => {
         colorToken="lavenderWeb"
         prefixToken="$"
         token={compactSuffix}
-        typographyToken="primaryBodySmallRegular"
+        typographyToken="secondaryBodySmallRegular"
         value={compactNumber}
       />
     </Wrapper>
@@ -43,19 +43,25 @@ const itemFilter = (item: SearchFieldProps['items'][0], value: string) => {
 
 export const MarginAccountsSearchField: React.FunctionComponent<{
   marginAccounts: MarginAccountUI[];
-}> = ({ marginAccounts }) => {
-  const [selectedItemId, setSelectedItemId] = useState('');
+  selectedMarginAccountId: string;
+  onMarginAccountClick: (id: string) => void;
+  disabled: boolean;
+}> = ({ disabled, onMarginAccountClick, selectedMarginAccountId, marginAccounts }) => {
+  const marginAccountsWithLabel = useMemo(() => {
+    return marginAccounts.map((mA) => ({ ...mA, label: mA.name }));
+  }, [marginAccounts]);
 
   return (
     <SearchField
+      disabled={disabled}
       itemFilter={itemFilter}
       itemRenderer={MarginAccountListItem}
-      items={marginAccounts as MarginAccountListItemProps[]}
+      items={marginAccountsWithLabel as MarginAccountListItemProps[]}
       labelTypographyToken="primaryBodySmallRegular"
       placeHolder="Select Margin Account"
-      selectedItemId={selectedItemId}
+      selectedItemId={selectedMarginAccountId}
       typographyToken="primaryBodySmallBold"
-      onItemSelected={setSelectedItemId}
+      onItemSelected={onMarginAccountClick}
     />
   );
 };

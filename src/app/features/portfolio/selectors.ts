@@ -10,6 +10,7 @@ import {
 } from './constants';
 import {
   getPositionsSummary,
+  mapAvailableAmountMarginAccountToAvailableAmountsUI,
   mapMarginAccountToMarginAccountUI,
   mapPortfolioPositionToPortfolioUI,
   sortPositions,
@@ -280,10 +281,8 @@ export const selectMarginAccountWithdrawFlowSimulationStatus = (state: RootState
 };
 
 export const selectMarginAccountWithdrawFlowSimulationIsLoading = (state: RootState) => {
-  return (
-    state.portfolio.marginAccountWithdrawMarginFlow.simulation.status === 'pending' ||
-    state.portfolio.marginAccountWithdrawMarginFlow.simulation.status === 'idle'
-  );
+  const status = selectMarginAccountWithdrawFlowSimulationStatus(state);
+  return status === 'pending' || status === 'idle';
 };
 
 export const selectMarginAccountWithdrawFlowSimulationValueFormatted = (state: RootState) => {
@@ -342,7 +341,7 @@ export const selectMarginAccountWithdrawFlowUserInputFormatted = (state: RootSta
 };
 
 export const selectMarginAccountWithdrawFlowMarginAccountsLoadedState = (state: RootState) => {
-  return state.portfolio.marginAccountsLoadedState;
+  return state.portfolio.marginAccountWithdrawMarginFlow.marginAccountsLoadedState;
 };
 
 export const selectMarginAccountWithdrawFlowMarginAccountsLoading = (state: RootState): boolean => {
@@ -356,5 +355,25 @@ export const selectMarginAccountWithdrawFlowMarginAccounts = (state: RootState) 
     ? []
     : state.portfolio.marginAccountWithdrawMarginFlow.marginAccounts.map(
         mapMarginAccountToMarginAccountUI,
+      );
+};
+
+export const selectMarginAccountWithdrawFlowAvailableAmountsLoadedState = (state: RootState) => {
+  return state.portfolio.marginAccountWithdrawMarginFlow.availableAmountsLoadedState;
+};
+
+export const selectMarginAccountWithdrawFlowAvailableAmountsLoading = (
+  state: RootState,
+): boolean => {
+  const loadedState = selectMarginAccountWithdrawFlowAvailableAmountsLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectMarginAccountWithdrawFlowAvailableAmounts = (state: RootState) => {
+  const isLoading = selectMarginAccountWithdrawFlowAvailableAmountsLoading(state);
+  return isLoading
+    ? []
+    : state.portfolio.marginAccountWithdrawMarginFlow.availableAmounts.map(
+        mapAvailableAmountMarginAccountToAvailableAmountsUI,
       );
 };

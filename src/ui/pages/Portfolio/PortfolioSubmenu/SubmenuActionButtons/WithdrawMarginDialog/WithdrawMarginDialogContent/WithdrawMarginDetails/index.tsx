@@ -4,6 +4,7 @@ import React from 'react';
 import {
   selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
   selectMarginAccountWithdrawFlowSimulationValueFormatted,
+  selectMarginAccountWithdrawFlowUserInputFormatted,
 } from '../../../../../../../../app/features/portfolio';
 import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
 import { useAppSelector } from '../../../../../../../../app/hooks';
@@ -19,18 +20,17 @@ import {
 type TransactionDetailsProps = {};
 
 export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
-  const token = 'eth';
-  const slippageFormatted = '123';
-  const feeFormatted = '456';
   const {
     gasFeeUSDFormatted,
     marginRatioHealth: simulationMarginRatioHealth,
     marginRatioPercentage: simulationMarginRatioPercentage,
   } = useAppSelector(selectMarginAccountWithdrawFlowSimulationValueFormatted);
-  const { marginRatioHealth, marginRatioPercentage } = useAppSelector(
+  const { marginRatioHealth, marginRatioPercentage, balanceCompactFormat } = useAppSelector(
     selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
   );
-
+  const { maxAmountFormatted, maxAmountUSDFormatted } = useAppSelector(
+    selectMarginAccountWithdrawFlowUserInputFormatted,
+  );
   return (
     <WithdrawMarginDetailsWrapperBox>
       <WithdrawMarginDetailsBox>
@@ -40,9 +40,10 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            token={token}
+            prefixToken="$"
+            token={balanceCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
-            value={feeFormatted}
+            value={balanceCompactFormat.compactNumber}
           />
         </TransactionDetailBox>
         <TransactionDetailBox>
@@ -51,9 +52,9 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            token="%"
+            token={`($${maxAmountUSDFormatted})`}
             typographyToken="secondaryBodySmallRegular"
-            value={slippageFormatted}
+            value={maxAmountFormatted}
           />
         </TransactionDetailBox>
         <TransactionDetailBox>

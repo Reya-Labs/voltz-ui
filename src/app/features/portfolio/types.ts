@@ -1,6 +1,11 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { PortfolioMarginAccount, PortfolioPosition, PortfolioSummary } from './thunks';
+import {
+  AvailableAmountForMarginAccount,
+  PortfolioMarginAccount,
+  PortfolioPosition,
+  PortfolioSummary,
+} from './thunks';
 export type PositionsFilterId = 'active' | 'matured' | 'settled';
 
 export type SliceState = {
@@ -30,6 +35,9 @@ export type SliceState = {
     // margin accounts for the selector
     marginAccounts: PortfolioMarginAccount[];
     marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+    // available amounts for the selector
+    availableAmounts: AvailableAmountForMarginAccount[];
+    availableAmountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
     step: 'closed' | 'opened' | 'withdrawing' | 'withdraw-success' | 'withdraw-error';
     selectedMarginAccount: null | {
       id: PortfolioMarginAccount['id'];
@@ -47,10 +55,10 @@ export type SliceState = {
       };
     };
     userInput: {
-      amount: 0;
-      maxAmount: 0;
-      maxAmountUSD: 0;
-      token: undefined | 'dai' | 'eth' | 'reth' | 'steth' | 'usdc' | 'usdt';
+      amount: number;
+      maxAmount: AvailableAmountForMarginAccount['value'];
+      maxAmountUSD: AvailableAmountForMarginAccount['valueUSD'];
+      token: undefined | AvailableAmountForMarginAccount['token'];
     };
   };
 };
@@ -123,6 +131,14 @@ export type MarginAccountUI = {
   positionsCount: string;
   marginRatioPercentage: number;
   marginRatioHealth: 'danger' | 'warning' | 'healthy';
+};
+
+export type AvailableAmountsUI = {
+  token: AvailableAmountForMarginAccount['token'];
+  value: AvailableAmountForMarginAccount['value'];
+  valueUSD: AvailableAmountForMarginAccount['valueUSD'];
+  valueSuffix: string;
+  valueFormatted: string;
 };
 
 export type PositionSortId =

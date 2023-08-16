@@ -4,13 +4,16 @@ import { getNextSortDirection } from '../helpers';
 import { resetMarginAccountsSortingDirection, resetPositionsSortingDirection } from './constants';
 import { initialState } from './state';
 import {
+  AvailableAmountForMarginAccount,
   createMarginAccountThunk,
+  fetchAvailableAmountsToWithdrawForMarginAccountThunk,
   fetchMarginAccountPositionsThunk,
   fetchMarginAccountsThunk,
   fetchPortfolioSummaryThunk,
   initialisePortfolioPositionsThunk,
   PortfolioPosition,
   PortfolioSummary,
+  ReturnTypeFetchAvailableAmountsToWithdrawForMarginAccount,
   ReturnTypeFetchMarginAccounts,
 } from './thunks';
 import { fetchMarginAccountsForWithdrawThunk } from './thunks/fetchMarginAccountsForWithdrawThunk';
@@ -32,6 +35,43 @@ const slice = createSlice({
     },
     closeCreateMarginAccountDialogAction: (state) => {
       state.createMarginAccountDialogState = 'closed';
+    },
+    selectMarginAccountWithdrawFlowAction: (
+      state,
+      {
+        payload: { id },
+      }: PayloadAction<{
+        id: string;
+      }>,
+    ) => {
+      const selectedMarginAccount = (
+        state.marginAccountWithdrawMarginFlow.marginAccounts || []
+      ).find((mA) => mA.id === id);
+      if (selectedMarginAccount) {
+        state.marginAccountWithdrawMarginFlow.selectedMarginAccount = selectedMarginAccount;
+      }
+    },
+    marginAmountWithdrawFlowValueChangeAction: (
+      state,
+      {
+        payload: { value, maxAmount, maxAmountUSD, token },
+      }: PayloadAction<{
+        value: number;
+        maxAmount?: number;
+        maxAmountUSD?: number;
+        token: AvailableAmountForMarginAccount['token'];
+      }>,
+    ) => {
+      state.marginAccountWithdrawMarginFlow.userInput.amount = value;
+      if (maxAmount !== undefined) {
+        state.marginAccountWithdrawMarginFlow.userInput.maxAmount = maxAmount;
+      }
+      if (maxAmountUSD !== undefined) {
+        state.marginAccountWithdrawMarginFlow.userInput.maxAmountUSD = maxAmountUSD;
+      }
+      if (token) {
+        state.marginAccountWithdrawMarginFlow.userInput.token = token;
+      }
     },
     togglePositionSortingDirectionAction: (
       state,
@@ -138,9 +178,24 @@ const slice = createSlice({
       .addCase(fetchMarginAccountsForWithdrawThunk.fulfilled, (state, { payload }) => {
         state.marginAccountWithdrawMarginFlow.marginAccountsLoadedState = 'succeeded';
         const { marginAccounts } = payload as ReturnTypeFetchMarginAccounts;
-        console.log('### payload', payload);
         state.marginAccountWithdrawMarginFlow.marginAccounts = marginAccounts;
-      });
+      })
+      .addCase(fetchAvailableAmountsToWithdrawForMarginAccountThunk.pending, (state) => {
+        state.marginAccountWithdrawMarginFlow.availableAmountsLoadedState = 'pending';
+        state.marginAccountWithdrawMarginFlow.availableAmounts = [];
+      })
+      .addCase(fetchAvailableAmountsToWithdrawForMarginAccountThunk.rejected, (state) => {
+        state.marginAccountWithdrawMarginFlow.availableAmountsLoadedState = 'failed';
+        state.marginAccountWithdrawMarginFlow.availableAmounts = [];
+      })
+      .addCase(
+        fetchAvailableAmountsToWithdrawForMarginAccountThunk.fulfilled,
+        (state, { payload }) => {
+          state.marginAccountWithdrawMarginFlow.availableAmountsLoadedState = 'succeeded';
+          state.marginAccountWithdrawMarginFlow.availableAmounts =
+            payload as ReturnTypeFetchAvailableAmountsToWithdrawForMarginAccount;
+        },
+      );
   },
 });
 
@@ -151,5 +206,7 @@ export const {
   togglePositionSortingDirectionAction,
   openMarginAccountWithdrawFlowAction,
   closeMarginAccountWithdrawFlowAction,
+  selectMarginAccountWithdrawFlowAction,
+  marginAmountWithdrawFlowValueChangeAction,
 } = slice.actions;
 export const portfolioReducer = slice.reducer;

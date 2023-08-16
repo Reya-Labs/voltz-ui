@@ -21,6 +21,8 @@ export const initialState: SliceState = {
   sortingDirection: { ...initialPositionsSortingDirection },
   marginAccountsSortingDirection: { ...initialMarginAccountsSortingDirection },
   marginAccountWithdrawMarginFlow: {
+    availableAmounts: [],
+    availableAmountsLoadedState: 'idle',
     marginAccounts: [],
     marginAccountsLoadedState: 'idle',
     step: 'closed',
