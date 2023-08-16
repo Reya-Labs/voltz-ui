@@ -2,31 +2,9 @@ import styled from '@emotion/styled';
 import { Highlight, SearchField, SearchFieldProps, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-type MarginAccountListItemProps = SearchFieldProps['items'][0] & {
-  balanceUSDFormatted: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-};
+import { MarginAccountUI } from '../../../../../../app/features/portfolio/types';
 
-const customItems: MarginAccountListItemProps[] = [
-  {
-    balanceUSDFormatted: {
-      compactNumber: '123',
-      compactSuffix: 'k',
-    },
-    id: '1',
-    label: 'Ethereum',
-  },
-  {
-    balanceUSDFormatted: {
-      compactNumber: '456',
-      compactSuffix: 'k',
-    },
-    id: '2',
-    label: 'Ethereum2',
-  },
-];
+type MarginAccountListItemProps = SearchFieldProps['items'][0] & MarginAccountUI;
 
 const Wrapper = styled('div')`
   display: flex;
@@ -40,12 +18,12 @@ const MarginAccountListItem: SearchFieldProps['itemRenderer'] = (props) => {
     item: MarginAccountListItemProps;
     searchedValue?: string;
   };
-  const { label, balanceUSDFormatted } = item;
-  const { compactSuffix, compactNumber } = balanceUSDFormatted;
+  const { name, balanceCompactFormat } = item;
+  const { compactSuffix, compactNumber } = balanceCompactFormat;
   return (
     <Wrapper>
       <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-        <Highlight highlight={searchedValue}>{label}</Highlight>
+        <Highlight highlight={searchedValue}>{name}</Highlight>
       </Typography>
       <TokenTypography
         colorToken="lavenderWeb"
@@ -58,13 +36,21 @@ const MarginAccountListItem: SearchFieldProps['itemRenderer'] = (props) => {
   );
 };
 
-export const MarginAccountsSearchField: React.FunctionComponent = () => {
+const itemFilter = (item: SearchFieldProps['items'][0], value: string) => {
+  const { name } = item as MarginAccountListItemProps;
+  return !value ? true : name.toLowerCase().includes(value.toLowerCase());
+};
+
+export const MarginAccountsSearchField: React.FunctionComponent<{
+  marginAccounts: MarginAccountUI[];
+}> = ({ marginAccounts }) => {
   const [selectedItemId, setSelectedItemId] = useState('');
 
   return (
     <SearchField
+      itemFilter={itemFilter}
       itemRenderer={MarginAccountListItem}
-      items={customItems}
+      items={marginAccounts as MarginAccountListItemProps[]}
       labelTypographyToken="primaryBodySmallRegular"
       placeHolder="Select Margin Account"
       selectedItemId={selectedItemId}
