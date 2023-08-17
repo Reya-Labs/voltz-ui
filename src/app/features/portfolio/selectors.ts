@@ -1,3 +1,5 @@
+import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk/dist/types';
+
 import { isOnlyV2PoolsPositions } from '../../../utilities/is-only-v2-pools-positions';
 import { compactFormat, compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
@@ -376,4 +378,11 @@ export const selectMarginAccountWithdrawFlowAvailableAmounts = (state: RootState
     : state.portfolio.marginAccountWithdrawMarginFlow.availableAmounts.map(
         mapAvailableAmountMarginAccountToAvailableAmountsUI,
       );
+};
+
+export const selectMarginAccountWithdrawFlowEtherscanLink = (state: RootState) => {
+  return getViewOnEtherScanLink(
+    state.network.chainId,
+    state.portfolio.marginAccountWithdrawMarginFlow.txHash || '',
+  );
 };

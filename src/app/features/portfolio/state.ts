@@ -28,6 +28,7 @@ export const initialState: SliceState = {
     step: 'closed',
     selectedMarginAccount: null,
     error: null,
+    txHash: null,
     simulation: {
       status: 'idle',
       value: null,

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ContractReceipt } from 'ethers';
 
 import { getNextSortDirection } from '../helpers';
 import { resetMarginAccountsSortingDirection, resetPositionsSortingDirection } from './constants';
@@ -8,17 +9,17 @@ import {
   createMarginAccountThunk,
   fetchAvailableAmountsToWithdrawForMarginAccountThunk,
   fetchMarginAccountPositionsThunk,
+  fetchMarginAccountsForWithdrawThunk,
   fetchMarginAccountsThunk,
   fetchPortfolioSummaryThunk,
   initialisePortfolioPositionsThunk,
   PortfolioPosition,
   PortfolioSummary,
-  ReturnTypeFetchAvailableAmountsToWithdrawForMarginAccount,
   ReturnTypeFetchMarginAccounts,
   ReturnTypeSimulateWithdrawMargin,
   simulateWithdrawMarginFromMarginAccountThunk,
+  withdrawMarginFromMarginAccountThunk,
 } from './thunks';
-import { fetchMarginAccountsForWithdrawThunk } from './thunks/fetchMarginAccountsForWithdrawThunk';
 import { PositionSortId } from './types';
 
 const slice = createSlice({
@@ -193,15 +194,15 @@ const slice = createSlice({
       .addCase(
         fetchAvailableAmountsToWithdrawForMarginAccountThunk.fulfilled,
         (state, { payload }) => {
-          const availableAmounts =
-            payload as ReturnTypeFetchAvailableAmountsToWithdrawForMarginAccount;
+          const availableAmounts = payload as AvailableAmountForMarginAccount[];
           state.marginAccountWithdrawMarginFlow.availableAmountsLoadedState = 'succeeded';
           state.marginAccountWithdrawMarginFlow.availableAmounts = availableAmounts;
           if (availableAmounts.length > 0) {
-            state.marginAccountWithdrawMarginFlow.userInput.token = availableAmounts[0].token;
-            state.marginAccountWithdrawMarginFlow.userInput.maxAmount = availableAmounts[0].value;
+            const firstAvailableAmount = availableAmounts[0];
+            state.marginAccountWithdrawMarginFlow.userInput.token = firstAvailableAmount.token;
+            state.marginAccountWithdrawMarginFlow.userInput.maxAmount = firstAvailableAmount.value;
             state.marginAccountWithdrawMarginFlow.userInput.maxAmountUSD =
-              availableAmounts[0].valueUSD;
+              firstAvailableAmount.valueUSD;
           }
         },
       )
@@ -218,6 +219,19 @@ const slice = createSlice({
         state.marginAccountWithdrawMarginFlow.simulation.value =
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           payload as ReturnTypeSimulateWithdrawMargin;
+      })
+      .addCase(withdrawMarginFromMarginAccountThunk.pending, (state) => {
+        state.marginAccountWithdrawMarginFlow.step = 'withdrawing';
+        state.marginAccountWithdrawMarginFlow.error = null;
+      })
+      .addCase(withdrawMarginFromMarginAccountThunk.rejected, (state, { payload }) => {
+        state.marginAccountWithdrawMarginFlow.step = 'withdraw-error';
+        state.marginAccountWithdrawMarginFlow.error = payload as string;
+      })
+      .addCase(withdrawMarginFromMarginAccountThunk.fulfilled, (state, { payload }) => {
+        state.marginAccountWithdrawMarginFlow.step = 'withdraw-success';
+        state.marginAccountWithdrawMarginFlow.txHash = (payload as ContractReceipt).transactionHash;
+        state.marginAccountWithdrawMarginFlow.error = null;
       });
   },
 });

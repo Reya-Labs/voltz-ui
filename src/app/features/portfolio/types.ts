@@ -46,6 +46,7 @@ export type SliceState = {
       balance: PortfolioMarginAccount['balance'];
     };
     error: string | null;
+    txHash: string | null;
     simulation: {
       status: 'idle' | 'pending' | 'succeeded' | 'failed';
       value: null | {
