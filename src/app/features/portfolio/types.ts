@@ -39,12 +39,7 @@ export type SliceState = {
     availableAmounts: AvailableAmountForMarginAccount[];
     availableAmountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
     step: 'closed' | 'opened' | 'withdrawing' | 'withdraw-success' | 'withdraw-error';
-    selectedMarginAccount: null | {
-      id: PortfolioMarginAccount['id'];
-      marginRatioPercentage: PortfolioMarginAccount['marginRatioPercentage'];
-      marginRatioHealth: PortfolioMarginAccount['marginRatioHealth'];
-      balance: PortfolioMarginAccount['balance'];
-    };
+    selectedMarginAccount: null | PortfolioMarginAccount;
     error: string | null;
     txHash: string | null;
     simulation: {

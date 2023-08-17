@@ -7193,10 +7193,10 @@
     tiny-invariant "1.3.1"
     toformat "2.0.0"
 
-"@voltz-protocol/sdk-v2@1.56.0":
-  version "1.56.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.56.0.tgz#72629ebc570406451215f40f65e48cd15ed6db61"
-  integrity sha512-Gx2VggqTPFlMEi5vtjipLVBdEVKXctMHdpaWiXDmLVp5hGSDDSNOAdNYxiaOEOwGnn8+FGB9wzUXAy7jiDqlBw==
+"@voltz-protocol/sdk-v2@1.56.1":
+  version "1.56.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.56.1.tgz#fa3b315a4cc6077a28c3d7040a5b773b4236f1bc"
+  integrity sha512-j9ZKQIdrUARQBx1quvfzSvt7VH6/Lu3Ca35Fr7muU8GLOupdkbrqoHQTUBTQg/qXeI76kSbDxiIo1gotpa4sfg==
   dependencies:
     "@voltz-protocol/api-sdk-v2" "^1.20.2"
     "@voltz-protocol/commons-v2" "^1.15.0"

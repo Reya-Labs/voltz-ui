@@ -1,4 +1,4 @@
-import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk/dist/types';
+import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { isOnlyV2PoolsPositions } from '../../../utilities/is-only-v2-pools-positions';
 import { compactFormat, compactFormatToParts } from '../../../utilities/number';
@@ -278,6 +278,23 @@ export const selectMarginAccountWithdrawFlowError = (state: RootState) => {
   return state.portfolio.marginAccountWithdrawMarginFlow.error;
 };
 
+export const selectMarginAccountWithdrawFlowValidationError = (state: RootState) => {
+  const userInput = state.portfolio.marginAccountWithdrawMarginFlow.userInput;
+  if (userInput.amount > userInput.maxAmount) {
+    return 'You cannot withdraw more than allowed maximum amount.';
+  }
+  return '';
+};
+
+export const selectMarginAccountWithdrawFlowCTADisabled = (state: RootState) => {
+  const validationError = selectMarginAccountWithdrawFlowValidationError(state);
+  const loading = selectMarginAccountWithdrawFlowStep(state) === 'withdrawing';
+  const selectedMarginAccountId =
+    selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted(state).id;
+
+  return Boolean(validationError) || Boolean(loading) || !Boolean(selectedMarginAccountId);
+};
+
 export const selectMarginAccountWithdrawFlowSimulationStatus = (state: RootState) => {
   return state.portfolio.marginAccountWithdrawMarginFlow.simulation.status;
 };
@@ -313,6 +330,7 @@ export const selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted = (st
   if (selectedMarginAccount === null) {
     return {
       id: '',
+      name: '',
       marginRatioPercentage: '--',
       marginRatioHealth: '--',
       balanceCompactFormat: {
@@ -324,6 +342,7 @@ export const selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted = (st
 
   return {
     id: selectedMarginAccount.id,
+    name: selectedMarginAccount.name,
     marginRatioPercentage: selectedMarginAccount.marginRatioPercentage,
     marginRatioHealth: selectedMarginAccount.marginRatioHealth,
     balanceCompactFormat: compactFormatToParts(selectedMarginAccount.balance),
@@ -335,6 +354,7 @@ export const selectMarginAccountWithdrawFlowUserInputFormatted = (state: RootSta
 
   return {
     amount: userInput.amount,
+    amountFormatted: compactFormatToParts(userInput.amount),
     maxAmount: userInput.maxAmount,
     maxAmountFormatted: compactFormat(userInput.maxAmount),
     maxAmountUSDFormatted: compactFormat(userInput.maxAmountUSD),

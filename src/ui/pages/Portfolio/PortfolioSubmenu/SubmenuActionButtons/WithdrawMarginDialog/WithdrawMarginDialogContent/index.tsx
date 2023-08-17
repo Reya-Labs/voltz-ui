@@ -7,31 +7,37 @@ import {
   fetchAvailableAmountsToWithdrawForMarginAccountThunk,
   fetchMarginAccountsForWithdrawThunk,
   marginAmountWithdrawFlowValueChangeAction,
-  selectCreateMarginAccountError,
-  selectCreateMarginAccountLoadedState,
   selectMarginAccountWithdrawFlowAction,
   selectMarginAccountWithdrawFlowAvailableAmounts,
   selectMarginAccountWithdrawFlowAvailableAmountsLoading,
+  selectMarginAccountWithdrawFlowCTADisabled,
+  selectMarginAccountWithdrawFlowError,
   selectMarginAccountWithdrawFlowMarginAccounts,
   selectMarginAccountWithdrawFlowMarginAccountsLoading,
   selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
+  selectMarginAccountWithdrawFlowStep,
   selectMarginAccountWithdrawFlowUserInputFormatted,
+  selectMarginAccountWithdrawFlowValidationError,
   simulateWithdrawMarginFromMarginAccountThunk,
+  withdrawMarginFromMarginAccountThunk,
 } from '../../../../../../../app/features/portfolio';
 import { AvailableAmountsUI } from '../../../../../../../app/features/portfolio/types';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { useWallet } from '../../../../../../../hooks/useWallet';
 import { localeParseFloat } from '../../../../../../../utilities/localeParseFloat';
-import { MarginAccountsSearchField } from './MarginAccountsSearchField';
-import { MarginAmountField } from './MarginAmountField';
+import { MarginAccountsSearchField } from '../MarginAccountsSearchField';
+import { MarginAmountField } from '../MarginAmountField';
 import { WithdrawMarginDetails } from './WithdrawMarginDetails';
 import { ContentBox, MidBox, TitleBox } from './WithdrawMarginDialogContent.styled';
 
 export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
   const { account } = useWallet();
   const dispatch = useAppDispatch();
-  const loading = useAppSelector(selectCreateMarginAccountLoadedState) === 'pending';
-  const error = useAppSelector(selectCreateMarginAccountError);
+  const loading = useAppSelector(selectMarginAccountWithdrawFlowStep) === 'withdrawing';
+  const error = useAppSelector(selectMarginAccountWithdrawFlowError);
+  const validationError = useAppSelector(selectMarginAccountWithdrawFlowValidationError);
+  const computedError = error || validationError;
+  const disabled = useAppSelector(selectMarginAccountWithdrawFlowCTADisabled);
   const marginAccounts = useAppSelector(selectMarginAccountWithdrawFlowMarginAccounts);
   const marginAccountsLoading = useAppSelector(
     selectMarginAccountWithdrawFlowMarginAccountsLoading,
@@ -45,7 +51,9 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
   );
   const availableAmounts = useAppSelector(selectMarginAccountWithdrawFlowAvailableAmounts);
   const handleOnCloseClick = () => dispatch(closeMarginAccountWithdrawFlowAction());
-  const handleOnVerifyClick = () => {};
+  const handleOnCTAClick = () => {
+    void dispatch(withdrawMarginFromMarginAccountThunk());
+  };
 
   const debouncedWithdrawSimulation = useMemo(
     () =>
@@ -168,13 +176,13 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
         <WithdrawMarginDetails />
       </MidBox>
       <Button
-        bottomLeftText={error ? error : ''}
-        bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
-        bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
-        disabled={loading}
+        bottomLeftText={computedError ? computedError : ''}
+        bottomLeftTextColorToken={computedError ? 'wildStrawberry' : undefined}
+        bottomLeftTextTypographyToken={computedError ? 'primaryBodyXSmallRegular' : undefined}
+        disabled={disabled}
         loading={loading}
         variant="primary"
-        onClick={handleOnVerifyClick}
+        onClick={handleOnCTAClick}
       >
         Withdraw Margin
       </Button>

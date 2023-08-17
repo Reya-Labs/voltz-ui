@@ -141,7 +141,7 @@
     "@voltz-protocol/api-sdk-v2": "1.20.2",
     "@voltz-protocol/community-sdk": "1.5.2",
     "@voltz-protocol/sdk-v1-stateless": "1.27.14",
-    "@voltz-protocol/sdk-v2": "1.56.0",
+    "@voltz-protocol/sdk-v2": "1.56.1",
     "@voltz-protocol/v1-sdk": "1.176.2",
     "@walletconnect/ethereum-provider": "2.9.1",
     "@walletconnect/modal": "2.6.1",
