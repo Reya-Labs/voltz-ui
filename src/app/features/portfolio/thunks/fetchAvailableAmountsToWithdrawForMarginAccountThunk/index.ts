@@ -3,21 +3,18 @@ import { getAvailableAmountsToWithdrawForMarginAccount } from '@voltz-protocol/a
 
 import { rejectThunkWithError } from '../../../helpers';
 
-export type AvailableAmountForMarginAccount = Awaited<
+export type AvailableAmountForMarginAccountWithdraw = Awaited<
   ReturnType<typeof getAvailableAmountsToWithdrawForMarginAccount>
 >[0];
-export type ReturnTypeFetchAvailableAmountsToWithdrawForMarginAccount = Awaited<
-  ReturnType<typeof getAvailableAmountsToWithdrawForMarginAccount>
->;
 
 // Define a cache object to store promises
 const cache = new Map<
   string,
-  Promise<AvailableAmountForMarginAccount[] | ReturnType<typeof rejectThunkWithError>>
+  Promise<AvailableAmountForMarginAccountWithdraw[] | ReturnType<typeof rejectThunkWithError>>
 >();
 
 export const fetchAvailableAmountsToWithdrawForMarginAccountThunk = createAsyncThunk<
-  Awaited<AvailableAmountForMarginAccount[] | ReturnType<typeof rejectThunkWithError>>,
+  Awaited<AvailableAmountForMarginAccountWithdraw[] | ReturnType<typeof rejectThunkWithError>>,
   {
     id: string;
   }
