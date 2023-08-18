@@ -20,13 +20,13 @@ import {
   selectMarginAccountWithdrawFlowValidationError,
   simulateWithdrawMarginFromMarginAccountThunk,
   withdrawMarginFromMarginAccountThunk,
-} from '../../../../../../../app/features/portfolio';
-import { AvailableAmountsUI } from '../../../../../../../app/features/portfolio/types';
-import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { useWallet } from '../../../../../../../hooks/useWallet';
-import { localeParseFloat } from '../../../../../../../utilities/localeParseFloat';
-import { MarginAccountsSearchField } from '../MarginAccountsSearchField';
-import { MarginAmountField } from '../MarginAmountField';
+} from '../../../../../../../../app/features/portfolio';
+import { AvailableAmountsUI } from '../../../../../../../../app/features/portfolio/types';
+import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
+import { useWallet } from '../../../../../../../../hooks/useWallet';
+import { localeParseFloat } from '../../../../../../../../utilities/localeParseFloat';
+import { MarginAccountsSearchField } from '../../MarginAccountsSearchField';
+import { MarginAmountField } from '../../MarginAmountField';
 import { WithdrawMarginDetails } from './WithdrawMarginDetails';
 import { ContentBox, MidBox, TitleBox } from './WithdrawMarginDialogContent.styled';
 

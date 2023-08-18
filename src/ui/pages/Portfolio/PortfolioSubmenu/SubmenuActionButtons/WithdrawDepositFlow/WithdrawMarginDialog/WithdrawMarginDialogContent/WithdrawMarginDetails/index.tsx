@@ -5,10 +5,10 @@ import {
   selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
   selectMarginAccountWithdrawFlowSimulationValueFormatted,
   selectMarginAccountWithdrawFlowUserInputFormatted,
-} from '../../../../../../../../app/features/portfolio';
-import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
-import { useAppSelector } from '../../../../../../../../app/hooks';
-import { MARGIN_RATIO_COLOR_MAP } from '../../../../../MarginAccounts/PortfolioOverview/Overview/MarginAccountList/MarginAccountEntry/MarginRatioDonut/constants';
+} from '../../../../../../../../../app/features/portfolio';
+import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
+import { useAppSelector } from '../../../../../../../../../app/hooks';
+import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../MarginAccounts/PortfolioOverview/Overview/MarginAccountList/MarginAccountEntry/MarginRatioDonut/constants';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import {
   IconTextWrapper,

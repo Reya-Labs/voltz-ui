@@ -5,7 +5,7 @@ import { useAppDispatch } from '../../../../../app/hooks';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { isMarginAccountsLive } from '../../../../../utilities/is-margin-accounts-live';
 import { Box, ButtonStyled } from './SubmenuActionButtons.styled';
-import { WithdrawMarginDialog } from './WithdrawMarginDialog';
+import { WithdrawMarginDialog } from './WithdrawDepositFlow/WithdrawMarginDialog';
 
 export const SubmenuActionButtons: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();

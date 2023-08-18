@@ -1,8 +1,8 @@
 import { Dialog } from 'brokoli-ui';
 import React from 'react';
 
-import { selectMarginAccountWithdrawFlowStep } from '../../../../../../app/features/portfolio';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { selectMarginAccountWithdrawFlowStep } from '../../../../../../../app/features/portfolio';
+import { useAppSelector } from '../../../../../../../app/hooks';
 import { WithdrawMarginDialogContent } from './WithdrawMarginDialogContent';
 import { WithdrawMarginSuccessDialogContent } from './WithdrawMarginSuccessDialogContent';
 

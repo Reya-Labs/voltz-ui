@@ -6,11 +6,11 @@ import {
   selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
   selectMarginAccountWithdrawFlowSimulationValueFormatted,
   selectMarginAccountWithdrawFlowUserInputFormatted,
-} from '../../../../../../../../app/features/portfolio';
-import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
-import { useAppSelector } from '../../../../../../../../app/hooks';
-import { ExplorerLink } from '../../../../../../../components/ExplorerLink';
-import { MARGIN_RATIO_COLOR_MAP } from '../../../../../MarginAccounts/PortfolioOverview/Overview/MarginAccountList/MarginAccountEntry/MarginRatioDonut/constants';
+} from '../../../../../../../../../app/features/portfolio';
+import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
+import { useAppSelector } from '../../../../../../../../../app/hooks';
+import { ExplorerLink } from '../../../../../../../../components/ExplorerLink';
+import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../MarginAccounts/PortfolioOverview/Overview/MarginAccountList/MarginAccountEntry/MarginRatioDonut/constants';
 import {
   TransactionDetailBox,
   WithdrawMarginDetailsBox,

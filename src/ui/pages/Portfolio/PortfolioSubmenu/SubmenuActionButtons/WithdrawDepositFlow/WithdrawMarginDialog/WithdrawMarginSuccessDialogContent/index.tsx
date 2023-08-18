@@ -1,8 +1,8 @@
 import { CloseButton, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { closeMarginAccountWithdrawFlowAction } from '../../../../../../../app/features/portfolio';
-import { useAppDispatch } from '../../../../../../../app/hooks';
+import { closeMarginAccountWithdrawFlowAction } from '../../../../../../../../app/features/portfolio';
+import { useAppDispatch } from '../../../../../../../../app/hooks';
 import { ContentBox, TitleBox } from './WithdrawMarginSuccessDialogContent.styled';
 import { WithdrawSuccessMarginDetails } from './WithdrawSuccessMarginDetails';
 
