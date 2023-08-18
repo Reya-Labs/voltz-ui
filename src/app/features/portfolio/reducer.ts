@@ -357,5 +357,9 @@ export const {
   closeMarginAccountWithdrawFlowAction,
   selectMarginAccountWithdrawFlowAction,
   marginAmountWithdrawFlowValueChangeAction,
+  openMarginAccountDepositFlowAction,
+  closeMarginAccountDepositFlowAction,
+  selectMarginAccountDepositFlowAction,
+  marginAmountDepositFlowValueChangeAction,
 } = slice.actions;
 export const portfolioReducer = slice.reducer;

@@ -1,10 +1,14 @@
 import React from 'react';
 
-import { openMarginAccountWithdrawFlowAction } from '../../../../../app/features/portfolio';
+import {
+  openMarginAccountDepositFlowAction,
+  openMarginAccountWithdrawFlowAction,
+} from '../../../../../app/features/portfolio';
 import { useAppDispatch } from '../../../../../app/hooks';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { isMarginAccountsLive } from '../../../../../utilities/is-margin-accounts-live';
 import { Box, ButtonStyled } from './SubmenuActionButtons.styled';
+import { DepositMarginDialog } from './WithdrawDepositFlow/DepositMarginDialog';
 import { WithdrawMarginDialog } from './WithdrawDepositFlow/WithdrawMarginDialog';
 
 export const SubmenuActionButtons: React.FunctionComponent = () => {
@@ -18,6 +22,7 @@ export const SubmenuActionButtons: React.FunctionComponent = () => {
       setRequired(true);
       return;
     }
+    dispatch(openMarginAccountDepositFlowAction());
   };
 
   const handleOnWithdrawClick = () => {
@@ -30,6 +35,7 @@ export const SubmenuActionButtons: React.FunctionComponent = () => {
   return (
     <Box>
       <WithdrawMarginDialog />
+      <DepositMarginDialog />
       <ButtonStyled
         typographyToken="primaryBodySmallBold"
         variant="secondary"

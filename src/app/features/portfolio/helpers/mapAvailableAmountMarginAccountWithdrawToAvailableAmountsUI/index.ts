@@ -1,6 +1,5 @@
 import { compactFormatToParts } from '../../../../../utilities/number';
 import {
-  AvailableAmountForMarginAccountDeposit,
   AvailableAmountForMarginAccountWithdraw,
 } from '../../thunks';
 import { AvailableAmountsUI } from '../../types';
