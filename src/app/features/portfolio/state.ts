@@ -40,4 +40,24 @@ export const initialState: SliceState = {
       token: undefined,
     },
   },
+  marginAccountDepositMarginFlow: {
+    availableAmounts: [],
+    availableAmountsLoadedState: 'idle',
+    marginAccounts: [],
+    marginAccountsLoadedState: 'idle',
+    step: 'closed',
+    selectedMarginAccount: null,
+    error: null,
+    txHash: null,
+    simulation: {
+      status: 'idle',
+      value: null,
+    },
+    userInput: {
+      amount: 0,
+      maxAmount: 0,
+      maxAmountUSD: 0,
+      token: undefined,
+    },
+  },
 };

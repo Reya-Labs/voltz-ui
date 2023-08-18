@@ -1,7 +1,8 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import {
-  AvailableAmountForMarginAccount,
+  AvailableAmountForMarginAccountDeposit,
+  AvailableAmountForMarginAccountWithdraw,
   PortfolioMarginAccount,
   PortfolioPosition,
   PortfolioSummary,
@@ -36,7 +37,7 @@ export type SliceState = {
     marginAccounts: PortfolioMarginAccount[];
     marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
     // available amounts for the selector
-    availableAmounts: AvailableAmountForMarginAccount[];
+    availableAmounts: AvailableAmountForMarginAccountWithdraw[];
     availableAmountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
     step: 'closed' | 'opened' | 'withdrawing' | 'withdraw-success' | 'withdraw-error';
     selectedMarginAccount: null | PortfolioMarginAccount;
@@ -52,9 +53,36 @@ export type SliceState = {
     };
     userInput: {
       amount: number;
-      maxAmount: AvailableAmountForMarginAccount['value'];
-      maxAmountUSD: AvailableAmountForMarginAccount['valueUSD'];
-      token: undefined | AvailableAmountForMarginAccount['token'];
+      maxAmount: AvailableAmountForMarginAccountWithdraw['value'];
+      maxAmountUSD: AvailableAmountForMarginAccountWithdraw['valueUSD'];
+      token: undefined | AvailableAmountForMarginAccountWithdraw['token'];
+    };
+  };
+  // margin account - deposit flow
+  marginAccountDepositMarginFlow: {
+    // margin accounts for the selector
+    marginAccounts: PortfolioMarginAccount[];
+    marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+    // available amounts for the selector
+    availableAmounts: AvailableAmountForMarginAccountDeposit[];
+    availableAmountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+    step: 'closed' | 'opened' | 'depositing' | 'deposit-success' | 'deposit-error';
+    selectedMarginAccount: null | PortfolioMarginAccount;
+    error: string | null;
+    txHash: string | null;
+    simulation: {
+      status: 'idle' | 'pending' | 'succeeded' | 'failed';
+      value: null | {
+        gasFeeUSD: number;
+        marginRatioPercentage: PortfolioMarginAccount['marginRatioPercentage'];
+        marginRatioHealth: PortfolioMarginAccount['marginRatioHealth'];
+      };
+    };
+    userInput: {
+      amount: number;
+      maxAmount: AvailableAmountForMarginAccountDeposit['value'];
+      maxAmountUSD: AvailableAmountForMarginAccountDeposit['valueUSD'];
+      token: undefined | AvailableAmountForMarginAccountDeposit['token'];
     };
   };
 };
@@ -130,9 +158,9 @@ export type MarginAccountUI = {
 };
 
 export type AvailableAmountsUI = {
-  token: AvailableAmountForMarginAccount['token'];
-  value: AvailableAmountForMarginAccount['value'];
-  valueUSD: AvailableAmountForMarginAccount['valueUSD'];
+  token: AvailableAmountForMarginAccountWithdraw['token'];
+  value: AvailableAmountForMarginAccountWithdraw['value'];
+  valueUSD: AvailableAmountForMarginAccountWithdraw['valueUSD'];
   valueSuffix: string;
   valueFormatted: string;
 };
