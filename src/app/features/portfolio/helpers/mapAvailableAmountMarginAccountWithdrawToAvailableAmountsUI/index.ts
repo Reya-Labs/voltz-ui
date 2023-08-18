@@ -1,7 +1,5 @@
 import { compactFormatToParts } from '../../../../../utilities/number';
-import {
-  AvailableAmountForMarginAccountWithdraw,
-} from '../../thunks';
+import { AvailableAmountForMarginAccountWithdraw } from '../../thunks';
 import { AvailableAmountsUI } from '../../types';
 
 export const mapAvailableAmountMarginAccountWithdrawToAvailableAmountsUI = (
