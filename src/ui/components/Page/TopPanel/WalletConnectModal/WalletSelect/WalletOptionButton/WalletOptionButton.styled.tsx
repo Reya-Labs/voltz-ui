@@ -21,7 +21,9 @@ export const OptionButton = styled('button')`
     color: ${colors.lavenderWeb};
   }
   border-radius: 8px;
-  transition: background, color 200ms ease-in;
+  transition:
+    background,
+    color 200ms ease-in;
 
   &:hover {
     background: ${colors.lavenderWeb7};

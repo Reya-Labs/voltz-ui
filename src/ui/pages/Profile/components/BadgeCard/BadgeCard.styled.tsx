@@ -23,7 +23,9 @@ export const Container = styled('div')`
   padding: 16px;
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.25s ease-out 0s, border 0.25s ease-out 0s;
+  transition:
+    box-shadow 0.25s ease-out 0s,
+    border 0.25s ease-out 0s;
   box-sizing: border-box;
 
   &:hover {

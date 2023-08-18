@@ -3,7 +3,8 @@ import { detectNetworkWithChainId, SupportedChainId } from '@voltz-protocol/v1-s
 import { detectIfNetworkSupported } from '.';
 
 jest.mock('@voltz-protocol/v1-sdk', () => ({
-  ...jest.requireActual('@voltz-protocol/v1-sdk'),
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  ...(jest.requireActual('@voltz-protocol/v1-sdk') as jest.Mock),
   detectNetworkWithChainId: jest.fn(),
 }));
 

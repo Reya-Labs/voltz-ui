@@ -48,7 +48,9 @@ const NotionalBox = styled('div')`
 
 export const NotionalSwapFixedBox = styled(NotionalBox)`
   background: linear-gradient(270deg, ${colors.lavenderWeb8} 0%, ${colors.lavenderWeb7} 54.61%);
-  box-shadow: 0px 4px 4px ${colors.liberty8}, 0px 0px 1px ${colors.lavenderWeb1};
+  box-shadow:
+    0px 4px 4px ${colors.liberty8},
+    0px 0px 1px ${colors.lavenderWeb1};
 `;
 
 export const NotionalSwapSwapper = styled('div', {

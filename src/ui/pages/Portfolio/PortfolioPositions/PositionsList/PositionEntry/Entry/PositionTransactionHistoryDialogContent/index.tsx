@@ -39,201 +39,203 @@ type SwitchNetworkParams =
   | 'swapForm'
   | 'lpRolloverForm'
   | 'swapRolloverForm';
-export const PositionTransactionHistoryDialogContent: React.FunctionComponent<PositionTransactionHistoryDialogContentProps> =
-  ({
-    token,
-    isBorrowing,
-    type,
-    status,
-    id,
-    chainId: poolChainId,
-    routePoolId,
-    routeAmmId,
-    onClose,
-    market,
-    routePositionId,
-  }) => {
-    const { isLargeDesktopDevice } = useResponsiveQuery();
-    const dispatch = useAppDispatch();
-    const [waitingOnNetworkChange, setWaitingOnNetworkChange] =
-      useState<null | SwitchNetworkParams>(null);
-    const chainId = useAppSelector(selectChainId);
-    const chainStateChangeError = useAppSelector(selectChainChangeState) === 'error';
-    const promptForNetworkChange = chainId !== null ? chainId !== poolChainId : false;
-    const navigate = useAppNavigate();
-    const { positionDetails } = usePositionDetails({ positionId: id });
-    const { account } = useWallet();
-    const canEdit = positionDetails?.canEdit;
-    const canRollover = positionDetails?.canRollover;
-    const canSettle = positionDetails?.canSettle;
-    const variant = status.variant;
-    const textsTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'primaryBodyMediumRegular'
-      : 'primaryBodySmallRegular';
+export const PositionTransactionHistoryDialogContent: React.FunctionComponent<
+  PositionTransactionHistoryDialogContentProps
+> = ({
+  token,
+  isBorrowing,
+  type,
+  status,
+  id,
+  chainId: poolChainId,
+  routePoolId,
+  routeAmmId,
+  onClose,
+  market,
+  routePositionId,
+}) => {
+  const { isLargeDesktopDevice } = useResponsiveQuery();
+  const dispatch = useAppDispatch();
+  const [waitingOnNetworkChange, setWaitingOnNetworkChange] = useState<null | SwitchNetworkParams>(
+    null,
+  );
+  const chainId = useAppSelector(selectChainId);
+  const chainStateChangeError = useAppSelector(selectChainChangeState) === 'error';
+  const promptForNetworkChange = chainId !== null ? chainId !== poolChainId : false;
+  const navigate = useAppNavigate();
+  const { positionDetails } = usePositionDetails({ positionId: id });
+  const { account } = useWallet();
+  const canEdit = positionDetails?.canEdit;
+  const canRollover = positionDetails?.canRollover;
+  const canSettle = positionDetails?.canSettle;
+  const variant = status.variant;
+  const textsTypographyToken: TypographyToken = isLargeDesktopDevice
+    ? 'primaryBodyMediumRegular'
+    : 'primaryBodySmallRegular';
 
-    const navigateToLPFormPage = () => {
-      navigate.toLPFormPage({
-        ammId: routeAmmId,
-        poolId: routePoolId,
-        fixedLower: status.fixLow,
-        fixedUpper: status.fixHigh,
-      });
-    };
+  const navigateToLPFormPage = () => {
+    navigate.toLPFormPage({
+      ammId: routeAmmId,
+      poolId: routePoolId,
+      fixedLower: status.fixLow,
+      fixedUpper: status.fixHigh,
+    });
+  };
 
-    const navigateToSwapFormPage = () => {
-      navigate.toSwapFormPage({
-        ammId: routeAmmId,
-        poolId: routePoolId,
-      });
-    };
+  const navigateToSwapFormPage = () => {
+    navigate.toSwapFormPage({
+      ammId: routeAmmId,
+      poolId: routePoolId,
+    });
+  };
 
-    const navigateToLPRolloverForm = () => {
-      navigate.toRolloverLPFormPage({
-        ammId: routeAmmId,
-        poolId: routePoolId,
-        positionId: routePositionId,
-      });
-    };
-    const navigateToSwapRolloverForm = () => {
-      navigate.toRolloverSwapFormPage({
-        ammId: routeAmmId,
-        poolId: routePoolId,
-        positionId: routePositionId,
-      });
-    };
+  const navigateToLPRolloverForm = () => {
+    navigate.toRolloverLPFormPage({
+      ammId: routeAmmId,
+      poolId: routePoolId,
+      positionId: routePositionId,
+    });
+  };
+  const navigateToSwapRolloverForm = () => {
+    navigate.toRolloverSwapFormPage({
+      ammId: routeAmmId,
+      poolId: routePoolId,
+      positionId: routePositionId,
+    });
+  };
 
-    const handleOnEdit = () => {
-      if (!canEdit) {
-        return;
-      }
-      if (!promptForNetworkChange) {
-        if (type === 'LP') {
-          navigateToLPFormPage();
-        } else {
-          navigateToSwapFormPage();
-        }
+  const handleOnEdit = () => {
+    if (!canEdit) {
+      return;
+    }
+    if (!promptForNetworkChange) {
+      if (type === 'LP') {
+        navigateToLPFormPage();
       } else {
-        switchNetwork(type === 'LP' ? 'lpForm' : 'swapForm');
+        navigateToSwapFormPage();
       }
-    };
+    } else {
+      switchNetwork(type === 'LP' ? 'lpForm' : 'swapForm');
+    }
+  };
 
-    const handleOnRollover = () => {
-      if (!canRollover) {
-        return;
-      }
-      if (!promptForNetworkChange) {
-        if (type === 'LP') {
-          navigateToLPRolloverForm();
-        } else {
-          navigateToSwapRolloverForm();
-        }
+  const handleOnRollover = () => {
+    if (!canRollover) {
+      return;
+    }
+    if (!promptForNetworkChange) {
+      if (type === 'LP') {
+        navigateToLPRolloverForm();
       } else {
-        switchNetwork(type === 'LP' ? 'lpRolloverForm' : 'swapRolloverForm');
+        navigateToSwapRolloverForm();
       }
-    };
+    } else {
+      switchNetwork(type === 'LP' ? 'lpRolloverForm' : 'swapRolloverForm');
+    }
+  };
 
-    const switchNetwork = (form: SwitchNetworkParams) => {
-      setWaitingOnNetworkChange(form);
-      void dispatch(
-        setChainIdThunk({
-          chainId: poolChainId,
-          isSupportedChain: true,
-          triggerApprovalFlow: true,
-          reloadPage: form !== 'settleFlow',
-        }),
-      );
-    };
-
-    useEffect(() => {
-      if (chainStateChangeError) {
-        setWaitingOnNetworkChange(null);
-      }
-    }, [chainStateChangeError]);
-    useEffect(() => {
-      if (waitingOnNetworkChange === null) {
-        return;
-      }
-      if (!chainId) {
-        return;
-      }
-      if (chainId === poolChainId) {
-        const afterNetworkChangeCallbackMap: Record<SwitchNetworkParams, () => void> = {
-          lpForm: navigateToLPFormPage,
-          lpRolloverForm: navigateToLPRolloverForm,
-          settleFlow: initializeSettle,
-          swapForm: navigateToSwapFormPage,
-          swapRolloverForm: navigateToSwapRolloverForm,
-        };
-        afterNetworkChangeCallbackMap[waitingOnNetworkChange] &&
-          afterNetworkChangeCallbackMap[waitingOnNetworkChange]();
-      }
-    }, [poolChainId, waitingOnNetworkChange, chainId]);
-
-    const initializeSettle = () => {
-      dispatch(
-        initializeSettleFlowAction({
-          account,
-          position: positionDetails,
-        }),
-      );
-    };
-
-    const handleOnSettle = () => {
-      if (!canSettle) {
-        return;
-      }
-      if (!promptForNetworkChange) {
-        initializeSettle();
-      } else {
-        switchNetwork('settleFlow');
-      }
-    };
-
-    return (
-      <React.Fragment>
-        {canSettle ? <SettleFlow /> : null}
-        <ContentBox>
-          <TitleBox>
-            <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
-              {variant === 'active'
-                ? 'Position History'
-                : variant === 'matured'
-                ? 'Matured Position'
-                : 'Settled Position'}
-            </Typography>
-            <CloseButton onClick={onClose} />
-          </TitleBox>
-          <MarketTokenInformation
-            isBorrowing={isBorrowing}
-            market={market}
-            token={token}
-            type={type}
-            typographyToken={textsTypographyToken}
-          />
-          <PositionTransactionHistory positionId={id} />
-          {canEdit || canRollover || canSettle ? (
-            <ButtonsBox>
-              {canEdit ? (
-                <Button variant="primary" onClick={handleOnEdit}>
-                  Edit
-                </Button>
-              ) : null}
-              {canSettle ? (
-                <Button
-                  variant={canSettle && canRollover ? 'secondary' : 'primary'}
-                  onClick={handleOnSettle}
-                >
-                  Settle
-                </Button>
-              ) : null}
-              {canRollover ? (
-                <Button variant="primary" onClick={handleOnRollover}>
-                  Rollover
-                </Button>
-              ) : null}
-            </ButtonsBox>
-          ) : null}
-        </ContentBox>
-      </React.Fragment>
+  const switchNetwork = (form: SwitchNetworkParams) => {
+    setWaitingOnNetworkChange(form);
+    void dispatch(
+      setChainIdThunk({
+        chainId: poolChainId,
+        isSupportedChain: true,
+        triggerApprovalFlow: true,
+        reloadPage: form !== 'settleFlow',
+      }),
     );
   };
+
+  useEffect(() => {
+    if (chainStateChangeError) {
+      setWaitingOnNetworkChange(null);
+    }
+  }, [chainStateChangeError]);
+  useEffect(() => {
+    if (waitingOnNetworkChange === null) {
+      return;
+    }
+    if (!chainId) {
+      return;
+    }
+    if (chainId === poolChainId) {
+      const afterNetworkChangeCallbackMap: Record<SwitchNetworkParams, () => void> = {
+        lpForm: navigateToLPFormPage,
+        lpRolloverForm: navigateToLPRolloverForm,
+        settleFlow: initializeSettle,
+        swapForm: navigateToSwapFormPage,
+        swapRolloverForm: navigateToSwapRolloverForm,
+      };
+      afterNetworkChangeCallbackMap[waitingOnNetworkChange] &&
+        afterNetworkChangeCallbackMap[waitingOnNetworkChange]();
+    }
+  }, [poolChainId, waitingOnNetworkChange, chainId]);
+
+  const initializeSettle = () => {
+    dispatch(
+      initializeSettleFlowAction({
+        account,
+        position: positionDetails,
+      }),
+    );
+  };
+
+  const handleOnSettle = () => {
+    if (!canSettle) {
+      return;
+    }
+    if (!promptForNetworkChange) {
+      initializeSettle();
+    } else {
+      switchNetwork('settleFlow');
+    }
+  };
+
+  return (
+    <React.Fragment>
+      {canSettle ? <SettleFlow /> : null}
+      <ContentBox>
+        <TitleBox>
+          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+            {variant === 'active'
+              ? 'Position History'
+              : variant === 'matured'
+              ? 'Matured Position'
+              : 'Settled Position'}
+          </Typography>
+          <CloseButton onClick={onClose} />
+        </TitleBox>
+        <MarketTokenInformation
+          isBorrowing={isBorrowing}
+          market={market}
+          token={token}
+          type={type}
+          typographyToken={textsTypographyToken}
+        />
+        <PositionTransactionHistory positionId={id} />
+        {canEdit || canRollover || canSettle ? (
+          <ButtonsBox>
+            {canEdit ? (
+              <Button variant="primary" onClick={handleOnEdit}>
+                Edit
+              </Button>
+            ) : null}
+            {canSettle ? (
+              <Button
+                variant={canSettle && canRollover ? 'secondary' : 'primary'}
+                onClick={handleOnSettle}
+              >
+                Settle
+              </Button>
+            ) : null}
+            {canRollover ? (
+              <Button variant="primary" onClick={handleOnRollover}>
+                Rollover
+              </Button>
+            ) : null}
+          </ButtonsBox>
+        ) : null}
+      </ContentBox>
+    </React.Fragment>
+  );
+};
