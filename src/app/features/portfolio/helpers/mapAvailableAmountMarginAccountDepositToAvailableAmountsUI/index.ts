@@ -1,9 +1,9 @@
 import { compactFormatToParts } from '../../../../../utilities/number';
-import { AvailableAmountForMarginAccount } from '../../thunks';
+import { AvailableAmountForMarginAccountDeposit } from '../../thunks';
 import { AvailableAmountsUI } from '../../types';
 
-export const mapAvailableAmountMarginAccountToAvailableAmountsUI = (
-  availableAmount: AvailableAmountForMarginAccount,
+export const mapAvailableAmountMarginAccountDepositToAvailableAmountsUI = (
+  availableAmount: AvailableAmountForMarginAccountDeposit,
 ): AvailableAmountsUI => {
   const formatted = compactFormatToParts(availableAmount.value, 2, 2);
 
