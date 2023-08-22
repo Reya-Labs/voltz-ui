@@ -1,24 +1,19 @@
-import { ColorTokens, Donut } from 'brokoli-ui';
+import { Donut } from 'brokoli-ui';
 import React from 'react';
 
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
-
-const MarginRatioColorMap: Record<MarginAccountUI['marginRatioHealth'], ColorTokens | undefined> = {
-  danger: 'wildStrawberry',
-  healthy: 'skyBlueCrayola',
-  warning: 'orangeYellow',
-};
+import { MARGIN_RATIO_COLOR_MAP } from './constants';
 
 export const MarginRatioDonut: React.FunctionComponent<{
   health: MarginAccountUI['marginRatioHealth'];
   percentage: number;
 }> = ({ health, percentage }) => {
-  if (MarginRatioColorMap[health] === undefined) {
+  if (MARGIN_RATIO_COLOR_MAP[health] === undefined) {
     return null;
   }
   return (
     <Donut
-      colorToken={MarginRatioColorMap[health]!}
+      colorToken={MARGIN_RATIO_COLOR_MAP[health]!}
       holeColorToken="lavenderWeb8"
       percentage={percentage}
     />

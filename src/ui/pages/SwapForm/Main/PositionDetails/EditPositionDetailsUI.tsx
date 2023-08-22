@@ -1,4 +1,4 @@
-import { LabelFromToTokenTypography, LabelTokenTypography, TypographyToken } from 'brokoli-ui';
+import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -88,7 +88,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             value={MODE_TEXT_MAP[editPositionMode]}
           />
         ) : (
-          <LabelFromToTokenTypography
+          <FromToTokenTypography
             fromColorToken={MODE_COLOR_TOKEN_MAP[existingPositionMode]}
             fromValue={MODE_TEXT_MAP[existingPositionMode]}
             label="Editing Position"
@@ -119,7 +119,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               value={editPositionCompactNotional.compactNotionalNumber}
             />
           ) : (
-            <LabelFromToTokenTypography
+            <FromToTokenTypography
               fromColorToken="lavenderWeb"
               fromToken={existingPositionCompactNotional.compactNotionalSuffix}
               fromValue={existingPositionCompactNotional.compactNotionalNumber}
@@ -145,7 +145,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               value={receivingRateTo}
             />
           ) : (
-            <LabelFromToTokenTypography
+            <FromToTokenTypography
               fromColorToken="lavenderWeb"
               fromToken="%"
               fromValue={receivingRateFrom}
@@ -171,7 +171,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               value={payingRateTo}
             />
           ) : (
-            <LabelFromToTokenTypography
+            <FromToTokenTypography
               fromColorToken="lavenderWeb"
               fromToken="%"
               fromValue={payingRateFrom}

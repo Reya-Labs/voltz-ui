@@ -7,7 +7,7 @@ import { getAllowedChainIds } from '../../../network';
 export type PortfolioPosition = Awaited<ReturnType<typeof getPortfolioPositions>>[0];
 
 // Define a cache object to store promises
-const positionsCache = new Map<
+const cache = new Map<
   string,
   Promise<PortfolioPosition[] | ReturnType<typeof rejectThunkWithError>>
 >();
@@ -28,7 +28,7 @@ export const initialisePortfolioPositionsThunk = createAsyncThunk<
 
   // Check if the promise is already cached
   const cacheId = `${account.toLowerCase()}-${chainIds.join(',')}`;
-  const cachedPromise = positionsCache.get(cacheId);
+  const cachedPromise = cache.get(cacheId);
   if (cachedPromise) {
     return await cachedPromise;
   }
@@ -42,7 +42,7 @@ export const initialisePortfolioPositionsThunk = createAsyncThunk<
     }
   })();
 
-  positionsCache.set(cacheId, promise);
+  cache.set(cacheId, promise);
 
   return await promise;
 });

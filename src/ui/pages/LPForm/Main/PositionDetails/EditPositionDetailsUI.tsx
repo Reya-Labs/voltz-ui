@@ -1,4 +1,4 @@
-import { LabelFromToTokenTypography, LabelTokenTypography, TypographyToken } from 'brokoli-ui';
+import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -87,7 +87,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
               value={editPositionCompactNotional.compactNotionalNumber}
             />
           ) : (
-            <LabelFromToTokenTypography
+            <FromToTokenTypography
               fromColorToken="lavenderWeb"
               fromToken={existingPositionCompactNotional.compactNotionalSuffix}
               fromValue={existingPositionCompactNotional.compactNotionalNumber}

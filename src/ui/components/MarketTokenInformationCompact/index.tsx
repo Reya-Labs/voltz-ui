@@ -8,18 +8,19 @@ export type MarketTokenInformationCompactProps = {
   token: MarketTokenProps['token'];
 };
 
-export const MarketTokenInformationCompact: React.FunctionComponent<MarketTokenInformationCompactProps> =
-  ({ market, token }) => {
-    return (
-      <MarketTokenInformationCompactBox data-testid="MarketTokenInformationCompact-MarketTokenBox">
-        <MarketToken
-          colorToken="lavenderWeb"
-          data-testid="MarketTokenInformationCompact-MarketToken"
-          iconSize={0}
-          market={market}
-          token={token}
-          typographyToken="primaryBodyMediumBold"
-        />
-      </MarketTokenInformationCompactBox>
-    );
-  };
+export const MarketTokenInformationCompact: React.FunctionComponent<
+  MarketTokenInformationCompactProps
+> = ({ market, token }) => {
+  return (
+    <MarketTokenInformationCompactBox data-testid="MarketTokenInformationCompact-MarketTokenBox">
+      <MarketToken
+        colorToken="lavenderWeb"
+        data-testid="MarketTokenInformationCompact-MarketToken"
+        iconSize={0}
+        market={market}
+        token={token}
+        typographyToken="primaryBodyMediumBold"
+      />
+    </MarketTokenInformationCompactBox>
+  );
+};

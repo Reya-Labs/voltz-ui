@@ -3,10 +3,8 @@ import React from 'react';
 
 import { extractTextFromLink } from './extract-text-from-link';
 
-export const ExplorerLink: React.FunctionComponent<{ link: string }> = ({ link }) => {
-  return (
-    <ExternalLink colorToken="lavenderWeb" href={link} typographyToken="primaryBodyXSmallRegular">
-      {`Open transaction on ${extractTextFromLink(link)}`}
-    </ExternalLink>
-  );
-};
+export const ExplorerLink: React.FunctionComponent<{ link: string }> = ({ link }) => (
+  <ExternalLink colorToken="lavenderWeb" href={link} typographyToken="primaryBodyXSmallRegular">
+    {`Open transaction on ${extractTextFromLink(link)}`}
+  </ExternalLink>
+);

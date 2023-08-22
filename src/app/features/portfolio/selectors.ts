@@ -1,5 +1,7 @@
+import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
+
 import { isOnlyV2PoolsPositions } from '../../../utilities/is-only-v2-pools-positions';
-import { compactFormatToParts } from '../../../utilities/number';
+import { compactFormat, compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { formFormatNumber } from '../forms/common';
 import {
@@ -8,8 +10,14 @@ import {
   MARGIN_ACCOUNTS_SORT_CONFIG,
   POSITIONS_SORT_CONFIG,
 } from './constants';
-import { getPositionsSummary, mapPortfolioPositionToPortfolioUI, sortPositions } from './helpers';
-import { mapMarginAccountToMarginAccountUI } from './helpers/mapMarginAccountToMarginAccountUI';
+import {
+  getPositionsSummary,
+  mapAvailableAmountMarginAccountDepositToAvailableAmountsUI,
+  mapAvailableAmountMarginAccountWithdrawToAvailableAmountsUI,
+  mapMarginAccountToMarginAccountUI,
+  mapPortfolioPositionToPortfolioUI,
+  sortPositions,
+} from './helpers';
 import { PortfolioMarginAccount } from './thunks';
 import {
   MarginAccountSortId,
@@ -261,4 +269,279 @@ export const selectCreateMarginAccountError = (state: RootState) => {
 
 export const selectCreateMarginAccountDialogState = (state: RootState) => {
   return state.portfolio.createMarginAccountDialogState;
+};
+
+// Withdraw flow
+export const selectMarginAccountWithdrawFlowStep = (state: RootState) => {
+  return state.portfolio.marginAccountWithdrawMarginFlow.step;
+};
+
+export const selectMarginAccountWithdrawFlowError = (state: RootState) => {
+  return state.portfolio.marginAccountWithdrawMarginFlow.error;
+};
+
+export const selectMarginAccountWithdrawFlowValidationError = (state: RootState) => {
+  const userInput = state.portfolio.marginAccountWithdrawMarginFlow.userInput;
+  if (userInput.amount > userInput.maxAmount) {
+    return 'You cannot withdraw more than allowed maximum amount.';
+  }
+  return '';
+};
+
+export const selectMarginAccountWithdrawFlowCTADisabled = (state: RootState) => {
+  const validationError = selectMarginAccountWithdrawFlowValidationError(state);
+  const loading = selectMarginAccountWithdrawFlowStep(state) === 'withdrawing';
+  const selectedMarginAccountId =
+    selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted(state).id;
+
+  return Boolean(validationError) || Boolean(loading) || !Boolean(selectedMarginAccountId);
+};
+
+export const selectMarginAccountWithdrawFlowSimulationStatus = (state: RootState) => {
+  return state.portfolio.marginAccountWithdrawMarginFlow.simulation.status;
+};
+
+export const selectMarginAccountWithdrawFlowSimulationIsLoading = (state: RootState) => {
+  const status = selectMarginAccountWithdrawFlowSimulationStatus(state);
+  return status === 'pending' || status === 'idle';
+};
+
+export const selectMarginAccountWithdrawFlowSimulationValueFormatted = (state: RootState) => {
+  const simulationValue = state.portfolio.marginAccountWithdrawMarginFlow.simulation.value;
+  if (selectMarginAccountWithdrawFlowSimulationIsLoading(state) || simulationValue === null) {
+    return {
+      gasFeeUSDFormatted: {
+        compactNumber: '--',
+        compactSuffix: '',
+      },
+      marginRatioPercentage: '--',
+      marginRatioHealth: '--',
+    };
+  }
+
+  return {
+    gasFeeUSDFormatted: compactFormatToParts(simulationValue.gasFeeUSD),
+    marginRatioPercentage: simulationValue.marginRatioPercentage,
+    marginRatioHealth: simulationValue.marginRatioHealth,
+  };
+};
+
+export const selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted = (state: RootState) => {
+  const selectedMarginAccount =
+    state.portfolio.marginAccountWithdrawMarginFlow.selectedMarginAccount;
+  if (selectedMarginAccount === null) {
+    return {
+      id: '',
+      name: '',
+      marginRatioPercentage: '--',
+      marginRatioHealth: '--',
+      balanceCompactFormat: {
+        compactNumber: '--',
+        compactSuffix: '',
+      },
+    };
+  }
+
+  return {
+    id: selectedMarginAccount.id,
+    name: selectedMarginAccount.name,
+    marginRatioPercentage: selectedMarginAccount.marginRatioPercentage,
+    marginRatioHealth: selectedMarginAccount.marginRatioHealth,
+    balanceCompactFormat: compactFormatToParts(selectedMarginAccount.balance),
+  };
+};
+
+export const selectMarginAccountWithdrawFlowUserInputFormatted = (state: RootState) => {
+  const userInput = state.portfolio.marginAccountWithdrawMarginFlow.userInput;
+
+  return {
+    amount: userInput.amount,
+    amountFormatted: compactFormatToParts(userInput.amount),
+    maxAmount: userInput.maxAmount,
+    maxAmountFormatted: compactFormat(userInput.maxAmount),
+    maxAmountUSDFormatted: compactFormat(userInput.maxAmountUSD),
+    token: userInput.token,
+  };
+};
+
+export const selectMarginAccountWithdrawFlowMarginAccountsLoadedState = (state: RootState) => {
+  return state.portfolio.marginAccountWithdrawMarginFlow.marginAccountsLoadedState;
+};
+
+export const selectMarginAccountWithdrawFlowMarginAccountsLoading = (state: RootState): boolean => {
+  const loadedState = selectMarginAccountWithdrawFlowMarginAccountsLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectMarginAccountWithdrawFlowMarginAccounts = (state: RootState) => {
+  const isLoading = selectMarginAccountsLoading(state);
+  return isLoading
+    ? []
+    : state.portfolio.marginAccountWithdrawMarginFlow.marginAccounts.map(
+        mapMarginAccountToMarginAccountUI,
+      );
+};
+
+export const selectMarginAccountWithdrawFlowAvailableAmountsLoadedState = (state: RootState) => {
+  return state.portfolio.marginAccountWithdrawMarginFlow.availableAmountsLoadedState;
+};
+
+export const selectMarginAccountWithdrawFlowAvailableAmountsLoading = (
+  state: RootState,
+): boolean => {
+  const loadedState = selectMarginAccountWithdrawFlowAvailableAmountsLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectMarginAccountWithdrawFlowAvailableAmounts = (state: RootState) => {
+  const isLoading = selectMarginAccountWithdrawFlowAvailableAmountsLoading(state);
+  return isLoading
+    ? []
+    : state.portfolio.marginAccountWithdrawMarginFlow.availableAmounts.map(
+        mapAvailableAmountMarginAccountWithdrawToAvailableAmountsUI,
+      );
+};
+
+export const selectMarginAccountWithdrawFlowEtherscanLink = (state: RootState) => {
+  return getViewOnEtherScanLink(
+    state.network.chainId,
+    state.portfolio.marginAccountWithdrawMarginFlow.txHash || '',
+  );
+};
+// Deposit flow
+export const selectMarginAccountDepositFlowStep = (state: RootState) => {
+  return state.portfolio.marginAccountDepositMarginFlow.step;
+};
+
+export const selectMarginAccountDepositFlowError = (state: RootState) => {
+  return state.portfolio.marginAccountDepositMarginFlow.error;
+};
+
+export const selectMarginAccountDepositFlowValidationError = (state: RootState) => {
+  const userInput = state.portfolio.marginAccountDepositMarginFlow.userInput;
+  if (userInput.amount > userInput.maxAmount) {
+    return 'You cannot deposit more than allowed maximum amount.';
+  }
+  return '';
+};
+
+export const selectMarginAccountDepositFlowCTADisabled = (state: RootState) => {
+  const validationError = selectMarginAccountDepositFlowValidationError(state);
+  const loading = selectMarginAccountDepositFlowStep(state) === 'depositing';
+  const selectedMarginAccountId =
+    selectMarginAccountDepositFlowSelectedMarginAccountFormatted(state).id;
+
+  return Boolean(validationError) || Boolean(loading) || !Boolean(selectedMarginAccountId);
+};
+
+export const selectMarginAccountDepositFlowSimulationStatus = (state: RootState) => {
+  return state.portfolio.marginAccountDepositMarginFlow.simulation.status;
+};
+
+export const selectMarginAccountDepositFlowSimulationIsLoading = (state: RootState) => {
+  const status = selectMarginAccountDepositFlowSimulationStatus(state);
+  return status === 'pending' || status === 'idle';
+};
+
+export const selectMarginAccountDepositFlowSimulationValueFormatted = (state: RootState) => {
+  const simulationValue = state.portfolio.marginAccountDepositMarginFlow.simulation.value;
+  if (selectMarginAccountDepositFlowSimulationIsLoading(state) || simulationValue === null) {
+    return {
+      gasFeeUSDFormatted: {
+        compactNumber: '--',
+        compactSuffix: '',
+      },
+      marginRatioPercentage: '--',
+      marginRatioHealth: '--',
+    };
+  }
+
+  return {
+    gasFeeUSDFormatted: compactFormatToParts(simulationValue.gasFeeUSD),
+    marginRatioPercentage: simulationValue.marginRatioPercentage,
+    marginRatioHealth: simulationValue.marginRatioHealth,
+  };
+};
+
+export const selectMarginAccountDepositFlowSelectedMarginAccountFormatted = (state: RootState) => {
+  const selectedMarginAccount =
+    state.portfolio.marginAccountDepositMarginFlow.selectedMarginAccount;
+  if (selectedMarginAccount === null) {
+    return {
+      id: '',
+      name: '',
+      marginRatioPercentage: '--',
+      marginRatioHealth: '--',
+      balanceCompactFormat: {
+        compactNumber: '--',
+        compactSuffix: '',
+      },
+    };
+  }
+
+  return {
+    id: selectedMarginAccount.id,
+    name: selectedMarginAccount.name,
+    marginRatioPercentage: selectedMarginAccount.marginRatioPercentage,
+    marginRatioHealth: selectedMarginAccount.marginRatioHealth,
+    balanceCompactFormat: compactFormatToParts(selectedMarginAccount.balance),
+  };
+};
+
+export const selectMarginAccountDepositFlowUserInputFormatted = (state: RootState) => {
+  const userInput = state.portfolio.marginAccountDepositMarginFlow.userInput;
+
+  return {
+    amount: userInput.amount,
+    amountFormatted: compactFormatToParts(userInput.amount),
+    maxAmount: userInput.maxAmount,
+    maxAmountFormatted: compactFormat(userInput.maxAmount),
+    maxAmountUSDFormatted: compactFormat(userInput.maxAmountUSD),
+    token: userInput.token,
+  };
+};
+
+export const selectMarginAccountDepositFlowMarginAccountsLoadedState = (state: RootState) => {
+  return state.portfolio.marginAccountDepositMarginFlow.marginAccountsLoadedState;
+};
+
+export const selectMarginAccountDepositFlowMarginAccountsLoading = (state: RootState): boolean => {
+  const loadedState = selectMarginAccountDepositFlowMarginAccountsLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectMarginAccountDepositFlowMarginAccounts = (state: RootState) => {
+  const isLoading = selectMarginAccountsLoading(state);
+  return isLoading
+    ? []
+    : state.portfolio.marginAccountDepositMarginFlow.marginAccounts.map(
+        mapMarginAccountToMarginAccountUI,
+      );
+};
+
+export const selectMarginAccountDepositFlowAvailableAmountsLoadedState = (state: RootState) => {
+  return state.portfolio.marginAccountDepositMarginFlow.availableAmountsLoadedState;
+};
+
+export const selectMarginAccountDepositFlowAvailableAmountsLoading = (
+  state: RootState,
+): boolean => {
+  const loadedState = selectMarginAccountDepositFlowAvailableAmountsLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectMarginAccountDepositFlowAvailableAmounts = (state: RootState) => {
+  const isLoading = selectMarginAccountDepositFlowAvailableAmountsLoading(state);
+  return isLoading
+    ? []
+    : state.portfolio.marginAccountDepositMarginFlow.availableAmounts.map(
+        mapAvailableAmountMarginAccountDepositToAvailableAmountsUI,
+      );
+};
+
+export const selectMarginAccountDepositFlowEtherscanLink = (state: RootState) => {
+  return getViewOnEtherScanLink(
+    state.network.chainId,
+    state.portfolio.marginAccountDepositMarginFlow.txHash || '',
+  );
 };

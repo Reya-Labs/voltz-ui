@@ -9,35 +9,36 @@ export type PositionUnrealizedPNLDetailsProps = {
   unrealizedPNLUSDCompactFormat: PositionUI['unrealizedPNLUSDCompactFormat'];
   type: PositionUI['type'];
 };
-export const PositionUnrealizedPNLDetails: React.FunctionComponent<PositionUnrealizedPNLDetailsProps> =
-  ({ type, numbersTypographyToken, unrealizedPNLUSDCompactFormat }) => {
-    if (type === 'LP') {
-      return (
-        <Typography colorToken="lavenderWeb" typographyToken={numbersTypographyToken}>
-          --
-        </Typography>
-      );
-    }
-
+export const PositionUnrealizedPNLDetails: React.FunctionComponent<
+  PositionUnrealizedPNLDetailsProps
+> = ({ type, numbersTypographyToken, unrealizedPNLUSDCompactFormat }) => {
+  if (type === 'LP') {
     return (
-      <Tooltip
-        trigger={
-          <TokenTypography
-            colorToken={
-              unrealizedPNLUSDCompactFormat.compactNumber.indexOf('-') === -1
-                ? 'skyBlueCrayola'
-                : 'wildStrawberry'
-            }
-            prefixToken={
-              unrealizedPNLUSDCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'
-            }
-            token={unrealizedPNLUSDCompactFormat.compactSuffix}
-            typographyToken={numbersTypographyToken}
-            value={unrealizedPNLUSDCompactFormat.compactNumber.replace('-', '')}
-          />
-        }
-      >
-        <UnrealizedPNLDetails />
-      </Tooltip>
+      <Typography colorToken="lavenderWeb" typographyToken={numbersTypographyToken}>
+        --
+      </Typography>
     );
-  };
+  }
+
+  return (
+    <Tooltip
+      trigger={
+        <TokenTypography
+          colorToken={
+            unrealizedPNLUSDCompactFormat.compactNumber.indexOf('-') === -1
+              ? 'skyBlueCrayola'
+              : 'wildStrawberry'
+          }
+          prefixToken={
+            unrealizedPNLUSDCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'
+          }
+          token={unrealizedPNLUSDCompactFormat.compactSuffix}
+          typographyToken={numbersTypographyToken}
+          value={unrealizedPNLUSDCompactFormat.compactNumber.replace('-', '')}
+        />
+      }
+    >
+      <UnrealizedPNLDetails />
+    </Tooltip>
+  );
+};

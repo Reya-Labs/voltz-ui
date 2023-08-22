@@ -1,4 +1,4 @@
-import { LabelFromToTokenTypography, MarketToken, MarketTokenProps } from 'brokoli-ui';
+import { FromToTokenTypography, MarketToken, MarketTokenProps } from 'brokoli-ui';
 import React from 'react';
 
 import { TitleBox, VaultFieldBox, VaultMetricsBox } from './VaultField.styled';
@@ -38,7 +38,7 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
         ></MarketToken>
       </TitleBox>
       <VaultMetricsBox>
-        <LabelFromToTokenTypography
+        <FromToTokenTypography
           fromColorToken="wildStrawberry"
           fromToken="%"
           fromValue={Number(Math.round(averageApyFrom))}
