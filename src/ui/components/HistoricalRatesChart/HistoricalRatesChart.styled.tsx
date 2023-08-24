@@ -9,7 +9,7 @@ export const ChartBox = styled('div')`
   align-items: center;
   padding: 0px;
 
-  border-bottom: 1px solid ${colors.lavenderWeb8};
+  border-bottom: 1px solid ${colors.lavenderWeb7};
 `;
 
 export const LineChartBox = styled('div')`

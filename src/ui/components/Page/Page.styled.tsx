@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { BACKGROUND_GRADIENT } from 'brokoli-ui';
 
 import { mediaQuery } from '../../../hooks/useResponsiveQuery/mediaQuery';
 
@@ -42,8 +43,7 @@ export const RightSectionBox = styled('div')`
 
   height: 100%;
 
-  background: linear-gradient(180deg, rgba(11, 9, 17, 0.8) 41.43%, rgba(24, 21, 36, 0.8) 110.49%);
-  backdrop-filter: blur(2px);
+  background: ${BACKGROUND_GRADIENT};
 
   @media ${mediaQuery.largeDesktopDevice} {
     width: 544px;

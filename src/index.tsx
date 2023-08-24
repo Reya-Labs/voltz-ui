@@ -1,12 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
 import 'brokoli-ui/dist/esm/index.css';
 import 'normalize.css';
-import './scrollbar.css';
 
 import { init as initSDKV1Stateless } from '@voltz-protocol/sdk-v1-stateless';
 import { init } from '@voltz-protocol/v1-sdk';
 import { Amplify } from 'aws-amplify';
-import { Notifications } from 'brokoli-ui';
+import { GlobalScrollbarStyle, Notifications } from 'brokoli-ui';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';
@@ -30,6 +29,7 @@ initSentryTracker();
 ReactDOM.render(
   <React.StrictMode>
     <Notifications />
+    <GlobalScrollbarStyle />
     <ReduxProvider store={store}>
       <WalletProvider>
         <HashRouter>

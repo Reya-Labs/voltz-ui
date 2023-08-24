@@ -27,7 +27,7 @@ export const MarginAccountBox = styled('div')`
   top: 0;
   z-index: 1;
   background: ${colors.lavenderWeb8};
-  box-shadow: 0px 0px 1px ${colors.lavenderWeb3};
+  border-bottom: 1px solid ${colors.lavenderWeb7};
 `;
 
 export const FormOuterBox = styled('div')`
@@ -51,5 +51,5 @@ export const TransactionDetailsBox = styled('div')`
   padding: 16px 40px 132px 40px;
   width: 100%;
 
-  border-bottom: 1px solid ${colors.lavenderWeb8};
+  border-bottom: 1px solid ${colors.lavenderWeb7};
 `;
