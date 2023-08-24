@@ -56,6 +56,8 @@ export const TransactionHistoryListBox = styled('div')`
   width: 100%;
   box-sizing: border-box;
   gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
 `;
 export const TransactionHistoryEntriesBox = styled('div')`
   display: flex;
