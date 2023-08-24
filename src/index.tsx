@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import 'brokoli-ui/dist/esm/index.css';
+import 'normalize.css';
+import './scrollbar.css';
 
 import { init as initSDKV1Stateless } from '@voltz-protocol/sdk-v1-stateless';
 import { init } from '@voltz-protocol/v1-sdk';
