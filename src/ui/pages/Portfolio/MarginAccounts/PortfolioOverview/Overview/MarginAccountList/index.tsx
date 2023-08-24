@@ -65,7 +65,7 @@ export const MarginAccountList: React.FunctionComponent = () => {
             <MarginAccountEntrySkeleton
               key={index}
               colorToken="liberty2"
-              data-testid="PositionsList-PositionEntrySkeleton"
+              data-testid="MarginAccountsList-MarginAccountEntrySkeleton"
               variant="rectangular"
             />
           ))}
@@ -100,7 +100,7 @@ export const MarginAccountList: React.FunctionComponent = () => {
                   No Margin Accounts found. Visit our{' '}
                   <AppLink
                     colorToken="skyBlueCrayola"
-                    data-testid="NoPositions-AppLink"
+                    data-testid="NoMarginAccounts-AppLink"
                     to={`/${routes.POOLS}`}
                     typographyToken="primaryBodyMediumRegular"
                   >

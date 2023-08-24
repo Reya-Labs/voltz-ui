@@ -60,11 +60,12 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
     const chainIcon = <ChainIcon chainId={chainId} hideForChains={[]} />;
     const testNetIndicator = <TestNetIndicator chainId={chainId} />;
     return (
-      <MarginAccountEntryBoxWrapper ref={ref} onClick={handleOnEntryClick}>
+      <MarginAccountEntryBoxWrapper ref={ref}>
         {testNetIndicator ? <TestPillContainer>{testNetIndicator}</TestPillContainer> : null}
         <MarginAccountEntryBox
           backgroundColorToken={backgroundColorToken}
           isPositionListShown={isPositionListShown}
+          onClick={handleOnEntryClick}
         >
           <LeftBox>
             <ChainIconAndNameContainer>
