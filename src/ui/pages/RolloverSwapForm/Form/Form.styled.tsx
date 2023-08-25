@@ -23,6 +23,7 @@ export const MarginAccountBox = styled('div')`
   top: 0;
   z-index: 1;
   border-bottom: 1px solid ${colors.lavenderWeb7};
+  background: ${colors.liberty7};
 `;
 
 export const FormOuterBox = styled('div')`
