@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { BACKGROUND_GRADIENT, colors } from 'brokoli-ui';
+import { colors } from 'brokoli-ui';
 
 export const PanelBox = styled('div')`
   box-sizing: border-box;
@@ -14,8 +14,6 @@ export const PanelBox = styled('div')`
   height: 100%;
 
   border: 1px solid ${colors.lavenderWeb7};
-
-  background: ${BACKGROUND_GRADIENT};
 `;
 
 export const CraftedByBox = styled('div')`
@@ -51,6 +49,4 @@ export const SubmenuBox = styled('div')`
   height: 100%;
 
   border: 1px solid ${colors.lavenderWeb7};
-
-  background: ${BACKGROUND_GRADIENT};
 `;

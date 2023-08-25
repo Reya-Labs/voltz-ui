@@ -11,8 +11,7 @@ export const FormBox = styled('div')`
 
   border-width: 0px 0px 1px 1px;
   border-style: solid;
-  border-color: ${colors.lavenderWeb8};
-  backdrop-filter: blur(4px);
+  border-color: ${colors.lavenderWeb7};
 `;
 export const TitleBox = styled('div')`
   box-sizing: border-box;
