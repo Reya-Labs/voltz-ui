@@ -22,7 +22,6 @@ export const MarginAccountBox = styled('div')`
   position: sticky;
   top: 0;
   z-index: 1;
-  background: ${colors.lavenderWeb8};
   border-bottom: 1px solid ${colors.lavenderWeb7};
 `;
 
