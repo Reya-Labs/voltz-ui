@@ -33,6 +33,7 @@ export const FormOuterBox = styled('div')`
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
+  border-left: 1px solid ${colors.lavenderWeb7};
 `;
 
 export const TransactionDetailsBox = styled('div')`
