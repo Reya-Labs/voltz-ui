@@ -8,10 +8,7 @@ export const FormBox = styled('div')`
   align-items: flex-start;
   padding: 16px 40px;
   gap: 24px;
-
-  border-width: 0px 0px 1px 1px;
-  border-style: solid;
-  border-color: ${colors.lavenderWeb7};
+  border-bottom: 1px solid ${colors.lavenderWeb7};
 `;
 export const TitleBox = styled('div')`
   box-sizing: border-box;
