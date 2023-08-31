@@ -2,7 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ContractReceipt } from 'ethers';
 
 import { getNextSortDirection } from '../helpers';
-import { resetMarginAccountsSortingDirection, resetPositionsSortingDirection } from './constants';
+import {
+  initialPositionsSortingDirection,
+  resetMarginAccountsSortingDirection,
+  resetPositionsSortingDirection,
+} from './constants';
 import { initialState } from './state';
 import {
   AvailableAmountForMarginAccountWithdraw,
@@ -18,6 +22,7 @@ import {
   fetchPortfolioSummaryThunk,
   initialisePortfolioPositionsThunk,
   MarginAccountSummary,
+  PortfolioMarginAccount,
   PortfolioPosition,
   PortfolioSummary,
   ReturnTypeFetchMarginAccounts,
@@ -138,6 +143,26 @@ const slice = createSlice({
       state.sortingDirection = {
         ...resetPositionsSortingDirection,
         [sortId]: getNextSortDirection(state.sortingDirection[sortId]),
+      };
+    },
+    toggleMarginAccountPositionsSortingDirectionAction: (
+      state,
+      {
+        payload: { marginAccountId, sortId },
+      }: PayloadAction<{
+        sortId: PositionSortId;
+        marginAccountId?: PortfolioMarginAccount['id'];
+      }>,
+    ) => {
+      if (!marginAccountId) {
+        return;
+      }
+      const direction = state.marginAccountPositionsSortingDirection[marginAccountId] || {
+        ...initialPositionsSortingDirection,
+      };
+      state.marginAccountPositionsSortingDirection[marginAccountId] = {
+        ...resetPositionsSortingDirection,
+        [sortId]: getNextSortDirection(direction[sortId]),
       };
     },
   },
@@ -373,6 +398,7 @@ export const {
   openCreateMarginAccountDialogAction,
   resetPortfolioStateAction,
   togglePositionSortingDirectionAction,
+  toggleMarginAccountPositionsSortingDirectionAction,
   openMarginAccountWithdrawFlowAction,
   closeMarginAccountWithdrawFlowAction,
   selectMarginAccountWithdrawFlowAction,
