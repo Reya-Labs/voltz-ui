@@ -1,7 +1,11 @@
 import { AppLink, Typography } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { selectPositions, selectPositionsLoading } from '../../../../../app/features/portfolio';
+import {
+  selectMarginAccountPositions,
+  selectMarginAccountPositionsLoading,
+} from '../../../../../app/features/portfolio';
 import { PositionsFilterId } from '../../../../../app/features/portfolio/types';
 import { useAppSelector } from '../../../../../app/hooks';
 import { routes } from '../../../../../routes/paths';
@@ -26,9 +30,10 @@ const PER_PAGE = 8;
 export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
   positionsFilterId,
 }) => {
+  const { marginAccountId } = useParams();
   const [page, setPage] = useState<number>(0);
-  const loading = useAppSelector(selectPositionsLoading);
-  const positions = useAppSelector(selectPositions).filter(
+  const loading = useAppSelector(selectMarginAccountPositionsLoading(marginAccountId));
+  const positions = useAppSelector(selectMarginAccountPositions(marginAccountId)).filter(
     (p) => positionsFilterId === p.status.variant,
   );
   const hasPagination = positions.length > 12;

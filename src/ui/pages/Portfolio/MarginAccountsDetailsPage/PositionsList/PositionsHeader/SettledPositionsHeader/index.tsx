@@ -1,9 +1,10 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 import {
-  selectPositionsLoading,
-  selectPositionsSortOptions,
-  togglePositionSortingDirectionAction,
+  selectMarginAccountPositionsLoading,
+  selectMarginAccountPositionsSortOptions,
+  toggleMarginAccountPositionsSortingDirectionAction,
 } from '../../../../../../../app/features/portfolio';
 import { PositionSortId } from '../../../../../../../app/features/portfolio/types';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
@@ -17,16 +18,18 @@ import {
 } from '../PositionsHeader.styled';
 
 export const SettledPositionsHeader: React.FunctionComponent = () => {
+  const { marginAccountId } = useParams();
   const dispatch = useAppDispatch();
-  const sortOptions = useAppSelector(selectPositionsSortOptions);
+  const sortOptions = useAppSelector(selectMarginAccountPositionsSortOptions(marginAccountId));
   const nameSortOption = sortOptions.find((o) => o.id === 'name');
   const maturitySortOption = sortOptions.find((o) => o.id === 'maturity');
   const statusSortOption = sortOptions.find((o) => o.id === 'status');
-  const loading = useAppSelector(selectPositionsLoading);
+  const loading = useAppSelector(selectMarginAccountPositionsLoading(marginAccountId));
   const onSort = (id: PositionSortId) => () => {
     dispatch(
-      togglePositionSortingDirectionAction({
+      toggleMarginAccountPositionsSortingDirectionAction({
         sortId: id,
+        marginAccountId,
       }),
     );
   };
