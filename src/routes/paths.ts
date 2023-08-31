@@ -3,7 +3,7 @@ export const routes = {
   PORTFOLIO_POSITIONS: 'portfolio/positions',
   PORTFOLIO_OPTIMISERS: 'portfolio/optimisers',
   PORTFOLIO_MARGIN_ACCOUNTS_OVERVIEW: 'portfolio/overview',
-  PORTFOLIO_MARGIN_ACCOUNTS_DETAILS: 'portfolio/details/:marginAccountId',
+  PORTFOLIO_MARGIN_ACCOUNTS_DETAILS: 'portfolio/margin-account/:marginAccountId',
   TRADING_LEAGUE: 'trading-league',
   PROFILE: 'profile',
   VOYAGE: 'voyage',

@@ -15,7 +15,7 @@ export const Vaults: React.FunctionComponent = () => {
     if (!signer) {
       setRequired(true);
     } else {
-      navigate.toLPOptimisersDepositForm({
+      navigate.toLPOptimisersDepositFormPage({
         vaultId: selectedVault.optimiserId,
       });
     }
