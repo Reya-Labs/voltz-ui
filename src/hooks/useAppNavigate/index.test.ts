@@ -103,7 +103,7 @@ describe('useAppNavigate', () => {
 
     (generatePath as jest.Mock).mockReturnValueOnce(`lp-optimisers/deposit/${params.vaultId}`);
 
-    result.current.toLPOptimisersDepositForm(params);
+    result.current.toLPOptimisersDepositFormPage(params);
 
     expect(generatePath).toHaveBeenCalledWith(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
       actions: 'deposit',
@@ -131,5 +131,22 @@ describe('useAppNavigate', () => {
     expect(navigateMock).toHaveBeenCalledWith(
       `/lp/rollover/${params.ammId}/${params.poolId}/${params.positionId}`,
     );
+  });
+
+  it('should navigate to margin account details page', () => {
+    const { result } = renderHook(() => useAppNavigate());
+
+    const params = {
+      marginAccountId: 'abc',
+    };
+
+    (generatePath as jest.Mock).mockReturnValueOnce(
+      `portfolio/margin-account/${params.marginAccountId}`,
+    );
+
+    result.current.toMarginAccountDetailsPage(params);
+
+    expect(generatePath).toHaveBeenCalledWith(routes.PORTFOLIO_MARGIN_ACCOUNTS_DETAILS, params);
+    expect(navigateMock).toHaveBeenCalledWith(`portfolio/margin-account/${params.marginAccountId}`);
   });
 });
