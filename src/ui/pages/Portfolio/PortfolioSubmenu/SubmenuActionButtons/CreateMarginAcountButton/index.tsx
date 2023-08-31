@@ -4,8 +4,8 @@ import {
   closeCreateMarginAccountDialogAction,
   openCreateMarginAccountDialogAction,
   selectCreateMarginAccountDialogState,
-} from '../../../../../../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
+} from '../../../../../../app/features/portfolio';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { CreateMarginAccountDialog } from './CreateMarginAccountDialog';
 import { CreateMarginAcountButtonStyled } from './CreateMarginAcountButton.styled';
 
@@ -26,7 +26,7 @@ export const CreateMarginAccountButton: React.FunctionComponent = () => {
         variant="secondary"
         onClick={openDialog}
       >
-        Create a New Margin Account +
+        + Margin Account
       </CreateMarginAcountButtonStyled>
     </React.Fragment>
   );

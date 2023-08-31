@@ -147,6 +147,8 @@ describe('useAppNavigate', () => {
     result.current.toMarginAccountDetailsPage(params);
 
     expect(generatePath).toHaveBeenCalledWith(routes.PORTFOLIO_MARGIN_ACCOUNTS_DETAILS, params);
-    expect(navigateMock).toHaveBeenCalledWith(`portfolio/margin-account/${params.marginAccountId}`);
+    expect(navigateMock).toHaveBeenCalledWith(
+      `/portfolio/margin-account/${params.marginAccountId}`,
+    );
   });
 });

@@ -7,6 +7,7 @@ import {
 import { useAppDispatch } from '../../../../../app/hooks';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { isMarginAccountsLive } from '../../../../../utilities/is-margin-accounts-live';
+import { CreateMarginAccountButton } from './CreateMarginAcountButton';
 import { Box, ButtonStyled } from './SubmenuActionButtons.styled';
 import { DepositMarginDialog } from './WithdrawDepositFlow/DepositMarginDialog';
 import { WithdrawMarginDialog } from './WithdrawDepositFlow/WithdrawMarginDialog';
@@ -50,6 +51,7 @@ export const SubmenuActionButtons: React.FunctionComponent = () => {
       >
         Withdraw
       </ButtonStyled>
+      <CreateMarginAccountButton />
     </Box>
   );
 };

@@ -288,7 +288,23 @@ export const selectMarginAccountPositions =
     if (!marginAccountsPositions) {
       return [];
     }
-    return marginAccountsPositions.positions.map(mapPortfolioPositionToPortfolioUI);
+
+    const appliedSortingDirection = state.portfolio.marginAccountPositionsSortingDirection[id] || {
+      ...initialPositionsSortingDirection,
+    };
+    const positions: PositionUI[] = marginAccountsPositions.positions.map(
+      mapPortfolioPositionToPortfolioUI,
+    );
+
+    return sortPositions(positions, {
+      marginSortingDirection: appliedSortingDirection['margin'],
+      notionalSortingDirection: appliedSortingDirection['notional'],
+      statusSortingDirection: appliedSortingDirection['status'],
+      nameSortingDirection: appliedSortingDirection['name'],
+      maturitySortingDirection: appliedSortingDirection['maturity'],
+      unrealizedPNLSortingDirection: appliedSortingDirection['unrealizedPNL'],
+      realizedPNLSortingDirection: appliedSortingDirection['realizedPNL'],
+    });
   };
 
 export const selectCreateMarginAccountLoadedState = (state: RootState) => {

@@ -13,8 +13,8 @@ import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { ChainIcon } from '../../../../components/ChainIcon';
 import { CollateralDistribution } from '../../../../components/CollateralDistribution';
+import { MarginAccountsSearchField } from '../../../../components/MarginAccountsSearchField';
 import { MarginRatioDonut, MarginRatioDonutProps } from '../../../../components/MarginRatioDonut';
-import { MarginAccountsSearchField } from '../../PortfolioSubmenu/SubmenuActionButtons/WithdrawDepositFlow/MarginAccountsSearchField';
 import {
   LeftBox,
   MarginBox,
