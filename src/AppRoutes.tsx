@@ -16,7 +16,8 @@ import { LPFormPage } from './ui/pages/LPForm';
 import { LPOptimisersPage } from './ui/pages/LPOptimisers';
 import { LPOptimisersFormPage } from './ui/pages/LPOptimisersForm';
 import { PoolsPage } from './ui/pages/Pools';
-import { PortfolioMarginAccountsPage } from './ui/pages/Portfolio/MarginAccounts';
+import { MarginAccountsDetailsPage } from './ui/pages/Portfolio/MarginAccountsDetailsPage';
+import { MarginAccountsOverviewPage } from './ui/pages/Portfolio/MarginAccountsOverviewPage';
 import { PortfolioOptimisersPage } from './ui/pages/Portfolio/PortfolioOptimisers';
 import { PortfolioPositionsPage } from './ui/pages/Portfolio/PortfolioPositions';
 import { ProfilePage } from './ui/pages/Profile';
@@ -52,10 +53,10 @@ export const AppRoutes = () => {
           <Route
             element={
               <NetworkProtectedPage>
-                <PortfolioMarginAccountsPage />
+                <MarginAccountsOverviewPage />
               </NetworkProtectedPage>
             }
-            path={routes.PORTFOLIO_OVERVIEW}
+            path={routes.PORTFOLIO_MARGIN_ACCOUNTS_OVERVIEW}
           />
         ) : (
           <Route
@@ -67,6 +68,16 @@ export const AppRoutes = () => {
             path={routes.PORTFOLIO_POSITIONS}
           />
         )}
+        {isMarginAccountsLive() ? (
+          <Route
+            element={
+              <NetworkProtectedPage>
+                <MarginAccountsDetailsPage />
+              </NetworkProtectedPage>
+            }
+            path={routes.PORTFOLIO_MARGIN_ACCOUNTS_DETAILS}
+          />
+        ) : null}
         <Route
           element={
             <NetworkProtectedPage

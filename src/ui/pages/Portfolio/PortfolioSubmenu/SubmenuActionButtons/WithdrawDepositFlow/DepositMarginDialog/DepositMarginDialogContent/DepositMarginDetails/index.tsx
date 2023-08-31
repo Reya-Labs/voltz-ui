@@ -8,7 +8,7 @@ import {
 } from '../../../../../../../../../app/features/portfolio';
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
 import { useAppSelector } from '../../../../../../../../../app/hooks';
-import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../MarginAccounts/PortfolioOverview/Overview/MarginAccountList/MarginAccountEntry/MarginRatioDonut/constants';
+import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../MarginAccountsOverviewPage/PortfolioOverview/Overview/MarginAccountList/MarginAccountEntry/MarginRatioDonut/constants';
 import {
   DepositMarginDetailsBox,
   DepositMarginDetailsWrapperBox,

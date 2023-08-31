@@ -45,7 +45,7 @@ const redirects = [
 if (isMarginAccountsLive()) {
   redirects.push({
     path: routes.PORTFOLIO_POSITIONS,
-    redirectsTo: routes.PORTFOLIO_OVERVIEW,
+    redirectsTo: routes.PORTFOLIO_MARGIN_ACCOUNTS_OVERVIEW,
   });
 }
 

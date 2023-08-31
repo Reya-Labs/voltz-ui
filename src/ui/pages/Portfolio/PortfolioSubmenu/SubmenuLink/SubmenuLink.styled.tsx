@@ -3,7 +3,11 @@ import styled from '@emotion/styled';
 import { colors, primaryBodyMediumRegularCSSObject } from 'brokoli-ui';
 import { Link } from 'react-router-dom';
 
-export const SubmenuLinkStyled = styled(Link)`
+export const SubmenuLinkStyled = styled(Link, {
+  shouldForwardProp: (prop) => prop !== 'disabled',
+})<{
+  disabled: boolean;
+}>`
   cursor: pointer;
   display: flex;
   flex-direction: row;
@@ -19,6 +23,8 @@ export const SubmenuLinkStyled = styled(Link)`
   border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : '')};
+
   & path {
     stroke: ${colors.lavenderWeb3};
   }
