@@ -25,7 +25,7 @@ import { AvailableAmountsUI } from '../../../../../../../../app/features/portfol
 import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { useWallet } from '../../../../../../../../hooks/useWallet';
 import { localeParseFloat } from '../../../../../../../../utilities/localeParseFloat';
-import { MarginAccountsSearchField } from '../../MarginAccountsSearchField';
+import { MarginAccountsSearchField } from '../../../../../../../components/MarginAccountsSearchField';
 import { MarginAmountField } from '../../MarginAmountField';
 import { WithdrawMarginDetails } from './WithdrawMarginDetails';
 import { ContentBox, MidBox, TitleBox } from './WithdrawMarginDialogContent.styled';

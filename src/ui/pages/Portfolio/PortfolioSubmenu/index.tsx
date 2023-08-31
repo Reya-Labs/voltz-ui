@@ -13,6 +13,10 @@ import { PortfolioSubmenuBox, SubpagesBox } from './PortfolioSubmenu.styled';
 import { SubmenuActionButtons } from './SubmenuActionButtons';
 import { SubmenuLink } from './SubmenuLink';
 
+function clean(toLink: string): string {
+  return toLink.replace(/:\w+/g, '');
+}
+
 export const PortfolioSubmenu: React.FunctionComponent = () => {
   const { pathname } = useLocation();
   const chainId = useAppSelector(selectChainId);
@@ -20,16 +24,19 @@ export const PortfolioSubmenu: React.FunctionComponent = () => {
   const subpages = isMarginAccountsLive()
     ? [
         {
+          disabled: false,
           label: 'Overview',
-          to: `/${routes.PORTFOLIO_OVERVIEW}`,
+          to: `/${routes.PORTFOLIO_MARGIN_ACCOUNTS_OVERVIEW}`,
           Icon: OverviewIcon,
         },
         {
+          disabled: true,
           label: 'Margin Accounts',
-          to: `/${routes.PORTFOLIO_MARGIN_ACCOUNTS}`,
+          to: `/${routes.PORTFOLIO_MARGIN_ACCOUNTS_DETAILS}`,
           Icon: MarginAccountsIcon,
         },
         {
+          disabled: false,
           label: 'Optimisers',
           to: `/${routes.PORTFOLIO_OPTIMISERS}`,
           Icon: OptimisersIcon,
@@ -38,11 +45,13 @@ export const PortfolioSubmenu: React.FunctionComponent = () => {
       ]
     : [
         {
+          disabled: false,
           label: 'Positions',
           to: `/${routes.PORTFOLIO_POSITIONS}`,
           Icon: PositionsIcon,
         },
         {
+          disabled: false,
           label: 'Optimisers',
           to: `/${routes.PORTFOLIO_OPTIMISERS}`,
           Icon: OptimisersIcon,
@@ -55,8 +64,14 @@ export const PortfolioSubmenu: React.FunctionComponent = () => {
       <SubpagesBox>
         {subpages
           .filter(({ hidden }) => !hidden)
-          .map(({ label, Icon, to }) => (
-            <SubmenuLink key={to} Icon={Icon} isActive={pathname.indexOf(to) !== -1} to={to}>
+          .map(({ label, Icon, to, disabled }) => (
+            <SubmenuLink
+              key={to}
+              disabled={disabled}
+              Icon={Icon}
+              isActive={pathname.indexOf(clean(to)) !== -1}
+              to={to}
+            >
               {label}
             </SubmenuLink>
           ))}

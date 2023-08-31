@@ -7,7 +7,7 @@ import { PortfolioMarginAccount } from '../fetchMarginAccountsThunk';
 import { PortfolioPosition } from '../initialisePortfolioPositionsThunk';
 
 // Define a cache object to store promises
-const positionsCache = new Map<
+const cache = new Map<
   string,
   Promise<PortfolioPosition[] | ReturnType<typeof rejectThunkWithError>>
 >();
@@ -16,8 +16,9 @@ export const fetchMarginAccountPositionsThunk = createAsyncThunk<
   Awaited<PortfolioPosition[] | ReturnType<typeof rejectThunkWithError>>,
   {
     id: PortfolioMarginAccount['id'];
+    perPage?: number;
   }
->('portfolio/fetchMarginAccountPositions', async ({ id }, thunkAPI) => {
+>('portfolio/fetchMarginAccountPositions', async ({ id, perPage }, thunkAPI) => {
   if (!id) {
     return [];
   }
@@ -27,8 +28,8 @@ export const fetchMarginAccountPositionsThunk = createAsyncThunk<
   }
 
   // Check if the promise is already cached
-  const cacheId = `${id}`;
-  const cachedPromise = positionsCache.get(cacheId);
+  const cacheId = perPage ? `${id}-${perPage}` : id;
+  const cachedPromise = cache.get(cacheId);
   if (cachedPromise) {
     return await cachedPromise;
   }
@@ -36,13 +37,13 @@ export const fetchMarginAccountPositionsThunk = createAsyncThunk<
   // Create a new promise and cache it
   const promise = (async () => {
     try {
-      return await getMarginAccountPositions({ id });
+      return await getMarginAccountPositions({ id, perPage });
     } catch (err) {
       return rejectThunkWithError(thunkAPI, err);
     }
   })();
 
-  positionsCache.set(cacheId, promise);
+  cache.set(cacheId, promise);
 
   return await promise;
 });

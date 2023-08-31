@@ -13,8 +13,10 @@ type UseAppNavigateResult = {
   toSwapFormPage: (params: { ammId: string; poolId: string }) => void;
   toRolloverSwapFormPage: (params: { ammId: string; poolId: string; positionId: string }) => void;
   toRolloverLPFormPage: (params: { ammId: string; poolId: string; positionId: string }) => void;
-  toLPOptimisersDepositForm: (params: { vaultId: string }) => void;
+  toLPOptimisersDepositFormPage: (params: { vaultId: string }) => void;
+  toMarginAccountDetailsPage: (params: { marginAccountId: string }) => void;
 };
+
 export const useAppNavigate = (): UseAppNavigateResult => {
   const navigate = useNavigate();
 
@@ -69,7 +71,7 @@ export const useAppNavigate = (): UseAppNavigateResult => {
     navigate(`/${path}`);
   };
 
-  const toLPOptimisersDepositForm: UseAppNavigateResult['toLPOptimisersDepositForm'] = ({
+  const toLPOptimisersDepositFormPage: UseAppNavigateResult['toLPOptimisersDepositFormPage'] = ({
     vaultId,
   }) => {
     const path = generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
@@ -83,12 +85,22 @@ export const useAppNavigate = (): UseAppNavigateResult => {
     navigate(`/${routes.POOLS}`);
   };
 
+  const toMarginAccountDetailsPage: UseAppNavigateResult['toMarginAccountDetailsPage'] = ({
+    marginAccountId,
+  }) => {
+    const path = generatePath(routes.PORTFOLIO_MARGIN_ACCOUNTS_DETAILS, {
+      marginAccountId,
+    });
+    navigate(`/${path}`);
+  };
+
   return {
     toLPFormPage,
     toPoolsPage,
     toSwapFormPage,
     toRolloverSwapFormPage,
     toRolloverLPFormPage,
-    toLPOptimisersDepositForm,
+    toLPOptimisersDepositFormPage,
+    toMarginAccountDetailsPage,
   };
 };

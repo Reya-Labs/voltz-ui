@@ -8,11 +8,7 @@ export const FormBox = styled('div')`
   align-items: flex-start;
   padding: 16px 40px;
   gap: 24px;
-
-  border-width: 0px 0px 1px 1px;
-  border-style: solid;
-  border-color: ${colors.lavenderWeb8};
-  backdrop-filter: blur(4px);
+  border-bottom: 1px solid ${colors.lavenderWeb7};
 `;
 export const TitleBox = styled('div')`
   box-sizing: border-box;
@@ -26,8 +22,8 @@ export const MarginAccountBox = styled('div')`
   position: sticky;
   top: 0;
   z-index: 1;
-  background: ${colors.lavenderWeb8};
-  box-shadow: 0px 0px 1px ${colors.lavenderWeb3};
+  border-bottom: 1px solid ${colors.lavenderWeb7};
+  background: ${colors.liberty7};
 `;
 
 export const FormOuterBox = styled('div')`
@@ -38,6 +34,7 @@ export const FormOuterBox = styled('div')`
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
+  border-left: 1px solid ${colors.lavenderWeb7};
 `;
 
 export const TransactionDetailsBox = styled('div')`
@@ -51,5 +48,5 @@ export const TransactionDetailsBox = styled('div')`
   padding: 16px 40px 132px 40px;
   width: 100%;
 
-  border-bottom: 1px solid ${colors.lavenderWeb8};
+  border-bottom: 1px solid ${colors.lavenderWeb7};
 `;

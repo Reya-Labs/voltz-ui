@@ -3,6 +3,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import {
   AvailableAmountForMarginAccountDeposit,
   AvailableAmountForMarginAccountWithdraw,
+  MarginAccountSummary,
   PortfolioMarginAccount,
   PortfolioPosition,
   PortfolioSummary,
@@ -18,6 +19,7 @@ export type SliceState = {
   portfolioSummaryLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   portfolioSummary: PortfolioSummary | null;
   sortingDirection: PositionSorting;
+  marginAccountPositionsSortingDirection: Record<PortfolioMarginAccount['id'], PositionSorting>;
   marginAccountsPositions: Record<
     PortfolioMarginAccount['id'],
     {
@@ -25,9 +27,18 @@ export type SliceState = {
       positions: PortfolioPosition[];
     }
   >;
+  marginAccountsSummary: Record<
+    PortfolioMarginAccount['id'],
+    {
+      status: 'idle' | 'pending' | 'succeeded' | 'failed';
+      value: null | MarginAccountSummary;
+    }
+  >;
   marginAccountsSortingDirection: MarginAccountsSorting;
   marginAccounts: PortfolioMarginAccount[];
   marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  marginAccountsForSelection: PortfolioMarginAccount[];
+  marginAccountsForSelectionLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   totalMarginAccounts: number;
   // 0-based, see MARGIN_ACCOUNTS_INITIAL_PAGE
   page: number;
@@ -216,4 +227,25 @@ export type PortfolioSummaryFormatted = {
     compactSuffix: string;
   };
   distributions: PortfolioSummary['distributions'];
+};
+
+export type MarginAccountSummaryFormatted = {
+  name: string;
+  chainId: SupportedChainId | null;
+  positionsLength: string;
+  totalPortfolioValueUSDFormatted: string;
+  totalPortfolioMarginValueUSDFormatted: string;
+  totalPortfolioRealizedPNLValueUSDFormatted: string;
+  totalPortfolioUnrealizedPNLValueUSDFormatted: string;
+  totalPortfolioNotionalValueUSDCompactFormatted: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  totalPortfolioCollateralUSDCompactFormatted: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  marginRatioPercentage: number;
+  marginRatioHealth: 'danger' | 'warning' | 'healthy';
+  distributions: MarginAccountSummary['distributions'];
 };

@@ -2,7 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ContractReceipt } from 'ethers';
 
 import { getNextSortDirection } from '../helpers';
-import { resetMarginAccountsSortingDirection, resetPositionsSortingDirection } from './constants';
+import {
+  initialPositionsSortingDirection,
+  resetMarginAccountsSortingDirection,
+  resetPositionsSortingDirection,
+} from './constants';
 import { initialState } from './state';
 import {
   AvailableAmountForMarginAccountWithdraw,
@@ -12,10 +16,14 @@ import {
   fetchAvailableAmountsToWithdrawForMarginAccountThunk,
   fetchMarginAccountPositionsThunk,
   fetchMarginAccountsForDepositThunk,
+  fetchMarginAccountsForSelectionThunk,
   fetchMarginAccountsForWithdrawThunk,
   fetchMarginAccountsThunk,
+  fetchMarginAccountSummaryThunk,
   fetchPortfolioSummaryThunk,
   initialisePortfolioPositionsThunk,
+  MarginAccountSummary,
+  PortfolioMarginAccount,
   PortfolioPosition,
   PortfolioSummary,
   ReturnTypeFetchMarginAccounts,
@@ -138,6 +146,26 @@ const slice = createSlice({
         [sortId]: getNextSortDirection(state.sortingDirection[sortId]),
       };
     },
+    toggleMarginAccountPositionsSortingDirectionAction: (
+      state,
+      {
+        payload: { marginAccountId, sortId },
+      }: PayloadAction<{
+        sortId: PositionSortId;
+        marginAccountId?: PortfolioMarginAccount['id'];
+      }>,
+    ) => {
+      if (!marginAccountId) {
+        return;
+      }
+      const direction = state.marginAccountPositionsSortingDirection[marginAccountId] || {
+        ...initialPositionsSortingDirection,
+      };
+      state.marginAccountPositionsSortingDirection[marginAccountId] = {
+        ...resetPositionsSortingDirection,
+        [sortId]: getNextSortDirection(direction[sortId]),
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -164,6 +192,24 @@ const slice = createSlice({
       .addCase(fetchPortfolioSummaryThunk.fulfilled, (state, { payload }) => {
         state.portfolioSummaryLoadedState = 'succeeded';
         state.portfolioSummary = payload as PortfolioSummary;
+      })
+      .addCase(fetchMarginAccountSummaryThunk.pending, (state, { meta }) => {
+        state.marginAccountsSummary[meta.arg.marginAccountId] = {
+          status: 'pending',
+          value: null,
+        };
+      })
+      .addCase(fetchMarginAccountSummaryThunk.rejected, (state, { meta }) => {
+        state.marginAccountsSummary[meta.arg.marginAccountId] = {
+          status: 'failed',
+          value: null,
+        };
+      })
+      .addCase(fetchMarginAccountSummaryThunk.fulfilled, (state, { payload, meta }) => {
+        state.marginAccountsSummary[meta.arg.marginAccountId] = {
+          status: 'succeeded',
+          value: payload as MarginAccountSummary,
+        };
       })
       .addCase(fetchMarginAccountsThunk.pending, (state) => {
         state.marginAccountsLoadedState = 'pending';
@@ -295,6 +341,19 @@ const slice = createSlice({
         const { marginAccounts } = payload as ReturnTypeFetchMarginAccounts;
         state.marginAccountDepositMarginFlow.marginAccounts = marginAccounts;
       })
+      .addCase(fetchMarginAccountsForSelectionThunk.pending, (state) => {
+        state.marginAccountsForSelectionLoadedState = 'pending';
+        state.marginAccountsForSelection = [];
+      })
+      .addCase(fetchMarginAccountsForSelectionThunk.rejected, (state) => {
+        state.marginAccountsForSelectionLoadedState = 'failed';
+        state.marginAccountsForSelection = [];
+      })
+      .addCase(fetchMarginAccountsForSelectionThunk.fulfilled, (state, { payload }) => {
+        const { marginAccounts } = payload as ReturnTypeFetchMarginAccounts;
+        state.marginAccountsForSelectionLoadedState = 'succeeded';
+        state.marginAccountsForSelection = marginAccounts;
+      })
       .addCase(fetchAvailableAmountsToDepositForMarginAccountThunk.pending, (state) => {
         state.marginAccountDepositMarginFlow.availableAmountsLoadedState = 'pending';
         state.marginAccountDepositMarginFlow.availableAmounts = [];
@@ -353,6 +412,7 @@ export const {
   openCreateMarginAccountDialogAction,
   resetPortfolioStateAction,
   togglePositionSortingDirectionAction,
+  toggleMarginAccountPositionsSortingDirectionAction,
   openMarginAccountWithdrawFlowAction,
   closeMarginAccountWithdrawFlowAction,
   selectMarginAccountWithdrawFlowAction,

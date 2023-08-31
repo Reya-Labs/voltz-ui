@@ -8,7 +8,7 @@ export const PoolHeaderBox = styled('div')`
   align-items: center;
   padding: 0px 24px 0px 0px;
 
-  border-bottom: 1px solid ${colors.lavenderWeb8};
+  border-bottom: 1px solid ${colors.lavenderWeb7};
 `;
 
 export const PoolHeaderDetailsBox = styled('div')`
