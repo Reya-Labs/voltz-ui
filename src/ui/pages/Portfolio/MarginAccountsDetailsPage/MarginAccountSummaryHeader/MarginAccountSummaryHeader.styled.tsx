@@ -36,11 +36,24 @@ export const UnrealizedPNLBox = styled(BorderBox)``;
 export const TotalNotionalBox = styled(BorderBox)``;
 export const TotalCollateralBox = styled(BorderBox)``;
 export const TotalPositionsBox = styled(BorderBox)``;
-export const MarginRatioBox = styled(BorderBox)``;
+export const MarginRatioBox = styled(BorderBox)`
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+`;
 
 export const PositionDetailsBox = styled('div')`
   display: flex;
   flex-direction: row;
   width: 100%;
   box-sizing: border-box;
+`;
+
+export const MarginRatioDonutBox = styled('div')`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 8px;
+  align-items: center;
 `;

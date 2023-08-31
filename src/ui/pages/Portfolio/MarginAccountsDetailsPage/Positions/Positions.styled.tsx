@@ -9,30 +9,9 @@ export const PositionsBox = styled('div')`
   box-sizing: border-box;
 `;
 
-export const TopBox = styled('div')`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-  box-sizing: border-box;
-`;
-export const TotalPortfolioValueBox = styled('div')`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  box-sizing: border-box;
-`;
 export const PositionDetailsBox = styled('div')`
   display: flex;
   flex-direction: row;
-  width: 100%;
-  box-sizing: border-box;
-`;
-export const MidBox = styled('div')`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
   width: 100%;
   box-sizing: border-box;
 `;
@@ -67,18 +46,3 @@ const BorderBox = styled(PositionBox)`
 export const MarginBox = styled(PositionBox)``;
 export const RealizedPNLBox = styled(BorderBox)``;
 export const UnrealizedPNLBox = styled(BorderBox)``;
-export const TotalNotionalBox = styled(BorderBox)``;
-
-export const HealthStatusBox = styled(BorderBox)`
-  display: flex;
-  gap: 24px;
-`;
-
-export const HealthBox = styled('div')`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  min-width: 40px;
-  gap: 4px;
-  justify-content: center;
-`;

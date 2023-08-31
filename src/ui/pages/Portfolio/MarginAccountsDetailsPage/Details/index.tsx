@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { selectChainId } from '../../../../../app/features/network';
 import {
-  initialisePortfolioPositionsThunk,
+  fetchMarginAccountPositionsThunk,
+  fetchMarginAccountSummaryThunk,
   selectPositionsLoadedState,
 } from '../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -13,6 +15,7 @@ import { Positions } from '../Positions';
 import { DetailsBox, WrapperBox } from './Details.styled';
 
 export const DetailsPage: React.FunctionComponent = () => {
+  const { marginAccountId } = useParams();
   const { account, signer } = useWallet();
   const chainId = useAppSelector(selectChainId);
   const positionsLoadedState = useAppSelector(selectPositionsLoadedState);
@@ -25,20 +28,29 @@ export const DetailsPage: React.FunctionComponent = () => {
     if (!account) {
       return;
     }
+    if (!marginAccountId) {
+      return;
+    }
     if (positionsLoadedState === 'succeeded') {
       return;
     }
     void dispatch(
-      initialisePortfolioPositionsThunk({
+      fetchMarginAccountSummaryThunk({
         account,
+        marginAccountId,
       }),
     );
-  }, [positionsLoadedState, account, chainId, dispatch]);
+    void dispatch(
+      fetchMarginAccountPositionsThunk({
+        id: marginAccountId,
+      }),
+    );
+  }, [positionsLoadedState, marginAccountId, account, chainId, dispatch]);
   if (!chainId) {
     return null;
   }
 
-  if (!account || !signer) {
+  if (!account || !signer || !marginAccountId) {
     return (
       <ConnectWallet
         heading="Welcome to the your Portfolio"

@@ -9,6 +9,7 @@ import { MarginRatioDonut, MarginRatioDonutProps } from '../../../../components/
 import {
   MarginBox,
   MarginRatioBox,
+  MarginRatioDonutBox,
   PositionDetailsBox,
   RealizedPNLBox,
   TopBox,
@@ -147,13 +148,15 @@ export const MarginAccountSummaryHeader = () => {
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
             Margin Ratio
           </Typography>
-          <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyXSmallRegular">
-            {marginRatioPercentage}%
-          </Typography>
-          <MarginRatioDonut
-            health={marginRatioHealth as MarginRatioDonutProps['health']}
-            percentage={marginRatioPercentage}
-          />
+          <MarginRatioDonutBox>
+            <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyMediumBold">
+              {marginRatioPercentage}%
+            </Typography>
+            <MarginRatioDonut
+              health={marginRatioHealth as MarginRatioDonutProps['health']}
+              percentage={marginRatioPercentage}
+            />
+          </MarginRatioDonutBox>
         </MarginRatioBox>
       </PositionDetailsBox>
     </TopBox>
