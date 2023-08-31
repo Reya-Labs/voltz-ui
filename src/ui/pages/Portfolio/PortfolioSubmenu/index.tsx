@@ -13,6 +13,10 @@ import { PortfolioSubmenuBox, SubpagesBox } from './PortfolioSubmenu.styled';
 import { SubmenuActionButtons } from './SubmenuActionButtons';
 import { SubmenuLink } from './SubmenuLink';
 
+function clean(toLink: string): string {
+  return toLink.replace(/:\w+/g, '');
+}
+
 export const PortfolioSubmenu: React.FunctionComponent = () => {
   const { pathname } = useLocation();
   const chainId = useAppSelector(selectChainId);
@@ -65,7 +69,7 @@ export const PortfolioSubmenu: React.FunctionComponent = () => {
               key={to}
               disabled={disabled}
               Icon={Icon}
-              isActive={pathname.indexOf(to) !== -1}
+              isActive={pathname.indexOf(clean(to)) !== -1}
               to={to}
             >
               {label}
