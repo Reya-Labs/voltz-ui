@@ -8,6 +8,7 @@ import {
   defaultMarginAccountSummaryFormatted,
   defaultPortfolioSummaryFormatted,
   defaultPositionsSummaryFormatted,
+  initialPositionsSortingDirection,
   MARGIN_ACCOUNTS_SORT_CONFIG,
   POSITIONS_SORT_CONFIG,
 } from './constants';
@@ -136,6 +137,30 @@ export const selectPositionsSortOptions = (
   }));
 };
 
+export const selectMarginAccountPositionsSortOptions =
+  (id?: PortfolioMarginAccount['id']) =>
+  (
+    state: RootState,
+  ): {
+    id: PositionSortId;
+    text: string;
+    subtext?: string;
+    direction: SortDirection;
+    disabled: boolean;
+  }[] => {
+    const sortingDirection =
+      (id
+        ? state.portfolio.marginAccountPositionsSortingDirection[id]
+        : initialPositionsSortingDirection) || initialPositionsSortingDirection;
+    return Object.keys(sortingDirection).map((sortKey) => ({
+      id: sortKey as PositionSortId,
+      text: POSITIONS_SORT_CONFIG[sortKey as PositionSortId].text,
+      subtext: POSITIONS_SORT_CONFIG[sortKey as PositionSortId].subtext,
+      direction: sortingDirection[sortKey as PositionSortId],
+      disabled: POSITIONS_SORT_CONFIG[sortKey as PositionSortId].disabled,
+    }));
+  };
+
 export const selectMarginAccountsSortOptions = (
   state: RootState,
 ): {
@@ -245,14 +270,20 @@ export const selectMarginAccountPositionsLoadedState =
   };
 
 export const selectMarginAccountPositionsLoading =
-  (id: PortfolioMarginAccount['id']) =>
+  (id?: PortfolioMarginAccount['id']) =>
   (state: RootState): boolean => {
+    if (!id) {
+      return true;
+    }
     const loadedState = selectMarginAccountPositionsLoadedState(id)(state);
     return loadedState === 'idle' || loadedState === 'pending';
   };
 
 export const selectMarginAccountPositions =
-  (id: PortfolioMarginAccount['id']) => (state: RootState) => {
+  (id?: PortfolioMarginAccount['id']) => (state: RootState) => {
+    if (!id) {
+      return [];
+    }
     const marginAccountsPositions = state.portfolio.marginAccountsPositions[id];
     if (!marginAccountsPositions) {
       return [];
@@ -606,5 +637,69 @@ export const selectMarginAccountSummary =
       marginRatioHealth,
       marginRatioPercentage,
       distributions: distributions.slice(),
+    };
+  };
+
+export const selectMarginAccountPositionsSummary =
+  (id?: PortfolioMarginAccount['id']) =>
+  (state: RootState): PositionsSummaryFormatted => {
+    if (!id || selectMarginAccountPositionsLoading(id)(state)) {
+      return defaultPositionsSummaryFormatted;
+    }
+
+    const positions = selectMarginAccountPositions(id)(state);
+    const {
+      maturedPositionsLength,
+      activePositionsLength,
+      settledPositionsLength,
+      healthyPositionsLength,
+      dangerPositionsLength,
+      warningPositionsLength,
+      totalPortfolioMarginValueUSD,
+      totalPortfolioRealizedPNLValueUSD,
+      totalPortfolioNotionalValueUSD,
+      totalPortfolioUnrealizedPNLValueUSD,
+    } = getPositionsSummary(positions);
+
+    return {
+      positionsLength: positions.length.toString(),
+      activePositionsLength: activePositionsLength.toString(),
+      settledPositionsLength: settledPositionsLength.toString(),
+      maturedPositionsLength: maturedPositionsLength.toString(),
+      healthyPositionsLength: healthyPositionsLength.toString(),
+      dangerPositionsLength: dangerPositionsLength.toString(),
+      warningPositionsLength: warningPositionsLength.toString(),
+      totalPortfolioMarginValueUSDFormatted: formFormatNumber(totalPortfolioMarginValueUSD),
+      totalPortfolioNotionalValueUSDCompactFormatted: compactFormatToParts(
+        totalPortfolioNotionalValueUSD,
+      ),
+      totalPortfolioRealizedPNLValueUSDFormatted: formFormatNumber(
+        totalPortfolioRealizedPNLValueUSD,
+      ),
+      totalPortfolioUnrealizedPNLValueUSDFormatted: formFormatNumber(
+        totalPortfolioUnrealizedPNLValueUSD,
+      ),
+      totalPortfolioValueUSDFormatted: formFormatNumber(
+        totalPortfolioMarginValueUSD +
+          totalPortfolioUnrealizedPNLValueUSD +
+          totalPortfolioRealizedPNLValueUSD,
+      ),
+      filterOptions: [
+        {
+          id: 'active',
+          label: 'Active',
+          attentionPrefixText: activePositionsLength.toString(),
+        },
+        {
+          id: 'matured',
+          label: 'To settle',
+          attentionPrefixText: maturedPositionsLength.toString(),
+        },
+        {
+          id: 'settled',
+          label: 'Settled',
+          attentionPrefixText: settledPositionsLength.toString(),
+        },
+      ],
     };
   };

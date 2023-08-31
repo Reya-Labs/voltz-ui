@@ -11,6 +11,7 @@ export const initialState: SliceState = {
   createMarginAccountLoadedState: 'idle',
   marginAccounts: [],
   marginAccountsPositions: {},
+  marginAccountPositionsSortingDirection: {},
   marginAccountsSummary: {},
   totalMarginAccounts: 0,
   page: MARGIN_ACCOUNTS_INITIAL_PAGE,
