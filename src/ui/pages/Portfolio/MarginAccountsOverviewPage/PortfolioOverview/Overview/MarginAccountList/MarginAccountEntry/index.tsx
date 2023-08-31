@@ -2,6 +2,7 @@ import { ColorTokens, ToggleCaret, TokenTypography, Typography, TypographyToken 
 import React, { useState } from 'react';
 
 import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
+import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { MarginRatioDonut } from '../../../../../../../components/MarginRatioDonut';
@@ -48,13 +49,13 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
     const textsTypographyToken: TypographyToken = isLargeDesktopDevice
       ? 'primaryBodyMediumRegular'
       : 'primaryBodySmallRegular';
-
+    const { toMarginAccountDetailsPage } = useAppNavigate();
     const handleOnEntryClick = () => {
       setIsPositionListShown(!isPositionListShown);
     };
     const handleOnViewDetailsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
-      alert('todo');
+      toMarginAccountDetailsPage({ marginAccountId: id });
     };
 
     const chainIcon = <ChainIcon chainId={chainId} hideForChains={[]} />;

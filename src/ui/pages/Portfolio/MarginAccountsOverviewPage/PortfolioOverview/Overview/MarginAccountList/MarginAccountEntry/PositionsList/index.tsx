@@ -44,6 +44,7 @@ export const PositionsList: React.FunctionComponent<{
     void dispatch(
       fetchMarginAccountPositionsThunk({
         id: marginAccountId,
+        perPage: 5,
       }),
     );
   }, [dispatch, isShown, loadedState, marginAccountId]);
