@@ -3,6 +3,7 @@ import { Highlight, SearchField, SearchFieldProps, TokenTypography, Typography }
 import React, { useMemo } from 'react';
 
 import { MarginAccountUI } from '../../../../../../../app/features/portfolio/types';
+import { ChainIcon } from '../../../../../../components/ChainIcon';
 
 type MarginAccountListItemProps = SearchFieldProps['items'][0] & MarginAccountUI;
 
@@ -13,18 +14,29 @@ const Wrapper = styled('div')`
   width: 100%;
 `;
 
+const LeftWrapper = styled('div')`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+`;
+
 const MarginAccountListItem: SearchFieldProps['itemRenderer'] = (props) => {
   const { item, searchedValue } = props as {
     item: MarginAccountListItemProps;
     searchedValue?: string;
   };
-  const { name, balanceCompactFormat } = item;
+  const { chainId, name, balanceCompactFormat } = item;
   const { compactSuffix, compactNumber } = balanceCompactFormat;
+  const chainIcon = <ChainIcon chainId={chainId} hideForChains={[]} />;
   return (
     <Wrapper>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
-        <Highlight highlight={searchedValue}>{name}</Highlight>
-      </Typography>
+      <LeftWrapper>
+        {chainIcon}
+        <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Highlight highlight={searchedValue}>{name}</Highlight>
+        </Typography>
+      </LeftWrapper>
       <TokenTypography
         colorToken="lavenderWeb"
         prefixToken="$"

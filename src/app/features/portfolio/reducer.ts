@@ -16,6 +16,7 @@ import {
   fetchAvailableAmountsToWithdrawForMarginAccountThunk,
   fetchMarginAccountPositionsThunk,
   fetchMarginAccountsForDepositThunk,
+  fetchMarginAccountsForSelectionThunk,
   fetchMarginAccountsForWithdrawThunk,
   fetchMarginAccountsThunk,
   fetchMarginAccountSummaryThunk,
@@ -339,6 +340,19 @@ const slice = createSlice({
         state.marginAccountDepositMarginFlow.marginAccountsLoadedState = 'succeeded';
         const { marginAccounts } = payload as ReturnTypeFetchMarginAccounts;
         state.marginAccountDepositMarginFlow.marginAccounts = marginAccounts;
+      })
+      .addCase(fetchMarginAccountsForSelectionThunk.pending, (state) => {
+        state.marginAccountsForSelectionLoadedState = 'pending';
+        state.marginAccountsForSelection = [];
+      })
+      .addCase(fetchMarginAccountsForSelectionThunk.rejected, (state) => {
+        state.marginAccountsForSelectionLoadedState = 'failed';
+        state.marginAccountsForSelection = [];
+      })
+      .addCase(fetchMarginAccountsForSelectionThunk.fulfilled, (state, { payload }) => {
+        const { marginAccounts } = payload as ReturnTypeFetchMarginAccounts;
+        state.marginAccountsForSelectionLoadedState = 'succeeded';
+        state.marginAccountsForSelection = marginAccounts;
       })
       .addCase(fetchAvailableAmountsToDepositForMarginAccountThunk.pending, (state) => {
         state.marginAccountDepositMarginFlow.availableAmountsLoadedState = 'pending';

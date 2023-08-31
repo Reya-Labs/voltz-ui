@@ -133,6 +133,8 @@ export const defaultPortfolioSummaryFormatted: PortfolioSummaryFormatted = {
 };
 
 export const defaultMarginAccountSummaryFormatted: MarginAccountSummaryFormatted = {
+  name: '--',
+  chainId: null,
   positionsLength: '--',
   totalPortfolioValueUSDFormatted: '--',
   totalPortfolioMarginValueUSDFormatted: '--',

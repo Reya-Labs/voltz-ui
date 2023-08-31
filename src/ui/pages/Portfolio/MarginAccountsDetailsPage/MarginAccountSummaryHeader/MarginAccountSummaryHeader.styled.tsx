@@ -11,9 +11,31 @@ export const TopBox = styled('div')`
 
 export const TotalPortfolioValueBox = styled('div')`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
   box-sizing: border-box;
+  justify-content: space-between;
+`;
+export const LeftBox = styled('div')`
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  justify-content: center;
+`;
+export const RightBox = styled('div')`
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  align-items: center;
+  width: 350px;
+`;
+export const NameBox = styled('div')`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 4px;
+  align-items: center;
 `;
 
 const PositionBox = styled('div')`

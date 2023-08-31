@@ -4,6 +4,7 @@ export * from './fetchAvailableAmountsToDepositForMarginAccountThunk';
 export * from './fetchAvailableAmountsToWithdrawForMarginAccountThunk';
 export * from './fetchMarginAccountPositionsThunk';
 export * from './fetchMarginAccountsForDepositThunk';
+export * from './fetchMarginAccountsForSelectionThunk';
 export * from './fetchMarginAccountsForWithdrawThunk';
 export * from './fetchMarginAccountsThunk';
 export * from './fetchMarginAccountSummaryThunk';

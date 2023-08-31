@@ -600,7 +600,11 @@ export const selectMarginAccountSummary =
       return defaultMarginAccountSummaryFormatted;
     }
     const marginAccountSummary = state.portfolio.marginAccountsSummary[id];
-    if (!marginAccountSummary || !marginAccountSummary.value) {
+    if (
+      !marginAccountSummary ||
+      !marginAccountSummary.value ||
+      selectMarginAccountSummaryLoading(id)(state)
+    ) {
       return defaultMarginAccountSummaryFormatted;
     }
     const {
@@ -613,8 +617,12 @@ export const selectMarginAccountSummary =
       marginRatioHealth,
       marginRatioPercentage,
       distributions,
+      name,
+      chainId,
     } = marginAccountSummary.value;
     return {
+      name,
+      chainId,
       positionsLength: totalPositionsCount.toString(),
       totalPortfolioMarginValueUSDFormatted: formFormatNumber(totalPortfolioMarginValueUSD),
       totalPortfolioNotionalValueUSDCompactFormatted: compactFormatToParts(
@@ -703,3 +711,19 @@ export const selectMarginAccountPositionsSummary =
       ],
     };
   };
+
+export const selectMarginAccountsForSelectionLoadedState = (state: RootState) => {
+  return state.portfolio.marginAccountsForSelectionLoadedState;
+};
+
+export const selectMarginAccountsForSelectionLoading = (state: RootState): boolean => {
+  const loadedState = selectMarginAccountsForSelectionLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectMarginAccountsForSelectionMarginAccounts = (state: RootState) => {
+  const isLoading = selectMarginAccountsForSelectionLoading(state);
+  return isLoading
+    ? []
+    : state.portfolio.marginAccountsForSelection.map(mapMarginAccountToMarginAccountUI);
+};

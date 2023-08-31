@@ -1,17 +1,29 @@
 import { LabelTokenTypography, TokenTypography, Typography } from 'brokoli-ui';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { selectMarginAccountSummary } from '../../../../../app/features/portfolio';
-import { useAppSelector } from '../../../../../app/hooks';
+import {
+  fetchMarginAccountsForSelectionThunk,
+  selectMarginAccountsForSelectionLoading,
+  selectMarginAccountsForSelectionMarginAccounts,
+  selectMarginAccountSummary,
+} from '../../../../../app/features/portfolio';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
+import { useWallet } from '../../../../../hooks/useWallet';
+import { ChainIcon } from '../../../../components/ChainIcon';
 import { CollateralDistribution } from '../../../../components/CollateralDistribution';
 import { MarginRatioDonut, MarginRatioDonutProps } from '../../../../components/MarginRatioDonut';
+import { MarginAccountsSearchField } from '../../PortfolioSubmenu/SubmenuActionButtons/WithdrawDepositFlow/MarginAccountsSearchField';
 import {
+  LeftBox,
   MarginBox,
   MarginRatioBox,
   MarginRatioDonutBox,
+  NameBox,
   PositionDetailsBox,
   RealizedPNLBox,
+  RightBox,
   TopBox,
   TotalCollateralBox,
   TotalNotionalBox,
@@ -21,7 +33,11 @@ import {
 } from './MarginAccountSummaryHeader.styled';
 
 export const MarginAccountSummaryHeader = () => {
+  const { account } = useWallet();
+  const dispatch = useAppDispatch();
   const { marginAccountId } = useParams();
+  const marginAccounts = useAppSelector(selectMarginAccountsForSelectionMarginAccounts);
+  const marginAccountsLoading = useAppSelector(selectMarginAccountsForSelectionLoading);
 
   const {
     positionsLength,
@@ -33,22 +49,61 @@ export const MarginAccountSummaryHeader = () => {
     marginRatioHealth,
     marginRatioPercentage,
     distributions,
+    name,
+    chainId,
     totalPortfolioCollateralUSDCompactFormatted,
   } = useAppSelector(selectMarginAccountSummary(marginAccountId));
+  const { toMarginAccountDetailsPage } = useAppNavigate();
+
+  useEffect(() => {
+    if (!account) {
+      return;
+    }
+
+    void dispatch(
+      fetchMarginAccountsForSelectionThunk({
+        account,
+      }),
+    );
+  }, [dispatch, account]);
+
+  const handleOnMarginAccountClick = (id: string) => {
+    toMarginAccountDetailsPage({
+      marginAccountId: id,
+    });
+  };
+
+  const chainIcon = chainId ? <ChainIcon chainId={chainId} hideForChains={[]} /> : null;
 
   return (
     <TopBox>
       <TotalPortfolioValueBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-          Total Value (USD)
-        </Typography>
-        <TokenTypography
-          colorToken="lavenderWeb"
-          prefixToken="$"
-          token=""
-          typographyToken="secondaryBodyExtraLargeBold"
-          value={totalPortfolioValueUSDFormatted}
-        />
+        <LeftBox>
+          <NameBox>
+            {chainIcon ? chainIcon : null}
+            <TokenTypography
+              colorToken="lavenderWeb"
+              token=" Total Value (USD)"
+              typographyToken="primaryBodySmallRegular"
+              value={name}
+            />
+          </NameBox>
+          <TokenTypography
+            colorToken="lavenderWeb"
+            prefixToken="$"
+            token=""
+            typographyToken="secondaryBodyExtraLargeBold"
+            value={totalPortfolioValueUSDFormatted}
+          />
+        </LeftBox>
+        <RightBox>
+          <MarginAccountsSearchField
+            disabled={marginAccountsLoading}
+            marginAccounts={marginAccounts}
+            selectedMarginAccountId={marginAccountId || ''}
+            onMarginAccountClick={handleOnMarginAccountClick}
+          />
+        </RightBox>
       </TotalPortfolioValueBox>
       <PositionDetailsBox>
         <MarginBox>

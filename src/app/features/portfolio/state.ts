@@ -10,6 +10,8 @@ export const initialState: SliceState = {
   createMarginAccountError: '',
   createMarginAccountLoadedState: 'idle',
   marginAccounts: [],
+  marginAccountsForSelection: [],
+  marginAccountsForSelectionLoadedState: 'idle',
   marginAccountsPositions: {},
   marginAccountPositionsSortingDirection: {},
   marginAccountsSummary: {},
