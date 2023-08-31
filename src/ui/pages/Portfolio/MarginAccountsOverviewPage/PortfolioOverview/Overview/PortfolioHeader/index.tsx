@@ -3,7 +3,7 @@ import React from 'react';
 
 import { selectPortfolioSummaryFormatted } from '../../../../../../../app/features/portfolio';
 import { useAppSelector } from '../../../../../../../app/hooks';
-import { CollateralDistribution } from './CollateralDistribution';
+import { CollateralDistribution } from '../../../../../../components/CollateralDistribution';
 import {
   HealthBox,
   HealthStatusBox,

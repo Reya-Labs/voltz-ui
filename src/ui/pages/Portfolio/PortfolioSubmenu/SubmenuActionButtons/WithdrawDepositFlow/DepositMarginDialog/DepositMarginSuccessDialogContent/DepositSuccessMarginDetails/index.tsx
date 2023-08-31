@@ -10,7 +10,7 @@ import {
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
 import { useAppSelector } from '../../../../../../../../../app/hooks';
 import { ExplorerLink } from '../../../../../../../../components/ExplorerLink';
-import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../MarginAccountsOverviewPage/PortfolioOverview/Overview/MarginAccountList/MarginAccountEntry/MarginRatioDonut/constants';
+import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../../../components/MarginRatioDonut/constants';
 import {
   DepositMarginDetailsBox,
   DepositMarginDetailsWrapperBox,

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
 import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
+import { MarginRatioDonut } from '../../../../../../../components/MarginRatioDonut';
 import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
 import {
   BalanceBox,
@@ -19,7 +20,6 @@ import {
   ViewDetailsBox,
   ViewDetailsButton,
 } from './MarginAccountEntry.styled';
-import { MarginRatioDonut } from './MarginRatioDonut';
 import { PositionsList } from './PositionsList';
 
 type MarginAccountEntryProps = MarginAccountUI & {
