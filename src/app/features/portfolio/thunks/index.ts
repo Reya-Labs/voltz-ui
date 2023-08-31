@@ -6,6 +6,7 @@ export * from './fetchMarginAccountPositionsThunk';
 export * from './fetchMarginAccountsForDepositThunk';
 export * from './fetchMarginAccountsForWithdrawThunk';
 export * from './fetchMarginAccountsThunk';
+export * from './fetchMarginAccountSummaryThunk';
 export * from './fetchPortfolioSummaryThunk';
 export * from './initialisePortfolioPositionsThunk';
 export * from './simulateDepositMarginFromMarginAccountThunk';

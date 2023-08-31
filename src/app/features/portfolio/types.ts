@@ -3,6 +3,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import {
   AvailableAmountForMarginAccountDeposit,
   AvailableAmountForMarginAccountWithdraw,
+  MarginAccountSummary,
   PortfolioMarginAccount,
   PortfolioPosition,
   PortfolioSummary,
@@ -23,6 +24,13 @@ export type SliceState = {
     {
       status: 'idle' | 'pending' | 'succeeded' | 'failed';
       positions: PortfolioPosition[];
+    }
+  >;
+  marginAccountsSummary: Record<
+    PortfolioMarginAccount['id'],
+    {
+      status: 'idle' | 'pending' | 'succeeded' | 'failed';
+      value: null | MarginAccountSummary;
     }
   >;
   marginAccountsSortingDirection: MarginAccountsSorting;
@@ -216,4 +224,22 @@ export type PortfolioSummaryFormatted = {
     compactSuffix: string;
   };
   distributions: PortfolioSummary['distributions'];
+};
+
+export type MarginAccountSummaryFormatted = {
+  positionsLength: string;
+  totalPortfolioValueUSDFormatted: string;
+  totalPortfolioMarginValueUSDFormatted: string;
+  totalPortfolioRealizedPNLValueUSDFormatted: string;
+  totalPortfolioUnrealizedPNLValueUSDFormatted: string;
+  totalPortfolioNotionalValueUSDCompactFormatted: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  totalPortfolioCollateralUSDCompactFormatted: {
+    compactNumber: string;
+    compactSuffix: string;
+  };
+  marginRatioPercentage: number;
+  marginRatioHealth: 'danger' | 'warning' | 'healthy';
 };

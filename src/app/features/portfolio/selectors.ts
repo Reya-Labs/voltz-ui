@@ -5,6 +5,7 @@ import { compactFormat, compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { formFormatNumber } from '../forms/common';
 import {
+  defaultMarginAccountSummaryFormatted,
   defaultPortfolioSummaryFormatted,
   defaultPositionsSummaryFormatted,
   MARGIN_ACCOUNTS_SORT_CONFIG,
@@ -545,3 +546,60 @@ export const selectMarginAccountDepositFlowEtherscanLink = (state: RootState) =>
     state.portfolio.marginAccountDepositMarginFlow.txHash || '',
   );
 };
+
+export const selectMarginAccountSummaryLoadedState =
+  (id: PortfolioMarginAccount['id']) => (state: RootState) => {
+    const marginAccountSummary = state.portfolio.marginAccountsSummary[id];
+    if (!marginAccountSummary || !marginAccountSummary.value) {
+      return 'idle';
+    }
+    return marginAccountSummary.status;
+  };
+
+export const selectMarginAccountSummaryLoading =
+  (id: PortfolioMarginAccount['id']) =>
+  (state: RootState): boolean => {
+    const loadedState = selectMarginAccountSummaryLoadedState(id)(state);
+    return loadedState === 'idle' || loadedState === 'pending';
+  };
+
+export const selectMarginAccountSummary =
+  (id: PortfolioMarginAccount['id']) => (state: RootState) => {
+    const marginAccountSummary = state.portfolio.marginAccountsSummary[id];
+    if (!marginAccountSummary || !marginAccountSummary.value) {
+      return defaultMarginAccountSummaryFormatted;
+    }
+    const {
+      totalPositionsCount,
+      totalPortfolioCollateralValueUSD,
+      totalPortfolioRealizedPNLValueUSD,
+      totalPortfolioMarginValueUSD,
+      totalPortfolioNotionalValueUSD,
+      totalPortfolioUnrealizedPNLValueUSD,
+      marginRatioHealth,
+      marginRatioPercentage,
+    } = marginAccountSummary.value;
+    return {
+      positionsLength: totalPositionsCount.toString(),
+      totalPortfolioMarginValueUSDFormatted: formFormatNumber(totalPortfolioMarginValueUSD),
+      totalPortfolioNotionalValueUSDCompactFormatted: compactFormatToParts(
+        totalPortfolioNotionalValueUSD,
+      ),
+      totalPortfolioRealizedPNLValueUSDFormatted: formFormatNumber(
+        totalPortfolioRealizedPNLValueUSD,
+      ),
+      totalPortfolioUnrealizedPNLValueUSDFormatted: formFormatNumber(
+        totalPortfolioUnrealizedPNLValueUSD,
+      ),
+      totalPortfolioValueUSDFormatted: formFormatNumber(
+        totalPortfolioMarginValueUSD +
+          totalPortfolioUnrealizedPNLValueUSD +
+          totalPortfolioRealizedPNLValueUSD,
+      ),
+      totalPortfolioCollateralUSDCompactFormatted: compactFormatToParts(
+        totalPortfolioCollateralValueUSD,
+      ),
+      marginRatioHealth,
+      marginRatioPercentage,
+    };
+  };

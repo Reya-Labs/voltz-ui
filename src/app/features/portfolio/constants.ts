@@ -1,6 +1,7 @@
 import {
   MarginAccountSortId,
   MarginAccountsSorting,
+  MarginAccountSummaryFormatted,
   PortfolioSummaryFormatted,
   PositionSortId,
   PositionSorting,
@@ -129,6 +130,24 @@ export const defaultPortfolioSummaryFormatted: PortfolioSummaryFormatted = {
     compactSuffix: '',
   },
   distributions: [],
+};
+
+export const defaultMarginAccountSummaryFormatted: MarginAccountSummaryFormatted = {
+  positionsLength: '--',
+  totalPortfolioValueUSDFormatted: '--',
+  totalPortfolioMarginValueUSDFormatted: '--',
+  totalPortfolioRealizedPNLValueUSDFormatted: '--',
+  totalPortfolioUnrealizedPNLValueUSDFormatted: '--',
+  totalPortfolioNotionalValueUSDCompactFormatted: {
+    compactNumber: '--',
+    compactSuffix: '',
+  },
+  totalPortfolioCollateralUSDCompactFormatted: {
+    compactNumber: '--',
+    compactSuffix: '',
+  },
+  marginRatioPercentage: 0,
+  marginRatioHealth: 'danger',
 };
 
 export const MARGIN_ACCOUNTS_PER_PAGE = 8;
