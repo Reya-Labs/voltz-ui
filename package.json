@@ -128,7 +128,7 @@
   "resolutions": {
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0",
-    "@voltz-protocol/api-sdk-v2": "1.21.0"
+    "@voltz-protocol/api-sdk-v2": "1.22.0"
   },
   "dependencies": {
     "@emotion/react": "11.7.1",
@@ -138,10 +138,10 @@
     "@reduxjs/toolkit": "1.9.5",
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0",
-    "@voltz-protocol/api-sdk-v2": "1.21.0",
+    "@voltz-protocol/api-sdk-v2": "1.22.0",
     "@voltz-protocol/community-sdk": "1.5.2",
-    "@voltz-protocol/sdk-v1-stateless": "1.27.15",
-    "@voltz-protocol/sdk-v2": "1.56.2",
+    "@voltz-protocol/sdk-v1-stateless": "1.27.16",
+    "@voltz-protocol/sdk-v2": "1.56.3",
     "@voltz-protocol/v1-sdk": "1.176.4",
     "@walletconnect/ethereum-provider": "2.9.1",
     "@walletconnect/modal": "2.6.1",
