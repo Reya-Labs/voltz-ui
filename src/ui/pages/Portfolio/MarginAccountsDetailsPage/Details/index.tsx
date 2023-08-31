@@ -8,10 +8,11 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useWallet } from '../../../../../hooks/useWallet';
 import { ConnectWallet } from '../../../../components/ConnectWallet';
+import { MarginAccountSummaryHeader } from '../MarginAccountSummaryHeader';
 import { Positions } from '../Positions';
-import { PortfolioPositionsBox } from './PortfolioPositions.styled';
+import { DetailsBox, WrapperBox } from './Details.styled';
 
-export const PortfolioPositions: React.FunctionComponent = () => {
+export const DetailsPage: React.FunctionComponent = () => {
   const { account, signer } = useWallet();
   const chainId = useAppSelector(selectChainId);
   const positionsLoadedState = useAppSelector(selectPositionsLoadedState);
@@ -47,8 +48,11 @@ export const PortfolioPositions: React.FunctionComponent = () => {
   }
 
   return (
-    <PortfolioPositionsBox>
-      <Positions />
-    </PortfolioPositionsBox>
+    <DetailsBox>
+      <WrapperBox>
+        <MarginAccountSummaryHeader />
+        <Positions />
+      </WrapperBox>
+    </DetailsBox>
   );
 };

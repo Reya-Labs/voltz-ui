@@ -564,7 +564,10 @@ export const selectMarginAccountSummaryLoading =
   };
 
 export const selectMarginAccountSummary =
-  (id: PortfolioMarginAccount['id']) => (state: RootState) => {
+  (id?: PortfolioMarginAccount['id']) => (state: RootState) => {
+    if (!id) {
+      return defaultMarginAccountSummaryFormatted;
+    }
     const marginAccountSummary = state.portfolio.marginAccountsSummary[id];
     if (!marginAccountSummary || !marginAccountSummary.value) {
       return defaultMarginAccountSummaryFormatted;
@@ -578,6 +581,7 @@ export const selectMarginAccountSummary =
       totalPortfolioUnrealizedPNLValueUSD,
       marginRatioHealth,
       marginRatioPercentage,
+      distributions,
     } = marginAccountSummary.value;
     return {
       positionsLength: totalPositionsCount.toString(),
@@ -601,5 +605,6 @@ export const selectMarginAccountSummary =
       ),
       marginRatioHealth,
       marginRatioPercentage,
+      distributions: distributions.slice(),
     };
   };

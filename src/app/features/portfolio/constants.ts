@@ -148,6 +148,7 @@ export const defaultMarginAccountSummaryFormatted: MarginAccountSummaryFormatted
   },
   marginRatioPercentage: 0,
   marginRatioHealth: 'danger',
+  distributions: [],
 };
 
 export const MARGIN_ACCOUNTS_PER_PAGE = 8;

@@ -242,4 +242,5 @@ export type MarginAccountSummaryFormatted = {
   };
   marginRatioPercentage: number;
   marginRatioHealth: 'danger' | 'warning' | 'healthy';
+  distributions: MarginAccountSummary['distributions'];
 };
