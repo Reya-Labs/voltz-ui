@@ -155,3 +155,4 @@ export const defaultMarginAccountSummaryFormatted: MarginAccountSummaryFormatted
 
 export const MARGIN_ACCOUNTS_PER_PAGE = 8;
 export const MARGIN_ACCOUNTS_INITIAL_PAGE = 0;
+export const MARGIN_ACCOUNT_POSITIONS_IN_OVERVIEW_COUNT = 5;

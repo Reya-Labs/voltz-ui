@@ -9,6 +9,7 @@ import {
   defaultPortfolioSummaryFormatted,
   defaultPositionsSummaryFormatted,
   initialPositionsSortingDirection,
+  MARGIN_ACCOUNT_POSITIONS_IN_OVERVIEW_COUNT,
   MARGIN_ACCOUNTS_SORT_CONFIG,
   POSITIONS_SORT_CONFIG,
 } from './constants';
@@ -743,3 +744,12 @@ export const selectMarginAccountsForSelectionMarginAccounts = (state: RootState)
     ? []
     : state.portfolio.marginAccountsForSelection.map(mapMarginAccountToMarginAccountUI);
 };
+
+export const selectMarginAccountPositionsForOverview =
+  (id?: PortfolioMarginAccount['id']) => (state: RootState) => {
+    if (!id) {
+      return [];
+    }
+    const positions = selectMarginAccountPositions(id)(state);
+    return positions.slice(0, MARGIN_ACCOUNT_POSITIONS_IN_OVERVIEW_COUNT);
+  };

@@ -4,7 +4,7 @@ import AnimateHeight from 'react-animate-height';
 
 import {
   fetchMarginAccountPositionsThunk,
-  selectMarginAccountPositions,
+  selectMarginAccountPositionsForOverview,
   selectMarginAccountPositionsLoadedState,
   selectMarginAccountPositionsLoading,
 } from '../../../../../../../../../app/features/portfolio';
@@ -26,7 +26,7 @@ export const PositionsList: React.FunctionComponent<{
 }> = ({ marginAccountId, isShown }) => {
   const loading = useAppSelector(selectMarginAccountPositionsLoading(marginAccountId));
   const loadedState = useAppSelector(selectMarginAccountPositionsLoadedState(marginAccountId));
-  const positions = useAppSelector(selectMarginAccountPositions(marginAccountId));
+  const positions = useAppSelector(selectMarginAccountPositionsForOverview(marginAccountId));
   const [height, setHeight] = useState<'auto' | number>(0);
   const dispatch = useAppDispatch();
 
