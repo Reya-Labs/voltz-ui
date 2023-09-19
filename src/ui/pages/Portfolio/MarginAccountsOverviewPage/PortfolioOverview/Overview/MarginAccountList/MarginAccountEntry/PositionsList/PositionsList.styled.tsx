@@ -15,7 +15,7 @@ export const PositionsHeaderAndListBox = styled('div')`
   width: 100%;
   box-sizing: border-box;
   border-radius: 0px 0px 8px 8px;
-  padding: 8px 4px;
+  padding: 8px;
   border: 1px solid ${colors.lavenderWeb7};
   border-top: 0px;
 `;

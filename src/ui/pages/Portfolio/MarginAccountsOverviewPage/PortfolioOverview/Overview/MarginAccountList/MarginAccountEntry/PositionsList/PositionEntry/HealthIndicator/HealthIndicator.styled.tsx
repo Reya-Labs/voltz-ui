@@ -4,5 +4,5 @@ export const HealthIndicatorBox = styled('div')`
   position: absolute;
   z-index: 0;
   top: 10px;
-  right: -8px;
+  right: -6px;
 `;
