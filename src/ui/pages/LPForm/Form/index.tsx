@@ -1,14 +1,14 @@
 import { Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { FixedRangeFields } from './FixedRangeFields';
 import {
   FormBox,
   FormOuterBox,
   MarginAccountBox,
   TitleBox,
   TransactionDetailsBox,
-} from './Form.styled';
+} from '../../../components/FormStyled';
+import { FixedRangeFields } from './FixedRangeFields';
 import { LeverageField } from './LeverageField';
 import { LPConfirmationFlow } from './LPConfirmationFlow';
 import { MarginAccount } from './MarginAccount';

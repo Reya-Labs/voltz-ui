@@ -178,6 +178,7 @@
     "no-debugger": "error",
     "testing-library/no-node-access": "warn",
     "testing-library/prefer-find-by": "off",
-    "jest/no-conditional-expect": "off"
+    "jest/no-conditional-expect": "off",
+    "no-useless-return": "error",
   }
 }
