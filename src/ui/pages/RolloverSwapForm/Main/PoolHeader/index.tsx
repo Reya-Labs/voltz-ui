@@ -38,7 +38,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
 
   const handleOnPoolItemClick = ({ routePoolId, routeAmmId }: PoolUI) => {
     dispatch(resetStateAction());
-    navigate.toSwapFormPage({
+    navigate.toDeprecatedSwapFormPage({
       ammId: routeAmmId,
       poolId: routePoolId,
     });

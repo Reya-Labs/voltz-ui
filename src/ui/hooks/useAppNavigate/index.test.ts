@@ -67,9 +67,9 @@ describe('useAppNavigate', () => {
 
     (generatePath as jest.Mock).mockReturnValueOnce(`trader/swap/${params.ammId}/${params.poolId}`);
 
-    result.current.toSwapFormPage(params);
+    result.current.toDeprecatedSwapFormPage(params);
 
-    expect(generatePath).toHaveBeenCalledWith(routes.TRADER_SWAP_FORM, params);
+    expect(generatePath).toHaveBeenCalledWith(routes.DEPRECATED_TRADER_SWAP_FORM, params);
     expect(navigateMock).toHaveBeenCalledWith(`/trader/swap/${params.ammId}/${params.poolId}`);
   });
 

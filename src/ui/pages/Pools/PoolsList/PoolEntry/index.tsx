@@ -132,7 +132,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     };
 
     const navigateToSwapFormPage = () => {
-      navigate.toSwapFormPage({
+      navigate.toDeprecatedSwapFormPage({
         ammId: routeAmmId,
         poolId: routePoolId,
       });

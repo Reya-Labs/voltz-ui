@@ -10,7 +10,7 @@ import { Form } from './Form';
 import { useSwapFormAMM } from './hooks/useSwapFormAMM';
 import { Main } from './Main';
 
-export const SwapFormPage: React.FunctionComponent = () => {
+export const DeprecatedSwapFormPage: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
   const { noAMMFound, loading, error } = useSwapFormAMM();

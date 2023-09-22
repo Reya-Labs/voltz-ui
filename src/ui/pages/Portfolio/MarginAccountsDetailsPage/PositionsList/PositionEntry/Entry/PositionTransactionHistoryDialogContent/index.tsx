@@ -83,7 +83,7 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<
   };
 
   const navigateToSwapFormPage = () => {
-    navigate.toSwapFormPage({
+    navigate.toDeprecatedSwapFormPage({
       ammId: routeAmmId,
       poolId: routePoolId,
     });

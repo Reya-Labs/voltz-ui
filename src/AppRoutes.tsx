@@ -12,7 +12,7 @@ import { Page } from './ui/components/Page';
 import { useChainChange } from './ui/hooks/useChainChange';
 import { useInitializeGoogleTagManager } from './ui/hooks/useInitializeGoogleTagManager';
 import { useReferrer } from './ui/hooks/useReferrer';
-import { SwapFormPage } from './ui/pages/Deprecated/SwapForm';
+import { DeprecatedSwapFormPage } from './ui/pages/Deprecated/SwapForm';
 import { LPFormPage } from './ui/pages/LPForm';
 import { LPOptimisersPage } from './ui/pages/LPOptimisers';
 import { LPOptimisersFormPage } from './ui/pages/LPOptimisersForm';
@@ -117,10 +117,10 @@ export const AppRoutes = () => {
         <Route
           element={
             <NetworkProtectedPage>
-              <SwapFormPage />
+              <DeprecatedSwapFormPage />
             </NetworkProtectedPage>
           }
-          path={routes.TRADER_SWAP_FORM}
+          path={routes.DEPRECATED_TRADER_SWAP_FORM}
         />
         <Route
           element={
