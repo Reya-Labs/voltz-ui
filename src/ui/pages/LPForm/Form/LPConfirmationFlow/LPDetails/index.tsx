@@ -1,6 +1,7 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../../app';
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
@@ -9,7 +10,6 @@ import {
   selectUserInputFixedLower,
   selectUserInputFixedUpper,
 } from '../../../../../../app/features/forms/lps/lp';
-import { useAppSelector } from '../../../../../../app/hooks';
 import { DetailBox, DetailsBox } from './LPDetails.styled';
 
 type LPDetailsProps = {};

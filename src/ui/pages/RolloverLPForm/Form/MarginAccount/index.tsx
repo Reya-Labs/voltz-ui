@@ -1,11 +1,11 @@
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import {
   selectAMMTokenFormatted,
   selectMarginAccountName,
   selectPositionMarginFormatted,
 } from '../../../../../app/features/forms/lps/rollover-lp';
-import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAccountFormPreview } from '../../../../components/MarginAccountFormPreview';
 
 type MarginAccountProps = {};

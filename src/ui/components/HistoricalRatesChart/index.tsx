@@ -2,14 +2,14 @@ import { Granularity } from '@voltz-protocol/v1-sdk';
 import { LineChart, RainbowLoader } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../app';
 import {
   fetchHistoricalRatesThunk,
   selectHistoricalRates,
   selectHistoricalRatesStatus,
 } from '../../../app/features/historical-rates';
 import { selectChainId } from '../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
+import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
 import {
   ChartBox,

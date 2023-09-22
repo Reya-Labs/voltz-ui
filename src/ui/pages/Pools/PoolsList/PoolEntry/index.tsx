@@ -2,15 +2,13 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import { MAX_POOL_CAP } from '../../../../../app/features/aMMs';
 import {
   selectChainChangeState,
   selectChainId,
   setChainIdThunk,
 } from '../../../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../components/ChainIcon';
 import {
   MarketTokenInformation,
@@ -18,6 +16,8 @@ import {
 } from '../../../../components/MarketTokenInformation';
 import { TestNetIndicator } from '../../../../components/TestNetIndicator';
 import { V2EntryInformation } from '../../../../components/V2EntryInformation';
+import { useAppNavigate } from '../../../../hooks/useAppNavigate';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import {
   ButtonStyled,
   ChainIconContainer,
@@ -132,7 +132,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     };
 
     const navigateToSwapFormPage = () => {
-      navigate.toSwapFormPage({
+      navigate.toDeprecatedSwapFormPage({
         ammId: routeAmmId,
         poolId: routePoolId,
       });

@@ -2,17 +2,17 @@ import { submitAllBatchesForFee } from '@voltz-protocol/v1-sdk';
 import { Button, Dialog, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useEffect, useReducer, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import { formFormatNumber } from '../../../../../app/features/forms/common';
 import {
   OptimiserInfo,
   updateOptimiserStateAction,
 } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useWallet } from '../../../../../hooks/useWallet';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../../utilities/getInfuraKey';
+import { useWallet } from '../../../../hooks/useWallet';
 import { GasCost } from '../GasCost/GasCost';
 import { batchBudgetReducer, initialState } from './batchBudgetReducer';
 import {

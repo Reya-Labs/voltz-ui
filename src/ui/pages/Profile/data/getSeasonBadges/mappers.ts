@@ -1,6 +1,6 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { Season } from '../../../../../hooks/season/types';
+import { Season } from '../../../../hooks/season/types';
 import { BadgeVariant, NonProgrammaticBadges } from './types';
 
 type BadgeTypeBadgeVariant = Record<string, BadgeVariant>;

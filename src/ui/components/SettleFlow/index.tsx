@@ -1,14 +1,14 @@
 import { Dialog } from 'brokoli-ui';
 import React, { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../app';
 import {
   getInfoPostSettlePositionThunk,
   selectSettlePosition,
   selectSettleStep,
   selectSettleVariant,
 } from '../../../app/features/settle-flow';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { useWallet } from '../../../hooks/useWallet';
+import { useWallet } from '../../hooks/useWallet';
 import { SettleCompletedStep } from './SettleCompletedStep';
 import { SettleConfirmationStep } from './SettleConfirmationStep';
 import { WaitingForConfirmationStep } from './WaitingForConfirmationStep';

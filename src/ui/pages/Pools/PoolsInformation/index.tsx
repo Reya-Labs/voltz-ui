@@ -1,14 +1,14 @@
 import { LabelTokenTypography, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../app';
 import {
   selectPoolFilterOptions,
   selectPoolsSize,
   togglePoolFilterAction,
 } from '../../../../app/features/aMMs';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { usePoolsInformation } from '../../../../hooks/usePoolsInformation';
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
+import { usePoolsInformation } from '../../../hooks/usePoolsInformation';
+import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import {
   FilterBox,
   FiltersBox,

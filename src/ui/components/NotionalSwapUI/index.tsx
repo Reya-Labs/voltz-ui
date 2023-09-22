@@ -2,8 +2,8 @@ import { TokenTypography, Typography, TypographyToken, TypographyWithTooltip } f
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import { formatNumber } from '../../../utilities/number';
+import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { ReactComponent as ArrowsSvg } from './arrows.svg';
 import {
   BottomTextContent,

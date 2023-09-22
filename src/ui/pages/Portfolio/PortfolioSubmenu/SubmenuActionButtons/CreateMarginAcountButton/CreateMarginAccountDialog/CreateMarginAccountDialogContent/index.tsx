@@ -1,13 +1,13 @@
 import { Button, CloseButton, TextField, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../../../app';
 import {
   createMarginAccountThunk,
   selectCreateMarginAccountError,
   selectCreateMarginAccountLoadedState,
 } from '../../../../../../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
-import { useWallet } from '../../../../../../../../hooks/useWallet';
+import { useWallet } from '../../../../../../../hooks/useWallet';
 import { ContentBox, TitleBox } from './CreateMarginAccountDialogContent.styled';
 
 export const CreateMarginAccountDialogContent: React.FunctionComponent<{

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useAppSelector } from '../../../../app';
 import {
   selectFixedRateInfo,
   selectInfoPostSwapAverageFixedRate,
@@ -9,7 +10,6 @@ import {
   selectRolloverSwapFormAMM,
   selectVariableRateInfo,
 } from '../../../../app/features/forms/trader/rollover-swap';
-import { useAppSelector } from '../../../../app/hooks';
 import { isV2AMM } from '../../../../utilities/amm';
 import { AlphaPassFlow } from '../../../components/AlphaPassFlow';
 import { CashFlowCalculator } from '../../../components/CashflowCalculator';

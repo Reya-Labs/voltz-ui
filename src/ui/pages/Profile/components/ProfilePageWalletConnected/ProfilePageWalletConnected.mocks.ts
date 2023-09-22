@@ -1,4 +1,4 @@
-import { Season } from '../../../../../hooks/season/types';
+import { Season } from '../../../../hooks/season/types';
 import { BadgeVariant } from '../../data/getSeasonBadges';
 
 type CollectionBadge = {

@@ -1,6 +1,7 @@
 import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import {
   selectIsMarginRequiredError,
@@ -9,7 +10,6 @@ import {
   selectUserInputMarginInfo,
   selectWalletBalance,
 } from '../../../../../app/features/forms/lps/lp';
-import { useAppSelector } from '../../../../../app/hooks';
 import { MarginAmountFieldBox } from './MarginAmountField.styled';
 
 type NewMarginAmountFieldUIProps = {

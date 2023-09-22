@@ -2,15 +2,15 @@ import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useAppDispatch, useAppSelector } from '../../../../app';
 import {
   selectLpFormAMM,
   selectLpFormPositionsFetchingStatus,
   selectPoolLpInfoStatus,
   setLpFormAMMAction,
 } from '../../../../app/features/forms/lps/lp';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useAMMs } from '../../../../hooks/useAMMs';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
+import { useAMMs } from '../../../hooks/useAMMs';
 import { useGetInfoPostLP } from './useGetInfoPostLP';
 import { useGetPoolLpInfo } from './useGetPoolLpInfo';
 import { useGetWalletBalanceAndUnderlyingTokenAllowance } from './useGetWalletBalanceAndUnderlyingTokenAllowance';

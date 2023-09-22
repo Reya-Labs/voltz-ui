@@ -2,14 +2,14 @@ import { TypographyToken } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   selectRolloverSwapFormAMM,
   selectUserInputMarginInfo,
   setMarginAmountAction,
 } from '../../../../../app/features/forms/trader/rollover-swap';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { NewMarginAmountFieldUI } from './NewMarginAmountFieldUI';
 type NotionalAmountProps = {};
 

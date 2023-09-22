@@ -1,6 +1,7 @@
 import { ExternalLink, TokenTypography, Typography, TypographyWithTooltip } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../app';
 import {
   selectAMMMaturityFormatted,
   selectAMMToken,
@@ -15,7 +16,6 @@ import {
   selectIsGLP28June,
   selectSettleVariant,
 } from '../../../../app/features/settle-flow';
-import { useAppSelector } from '../../../../app/hooks';
 import { RealizedPNLDetails } from '../../RealizedPNLDetails';
 import { DetailBox, DetailsBox } from './SettleDetails.styled';
 

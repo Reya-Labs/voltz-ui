@@ -1,7 +1,7 @@
 import { Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { useWallet } from '../../../hooks/useWallet';
+import { useWallet } from '../../hooks/useWallet';
 import { ContainerBox } from './ConnectSupportedNetwork.styled';
 
 type ConnectSupportedNetworkProps = {

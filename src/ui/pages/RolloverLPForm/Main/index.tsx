@@ -1,12 +1,12 @@
 import React from 'react';
 
+import { useAppSelector } from '../../../../app';
 import {
   selectFixedRateInfo,
   selectPreviousPositionId,
   selectRolloverLpFormAMM,
   selectVariableRateInfo,
 } from '../../../../app/features/forms/lps/rollover-lp';
-import { useAppSelector } from '../../../../app/hooks';
 import { isV2AMM } from '../../../../utilities/amm';
 import { AlphaPassFlow } from '../../../components/AlphaPassFlow';
 import { FormTransactionHistory } from '../../../components/FormTransactionHistory';

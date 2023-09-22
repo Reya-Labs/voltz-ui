@@ -1,9 +1,9 @@
 import { TokenField, TokenFieldProps, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import { selectUserInputNotionalInfo } from '../../../../../app/features/forms/lps/rollover-lp';
-import { useAppSelector } from '../../../../../app/hooks';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 
 type NewNotionalAmountFieldUIProps = {

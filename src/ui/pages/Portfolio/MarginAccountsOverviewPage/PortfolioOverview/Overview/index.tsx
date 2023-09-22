@@ -1,8 +1,8 @@
 import { Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../../app';
 import { selectTotalMarginAccountsFormatted } from '../../../../../../app/features/portfolio';
-import { useAppSelector } from '../../../../../../app/hooks';
 import { MarginAccountList } from './MarginAccountList';
 import { MarginAccountsSortOptions } from './MarginAccountsSortOptions';
 import { BottomBox, LeftBox, OverviewBox, PositionsSelectorBox, RightBox } from './Overview.styled';

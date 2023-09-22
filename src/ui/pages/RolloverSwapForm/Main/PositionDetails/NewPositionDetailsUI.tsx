@@ -1,15 +1,15 @@
 import { LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import {
   selectNewPositionCompactNotional,
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
   selectProspectiveSwapMode,
 } from '../../../../../app/features/forms/trader/rollover-swap';
-import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
-import { MODE_TEXT_MAP } from '../../../SwapForm/helpers';
+import { MODE_TEXT_MAP } from '../../../Deprecated/SwapForm/helpers';
 import { MODE_COLOR_TOKEN_MAP } from '../../helpers';
 import {
   CashFlowBox,

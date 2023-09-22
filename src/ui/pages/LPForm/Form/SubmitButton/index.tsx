@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   approveUnderlyingTokenThunk,
   closeLpConfirmationFlowAction,
@@ -10,7 +11,6 @@ import {
   selectSubmitButtonInfo,
   selectSubmitButtonText,
 } from '../../../../../app/features/forms/lps/lp';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { FormSubmitButton } from '../../../../components/FormSubmitButton';
 
 type SubmitButtonProps = {};

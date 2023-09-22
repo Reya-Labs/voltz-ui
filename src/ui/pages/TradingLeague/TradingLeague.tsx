@@ -1,16 +1,16 @@
 import { RankType } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useMemo, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../app';
 import { selectChainId } from '../../../app/features/network';
 import {
   fetchRankingsThunk,
   selectTradingLeagueRankings,
   selectTradingLeagueStatus,
 } from '../../../app/features/trading-league';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { useCurrentSeason } from '../../../hooks/season/useCurrentSeason';
-import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
+import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
+import { useWallet } from '../../hooks/useWallet';
 import { Leaderboard } from './Leaderboard/Leaderboard';
 import { TradingLeagueBox } from './TradingLeague.styled';
 

@@ -1,9 +1,9 @@
 import fetch from 'isomorphic-fetch';
 
 import { WELCOME } from '../../../app/features/redirects';
-import { REFERRAL_AND_SIGNATURES_URL } from '../../../contexts/WalletContext/services/constants';
 import { REFERRER_QUERY_PARAM_KEY } from '../../../utilities/referrer-store/constants';
 import { getSentryTracker } from '../../../utilities/sentry';
+import { REFERRAL_AND_SIGNATURES_URL } from '../../contexts/WalletContext/services/constants';
 
 const cached: Record<string, string> = {};
 export const getReferrerLink = async (account: string) => {

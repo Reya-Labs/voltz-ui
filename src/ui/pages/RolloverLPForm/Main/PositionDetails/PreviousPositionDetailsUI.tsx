@@ -1,6 +1,7 @@
 import { LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import {
   selectPreviousPositionCompactNotional,
   selectPreviousPositionDepositedMargin,
@@ -11,7 +12,6 @@ import {
   selectPreviousPositionRealizedPnLTotalFormatted,
   selectPreviousPositionSettlingBalance,
 } from '../../../../../app/features/forms/lps/rollover-lp';
-import { useAppSelector } from '../../../../../app/hooks';
 import { PnLDetailsWithTooltip } from '../../../../components/PnLDetailsWithTooltip';
 import {
   CashFlowBox,

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../../app';
 import {
   selectMarginAccountPositionsLoading,
   selectMarginAccountPositionsSortOptions,
   toggleMarginAccountPositionsSortingDirectionAction,
 } from '../../../../../../../app/features/portfolio';
 import { PositionSortId } from '../../../../../../../app/features/portfolio/types';
-import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { SortHeader } from '../../../../../../components/SortHeader';
 import {
   LeftBox,

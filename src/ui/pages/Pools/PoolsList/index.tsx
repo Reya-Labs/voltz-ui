@@ -1,8 +1,8 @@
 import { Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../app';
 import { selectPools, selectPoolsLoading } from '../../../../app/features/aMMs';
-import { useAppSelector } from '../../../../app/hooks';
 import { PoolEntry } from './PoolEntry';
 import { PoolsHeader } from './PoolsHeader';
 import {

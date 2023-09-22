@@ -2,7 +2,7 @@ import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
 import { AMM, getLpPositionsByPool, Position, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { getConfig } from '../../../../../../../hooks/voltz-config/config';
+import { getConfig } from '../../../../../../../ui/hooks/voltz-config/config';
 import {
   findCurrentAmm,
   generateAmmIdForRoute,

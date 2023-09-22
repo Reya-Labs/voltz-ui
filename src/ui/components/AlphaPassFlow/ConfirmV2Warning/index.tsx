@@ -2,10 +2,10 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Button, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
+import { useAppDispatch } from '../../../../app';
 import { confirmV2WarningAction } from '../../../../app/features/alpha-pass-verification-flow';
 import { MAX_POOL_CAP } from '../../../../app/features/aMMs';
-import { useAppDispatch } from '../../../../app/hooks';
-import { useWallet } from '../../../../hooks/useWallet';
+import { useWallet } from '../../../hooks/useWallet';
 import { ConfirmV2WarningBox, TitleBox } from './ConfirmV2Warning.styled';
 import { PoolDetails } from './PoolDetails';
 

@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   getPoolLpInfoThunk,
   selectLpFormAMM,
   selectUserInputFixedLower,
   selectUserInputFixedUpper,
 } from '../../../../../app/features/forms/lps/lp';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 
 export const useGetPoolLpInfo = () => {
   const dispatch = useAppDispatch();

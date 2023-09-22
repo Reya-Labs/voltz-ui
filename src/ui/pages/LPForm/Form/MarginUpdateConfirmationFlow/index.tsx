@@ -1,8 +1,8 @@
 import { Dialog } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import { selectMarginUpdateConfirmationFlowStep } from '../../../../../app/features/forms/lps/lp';
-import { useAppSelector } from '../../../../../app/hooks';
 import { MarginUpdateCompletedStep } from './MarginUpdateCompletedStep';
 import { MarginUpdateConfirmationStep } from './MarginUpdateConfirmationStep';
 import { WaitingForMarginUpdateConfirmationStep } from './WaitingForMarginUpdateConfirmationStep';

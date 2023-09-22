@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   selectIsLeverageDisabled,
   selectIsLeverageHidden,
@@ -8,10 +9,9 @@ import {
   selectShowLeverageNotification,
   setLeverageAction,
 } from '../../../../../app/features/forms/lps/lp';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useLowLeverageNotification } from '../../../../../hooks/useLowLeverageNotification';
-import { useWallet } from '../../../../../hooks/useWallet';
 import { LeverageField as LeverageFieldComponent } from '../../../../components/LeverageField';
+import { useLowLeverageNotification } from '../../../../hooks/useLowLeverageNotification';
+import { useWallet } from '../../../../hooks/useWallet';
 
 export const LeverageField: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();

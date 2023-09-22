@@ -1,6 +1,6 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
-import { Season } from '../../../../../hooks/season/types';
+import { Season } from '../../../../hooks/season/types';
 import { CHAIN_SEASON_BADGE_VARIANTS } from './mappers';
 import { BadgeVariant, GetProfileBadgesResponse } from './types';
 

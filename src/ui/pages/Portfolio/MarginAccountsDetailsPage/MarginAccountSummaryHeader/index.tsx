@@ -2,19 +2,19 @@ import { LabelTokenTypography, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   fetchMarginAccountsForSelectionThunk,
   selectMarginAccountsForSelectionLoading,
   selectMarginAccountsForSelectionMarginAccounts,
   selectMarginAccountSummary,
 } from '../../../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
-import { useWallet } from '../../../../../hooks/useWallet';
 import { ChainIcon } from '../../../../components/ChainIcon';
 import { CollateralDistribution } from '../../../../components/CollateralDistribution';
 import { MarginAccountsSearchField } from '../../../../components/MarginAccountsSearchField';
 import { MarginRatioDonut, MarginRatioDonutProps } from '../../../../components/MarginRatioDonut';
+import { useAppNavigate } from '../../../../hooks/useAppNavigate';
+import { useWallet } from '../../../../hooks/useWallet';
 import {
   LeftBox,
   MarginBox,

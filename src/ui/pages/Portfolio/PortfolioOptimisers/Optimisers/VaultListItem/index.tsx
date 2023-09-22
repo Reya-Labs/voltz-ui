@@ -2,7 +2,7 @@ import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 
-import { routes } from '../../../../../../routes/paths';
+import { routes } from '../../../../../../app/paths';
 import { formatPOSIXTimestamp } from '../../../../../../utilities/date';
 import { doNothing } from '../../../../../../utilities/doNothing';
 import { compactFormatToParts } from '../../../../../../utilities/number';

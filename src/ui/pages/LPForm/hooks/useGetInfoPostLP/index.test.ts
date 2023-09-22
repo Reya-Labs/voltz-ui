@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import { getInfoPostLpThunk } from '../../../../../app/features/forms/lps/lp';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useGetInfoPostLP } from '.';
 
 jest.mock('../../../../../app/features/forms/lps/lp', () => ({

@@ -1,5 +1,5 @@
-import { routes } from '../../../routes/paths';
 import { isMarginAccountsLive } from '../../../utilities/is-margin-accounts-live';
+import { routes } from '../../paths';
 import {
   DEPRECATED_LP_POOLS,
   DEPRECATED_LP_PORTFOLIO,

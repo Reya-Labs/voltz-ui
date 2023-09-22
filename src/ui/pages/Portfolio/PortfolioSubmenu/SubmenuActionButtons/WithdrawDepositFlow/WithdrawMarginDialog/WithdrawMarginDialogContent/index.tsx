@@ -2,6 +2,7 @@ import { Button, CloseButton, Typography } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useEffect, useMemo } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../../../app';
 import {
   closeMarginAccountWithdrawFlowAction,
   fetchAvailableAmountsToWithdrawForMarginAccountThunk,
@@ -22,10 +23,9 @@ import {
   withdrawMarginFromMarginAccountThunk,
 } from '../../../../../../../../app/features/portfolio';
 import { AvailableAmountsUI } from '../../../../../../../../app/features/portfolio/types';
-import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
-import { useWallet } from '../../../../../../../../hooks/useWallet';
 import { localeParseFloat } from '../../../../../../../../utilities/localeParseFloat';
 import { MarginAccountsSearchField } from '../../../../../../../components/MarginAccountsSearchField';
+import { useWallet } from '../../../../../../../hooks/useWallet';
 import { MarginAmountField } from '../../MarginAmountField';
 import { WithdrawMarginDetails } from './WithdrawMarginDetails';
 import { ContentBox, MidBox, TitleBox } from './WithdrawMarginDialogContent.styled';

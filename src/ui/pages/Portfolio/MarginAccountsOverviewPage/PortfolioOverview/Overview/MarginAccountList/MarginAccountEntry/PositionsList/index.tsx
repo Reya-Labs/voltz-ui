@@ -2,15 +2,15 @@ import { AppLink, Typography } from 'brokoli-ui';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import AnimateHeight from 'react-animate-height';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../../../../app';
 import {
   fetchMarginAccountPositionsThunk,
-  selectMarginAccountPositions,
+  selectMarginAccountPositionsForOverview,
   selectMarginAccountPositionsLoadedState,
   selectMarginAccountPositionsLoading,
 } from '../../../../../../../../../app/features/portfolio';
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
-import { useAppDispatch, useAppSelector } from '../../../../../../../../../app/hooks';
-import { routes } from '../../../../../../../../../routes/paths';
+import { routes } from '../../../../../../../../../app/paths';
 import { PositionEntry } from './PositionEntry';
 import { PositionsHeader } from './PositionsHeader';
 import {
@@ -26,7 +26,7 @@ export const PositionsList: React.FunctionComponent<{
 }> = ({ marginAccountId, isShown }) => {
   const loading = useAppSelector(selectMarginAccountPositionsLoading(marginAccountId));
   const loadedState = useAppSelector(selectMarginAccountPositionsLoadedState(marginAccountId));
-  const positions = useAppSelector(selectMarginAccountPositions(marginAccountId));
+  const positions = useAppSelector(selectMarginAccountPositionsForOverview(marginAccountId));
   const [height, setHeight] = useState<'auto' | number>(0);
   const dispatch = useAppDispatch();
 

@@ -2,7 +2,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { LabelTokenTypography, Popover, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
+import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { MarketTokenInformation, MarketTokenInformationProps } from '../MarketTokenInformation';
 import {
   FixedBox,

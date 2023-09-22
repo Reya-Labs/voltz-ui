@@ -1,8 +1,8 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import { selectGasInfoFormatted } from '../../../../../app/features/forms/lps/rollover-lp';
-import { useAppSelector } from '../../../../../app/hooks';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 

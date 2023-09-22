@@ -1,9 +1,9 @@
 import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import { selectRolloverLpFormAMM } from '../../../../../app/features/forms/lps/rollover-lp';
-import { useAppSelector } from '../../../../../app/hooks';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';
 import { PreviousPositionDetailsUI } from './PreviousPositionDetailsUI';
 

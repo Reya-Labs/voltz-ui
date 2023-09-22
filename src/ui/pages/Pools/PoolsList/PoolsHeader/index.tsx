@@ -1,12 +1,12 @@
 import React from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   selectPoolsLoading,
   selectPoolSortOptions,
   togglePoolSortingDirectionAction,
 } from '../../../../../app/features/aMMs';
 import { PoolSortId } from '../../../../../app/features/aMMs/types';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { SortHeader } from '../../../../components/SortHeader';
 import {
   FixedAPRBox,

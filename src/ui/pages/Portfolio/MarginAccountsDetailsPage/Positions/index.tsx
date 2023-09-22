@@ -2,9 +2,9 @@ import { PillSelector, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useAppSelector } from '../../../../../app';
 import { selectMarginAccountPositionsSummary } from '../../../../../app/features/portfolio';
 import { PositionsFilterId } from '../../../../../app/features/portfolio/types';
-import { useAppSelector } from '../../../../../app/hooks';
 import { capitalize } from '../../../../../utilities/capitalize';
 import { PositionsList } from '../PositionsList';
 import { BottomBox, PositionsBox, PositionsSelectorBox } from './Positions.styled';

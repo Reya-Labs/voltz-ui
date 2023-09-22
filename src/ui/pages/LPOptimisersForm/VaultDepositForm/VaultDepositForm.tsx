@@ -2,14 +2,14 @@ import { approveToken, depositAndRegister, isTokenApproved } from '@voltz-protoc
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../app';
 import { OptimiserInfo, updateOptimiserStateAction } from '../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useWallet } from '../../../../hooks/useWallet';
 import { getAlchemyKey } from '../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../utilities/getInfuraKey';
 import { pushEvent } from '../../../../utilities/googleAnalytics';
 import { AutomaticRolloverToggleProps } from '../../../components/AutomaticRolloverToggle';
+import { useWallet } from '../../../hooks/useWallet';
 import { getSpareWeights } from '../../LPOptimisers/get-spare-weights';
 import { DepositForm, FormProps } from '../Form/DepositForm/DepositForm';
 import { DepositStates, getSubmissionState } from './mappers';

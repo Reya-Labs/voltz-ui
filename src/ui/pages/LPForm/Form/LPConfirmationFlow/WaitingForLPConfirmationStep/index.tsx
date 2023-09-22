@@ -1,8 +1,8 @@
 import { RainbowLoader, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../../app';
 import { selectUserInputNotionalAmountEditMode } from '../../../../../../app/features/forms/lps/lp';
-import { useAppSelector } from '../../../../../../app/hooks';
 import {
   RainbowLoaderBox,
   WaitingForConfirmationStepBox,

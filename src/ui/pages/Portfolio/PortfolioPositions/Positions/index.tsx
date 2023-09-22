@@ -1,9 +1,9 @@
 import { LabelTokenTypography, PillSelector, TokenTypography, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import { selectPositionsSummary } from '../../../../../app/features/portfolio';
 import { PositionsFilterId } from '../../../../../app/features/portfolio/types';
-import { useAppSelector } from '../../../../../app/hooks';
 import { capitalize } from '../../../../../utilities/capitalize';
 import { PositionsList } from '../PositionsList';
 import {

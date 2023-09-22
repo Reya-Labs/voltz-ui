@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { OptimiserInfo } from '../../../../app/features/lp-optimisers';
-import { useAppNavigate } from '../../../../hooks/useAppNavigate';
-import { useLPVaults } from '../../../../hooks/useLPVaults';
-import { useWallet } from '../../../../hooks/useWallet';
+import { useAppNavigate } from '../../../hooks/useAppNavigate';
+import { useLPVaults } from '../../../hooks/useLPVaults';
+import { useWallet } from '../../../hooks/useWallet';
 import { VaultsBox } from './Vaults.styled';
 import { VaultsTable } from './VaultsTable/VaultsTable';
 

@@ -2,8 +2,8 @@ import { Dialog, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
-import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
+import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
 import { HealthIndicator } from '../../HealthIndicator';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
 import {

@@ -2,6 +2,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Button, CloseButton, Typography, TypographyToken } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../../../app';
 import {
   selectChainChangeState,
   selectChainId,
@@ -9,13 +10,12 @@ import {
 } from '../../../../../../../../app/features/network';
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { initializeSettleFlowAction } from '../../../../../../../../app/features/settle-flow';
-import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
-import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
-import { usePositionDetails } from '../../../../../../../../hooks/usePositionDetails';
-import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
-import { useWallet } from '../../../../../../../../hooks/useWallet';
 import { PositionTransactionHistory } from '../../../../../../../components/PositionTransactionHistory';
 import { SettleFlow } from '../../../../../../../components/SettleFlow';
+import { useAppNavigate } from '../../../../../../../hooks/useAppNavigate';
+import { usePositionDetails } from '../../../../../../../hooks/usePositionDetails';
+import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
+import { useWallet } from '../../../../../../../hooks/useWallet';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
 import { ButtonsBox, ContentBox, TitleBox } from './PositionTransactionHistoryDialogContent.styled';
 
@@ -83,7 +83,7 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<
   };
 
   const navigateToSwapFormPage = () => {
-    navigate.toSwapFormPage({
+    navigate.toDeprecatedSwapFormPage({
       ammId: routeAmmId,
       poolId: routePoolId,
     });

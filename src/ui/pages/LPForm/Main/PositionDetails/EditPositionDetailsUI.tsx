@@ -1,6 +1,7 @@
 import { FromToTokenTypography, LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import {
   selectEditLpPositionRealizedPnLFromFeesFormatted,
   selectEditLpPositionRealizedPnLFromSwapsFormatted,
@@ -11,7 +12,6 @@ import {
   selectExistingPositionFixedUpper,
   selectLpFormSelectedPosition,
 } from '../../../../../app/features/forms/lps/lp';
-import { useAppSelector } from '../../../../../app/hooks';
 import { formatNumber } from '../../../../../utilities/number';
 import { PnLDetailsWithTooltip } from '../../../../components/PnLDetailsWithTooltip';
 import {
