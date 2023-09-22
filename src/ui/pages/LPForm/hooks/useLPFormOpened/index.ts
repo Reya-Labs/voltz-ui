@@ -7,8 +7,8 @@ import {
   trackPageViewAction,
 } from '../../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useAppSearchParams } from '../../../../../hooks/useAppSearchParams';
-import { useWallet } from '../../../../../hooks/useWallet';
+import { useAppSearchParams } from '../../../../hooks/useAppSearchParams';
+import { useWallet } from '../../../../hooks/useWallet';
 
 export const useLPFormOpened = () => {
   const dispatch = useAppDispatch();

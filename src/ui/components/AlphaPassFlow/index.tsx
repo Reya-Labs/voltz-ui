@@ -7,7 +7,7 @@ import {
   verifyAlphaPassThunk,
 } from '../../../app/features/alpha-pass-verification-flow';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { useWallet } from '../../../hooks/useWallet';
+import { useWallet } from '../../hooks/useWallet';
 import { ConfirmV2Warning } from './ConfirmV2Warning';
 import { NoPassDetected } from './NoPassDetected';
 

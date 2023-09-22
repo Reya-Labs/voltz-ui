@@ -1,7 +1,7 @@
 import { LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import {
   MarketTokenInformation,
   MarketTokenInformationProps,

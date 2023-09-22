@@ -11,9 +11,9 @@ import {
   selectTotalMarginAccounts,
 } from '../../../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { useWallet } from '../../../../../../../hooks/useWallet';
-import { routes } from '../../../../../../../routes/paths';
+import { routes } from '../../../../../../../app/paths';
 import { Pagination } from '../../../../../../components/Pagination';
+import { useWallet } from '../../../../../../hooks/useWallet';
 import { MarginAccountEntry } from './MarginAccountEntry';
 import {
   MarginAccountEntrySkeleton,

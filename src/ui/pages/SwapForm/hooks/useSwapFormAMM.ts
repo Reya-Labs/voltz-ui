@@ -16,9 +16,9 @@ import {
 } from '../../../../app/features/forms/trader/swap';
 import { selectChainId } from '../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useAMMs } from '../../../../hooks/useAMMs';
-import { useWallet } from '../../../../hooks/useWallet';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
+import { useAMMs } from '../../../hooks/useAMMs';
+import { useWallet } from '../../../hooks/useWallet';
 
 type UseSwapFormAMMResult = {
   aMM: AMM | null;

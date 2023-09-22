@@ -8,7 +8,7 @@ import {
 } from '../../../../../../app/features/forms/trader/rollover-swap';
 import { resetPortfolioStateAction } from '../../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { routes } from '../../../../../../routes/paths';
+import { routes } from '../../../../../../app/paths';
 import { ExplorerLink } from '../../../../../components/ExplorerLink';
 import { RolloverDetails } from '../RolloverDetails';
 import { RolloverCompletedStepBox } from './RolloverCompletedStep.styled';

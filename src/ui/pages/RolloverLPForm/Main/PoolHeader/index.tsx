@@ -11,9 +11,9 @@ import {
   selectVariableRateValueFormatted,
 } from '../../../../../app/features/forms/lps/rollover-lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
 import { MarketTokenInformationProps } from '../../../../components/MarketTokenInformation';
 import { PoolHeader as PoolHeaderComponent } from '../../../../components/PoolHeader';
+import { useAppNavigate } from '../../../../hooks/useAppNavigate';
 
 type PoolHeaderProps = {};
 

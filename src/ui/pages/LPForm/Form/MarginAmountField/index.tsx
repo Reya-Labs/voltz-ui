@@ -9,8 +9,8 @@ import {
   setMarginAmountAction,
 } from '../../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { EditMarginAmountFieldUI } from './EditMarginAmountFieldUI';
 import { NewMarginAmountFieldUI } from './NewMarginAmountFieldUI';
 type NotionalAmountProps = {};

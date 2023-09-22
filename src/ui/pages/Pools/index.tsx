@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { useAMMs } from '../../../hooks/useAMMs';
-import { routes } from '../../../routes/paths';
+import { routes } from '../../../app/paths';
 import { GenericError } from '../../components/GenericError';
 import { Page } from '../../components/Page';
+import { useAMMs } from '../../hooks/useAMMs';
 import { Pools } from './Pools';
 
 export const PoolsPage: React.FunctionComponent = () => {

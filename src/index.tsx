@@ -13,7 +13,7 @@ import { HashRouter } from 'react-router-dom';
 
 import { store } from './app';
 import { AppRoutes } from './AppRoutes';
-import { WalletProvider } from './contexts/WalletContext/WalletProvider';
+import { WalletProvider } from './ui/contexts/WalletContext/WalletProvider';
 import { initSentryTracker } from './utilities/sentry';
 
 try {

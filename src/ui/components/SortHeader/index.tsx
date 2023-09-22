@@ -1,7 +1,7 @@
 import { Typography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
+import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { DirectionIcon } from './DirectionIcon';
 import { RowsBox, TypographyWithIcon } from './SortHeader.styled';
 

@@ -2,8 +2,8 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import React, { useEffect, useState } from 'react';
 
-import { SEASONS } from '../../../../../hooks/season/constants';
-import { Season } from '../../../../../hooks/season/types';
+import { SEASONS } from '../../../../hooks/season/constants';
+import { Season } from '../../../../hooks/season/types';
 import { BadgeVariant, CHAIN_SEASON_BADGE_VARIANTS } from '../../data/getSeasonBadges';
 import { ClaimButtonProps } from '../ClaimButton/ClaimButton';
 import { CopyLinkButtonProps } from '../CopyLinkButton/CopyLinkButton';

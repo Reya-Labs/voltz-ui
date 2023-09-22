@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 
 import { MAX_POOL_CAP } from '../../../../../../../../app/features/aMMs';
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
-import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
 import { V2EntryInformation } from '../../../../../../../components/V2EntryInformation';
+import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
 import { HealthIndicator } from '../../HealthIndicator';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
 import {

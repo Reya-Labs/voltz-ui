@@ -2,8 +2,8 @@ import React from 'react';
 
 import { selectChainId } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
-import { useWallet } from '../../../hooks/useWallet';
 import { ConnectWallet } from '../../components/ConnectWallet';
+import { useWallet } from '../../hooks/useWallet';
 import { VoyageWalletConnected } from './VoyageWalletConnected';
 
 export const Voyage: React.FunctionComponent = () => {

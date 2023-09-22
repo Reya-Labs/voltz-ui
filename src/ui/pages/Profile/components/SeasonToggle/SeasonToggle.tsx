@@ -1,8 +1,8 @@
 import { PillSelector } from 'brokoli-ui';
 import React from 'react';
 
-import { Season } from '../../../../../hooks/season/types';
 import { doNothing } from '../../../../../utilities/doNothing';
+import { Season } from '../../../../hooks/season/types';
 import { PillsBox } from './SeasonToggle.styled';
 
 type SeasonToggleProps = {

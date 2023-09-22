@@ -10,17 +10,6 @@ import {
   getProtocolName,
 } from '.';
 
-jest.mock('../../hooks/voltz-config/config', () => ({
-  getConfig: function () {
-    return {
-      pools: [
-        { id: '1', rollover: 'customRollover1' },
-        { id: '2', rollover: 'customRollover2' },
-      ],
-    };
-  },
-}));
-
 describe('utilities/amm', () => {
   describe('findCurrentAmm', () => {
     it('returns the custom rollover AMM when it exists in the config', () => {

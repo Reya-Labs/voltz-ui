@@ -9,7 +9,7 @@ import {
 } from '../../../app/features/historical-rates';
 import { selectChainId } from '../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
+import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
 import {
   ChartBox,

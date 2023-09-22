@@ -1,7 +1,7 @@
 import { Button, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { useAppNavigate } from '../../../../hooks/useAppNavigate';
+import { useAppNavigate } from '../../../hooks/useAppNavigate';
 import { NoPassDetectedBox, TitleBox } from './NoPassDetected.styled';
 
 export const NoPassDetected: React.FunctionComponent = () => {

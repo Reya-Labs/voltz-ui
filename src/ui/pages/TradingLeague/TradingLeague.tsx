@@ -8,9 +8,9 @@ import {
   selectTradingLeagueStatus,
 } from '../../../app/features/trading-league';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { useCurrentSeason } from '../../../hooks/season/useCurrentSeason';
-import { useWallet } from '../../../hooks/useWallet';
 import { setPageTitle } from '../../../utilities/page';
+import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
+import { useWallet } from '../../hooks/useWallet';
 import { Leaderboard } from './Leaderboard/Leaderboard';
 import { TradingLeagueBox } from './TradingLeague.styled';
 

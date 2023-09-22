@@ -9,8 +9,8 @@ import {
   setLpFormAMMAction,
 } from '../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useAMMs } from '../../../../hooks/useAMMs';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
+import { useAMMs } from '../../../hooks/useAMMs';
 import { useGetInfoPostLP } from './useGetInfoPostLP';
 import { useGetPoolLpInfo } from './useGetPoolLpInfo';
 import { useGetWalletBalanceAndUnderlyingTokenAllowance } from './useGetWalletBalanceAndUnderlyingTokenAllowance';

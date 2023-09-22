@@ -10,12 +10,12 @@ import {
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { initializeSettleFlowAction } from '../../../../../../../../app/features/settle-flow';
 import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
-import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
-import { usePositionDetails } from '../../../../../../../../hooks/usePositionDetails';
-import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
-import { useWallet } from '../../../../../../../../hooks/useWallet';
 import { PositionTransactionHistory } from '../../../../../../../components/PositionTransactionHistory';
 import { SettleFlow } from '../../../../../../../components/SettleFlow';
+import { useAppNavigate } from '../../../../../../../hooks/useAppNavigate';
+import { usePositionDetails } from '../../../../../../../hooks/usePositionDetails';
+import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
+import { useWallet } from '../../../../../../../hooks/useWallet';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
 import { ButtonsBox, ContentBox, TitleBox } from './PositionTransactionHistoryDialogContent.styled';
 

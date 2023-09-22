@@ -10,7 +10,7 @@ import {
   selectSettlementAllowed,
 } from '../../../../app/features/settle-flow';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useWallet } from '../../../../hooks/useWallet';
+import { useWallet } from '../../../hooks/useWallet';
 import { MarketTokenInformationProps } from '../../MarketTokenInformation';
 import { MarketTokenInformationCompact } from '../../MarketTokenInformationCompact';
 import { SettleDetails } from '../SettleDetails';

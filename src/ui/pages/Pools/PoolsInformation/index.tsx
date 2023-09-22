@@ -7,8 +7,8 @@ import {
   togglePoolFilterAction,
 } from '../../../../app/features/aMMs';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { usePoolsInformation } from '../../../../hooks/usePoolsInformation';
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
+import { usePoolsInformation } from '../../../hooks/usePoolsInformation';
+import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import {
   FilterBox,
   FiltersBox,

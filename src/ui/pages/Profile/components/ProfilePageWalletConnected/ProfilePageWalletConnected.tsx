@@ -2,9 +2,9 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { formatEthereumAddress, Typography } from 'brokoli-ui';
 import React, { useRef } from 'react';
 
-import { Season } from '../../../../../hooks/season/types';
 import { formatDateTimeWithOrdinal } from '../../../../../utilities/date';
 import { doNothing } from '../../../../../utilities/doNothing';
+import { Season } from '../../../../hooks/season/types';
 import {
   BadgeVariant,
   INSOLVENCY_ARBITRUM_BADGES,

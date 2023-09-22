@@ -5,8 +5,8 @@ import {
   openMarginAccountWithdrawFlowAction,
 } from '../../../../../app/features/portfolio';
 import { useAppDispatch } from '../../../../../app/hooks';
-import { useWallet } from '../../../../../hooks/useWallet';
 import { isMarginAccountsLive } from '../../../../../utilities/is-margin-accounts-live';
+import { useWallet } from '../../../../hooks/useWallet';
 import { CreateMarginAccountButton } from './CreateMarginAcountButton';
 import { Box, ButtonStyled } from './SubmenuActionButtons.styled';
 import { DepositMarginDialog } from './WithdrawDepositFlow/DepositMarginDialog';

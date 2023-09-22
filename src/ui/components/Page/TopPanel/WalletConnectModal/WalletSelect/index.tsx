@@ -1,7 +1,7 @@
 import { CloseButton, ExternalLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { Wallet, WalletName } from '../../../../../../contexts/WalletContext/types';
+import { Wallet, WalletName } from '../../../../../contexts/WalletContext/types';
 import { WalletOptionButton } from './WalletOptionButton';
 import { TitleBox, WalletOptionsBox, WalletSelectBox } from './WalletSelect.styled';
 type WalletOption = {

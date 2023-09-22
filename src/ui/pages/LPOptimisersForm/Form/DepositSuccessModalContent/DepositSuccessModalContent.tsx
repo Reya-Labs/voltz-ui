@@ -5,7 +5,7 @@ import React from 'react';
 import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
 import { useAppSelector } from '../../../../../app/hooks';
-import { routes } from '../../../../../routes/paths';
+import { routes } from '../../../../../app/paths';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { TitleBox } from '../../../../components/SettleFlow/SettleConfirmationStep/SettleConfirmationStep.styled';
 import { BatchBudgetTrigger } from '../BatchBudgetTrigger/BatchBudgetTrigger';

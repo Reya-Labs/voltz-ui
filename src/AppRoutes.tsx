@@ -5,13 +5,13 @@ import { isArbitrumChain, isAvalancheChain, selectChainId } from './app/features
 import { isSpruceChain } from './app/features/network/helpers/is-spruce-chain';
 import { selectRedirects } from './app/features/redirects';
 import { useAppSelector } from './app/hooks';
-import { useChainChange } from './hooks/useChainChange';
-import { useInitializeGoogleTagManager } from './hooks/useInitializeGoogleTagManager';
-import { useReferrer } from './hooks/useReferrer';
-import { routes } from './routes/paths';
+import { routes } from './app/paths';
 import { NetworkProtectedPage } from './ui/components/NetworkProtectedPage';
 import { NotFoundPageContent } from './ui/components/NotFoundPageContent';
 import { Page } from './ui/components/Page';
+import { useChainChange } from './ui/hooks/useChainChange';
+import { useInitializeGoogleTagManager } from './ui/hooks/useInitializeGoogleTagManager';
+import { useReferrer } from './ui/hooks/useReferrer';
 import { LPFormPage } from './ui/pages/LPForm';
 import { LPOptimisersPage } from './ui/pages/LPOptimisers';
 import { LPOptimisersFormPage } from './ui/pages/LPOptimisersForm';

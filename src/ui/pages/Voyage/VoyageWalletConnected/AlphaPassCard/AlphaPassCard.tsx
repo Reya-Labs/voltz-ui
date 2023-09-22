@@ -10,7 +10,7 @@ import {
   selectAlphaPassTotalPasses,
 } from '../../../../../app/features/alpha-pass-claim-flow';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useWallet } from '../../../../../hooks/useWallet';
+import { useWallet } from '../../../../hooks/useWallet';
 import { AdminPassDialogContent } from './AdminPassDialogContent';
 import {
   BadgeBox,

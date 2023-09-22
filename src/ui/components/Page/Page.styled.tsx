@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { mediaQuery } from '../../../hooks/useResponsiveQuery/mediaQuery';
+import { mediaQuery } from '../../hooks/useResponsiveQuery/mediaQuery';
 
 export const PageSectionBox = styled('div', {
   shouldForwardProp: (prop) => prop !== 'hasSubmenu',

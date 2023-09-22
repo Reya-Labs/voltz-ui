@@ -1,7 +1,7 @@
 import { RainbowLoader, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { usePositionDetails } from '../../../hooks/usePositionDetails';
+import { usePositionDetails } from '../../hooks/usePositionDetails';
 import { RainbowLoaderBox } from './PositionTransactionHistory.styled';
 import { TransactionHistoryList } from './TransactionHistoryList';
 

@@ -11,8 +11,8 @@ import {
   setNotionalAmountAction,
 } from '../../../../../app/features/forms/lps/rollover-lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 
 type NotionalAmountProps = {};

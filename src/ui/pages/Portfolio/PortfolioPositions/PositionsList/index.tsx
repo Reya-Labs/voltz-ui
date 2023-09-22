@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { selectPositions, selectPositionsLoading } from '../../../../../app/features/portfolio';
 import { PositionsFilterId } from '../../../../../app/features/portfolio/types';
 import { useAppSelector } from '../../../../../app/hooks';
-import { routes } from '../../../../../routes/paths';
+import { routes } from '../../../../../app/paths';
 import { Pagination } from '../../../../components/Pagination';
 import { ActivePositionEntry } from './PositionEntry/Entry/ActivePositionEntry';
 import { MaturedPositionEntry } from './PositionEntry/Entry/MaturedPositionEntry';

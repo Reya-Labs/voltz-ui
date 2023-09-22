@@ -9,7 +9,7 @@ import {
 } from '../../../../app/features/voyage';
 import { VoyageBadgeUI } from '../../../../app/features/voyage/types';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { routes } from '../../../../routes/paths';
+import { routes } from '../../../../app/paths';
 import { GenericError } from '../../../components/GenericError';
 import { AlphaPassCard } from './AlphaPassCard/AlphaPassCard';
 import { BadgeCard, BadgeCardHandle } from './BadgeCard/BadgeCard';

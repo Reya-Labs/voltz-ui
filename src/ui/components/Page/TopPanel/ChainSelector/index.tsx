@@ -9,7 +9,7 @@ import {
   setChainIdThunk,
 } from '../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useWallet } from '../../../../../hooks/useWallet';
+import { useWallet } from '../../../../hooks/useWallet';
 import { getChainOptions } from './get-chain-options';
 
 export const ChainSelector: React.FunctionComponent = () => {

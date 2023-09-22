@@ -10,7 +10,7 @@ import {
 } from '../../../../../../../app/features/portfolio';
 import { MarginAccountSortId } from '../../../../../../../app/features/portfolio/types';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { useWallet } from '../../../../../../../hooks/useWallet';
+import { useWallet } from '../../../../../../hooks/useWallet';
 
 export const MarginAccountsSortOptions: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();

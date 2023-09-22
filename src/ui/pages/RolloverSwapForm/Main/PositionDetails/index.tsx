@@ -3,7 +3,7 @@ import React from 'react';
 
 import { selectRolloverSwapFormAMM } from '../../../../../app/features/forms/trader/rollover-swap';
 import { useAppSelector } from '../../../../../app/hooks';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';
 import { PreviousPositionDetailsUI } from './PreviousPositionDetailsUI';
 

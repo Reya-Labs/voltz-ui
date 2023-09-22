@@ -8,8 +8,8 @@ import {
   MARGIN_ACCOUNTS_PER_PAGE,
 } from '../../../../../app/features/portfolio';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useWallet } from '../../../../../hooks/useWallet';
 import { ConnectWallet } from '../../../../components/ConnectWallet';
+import { useWallet } from '../../../../hooks/useWallet';
 import { Overview } from './Overview';
 import { PortfolioOverviewBox } from './PortfolioOverview.styled';
 

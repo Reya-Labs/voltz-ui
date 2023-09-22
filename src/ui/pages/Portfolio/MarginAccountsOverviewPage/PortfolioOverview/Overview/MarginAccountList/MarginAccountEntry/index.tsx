@@ -2,11 +2,11 @@ import { ColorTokens, ToggleCaret, TokenTypography, Typography, TypographyToken 
 import React, { useState } from 'react';
 
 import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
-import { useAppNavigate } from '../../../../../../../../hooks/useAppNavigate';
-import { useResponsiveQuery } from '../../../../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { MarginRatioDonut } from '../../../../../../../components/MarginRatioDonut';
 import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
+import { useAppNavigate } from '../../../../../../../hooks/useAppNavigate';
+import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
 import {
   BalanceBox,
   ChainIconAndNameContainer,

@@ -9,7 +9,7 @@ import {
 } from '../../../../../app/features/network';
 import { isSpruceChain } from '../../../../../app/features/network/helpers/is-spruce-chain';
 import { useAppSelector } from '../../../../../app/hooks';
-import { routes } from '../../../../../routes/paths';
+import { routes } from '../../../../../app/paths';
 
 const getLinks = (chainId?: SupportedChainId | null) =>
   !chainId

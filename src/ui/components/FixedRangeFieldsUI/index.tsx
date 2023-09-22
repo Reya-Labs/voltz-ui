@@ -3,8 +3,8 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FormNumberLimits } from '../../../app/features/forms/common';
-import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../utilities/number';
+import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { FixedRangeFieldsBox } from './FixedRangeFieldsUI.styled';
 type FixedRangeFieldsUIProps = {
   fixedLower: string;

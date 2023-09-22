@@ -1,8 +1,8 @@
 import { Dialog, WalletConnectButton } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
-import { WalletName } from '../../../../../contexts/WalletContext/types';
-import { useWallet } from '../../../../../hooks/useWallet';
+import { WalletName } from '../../../../contexts/WalletContext/types';
+import { useWallet } from '../../../../hooks/useWallet';
 import { WalletConnected } from './WalletConnected';
 import { WalletSelect } from './WalletSelect';
 

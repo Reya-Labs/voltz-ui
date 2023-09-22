@@ -2,8 +2,8 @@ import { LeverageField as BrokoliLeverageField, TypographyToken } from 'brokoli-
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../utilities/number';
+import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { LeverageFieldBox } from './LeverageField.styled';
 
 type LeverageFieldProps = {

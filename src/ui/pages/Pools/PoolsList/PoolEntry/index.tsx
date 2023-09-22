@@ -9,8 +9,6 @@ import {
   setChainIdThunk,
 } from '../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { ChainIcon } from '../../../../components/ChainIcon';
 import {
   MarketTokenInformation,
@@ -18,6 +16,8 @@ import {
 } from '../../../../components/MarketTokenInformation';
 import { TestNetIndicator } from '../../../../components/TestNetIndicator';
 import { V2EntryInformation } from '../../../../components/V2EntryInformation';
+import { useAppNavigate } from '../../../../hooks/useAppNavigate';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import {
   ButtonStyled,
   ChainIconContainer,

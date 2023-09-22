@@ -4,14 +4,14 @@ import React, { useEffect, useState } from 'react';
 
 import { selectChainId } from '../../../app/features/network';
 import { useAppSelector } from '../../../app/hooks';
-import { Season } from '../../../hooks/season/types';
-import { useCurrentSeason } from '../../../hooks/season/useCurrentSeason';
-import { usePastSeasons } from '../../../hooks/season/usePastSeasons';
-import { useWallet } from '../../../hooks/useWallet';
 import { getEndOfTodayTimestamp, getStartOfTodayTimestamp } from '../../../utilities/date';
 import { setPageTitle } from '../../../utilities/page';
 import { getSentryTracker } from '../../../utilities/sentry';
 import { ConnectWallet } from '../../components/ConnectWallet';
+import { Season } from '../../hooks/season/types';
+import { useCurrentSeason } from '../../hooks/season/useCurrentSeason';
+import { usePastSeasons } from '../../hooks/season/usePastSeasons';
+import { useWallet } from '../../hooks/useWallet';
 import { ClaimButtonProps } from './components/ClaimButton/ClaimButton';
 import { CopyLinkButtonProps } from './components/CopyLinkButton/CopyLinkButton';
 import { ProfilePageWalletConnected } from './components/ProfilePageWalletConnected/ProfilePageWalletConnected';

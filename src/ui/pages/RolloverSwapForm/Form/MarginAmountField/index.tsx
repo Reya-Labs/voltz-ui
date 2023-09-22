@@ -8,8 +8,8 @@ import {
   setMarginAmountAction,
 } from '../../../../../app/features/forms/trader/rollover-swap';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { stringToBigFloat } from '../../../../../utilities/number';
+import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { NewMarginAmountFieldUI } from './NewMarginAmountFieldUI';
 type NotionalAmountProps = {};
 

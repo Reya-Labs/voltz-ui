@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RankType, SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
-import { Season } from '../../../../../hooks/season/types';
+import { Season } from '../../../../../ui/hooks/season/types';
 import { getCommunitySbt } from '../../../../../ui/pages/Profile/helpers';
 import { rejectThunkWithError } from '../../../helpers';
 

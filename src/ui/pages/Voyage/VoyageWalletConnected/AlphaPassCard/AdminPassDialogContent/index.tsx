@@ -8,7 +8,7 @@ import {
   selectAlphaPassTotalPasses,
 } from '../../../../../../app/features/alpha-pass-claim-flow';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { useWallet } from '../../../../../../hooks/useWallet';
+import { useWallet } from '../../../../../hooks/useWallet';
 import { ContentBox, DetailBox, TitleBox } from './AdminPassDialogContent.styled';
 
 export const AdminPassDialogContent: React.FunctionComponent<{

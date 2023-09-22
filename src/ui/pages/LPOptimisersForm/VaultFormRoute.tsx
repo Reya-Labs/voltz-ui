@@ -2,9 +2,9 @@ import { RainbowLoader } from 'brokoli-ui';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { useLPVaults } from '../../../hooks/useLPVaults';
-import { useWallet } from '../../../hooks/useWallet';
 import { ConnectWallet } from '../../components/ConnectWallet';
+import { useLPVaults } from '../../hooks/useLPVaults';
+import { useWallet } from '../../hooks/useWallet';
 import { RainbowLoaderBox } from '../LPOptimisers/Vaults/VaultsTable/VaultsTable.styled';
 import { NoVaultFound } from './NoVaultFound/NoVaultFound';
 import { VaultDepositForm } from './VaultDepositForm/VaultDepositForm';

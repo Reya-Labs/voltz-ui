@@ -9,10 +9,10 @@ import {
 } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useWallet } from '../../../../../hooks/useWallet';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../../utilities/getInfuraKey';
+import { useWallet } from '../../../../hooks/useWallet';
 import { GasCost } from '../GasCost/GasCost';
 import { batchBudgetReducer, initialState } from './batchBudgetReducer';
 import {

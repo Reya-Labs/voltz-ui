@@ -7,7 +7,7 @@ import {
 } from '../../../../../app/features/forms/lps/lp';
 import { selectChainId } from '../../../../../app/features/network';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useAMMs } from '../../../../../hooks/useAMMs';
+import { useAMMs } from '../../../../hooks/useAMMs';
 
 export const useGetWalletBalanceAndUnderlyingTokenAllowance = () => {
   const dispatch = useAppDispatch();

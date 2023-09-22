@@ -6,7 +6,7 @@ import {
   getWalletBalanceThunk,
 } from '../../../../../app/features/forms/lps/lp';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useAMMs } from '../../../../../hooks/useAMMs';
+import { useAMMs } from '../../../../hooks/useAMMs';
 import { useGetWalletBalanceAndUnderlyingTokenAllowance } from '.';
 
 jest.mock('../../../../../app/features/forms/lps/lp', () => ({
@@ -19,7 +19,7 @@ jest.mock('../../../../../app/hooks', () => ({
   useAppSelector: jest.fn(),
 }));
 
-jest.mock('../../../../../hooks/useAMMs', () => ({
+jest.mock('../../../../hooks/useAMMs', () => ({
   useAMMs: jest.fn(),
 }));
 
