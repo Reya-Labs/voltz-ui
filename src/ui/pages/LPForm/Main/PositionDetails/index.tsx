@@ -1,8 +1,8 @@
 import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import { selectLpFormAMM, selectLpFormMode } from '../../../../../app/features/forms/lps/lp';
-import { useAppSelector } from '../../../../../app/hooks';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { EditPositionDetailsUI } from './EditPositionDetailsUI';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';

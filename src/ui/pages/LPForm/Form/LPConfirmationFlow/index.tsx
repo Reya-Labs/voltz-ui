@@ -1,8 +1,8 @@
 import { Dialog } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import { selectLpConfirmationFlowStep } from '../../../../../app/features/forms/lps/lp';
-import { useAppSelector } from '../../../../../app/hooks';
 import { LPCompletedStep } from './LPCompletedStep';
 import { LPConfirmationStep } from './LPConfirmationStep';
 import { WaitingForLPConfirmationStep } from './WaitingForLPConfirmationStep';

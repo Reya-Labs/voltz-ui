@@ -1,6 +1,7 @@
 import { Button, CloseButton, HorizontalLine, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../app';
 import {
   closeSettleFlowAction,
   confirmSettleThunk,
@@ -9,7 +10,6 @@ import {
   selectSettleError,
   selectSettlementAllowed,
 } from '../../../../app/features/settle-flow';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useWallet } from '../../../hooks/useWallet';
 import { MarketTokenInformationProps } from '../../MarketTokenInformation';
 import { MarketTokenInformationCompact } from '../../MarketTokenInformationCompact';

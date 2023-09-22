@@ -1,10 +1,10 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import { useAppSelector } from './app';
 import { isArbitrumChain, isAvalancheChain, selectChainId } from './app/features/network';
 import { isSpruceChain } from './app/features/network/helpers/is-spruce-chain';
 import { selectRedirects } from './app/features/redirects';
-import { useAppSelector } from './app/hooks';
 import { routes } from './app/paths';
 import { NetworkProtectedPage } from './ui/components/NetworkProtectedPage';
 import { NotFoundPageContent } from './ui/components/NotFoundPageContent';
@@ -12,6 +12,7 @@ import { Page } from './ui/components/Page';
 import { useChainChange } from './ui/hooks/useChainChange';
 import { useInitializeGoogleTagManager } from './ui/hooks/useInitializeGoogleTagManager';
 import { useReferrer } from './ui/hooks/useReferrer';
+import { SwapFormPage } from './ui/pages/Deprecated/SwapForm';
 import { LPFormPage } from './ui/pages/LPForm';
 import { LPOptimisersPage } from './ui/pages/LPOptimisers';
 import { LPOptimisersFormPage } from './ui/pages/LPOptimisersForm';
@@ -23,7 +24,6 @@ import { PortfolioPositionsPage } from './ui/pages/Portfolio/PortfolioPositions'
 import { ProfilePage } from './ui/pages/Profile';
 import { RolloverLPFormPage } from './ui/pages/RolloverLPForm';
 import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
-import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { VoyagePage } from './ui/pages/Voyage';
 import { isMarginAccountsLive } from './utilities/is-margin-accounts-live';

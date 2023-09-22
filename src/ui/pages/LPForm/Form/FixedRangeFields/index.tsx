@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   getInfoPostLpThunk,
   selectUserInputFixedError,
@@ -9,7 +10,6 @@ import {
   setUserInputFixedLowerAction,
   setUserInputFixedUpperAction,
 } from '../../../../../app/features/forms/lps/lp';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { FixedRangeFieldsUI } from '../../../../components/FixedRangeFieldsUI';
 
 export const FixedRangeFields: React.FunctionComponent = () => {

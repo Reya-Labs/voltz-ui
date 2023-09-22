@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import { MAX_POOL_CAP, selectPoolsOnCurrentChain } from '../../../../../app/features/aMMs';
 import { PoolUI } from '../../../../../app/features/aMMs/types';
 import {
@@ -10,7 +11,6 @@ import {
   selectVariableRate24hDelta,
   selectVariableRateValueFormatted,
 } from '../../../../../app/features/forms/trader/rollover-swap';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { MarketTokenInformationProps } from '../../../../components/MarketTokenInformation';
 import { PoolHeader as PoolHeaderComponent } from '../../../../components/PoolHeader';
 import { useAppNavigate } from '../../../../hooks/useAppNavigate';

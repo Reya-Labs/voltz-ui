@@ -1,7 +1,7 @@
 import * as React from 'react';
 
+import { useAppDispatch } from '../../../app';
 import { resetStateAction } from '../../../app/features/forms/trader/rollover-swap';
-import { useAppDispatch } from '../../../app/hooks';
 import { routes } from '../../../app/paths';
 import { GenericError } from '../../components/GenericError';
 import { NoAMMFound } from '../../components/NoAMMFound';

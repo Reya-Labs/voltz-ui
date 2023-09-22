@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   selectLpFormPositionsFetchingStatus,
   setUserInputFixedLowerAction,
   setUserInputFixedUpperAction,
   trackPageViewAction,
 } from '../../../../../app/features/forms/lps/lp';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useAppSearchParams } from '../../../../hooks/useAppSearchParams';
 import { useWallet } from '../../../../hooks/useWallet';
 

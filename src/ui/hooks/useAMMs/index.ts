@@ -1,6 +1,7 @@
 import { AMM } from '@voltz-protocol/v1-sdk';
 import { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../app';
 import {
   initialiseAMMsThunk,
   selectAMMs,
@@ -8,7 +9,6 @@ import {
   setSignerForAMMsAction,
 } from '../../../app/features/aMMs';
 import { selectChainId } from '../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../useWallet';
 
 type UseAMMsResult = {

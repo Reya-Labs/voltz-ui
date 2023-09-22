@@ -2,13 +2,13 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Dialog, formatEthereumAddress, Typography } from 'brokoli-ui';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../app';
 import {
   fetchVoyageBadgesThunk,
   selectVoyageBadges,
   selectVoyageBadgesStatus,
 } from '../../../../app/features/voyage';
 import { VoyageBadgeUI } from '../../../../app/features/voyage/types';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { routes } from '../../../../app/paths';
 import { GenericError } from '../../../components/GenericError';
 import { AlphaPassCard } from './AlphaPassCard/AlphaPassCard';

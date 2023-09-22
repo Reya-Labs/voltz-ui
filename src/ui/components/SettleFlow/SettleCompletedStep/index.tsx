@@ -1,11 +1,11 @@
 import { Button, Confetti, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../app';
 import {
   closeSettleFlowAction,
   selectConfirmationFlowEtherscanLink,
 } from '../../../../app/features/settle-flow';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ExplorerLink } from '../../ExplorerLink';
 import { SettleDetails } from '../SettleDetails';
 import { SettleCompletedStepBox } from './SettleCompletedStep.styled';

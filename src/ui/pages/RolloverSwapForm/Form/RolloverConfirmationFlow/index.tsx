@@ -1,8 +1,8 @@
 import { Dialog } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import { selectSwapConfirmationFlowStep } from '../../../../../app/features/forms/trader/rollover-swap';
-import { useAppSelector } from '../../../../../app/hooks';
 import { RolloverCompletedStep } from './RolloverCompletedStep';
 import { RolloverConfirmationStep } from './RolloverConfirmationStep';
 import { WaitingForRolloverConfirmationStep } from './WaitingForRolloverConfirmationStep';

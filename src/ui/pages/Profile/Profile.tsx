@@ -2,8 +2,8 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import copy from 'copy-to-clipboard';
 import React, { useEffect, useState } from 'react';
 
+import { useAppSelector } from '../../../app';
 import { selectChainId } from '../../../app/features/network';
-import { useAppSelector } from '../../../app/hooks';
 import { getEndOfTodayTimestamp, getStartOfTodayTimestamp } from '../../../utilities/date';
 import { setPageTitle } from '../../../utilities/page';
 import { getSentryTracker } from '../../../utilities/sentry';

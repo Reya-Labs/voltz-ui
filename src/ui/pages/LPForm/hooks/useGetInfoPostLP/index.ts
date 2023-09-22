@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   getInfoPostLpThunk,
   selectLpFormAMM,
   selectLpFormSelectedPosition,
 } from '../../../../../app/features/forms/lps/lp';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 
 export const useGetInfoPostLP = () => {
   const dispatch = useAppDispatch();

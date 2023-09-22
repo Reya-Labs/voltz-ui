@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../app';
 import {
   fetchPoolsInformationThunk,
   selectPoolsInformationLoadedState,
   selectTotalLiquidityFormatted,
   selectVolume30DaysFormatted,
 } from '../../../app/features/aMMs';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
 export type UsePoolsInformationResult = {
   volume30DaysFormatted: ReturnType<typeof selectVolume30DaysFormatted>;

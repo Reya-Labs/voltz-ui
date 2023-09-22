@@ -1,8 +1,8 @@
 import { CloseButton, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppDispatch } from '../../../../../../../../app';
 import { closeMarginAccountDepositFlowAction } from '../../../../../../../../app/features/portfolio';
-import { useAppDispatch } from '../../../../../../../../app/hooks';
 import { ContentBox, TitleBox } from './DepositMarginSuccessDialogContent.styled';
 import { DepositSuccessMarginDetails } from './DepositSuccessMarginDetails';
 

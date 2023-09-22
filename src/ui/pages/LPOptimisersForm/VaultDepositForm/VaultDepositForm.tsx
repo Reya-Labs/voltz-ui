@@ -2,9 +2,9 @@ import { approveToken, depositAndRegister, isTokenApproved } from '@voltz-protoc
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../app';
 import { OptimiserInfo, updateOptimiserStateAction } from '../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { getAlchemyKey } from '../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../utilities/getInfuraKey';
 import { pushEvent } from '../../../../utilities/googleAnalytics';

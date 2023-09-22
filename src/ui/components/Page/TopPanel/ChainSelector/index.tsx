@@ -2,13 +2,13 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ChainSelector as BrokoliChainSelector } from 'brokoli-ui';
 import React, { useCallback, useEffect, useMemo } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   selectChainChangeState,
   selectChainId,
   setChainId,
   setChainIdThunk,
 } from '../../../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
 import { getChainOptions } from './get-chain-options';
 

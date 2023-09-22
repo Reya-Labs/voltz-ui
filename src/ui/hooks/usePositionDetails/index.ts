@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../app';
 import {
   fetchPositionDetailsThunk,
   selectPositionDetails,
   selectPositionDetailsLoadingState,
 } from '../../../app/features/position-details';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
 export const usePositionDetails = ({ positionId }: { positionId: string }) => {
   const positionDetails = useAppSelector(selectPositionDetails(positionId));

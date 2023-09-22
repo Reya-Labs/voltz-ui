@@ -1,13 +1,13 @@
 import { FromToTokenTypography, HorizontalLine, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../../../../../app';
 import {
   selectMarginAccountDepositFlowSelectedMarginAccountFormatted,
   selectMarginAccountDepositFlowSimulationValueFormatted,
   selectMarginAccountDepositFlowUserInputFormatted,
 } from '../../../../../../../../../app/features/portfolio';
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
-import { useAppSelector } from '../../../../../../../../../app/hooks';
 import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../../../components/MarginRatioDonut/constants';
 import {
   DepositMarginDetailsBox,

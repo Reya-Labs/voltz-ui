@@ -1,6 +1,7 @@
 import { Confetti, FromToTokenTypography, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../../../../../app';
 import {
   selectMarginAccountWithdrawFlowEtherscanLink,
   selectMarginAccountWithdrawFlowSelectedMarginAccountFormatted,
@@ -8,7 +9,6 @@ import {
   selectMarginAccountWithdrawFlowUserInputFormatted,
 } from '../../../../../../../../../app/features/portfolio';
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
-import { useAppSelector } from '../../../../../../../../../app/hooks';
 import { ExplorerLink } from '../../../../../../../../components/ExplorerLink';
 import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../../../components/MarginRatioDonut/constants';
 import {

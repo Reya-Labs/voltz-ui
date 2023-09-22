@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import { selectChainId } from '../../../../../app/features/network';
 import {
   initialisePortfolioPositionsThunk,
   selectPositionsLoadedState,
 } from '../../../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { ConnectWallet } from '../../../../components/ConnectWallet';
 import { useWallet } from '../../../../hooks/useWallet';
 import { Positions } from '../Positions';

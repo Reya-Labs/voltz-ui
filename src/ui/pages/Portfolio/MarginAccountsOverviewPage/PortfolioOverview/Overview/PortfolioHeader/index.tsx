@@ -1,8 +1,8 @@
 import { LabelTokenTypography, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../../../app';
 import { selectPortfolioSummaryFormatted } from '../../../../../../../app/features/portfolio';
-import { useAppSelector } from '../../../../../../../app/hooks';
 import { CollateralDistribution } from '../../../../../../components/CollateralDistribution';
 import {
   HealthBox,

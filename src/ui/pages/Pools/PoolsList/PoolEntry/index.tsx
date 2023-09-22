@@ -2,13 +2,13 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { ColorTokens, TokenTypography, TypographyToken } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import { MAX_POOL_CAP } from '../../../../../app/features/aMMs';
 import {
   selectChainChangeState,
   selectChainId,
   setChainIdThunk,
 } from '../../../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { ChainIcon } from '../../../../components/ChainIcon';
 import {
   MarketTokenInformation,

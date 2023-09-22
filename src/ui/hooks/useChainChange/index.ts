@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../app';
 import { selectReloadPageAfterChainChange, setChainId } from '../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useWallet } from '../useWallet';
 import { handlePageReloadAfterChainChanged } from './handle-page-reload-after-chain-changed';
 

@@ -1,6 +1,7 @@
 import { PillSelector } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../../app';
 import {
   fetchMarginAccountsThunk,
   MARGIN_ACCOUNTS_INITIAL_PAGE,
@@ -9,7 +10,6 @@ import {
   selectMarginAccountsSortOptions,
 } from '../../../../../../../app/features/portfolio';
 import { MarginAccountSortId } from '../../../../../../../app/features/portfolio/types';
-import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { useWallet } from '../../../../../../hooks/useWallet';
 
 export const MarginAccountsSortOptions: React.FunctionComponent = () => {

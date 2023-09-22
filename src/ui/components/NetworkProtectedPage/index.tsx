@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { useAppSelector } from '../../../app';
 import { selectIsSupportedChain } from '../../../app/features/network';
-import { useAppSelector } from '../../../app/hooks';
 import { ConnectSupportedNetwork } from '../ConnectSupportedNetwork';
 import { NotFoundPageContent } from '../NotFoundPageContent';
 import { Page } from '../Page';

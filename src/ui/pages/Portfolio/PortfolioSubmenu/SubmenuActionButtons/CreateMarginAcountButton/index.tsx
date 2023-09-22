@@ -1,11 +1,11 @@
 import React from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../app';
 import {
   closeCreateMarginAccountDialogAction,
   openCreateMarginAccountDialogAction,
   selectCreateMarginAccountDialogState,
 } from '../../../../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { CreateMarginAccountDialog } from './CreateMarginAccountDialog';
 import { CreateMarginAcountButtonStyled } from './CreateMarginAcountButton.styled';
 

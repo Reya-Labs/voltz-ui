@@ -2,9 +2,9 @@ import { registerForAutoRollover } from '@voltz-protocol/v1-sdk';
 import { MarketTokenProps, Typography } from 'brokoli-ui';
 import React, { useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import { updateOptimiserStateAction } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { routes } from '../../../../../app/paths';
 import { getAlchemyKey } from '../../../../../utilities/getAlchemyKey';
 import { getInfuraKey } from '../../../../../utilities/getInfuraKey';

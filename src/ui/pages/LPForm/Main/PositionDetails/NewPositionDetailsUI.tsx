@@ -1,12 +1,12 @@
 import { LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../app';
 import {
   selectNewPositionCompactNotional,
   selectUserInputFixedLower,
   selectUserInputFixedUpper,
 } from '../../../../../app/features/forms/lps/lp';
-import { useAppSelector } from '../../../../../app/hooks';
 import {
   BorderedBox,
   NotionalBox,

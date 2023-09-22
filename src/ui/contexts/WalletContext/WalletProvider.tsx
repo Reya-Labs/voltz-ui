@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../app';
 import {
   detectIfNetworkSupported,
   getDefaultChainId,
@@ -8,7 +9,6 @@ import {
   setChainIdThunk,
 } from '../../../app/features/network';
 import { resetPortfolioStateAction } from '../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { getENSDetails } from '../../../utilities/getENSDetails';
 import { getErrorMessage } from '../../../utilities/getErrorMessage';
 import { getSentryTracker } from '../../../utilities/sentry';

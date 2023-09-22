@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import { selectChainId } from '../../../../../app/features/network';
 import {
   fetchMarginAccountPositionsThunk,
   fetchMarginAccountSummaryThunk,
   selectPositionsLoadedState,
 } from '../../../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { ConnectWallet } from '../../../../components/ConnectWallet';
 import { useWallet } from '../../../../hooks/useWallet';
 import { MarginAccountSummaryHeader } from '../MarginAccountSummaryHeader';

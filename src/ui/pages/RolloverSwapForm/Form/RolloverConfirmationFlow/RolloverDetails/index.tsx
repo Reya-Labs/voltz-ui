@@ -1,6 +1,7 @@
 import { TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../../../app';
 import {
   selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
@@ -10,7 +11,6 @@ import {
   selectProspectiveSwapNotionalFormatted,
   selectVariableRateInfo,
 } from '../../../../../../app/features/forms/trader/rollover-swap';
-import { useAppSelector } from '../../../../../../app/hooks';
 import { formatNumber } from '../../../../../../utilities/number';
 import { RolloverDetailBox, RolloverDetailsBox } from './RolloverDetails.styled';
 

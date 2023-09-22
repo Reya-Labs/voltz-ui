@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import { selectChainId } from '../../../../../app/features/network';
 import {
   fetchMarginAccountsThunk,
@@ -7,7 +8,6 @@ import {
   MARGIN_ACCOUNTS_INITIAL_PAGE,
   MARGIN_ACCOUNTS_PER_PAGE,
 } from '../../../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { ConnectWallet } from '../../../../components/ConnectWallet';
 import { useWallet } from '../../../../hooks/useWallet';
 import { Overview } from './Overview';

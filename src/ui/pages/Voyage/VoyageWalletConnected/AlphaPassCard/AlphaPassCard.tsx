@@ -1,6 +1,7 @@
 import { Dialog, Pill } from 'brokoli-ui';
 import React, { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   closeClaimDialogAction,
   fetchIsAlphaPassClaimedThunk,
@@ -9,7 +10,6 @@ import {
   selectAlphaPassClaimFlowStep,
   selectAlphaPassTotalPasses,
 } from '../../../../../app/features/alpha-pass-claim-flow';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useWallet } from '../../../../hooks/useWallet';
 import { AdminPassDialogContent } from './AdminPassDialogContent';
 import {

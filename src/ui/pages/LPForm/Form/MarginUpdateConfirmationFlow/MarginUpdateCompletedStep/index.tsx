@@ -2,12 +2,12 @@ import { Button, Confetti, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../app';
 import {
   closeMarginUpdateConfirmationFlowAction,
   selectMarginUpdateConfirmationFlowEtherscanLink,
 } from '../../../../../../app/features/forms/lps/lp';
 import { resetPortfolioStateAction } from '../../../../../../app/features/portfolio';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { routes } from '../../../../../../app/paths';
 import { ExplorerLink } from '../../../../../components/ExplorerLink';
 import { MarginUpdateDetails } from '../MarginUpdateDetails';

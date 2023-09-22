@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
   selectLpFormAMM,
 } from '../../../../../app/features/forms/lps/lp';
 import { selectChainId } from '../../../../../app/features/network';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';
 
 export const useGetWalletBalanceAndUnderlyingTokenAllowance = () => {

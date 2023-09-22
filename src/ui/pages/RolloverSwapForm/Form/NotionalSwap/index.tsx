@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   getInfoPostSwapThunk,
   selectFixedRateInfo,
@@ -8,7 +9,6 @@ import {
   selectVariableRateInfo,
   setUserInputModeAction,
 } from '../../../../../app/features/forms/trader/rollover-swap';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { NotionalSwapUI } from '../../../../components/NotionalSwapUI';
 
 export const NotionalSwap: React.FunctionComponent = () => {

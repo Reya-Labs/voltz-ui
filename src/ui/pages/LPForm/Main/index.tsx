@@ -1,12 +1,12 @@
 import React from 'react';
 
+import { useAppSelector } from '../../../../app';
 import {
   selectFixedRateInfo,
   selectLpFormAMM,
   selectLpFormSelectedPosition,
   selectVariableRateInfo,
 } from '../../../../app/features/forms/lps/lp';
-import { useAppSelector } from '../../../../app/hooks';
 import { isV2AMM } from '../../../../utilities/amm';
 import { AlphaPassFlow } from '../../../components/AlphaPassFlow';
 import { FormTransactionHistory } from '../../../components/FormTransactionHistory';

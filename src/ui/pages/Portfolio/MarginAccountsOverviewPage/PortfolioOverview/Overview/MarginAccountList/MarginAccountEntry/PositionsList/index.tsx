@@ -2,6 +2,7 @@ import { AppLink, Typography } from 'brokoli-ui';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import AnimateHeight from 'react-animate-height';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../../../../app';
 import {
   fetchMarginAccountPositionsThunk,
   selectMarginAccountPositionsForOverview,
@@ -9,7 +10,6 @@ import {
   selectMarginAccountPositionsLoading,
 } from '../../../../../../../../../app/features/portfolio';
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
-import { useAppDispatch, useAppSelector } from '../../../../../../../../../app/hooks';
 import { routes } from '../../../../../../../../../app/paths';
 import { PositionEntry } from './PositionEntry';
 import { PositionsHeader } from './PositionsHeader';

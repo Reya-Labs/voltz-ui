@@ -2,6 +2,7 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Button, CloseButton, Typography, TypographyToken } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../../../app';
 import {
   selectChainChangeState,
   selectChainId,
@@ -9,7 +10,6 @@ import {
 } from '../../../../../../../../app/features/network';
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { initializeSettleFlowAction } from '../../../../../../../../app/features/settle-flow';
-import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { PositionTransactionHistory } from '../../../../../../../components/PositionTransactionHistory';
 import { SettleFlow } from '../../../../../../../components/SettleFlow';
 import { useAppNavigate } from '../../../../../../../hooks/useAppNavigate';

@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
   getUnderlyingTokenAllowanceThunk,
   getWalletBalanceThunk,
 } from '../../../../../app/features/forms/lps/lp';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { useAMMs } from '../../../../hooks/useAMMs';
 import { useGetWalletBalanceAndUnderlyingTokenAllowance } from '.';
 

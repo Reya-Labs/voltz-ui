@@ -1,13 +1,13 @@
 import { Button, CloseButton, HorizontalLine, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../../../../../app';
 import {
   closeRolloverConfirmationFlowAction,
   confirmLpRolloverThunk,
   selectRolloverConfirmationFlowError,
   selectRolloverLpFormAMM,
 } from '../../../../../../app/features/forms/lps/rollover-lp';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { MarketTokenInformationProps } from '../../../../../components/MarketTokenInformation';
 import { MarketTokenInformationCompact } from '../../../../../components/MarketTokenInformationCompact';
 import { TransactionDetails } from '../../TransactionDetails';
