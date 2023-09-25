@@ -10,8 +10,6 @@ import {
   selectSwapFormPosition,
   selectVariableRateInfo,
 } from '../../../../app/features/forms/trader/swap';
-import { isV2AMM } from '../../../../utilities/amm';
-import { AlphaPassFlow } from '../../../components/AlphaPassFlow';
 import { CashFlowCalculator } from '../../../components/CashflowCalculator';
 import { FormTransactionHistory } from '../../../components/FormTransactionHistory';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
@@ -33,7 +31,6 @@ export const Main: React.FunctionComponent = () => {
 
   return (
     <MainBox>
-      {isV2AMM(aMM) ? <AlphaPassFlow chainId={aMM.chainId} /> : null}
       <PoolHeader />
       <HistoricalRatesChart
         aMMId={aMM.id}
@@ -43,15 +40,13 @@ export const Main: React.FunctionComponent = () => {
       />
       <BottomMainBox>
         <PositionDetails />
-        {isV2AMM(aMM) ? null : (
-          <CashFlowCalculator
-            aMM={aMM}
-            averageFixedRate={averageFixedRate}
-            mode={mode}
-            position={position}
-            variableTokenDeltaBalance={variableTokenDeltaBalance}
-          />
-        )}
+        <CashFlowCalculator
+          aMM={aMM}
+          averageFixedRate={averageFixedRate}
+          mode={mode}
+          position={position}
+          variableTokenDeltaBalance={variableTokenDeltaBalance}
+        />
         <FormTransactionHistory positionId={position?.id} />
       </BottomMainBox>
     </MainBox>
