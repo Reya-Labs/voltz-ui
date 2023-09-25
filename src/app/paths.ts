@@ -11,7 +11,7 @@ export const routes = {
   LP_OPTIMISERS_DEPOSIT_FORM: 'lp-optimisers/:actions/:vaultId',
   LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM: 'lp-optimisers/:actions/:vaultId/:vaultIndex',
   DEPRECATED_TRADER_SWAP_FORM: 'trader/swap/:ammId/:poolId',
-  TRADER_SWAP_FORM: 'trader/swap/:ammId/:poolId/:marginAccountId',
+  TRADER_SWAP_FORM: 'trader/swap/:ammId/:poolId/ma/:marginAccountId',
   TRADER_ROLLOVER_SWAP_FORM: 'trader/rollover/:ammId/:positionId/:poolId',
   LP_FORM: 'lp/liquidity/:ammId/:poolId?',
   LP_ROLLOVER_FORM: 'lp/rollover/:ammId/:positionId/:poolId',

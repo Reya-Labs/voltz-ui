@@ -1,6 +1,15 @@
 import { Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { useAppSelector } from '../../../../app';
+import {
+  selectInfoPostSwapAverageFixedRate,
+  selectInfoPostSwapVariableTokenDeltaBalance,
+  selectProspectiveSwapMode,
+  selectSwapFormAMM,
+  selectSwapFormPosition,
+} from '../../../../app/features/forms/trader/swap';
+import { CashFlowCalculator } from '../../../components/CashflowCalculator';
 import {
   FormBox,
   FormOuterBox,
@@ -8,9 +17,7 @@ import {
   TitleBox,
   TransactionDetailsBox,
 } from '../../../components/FormStyled';
-import { LeverageField } from './LeverageField';
 import { MarginAccount } from './MarginAccount';
-import { MarginAmountField } from './MarginAmountField';
 import { MarginUpdateConfirmationFlow } from './MarginUpdateConfirmationFlow';
 import { NotionalAmountField } from './NotionalAmountField';
 import { NotionalSwap } from './NotionalSwap';
@@ -19,6 +26,16 @@ import { SwapConfirmationFlow } from './SwapConfirmationFlow';
 import { TransactionDetails } from './TransactionDetails';
 
 export const Form: React.FunctionComponent = () => {
+  const aMM = useAppSelector(selectSwapFormAMM);
+  const averageFixedRate = useAppSelector(selectInfoPostSwapAverageFixedRate);
+  const variableTokenDeltaBalance = useAppSelector(selectInfoPostSwapVariableTokenDeltaBalance);
+  const position = useAppSelector(selectSwapFormPosition);
+  const mode = useAppSelector(selectProspectiveSwapMode);
+
+  if (!aMM) {
+    return null;
+  }
+
   return (
     <React.Fragment>
       <SwapConfirmationFlow />
@@ -35,13 +52,18 @@ export const Form: React.FunctionComponent = () => {
         <FormBox>
           <NotionalSwap />
           <NotionalAmountField />
-          <LeverageField />
-          <MarginAmountField />
           <SubmitButton />
         </FormBox>
         <TransactionDetailsBox>
           <TransactionDetails />
         </TransactionDetailsBox>
+        <CashFlowCalculator
+          aMM={aMM}
+          averageFixedRate={averageFixedRate}
+          mode={mode}
+          position={position}
+          variableTokenDeltaBalance={variableTokenDeltaBalance}
+        />
       </FormOuterBox>
     </React.Fragment>
   );

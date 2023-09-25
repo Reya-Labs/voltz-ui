@@ -90,7 +90,7 @@ describe('useAppNavigate', () => {
 
     expect(generatePath).toHaveBeenCalledWith(routes.TRADER_SWAP_FORM, params);
     expect(navigateMock).toHaveBeenCalledWith(
-      `/trader/swap/${params.ammId}/${params.poolId}/${params.marginAccountId}`,
+      `/trader/swap/${params.ammId}/${params.poolId}/ma/${params.marginAccountId}`,
     );
   });
 
