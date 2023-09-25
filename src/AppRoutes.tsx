@@ -24,6 +24,7 @@ import { PortfolioPositionsPage } from './ui/pages/Portfolio/PortfolioPositions'
 import { ProfilePage } from './ui/pages/Profile';
 import { RolloverLPFormPage } from './ui/pages/RolloverLPForm';
 import { RolloverSwapFormPage } from './ui/pages/RolloverSwapForm';
+import { SwapFormPage } from './ui/pages/SwapForm';
 import { TradingLeaguePage } from './ui/pages/TradingLeague';
 import { VoyagePage } from './ui/pages/Voyage';
 import { isMarginAccountsLive } from './utilities/is-margin-accounts-live';
@@ -121,6 +122,14 @@ export const AppRoutes = () => {
             </NetworkProtectedPage>
           }
           path={routes.DEPRECATED_TRADER_SWAP_FORM}
+        />
+        <Route
+          element={
+            <NetworkProtectedPage>
+              <SwapFormPage />
+            </NetworkProtectedPage>
+          }
+          path={routes.TRADER_SWAP_FORM}
         />
         <Route
           element={

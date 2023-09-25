@@ -11,6 +11,7 @@ type UseAppNavigateResult = {
   }) => void;
   toPoolsPage: () => void;
   toDeprecatedSwapFormPage: (params: { ammId: string; poolId: string }) => void;
+  toSwapFormPage: (params: { ammId: string; poolId: string; marginAccountId: string }) => void;
   toRolloverSwapFormPage: (params: { ammId: string; poolId: string; positionId: string }) => void;
   toRolloverLPFormPage: (params: { ammId: string; poolId: string; positionId: string }) => void;
   toLPOptimisersDepositFormPage: (params: { vaultId: string }) => void;
@@ -44,6 +45,19 @@ export const useAppNavigate = (): UseAppNavigateResult => {
     const path = generatePath(routes.DEPRECATED_TRADER_SWAP_FORM, {
       ammId,
       poolId,
+    });
+    navigate(`/${path}`);
+  };
+
+  const toSwapFormPage: UseAppNavigateResult['toSwapFormPage'] = ({
+    ammId,
+    poolId,
+    marginAccountId,
+  }) => {
+    const path = generatePath(routes.TRADER_SWAP_FORM, {
+      ammId,
+      poolId,
+      marginAccountId,
     });
     navigate(`/${path}`);
   };
@@ -100,6 +114,7 @@ export const useAppNavigate = (): UseAppNavigateResult => {
   return {
     toLPFormPage,
     toPoolsPage,
+    toSwapFormPage,
     toDeprecatedSwapFormPage,
     toRolloverSwapFormPage,
     toRolloverLPFormPage,
