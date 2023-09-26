@@ -10,7 +10,7 @@ import {
   selectProspectiveSwapMode,
   selectProspectiveSwapNotionalFormatted,
   selectVariableRateInfo,
-} from '../../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../../app/features/forms/trader/deprecated/swap';
 import { formatNumber } from '../../../../../../../utilities/number';
 import { SwapDetailBox, SwapDetailsBox } from './SwapDetails.styled';
 

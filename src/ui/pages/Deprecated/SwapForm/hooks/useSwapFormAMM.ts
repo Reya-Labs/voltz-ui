@@ -14,7 +14,7 @@ import {
   selectSwapFormPositionFetchingStatus,
   setSignerAndPositionForAMMThunk,
   setSwapFormAMMAction,
-} from '../../../../../app/features/forms/trader/swap';
+} from '../../../../../app/features/forms/trader/deprecated/swap';
 import { selectChainId } from '../../../../../app/features/network';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../../utilities/amm';
 import { useAMMs } from '../../../../hooks/useAMMs';

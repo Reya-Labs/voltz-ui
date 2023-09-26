@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../../app';
 import {
   closeSwapConfirmationFlowAction,
   selectSwapConfirmationFlowEtherscanLink,
-} from '../../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../../app/features/forms/trader/deprecated/swap';
 import { resetPortfolioStateAction } from '../../../../../../../app/features/portfolio';
 import { routes } from '../../../../../../../app/paths';
 import { ExplorerLink } from '../../../../../../components/ExplorerLink';

@@ -11,7 +11,7 @@ import {
   selectSwapFormPosition,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
-} from '../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { stringToBigFloat } from '../../../../../../utilities/number';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { EditNotionalAmountFieldUI } from './EditNotionalAmountFieldUI';

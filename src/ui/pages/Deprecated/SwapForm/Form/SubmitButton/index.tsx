@@ -10,7 +10,7 @@ import {
   selectInfoPostSwap,
   selectSubmitButtonInfo,
   selectSubmitButtonText,
-} from '../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { FormSubmitButton } from '../../../../../components/FormSubmitButton';
 
 type SubmitButtonProps = {};

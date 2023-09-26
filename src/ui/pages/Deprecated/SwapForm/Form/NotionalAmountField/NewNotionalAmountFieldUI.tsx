@@ -6,7 +6,7 @@ import { FormNumberLimits } from '../../../../../../app/features/forms/common';
 import {
   selectAvailableNotional,
   selectUserInputNotionalInfo,
-} from '../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { formatNumber } from '../../../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 

@@ -8,7 +8,7 @@ import {
   selectLeverageOptions,
   selectShowLeverageNotification,
   setLeverageAction,
-} from '../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { LeverageField as LeverageFieldComponent } from '../../../../../components/LeverageField';
 import { useLowLeverageNotification } from '../../../../../hooks/useLowLeverageNotification';
 import { useWallet } from '../../../../../hooks/useWallet';

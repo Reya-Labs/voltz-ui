@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { routes, useAppDispatch } from '../../../../app';
-import { resetStateAction } from '../../../../app/features/forms/trader/swap';
+import { resetStateAction } from '../../../../app/features/forms/trader/deprecated/swap';
 import { GenericError } from '../../../components/GenericError';
 import { NoAMMFound } from '../../../components/NoAMMFound';
 import { Page } from '../../../components/Page';

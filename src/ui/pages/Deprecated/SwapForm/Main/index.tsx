@@ -9,7 +9,7 @@ import {
   selectSwapFormAMM,
   selectSwapFormPosition,
   selectVariableRateInfo,
-} from '../../../../../app/features/forms/trader/swap';
+} from '../../../../../app/features/forms/trader/deprecated/swap';
 import { isV2AMM } from '../../../../../utilities/amm';
 import { AlphaPassFlow } from '../../../../components/AlphaPassFlow';
 import { CashFlowCalculator } from '../../../../components/CashflowCalculator';
@@ -36,9 +36,9 @@ export const Main: React.FunctionComponent = () => {
       {isV2AMM(aMM) ? <AlphaPassFlow chainId={aMM.chainId} /> : null}
       <PoolHeader />
       <HistoricalRatesChart
-        aMMId={aMM.id}
-        aMMRateOracleId={aMM.rateOracle.id}
         fixedRate={fixedRateInfo}
+        poolId={aMM.id}
+        poolRateOracleId={aMM.rateOracle.id}
         variableRate={variableRateInfo}
       />
       <BottomMainBox>
