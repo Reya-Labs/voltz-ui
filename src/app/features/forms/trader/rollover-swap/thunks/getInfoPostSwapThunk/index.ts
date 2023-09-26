@@ -8,7 +8,7 @@ import { isV1StatelessEnabled } from '../../../../../../../utilities/isEnvVarPro
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers';
 import { isUserInputNotionalError } from '../../../../common';
-import { initialState } from '../../../swap/state';
+import { initialState } from '../../state';
 import {
   getProspectiveSwapMargin,
   getProspectiveSwapMode,
