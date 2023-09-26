@@ -1,5 +1,6 @@
 import { AMM, NetworkConfiguration, Position } from '@voltz-protocol/v1-sdk';
 
+import { V2Pool } from '../../app/features/aMMs';
 import { PortfolioPositionPool } from '../../app/features/position-details';
 
 /**
@@ -47,6 +48,16 @@ export const findCurrentAmm = (
 export const getAmmProtocol = (amm: AMM) => {
   return `${amm.protocol}${amm.market.tags.isV2 ? '_v2' : ''}${
     amm.market.tags.isBorrowing ? '_borrow' : ''
+  }`;
+};
+
+/**
+ * Returns pool name and includes borrowing tag and v2 tag
+ * @param pool - the pool
+ */
+export const getPoolProtocol = (pool: V2Pool) => {
+  return `${pool.market.split('').join()}${pool.isV2 ? '_v2' : ''}${
+    pool.isBorrowing ? '_borrow' : ''
   }`;
 };
 
@@ -110,6 +121,7 @@ export const generatePositionIdForRoute = (position: { id: string }) => position
 export const isV2AMM = (amm: AMM) => amm.market.tags.isV2;
 
 export const isAMMPaused = (amm: AMM) => (!amm ? false : amm.isPaused);
+export const isPoolPaused = (amm: V2Pool) => (!amm ? false : amm.flags.isPaused);
 export const isAMMPausedPortfolio = (amm: PortfolioPositionPool) =>
   !amm ? false : amm.flags.isPaused;
 
