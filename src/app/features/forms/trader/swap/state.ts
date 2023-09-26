@@ -1,15 +1,13 @@
-import { AMM, InfoPostSwapV1, Position } from '@voltz-protocol/v1-sdk';
+import { SimulateSwapMarginAccountResult } from '@voltz-protocol/sdk-v2';
+import { Position } from '@voltz-protocol/v1-sdk';
+import { providers } from 'ethers';
+
+import { V2Pool } from '../../../aMMs';
+import { PortfolioMarginAccount } from '../../../portfolio';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
-type SubmitButtonState =
-  | 'swap'
-  | 'margin-update'
-  | 'not-enough-balance'
-  | 'connect-wallet'
-  | 'approve'
-  | 'approving'
-  | 'paused';
+type SubmitButtonState = 'swap' | 'connect-wallet' | 'paused';
 
 export type SliceState = {
   submitButton: {
@@ -20,23 +18,19 @@ export type SliceState = {
       type: 'error' | 'warning' | 'info';
     };
   };
-  amm: AMM | null;
+  pool: V2Pool | null;
+  signer: providers.JsonRpcSigner | null;
+  marginAccount: PortfolioMarginAccount | null;
   position: {
     value: Position | null;
     status: ThunkStatus;
   };
-  walletBalance: {
+  maxNotionalAvailable: {
     value: number;
     status: ThunkStatus;
   };
   walletTokenAllowance: {
     value: number;
-    status: ThunkStatus;
-  };
-  // User-agnostic swap info about pool
-  poolSwapInfo: {
-    availableNotional: Record<'fixed' | 'variable', number>;
-    maxLeverage: Record<'fixed' | 'variable', number>;
     status: ThunkStatus;
   };
   userInput: {
@@ -48,23 +42,11 @@ export type SliceState = {
       editMode: 'add' | 'remove';
       error: string | null;
     };
-    // User-inputted margin amount
-    marginAmount: {
-      value: number;
-      editMode: 'add' | 'remove';
-      error: string | null;
-    };
-    leverage: number | null;
   };
   // State of prospective swap
   prospectiveSwap: {
-    // Leverage options
-    leverage: {
-      options: number[];
-      maxLeverage: string;
-    };
-    infoPostSwap: {
-      value: InfoPostSwapV1;
+    swapSimulation: {
+      value: SimulateSwapMarginAccountResult;
       status: ThunkStatus;
     };
   };
@@ -73,16 +55,6 @@ export type SliceState = {
     error: string | null;
     txHash: string | null;
   };
-  marginUpdateConfirmationFlow: {
-    step:
-      | 'marginUpdateConfirmation'
-      | 'waitingForMarginUpdateConfirmation'
-      | 'marginUpdateCompleted'
-      | null;
-    error: string | null;
-    txHash: string | null;
-  };
-  showLowLeverageNotification: boolean;
 };
 
 export const initialState: SliceState = {
@@ -94,28 +66,19 @@ export const initialState: SliceState = {
       type: 'info',
     },
   },
-  amm: null,
+  pool: null,
+  signer: null,
+  marginAccount: null,
   position: {
     value: null,
     status: 'idle',
   },
-  walletBalance: {
+  maxNotionalAvailable: {
     value: 0,
     status: 'idle',
   },
   walletTokenAllowance: {
     value: 0,
-    status: 'idle',
-  },
-  poolSwapInfo: {
-    availableNotional: {
-      fixed: 0,
-      variable: 0,
-    },
-    maxLeverage: {
-      fixed: 0,
-      variable: 0,
-    },
     status: 'idle',
   },
   userInput: {
@@ -125,19 +88,9 @@ export const initialState: SliceState = {
       editMode: 'add',
       error: null,
     },
-    marginAmount: {
-      value: 0,
-      editMode: 'add',
-      error: null,
-    },
-    leverage: null,
   },
   prospectiveSwap: {
-    leverage: {
-      options: [0, 0, 0],
-      maxLeverage: '--',
-    },
-    infoPostSwap: {
+    swapSimulation: {
       value: {
         marginRequirement: 0,
         maxMarginWithdrawable: 0,
@@ -157,10 +110,4 @@ export const initialState: SliceState = {
     error: null,
     txHash: null,
   },
-  marginUpdateConfirmationFlow: {
-    step: null,
-    error: null,
-    txHash: null,
-  },
-  showLowLeverageNotification: false,
 };

@@ -10,7 +10,7 @@ describe('getEditPositionTokenBalance', () => {
         },
       },
       prospectiveSwap: {
-        infoPostSwap: {
+        swapSimulation: {
           status: 'success',
           value: {
             variableTokenDeltaBalance: 100,
@@ -35,7 +35,7 @@ describe('getEditPositionTokenBalance', () => {
         value: null,
       },
       prospectiveSwap: {
-        infoPostSwap: {
+        swapSimulation: {
           status: 'success',
           value: {
             variableTokenDeltaBalance: 100,
@@ -62,7 +62,7 @@ describe('getEditPositionTokenBalance', () => {
         },
       },
       prospectiveSwap: {
-        infoPostSwap: {
+        swapSimulation: {
           status: 'idle',
           value: null,
         },
@@ -85,7 +85,7 @@ describe('getEditPositionTokenBalance', () => {
         value: null,
       },
       prospectiveSwap: {
-        infoPostSwap: {
+        swapSimulation: {
           status: 'idle',
           value: null,
         },

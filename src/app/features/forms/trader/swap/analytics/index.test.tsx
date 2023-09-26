@@ -1,6 +1,5 @@
 import { pushEvent } from '../../../../../../utilities/googleAnalytics';
 import {
-  pushLeverageChangeEvent,
   pushPageViewEvent,
   pushSwapTransactionFailedEvent,
   pushSwapTransactionSubmittedEvent,
@@ -34,16 +33,12 @@ describe('analyticsEvents', () => {
   describe('pushSwapTransactionSubmittedEvent', () => {
     it('should call pushEvent with the correct arguments', () => {
       const mockNotional = 1000;
-      const mockMargin = 0.1;
-      const mockIsEdit = true;
       const mockPool = 'pool123';
       const mockIsFT = false;
       const mockAccount = 'account123';
 
       pushSwapTransactionSubmittedEvent({
         notional: mockNotional,
-        margin: mockMargin,
-        isEdit: mockIsEdit,
         pool: mockPool,
         isFT: mockIsFT,
         account: mockAccount,
@@ -54,8 +49,7 @@ describe('analyticsEvents', () => {
         event: 'tx_submitted',
         eventValue: {
           notional: mockNotional,
-          margin: mockMargin,
-          action: 'edit',
+          action: 'new',
         },
         pool: mockPool,
         agent: 'Variable Trader',
@@ -66,16 +60,12 @@ describe('analyticsEvents', () => {
   describe('pushSwapTransactionSuccessEvent', () => {
     it('should call pushEvent with the correct arguments', () => {
       const mockNotional = 1000;
-      const mockMargin = 0.1;
-      const mockIsEdit = true;
       const mockPool = 'pool123';
       const mockIsFT = false;
       const mockAccount = 'account123';
 
       pushSwapTransactionSuccessEvent({
         notional: mockNotional,
-        margin: mockMargin,
-        isEdit: mockIsEdit,
         pool: mockPool,
         isFT: mockIsFT,
         account: mockAccount,
@@ -86,8 +76,7 @@ describe('analyticsEvents', () => {
         event: 'successful_tx',
         eventValue: {
           notional: mockNotional,
-          margin: mockMargin,
-          action: 'edit',
+          action: 'new',
         },
         pool: mockPool,
         agent: 'Variable Trader',
@@ -98,8 +87,6 @@ describe('analyticsEvents', () => {
   describe('pushSwapTransactionFailedEvent', () => {
     it('should call pushEvent with the correct arguments', () => {
       const mockNotional = 1000;
-      const mockMargin = 0.1;
-      const mockIsEdit = true;
       const mockPool = 'pool123';
       const mockIsFT = false;
       const mockAccount = 'account123';
@@ -107,8 +94,6 @@ describe('analyticsEvents', () => {
 
       pushSwapTransactionFailedEvent({
         notional: mockNotional,
-        margin: mockMargin,
-        isEdit: mockIsEdit,
         pool: mockPool,
         isFT: mockIsFT,
         account: mockAccount,
@@ -120,58 +105,10 @@ describe('analyticsEvents', () => {
         event: 'failed_tx',
         eventValue: {
           notional: mockNotional,
-          margin: mockMargin,
-          action: 'edit',
+          action: 'new',
           failMessage: mockErrorMessage,
         },
         pool: mockPool,
-        agent: 'Variable Trader',
-      });
-    });
-  });
-
-  describe('pushLeverageChangeEvent', () => {
-    it('calls pushEvent with the correct parameters', () => {
-      const account = 'myAccount';
-      const leverage = 3;
-      const isFT = false;
-      const pool = 'myPool';
-      const changeType = 'button';
-
-      // Call pushLeverageChangeEvent with the test parameters and the mock pushEvent function
-      pushLeverageChangeEvent({
-        account,
-        leverage,
-        isFT,
-        pool,
-        changeType,
-      });
-
-      // Check if pushEvent was called once
-      expect(pushEvent).toHaveBeenCalledTimes(1);
-
-      // Check if pushEvent was called with the correct parameters
-      expect(pushEvent).toHaveBeenCalledWith(account, {
-        event: 'leverage_change_button',
-        eventValue: leverage,
-        pool,
-        agent: 'Variable Trader',
-      });
-
-      // Call pushLeverageChangeEvent with the test parameters and the mock pushEvent function
-      pushLeverageChangeEvent({
-        account,
-        leverage,
-        isFT,
-        pool,
-        changeType: 'input',
-      });
-
-      // Check if pushEvent was called with the correct parameters
-      expect(pushEvent).toHaveBeenCalledWith(account, {
-        event: 'leverage_change_input',
-        eventValue: leverage,
-        pool,
         agent: 'Variable Trader',
       });
     });

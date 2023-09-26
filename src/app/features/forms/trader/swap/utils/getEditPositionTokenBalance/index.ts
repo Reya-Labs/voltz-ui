@@ -9,8 +9,8 @@ export const getEditPositionTokenBalance = (state: Draft<SliceState>) => {
     variableTokenBalance += state.position.value.variableTokenBalance;
   }
 
-  if (state.prospectiveSwap.infoPostSwap.status === 'success') {
-    variableTokenBalance += state.prospectiveSwap.infoPostSwap.value.variableTokenDeltaBalance;
+  if (state.prospectiveSwap.swapSimulation.status === 'success') {
+    variableTokenBalance += state.prospectiveSwap.swapSimulation.value.variableTokenDeltaBalance;
   }
 
   return {
