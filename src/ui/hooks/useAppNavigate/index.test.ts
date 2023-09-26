@@ -83,7 +83,7 @@ describe('useAppNavigate', () => {
     };
 
     (generatePath as jest.Mock).mockReturnValueOnce(
-      `trader/swap/${params.ammId}/${params.poolId}/${params.marginAccountId}`,
+      `trader/swap/${params.ammId}/${params.poolId}/ma/${params.marginAccountId}`,
     );
 
     result.current.toSwapFormPage(params);
