@@ -2,7 +2,7 @@ import { Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { useAppSelector } from '../../../../app';
-import { selectPools, selectPoolsLoading } from '../../../../app/features/aMMs';
+import { selectV1V2Pools, selectV1V2PoolsLoading } from '../../../../app/features/aMMs';
 import { PoolEntry } from './PoolEntry';
 import { PoolsHeader } from './PoolsHeader';
 import {
@@ -13,8 +13,8 @@ import {
 } from './PoolsList.styled';
 
 export const PoolsList: React.FunctionComponent = () => {
-  const loading = useAppSelector(selectPoolsLoading);
-  const pools = useAppSelector(selectPools);
+  const loading = useAppSelector(selectV1V2PoolsLoading);
+  const pools = useAppSelector(selectV1V2Pools);
 
   return (
     <PoolsHeaderAndListBox>

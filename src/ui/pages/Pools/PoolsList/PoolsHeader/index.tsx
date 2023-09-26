@@ -2,8 +2,8 @@ import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
-  selectPoolsLoading,
   selectPoolSortOptions,
+  selectV1V2PoolsLoading,
   togglePoolSortingDirectionAction,
 } from '../../../../../app/features/aMMs';
 import { PoolSortId } from '../../../../../app/features/aMMs/types';
@@ -25,7 +25,7 @@ export const PoolsHeader: React.FunctionComponent = () => {
   const fixedAPRSortOption = sortOptions.find((o) => o.id === 'fixedAPR');
   const variableAPYSortOption = sortOptions.find((o) => o.id === 'variableAPY');
   const maturitySortOption = sortOptions.find((o) => o.id === 'maturity');
-  const loading = useAppSelector(selectPoolsLoading);
+  const loading = useAppSelector(selectV1V2PoolsLoading);
   const onSort = (id: PoolSortId) => () => {
     dispatch(
       togglePoolSortingDirectionAction({

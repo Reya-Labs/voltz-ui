@@ -10,6 +10,7 @@ import { RootState } from '../../store';
 import { selectChainId } from '../network';
 import { FILTER_CONFIG, SORT_CONFIG } from './constants';
 import { filterByChain, filterByTag, sortPools } from './helpers';
+import { V2Pool } from './thunks';
 import { PoolFilterId, PoolSortDirection, PoolSortId, PoolUI } from './types';
 
 export const selectAMMs = (state: RootState): AMM[] => {
@@ -19,16 +20,20 @@ export const selectAMMs = (state: RootState): AMM[] => {
   return state.aMMs.aMMs;
 };
 
-export const selectPoolsOnCurrentChain = (state: RootState): PoolUI[] => {
+export const selectPools = (state: RootState): V2Pool[] => {
+  return state.aMMs.pools;
+};
+
+export const selectV1V2PoolsOnCurrentChain = (state: RootState): PoolUI[] => {
   const chainId = selectChainId(state);
   if (!chainId) {
     return [];
   }
-  const pools = selectPools(state);
+  const pools = selectV1V2Pools(state);
   return pools.filter((p) => p.chainId === chainId);
 };
 
-export const selectPools = (state: RootState): PoolUI[] => {
+export const selectV1V2Pools = (state: RootState): PoolUI[] => {
   const aMMs = selectAMMs(state);
   const appliedFilters = state.aMMs.filters;
   const appliedSortingDirection = state.aMMs.sortingDirection;
@@ -85,7 +90,7 @@ export const selectPools = (state: RootState): PoolUI[] => {
   });
 };
 
-export const selectPoolsLoading = (state: RootState): boolean => {
+export const selectV1V2PoolsLoading = (state: RootState): boolean => {
   const loadedState = selectAMMsLoadedState(state);
   return loadedState === 'idle' || loadedState === 'pending';
 };
@@ -95,11 +100,11 @@ const selectPoolsInformationLoading = (state: RootState): boolean => {
   return loadedState === 'idle' || loadedState === 'pending';
 };
 
-export const selectPoolsSize = (state: RootState): string => {
-  if (selectPoolsLoading(state)) {
+export const selectV1V2PoolsSize = (state: RootState): string => {
+  if (selectV1V2PoolsLoading(state)) {
     return '--';
   }
-  return selectPools(state).length.toString();
+  return selectV1V2Pools(state).length.toString();
 };
 
 export const selectVolume30DaysFormatted = (
@@ -177,6 +182,10 @@ export const selectPoolSortOptions = (
 
 export const selectAMMsLoadedState = (state: RootState) => {
   return state.aMMs.aMMsLoadedState;
+};
+
+export const selectPoolsLoadedState = (state: RootState) => {
+  return state.aMMs.poolsLoadedState;
 };
 
 export const selectPoolsInformationLoadedState = (state: RootState) => {
