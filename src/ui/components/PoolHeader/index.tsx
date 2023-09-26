@@ -24,7 +24,7 @@ type PoolHeaderProps = {
   fixedRateFormatted: string;
   variableRate24hDelta: number | undefined;
   variableRateFormatted: string;
-  aMMMaturity: string;
+  poolMaturity: string;
   onPoolItemClick: PoolListProps['onPoolItemClick'];
   pools: PoolListProps['pools'];
   poolCap: number;
@@ -40,7 +40,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   fixedRateFormatted,
   variableRate24hDelta,
   variableRateFormatted,
-  aMMMaturity,
+  poolMaturity,
   onPoolItemClick,
   isV2,
   pools,
@@ -120,7 +120,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
             labelTypographyToken={labelTypographyToken}
             token=""
             typographyToken={typographyToken}
-            value={aMMMaturity}
+            value={poolMaturity}
           />
         </MaturityBox>
         {isV2 ? (
