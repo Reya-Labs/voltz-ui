@@ -3,7 +3,7 @@ import React from 'react';
 import { useAppSelector } from '../../../../app';
 import {
   selectFixedRateInfo,
-  selectSwapFormAMM,
+  selectSwapFormPool,
   selectVariableRateInfo,
 } from '../../../../app/features/forms/trader/swap';
 import { HistoricalRatesChart } from '../../../components/HistoricalRatesChart';
@@ -11,10 +11,10 @@ import { MainBox } from './Main.styled';
 import { PoolHeader } from './PoolHeader';
 
 export const Main: React.FunctionComponent = () => {
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const pool = useAppSelector(selectSwapFormPool);
   const fixedRateInfo = useAppSelector(selectFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
-  if (!aMM || fixedRateInfo === undefined || variableRateInfo === undefined) {
+  if (!pool || fixedRateInfo === undefined || variableRateInfo === undefined) {
     return null;
   }
 
@@ -22,9 +22,9 @@ export const Main: React.FunctionComponent = () => {
     <MainBox>
       <PoolHeader />
       <HistoricalRatesChart
-        aMMId={aMM.id}
-        aMMRateOracleId={aMM.rateOracle.id}
         fixedRate={fixedRateInfo}
+        poolId={pool.id}
+        poolRateOracleId={pool.rateOracle.address}
         variableRate={variableRateInfo}
       />
     </MainBox>

@@ -3,10 +3,9 @@ import React from 'react';
 
 import { useAppSelector } from '../../../../../../app';
 import {
-  selectAMMMaturityFormatted,
   selectAMMTokenFormatted,
   selectInfoPostSwap,
-  selectProspectiveSwapMarginFormatted,
+  selectPoolMaturityFormatted,
   selectProspectiveSwapMode,
   selectProspectiveSwapNotionalFormatted,
   selectVariableRateInfo,
@@ -21,13 +20,12 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const mode = useAppSelector(selectProspectiveSwapMode);
   const prospectiveSwapNotionalFormatted = useAppSelector(selectProspectiveSwapNotionalFormatted);
-  const prospectiveSwapMarginFormatted = useAppSelector(selectProspectiveSwapMarginFormatted);
   const fixedRate = formatNumber(infoPostSwap.value.averageFixedRate);
   const variableRate = formatNumber(variableRateInfo || 0);
 
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
-  const aMMMaturity = useAppSelector(selectAMMMaturityFormatted);
+  const poolMaturity = useAppSelector(selectPoolMaturityFormatted);
   const token = useAppSelector(selectAMMTokenFormatted);
 
   return (
@@ -67,24 +65,13 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
       </SwapDetailBox>
       <SwapDetailBox>
         <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-          Margin
-        </Typography>
-        <TokenTypography
-          colorToken="lavenderWeb"
-          token={token}
-          typographyToken="secondaryBodySmallRegular"
-          value={prospectiveSwapMarginFormatted}
-        />
-      </SwapDetailBox>
-      <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
           token=" "
           typographyToken="secondaryBodySmallRegular"
-          value={aMMMaturity}
+          value={poolMaturity}
         />
       </SwapDetailBox>
     </SwapDetailsBox>

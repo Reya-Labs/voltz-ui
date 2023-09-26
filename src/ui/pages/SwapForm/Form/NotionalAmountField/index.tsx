@@ -4,13 +4,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
-  getInfoPostSwapThunk,
   resetInfoPostSwapAction,
   selectIsGetInfoPostSwapLoading,
-  selectSwapFormAMM,
+  selectSwapFormPool,
   selectSwapFormPosition,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
+  simulateSwapThunk,
 } from '../../../../../app/features/forms/trader/swap';
 import { stringToBigFloat } from '../../../../../utilities/number';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
@@ -29,7 +29,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const dispatch = useAppDispatch();
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const pool = useAppSelector(selectSwapFormPool);
   const position = useAppSelector(selectSwapFormPosition);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   const getInfoPostSwap = useCallback(() => {
     setGetInfoPostSwapNotional(localNotional);
     dispatch(resetInfoPostSwapAction());
-    void dispatch(getInfoPostSwapThunk());
+    void dispatch(simulateSwapThunk());
   }, [localNotional, dispatch]);
 
   const debouncedSetNotionalAmount = useMemo(
@@ -102,7 +102,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     };
   }, []);
 
-  if (!aMM) {
+  if (!pool) {
     return null;
   }
 
@@ -127,7 +127,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       handleOnNotionalChange={handleOnNotionalChange}
       labelTypographyToken={labelTypographyToken}
       localNotional={localNotional}
-      underlyingTokenName={aMM.underlyingToken.name}
+      underlyingTokenName={pool.underlyingToken.name}
     />
   ) : (
     <EditNotionalAmountFieldUI
@@ -140,7 +140,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       labelTypographyToken={labelTypographyToken}
       localEditMode={localEditMode}
       localNotional={localNotional}
-      underlyingTokenName={aMM.underlyingToken.name}
+      underlyingTokenName={pool.underlyingToken.name}
     />
   );
 };

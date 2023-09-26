@@ -7,13 +7,13 @@ import { NoAMMFound } from '../../components/NoAMMFound';
 import { Page } from '../../components/Page';
 import { PageLoading } from '../../components/PageLoading';
 import { Form } from './Form';
-import { useSwapFormAMM } from './hooks/useSwapFormAMM';
+import { useSwapFormPool } from './hooks/useSwapFormPool';
 import { Main } from './Main';
 
 export const SwapFormPage: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
-  const { noAMMFound, loading, error } = useSwapFormAMM();
+  const { noPoolFound, loading, error } = useSwapFormPool();
 
   React.useEffect(() => {
     return () => {
@@ -25,7 +25,7 @@ export const SwapFormPage: React.FunctionComponent = () => {
     <Page
       errorSlot={error ? <GenericError to={`/${routes.POOLS}`} /> : undefined}
       mainSlot={<Main />}
-      notFoundSlot={noAMMFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
+      notFoundSlot={noPoolFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
       pageLoadingSlot={loading ? <PageLoading /> : undefined}
       rightSlot={<Form />}
     />

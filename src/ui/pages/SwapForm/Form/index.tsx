@@ -3,13 +3,10 @@ import React from 'react';
 
 import { useAppSelector } from '../../../../app';
 import {
-  selectInfoPostSwapAverageFixedRate,
-  selectInfoPostSwapVariableTokenDeltaBalance,
   selectProspectiveSwapMode,
-  selectSwapFormAMM,
-  selectSwapFormPosition,
+  selectSwapFormPool,
 } from '../../../../app/features/forms/trader/swap';
-import { CashFlowCalculator } from '../../../components/CashflowCalculator';
+import { CashflowCalculatorModal } from '../../../components/CashflowCalculatorModal';
 import {
   FormBox,
   FormOuterBox,
@@ -18,7 +15,6 @@ import {
   TransactionDetailsBox,
 } from '../../../components/FormStyled';
 import { MarginAccount } from './MarginAccount';
-import { MarginUpdateConfirmationFlow } from './MarginUpdateConfirmationFlow';
 import { NotionalAmountField } from './NotionalAmountField';
 import { NotionalSwap } from './NotionalSwap';
 import { SubmitButton } from './SubmitButton';
@@ -26,20 +22,16 @@ import { SwapConfirmationFlow } from './SwapConfirmationFlow';
 import { TransactionDetails } from './TransactionDetails';
 
 export const Form: React.FunctionComponent = () => {
-  const aMM = useAppSelector(selectSwapFormAMM);
-  const averageFixedRate = useAppSelector(selectInfoPostSwapAverageFixedRate);
-  const variableTokenDeltaBalance = useAppSelector(selectInfoPostSwapVariableTokenDeltaBalance);
-  const position = useAppSelector(selectSwapFormPosition);
+  const pool = useAppSelector(selectSwapFormPool);
   const mode = useAppSelector(selectProspectiveSwapMode);
 
-  if (!aMM) {
+  if (!pool) {
     return null;
   }
 
   return (
     <React.Fragment>
       <SwapConfirmationFlow />
-      <MarginUpdateConfirmationFlow />
       <FormOuterBox>
         <MarginAccountBox>
           <MarginAccount />
@@ -57,13 +49,7 @@ export const Form: React.FunctionComponent = () => {
         <TransactionDetailsBox>
           <TransactionDetails />
         </TransactionDetailsBox>
-        <CashFlowCalculator
-          aMM={aMM}
-          averageFixedRate={averageFixedRate}
-          mode={mode}
-          position={position}
-          variableTokenDeltaBalance={variableTokenDeltaBalance}
-        />
+        <CashflowCalculatorModal mode={mode} pool={pool} />
       </FormOuterBox>
     </React.Fragment>
   );

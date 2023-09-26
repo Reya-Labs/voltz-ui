@@ -4,9 +4,9 @@ import React, { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../../app';
 import {
   closeSwapConfirmationFlowAction,
-  confirmSwapThunk,
   selectSwapConfirmationFlowError,
-  selectSwapFormAMM,
+  selectSwapFormPool,
+  swapThunk,
 } from '../../../../../../app/features/forms/trader/swap';
 import { MarketTokenInformationProps } from '../../../../../components/MarketTokenInformation';
 import { MarketTokenInformationCompact } from '../../../../../components/MarketTokenInformationCompact';
@@ -20,16 +20,16 @@ import {
 } from './SwapConfirmationStep.styled';
 
 export const SwapConfirmationStep: React.FunctionComponent = () => {
-  const aMM = useAppSelector(selectSwapFormAMM);
+  const pool = useAppSelector(selectSwapFormPool);
   const dispatch = useAppDispatch();
   const handleConfirmSwap = useCallback(() => {
-    void dispatch(confirmSwapThunk());
+    void dispatch(swapThunk());
   }, [dispatch]);
   const error = useAppSelector(selectSwapConfirmationFlowError);
   const handleCloseButtonClick = useCallback(() => {
     dispatch(closeSwapConfirmationFlowAction());
   }, [dispatch]);
-  if (!aMM) {
+  if (!pool) {
     return null;
   }
 
@@ -43,8 +43,8 @@ export const SwapConfirmationStep: React.FunctionComponent = () => {
       </TitleBox>
       <SwapDetailsBox>
         <MarketTokenInformationCompact
-          market={aMM.market.name as MarketTokenInformationProps['market']}
-          token={aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
+          market={pool.market as MarketTokenInformationProps['market']}
+          token={pool.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token']}
         />
         <SwapDetails />
       </SwapDetailsBox>

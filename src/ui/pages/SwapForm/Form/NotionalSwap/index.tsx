@@ -2,12 +2,12 @@ import React, { useCallback } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
-  getInfoPostSwapThunk,
   selectFixedRateInfo,
   selectIsGetInfoPostSwapLoading,
   selectUserInputMode,
   selectVariableRateInfo,
   setUserInputModeAction,
+  simulateSwapThunk,
 } from '../../../../../app/features/forms/trader/swap';
 import { NotionalSwapUI } from '../../../../components/NotionalSwapUI';
 
@@ -26,7 +26,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
           value,
         }),
       );
-      void dispatch(getInfoPostSwapThunk());
+      void dispatch(simulateSwapThunk());
     },
     [dispatch],
   );

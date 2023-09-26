@@ -2,10 +2,6 @@ import React, { useCallback } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
-  approveUnderlyingTokenThunk,
-  closeMarginUpdateConfirmationFlowAction,
-  closeSwapConfirmationFlowAction,
-  openMarginUpdateConfirmationFlowAction,
   openSwapConfirmationFlowAction,
   selectInfoPostSwap,
   selectSubmitButtonInfo,
@@ -23,16 +19,12 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
 
   const handleButtonClick = useCallback(() => {
     switch (submitButtonInfo.state) {
-      case 'approve':
-        void dispatch(approveUnderlyingTokenThunk());
-        break;
+      // TODO: FB - Should be part of the deposit flow
+      // case 'approve':
+      //   void dispatch(approvePoolUnderlyingTokenThunk());
+      //   break;
       case 'swap':
-        void dispatch(closeMarginUpdateConfirmationFlowAction());
         void dispatch(openSwapConfirmationFlowAction());
-        break;
-      case 'margin-update':
-        void dispatch(closeSwapConfirmationFlowAction());
-        void dispatch(openMarginUpdateConfirmationFlowAction());
         break;
       default:
         break;
