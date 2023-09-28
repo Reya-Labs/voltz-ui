@@ -1,17 +1,17 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { useAppSelector } from './app';
+import { routes, useAppSelector } from './app';
 import { isArbitrumChain, isAvalancheChain, selectChainId } from './app/features/network';
 import { isSpruceChain } from './app/features/network/helpers/is-spruce-chain';
 import { selectRedirects } from './app/features/redirects';
-import { routes } from './app/paths';
 import { NetworkProtectedPage } from './ui/components/NetworkProtectedPage';
 import { NotFoundPageContent } from './ui/components/NotFoundPageContent';
 import { Page } from './ui/components/Page';
 import { useChainChange } from './ui/hooks/useChainChange';
 import { useInitializeGoogleTagManager } from './ui/hooks/useInitializeGoogleTagManager';
 import { useReferrer } from './ui/hooks/useReferrer';
+import { DeprecatedPoolsPage } from './ui/pages/Deprecated/Pools';
 import { DeprecatedSwapFormPage } from './ui/pages/Deprecated/SwapForm';
 import { LPFormPage } from './ui/pages/LPForm';
 import { LPOptimisersPage } from './ui/pages/LPOptimisers';
@@ -45,7 +45,7 @@ export const AppRoutes = () => {
         <Route
           element={
             <NetworkProtectedPage>
-              <PoolsPage />
+              {isMarginAccountsLive() ? <PoolsPage /> : <DeprecatedPoolsPage />}
             </NetworkProtectedPage>
           }
           path={routes.POOLS}
