@@ -1,24 +1,33 @@
-import { AMM } from '@voltz-protocol/v1-sdk';
-
 import { PoolFilters } from '../../types';
 
-export const filterByTag = (amm: AMM, appliedFilters: PoolFilters) => {
-  if (amm.market.tags.isV2) {
+export const filterByTag = (
+  {
+    isV2,
+    isYield,
+    isBorrowing,
+  }: {
+    isV2: boolean;
+    isBorrowing: boolean;
+    isYield: boolean;
+  },
+  appliedFilters: PoolFilters,
+) => {
+  if (isV2) {
     if (!appliedFilters['v2']) {
       return false;
     }
-    if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
+    if (appliedFilters['borrow'] && isBorrowing) {
       return true;
     }
-    if (appliedFilters['yield'] && amm.market.tags.isYield) {
+    if (appliedFilters['yield'] && isYield) {
       return true;
     }
     return true;
   } else {
-    if (appliedFilters['borrow'] && amm.market.tags.isBorrowing) {
+    if (appliedFilters['borrow'] && isBorrowing) {
       return true;
     }
-    if (appliedFilters['yield'] && amm.market.tags.isYield) {
+    if (appliedFilters['yield'] && isYield) {
       return true;
     }
   }
