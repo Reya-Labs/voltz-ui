@@ -76,11 +76,11 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
   }, []);
 
   const receiveTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyExtraLargeBold'
-    : 'primaryBodyMediumBold';
+    ? 'primaryBodySmallBold'
+    : 'primaryBodyXSmallBold';
 
   const payTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
+    ? 'primaryBodySmallRegular'
     : 'primaryBodyXSmallRegular';
 
   const labelTypographyToken: TypographyToken = isLargeDesktopDevice
@@ -88,8 +88,8 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
     : 'primaryBodySmallBold';
 
   const percentageTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyLargeBold'
-    : 'secondaryBodyMediumBold';
+    ? 'primaryBodySmallBold'
+    : 'primaryBodyXSmallBold';
 
   return (
     <NotionalSwapWrapperBox>

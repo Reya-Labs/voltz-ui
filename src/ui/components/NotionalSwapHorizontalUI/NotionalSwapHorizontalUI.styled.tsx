@@ -38,7 +38,7 @@ export const NotionalSwapBox = styled('div')`
   display: flex;
   flex-direction: row;
   position: relative;
-  gap: 8px;
+  gap: 4px;
 `;
 
 const NotionalBox = styled('div')`
@@ -51,6 +51,7 @@ export const NotionalSwapFixedBox = styled(NotionalBox)`
   border: 1px solid ${colors.lavenderWeb5};
   background: ${colors.lavenderWeb8};
   flex: 1;
+  padding: 8px;
 `;
 
 export const NotionalSwapSwapper = styled('div', {
@@ -61,11 +62,11 @@ export const NotionalSwapSwapper = styled('div', {
   filter: drop-shadow(0px 1px 8px ${colors.liberty8})
     drop-shadow(0px 2px 40px ${colors.lavenderWeb4});
   background: ${colors.lavenderWeb};
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   position: absolute;
-  top: calc(50% - 14px);
-  left: calc(50% - 14px);
+  top: calc(50% - 12px);
+  left: calc(50% - 16px);
   border-radius: 50%;
   transition: box-shadow 200ms ease-in;
   cursor: pointer;
@@ -86,6 +87,7 @@ export const NotionalSwapVariableBox = styled(NotionalBox)`
   border: 1px solid ${colors.lavenderWeb7};
   background: ${colors.liberty7};
   flex: 1;
+  padding: 8px 8px 8px 16px;
 `;
 
 export const TopTextContent = styled('div')`

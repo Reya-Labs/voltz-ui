@@ -1,4 +1,3 @@
-import { Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { useAppSelector } from '../../../../app';
@@ -11,7 +10,6 @@ import {
   FormBox,
   FormOuterBox,
   MarginAccountBox,
-  TitleBox,
   TransactionDetailsBox,
 } from '../../../components/FormStyled';
 import { MarginAccount } from './MarginAccount';
@@ -36,11 +34,6 @@ export const Form: React.FunctionComponent = () => {
         <MarginAccountBox>
           <MarginAccount />
         </MarginAccountBox>
-        <TitleBox>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Black">
-            SWAP Rates
-          </Typography>
-        </TitleBox>
         <FormBox>
           <NotionalSwap />
           <NotionalAmountField />
