@@ -19,12 +19,14 @@ type NotionalSwapHorizontalUIProps = {
   loading: boolean;
   fixedRateInfo: number | undefined;
   variableRateInfo: number | undefined;
+  payFixedRateInfo: number | undefined;
   mode: 'fixed' | 'variable';
   onModeChange: (mode: 'fixed' | 'variable') => void;
 };
 export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHorizontalUIProps> = ({
   fixedRateInfo,
   variableRateInfo,
+  payFixedRateInfo,
   loading,
   onModeChange,
   mode,
@@ -32,6 +34,7 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
   const [localMode, setLocalMode] = useState<'fixed' | 'variable'>('fixed');
   const fixedRate = fixedRateInfo ? formatNumber(fixedRateInfo) : '--';
   const variableRate = variableRateInfo ? formatNumber(variableRateInfo) : '--';
+  const payFixedRate = payFixedRateInfo ? formatNumber(payFixedRateInfo) : '--';
   const isFixedMode = localMode === 'fixed';
   const { isLargeDesktopDevice } = useResponsiveQuery();
 
@@ -81,17 +84,17 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
     : 'primaryBodyXSmallRegular';
 
   const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodySmallRegular';
+    ? 'primaryBodyMediumBold'
+    : 'primaryBodySmallBold';
 
   const percentageTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyLargeRegular'
-    : 'secondaryBodyMediumRegular';
+    ? 'secondaryBodyLargeBold'
+    : 'secondaryBodyMediumBold';
 
   return (
     <NotionalSwapWrapperBox>
       <TypographyWithTooltip
-        colorToken="lavenderWeb2"
+        colorToken="lavenderWeb"
         tooltip="When trading interest rate swaps, you receive one rate and pay out the other. Choose the rate you wish to receive vs. pay."
         typographyToken={labelTypographyToken}
       >
@@ -104,7 +107,7 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
               {isFixedMode ? 'Receive Fixed' : 'Receive Variable'}
             </Typography>
             <TokenTypography
-              colorToken={isFixedMode ? 'skyBlueCrayola' : 'ultramarineBlue'}
+              colorToken={isFixedMode ? 'skyBlueCrayola' : 'wildStrawberry'}
               token="%"
               typographyToken={percentageTypographyToken}
               value={isFixedMode ? fixedRate : variableRate}
@@ -112,7 +115,7 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
           </TopTextContent>
           <BottomTextContent>
             <Typography colorToken="lavenderWeb2" typographyToken={payTypographyToken}>
-              {isFixedMode ? `Pay Variable ${variableRate}%` : `Pay Fixed ${fixedRate}%`}
+              {isFixedMode ? `Pay Variable ${variableRate}%` : `Pay Fixed ${payFixedRate}%`}
             </Typography>
           </BottomTextContent>
         </NotionalSwapFixedBox>
@@ -125,7 +128,7 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
               {isFixedMode ? 'Receive Variable' : 'Receive Fixed'}
             </Typography>
             <TokenTypography
-              colorToken={isFixedMode ? 'ultramarineBlue' : 'skyBlueCrayola'}
+              colorToken={isFixedMode ? 'wildStrawberry' : 'skyBlueCrayola'}
               token="%"
               typographyToken={percentageTypographyToken}
               value={isFixedMode ? variableRate : fixedRate}
@@ -133,7 +136,7 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
           </TopTextContent>
           <BottomTextContent>
             <Typography colorToken="lavenderWeb4" typographyToken={payTypographyToken}>
-              {isFixedMode ? `Pay Fixed ${fixedRate}%` : `Pay Variable ${variableRate}%`}
+              {isFixedMode ? `Pay Fixed ${payFixedRate}%` : `Pay Variable ${variableRate}%`}
             </Typography>
           </BottomTextContent>
         </NotionalSwapVariableBox>

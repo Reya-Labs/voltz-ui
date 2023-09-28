@@ -20,6 +20,7 @@ const args: React.ComponentProps<typeof NotionalSwapHorizontalUI> = {
   loading: false,
   onModeChange: () => {},
   mode: 'fixed',
+  payFixedRateInfo: 7.89,
 };
 Default.args = args;
 
@@ -30,5 +31,6 @@ const withLoadingArgs: React.ComponentProps<typeof NotionalSwapHorizontalUI> = {
   loading: true,
   onModeChange: () => {},
   mode: 'fixed',
+  payFixedRateInfo: 7.89,
 };
 WithLoading.args = withLoadingArgs;

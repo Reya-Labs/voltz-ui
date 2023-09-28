@@ -36,7 +36,7 @@ const fullSpin = keyframes`
 
 export const NotionalSwapBox = styled('div')`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   position: relative;
   gap: 8px;
 `;
@@ -47,10 +47,10 @@ const NotionalBox = styled('div')`
 `;
 
 export const NotionalSwapFixedBox = styled(NotionalBox)`
-  background: linear-gradient(270deg, ${colors.lavenderWeb8} 0%, ${colors.lavenderWeb7} 54.61%);
-  box-shadow:
-    0px 4px 4px ${colors.liberty8},
-    0px 0px 1px ${colors.lavenderWeb1};
+  border-radius: 4px;
+  border: 1px solid ${colors.lavenderWeb5};
+  background: ${colors.lavenderWeb8};
+  flex: 1;
 `;
 
 export const NotionalSwapSwapper = styled('div', {
@@ -82,14 +82,16 @@ export const NotionalSwapSwapper = styled('div', {
 `;
 
 export const NotionalSwapVariableBox = styled(NotionalBox)`
-  background: linear-gradient(90.95deg, ${colors.lavenderWeb8} 0.66%, ${colors.liberty8} 99.34%);
-  box-shadow: 0px 0px 1px ${colors.lavenderWeb6};
+  border-radius: 4px;
+  border: 1px solid ${colors.lavenderWeb7};
+  background: ${colors.liberty7};
+  flex: 1;
 `;
 
 export const TopTextContent = styled('div')`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 8px;
 `;
 
 export const BottomTextContent = styled('div')``;
