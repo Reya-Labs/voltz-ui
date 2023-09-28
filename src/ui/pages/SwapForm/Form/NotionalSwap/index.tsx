@@ -2,21 +2,23 @@ import React, { useCallback } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
-  selectFixedRateInfo,
   selectIsGetInfoPostSwapLoading,
+  selectPayFixedRateInfo,
+  selectReceiveFixedRateInfo,
   selectUserInputMode,
   selectVariableRateInfo,
   setUserInputModeAction,
   simulateSwapThunk,
 } from '../../../../../app/features/forms/trader/swap';
-import { NotionalSwapUI } from '../../../../components/NotionalSwapUI';
+import { NotionalSwapHorizontalUI } from '../../../../components/NotionalSwapHorizontalUI';
 
 export const NotionalSwap: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const isGetInfoPostSwapLoading = useAppSelector(selectIsGetInfoPostSwapLoading);
 
-  const fixedRateInfo = useAppSelector(selectFixedRateInfo);
+  const receiveFixedRateInfo = useAppSelector(selectReceiveFixedRateInfo);
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
+  const payFixedRateInfo = useAppSelector(selectPayFixedRateInfo);
   const mode = useAppSelector(selectUserInputMode);
 
   const handleOnModeChange = useCallback(
@@ -32,10 +34,11 @@ export const NotionalSwap: React.FunctionComponent = () => {
   );
 
   return (
-    <NotionalSwapUI
-      fixedRateInfo={fixedRateInfo}
+    <NotionalSwapHorizontalUI
       loading={isGetInfoPostSwapLoading}
       mode={mode}
+      payFixedRateInfo={payFixedRateInfo}
+      receiveFixedRateInfo={receiveFixedRateInfo}
       variableRateInfo={variableRateInfo}
       onModeChange={handleOnModeChange}
     />
