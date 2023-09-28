@@ -7,11 +7,8 @@ import {
   getMaxNotionalAvailableThunk,
   getPoolUnderlyingTokenAllowanceThunk,
   selectSwapFormPool,
-  selectSwapFormPosition,
-  selectSwapFormPositionFetchingStatus,
   setSwapFormPoolAction,
   setSwapFormSignerAction,
-  simulateSwapThunk,
 } from '../../../../app/features/forms/trader/swap';
 import { selectChainId } from '../../../../app/features/network';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
@@ -30,8 +27,6 @@ export const useSwapFormPool = (): UseSwapFormPoolResult => {
   const { ammId, poolId } = useParams();
   const { pools, loading: poolsLoading, error, idle } = usePools();
   const pool = useAppSelector(selectSwapFormPool);
-  const position = useAppSelector(selectSwapFormPosition);
-  const positionFetchingStatus = useAppSelector(selectSwapFormPositionFetchingStatus);
   const chainId = useAppSelector(selectChainId);
   const [loading, setLoading] = useState(true);
 
@@ -78,21 +73,12 @@ export const useSwapFormPool = (): UseSwapFormPoolResult => {
 
     void dispatch(getMaxNotionalAvailableThunk());
     void dispatch(getPoolUnderlyingTokenAllowanceThunk());
-  }, [dispatch, pool, poolsLoading]);
-
-  useEffect(() => {
-    if (!position) {
-      return;
-    }
-
-    void dispatch(simulateSwapThunk());
-  }, [dispatch, position]);
+  }, [chainId, dispatch, pool, poolsLoading]);
 
   return {
     pool,
-    loading:
-      idle || positionFetchingStatus === 'idle' || loading || positionFetchingStatus === 'pending',
+    loading: idle || loading,
     noPoolFound: !pool && !loading,
-    error: error || positionFetchingStatus === 'error',
+    error: error,
   };
 };

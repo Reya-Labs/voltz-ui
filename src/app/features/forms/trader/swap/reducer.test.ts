@@ -16,31 +16,11 @@ import {
 } from './thunks';
 import { validateUserInputAndUpdateSubmitButton } from './utils';
 
-jest.mock('../../../../../utilities/number', () => ({
-  stringToBigFloat: jest.fn(),
-}));
-jest.mock('../../../../../utilities/amm', () => ({
-  getAmmProtocol: jest.fn(),
-}));
-
-jest.mock('./analytics', () => ({
-  pushLeverageChangeEvent: jest.fn(),
-}));
-
-jest.mock('../../common/utils', () => ({
-  checkLowLeverageNotification: jest.fn(),
-  formLimitAndFormatNumber: jest.fn(),
-}));
-
-jest.mock('./utils', () => ({
-  validateUserInputAndUpdateSubmitButton: jest.fn(),
-  updateLeverageOptionsAfterGetPoolSwapInfo: jest.fn(),
-  updateLeverageOptionsAfterGetInfoPostSwap: jest.fn(),
-  updateLeverage: jest.fn(),
-  getExistingPositionMode: jest.fn(),
-  getProspectiveSwapNotional: jest.fn(),
-  getProspectiveSwapMode: jest.fn(),
-}));
+jest.mock('../../../../../utilities/number');
+jest.mock('../../../../../utilities/amm');
+jest.mock('./analytics');
+jest.mock('../../common/utils');
+jest.mock('./utils');
 
 // Define the mock state
 let testsInitialState: SliceState = initialState;
@@ -125,7 +105,6 @@ describe('swapFormReducer', () => {
           );
 
           expect(nextState.userInput.notionalAmount.value).toEqual(payload.value);
-          expect(nextState.userInput.notionalAmount.editMode).toEqual(payload.editMode);
           expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
         },
       );

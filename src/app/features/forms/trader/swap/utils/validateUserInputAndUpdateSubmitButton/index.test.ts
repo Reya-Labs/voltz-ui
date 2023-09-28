@@ -1,22 +1,10 @@
 import { validateUserInputAndUpdateSubmitButton } from '.';
 
 // Mock the dependencies
-jest.mock('../hasExistingPosition', () => ({
-  hasExistingPosition: jest.fn(),
-}));
-jest.mock('../validateUserInput', () => ({
-  validateUserInput: jest.fn(),
-}));
-jest.mock('../getProspectiveSwapMode', () => ({
-  getProspectiveSwapMode: jest.fn(),
-}));
-jest.mock('../getProspectiveSwapNotional', () => ({
-  getProspectiveSwapNotional: jest.fn(),
-}));
-jest.mock('../../../../common', () => ({
-  isUserInputMarginError: jest.fn(),
-  isUserInputNotionalError: jest.fn(),
-}));
+jest.mock('../validateUserInput');
+jest.mock('../getProspectiveSwapMode');
+jest.mock('../getProspectiveSwapNotional');
+jest.mock('../../../../common');
 
 describe('validateUserInputAndUpdateSubmitButton', () => {
   afterEach(() => {

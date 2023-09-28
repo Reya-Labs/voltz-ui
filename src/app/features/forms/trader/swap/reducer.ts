@@ -46,21 +46,15 @@ const slice = createSlice({
     setNotionalAmountAction: (
       state,
       {
-        payload: { value, editMode },
+        payload: { value },
       }: PayloadAction<{
         value?: number;
-        editMode?: 'add' | 'remove';
       }>,
     ) => {
-      if (value !== undefined || editMode !== undefined) {
-        if (value !== undefined) {
-          state.userInput.notionalAmount.value = value;
-        }
-        if (editMode !== undefined) {
-          state.userInput.notionalAmount.editMode = editMode;
-        }
-        validateUserInputAndUpdateSubmitButton(state);
+      if (value !== undefined) {
+        state.userInput.notionalAmount.value = value;
       }
+      validateUserInputAndUpdateSubmitButton(state);
     },
     resetInfoPostSwapAction: (state) => {
       state.prospectiveSwap.swapSimulation = {

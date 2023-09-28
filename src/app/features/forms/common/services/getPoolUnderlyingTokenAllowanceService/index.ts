@@ -11,6 +11,17 @@ export const getPoolUnderlyingTokenAllowanceService = async ({
   if (!poolId || !signer) {
     return 0;
   }
+  // TODO: FB evaluate before launch
+  if (poolId === '1_1_1698710400_v2' || poolId === '42161_2_1703980800_v2') {
+    return await new Promise((resolve, reject) => {
+      setTimeout(
+        () => {
+          resolve(Math.random() * 10000 + 1000);
+        },
+        Math.random() * 100 + 1000,
+      );
+    });
+  }
   return await getAllowanceToPeripheryV2({
     ammId: poolId,
     signer,

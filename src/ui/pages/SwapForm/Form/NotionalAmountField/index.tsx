@@ -7,21 +7,18 @@ import {
   resetInfoPostSwapAction,
   selectIsGetInfoPostSwapLoading,
   selectSwapFormPool,
-  selectSwapFormPosition,
   selectUserInputNotionalInfo,
   setNotionalAmountAction,
   simulateSwapThunk,
 } from '../../../../../app/features/forms/trader/swap';
 import { stringToBigFloat } from '../../../../../utilities/number';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
-import { EditNotionalAmountFieldUI } from './EditNotionalAmountFieldUI';
 import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 
 type NotionalAmountProps = {};
 export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> = () => {
   const notionalAmount = useAppSelector(selectUserInputNotionalInfo);
   const isGetInfoPostSwapLoading = useAppSelector(selectIsGetInfoPostSwapLoading);
-  const [localEditMode, setLocalEditMode] = useState<'add' | 'remove'>('add');
   const [localNotional, setLocalNotional] = useState<string | null>(
     notionalAmount.value.toString(),
   );
@@ -30,7 +27,6 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const dispatch = useAppDispatch();
   const pool = useAppSelector(selectSwapFormPool);
-  const position = useAppSelector(selectSwapFormPosition);
 
   useEffect(() => {
     setLocalNotional(notionalAmount.value.toString());
@@ -44,11 +40,10 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const debouncedSetNotionalAmount = useMemo(
     () =>
-      debounce((value: number | null | undefined, editMode: 'add' | 'remove' | undefined) => {
+      debounce((value: number | null | undefined) => {
         dispatch(
           setNotionalAmountAction({
             value: value === undefined ? undefined : value ?? 0,
-            editMode: editMode,
           }),
         );
       }, 300),
@@ -62,7 +57,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
         return;
       }
       setLocalNotional(value ?? null);
-      debouncedSetNotionalAmount(valueAsNumber, undefined);
+      debouncedSetNotionalAmount(valueAsNumber);
     },
     [notionalAmount.value, debouncedSetNotionalAmount],
   );
@@ -77,22 +72,6 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     }
     getInfoPostSwap();
   }, [getInfoPostSwapNotional, localNotional, getInfoPostSwap]);
-
-  const handleOnSwitchChange = useCallback(
-    (value: string) => {
-      if (value !== 'add' && value !== 'remove') {
-        return;
-      }
-      if (localEditMode === value) {
-        return;
-      }
-
-      setLocalEditMode(value);
-      debouncedSetNotionalAmount(undefined, value);
-      getInfoPostSwap();
-    },
-    [localEditMode, debouncedSetNotionalAmount, getInfoPostSwap],
-  );
 
   // Stop the invocation of the debounced function
   // after unmounting
@@ -118,7 +97,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     ? 'primaryBodySmallRegular'
     : 'primaryBodyXSmallRegular';
 
-  return !position ? (
+  return (
     <NewNotionalAmountFieldUI
       bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
       bottomRightTextTypographyToken={bottomRightTextTypographyToken}
@@ -126,19 +105,6 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
       handleOnNotionalBlur={handleOnNotionalBlur}
       handleOnNotionalChange={handleOnNotionalChange}
       labelTypographyToken={labelTypographyToken}
-      localNotional={localNotional}
-      underlyingTokenName={pool.underlyingToken.name}
-    />
-  ) : (
-    <EditNotionalAmountFieldUI
-      bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
-      bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-      disabled={isGetInfoPostSwapLoading}
-      handleOnNotionalBlur={handleOnNotionalBlur}
-      handleOnNotionalChange={handleOnNotionalChange}
-      handleOnSwitchChange={handleOnSwitchChange}
-      labelTypographyToken={labelTypographyToken}
-      localEditMode={localEditMode}
       localNotional={localNotional}
       underlyingTokenName={pool.underlyingToken.name}
     />

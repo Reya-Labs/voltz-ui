@@ -1,5 +1,4 @@
 import { SimulateSwapMarginAccountResult } from '@voltz-protocol/sdk-v2';
-import { Position } from '@voltz-protocol/v1-sdk';
 import { providers } from 'ethers';
 
 import { V2Pool } from '../../../aMMs';
@@ -21,10 +20,6 @@ export type SliceState = {
   pool: V2Pool | null;
   signer: providers.JsonRpcSigner | null;
   marginAccount: PortfolioMarginAccount | null;
-  position: {
-    value: Position | null;
-    status: ThunkStatus;
-  };
   maxNotionalAvailable: {
     value: number;
     status: ThunkStatus;
@@ -39,7 +34,6 @@ export type SliceState = {
     // User-inputted notional amount
     notionalAmount: {
       value: number;
-      editMode: 'add' | 'remove';
       error: string | null;
     };
   };
@@ -69,10 +63,6 @@ export const initialState: SliceState = {
   pool: null,
   signer: null,
   marginAccount: null,
-  position: {
-    value: null,
-    status: 'idle',
-  },
   maxNotionalAvailable: {
     value: 0,
     status: 'idle',
@@ -85,7 +75,6 @@ export const initialState: SliceState = {
     mode: 'fixed',
     notionalAmount: {
       value: 0,
-      editMode: 'add',
       error: null,
     },
   },
