@@ -17,14 +17,14 @@ import {
 
 type NotionalSwapHorizontalUIProps = {
   loading: boolean;
-  fixedRateInfo: number | undefined;
+  receiveFixedRateInfo: number | undefined;
   variableRateInfo: number | undefined;
   payFixedRateInfo: number | undefined;
   mode: 'fixed' | 'variable';
   onModeChange: (mode: 'fixed' | 'variable') => void;
 };
 export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHorizontalUIProps> = ({
-  fixedRateInfo,
+  receiveFixedRateInfo,
   variableRateInfo,
   payFixedRateInfo,
   loading,
@@ -32,7 +32,7 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
   mode,
 }) => {
   const [localMode, setLocalMode] = useState<'fixed' | 'variable'>('fixed');
-  const fixedRate = fixedRateInfo ? formatNumber(fixedRateInfo) : '--';
+  const receiveFixedRate = receiveFixedRateInfo ? formatNumber(receiveFixedRateInfo) : '--';
   const variableRate = variableRateInfo ? formatNumber(variableRateInfo) : '--';
   const payFixedRate = payFixedRateInfo ? formatNumber(payFixedRateInfo) : '--';
   const isFixedMode = localMode === 'fixed';
@@ -110,7 +110,7 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
               colorToken={isFixedMode ? 'skyBlueCrayola' : 'wildStrawberry'}
               token="%"
               typographyToken={percentageTypographyToken}
-              value={isFixedMode ? fixedRate : variableRate}
+              value={isFixedMode ? receiveFixedRate : variableRate}
             />
           </TopTextContent>
           <BottomTextContent>
@@ -131,7 +131,7 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
               colorToken={isFixedMode ? 'wildStrawberry' : 'skyBlueCrayola'}
               token="%"
               typographyToken={percentageTypographyToken}
-              value={isFixedMode ? variableRate : fixedRate}
+              value={isFixedMode ? variableRate : receiveFixedRate}
             />
           </TopTextContent>
           <BottomTextContent>
