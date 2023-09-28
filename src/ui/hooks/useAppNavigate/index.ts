@@ -1,6 +1,6 @@
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import { routes } from '../../../app/paths';
+import { routes } from '../../../app';
 
 type UseAppNavigateResult = {
   toLPFormPage: (params: {

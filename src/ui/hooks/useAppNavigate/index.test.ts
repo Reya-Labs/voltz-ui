@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import { routes } from '../../../app/paths';
+import { routes } from '../../../app';
 import { useAppNavigate } from './index';
 
 jest.mock('react-router-dom', () => ({
