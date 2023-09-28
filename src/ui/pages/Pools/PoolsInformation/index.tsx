@@ -4,7 +4,7 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app';
 import {
   selectPoolFilterOptions,
-  selectV1V2PoolsSize,
+  selectPoolsSize,
   togglePoolFilterAction,
 } from '../../../../app/features/aMMs';
 import { usePoolsInformation } from '../../../hooks/usePoolsInformation';
@@ -20,7 +20,7 @@ import {
 
 export const PoolsInformation: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const poolsSize = useAppSelector(selectV1V2PoolsSize);
+  const poolsSize = useAppSelector(selectPoolsSize);
   const { volume30DaysFormatted, totalLiquidityFormatted } = usePoolsInformation();
   const filterOptions = useAppSelector(selectPoolFilterOptions);
   const { isLargeDesktopDevice } = useResponsiveQuery();

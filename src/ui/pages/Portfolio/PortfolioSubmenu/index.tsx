@@ -1,9 +1,8 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { useAppSelector } from '../../../../app';
+import { routes, useAppSelector } from '../../../../app';
 import { isArbitrumChain, isAvalancheChain, selectChainId } from '../../../../app/features/network';
-import { routes } from '../../../../app/paths';
 import { isMarginAccountsLive } from '../../../../utilities/is-margin-accounts-live';
 import { ReactComponent as MarginAccountsIcon } from './assets/margin-accounts.svg';
 import { ReactComponent as OptimisersIcon } from './assets/optimisers.svg';

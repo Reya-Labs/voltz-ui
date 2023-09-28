@@ -2,10 +2,9 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 import { AppLink, CloseButton, ExternalLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { useAppSelector } from '../../../../../app';
+import { routes, useAppSelector } from '../../../../../app';
 import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
-import { routes } from '../../../../../app/paths';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { TitleBox } from '../../../../components/SettleFlow/SettleConfirmationStep/SettleConfirmationStep.styled';
 import { BatchBudgetTrigger } from '../BatchBudgetTrigger/BatchBudgetTrigger';

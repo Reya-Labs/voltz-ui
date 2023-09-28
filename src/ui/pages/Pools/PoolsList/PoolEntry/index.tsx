@@ -17,6 +17,7 @@ import {
 import { TestNetIndicator } from '../../../../components/TestNetIndicator';
 import { V2EntryInformation } from '../../../../components/V2EntryInformation';
 import { useAppNavigate } from '../../../../hooks/useAppNavigate';
+import { useMarginAccountsForSelection } from '../../../../hooks/useMarginAccountsForSelection';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import {
   ButtonStyled,
@@ -69,6 +70,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     },
     ref,
   ) => {
+    const { marginAccounts } = useMarginAccountsForSelection();
     const dispatch = useAppDispatch();
     const [waitingOnNetworkChange, setWaitingOnNetworkChange] = useState<
       null | 'lpForm' | 'swapForm'
@@ -131,10 +133,12 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
       }
     };
 
+    // TODO: FB evaluate before launch
     const navigateToSwapFormPage = () => {
-      navigate.toDeprecatedSwapFormPage({
+      navigate.toSwapFormPage({
         ammId: routeAmmId,
         poolId: routePoolId,
+        marginAccountId: marginAccounts[0].id,
       });
     };
 

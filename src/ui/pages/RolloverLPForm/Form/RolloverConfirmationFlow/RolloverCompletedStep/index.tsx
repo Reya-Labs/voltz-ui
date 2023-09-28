@@ -2,13 +2,12 @@ import { Button, Confetti, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../../../../../../app';
+import { routes, useAppDispatch, useAppSelector } from '../../../../../../app';
 import {
   closeRolloverConfirmationFlowAction,
   selectRolloverConfirmationFlowEtherscanLink,
 } from '../../../../../../app/features/forms/lps/rollover-lp';
 import { resetPortfolioStateAction } from '../../../../../../app/features/portfolio';
-import { routes } from '../../../../../../app/paths';
 import { ExplorerLink } from '../../../../../components/ExplorerLink';
 import { RolloverDetails } from '../RolloverDetails';
 import { RolloverCompletedStepBox } from './RolloverCompletedStep.styled';
