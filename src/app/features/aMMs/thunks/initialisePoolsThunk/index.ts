@@ -1,14 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getPools } from '@voltz-protocol/api-sdk-v2';
+import { getV2Pools } from '@voltz-protocol/api-sdk-v2';
 
 import { rejectThunkWithError } from '../../../helpers';
 import { getAllowedChainIds } from '../../../network/';
 
-type V2Pools = Awaited<ReturnType<typeof getPools>>;
+type V2Pools = Awaited<ReturnType<typeof getV2Pools>>;
 export type V2Pool = V2Pools[0];
 
 export const initialisePoolsThunk = createAsyncThunk<
-  Awaited<ReturnType<typeof getPools> | ReturnType<typeof rejectThunkWithError>>,
+  Awaited<ReturnType<typeof getV2Pools> | ReturnType<typeof rejectThunkWithError>>,
   void
 >('aMMs/initialisePoolsThunk', async (_, thunkAPI) => {
   const chainIds = getAllowedChainIds();
@@ -17,7 +17,7 @@ export const initialisePoolsThunk = createAsyncThunk<
   }
 
   try {
-    return await getPools({
+    return await getV2Pools({
       chainIds,
     });
   } catch (err) {

@@ -44,6 +44,10 @@ export const selectWalletBalance = (state: RootState) => {
 export const selectFixedRateInfo = (state: RootState) => state.swapForm.pool?.currentFixedRate;
 export const selectVariableRateInfo = (state: RootState) =>
   state.swapForm.pool?.currentVariableRate;
+// TODO: FB evaluate before launch
+export const selectPayFixedRateInfo = (state: RootState) => state.swapForm.pool?.payFixedRate;
+export const selectReceiveFixedRateInfo = (state: RootState) =>
+  state.swapForm.pool?.receiveFixedRate;
 export const selectSwapFormMode = (state: RootState): 'new' | 'edit' => {
   return hasExistingPosition(state.swapForm) ? 'edit' : 'new';
 };
