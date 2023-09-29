@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '../../../../app';
 import { V2Pool } from '../../../../app/features/aMMs';
 import {
   getMaxNotionalAvailableThunk,
-  getPoolUnderlyingTokenAllowanceThunk,
   selectSwapFormPool,
   setSwapFormPoolAction,
   setSwapFormSignerAction,
@@ -72,7 +71,6 @@ export const useSwapFormPool = (): UseSwapFormPoolResult => {
     }
 
     void dispatch(getMaxNotionalAvailableThunk());
-    void dispatch(getPoolUnderlyingTokenAllowanceThunk());
   }, [chainId, dispatch, pool, poolsLoading]);
 
   return {
