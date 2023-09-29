@@ -8,12 +8,7 @@ import {
   swapFormReducer,
 } from './reducer';
 import { initialState, SliceState } from './state';
-import {
-  getMaxNotionalAvailableThunk,
-  getPoolUnderlyingTokenAllowanceThunk,
-  simulateSwapThunk,
-  swapThunk,
-} from './thunks';
+import { getMaxNotionalAvailableThunk, simulateSwapThunk, swapThunk } from './thunks';
 import { validateUserInputAndUpdateSubmitButton } from './utils';
 
 jest.mock('../../../../../utilities/number');
@@ -151,34 +146,6 @@ describe('swapFormReducer', () => {
         expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
         expect(nextState.maxNotionalAvailable.status).toEqual('success');
         expect(nextState.maxNotionalAvailable.value).toEqual(10);
-      });
-    });
-
-    describe('getUnderlyingTokenAllowanceThunk', () => {
-      it('should update status to "pending" when getUnderlyingTokenAllowanceThunk is pending', () => {
-        const nextState = swapFormReducer(testsInitialState, {
-          type: getPoolUnderlyingTokenAllowanceThunk.pending.type,
-        });
-        expect(nextState.walletTokenAllowance.status).toEqual('pending');
-      });
-
-      it('should update status to "error" and set walletTokenAllowance to error state when getUnderlyingTokenAllowanceThunk is rejected', () => {
-        const nextState = swapFormReducer(testsInitialState, {
-          type: getPoolUnderlyingTokenAllowanceThunk.rejected.type,
-        });
-        expect(nextState.walletTokenAllowance.status).toEqual('error');
-        expect(nextState.walletTokenAllowance.value).toEqual(0);
-      });
-
-      it('should update walletTokenAllowance and status to "success" when getUnderlyingTokenAllowanceThunk is fulfilled, also make sure validateUserInputAndUpdateSubmitButton is called', () => {
-        const nextState = swapFormReducer(testsInitialState, {
-          type: getPoolUnderlyingTokenAllowanceThunk.fulfilled.type,
-          payload: 10,
-        });
-
-        expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(1);
-        expect(nextState.walletTokenAllowance.status).toEqual('success');
-        expect(nextState.walletTokenAllowance.value).toEqual(10);
       });
     });
 

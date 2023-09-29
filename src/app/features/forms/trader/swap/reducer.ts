@@ -4,12 +4,7 @@ import { ContractReceipt, providers } from 'ethers';
 
 import { V2Pool } from '../../../aMMs';
 import { initialState } from './state';
-import {
-  getMaxNotionalAvailableThunk,
-  getPoolUnderlyingTokenAllowanceThunk,
-  simulateSwapThunk,
-  swapThunk,
-} from './thunks';
+import { getMaxNotionalAvailableThunk, simulateSwapThunk, swapThunk } from './thunks';
 import { validateUserInputAndUpdateSubmitButton } from './utils';
 
 const slice = createSlice({
@@ -103,53 +98,6 @@ const slice = createSlice({
         };
         validateUserInputAndUpdateSubmitButton(state);
       })
-      .addCase(getPoolUnderlyingTokenAllowanceThunk.pending, (state) => {
-        state.walletTokenAllowance = {
-          value: 0,
-          status: 'pending',
-        };
-      })
-      .addCase(getPoolUnderlyingTokenAllowanceThunk.rejected, (state) => {
-        state.walletTokenAllowance = {
-          value: 0,
-          status: 'error',
-        };
-      })
-      .addCase(getPoolUnderlyingTokenAllowanceThunk.fulfilled, (state, { payload }) => {
-        state.walletTokenAllowance = {
-          value: payload as number,
-          status: 'success',
-        };
-        validateUserInputAndUpdateSubmitButton(state);
-      })
-      // TODO: FB - Should be part of the deposit flow
-      // .addCase(approvePoolUnderlyingTokenThunk.pending, (state) => {
-      //   state.submitButton = {
-      //     state: 'approving',
-      //     disabled: true,
-      //     message: {
-      //       text: 'Waiting for confirmation...',
-      //       type: 'info',
-      //     },
-      //   };
-      // })
-      // .addCase(approvePoolUnderlyingTokenThunk.rejected, (state, { payload }) => {
-      //   state.submitButton = {
-      //     state: 'approve',
-      //     disabled: false,
-      //     message: {
-      //       text: payload as string,
-      //       type: 'error',
-      //     },
-      //   };
-      // })
-      // .addCase(approvePoolUnderlyingTokenThunk.fulfilled, (state, { payload }) => {
-      //   state.walletTokenAllowance = {
-      //     value: payload as number,
-      //     status: 'success',
-      //   };
-      //   validateUserInputAndUpdateSubmitButton(state);
-      // })
       .addCase(simulateSwapThunk.pending, (state) => {
         state.prospectiveSwap.swapSimulation = {
           value: initialState.prospectiveSwap.swapSimulation.value,
