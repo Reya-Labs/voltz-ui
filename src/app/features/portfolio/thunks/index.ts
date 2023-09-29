@@ -1,3 +1,4 @@
+export * from './approveTokenForPeripheryThunk';
 export * from './createMarginAccountThunk';
 export * from './depositMarginFromMarginAccountThunk';
 export * from './fetchAvailableAmountsToDepositForMarginAccountThunk';
@@ -9,6 +10,7 @@ export * from './fetchMarginAccountsForWithdrawThunk';
 export * from './fetchMarginAccountsThunk';
 export * from './fetchMarginAccountSummaryThunk';
 export * from './fetchPortfolioSummaryThunk';
+export * from './getTokenAllowanceForPeripheryThunk';
 export * from './initialisePortfolioPositionsThunk';
 export * from './simulateDepositMarginFromMarginAccountThunk';
 export * from './simulateWithdrawMarginFromMarginAccountThunk';

@@ -5,8 +5,10 @@ import { alphaPassClaimFlowReducer } from './features/alpha-pass-claim-flow';
 import { alphaPassVerificationFlowReducer } from './features/alpha-pass-verification-flow';
 import { aMMsReducer } from './features/aMMs';
 import { cashflowCalculatorReducer } from './features/cashflow-calculator';
+import { cashflowCalculatorModalReducer } from './features/cashflow-calculator-modal';
 import { lpFormReducer } from './features/forms/lps/lp';
 import { rolloverLpFormReducer } from './features/forms/lps/rollover-lp';
+import { deprecatedSwapFormReducer } from './features/forms/trader/deprecated/swap';
 import { rolloverSwapFormReducer } from './features/forms/trader/rollover-swap';
 import { swapFormReducer } from './features/forms/trader/swap';
 import { historicalRatesReducer } from './features/historical-rates';
@@ -23,11 +25,13 @@ const rootReducer = combineReducers({
   lpOptimisers: lpOptimisersReducer,
   aMMs: aMMsReducer,
   network: networkReducer,
+  deprecatedSwapForm: deprecatedSwapFormReducer,
   swapForm: swapFormReducer,
   historicalRates: historicalRatesReducer,
   tradingLeague: tradingLeagueReducer,
   lpForm: lpFormReducer,
   cashflowCalculator: cashflowCalculatorReducer,
+  cashflowCalculatorModal: cashflowCalculatorModalReducer,
   rolloverSwapForm: rolloverSwapFormReducer,
   settleFlow: settleFlowReducer,
   rolloverLpForm: rolloverLpFormReducer,

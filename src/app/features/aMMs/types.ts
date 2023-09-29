@@ -1,8 +1,9 @@
+import { V1V2Pool } from '@voltz-protocol/api-sdk-v2';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 export type PoolUI = {
   market: 'Aave' | 'Aave V2' | 'Aave V3' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
-  token?: 'eth' | 'usdc' | 'usdt' | 'dai';
+  token?: V1V2Pool['underlyingToken']['name'];
   name: string;
   isBorrowing: boolean;
   isV2: boolean;

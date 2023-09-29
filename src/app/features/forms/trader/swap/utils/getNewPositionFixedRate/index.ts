@@ -3,13 +3,13 @@ import { Draft } from '@reduxjs/toolkit';
 import { SliceState } from '../../state';
 
 export const getNewPositionFixedRate = (state: Draft<SliceState>) => {
-  if (!state.amm) {
+  if (!state.pool) {
     return null;
   }
 
-  if (state.prospectiveSwap.infoPostSwap.status === 'success') {
-    return state.prospectiveSwap.infoPostSwap.value.averageFixedRate;
+  if (state.prospectiveSwap.swapSimulation.status === 'success') {
+    return state.prospectiveSwap.swapSimulation.value.averageFixedRate;
   }
 
-  return state.amm.fixedApr;
+  return state.pool.currentFixedRate;
 };

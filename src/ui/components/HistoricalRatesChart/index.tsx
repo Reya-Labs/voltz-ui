@@ -19,8 +19,8 @@ import {
 } from './HistoricalRatesChart.styled';
 
 type HistoricalRatesChartProps = {
-  aMMId: string;
-  aMMRateOracleId: string;
+  poolId: string;
+  poolRateOracleId: string;
   fixedRate: number;
   variableRate: number;
 };
@@ -61,8 +61,8 @@ const filterOptions: ChartFiltersProps['filterOptions'] = [
 ];
 
 export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartProps> = ({
-  aMMId,
-  aMMRateOracleId,
+  poolId,
+  poolRateOracleId,
   fixedRate,
   variableRate,
 }) => {
@@ -88,7 +88,7 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
       : 365;
   const isFixed = activeModeId === 'fixed';
   useEffect(() => {
-    if (!aMMId || !aMMRateOracleId || !chainId) {
+    if (!poolId || !poolRateOracleId || !chainId) {
       return;
     }
     void dispatch(
@@ -96,10 +96,10 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
         isFixed,
         granularity,
         timeframeMs: timeframe * 24 * 60 * 60 * 1000,
-        poolId: aMMId,
+        poolId: poolId,
       }),
     );
-  }, [dispatch, timeframe, isFixed, granularity, chainId, aMMId, aMMRateOracleId]);
+  }, [dispatch, timeframe, isFixed, granularity, chainId, poolId, poolRateOracleId]);
 
   let yMarker = -100;
   if (fixedRate !== null && !isFixed) {

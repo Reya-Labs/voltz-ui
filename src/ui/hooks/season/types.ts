@@ -1,4 +1,4 @@
-type SEASON_IDS = 0 | 1 | 2 | 3 | 4 | 5;
+type SEASON_IDS = 0 | 1 | 2 | 3 | 4;
 
 export type Season = {
   id: SEASON_IDS;

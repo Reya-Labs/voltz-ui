@@ -13,8 +13,6 @@ export const pushPageViewEvent = ({ account, isEdit }: PageViewEventParams) => {
 
 export type SwapEventParams = {
   notional: number;
-  margin: number;
-  isEdit: boolean;
   pool: string;
   isFT: boolean;
   account: string;
@@ -22,8 +20,6 @@ export type SwapEventParams = {
 
 export const pushSwapTransactionSubmittedEvent = ({
   notional,
-  margin,
-  isEdit,
   pool,
   isFT,
   account,
@@ -32,8 +28,9 @@ export const pushSwapTransactionSubmittedEvent = ({
     event: 'tx_submitted',
     eventValue: {
       notional,
-      margin,
-      action: isEdit ? 'edit' : 'new',
+      margin: undefined,
+      // TODO: FB evaluate before launch
+      action: 'new',
     },
     pool,
     agent: isFT ? 'Fixed Trader' : 'Variable Trader',
@@ -42,8 +39,6 @@ export const pushSwapTransactionSubmittedEvent = ({
 
 export const pushSwapTransactionSuccessEvent = ({
   notional,
-  margin,
-  isEdit,
   pool,
   isFT,
   account,
@@ -52,8 +47,9 @@ export const pushSwapTransactionSuccessEvent = ({
     event: 'successful_tx',
     eventValue: {
       notional,
-      margin,
-      action: isEdit ? 'edit' : 'new',
+      margin: undefined,
+      // TODO: FB evaluate before launch
+      action: 'new',
     },
     pool,
     agent: isFT ? 'Fixed Trader' : 'Variable Trader',
@@ -65,8 +61,6 @@ type FailedSwapEventParams = SwapEventParams & {
 };
 export const pushSwapTransactionFailedEvent = ({
   notional,
-  margin,
-  isEdit,
   pool,
   isFT,
   account,
@@ -76,32 +70,11 @@ export const pushSwapTransactionFailedEvent = ({
     event: 'failed_tx',
     eventValue: {
       notional,
-      margin,
-      action: isEdit ? 'edit' : 'new',
+      margin: undefined,
+      // TODO: FB evaluate before launch
+      action: 'new',
       failMessage: errorMessage,
     },
-    pool,
-    agent: isFT ? 'Fixed Trader' : 'Variable Trader',
-  });
-};
-
-type EstimatedLeverageChangeEventParams = {
-  leverage: number;
-  pool: string;
-  isFT: boolean;
-  account: string;
-  changeType: 'button' | 'input';
-};
-export const pushLeverageChangeEvent = ({
-  account,
-  leverage,
-  isFT,
-  pool,
-  changeType,
-}: EstimatedLeverageChangeEventParams) => {
-  pushEvent(account ?? '', {
-    event: changeType === 'input' ? 'leverage_change_input' : 'leverage_change_button',
-    eventValue: leverage,
     pool,
     agent: isFT ? 'Fixed Trader' : 'Variable Trader',
   });

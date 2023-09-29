@@ -1,20 +1,15 @@
 import { LabelTokenTypography, TokenTypography, Typography } from 'brokoli-ui';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../../../../../app';
-import {
-  fetchMarginAccountsForSelectionThunk,
-  selectMarginAccountsForSelectionLoading,
-  selectMarginAccountsForSelectionMarginAccounts,
-  selectMarginAccountSummary,
-} from '../../../../../app/features/portfolio';
+import { useAppSelector } from '../../../../../app';
+import { selectMarginAccountSummary } from '../../../../../app/features/portfolio';
 import { ChainIcon } from '../../../../components/ChainIcon';
 import { CollateralDistribution } from '../../../../components/CollateralDistribution';
 import { MarginAccountsSearchField } from '../../../../components/MarginAccountsSearchField';
 import { MarginRatioDonut, MarginRatioDonutProps } from '../../../../components/MarginRatioDonut';
 import { useAppNavigate } from '../../../../hooks/useAppNavigate';
-import { useWallet } from '../../../../hooks/useWallet';
+import { useMarginAccountsForSelection } from '../../../../hooks/useMarginAccountsForSelection';
 import {
   LeftBox,
   MarginBox,
@@ -33,12 +28,7 @@ import {
 } from './MarginAccountSummaryHeader.styled';
 
 export const MarginAccountSummaryHeader = () => {
-  const { account } = useWallet();
-  const dispatch = useAppDispatch();
   const { marginAccountId } = useParams();
-  const marginAccounts = useAppSelector(selectMarginAccountsForSelectionMarginAccounts);
-  const marginAccountsLoading = useAppSelector(selectMarginAccountsForSelectionLoading);
-
   const {
     positionsLength,
     totalPortfolioNotionalValueUSDCompactFormatted,
@@ -54,18 +44,7 @@ export const MarginAccountSummaryHeader = () => {
     totalPortfolioCollateralUSDCompactFormatted,
   } = useAppSelector(selectMarginAccountSummary(marginAccountId));
   const { toMarginAccountDetailsPage } = useAppNavigate();
-
-  useEffect(() => {
-    if (!account) {
-      return;
-    }
-
-    void dispatch(
-      fetchMarginAccountsForSelectionThunk({
-        account,
-      }),
-    );
-  }, [dispatch, account]);
+  const { marginAccounts, loading: marginAccountsLoading } = useMarginAccountsForSelection();
 
   const handleOnMarginAccountClick = (id: string) => {
     toMarginAccountDetailsPage({

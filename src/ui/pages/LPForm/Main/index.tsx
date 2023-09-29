@@ -29,9 +29,9 @@ export const Main: React.FunctionComponent = () => {
       {isV2AMM(aMM) ? <AlphaPassFlow chainId={aMM.chainId} /> : null}
       <PoolHeader />
       <HistoricalRatesChart
-        aMMId={aMM.id}
-        aMMRateOracleId={aMM.rateOracle.id}
         fixedRate={fixedRateInfo}
+        poolId={aMM.id}
+        poolRateOracleId={aMM.rateOracle.id}
         variableRate={variableRateInfo}
       />
       <BottomMainBox>

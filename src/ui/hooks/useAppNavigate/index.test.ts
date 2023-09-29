@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import { routes } from '../../../app/paths';
+import { routes } from '../../../app';
 import { useAppNavigate } from './index';
 
 jest.mock('react-router-dom', () => ({
@@ -57,7 +57,7 @@ describe('useAppNavigate', () => {
     expect(navigateMock).toHaveBeenCalledWith(`/lp/${params.ammId}/${params.poolId}`);
   });
 
-  it('should navigate to swap form page', () => {
+  it('should navigate to deprecated swap form page', () => {
     const { result } = renderHook(() => useAppNavigate());
 
     const params = {
@@ -71,6 +71,27 @@ describe('useAppNavigate', () => {
 
     expect(generatePath).toHaveBeenCalledWith(routes.DEPRECATED_TRADER_SWAP_FORM, params);
     expect(navigateMock).toHaveBeenCalledWith(`/trader/swap/${params.ammId}/${params.poolId}`);
+  });
+
+  it('should navigate to swap form page', () => {
+    const { result } = renderHook(() => useAppNavigate());
+
+    const params = {
+      ammId: 'abc',
+      poolId: 'def',
+      marginAccountId: '123',
+    };
+
+    (generatePath as jest.Mock).mockReturnValueOnce(
+      `trader/swap/${params.ammId}/${params.poolId}/ma/${params.marginAccountId}`,
+    );
+
+    result.current.toSwapFormPage(params);
+
+    expect(generatePath).toHaveBeenCalledWith(routes.TRADER_SWAP_FORM, params);
+    expect(navigateMock).toHaveBeenCalledWith(
+      `/trader/swap/${params.ammId}/${params.poolId}/ma/${params.marginAccountId}`,
+    );
   });
 
   it('should navigate to rollover swap form page', () => {

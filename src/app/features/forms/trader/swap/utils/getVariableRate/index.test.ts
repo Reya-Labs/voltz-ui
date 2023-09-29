@@ -14,8 +14,8 @@ describe('getVariableRate', () => {
   it('should return the variableRate value when variableRate status is success', () => {
     const mockVariableRate = 0.0123;
     const mockState = {
-      amm: {
-        variableApy: mockVariableRate,
+      pool: {
+        currentVariableRate: mockVariableRate,
       },
     };
 

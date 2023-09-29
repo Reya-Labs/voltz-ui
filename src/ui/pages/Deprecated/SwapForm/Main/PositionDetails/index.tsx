@@ -5,7 +5,7 @@ import { useAppSelector } from '../../../../../../app';
 import {
   selectSwapFormAMM,
   selectSwapFormMode,
-} from '../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import { EditPositionDetailsUI } from './EditPositionDetailsUI';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';

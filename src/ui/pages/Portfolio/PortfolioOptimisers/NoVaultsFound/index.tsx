@@ -1,7 +1,7 @@
 import { AppLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { routes } from '../../../../../app/paths';
+import { routes } from '../../../../../app';
 import { ContentBox } from './NoVaultsFound.styled';
 
 export const NoVaultsFound: React.FunctionComponent<{

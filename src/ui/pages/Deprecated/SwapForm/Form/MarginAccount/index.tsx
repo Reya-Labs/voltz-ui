@@ -5,7 +5,7 @@ import {
   selectAMMTokenFormatted,
   selectMarginAccountName,
   selectPositionMarginFormatted,
-} from '../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { MarginAccountFormPreview } from '../../../../../components/MarginAccountFormPreview';
 
 export const MarginAccount: React.FunctionComponent = () => {

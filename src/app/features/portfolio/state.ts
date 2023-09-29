@@ -63,5 +63,9 @@ export const initialState: SliceState = {
       maxAmountUSD: 0,
       token: undefined,
     },
+    walletTokenAllowance: {
+      value: 0,
+      status: 'idle',
+    },
   },
 };

@@ -8,7 +8,7 @@ import {
   selectUserInputMode,
   selectVariableRateInfo,
   setUserInputModeAction,
-} from '../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { NotionalSwapUI } from '../../../../../components/NotionalSwapUI';
 
 export const NotionalSwap: React.FunctionComponent = () => {

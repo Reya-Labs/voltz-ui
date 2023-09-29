@@ -5,6 +5,7 @@ export * from './formCompactFormatToParts';
 export * from './formFormatNumber';
 export * from './formLimitAndFormatNumber';
 export * from './getGasInfoFormatted';
+export * from './getPoolVariableRate24hDelta';
 export * from './getProspectiveLpFixedHigh';
 export * from './getProspectiveLpFixedLow';
 export * from './getVariableRate24hDelta';

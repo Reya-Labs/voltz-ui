@@ -1,7 +1,7 @@
 import { AppLink, ExternalLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { routes } from '../../../../app/paths';
+import { routes } from '../../../../app';
 import { ContainerBox } from './NoVaultFound.styled';
 
 export const NoVaultFound: React.FunctionComponent = React.memo(() => (

@@ -8,7 +8,7 @@ import {
   selectProspectiveSwapFeeFormatted,
   selectSlippageFormatted,
   selectSubmitButtonInfo,
-} from '../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 

@@ -2,7 +2,7 @@ import { Dialog } from 'brokoli-ui';
 import React from 'react';
 
 import { useAppSelector } from '../../../../../../app';
-import { selectSwapConfirmationFlowStep } from '../../../../../../app/features/forms/trader/swap';
+import { selectSwapConfirmationFlowStep } from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { SwapCompletedStep } from './SwapCompletedStep';
 import { SwapConfirmationStep } from './SwapConfirmationStep';
 import { WaitingForSwapConfirmationStep } from './WaitingForSwapConfirmationStep';

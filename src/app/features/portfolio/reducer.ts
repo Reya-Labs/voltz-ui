@@ -9,6 +9,7 @@ import {
 } from './constants';
 import { initialState } from './state';
 import {
+  approveTokenForPeripheryThunk,
   AvailableAmountForMarginAccountWithdraw,
   createMarginAccountThunk,
   depositMarginFromMarginAccountThunk,
@@ -21,6 +22,7 @@ import {
   fetchMarginAccountsThunk,
   fetchMarginAccountSummaryThunk,
   fetchPortfolioSummaryThunk,
+  getTokenAllowanceForPeripheryThunk,
   initialisePortfolioPositionsThunk,
   MarginAccountSummary,
   PortfolioMarginAccount,
@@ -52,6 +54,17 @@ const slice = createSlice({
     },
     closeMarginAccountDepositFlowAction: (state) => {
       state.marginAccountDepositMarginFlow.step = 'closed';
+      state.marginAccountDepositMarginFlow.userInput = {
+        ...initialState.marginAccountDepositMarginFlow.userInput,
+      };
+      state.marginAccountDepositMarginFlow.walletTokenAllowance = {
+        ...initialState.marginAccountDepositMarginFlow.walletTokenAllowance,
+      };
+      state.marginAccountDepositMarginFlow.selectedMarginAccount = null;
+      state.marginAccountDepositMarginFlow.error = null;
+      state.marginAccountDepositMarginFlow.simulation = {
+        ...initialState.marginAccountDepositMarginFlow.simulation,
+      };
     },
     openCreateMarginAccountDialogAction: (state) => {
       state.createMarginAccountDialogState = 'opened';
@@ -403,6 +416,37 @@ const slice = createSlice({
         state.marginAccountDepositMarginFlow.step = 'deposit-success';
         state.marginAccountDepositMarginFlow.txHash = (payload as ContractReceipt).transactionHash;
         state.marginAccountDepositMarginFlow.error = null;
+      })
+      .addCase(getTokenAllowanceForPeripheryThunk.pending, (state) => {
+        state.marginAccountDepositMarginFlow.walletTokenAllowance = {
+          value: 0,
+          status: 'pending',
+        };
+      })
+      .addCase(getTokenAllowanceForPeripheryThunk.rejected, (state) => {
+        state.marginAccountDepositMarginFlow.walletTokenAllowance = {
+          value: 0,
+          status: 'failed',
+        };
+      })
+      .addCase(getTokenAllowanceForPeripheryThunk.fulfilled, (state, { payload }) => {
+        state.marginAccountDepositMarginFlow.walletTokenAllowance = {
+          value: payload as number,
+          status: 'succeeded',
+        };
+      })
+      .addCase(approveTokenForPeripheryThunk.pending, (state) => {
+        state.marginAccountDepositMarginFlow.step = 'approvingToken';
+        state.marginAccountDepositMarginFlow.error = null;
+      })
+      .addCase(approveTokenForPeripheryThunk.rejected, (state, { payload }) => {
+        state.marginAccountDepositMarginFlow.step = 'approveTokenError';
+        state.marginAccountDepositMarginFlow.error = payload as string;
+      })
+      .addCase(approveTokenForPeripheryThunk.fulfilled, (state, { payload }) => {
+        state.marginAccountDepositMarginFlow.step = 'opened';
+        state.marginAccountDepositMarginFlow.error = null;
+        state.marginAccountDepositMarginFlow.walletTokenAllowance.value = payload as number;
       });
   },
 });

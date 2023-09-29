@@ -1,7 +1,7 @@
 import { AppLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../../../../../../app';
+import { routes, useAppDispatch, useAppSelector } from '../../../../../../../app';
 import {
   fetchMarginAccountsThunk,
   MARGIN_ACCOUNTS_PER_PAGE,
@@ -11,7 +11,6 @@ import {
   selectMarginAccountsSortOptions,
   selectTotalMarginAccounts,
 } from '../../../../../../../app/features/portfolio';
-import { routes } from '../../../../../../../app/paths';
 import { Pagination } from '../../../../../../components/Pagination';
 import { useWallet } from '../../../../../../hooks/useWallet';
 import { MarginAccountEntry } from './MarginAccountEntry';

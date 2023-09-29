@@ -2,14 +2,13 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Nav as BrokoliNav, NavProps } from 'brokoli-ui';
 import React, { useMemo } from 'react';
 
-import { useAppSelector } from '../../../../../app';
+import { routes, useAppSelector } from '../../../../../app';
 import {
   isArbitrumChain,
   isAvalancheChain,
   selectChainId,
 } from '../../../../../app/features/network';
 import { isSpruceChain } from '../../../../../app/features/network/helpers/is-spruce-chain';
-import { routes } from '../../../../../app/paths';
 
 const getLinks = (chainId?: SupportedChainId | null) =>
   !chainId

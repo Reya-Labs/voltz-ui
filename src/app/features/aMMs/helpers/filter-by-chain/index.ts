@@ -1,23 +1,23 @@
-import { AMM, SupportedChainId } from '@voltz-protocol/v1-sdk';
+import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { PoolFilters } from '../../types';
 
-export const filterByChain = (amm: AMM, appliedFilters: PoolFilters) => {
+export const filterByChain = (chainId: SupportedChainId, appliedFilters: PoolFilters) => {
   if (
     appliedFilters['ethereum'] &&
-    (amm.chainId === SupportedChainId.mainnet || amm.chainId === SupportedChainId.goerli)
+    (chainId === SupportedChainId.mainnet || chainId === SupportedChainId.goerli)
   ) {
     return true;
   }
   if (
     appliedFilters['arbitrum'] &&
-    (amm.chainId === SupportedChainId.arbitrum || amm.chainId === SupportedChainId.arbitrumGoerli)
+    (chainId === SupportedChainId.arbitrum || chainId === SupportedChainId.arbitrumGoerli)
   ) {
     return true;
   }
   if (
     appliedFilters['avalanche'] &&
-    (amm.chainId === SupportedChainId.avalanche || amm.chainId === SupportedChainId.avalancheFuji)
+    (chainId === SupportedChainId.avalanche || chainId === SupportedChainId.avalancheFuji)
   ) {
     return true;
   }

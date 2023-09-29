@@ -3,39 +3,39 @@ import { getNewPositionFixedRate } from '.';
 describe('getNewPositionFixedRate', () => {
   const state = {
     prospectiveSwap: {
-      infoPostSwap: {
+      swapSimulation: {
         status: 'idle',
         value: {
           averageFixedRate: 0,
         },
       },
     },
-    amm: null,
+    pool: null,
   };
 
   beforeEach(() => {
     // Reset the state object before each test
     state.prospectiveSwap = {
-      infoPostSwap: {
+      swapSimulation: {
         value: {
           averageFixedRate: 0,
         },
         status: 'pending',
       },
     };
-    state.amm = null;
+    state.pool = null;
   });
 
   it('should return the average fixed rate from state.prospectiveSwap.infoPostSwap when status is success', () => {
-    state.amm = { fixedApr: 0.25 } as never;
-    state.prospectiveSwap.infoPostSwap.status = 'success';
-    state.prospectiveSwap.infoPostSwap.value = { averageFixedRate: 0.5 };
+    state.pool = { currentFixedRate: 0.25 } as never;
+    state.prospectiveSwap.swapSimulation.status = 'success';
+    state.prospectiveSwap.swapSimulation.value = { averageFixedRate: 0.5 };
 
     expect(getNewPositionFixedRate(state as never)).toBe(0.5);
   });
 
   it('should return the fixed rate from state.fixedRate when status is success', () => {
-    state.amm = { fixedApr: 0.25 } as never;
+    state.pool = { currentFixedRate: 0.25 } as never;
 
     expect(getNewPositionFixedRate(state as never)).toBe(0.25);
   });

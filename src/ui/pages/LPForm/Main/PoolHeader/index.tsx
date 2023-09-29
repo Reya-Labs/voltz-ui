@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
-import { MAX_POOL_CAP, selectPoolsOnCurrentChain } from '../../../../../app/features/aMMs';
+import { MAX_POOL_CAP, selectV1V2PoolsOnCurrentChain } from '../../../../../app/features/aMMs';
 import { PoolUI } from '../../../../../app/features/aMMs/types';
 import {
   resetStateAction,
@@ -25,7 +25,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const variableRateFormatted = useAppSelector(selectVariableRateValueFormatted);
   const navigate = useAppNavigate();
   const dispatch = useAppDispatch();
-  const pools = useAppSelector(selectPoolsOnCurrentChain);
+  const pools = useAppSelector(selectV1V2PoolsOnCurrentChain);
 
   if (!aMM) {
     return null;
@@ -46,7 +46,6 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
 
   return (
     <PoolHeaderComponent
-      aMMMaturity={aMMMaturity}
       chainId={aMM.chainId}
       fixedRateFormatted={fixedRateFormatted}
       isAaveV3={isAaveV3}
@@ -54,6 +53,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
       isV2={isV2}
       market={market}
       poolCap={MAX_POOL_CAP}
+      poolMaturity={aMMMaturity}
       pools={pools.filter((p) => p.id !== aMM.id)}
       token={token}
       variableRate24hDelta={variableRate24hDelta}

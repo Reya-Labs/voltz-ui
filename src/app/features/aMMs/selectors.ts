@@ -10,6 +10,7 @@ import { RootState } from '../../store';
 import { selectChainId } from '../network';
 import { FILTER_CONFIG, SORT_CONFIG } from './constants';
 import { filterByChain, filterByTag, sortPools } from './helpers';
+import { V2Pool } from './thunks';
 import { PoolFilterId, PoolSortDirection, PoolSortId, PoolUI } from './types';
 
 export const selectAMMs = (state: RootState): AMM[] => {
@@ -19,16 +20,20 @@ export const selectAMMs = (state: RootState): AMM[] => {
   return state.aMMs.aMMs;
 };
 
-export const selectPoolsOnCurrentChain = (state: RootState): PoolUI[] => {
+export const selectPools = (state: RootState): V2Pool[] => {
+  return state.aMMs.pools;
+};
+
+export const selectV1V2PoolsOnCurrentChain = (state: RootState): PoolUI[] => {
   const chainId = selectChainId(state);
   if (!chainId) {
     return [];
   }
-  const pools = selectPools(state);
+  const pools = selectV1V2Pools(state);
   return pools.filter((p) => p.chainId === chainId);
 };
 
-export const selectPools = (state: RootState): PoolUI[] => {
+export const selectV1V2Pools = (state: RootState): PoolUI[] => {
   const aMMs = selectAMMs(state);
   const appliedFilters = state.aMMs.filters;
   const appliedSortingDirection = state.aMMs.sortingDirection;
@@ -42,8 +47,17 @@ export const selectPools = (state: RootState): PoolUI[] => {
         Date.now().valueOf() + getMaturityWindow(amm.rateOracle.protocolId) <
         amm.endDateTime.toMillis(),
     )
-    .filter((amm) => filterByChain(amm, appliedFilters))
-    .filter((amm) => filterByTag(amm, appliedFilters))
+    .filter((amm) => filterByChain(amm.chainId, appliedFilters))
+    .filter((amm) =>
+      filterByTag(
+        {
+          isYield: amm.market.tags.isYield,
+          isBorrowing: amm.market.tags.isBorrowing,
+          isV2: amm.market.tags.isV2,
+        },
+        appliedFilters,
+      ),
+    )
     .map((aMM) => {
       const isV2 = aMM.market.tags.isV2;
       const isAaveV3 = aMM.market.tags.isAaveV3;
@@ -85,7 +99,7 @@ export const selectPools = (state: RootState): PoolUI[] => {
   });
 };
 
-export const selectPoolsLoading = (state: RootState): boolean => {
+export const selectV1V2PoolsLoading = (state: RootState): boolean => {
   const loadedState = selectAMMsLoadedState(state);
   return loadedState === 'idle' || loadedState === 'pending';
 };
@@ -95,11 +109,11 @@ const selectPoolsInformationLoading = (state: RootState): boolean => {
   return loadedState === 'idle' || loadedState === 'pending';
 };
 
-export const selectPoolsSize = (state: RootState): string => {
-  if (selectPoolsLoading(state)) {
+export const selectV1V2PoolsSize = (state: RootState): string => {
+  if (selectV1V2PoolsLoading(state)) {
     return '--';
   }
-  return selectPools(state).length.toString();
+  return selectV1V2Pools(state).length.toString();
 };
 
 export const selectVolume30DaysFormatted = (
@@ -179,6 +193,88 @@ export const selectAMMsLoadedState = (state: RootState) => {
   return state.aMMs.aMMsLoadedState;
 };
 
+export const selectPoolsLoadedState = (state: RootState) => {
+  return state.aMMs.poolsLoadedState;
+};
+
 export const selectPoolsInformationLoadedState = (state: RootState) => {
   return state.aMMs.poolsInformationLoadedState;
+};
+
+export const selectPoolsLoading = (state: RootState): boolean => {
+  const loadedState = selectPoolsLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectPoolsSize = (state: RootState): string => {
+  if (selectPoolsLoading(state)) {
+    return '--';
+  }
+  return selectPoolsUI(state).length.toString();
+};
+
+export const selectPoolsUI = (state: RootState): PoolUI[] => {
+  const rawPools = selectPools(state);
+  const appliedFilters = state.aMMs.filters;
+  const appliedSortingDirection = state.aMMs.sortingDirection;
+  if (!appliedFilters || !appliedSortingDirection) {
+    return [];
+  }
+
+  const pools: PoolUI[] = rawPools
+    .filter(
+      (pool) =>
+        Date.now().valueOf() + getMaturityWindow(pool.rateOracle.protocolId) <
+        pool.termEndTimestampInMS,
+    )
+    .filter((pool) => filterByChain(pool.chainId, appliedFilters))
+    .filter((pool) =>
+      filterByTag(
+        {
+          isYield: !pool.isBorrowing,
+          isBorrowing: pool.isBorrowing,
+          isV2: pool.isV2,
+        },
+        appliedFilters,
+      ),
+    )
+    .map((aMM) => {
+      const isV2 = aMM.isV2;
+      const isAaveV3 = aMM.market === 'Aave V3';
+      const isBorrowing = aMM.isBorrowing;
+      const market = aMM.market as NonNullable<MarketTokenInformationProps['market']>;
+      const token = aMM.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token'];
+      const fixedAPRRate = aMM.currentFixedRate;
+      const variableAPYRate = aMM.currentVariableRate;
+      const variableApy24Ago = aMM.variableRateChange;
+
+      return {
+        market,
+        token,
+        isBorrowing,
+        isAaveV3,
+        isV2,
+        fixedAPRRateFormatted: formatNumber(fixedAPRRate),
+        fixedAPRRate,
+        maturityTimestampInMS: aMM.termEndTimestampInMS,
+        aMMMaturity: formatPOSIXTimestamp(aMM.termEndTimestampInMS),
+        id: aMM.id,
+        variableAPYRate24hDelta: stringToBigFloat(
+          formatNumber(variableAPYRate - variableApy24Ago, 0, 3),
+        ),
+        chainId: aMM.chainId,
+        variableAPYRateFormatted: formatNumber(variableAPYRate),
+        variableAPYRate,
+        routeAmmId: generateAmmIdForRoute(aMM),
+        routePoolId: generatePoolId(aMM),
+        name: `${market as string} - ${token as string}`,
+      };
+    });
+
+  return sortPools(pools, {
+    nameSortingDirection: appliedSortingDirection['pools'],
+    fixedAPRSortingDirection: appliedSortingDirection['fixedAPR'],
+    variableAPYSortingDirection: appliedSortingDirection['variableAPY'],
+    maturitySortingDirection: appliedSortingDirection['maturity'],
+  });
 };

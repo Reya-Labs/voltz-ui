@@ -7,7 +7,7 @@ import {
   confirmSwapThunk,
   selectSwapConfirmationFlowError,
   selectSwapFormAMM,
-} from '../../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../../app/features/forms/trader/deprecated/swap';
 import { MarketTokenInformationProps } from '../../../../../../components/MarketTokenInformation';
 import { MarketTokenInformationCompact } from '../../../../../../components/MarketTokenInformationCompact';
 import { TransactionDetails } from '../../TransactionDetails';

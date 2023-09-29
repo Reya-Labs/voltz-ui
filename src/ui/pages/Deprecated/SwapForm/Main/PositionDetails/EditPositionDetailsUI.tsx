@@ -16,7 +16,7 @@ import {
   selectExistingPositionPayingRateFormatted,
   selectExistingPositionReceivingRateFormatted,
   selectSwapFormPosition,
-} from '../../../../../../app/features/forms/trader/swap';
+} from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { PnLDetailsWithTooltip } from '../../../../../components/PnLDetailsWithTooltip';
 import { UnrealizedPNLDetails } from '../../../../../components/UnrealizedPNLDetails';
 import { MODE_COLOR_TOKEN_MAP, MODE_TEXT_MAP } from '../../helpers';

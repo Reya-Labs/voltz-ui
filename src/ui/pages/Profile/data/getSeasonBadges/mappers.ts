@@ -305,7 +305,6 @@ const etherumChainSeasonBadgeVariants: SeasonBadgeVariants = {
     's4MellowLpVaultTier3',
     ...NON_PROGRAMMATIC_BADGES,
   ],
-  5: [],
 };
 const arbitrumChainSeasonBadgeVariants: SeasonBadgeVariants = {
   0: [],
@@ -344,7 +343,6 @@ const arbitrumChainSeasonBadgeVariants: SeasonBadgeVariants = {
     's4TopTraderArbitrum',
     ...INSOLVENCY_ARBITRUM_BADGES,
   ],
-  5: [],
 };
 const avalancheChainSeasonBadgeVariants: SeasonBadgeVariants = {
   0: [],
@@ -352,7 +350,6 @@ const avalancheChainSeasonBadgeVariants: SeasonBadgeVariants = {
   2: [],
   3: [],
   4: [],
-  5: [],
 };
 const spurceChainSeasonBadgeVariants: SeasonBadgeVariants = {
   0: [],
@@ -360,7 +357,6 @@ const spurceChainSeasonBadgeVariants: SeasonBadgeVariants = {
   2: [],
   3: [],
   4: [],
-  5: [],
 };
 export const CHAIN_SEASON_BADGE_VARIANTS: Record<SupportedChainId, SeasonBadgeVariants> = {
   [SupportedChainId.mainnet]: etherumChainSeasonBadgeVariants,

@@ -2,7 +2,7 @@ import { Dialog } from 'brokoli-ui';
 import React from 'react';
 
 import { useAppSelector } from '../../../../../../app';
-import { selectMarginUpdateConfirmationFlowStep } from '../../../../../../app/features/forms/trader/swap';
+import { selectMarginUpdateConfirmationFlowStep } from '../../../../../../app/features/forms/trader/deprecated/swap';
 import { MarginUpdateCompletedStep } from './MarginUpdateCompletedStep';
 import { MarginUpdateConfirmationStep } from './MarginUpdateConfirmationStep';
 import { WaitingForMarginUpdateConfirmationStep } from './WaitingForMarginUpdateConfirmationStep';

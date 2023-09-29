@@ -7467,10 +7467,10 @@
     "@typescript-eslint/types" "5.10.0"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/api-sdk-v2@1.21.0", "@voltz-protocol/api-sdk-v2@1.25.0", "@voltz-protocol/api-sdk-v2@^1.25.0":
-  version "1.25.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/api-sdk-v2/-/api-sdk-v2-1.25.0.tgz#d14e0648383192c9a47bd5dfb429b5c07ba42271"
-  integrity sha512-dociUXsYrTUaKmBOYNjkaHUS2mVxHnKZK6T0RxP3oY3mlomlXwZez7+OLkgibIIOp2siwKHqVPk1Ebijh0dang==
+"@voltz-protocol/api-sdk-v2@1.25.0", "@voltz-protocol/api-sdk-v2@1.28.0", "@voltz-protocol/api-sdk-v2@^1.28.0":
+  version "1.28.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/api-sdk-v2/-/api-sdk-v2-1.28.0.tgz#bd6cc2009a916de4795302c718cf2285836a5935"
+  integrity sha512-j03pKEBzgeDhnAeGW7xH8nBdllKzaau+HNg5zQFP0fOfs1iQvyoBcfgERMgmT+4oy22L81AtEpZCv6fIhpQOsQ==
   dependencies:
     "@voltz-protocol/commons-v2" "^1.15.0"
     ethers "5.5.4"
@@ -7492,14 +7492,14 @@
     keccak256 "1.0.6"
     merkletreejs "^0.3.0"
 
-"@voltz-protocol/sdk-v1-stateless@1.27.19":
-  version "1.27.19"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.27.19.tgz#3395cda72dfaf8adde7a5b7a5d14627e7f53ad18"
-  integrity sha512-XJ5QBojo+cY4kkSho1pkHjuOJocm6dKe3qJpaT1S3DzVd6J0RuM4xE0YU/GsVNcBfOINJokhmpVgfPd7Sl6EDA==
+"@voltz-protocol/sdk-v1-stateless@1.27.23":
+  version "1.27.23"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.27.23.tgz#b0f1b08d84842f1e06c85093ceb3f3e434dd7107"
+  integrity sha512-IlwSyfmps0EGTtop+oItRJE0ldSOJmS01yGqyGwDqTe7xT/em8Z+Eu+WYDs9gUKuOXYEJIBoLno3RsRLgeIFhQ==
   dependencies:
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
-    "@voltz-protocol/api-sdk-v2" "^1.25.0"
+    "@voltz-protocol/api-sdk-v2" "^1.28.0"
     "@voltz-protocol/commons-v2" "^1.15.0"
     big.js "6.2.1"
     decimal.js-light "2.5.1"
@@ -7511,12 +7511,12 @@
     tiny-invariant "1.3.1"
     toformat "2.0.0"
 
-"@voltz-protocol/sdk-v2@1.56.6":
-  version "1.56.6"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.56.6.tgz#878db10ba6965ec61c54e3346edbd302396bd8a0"
-  integrity sha512-xkVFRyDQqy37bxi6hQuM0LlEYgcm3w/3keqIwKveigxfpupR/Jz6AESW26fwvXjhegGC90KhCqnJDtjv+AuWcQ==
+"@voltz-protocol/sdk-v2@1.61.1":
+  version "1.61.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.61.1.tgz#7f7b85ce2f3ada0d29b8933dcf9801bd1ded6e72"
+  integrity sha512-yXPAyuP3PU5GmPsdM8pFaWUmFMi+hnJRigYTilICZNr0H3+3V/vNF6U630iGhOKops8YTT/z5BstDU3+pqsT3A==
   dependencies:
-    "@voltz-protocol/api-sdk-v2" "^1.25.0"
+    "@voltz-protocol/api-sdk-v2" "^1.28.0"
     "@voltz-protocol/commons-v2" "^1.15.0"
     crypto-js "4.1.1"
     jsbi "3.1.4"
@@ -7531,16 +7531,16 @@
     graphql-request "5.0.0"
     lodash.isundefined "3.0.1"
 
-"@voltz-protocol/v1-sdk@1.176.4":
-  version "1.176.4"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.176.4.tgz#3299948d8c335cfbbf96be875b5c62154cb019fd"
-  integrity sha512-TwAtMofW9gnWFfI6wmVS+DHWQxBsNGO6PrZG2j9kT8Cye/PNqU9LTrQY3AOvbrFs6j2wWw+1g0oE//zCvvoqXw==
+"@voltz-protocol/v1-sdk@1.176.5":
+  version "1.176.5"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/v1-sdk/-/v1-sdk-1.176.5.tgz#28e03f47c871c38125fcee04d1db18e11468bf0e"
+  integrity sha512-cHa8N1quo+jMgyiBynUwC93gN5icDLh4xhRfv+NT2EjD/Vna8NsqMwO4rn74huqRkHSM/Zr+lMtimbfeC3OTQw==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@metamask/detect-provider" "^1.2.0"
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
-    "@voltz-protocol/api-sdk-v2" "1.21.0"
+    "@voltz-protocol/api-sdk-v2" "1.25.0"
     "@voltz-protocol/subgraph-data" "1.18.1"
     axios "^0.27.2"
     big.js "^6.1.1"
@@ -10115,10 +10115,10 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.101.1:
-  version "1.101.1"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.101.1.tgz#6aaaa720f65c723b66b0eb58dfd0b172903b4dd4"
-  integrity sha512-9ioqMc/Y/JbFwpE/tFlskklq3HVZdhMNJ+qiOMAiXlkyIsFVqb3gGZaBrjnSopQzxG0XS/mQXXdH3R4NKafOrg==
+brokoli-ui@1.101.3:
+  version "1.101.3"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.101.3.tgz#80c455ad02ad04f4ef45e30297d1557578b6b871"
+  integrity sha512-n77OIVp97jS8q4vEzv7QaA3KkwNyFo15CN43cuwgietCwYCNTAlr2RwXBtQSkEnqFo1qdUBs8jJO8ORCDwPoLw==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"

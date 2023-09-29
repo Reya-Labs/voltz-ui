@@ -9,7 +9,12 @@ import {
   initialSortingDirection,
   resetSortingDirection,
 } from './constants';
-import { fetchPoolsInformationThunk, initialiseAMMsThunk } from './thunks';
+import {
+  fetchPoolsInformationThunk,
+  initialiseAMMsThunk,
+  initialisePoolsThunk,
+  V2Pool,
+} from './thunks';
 import { PoolFilterId, PoolFilters, PoolsInformation, PoolSortId, PoolSorting } from './types';
 
 type SliceState = {
@@ -19,11 +24,15 @@ type SliceState = {
   sortingDirection: PoolSorting;
   poolsInformationLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
   poolsInformation: PoolsInformation;
+  poolsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+  pools: V2Pool[];
 };
 
 const initialState: SliceState = {
   aMMsLoadedState: 'idle',
   aMMs: [],
+  poolsLoadedState: 'idle',
+  pools: [],
   filters: { ...initialFilters },
   sortingDirection: { ...initialSortingDirection },
   poolsInformationLoadedState: 'idle',
@@ -81,6 +90,17 @@ const slice = createSlice({
       .addCase(initialiseAMMsThunk.fulfilled, (state, { payload }) => {
         state.aMMsLoadedState = 'succeeded';
         state.aMMs = payload as AMM[];
+      })
+      .addCase(initialisePoolsThunk.pending, (state) => {
+        state.poolsLoadedState = 'pending';
+      })
+      .addCase(initialisePoolsThunk.rejected, (state) => {
+        state.poolsLoadedState = 'failed';
+        state.pools = [];
+      })
+      .addCase(initialisePoolsThunk.fulfilled, (state, { payload }) => {
+        state.poolsLoadedState = 'succeeded';
+        state.pools = payload as V2Pool[];
       })
       .addCase(fetchPoolsInformationThunk.pending, (state) => {
         state.poolsInformationLoadedState = 'pending';
