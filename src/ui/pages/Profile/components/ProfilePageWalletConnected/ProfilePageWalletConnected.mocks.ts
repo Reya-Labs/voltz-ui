@@ -454,7 +454,6 @@ export const mockBadges: Record<Season['id'], CollectionBadge[]> = {
       achievedAt: new Date('02/02/2022').valueOf(),
     },
   ],
-  5: [],
 };
 
 export const mockBadgesArbitrum: Record<Season['id'], CollectionBadge[]> = {
@@ -665,5 +664,4 @@ export const mockBadgesArbitrum: Record<Season['id'], CollectionBadge[]> = {
       achievedAt: new Date('02/02/2022').valueOf(),
     },
   ],
-  5: [],
 };

@@ -51,14 +51,6 @@ const ethSeasons: Season[] = [
     endDate: getUTCTimestampFromString('2023-09-30 12:00:00'),
     claimingEnabled: false,
   },
-  {
-    id: 5,
-    label: 'Season 05',
-    shortName: '05',
-    startDate: getUTCTimestampFromString('2023-09-30 12:00:01'),
-    endDate: getUTCTimestampFromString('2023-12-31 23:59:59'),
-    claimingEnabled: false,
-  },
 ];
 
 const arbitrumSeasons: Season[] = [
@@ -76,14 +68,6 @@ const arbitrumSeasons: Season[] = [
     shortName: '04',
     startDate: getUTCTimestampFromString('2023-06-30 11:30:00'),
     endDate: getUTCTimestampFromString('2023-09-30 12:00:00'),
-    claimingEnabled: false,
-  },
-  {
-    id: 5,
-    label: 'Season 05',
-    shortName: '05',
-    startDate: getUTCTimestampFromString('2023-09-30 12:00:01'),
-    endDate: getUTCTimestampFromString('2023-12-31 23:59:59'),
     claimingEnabled: false,
   },
 ];

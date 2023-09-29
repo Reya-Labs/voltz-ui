@@ -18,6 +18,9 @@ export const useCurrentSeason = (
       return season;
     }
   }
-
+  const lastSeason = seasons[seasons.length - 1];
+  if (now > lastSeason.endDate) {
+    return seasons[seasons.length - 1];
+  }
   return seasons[0];
 };
