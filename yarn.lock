@@ -7467,10 +7467,10 @@
     "@typescript-eslint/types" "5.10.0"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/api-sdk-v2@1.25.0", "@voltz-protocol/api-sdk-v2@1.27.0", "@voltz-protocol/api-sdk-v2@^1.27.0":
-  version "1.27.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/api-sdk-v2/-/api-sdk-v2-1.27.0.tgz#101558b26b83184f5665bf7c5e602c4f4b31ec69"
-  integrity sha512-W8zfhbcnHfv/PLLKMZEhgQKim/0s8gdxiIrINxkTuO3OvO5ouhgp8Yb2nB0vo0+7Y9TvYqZ/1Kn+mqi1NC8P8w==
+"@voltz-protocol/api-sdk-v2@1.25.0", "@voltz-protocol/api-sdk-v2@1.28.0", "@voltz-protocol/api-sdk-v2@^1.28.0":
+  version "1.28.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/api-sdk-v2/-/api-sdk-v2-1.28.0.tgz#bd6cc2009a916de4795302c718cf2285836a5935"
+  integrity sha512-j03pKEBzgeDhnAeGW7xH8nBdllKzaau+HNg5zQFP0fOfs1iQvyoBcfgERMgmT+4oy22L81AtEpZCv6fIhpQOsQ==
   dependencies:
     "@voltz-protocol/commons-v2" "^1.15.0"
     ethers "5.5.4"
@@ -7492,14 +7492,14 @@
     keccak256 "1.0.6"
     merkletreejs "^0.3.0"
 
-"@voltz-protocol/sdk-v1-stateless@1.27.21":
-  version "1.27.21"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.27.21.tgz#816e6a8ceceb5139d45b928b8cba266df5d5269d"
-  integrity sha512-IFTJOlY0i+pLbrS2A+OLG8YHfoidA9UDiJ0d07zwHsm2aZz/Dus9WO3p0iX2Ezt1G9c508yCZ7fCR5pevhT62Q==
+"@voltz-protocol/sdk-v1-stateless@1.27.23":
+  version "1.27.23"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.27.23.tgz#b0f1b08d84842f1e06c85093ceb3f3e434dd7107"
+  integrity sha512-IlwSyfmps0EGTtop+oItRJE0ldSOJmS01yGqyGwDqTe7xT/em8Z+Eu+WYDs9gUKuOXYEJIBoLno3RsRLgeIFhQ==
   dependencies:
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
-    "@voltz-protocol/api-sdk-v2" "^1.27.0"
+    "@voltz-protocol/api-sdk-v2" "^1.28.0"
     "@voltz-protocol/commons-v2" "^1.15.0"
     big.js "6.2.1"
     decimal.js-light "2.5.1"
@@ -7511,12 +7511,12 @@
     tiny-invariant "1.3.1"
     toformat "2.0.0"
 
-"@voltz-protocol/sdk-v2@1.59.6":
-  version "1.59.6"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.59.6.tgz#4c967011c872e03046c239299df286e85ccb9b7c"
-  integrity sha512-NdXK55Ej/E9bH1FjLeD/fF/Geh/nDFN6KclY/xfy7yf3WePQvBMpC/ACk36yemOk+Bw64genLR2cUhy9sdE7qA==
+"@voltz-protocol/sdk-v2@1.61.1":
+  version "1.61.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.61.1.tgz#7f7b85ce2f3ada0d29b8933dcf9801bd1ded6e72"
+  integrity sha512-yXPAyuP3PU5GmPsdM8pFaWUmFMi+hnJRigYTilICZNr0H3+3V/vNF6U630iGhOKops8YTT/z5BstDU3+pqsT3A==
   dependencies:
-    "@voltz-protocol/api-sdk-v2" "^1.27.0"
+    "@voltz-protocol/api-sdk-v2" "^1.28.0"
     "@voltz-protocol/commons-v2" "^1.15.0"
     crypto-js "4.1.1"
     jsbi "3.1.4"
@@ -10115,10 +10115,10 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-brokoli-ui@1.101.1:
-  version "1.101.1"
-  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.101.1.tgz#6aaaa720f65c723b66b0eb58dfd0b172903b4dd4"
-  integrity sha512-9ioqMc/Y/JbFwpE/tFlskklq3HVZdhMNJ+qiOMAiXlkyIsFVqb3gGZaBrjnSopQzxG0XS/mQXXdH3R4NKafOrg==
+brokoli-ui@1.101.3:
+  version "1.101.3"
+  resolved "https://registry.yarnpkg.com/brokoli-ui/-/brokoli-ui-1.101.3.tgz#80c455ad02ad04f4ef45e30297d1557578b6b871"
+  integrity sha512-n77OIVp97jS8q4vEzv7QaA3KkwNyFo15CN43cuwgietCwYCNTAlr2RwXBtQSkEnqFo1qdUBs8jJO8ORCDwPoLw==
   dependencies:
     "@floating-ui/react" "0.19.0"
     "@nivo/core" "0.80.0"

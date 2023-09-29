@@ -128,7 +128,7 @@
   "resolutions": {
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0",
-    "@voltz-protocol/api-sdk-v2": "1.27.0"
+    "@voltz-protocol/api-sdk-v2": "1.28.0"
   },
   "dependencies": {
     "@emotion/react": "11.7.1",
@@ -138,16 +138,16 @@
     "@reduxjs/toolkit": "1.9.5",
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0",
-    "@voltz-protocol/api-sdk-v2": "1.27.0",
+    "@voltz-protocol/api-sdk-v2": "1.28.0",
     "@voltz-protocol/community-sdk": "1.5.2",
-    "@voltz-protocol/sdk-v1-stateless": "1.27.21",
-    "@voltz-protocol/sdk-v2": "1.59.6",
+    "@voltz-protocol/sdk-v1-stateless": "1.27.23",
+    "@voltz-protocol/sdk-v2": "1.61.1",
     "@voltz-protocol/v1-sdk": "1.176.5",
     "@walletconnect/ethereum-provider": "2.9.1",
     "@walletconnect/modal": "2.6.1",
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.44",
-    "brokoli-ui": "1.101.1",
+    "brokoli-ui": "1.101.3",
     "copy-to-clipboard": "3.3.3",
     "ethers": "5.5.4",
     "isomorphic-fetch": "3.0.0",
