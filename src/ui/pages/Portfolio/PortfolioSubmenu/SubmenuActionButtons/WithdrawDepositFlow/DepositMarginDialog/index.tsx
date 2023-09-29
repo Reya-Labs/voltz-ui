@@ -8,11 +8,10 @@ import { DepositMarginSuccessDialogContent } from './DepositMarginSuccessDialogC
 
 export const DepositMarginDialog: React.FunctionComponent = () => {
   const step = useAppSelector(selectMarginAccountDepositFlowStep);
+
   return (
     <Dialog open={step !== 'closed'}>
-      {step === 'opened' || step === 'depositing' || step === 'deposit-error' ? (
-        <DepositMarginDialogContent />
-      ) : null}
+      {step !== 'deposit-success' ? <DepositMarginDialogContent /> : null}
       {step === 'deposit-success' ? <DepositMarginSuccessDialogContent /> : null}
     </Dialog>
   );

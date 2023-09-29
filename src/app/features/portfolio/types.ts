@@ -7,6 +7,8 @@ import {
   PortfolioMarginAccount,
   PortfolioPosition,
   PortfolioSummary,
+  ReturnTypeSimulateDepositMargin,
+  ReturnTypeSimulateWithdrawMargin,
 } from './thunks';
 export type PositionsFilterId = 'active' | 'matured' | 'settled';
 
@@ -56,11 +58,7 @@ export type SliceState = {
     txHash: string | null;
     simulation: {
       status: 'idle' | 'pending' | 'succeeded' | 'failed';
-      value: null | {
-        gasFeeUSD: number;
-        marginRatioPercentage: PortfolioMarginAccount['marginRatioPercentage'];
-        marginRatioHealth: PortfolioMarginAccount['marginRatioHealth'];
-      };
+      value: null | ReturnTypeSimulateWithdrawMargin;
     };
     userInput: {
       amount: number;
@@ -77,23 +75,31 @@ export type SliceState = {
     // available amounts for the selector
     availableAmounts: AvailableAmountForMarginAccountDeposit[];
     availableAmountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
-    step: 'closed' | 'opened' | 'depositing' | 'deposit-success' | 'deposit-error';
+    step:
+      | 'closed'
+      | 'opened'
+      | 'depositing'
+      | 'deposit-success'
+      | 'deposit-error'
+      | 'approveTokenError'
+      | 'approvingToken';
     selectedMarginAccount: null | PortfolioMarginAccount;
     error: string | null;
     txHash: string | null;
     simulation: {
       status: 'idle' | 'pending' | 'succeeded' | 'failed';
-      value: null | {
-        gasFeeUSD: number;
-        marginRatioPercentage: PortfolioMarginAccount['marginRatioPercentage'];
-        marginRatioHealth: PortfolioMarginAccount['marginRatioHealth'];
-      };
+      value: null | ReturnTypeSimulateDepositMargin;
     };
     userInput: {
       amount: number;
       maxAmount: AvailableAmountForMarginAccountDeposit['value'];
       maxAmountUSD: AvailableAmountForMarginAccountDeposit['valueUSD'];
       token: undefined | AvailableAmountForMarginAccountDeposit['token'];
+    };
+    // required for approval flow, used to validate the deposit value against
+    walletTokenAllowance: {
+      value: number;
+      status: 'idle' | 'pending' | 'succeeded' | 'failed';
     };
   };
 };
@@ -109,7 +115,7 @@ export type PositionUI = {
   type: 'LP' | 'Variable' | 'Fixed';
   chainId: SupportedChainId;
   market: 'Aave V2' | 'Aave V3' | 'Compound' | 'Lido' | 'Rocket' | 'GMX:GLP' | 'SOFR';
-  token?: 'eth' | 'usdc' | 'usdt' | 'dai';
+  token?: PortfolioPosition['pool']['underlyingToken']['name'];
   name: string;
   notionalUSD: number;
   notionalUSDCompactFormat: {

@@ -466,21 +466,115 @@ export const selectMarginAccountDepositFlowError = (state: RootState) => {
   return state.portfolio.marginAccountDepositMarginFlow.error;
 };
 
-export const selectMarginAccountDepositFlowValidationError = (state: RootState) => {
-  const userInput = state.portfolio.marginAccountDepositMarginFlow.userInput;
-  if (userInput.amount > userInput.maxAmount) {
-    return 'You cannot deposit more than allowed maximum amount.';
+export const selectMarginAccountDepositFlowShouldApproveToken = (state: RootState) => {
+  const {
+    userInput: { token, amount },
+  } = state.portfolio.marginAccountDepositMarginFlow;
+  const simulationValue = state.portfolio.marginAccountDepositMarginFlow.simulation.value;
+  if (!token || amount <= 0 || simulationValue === null) {
+    return false;
   }
-  return '';
+  const value = selectMarginAccountDepositFlowWalletTokenAllowanceValue(state);
+  const fee = simulationValue.gasFee;
+  return amount + fee > value;
+};
+
+export const selectMarginAccountDepositFlowWalletTokenAllowanceHasError = (state: RootState) => {
+  const {
+    walletTokenAllowance: { status },
+  } = state.portfolio.marginAccountDepositMarginFlow;
+  return status === 'failed';
+};
+
+export const selectMarginAccountDepositFlowHasSimulationError = (state: RootState) => {
+  return state.portfolio.marginAccountDepositMarginFlow.simulation.status === 'failed';
+};
+
+export const selectMarginAccountDepositFlowValidationError = (state: RootState) => {
+  const {
+    userInput: { amount, maxAmount },
+  } = state.portfolio.marginAccountDepositMarginFlow;
+  if (amount <= 0) {
+    return {
+      validationError: '',
+      disableCTAButton: true,
+    };
+  }
+  if (selectMarginAccountDepositFlowHasSimulationError(state)) {
+    return {
+      validationError: 'Gas fee calculation failed',
+      disableCTAButton: false,
+    };
+  }
+  if (selectMarginAccountDepositFlowWalletTokenAllowanceHasError(state)) {
+    return {
+      validationError: 'Something went wrong, retry to fetch approve information.',
+      disableCTAButton: false,
+    };
+  }
+  if (amount > maxAmount) {
+    return {
+      validationError: 'You cannot deposit more than allowed maximum amount.',
+      disableCTAButton: true,
+    };
+  }
+  if (selectMarginAccountDepositFlowShouldApproveToken(state)) {
+    return {
+      validationError: 'You cannot deposit the inputted amount. Approve first!',
+      disableCTAButton: false,
+    };
+  }
+  return {
+    validationError: '',
+    disableCTAButton: false,
+  };
+};
+
+export const selectMarginAccountDepositFlowCTAText = (state: RootState) => {
+  const step = selectMarginAccountDepositFlowStep(state);
+  if (step === 'depositing') {
+    return 'Waiting for deposit';
+  }
+  if (step === 'approvingToken') {
+    return 'Approval pending...';
+  }
+  if (selectMarginAccountDepositFlowHasSimulationError(state)) {
+    return 'Refresh Gas Calculation';
+  }
+  if (selectMarginAccountDepositFlowWalletTokenAllowanceHasError(state)) {
+    return 'Retry';
+  }
+  if (step === 'approveTokenError') {
+    return 'Try to approve again!';
+  }
+  if (selectMarginAccountDepositFlowShouldApproveToken(state)) {
+    const { token } = state.portfolio.marginAccountDepositMarginFlow.userInput;
+    return token ? `Approve ${(token as string).toUpperCase()} and deposit` : 'Approve and deposit';
+  }
+  return 'Deposit Margin';
+};
+
+export const selectMarginAccountDepositFlowWalletTokenAllowanceLoading = (state: RootState) => {
+  const { status } = state.portfolio.marginAccountDepositMarginFlow.walletTokenAllowance;
+  return status === 'idle' || status === 'pending';
+};
+
+export const selectMarginAccountDepositFlowWalletTokenAllowanceValue = (state: RootState) => {
+  if (state.portfolio.marginAccountDepositMarginFlow.walletTokenAllowance.status === 'succeeded') {
+    return state.portfolio.marginAccountDepositMarginFlow.walletTokenAllowance.value;
+  }
+  return 0;
 };
 
 export const selectMarginAccountDepositFlowCTADisabled = (state: RootState) => {
-  const validationError = selectMarginAccountDepositFlowValidationError(state);
-  const loading = selectMarginAccountDepositFlowStep(state) === 'depositing';
+  const walletTokenAllowanceLoading =
+    selectMarginAccountDepositFlowWalletTokenAllowanceLoading(state);
+  const { disableCTAButton } = selectMarginAccountDepositFlowValidationError(state);
+  const step = selectMarginAccountDepositFlowStep(state);
+  const loading = walletTokenAllowanceLoading || step === 'depositing' || step === 'approvingToken';
   const selectedMarginAccountId =
     selectMarginAccountDepositFlowSelectedMarginAccountFormatted(state).id;
-
-  return Boolean(validationError) || Boolean(loading) || !Boolean(selectedMarginAccountId);
+  return disableCTAButton || Boolean(loading) || !Boolean(selectedMarginAccountId);
 };
 
 export const selectMarginAccountDepositFlowSimulationStatus = (state: RootState) => {

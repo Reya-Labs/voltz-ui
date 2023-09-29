@@ -4,22 +4,27 @@ import React, { useEffect, useMemo } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../../../../app';
 import {
+  approveTokenForPeripheryThunk,
   closeMarginAccountDepositFlowAction,
   depositMarginFromMarginAccountThunk,
   fetchAvailableAmountsToDepositForMarginAccountThunk,
   fetchMarginAccountsForDepositThunk,
+  getTokenAllowanceForPeripheryThunk,
   marginAmountDepositFlowValueChangeAction,
   selectMarginAccountDepositFlowAction,
   selectMarginAccountDepositFlowAvailableAmounts,
   selectMarginAccountDepositFlowAvailableAmountsLoading,
   selectMarginAccountDepositFlowCTADisabled,
+  selectMarginAccountDepositFlowCTAText,
   selectMarginAccountDepositFlowError,
   selectMarginAccountDepositFlowMarginAccounts,
   selectMarginAccountDepositFlowMarginAccountsLoading,
   selectMarginAccountDepositFlowSelectedMarginAccountFormatted,
+  selectMarginAccountDepositFlowShouldApproveToken,
   selectMarginAccountDepositFlowStep,
   selectMarginAccountDepositFlowUserInputFormatted,
   selectMarginAccountDepositFlowValidationError,
+  selectMarginAccountDepositFlowWalletTokenAllowanceHasError,
   simulateDepositMarginFromMarginAccountThunk,
 } from '../../../../../../../../app/features/portfolio';
 import { AvailableAmountsUI } from '../../../../../../../../app/features/portfolio/types';
@@ -31,11 +36,15 @@ import { DepositMarginDetails } from './DepositMarginDetails';
 import { ContentBox, MidBox, TitleBox } from './DepositMarginDialogContent.styled';
 
 export const DepositMarginDialogContent: React.FunctionComponent = () => {
-  const { account } = useWallet();
+  const step = useAppSelector(selectMarginAccountDepositFlowStep);
+  const walletTokenAllowanceHasError = useAppSelector(
+    selectMarginAccountDepositFlowWalletTokenAllowanceHasError,
+  );
+  const { account, signer } = useWallet();
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectMarginAccountDepositFlowStep) === 'depositing';
   const error = useAppSelector(selectMarginAccountDepositFlowError);
-  const validationError = useAppSelector(selectMarginAccountDepositFlowValidationError);
+  const { validationError } = useAppSelector(selectMarginAccountDepositFlowValidationError);
   const computedError = error || validationError;
   const disabled = useAppSelector(selectMarginAccountDepositFlowCTADisabled);
   const marginAccounts = useAppSelector(selectMarginAccountDepositFlowMarginAccounts);
@@ -43,20 +52,60 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
   const { id: selectedMarginAccountId } = useAppSelector(
     selectMarginAccountDepositFlowSelectedMarginAccountFormatted,
   );
+  const ctaText = useAppSelector(selectMarginAccountDepositFlowCTAText);
   const { token, amount } = useAppSelector(selectMarginAccountDepositFlowUserInputFormatted);
   const availableAmountsLoading = useAppSelector(
     selectMarginAccountDepositFlowAvailableAmountsLoading,
   );
+  const shouldApproveToken = useAppSelector(selectMarginAccountDepositFlowShouldApproveToken);
   const availableAmounts = useAppSelector(selectMarginAccountDepositFlowAvailableAmounts);
   const handleOnCloseClick = () => dispatch(closeMarginAccountDepositFlowAction());
   const handleOnCTAClick = () => {
+    if (!token || !signer) {
+      return;
+    }
+    if (walletTokenAllowanceHasError) {
+      void dispatch(
+        getTokenAllowanceForPeripheryThunk({
+          signer,
+          tokenName: token,
+        }),
+      );
+      return;
+    }
+    if (shouldApproveToken) {
+      void dispatch(
+        approveTokenForPeripheryThunk({
+          signer,
+          tokenName: token,
+        }),
+      );
+      return;
+    }
+
     void dispatch(depositMarginFromMarginAccountThunk());
   };
+
+  useEffect(() => {
+    if (step !== 'opened' || !signer || !token) {
+      return;
+    }
+    void dispatch(
+      getTokenAllowanceForPeripheryThunk({
+        signer,
+        tokenName: token,
+      }),
+    );
+  }, [dispatch, signer, step, token]);
 
   const debouncedDepositSimulation = useMemo(
     () =>
       debounce(
         (nextAmount: number, nextToken: AvailableAmountsUI['token'], marginAccountId: string) => {
+          if (nextAmount <= 0) {
+            return;
+          }
+
           void dispatch(
             simulateDepositMarginFromMarginAccountThunk({
               amount: nextAmount,
@@ -182,7 +231,7 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
         variant="primary"
         onClick={handleOnCTAClick}
       >
-        Deposit Margin
+        {ctaText}
       </Button>
     </ContentBox>
   );
