@@ -6,8 +6,9 @@ import {
 import { formatPOSIXTimestamp } from '../../../../../utilities/date';
 import { compactFormatToParts } from '../../../../../utilities/number';
 import { PortfolioPosition } from '../../thunks';
+import { PositionUI } from '../../types';
 
-export const mapPortfolioPositionToPortfolioUI = (position: PortfolioPosition) => {
+export const mapPortfolioPositionToPortfolioUI = (position: PortfolioPosition): PositionUI => {
   const pool = position.pool;
   const isV2 = pool.isV2;
   const isBorrowing = pool.isBorrowing;
