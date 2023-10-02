@@ -2,7 +2,7 @@ import { Dialog } from 'brokoli-ui';
 import React from 'react';
 
 import { useAppSelector } from '../../../../../../../app';
-import { selectMarginAccountDepositFlowStep } from '../../../../../../../app/features/portfolio';
+import { selectMarginAccountDepositFlowStep } from '../../../../../../../app/features/deposit-flow';
 import { DepositMarginDialogContent } from './DepositMarginDialogContent';
 import { DepositMarginSuccessDialogContent } from './DepositMarginSuccessDialogContent';
 

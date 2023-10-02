@@ -1,6 +1,6 @@
 import { compactFormatToParts } from '../../../../../utilities/number';
+import { AvailableAmountsUI } from '../../../portfolio/types';
 import { AvailableAmountForMarginAccountDeposit } from '../../thunks';
-import { AvailableAmountsUI } from '../../types';
 
 export const mapAvailableAmountMarginAccountDepositToAvailableAmountsUI = (
   availableAmount: AvailableAmountForMarginAccountDeposit,

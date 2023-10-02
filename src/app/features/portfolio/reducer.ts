@@ -9,33 +9,25 @@ import {
 } from './constants';
 import { initialState } from './state';
 import {
-  approveTokenForPeripheryThunk,
   AvailableAmountForMarginAccountWithdraw,
   createMarginAccountThunk,
-  depositMarginFromMarginAccountThunk,
-  fetchAvailableAmountsToDepositForMarginAccountThunk,
   fetchAvailableAmountsToWithdrawForMarginAccountThunk,
   fetchMarginAccountPositionsThunk,
-  fetchMarginAccountsForDepositThunk,
   fetchMarginAccountsForSelectionThunk,
   fetchMarginAccountsForWithdrawThunk,
   fetchMarginAccountsThunk,
   fetchMarginAccountSummaryThunk,
   fetchPortfolioSummaryThunk,
-  getTokenAllowanceForPeripheryThunk,
   initialisePortfolioPositionsThunk,
   MarginAccountSummary,
   PortfolioMarginAccount,
   PortfolioPosition,
   PortfolioSummary,
   ReturnTypeFetchMarginAccounts,
-  ReturnTypeSimulateDepositMargin,
   ReturnTypeSimulateWithdrawMargin,
-  simulateDepositMarginFromMarginAccountThunk,
   simulateWithdrawMarginFromMarginAccountThunk,
   withdrawMarginFromMarginAccountThunk,
 } from './thunks';
-import { AvailableAmountForMarginAccountDeposit } from './thunks/fetchAvailableAmountsToDepositForMarginAccountThunk';
 import { PositionSortId } from './types';
 
 const slice = createSlice({
@@ -48,23 +40,6 @@ const slice = createSlice({
     },
     closeMarginAccountWithdrawFlowAction: (state) => {
       state.marginAccountWithdrawMarginFlow.step = 'closed';
-    },
-    openMarginAccountDepositFlowAction: (state) => {
-      state.marginAccountDepositMarginFlow.step = 'opened';
-    },
-    closeMarginAccountDepositFlowAction: (state) => {
-      state.marginAccountDepositMarginFlow.step = 'closed';
-      state.marginAccountDepositMarginFlow.userInput = {
-        ...initialState.marginAccountDepositMarginFlow.userInput,
-      };
-      state.marginAccountDepositMarginFlow.walletTokenAllowance = {
-        ...initialState.marginAccountDepositMarginFlow.walletTokenAllowance,
-      };
-      state.marginAccountDepositMarginFlow.selectedMarginAccount = null;
-      state.marginAccountDepositMarginFlow.error = null;
-      state.marginAccountDepositMarginFlow.simulation = {
-        ...initialState.marginAccountDepositMarginFlow.simulation,
-      };
     },
     openCreateMarginAccountDialogAction: (state) => {
       state.createMarginAccountDialogState = 'opened';
@@ -107,43 +82,6 @@ const slice = createSlice({
       }
       if (token) {
         state.marginAccountWithdrawMarginFlow.userInput.token = token;
-      }
-    },
-    selectMarginAccountDepositFlowAction: (
-      state,
-      {
-        payload: { id },
-      }: PayloadAction<{
-        id: string;
-      }>,
-    ) => {
-      const selectedMarginAccount = (
-        state.marginAccountDepositMarginFlow.marginAccounts || []
-      ).find((mA) => mA.id === id);
-      if (selectedMarginAccount) {
-        state.marginAccountDepositMarginFlow.selectedMarginAccount = selectedMarginAccount;
-      }
-    },
-    marginAmountDepositFlowValueChangeAction: (
-      state,
-      {
-        payload: { value, maxAmount, maxAmountUSD, token },
-      }: PayloadAction<{
-        value: number;
-        maxAmount?: number;
-        maxAmountUSD?: number;
-        token: AvailableAmountForMarginAccountDeposit['token'];
-      }>,
-    ) => {
-      state.marginAccountDepositMarginFlow.userInput.amount = value;
-      if (maxAmount !== undefined) {
-        state.marginAccountDepositMarginFlow.userInput.maxAmount = maxAmount;
-      }
-      if (maxAmountUSD !== undefined) {
-        state.marginAccountDepositMarginFlow.userInput.maxAmountUSD = maxAmountUSD;
-      }
-      if (token) {
-        state.marginAccountDepositMarginFlow.userInput.token = token;
       }
     },
     togglePositionSortingDirectionAction: (
@@ -341,19 +279,6 @@ const slice = createSlice({
         state.marginAccountWithdrawMarginFlow.txHash = (payload as ContractReceipt).transactionHash;
         state.marginAccountWithdrawMarginFlow.error = null;
       })
-      .addCase(fetchMarginAccountsForDepositThunk.pending, (state) => {
-        state.marginAccountDepositMarginFlow.marginAccountsLoadedState = 'pending';
-        state.marginAccountDepositMarginFlow.marginAccounts = [];
-      })
-      .addCase(fetchMarginAccountsForDepositThunk.rejected, (state) => {
-        state.marginAccountDepositMarginFlow.marginAccountsLoadedState = 'failed';
-        state.marginAccountDepositMarginFlow.marginAccounts = [];
-      })
-      .addCase(fetchMarginAccountsForDepositThunk.fulfilled, (state, { payload }) => {
-        state.marginAccountDepositMarginFlow.marginAccountsLoadedState = 'succeeded';
-        const { marginAccounts } = payload as ReturnTypeFetchMarginAccounts;
-        state.marginAccountDepositMarginFlow.marginAccounts = marginAccounts;
-      })
       .addCase(fetchMarginAccountsForSelectionThunk.pending, (state) => {
         state.marginAccountsForSelectionLoadedState = 'pending';
         state.marginAccountsForSelection = [];
@@ -366,87 +291,6 @@ const slice = createSlice({
         const { marginAccounts } = payload as ReturnTypeFetchMarginAccounts;
         state.marginAccountsForSelectionLoadedState = 'succeeded';
         state.marginAccountsForSelection = marginAccounts;
-      })
-      .addCase(fetchAvailableAmountsToDepositForMarginAccountThunk.pending, (state) => {
-        state.marginAccountDepositMarginFlow.availableAmountsLoadedState = 'pending';
-        state.marginAccountDepositMarginFlow.availableAmounts = [];
-      })
-      .addCase(fetchAvailableAmountsToDepositForMarginAccountThunk.rejected, (state) => {
-        state.marginAccountDepositMarginFlow.availableAmountsLoadedState = 'failed';
-        state.marginAccountDepositMarginFlow.availableAmounts = [];
-      })
-      .addCase(
-        fetchAvailableAmountsToDepositForMarginAccountThunk.fulfilled,
-        (state, { payload }) => {
-          const availableAmounts = payload as AvailableAmountForMarginAccountDeposit[];
-          state.marginAccountDepositMarginFlow.availableAmountsLoadedState = 'succeeded';
-          state.marginAccountDepositMarginFlow.availableAmounts = availableAmounts;
-          if (availableAmounts.length > 0) {
-            const firstAvailableAmount = availableAmounts[0];
-            state.marginAccountDepositMarginFlow.userInput.token = firstAvailableAmount.token;
-            state.marginAccountDepositMarginFlow.userInput.maxAmount = firstAvailableAmount.value;
-            state.marginAccountDepositMarginFlow.userInput.maxAmountUSD =
-              firstAvailableAmount.valueUSD;
-          }
-        },
-      )
-      .addCase(simulateDepositMarginFromMarginAccountThunk.pending, (state) => {
-        state.marginAccountDepositMarginFlow.simulation.status = 'pending';
-        state.marginAccountDepositMarginFlow.simulation.value = null;
-      })
-      .addCase(simulateDepositMarginFromMarginAccountThunk.rejected, (state) => {
-        state.marginAccountDepositMarginFlow.simulation.status = 'failed';
-        state.marginAccountDepositMarginFlow.simulation.value = null;
-      })
-      .addCase(simulateDepositMarginFromMarginAccountThunk.fulfilled, (state, { payload }) => {
-        state.marginAccountDepositMarginFlow.simulation.status = 'succeeded';
-        state.marginAccountDepositMarginFlow.simulation.value =
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-          payload as ReturnTypeSimulateDepositMargin;
-      })
-      .addCase(depositMarginFromMarginAccountThunk.pending, (state) => {
-        state.marginAccountDepositMarginFlow.step = 'depositing';
-        state.marginAccountDepositMarginFlow.error = null;
-      })
-      .addCase(depositMarginFromMarginAccountThunk.rejected, (state, { payload }) => {
-        state.marginAccountDepositMarginFlow.step = 'deposit-error';
-        state.marginAccountDepositMarginFlow.error = payload as string;
-      })
-      .addCase(depositMarginFromMarginAccountThunk.fulfilled, (state, { payload }) => {
-        state.marginAccountDepositMarginFlow.step = 'deposit-success';
-        state.marginAccountDepositMarginFlow.txHash = (payload as ContractReceipt).transactionHash;
-        state.marginAccountDepositMarginFlow.error = null;
-      })
-      .addCase(getTokenAllowanceForPeripheryThunk.pending, (state) => {
-        state.marginAccountDepositMarginFlow.walletTokenAllowance = {
-          value: 0,
-          status: 'pending',
-        };
-      })
-      .addCase(getTokenAllowanceForPeripheryThunk.rejected, (state) => {
-        state.marginAccountDepositMarginFlow.walletTokenAllowance = {
-          value: 0,
-          status: 'failed',
-        };
-      })
-      .addCase(getTokenAllowanceForPeripheryThunk.fulfilled, (state, { payload }) => {
-        state.marginAccountDepositMarginFlow.walletTokenAllowance = {
-          value: payload as number,
-          status: 'succeeded',
-        };
-      })
-      .addCase(approveTokenForPeripheryThunk.pending, (state) => {
-        state.marginAccountDepositMarginFlow.step = 'approvingToken';
-        state.marginAccountDepositMarginFlow.error = null;
-      })
-      .addCase(approveTokenForPeripheryThunk.rejected, (state, { payload }) => {
-        state.marginAccountDepositMarginFlow.step = 'approveTokenError';
-        state.marginAccountDepositMarginFlow.error = payload as string;
-      })
-      .addCase(approveTokenForPeripheryThunk.fulfilled, (state, { payload }) => {
-        state.marginAccountDepositMarginFlow.step = 'opened';
-        state.marginAccountDepositMarginFlow.error = null;
-        state.marginAccountDepositMarginFlow.walletTokenAllowance.value = payload as number;
       });
   },
 });
@@ -461,9 +305,5 @@ export const {
   closeMarginAccountWithdrawFlowAction,
   selectMarginAccountWithdrawFlowAction,
   marginAmountWithdrawFlowValueChangeAction,
-  openMarginAccountDepositFlowAction,
-  closeMarginAccountDepositFlowAction,
-  selectMarginAccountDepositFlowAction,
-  marginAmountDepositFlowValueChangeAction,
 } = slice.actions;
 export const portfolioReducer = slice.reducer;

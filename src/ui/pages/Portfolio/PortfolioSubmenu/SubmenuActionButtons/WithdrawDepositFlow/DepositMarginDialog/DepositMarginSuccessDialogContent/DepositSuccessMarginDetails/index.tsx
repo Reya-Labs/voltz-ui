@@ -7,7 +7,7 @@ import {
   selectMarginAccountDepositFlowSelectedMarginAccountFormatted,
   selectMarginAccountDepositFlowSimulationValueFormatted,
   selectMarginAccountDepositFlowUserInputFormatted,
-} from '../../../../../../../../../app/features/portfolio';
+} from '../../../../../../../../../app/features/deposit-flow';
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
 import { ExplorerLink } from '../../../../../../../../components/ExplorerLink';
 import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../../../components/MarginRatioDonut/constants';
