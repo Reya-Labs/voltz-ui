@@ -5,12 +5,15 @@ import { useAppDispatch, useAppSelector } from '../../../../app';
 import { V2Pool } from '../../../../app/features/aMMs';
 import {
   getMaxNotionalAvailableThunk,
+  selectSwapFormMarginAccount,
   selectSwapFormPool,
+  setSwapFormMarginAccountAction,
   setSwapFormPoolAction,
   setSwapFormSignerAction,
 } from '../../../../app/features/forms/trader/swap';
 import { selectChainId } from '../../../../app/features/network';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
+import { useMarginAccountsForSelection } from '../../../hooks/useMarginAccountsForSelection';
 import { usePools } from '../../../hooks/usePools';
 import { useWallet } from '../../../hooks/useWallet';
 
@@ -19,13 +22,16 @@ type UseSwapFormPoolResult = {
   loading: boolean;
   error: boolean;
   noPoolFound: boolean;
+  noMarginAccountFound: boolean;
 };
 
-export const useSwapFormPool = (): UseSwapFormPoolResult => {
+export const useSwapFormPoolAndMarginAccount = (): UseSwapFormPoolResult => {
   const dispatch = useAppDispatch();
-  const { ammId, poolId } = useParams();
+  const { ammId, poolId, marginAccountId } = useParams();
   const { pools, loading: poolsLoading, error, idle } = usePools();
+  const { marginAccounts, loading: marginAccountsLoading } = useMarginAccountsForSelection();
   const pool = useAppSelector(selectSwapFormPool);
+  const marginAccount = useAppSelector(selectSwapFormMarginAccount);
   const chainId = useAppSelector(selectChainId);
   const [loading, setLoading] = useState(true);
 
@@ -37,6 +43,21 @@ export const useSwapFormPool = (): UseSwapFormPoolResult => {
       }),
     );
   }, [dispatch, signer]);
+
+  useEffect(() => {
+    if (!marginAccountId || marginAccountsLoading) {
+      return;
+    }
+    const foundMarginAccount = marginAccounts.find(
+      (ma) => ma.id.toLowerCase() === marginAccountId.toLowerCase(),
+    );
+
+    dispatch(
+      setSwapFormMarginAccountAction({
+        marginAccount: foundMarginAccount ? foundMarginAccount : null,
+      }),
+    );
+  }, [dispatch, marginAccounts, marginAccountsLoading, marginAccountId]);
 
   useEffect(() => {
     if (!ammId || !poolId) {
@@ -77,6 +98,7 @@ export const useSwapFormPool = (): UseSwapFormPoolResult => {
     pool,
     loading: idle || loading,
     noPoolFound: !pool && !loading,
+    noMarginAccountFound: !marginAccount && !marginAccountsLoading,
     error: error,
   };
 };

@@ -37,11 +37,11 @@ export const Form: React.FunctionComponent = () => {
         <FormBox>
           <NotionalSwap />
           <NotionalAmountField />
+          <TransactionDetailsBox>
+            <TransactionDetails />
+          </TransactionDetailsBox>
           <SubmitButton />
         </FormBox>
-        <TransactionDetailsBox>
-          <TransactionDetails />
-        </TransactionDetailsBox>
         <CashflowCalculatorModal mode={mode} pool={pool} />
       </FormOuterBox>
     </React.Fragment>

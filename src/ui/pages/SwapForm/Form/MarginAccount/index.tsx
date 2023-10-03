@@ -1,15 +1,46 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 import { useAppSelector } from '../../../../../app';
 import {
-  selectAMMTokenFormatted,
-  selectMarginAccountName,
+  selectPoolTokenFormatted,
+  selectSwapFormMarginAccountUI,
 } from '../../../../../app/features/forms/trader/swap';
-import { MarginAccountFormPreview } from '../../../../components/MarginAccountFormPreview';
+import { MarginAccountSelectorFormPreview } from '../../../../components/MarginAccountSelectorFormPreview';
+import { useAppNavigate } from '../../../../hooks/useAppNavigate';
+import { useMarginAccountsForSelection } from '../../../../hooks/useMarginAccountsForSelection';
 
 export const MarginAccount: React.FunctionComponent = () => {
-  const token = useAppSelector(selectAMMTokenFormatted);
-  const accountName = useAppSelector(selectMarginAccountName);
+  const navigate = useAppNavigate();
+  const token = useAppSelector(selectPoolTokenFormatted);
+  const { marginAccountsUI, loading } = useMarginAccountsForSelection();
+  const selectedMarginAccountUI = useAppSelector(selectSwapFormMarginAccountUI);
+  const { ammId, poolId } = useParams();
+  if (!selectedMarginAccountUI) {
+    return null;
+  }
+  const handleOnMarginAccountChange = (id: string) => {
+    if (!ammId || !poolId) {
+      return;
+    }
+    // TODO: FB evaluate before launch
+    navigate.toSwapFormPage({
+      ammId,
+      poolId,
+      marginAccountId: id,
+    });
+  };
 
-  return <MarginAccountFormPreview accountName={accountName} balanceValue={'123'} token={token} />;
+  return (
+    <MarginAccountSelectorFormPreview
+      balanceCompactFormatted={selectedMarginAccountUI?.balanceCompactFormat}
+      initialMarginPretradeValueFormatted={'123'}
+      marginAccountsLoading={loading}
+      marginAccountsUI={marginAccountsUI}
+      marginImpactValueFormatted={'123'}
+      selectedMarginAccountId={selectedMarginAccountUI?.id}
+      token={token}
+      onMarginAccountClick={handleOnMarginAccountChange}
+    />
+  );
 };

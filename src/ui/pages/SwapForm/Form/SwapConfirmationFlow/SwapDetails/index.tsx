@@ -3,9 +3,9 @@ import React from 'react';
 
 import { useAppSelector } from '../../../../../../app';
 import {
-  selectAMMTokenFormatted,
   selectInfoPostSwap,
   selectPoolMaturityFormatted,
+  selectPoolTokenFormatted,
   selectProspectiveSwapMode,
   selectProspectiveSwapNotionalFormatted,
   selectVariableRateInfo,
@@ -26,7 +26,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   const receivingRate = mode === 'fixed' ? fixedRate : variableRate;
   const payingRate = mode === 'fixed' ? variableRate : fixedRate;
   const poolMaturity = useAppSelector(selectPoolMaturityFormatted);
-  const token = useAppSelector(selectAMMTokenFormatted);
+  const token = useAppSelector(selectPoolTokenFormatted);
 
   return (
     <SwapDetailsBox>
