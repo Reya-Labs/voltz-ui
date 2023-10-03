@@ -16,9 +16,11 @@ import {
   selectMarginAccountDepositFlowAvailableAmountsLoading,
   selectMarginAccountDepositFlowCTADisabled,
   selectMarginAccountDepositFlowCTAText,
+  selectMarginAccountDepositFlowDisableMarginAccountSelection,
   selectMarginAccountDepositFlowError,
   selectMarginAccountDepositFlowMarginAccounts,
   selectMarginAccountDepositFlowMarginAccountsLoading,
+  selectMarginAccountDepositFlowQueuedSelectedMarginAccountId,
   selectMarginAccountDepositFlowSelectedMarginAccountFormatted,
   selectMarginAccountDepositFlowShouldApproveToken,
   selectMarginAccountDepositFlowStep,
@@ -46,11 +48,17 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
   const error = useAppSelector(selectMarginAccountDepositFlowError);
   const { validationError } = useAppSelector(selectMarginAccountDepositFlowValidationError);
   const computedError = error || validationError;
+  const disableMarginAccountSelection = useAppSelector(
+    selectMarginAccountDepositFlowDisableMarginAccountSelection,
+  );
   const disabled = useAppSelector(selectMarginAccountDepositFlowCTADisabled);
   const marginAccounts = useAppSelector(selectMarginAccountDepositFlowMarginAccounts);
   const marginAccountsLoading = useAppSelector(selectMarginAccountDepositFlowMarginAccountsLoading);
   const { id: selectedMarginAccountId } = useAppSelector(
     selectMarginAccountDepositFlowSelectedMarginAccountFormatted,
+  );
+  const queuedSelectedMarginAccountId = useAppSelector(
+    selectMarginAccountDepositFlowQueuedSelectedMarginAccountId,
   );
   const ctaText = useAppSelector(selectMarginAccountDepositFlowCTAText);
   const { token, amount } = useAppSelector(selectMarginAccountDepositFlowUserInputFormatted);
@@ -186,6 +194,17 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
     );
   }, [dispatch, selectedMarginAccountId]);
 
+  useEffect(() => {
+    if (!queuedSelectedMarginAccountId || marginAccounts.length === 0 || marginAccountsLoading) {
+      return;
+    }
+    dispatch(
+      selectMarginAccountDepositFlowAction({
+        id: queuedSelectedMarginAccountId,
+      }),
+    );
+  }, [dispatch, marginAccountsLoading, marginAccounts, queuedSelectedMarginAccountId]);
+
   // Stop the invocation of the debounced function
   // after unmounting
   useEffect(() => {
@@ -208,7 +227,7 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
       </Typography>
       <MidBox>
         <MarginAccountsSearchField
-          disabled={marginAccountsLoading}
+          disabled={marginAccountsLoading || disableMarginAccountSelection}
           marginAccounts={marginAccounts}
           selectedMarginAccountId={selectedMarginAccountId}
           onMarginAccountClick={handleOnMarginAccountClick}

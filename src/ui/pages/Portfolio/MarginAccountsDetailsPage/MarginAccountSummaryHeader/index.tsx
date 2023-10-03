@@ -44,7 +44,7 @@ export const MarginAccountSummaryHeader = () => {
     totalPortfolioCollateralUSDCompactFormatted,
   } = useAppSelector(selectMarginAccountSummary(marginAccountId));
   const { toMarginAccountDetailsPage } = useAppNavigate();
-  const { marginAccounts, loading: marginAccountsLoading } = useMarginAccountsForSelection();
+  const { marginAccountsUI, loading: marginAccountsLoading } = useMarginAccountsForSelection();
 
   const handleOnMarginAccountClick = (id: string) => {
     toMarginAccountDetailsPage({
@@ -78,7 +78,7 @@ export const MarginAccountSummaryHeader = () => {
         <RightBox>
           <MarginAccountsSearchField
             disabled={marginAccountsLoading}
-            marginAccounts={marginAccounts}
+            marginAccounts={marginAccountsUI}
             selectedMarginAccountId={marginAccountId || ''}
             onMarginAccountClick={handleOnMarginAccountClick}
           />

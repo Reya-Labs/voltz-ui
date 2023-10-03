@@ -21,7 +21,7 @@ export const SubmenuActionButtons: React.FunctionComponent = () => {
       setRequired(true);
       return;
     }
-    dispatch(openMarginAccountDepositFlowAction());
+    dispatch(openMarginAccountDepositFlowAction({}));
   };
 
   const handleOnWithdrawClick = () => {

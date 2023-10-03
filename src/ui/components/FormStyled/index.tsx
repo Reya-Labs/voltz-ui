@@ -6,7 +6,7 @@ export const FormBox = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 16px 40px;
+  padding: 16px;
   gap: 24px;
   border-bottom: 1px solid ${colors.lavenderWeb7};
 `;
@@ -45,8 +45,8 @@ export const TransactionDetailsBox = styled('div')`
   justify-content: center;
   gap: 4px;
   align-items: flex-start;
-  padding: 16px 40px 132px 40px;
+  padding: 8px 16px;
   width: 100%;
-
-  border-bottom: 1px solid ${colors.lavenderWeb7};
+  border-radius: 4px;
+  background: ${colors.lavenderWeb8};
 `;
