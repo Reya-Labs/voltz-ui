@@ -18,8 +18,18 @@ const slice = createSlice({
   name: 'portfolio',
   initialState,
   reducers: {
-    openMarginAccountDepositFlowAction: (state) => {
+    openMarginAccountDepositFlowAction: (
+      state,
+      {
+        payload: { disableMarginAccountSelection = false, selectedMarginAccountId },
+      }: PayloadAction<{
+        selectedMarginAccountId?: string;
+        disableMarginAccountSelection?: boolean;
+      }>,
+    ) => {
       state.step = 'opened';
+      state.disableMarginAccountSelection = disableMarginAccountSelection;
+      state.queuedSelectedMarginAccountId = selectedMarginAccountId || null;
     },
     closeMarginAccountDepositFlowAction: (state) => {
       state.step = 'closed';
@@ -46,6 +56,7 @@ const slice = createSlice({
       const selectedMarginAccount = (state.marginAccounts || []).find((mA) => mA.id === id);
       if (selectedMarginAccount) {
         state.selectedMarginAccount = selectedMarginAccount;
+        state.queuedSelectedMarginAccountId = null;
       }
     },
     marginAmountDepositFlowValueChangeAction: (
