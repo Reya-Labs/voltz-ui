@@ -25,6 +25,16 @@ import { getCacheValue, invalidateCache, setCacheValue } from './data/getSeasonB
 import { getReferrerLink } from './get-referrer-link';
 import { getClaimButtonModesForVariants, getCommunitySbt, getSeasonUserId } from './helpers';
 
+function uniqueSeasons(seasons: Season[]): Season[] {
+  const uniqueSeasonsMap = new Map<number, Season>();
+
+  seasons.forEach((season) => {
+    uniqueSeasonsMap.set(season.id, season);
+  });
+
+  return Array.from(uniqueSeasonsMap.values());
+}
+
 export const Profile: React.FunctionComponent = () => {
   const wallet = useWallet();
   const [collectionBadges, setCollectionBadges] = React.useState<GetProfileBadgesResponse>([]);
@@ -277,7 +287,7 @@ export const Profile: React.FunctionComponent = () => {
       loading={loading}
       season={season}
       seasonBadgeVariants={seasonBadgeVariants}
-      seasonOptions={[...pastSeasons, currentActiveSeason]}
+      seasonOptions={uniqueSeasons([...pastSeasons, currentActiveSeason])}
       onClaimBulkClick={handleOnClaimBulkClick}
       onClaimButtonClick={handleOnClaimButtonClick}
       onCopyLinkButtonClick={handleOnCopyLinkButtonClick}
