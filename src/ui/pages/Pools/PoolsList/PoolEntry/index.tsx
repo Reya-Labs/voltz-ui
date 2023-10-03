@@ -70,7 +70,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     },
     ref,
   ) => {
-    const { marginAccounts } = useMarginAccountsForSelection();
+    const { marginAccountsUI } = useMarginAccountsForSelection();
     const dispatch = useAppDispatch();
     const [waitingOnNetworkChange, setWaitingOnNetworkChange] = useState<
       null | 'lpForm' | 'swapForm'
@@ -138,7 +138,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
       navigate.toSwapFormPage({
         ammId: routeAmmId,
         poolId: routePoolId,
-        marginAccountId: marginAccounts[0].id,
+        marginAccountId: marginAccountsUI[0].id,
       });
     };
 

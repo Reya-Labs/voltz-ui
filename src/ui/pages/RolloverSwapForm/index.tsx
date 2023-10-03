@@ -3,7 +3,7 @@ import * as React from 'react';
 import { routes, useAppDispatch } from '../../../app';
 import { resetStateAction } from '../../../app/features/forms/trader/rollover-swap';
 import { GenericError } from '../../components/GenericError';
-import { NoAMMFound } from '../../components/NoAMMFound';
+import { NoPoolFound } from '../../components/NoPoolFound';
 import { Page } from '../../components/Page';
 import { PageLoading } from '../../components/PageLoading';
 import { Form } from './Form';
@@ -25,7 +25,7 @@ export const RolloverSwapFormPage: React.FunctionComponent = () => {
     <Page
       errorSlot={error ? <GenericError to={`/${routes.POOLS}`} /> : undefined}
       mainSlot={<Main />}
-      notFoundSlot={noAMMFound ? <NoAMMFound to={`/${routes.POOLS}`} /> : undefined}
+      notFoundSlot={noAMMFound ? <NoPoolFound to={`/${routes.POOLS}`} /> : undefined}
       pageLoadingSlot={loading ? <PageLoading /> : undefined}
       rightSlot={<Form />}
     />
