@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
-import { MAX_POOL_CAP, selectV1V2PoolsOnCurrentChain } from '../../../../../app/features/aMMs';
+import { MAX_POOL_CAP, selectPoolsUI } from '../../../../../app/features/aMMs';
 import { PoolUI } from '../../../../../app/features/aMMs/types';
 import {
   resetStateAction,
@@ -25,13 +25,12 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
   const variableRateFormatted = useAppSelector(selectVariableRateValueFormatted);
   const navigate = useAppNavigate();
   const dispatch = useAppDispatch();
-  const pools = useAppSelector(selectV1V2PoolsOnCurrentChain);
+  const pools = useAppSelector(selectPoolsUI);
 
   if (!pool) {
     return null;
   }
   const isAaveV3 = pool.market === 'Aave V3';
-  const isV2 = pool.isV2;
   const isBorrowing = pool.isBorrowing;
   const market = pool.market as MarketTokenInformationProps['market'];
   const token = pool.underlyingToken.name.toLowerCase() as MarketTokenInformationProps['token'];
@@ -49,7 +48,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = () => {
       fixedRateFormatted={fixedRateFormatted}
       isAaveV3={isAaveV3}
       isBorrowing={isBorrowing}
-      isV2={isV2}
+      isV2={false}
       market={market}
       poolCap={MAX_POOL_CAP}
       poolMaturity={poolMaturity}
