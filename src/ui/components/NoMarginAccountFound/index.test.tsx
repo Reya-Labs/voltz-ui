@@ -16,12 +16,12 @@ describe('<NoMarginAccountFound />', () => {
 
     const title = screen.getByTestId('NoMarginAccountFound-Title');
     expect(title).toBeInTheDocument();
-    expect(title).toHaveTextContent('Gas is cheap but... Pool not found');
+    expect(title).toHaveTextContent('Margin account not found');
 
     const subtitle = screen.getByTestId('NoMarginAccountFound-Subtitle');
     expect(subtitle).toBeInTheDocument();
     expect(subtitle).toHaveTextContent(
-      "Unfortunately we couldn't fetch any existing pool matching this criteria. However we have several other markets currently operating, visit our pool page to discover those.",
+      "Unfortunately we couldn't fetch any existing margin account matching this criteria. We encourage you to visit our pool page",
     );
   });
 

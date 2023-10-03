@@ -1,6 +1,7 @@
 import { SliceState } from './types';
 
 export const initialState: SliceState = {
+  disableMarginAccountSelection: false,
   availableAmounts: [],
   availableAmountsLoadedState: 'idle',
   marginAccounts: [],
