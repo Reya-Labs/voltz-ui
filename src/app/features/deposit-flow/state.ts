@@ -7,6 +7,7 @@ export const initialState: SliceState = {
   marginAccountsLoadedState: 'idle',
   step: 'closed',
   selectedMarginAccount: null,
+  queuedSelectedMarginAccountId: null,
   error: null,
   txHash: null,
   simulation: {
