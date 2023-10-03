@@ -3,6 +3,7 @@ import { SimulateSwapMarginAccountResult } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt, providers } from 'ethers';
 
 import { V2Pool } from '../../../aMMs';
+import { PortfolioMarginAccount } from '../../../portfolio';
 import { initialState } from './state';
 import { getMaxNotionalAvailableThunk, simulateSwapThunk, swapThunk } from './thunks';
 import { validateUserInputAndUpdateSubmitButton } from './utils';
@@ -65,6 +66,16 @@ const slice = createSlice({
       }>,
     ) => {
       state.pool = pool;
+    },
+    setSwapFormMarginAccountAction: (
+      state,
+      {
+        payload: { marginAccount },
+      }: PayloadAction<{
+        marginAccount: PortfolioMarginAccount | null;
+      }>,
+    ) => {
+      state.marginAccount = marginAccount;
     },
     setSwapFormSignerAction: (
       state,
@@ -160,6 +171,7 @@ export const {
   resetStateAction,
   setUserInputModeAction,
   setSwapFormPoolAction,
+  setSwapFormMarginAccountAction,
   setNotionalAmountAction,
   openSwapConfirmationFlowAction,
   closeSwapConfirmationFlowAction,

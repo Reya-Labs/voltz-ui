@@ -3,6 +3,7 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
 import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
+import { mapMarginAccountToMarginAccountUI } from '../../../portfolio/helpers';
 import {
   formCompactFormat,
   formCompactFormatToParts,
@@ -38,7 +39,7 @@ export const selectSwapFormMode = (state: RootState): 'new' => {
   return 'new';
 };
 
-export const selectAMMTokenFormatted = (state: RootState) => {
+export const selectPoolTokenFormatted = (state: RootState) => {
   return formatUnderlyingTokenName(selectSwapFormPool(state));
 };
 
@@ -46,12 +47,16 @@ export const selectPoolMaturityFormatted = (state: RootState) => {
   return formatPoolMaturity(selectSwapFormPool(state));
 };
 
-export const selectMarginAccountName = (state: RootState) => {
-  const aMM = selectSwapFormPool(state);
-  if (!aMM) {
-    return '';
+export const selectSwapFormMarginAccount = (state: RootState) => {
+  return state.swapForm.marginAccount;
+};
+
+export const selectSwapFormMarginAccountUI = (state: RootState) => {
+  const marginAccount = selectSwapFormMarginAccount(state);
+  if (!marginAccount) {
+    return null;
   }
-  return `${selectPoolMaturityFormatted(state)}`;
+  return mapMarginAccountToMarginAccountUI(marginAccount);
 };
 
 // User Input

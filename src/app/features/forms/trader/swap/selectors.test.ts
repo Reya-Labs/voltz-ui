@@ -3,19 +3,18 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 import { formatNumber } from '../../../../../utilities/number';
 import { formCompactFormat, formCompactFormatToParts, formFormatNumber } from '../../common';
 import {
-  selectAMMTokenFormatted,
   selectAvailableNotional,
   selectFixedRateInfo,
   selectFixedRateValueFormatted,
   selectInfoPostSwap,
   selectIsGetInfoPostSwapLoading,
   selectIsLeverageDisabled,
-  selectMarginAccountName,
   selectMarginRequirementFormatted,
   selectNewPositionCompactNotional,
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
   selectPoolMaturityFormatted,
+  selectPoolTokenFormatted,
   selectProspectiveSwapFeeFormatted,
   selectProspectiveSwapMode,
   selectProspectiveSwapNotionalFormatted,
@@ -201,7 +200,7 @@ describe('swap-form.selectors', () => {
     } as never;
 
     it('returns the formatted AMM token name when aMM is defined', () => {
-      const result = selectAMMTokenFormatted(mockState);
+      const result = selectPoolTokenFormatted(mockState);
       expect(result).toBe(' USDC');
     });
 
@@ -212,7 +211,7 @@ describe('swap-form.selectors', () => {
         },
       } as never;
 
-      const result = selectAMMTokenFormatted(emptyState);
+      const result = selectPoolTokenFormatted(emptyState);
 
       expect(result).toBe('');
     });
@@ -241,35 +240,6 @@ describe('swap-form.selectors', () => {
       } as never;
 
       const result = selectPoolMaturityFormatted(emptyState);
-
-      expect(result).toBe('');
-    });
-  });
-
-  describe('selectMarginAccountName', () => {
-    const mockState = {
-      swapForm: {
-        pool: {
-          id: '1',
-          termEndTimestampInMS: 1614667200000,
-          protocol: 'PROTOCOL_A',
-        },
-      },
-    } as never;
-
-    it('returns the formatted margin account name when aMM is defined', () => {
-      const result = selectMarginAccountName(mockState);
-      expect(result).toBe('02 Mar 2021');
-    });
-
-    it('returns an empty string when aMM is not defined', () => {
-      const emptyState = {
-        swapForm: {
-          aMM: undefined,
-        },
-      } as never;
-
-      const result = selectMarginAccountName(emptyState);
 
       expect(result).toBe('');
     });
