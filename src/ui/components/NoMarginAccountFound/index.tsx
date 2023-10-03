@@ -1,35 +1,34 @@
 import { AppLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
-import { ContainerBox } from './NoAMMFound.styled';
+import { ContainerBox } from './NoMarginAccountFound.styled';
 
-export const NoAMMFound: React.FunctionComponent<{
+export const NoMarginAccountFound: React.FunctionComponent<{
   to: string;
 }> = React.memo(({ to }) => (
   <ContainerBox>
     <Typography
       colorToken="lavenderWeb"
-      data-testid="NoAMMFound-Title"
+      data-testid="NoMarginAccountFound-Title"
       typographyToken="primaryHeader1Black"
     >
-      Gas is cheap but... Pool not found
+      Margin account not found
     </Typography>
     <Typography
       colorToken="lavenderWeb2"
-      data-testid="NoAMMFound-Subtitle"
+      data-testid="NoMarginAccountFound-Subtitle"
       typographyToken="primaryBodyMediumRegular"
     >
-      Unfortunately we couldn't fetch any existing pool matching this criteria. However we have
-      several other markets currently operating,{' '}
+      Unfortunately we couldn't fetch any existing margin account matching this criteria. We
+      encourage you to{' '}
       <AppLink
         colorToken="skyBlueCrayola"
-        data-testid="NoAMMFound-AppLink"
+        data-testid="NoMarginAccountFound-AppLink"
         to={to}
         typographyToken="primaryBodyMediumRegular"
       >
         visit our pool page
-      </AppLink>{' '}
-      to discover those.
+      </AppLink>
     </Typography>
   </ContainerBox>
 ));
