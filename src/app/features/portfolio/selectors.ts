@@ -600,7 +600,17 @@ export const selectMarginAccountsForSelectionLoading = (state: RootState): boole
   return loadedState === 'idle' || loadedState === 'pending';
 };
 
+export const selectMarginAccountsForSelectionError = (state: RootState): boolean => {
+  const loadedState = selectMarginAccountsForSelectionLoadedState(state);
+  return loadedState === 'failed';
+};
+
 export const selectMarginAccountsForSelectionMarginAccounts = (state: RootState) => {
+  const isLoading = selectMarginAccountsForSelectionLoading(state);
+  return isLoading ? [] : state.portfolio.marginAccountsForSelection;
+};
+
+export const selectMarginAccountsForSelectionMarginAccountsUI = (state: RootState) => {
   const isLoading = selectMarginAccountsForSelectionLoading(state);
   return isLoading
     ? []
