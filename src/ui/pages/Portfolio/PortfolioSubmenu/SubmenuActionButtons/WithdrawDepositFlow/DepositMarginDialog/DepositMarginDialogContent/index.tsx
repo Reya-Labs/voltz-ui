@@ -26,7 +26,7 @@ import {
   selectMarginAccountDepositFlowValidationError,
   selectMarginAccountDepositFlowWalletTokenAllowanceHasError,
   simulateDepositMarginFromMarginAccountThunk,
-} from '../../../../../../../../app/features/portfolio';
+} from '../../../../../../../../app/features/deposit-flow';
 import { AvailableAmountsUI } from '../../../../../../../../app/features/portfolio/types';
 import { localeParseFloat } from '../../../../../../../../utilities/localeParseFloat';
 import { MarginAccountsSearchField } from '../../../../../../../components/MarginAccountsSearchField';

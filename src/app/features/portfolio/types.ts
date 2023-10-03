@@ -1,13 +1,11 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import {
-  AvailableAmountForMarginAccountDeposit,
   AvailableAmountForMarginAccountWithdraw,
   MarginAccountSummary,
   PortfolioMarginAccount,
   PortfolioPosition,
   PortfolioSummary,
-  ReturnTypeSimulateDepositMargin,
   ReturnTypeSimulateWithdrawMargin,
 } from './thunks';
 export type PositionsFilterId = 'active' | 'matured' | 'settled';
@@ -65,41 +63,6 @@ export type SliceState = {
       maxAmount: AvailableAmountForMarginAccountWithdraw['value'];
       maxAmountUSD: AvailableAmountForMarginAccountWithdraw['valueUSD'];
       token: undefined | AvailableAmountForMarginAccountWithdraw['token'];
-    };
-  };
-  // margin account - deposit flow
-  marginAccountDepositMarginFlow: {
-    // margin accounts for the selector
-    marginAccounts: PortfolioMarginAccount[];
-    marginAccountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
-    // available amounts for the selector
-    availableAmounts: AvailableAmountForMarginAccountDeposit[];
-    availableAmountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
-    step:
-      | 'closed'
-      | 'opened'
-      | 'depositing'
-      | 'deposit-success'
-      | 'deposit-error'
-      | 'approveTokenError'
-      | 'approvingToken';
-    selectedMarginAccount: null | PortfolioMarginAccount;
-    error: string | null;
-    txHash: string | null;
-    simulation: {
-      status: 'idle' | 'pending' | 'succeeded' | 'failed';
-      value: null | ReturnTypeSimulateDepositMargin;
-    };
-    userInput: {
-      amount: number;
-      maxAmount: AvailableAmountForMarginAccountDeposit['value'];
-      maxAmountUSD: AvailableAmountForMarginAccountDeposit['valueUSD'];
-      token: undefined | AvailableAmountForMarginAccountDeposit['token'];
-    };
-    // required for approval flow, used to validate the deposit value against
-    walletTokenAllowance: {
-      value: number;
-      status: 'idle' | 'pending' | 'succeeded' | 'failed';
     };
   };
 };

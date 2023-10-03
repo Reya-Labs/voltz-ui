@@ -12,10 +12,9 @@ export const depositMarginFromMarginAccountThunk = createAsyncThunk<
   { state: RootState }
 >('portfolio/depositMarginFromMarginAccountThunk', async (_, thunkAPI) => {
   try {
-    const state = thunkAPI.getState();
-    const depositMarginFlow = state.portfolio.marginAccountDepositMarginFlow;
-    const selectedMarginAccount = depositMarginFlow.selectedMarginAccount;
-    const userInput = depositMarginFlow.userInput;
+    const { depositFlow } = thunkAPI.getState();
+    const selectedMarginAccount = depositFlow.selectedMarginAccount;
+    const userInput = depositFlow.userInput;
     if (!selectedMarginAccount || !userInput.token) {
       return;
     }

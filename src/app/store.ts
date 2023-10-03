@@ -6,6 +6,7 @@ import { alphaPassVerificationFlowReducer } from './features/alpha-pass-verifica
 import { aMMsReducer } from './features/aMMs';
 import { cashflowCalculatorReducer } from './features/cashflow-calculator';
 import { cashflowCalculatorModalReducer } from './features/cashflow-calculator-modal';
+import { depositFlowReducer } from './features/deposit-flow';
 import { lpFormReducer } from './features/forms/lps/lp';
 import { rolloverLpFormReducer } from './features/forms/lps/rollover-lp';
 import { deprecatedSwapFormReducer } from './features/forms/trader/deprecated/swap';
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   redirects: redirectsReducer,
   alphaPassClaimFlow: alphaPassClaimFlowReducer,
   alphaPassVerificationFlow: alphaPassVerificationFlowReducer,
+  depositFlow: depositFlowReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>

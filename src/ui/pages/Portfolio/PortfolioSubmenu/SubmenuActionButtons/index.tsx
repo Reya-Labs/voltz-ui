@@ -1,10 +1,8 @@
 import React from 'react';
 
 import { useAppDispatch } from '../../../../../app';
-import {
-  openMarginAccountDepositFlowAction,
-  openMarginAccountWithdrawFlowAction,
-} from '../../../../../app/features/portfolio';
+import { openMarginAccountDepositFlowAction } from '../../../../../app/features/deposit-flow';
+import { openMarginAccountWithdrawFlowAction } from '../../../../../app/features/portfolio';
 import { isMarginAccountsLive } from '../../../../../utilities/is-margin-accounts-live';
 import { useWallet } from '../../../../hooks/useWallet';
 import { CreateMarginAccountButton } from './CreateMarginAcountButton';
