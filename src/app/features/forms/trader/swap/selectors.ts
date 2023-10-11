@@ -12,7 +12,7 @@ import {
   getPoolVariableRate24hDelta,
 } from '../../common';
 import {
-  getAvailableNotional,
+  getMaxAvailableNotional,
   getNewPositionFixedRate,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
@@ -88,8 +88,11 @@ export const selectGasInfoFormatted = (state: RootState) => {
 export const selectInfoPostSwap = (state: RootState) =>
   state.swapForm.prospectiveSwap.swapSimulation;
 
-export const selectAvailableNotional = (state: RootState) => {
-  return getAvailableNotional(state.swapForm);
+export const selectMaxAvailableNotionalFormatted = (state: RootState) => {
+  if (state.swapForm.maxNotionalAvailable.status !== 'success') {
+    return '--';
+  }
+  return formatNumber(getMaxAvailableNotional(state.swapForm));
 };
 
 export const selectNewPositionReceivingRate = (state: RootState) => {

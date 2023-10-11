@@ -1,7 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
+  getMaxNotionalAvailableThunk,
   selectIsGetInfoPostSwapLoading,
   selectPayFixedRateInfo,
   selectReceiveFixedRateInfo,
@@ -32,6 +33,14 @@ export const NotionalSwap: React.FunctionComponent = () => {
     },
     [dispatch],
   );
+
+  useEffect(() => {
+    void dispatch(
+      getMaxNotionalAvailableThunk({
+        mode,
+      }),
+    );
+  }, [dispatch, mode]);
 
   return (
     <NotionalSwapHorizontalUI

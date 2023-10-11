@@ -1,4 +1,4 @@
-export * from './getAvailableNotional';
+export * from './getMaxAvailableNotional';
 export * from './getNewPositionFixedRate';
 export * from './getProspectiveSwapMode';
 export * from './getProspectiveSwapNotional';

@@ -4,10 +4,9 @@ import React from 'react';
 import { useAppSelector } from '../../../../../app';
 import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import {
-  selectAvailableNotional,
+  selectMaxAvailableNotionalFormatted,
   selectUserInputNotionalInfo,
 } from '../../../../../app/features/forms/trader/swap';
-import { formatNumber } from '../../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 
 type NewNotionalAmountFieldUIProps = {
@@ -32,18 +31,20 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
   disabled,
 }) => {
   const notionalInfo = useAppSelector(selectUserInputNotionalInfo);
-  const notionalAvailable = useAppSelector(selectAvailableNotional);
+  const maxAvailableNotionalAvailableFormatted = useAppSelector(
+    selectMaxAvailableNotionalFormatted,
+  );
 
   return (
     <NotionalAmountFieldBox>
       <TokenField
         allowNegativeValue={false}
-        bottomLeftText={notionalInfo.error ? notionalInfo.error : 'Liquidity Available'}
+        bottomLeftText={notionalInfo.error ? notionalInfo.error : 'Max Notional Possible'}
         bottomLeftTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb3'}
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
         bottomRightTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-        bottomRightTextValue={formatNumber(notionalAvailable)}
+        bottomRightTextValue={maxAvailableNotionalAvailableFormatted}
         decimalsLimit={FormNumberLimits.decimalLimit}
         disabled={disabled}
         error={notionalInfo.error !== null}

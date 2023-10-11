@@ -1,11 +1,11 @@
 import { Draft } from '@reduxjs/toolkit';
 
 import { SliceState } from '../../state';
-import { getAvailableNotional } from '../getAvailableNotional';
+import { getMaxAvailableNotional } from '../getMaxAvailableNotional';
 
 export const validateUserInputNotional = (state: Draft<SliceState>): void => {
   let error = null;
-  if (state.userInput.notionalAmount.value > getAvailableNotional(state)) {
+  if (state.userInput.notionalAmount.value > getMaxAvailableNotional(state)) {
     error = 'Not enough notional. Available:';
   }
 

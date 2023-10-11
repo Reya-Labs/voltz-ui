@@ -1,8 +1,8 @@
-import { getAvailableNotional } from '.';
+import { getMaxAvailableNotional } from '.';
 
 describe('getAvailableNotional', () => {
   it('should return available notional', () => {
-    const result = getAvailableNotional({
+    const result = getMaxAvailableNotional({
       maxNotionalAvailable: {
         value: 100,
         status: 'success',

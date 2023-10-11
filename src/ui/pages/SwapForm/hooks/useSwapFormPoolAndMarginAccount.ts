@@ -4,14 +4,12 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app';
 import { V2Pool } from '../../../../app/features/aMMs';
 import {
-  getMaxNotionalAvailableThunk,
   selectSwapFormMarginAccount,
   selectSwapFormPool,
   setSwapFormMarginAccountAction,
   setSwapFormPoolAction,
   setSwapFormSignerAction,
 } from '../../../../app/features/forms/trader/swap';
-import { selectChainId } from '../../../../app/features/network';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
 import { useMarginAccountsForSelection } from '../../../hooks/useMarginAccountsForSelection';
 import { usePools } from '../../../hooks/usePools';
@@ -32,7 +30,6 @@ export const useSwapFormPoolAndMarginAccount = (): UseSwapFormPoolResult => {
   const { marginAccounts, loading: marginAccountsLoading } = useMarginAccountsForSelection();
   const pool = useAppSelector(selectSwapFormPool);
   const marginAccount = useAppSelector(selectSwapFormMarginAccount);
-  const chainId = useAppSelector(selectChainId);
   const [loading, setLoading] = useState(true);
 
   const { signer } = useWallet();
@@ -85,14 +82,6 @@ export const useSwapFormPoolAndMarginAccount = (): UseSwapFormPoolResult => {
     );
     setLoading(false);
   }, [pool, dispatch, ammId, poolId, idle, pools, poolsLoading, error]);
-
-  useEffect(() => {
-    if (!pool || !chainId || poolsLoading) {
-      return;
-    }
-
-    void dispatch(getMaxNotionalAvailableThunk());
-  }, [chainId, dispatch, pool, poolsLoading]);
 
   return {
     pool,

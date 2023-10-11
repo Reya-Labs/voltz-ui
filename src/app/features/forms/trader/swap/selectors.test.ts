@@ -3,13 +3,13 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 import { formatNumber } from '../../../../../utilities/number';
 import { formCompactFormat, formCompactFormatToParts, formFormatNumber } from '../../common';
 import {
-  selectAvailableNotional,
   selectFixedRateInfo,
   selectFixedRateValueFormatted,
   selectInfoPostSwap,
   selectIsGetInfoPostSwapLoading,
   selectIsLeverageDisabled,
   selectMarginRequirementFormatted,
+  selectMaxAvailableNotionalFormatted,
   selectNewPositionCompactNotional,
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
@@ -32,7 +32,7 @@ import {
   selectWalletBalance,
 } from './selectors';
 import {
-  getAvailableNotional,
+  getMaxAvailableNotional,
   getNewPositionFixedRate,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
@@ -407,7 +407,7 @@ describe('swap-form.selectors', () => {
 
   describe('selectAvailableNotional', () => {
     beforeEach(() => {
-      (getAvailableNotional as jest.Mock).mockImplementationOnce(
+      (getMaxAvailableNotional as jest.Mock).mockImplementationOnce(
         (swapFormState: {
           userInput: {
             notionalAmount: {
@@ -436,10 +436,10 @@ describe('swap-form.selectors', () => {
           availableMargin: 5678.1234,
         },
       };
-      const result = selectAvailableNotional(state as never);
+      const result = selectMaxAvailableNotionalFormatted(state as never);
 
       expect(result).toBe(6912.6912); // 1234.5678 + 5678.1234
-      expect(getAvailableNotional).toHaveBeenCalledWith(state.swapForm);
+      expect(getMaxAvailableNotional).toHaveBeenCalledWith(state.swapForm);
     });
   });
 
