@@ -95,6 +95,13 @@ export const selectMaxAvailableNotionalFormatted = (state: RootState) => {
   return formatNumber(getMaxAvailableNotional(state.swapForm));
 };
 
+export const selectMaxAvailableNotionalForMaxButton = (state: RootState) => {
+  if (state.swapForm.maxNotionalAvailable.status !== 'success') {
+    return undefined;
+  }
+  return getMaxAvailableNotional(state.swapForm);
+};
+
 export const selectNewPositionReceivingRate = (state: RootState) => {
   return getProspectiveSwapMode(state.swapForm) === 'fixed'
     ? getNewPositionFixedRate(state.swapForm)

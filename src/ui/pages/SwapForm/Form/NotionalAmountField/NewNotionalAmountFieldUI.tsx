@@ -5,6 +5,7 @@ import { useAppSelector } from '../../../../../app';
 import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import {
   selectMaxAvailableNotionalFormatted,
+  selectMaxAvailableNotionalForMaxButton,
   selectUserInputNotionalInfo,
 } from '../../../../../app/features/forms/trader/swap';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
@@ -34,6 +35,7 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
   const maxAvailableNotionalAvailableFormatted = useAppSelector(
     selectMaxAvailableNotionalFormatted,
   );
+  const maxAvailableNotionalForMaxButton = useAppSelector(selectMaxAvailableNotionalForMaxButton);
 
   return (
     <NotionalAmountFieldBox>
@@ -51,11 +53,7 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
         label="Notional Size"
         labelColorToken="lavenderWeb"
         labelTypographyToken={labelTypographyToken}
-        max={
-          maxAvailableNotionalAvailableFormatted !== '--'
-            ? maxAvailableNotionalAvailableFormatted
-            : undefined
-        }
+        max={maxAvailableNotionalForMaxButton}
         maxLength={FormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When trading rates, the amount you receive and pay is calculated as a percentage of the notional value you choose."
