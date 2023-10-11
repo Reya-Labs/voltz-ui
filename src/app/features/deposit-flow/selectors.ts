@@ -2,10 +2,8 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { compactFormat, compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
-import {
-  mapAvailableAmountMarginAccountDepositToAvailableAmountsUI,
-  mapMarginAccountToMarginAccountUI,
-} from './helpers';
+import { mapMarginAccountToMarginAccountUI } from '../_common';
+import { mapAvailableAmountMarginAccountDepositToAvailableAmountsUI } from './helpers';
 
 export const selectMarginAccountDepositFlowDisableMarginAccountSelection = (state: RootState) => {
   return state.depositFlow.disableMarginAccountSelection;

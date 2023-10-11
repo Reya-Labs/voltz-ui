@@ -2,8 +2,8 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
+import { mapMarginAccountToMarginAccountUI } from '../../../_common';
 import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
-import { mapMarginAccountToMarginAccountUI } from '../../../portfolio/helpers';
 import {
   formCompactFormat,
   formCompactFormatToParts,

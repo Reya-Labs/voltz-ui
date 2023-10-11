@@ -4,6 +4,7 @@ import React from 'react';
 import { useAppDispatch } from '../../../app';
 import { openMarginAccountDepositFlowAction } from '../../../app/features/deposit-flow';
 import { MarginAccountUI } from '../../../app/features/portfolio/types';
+import { CompactFormatParts } from '../../../utilities/number';
 import { useWallet } from '../../hooks/useWallet';
 import { DepositMarginDialog } from '../../pages/Portfolio/PortfolioSubmenu/SubmenuActionButtons/WithdrawDepositFlow/DepositMarginDialog';
 import { MarginAccountsSearchField } from '../MarginAccountsSearchField';
@@ -17,8 +18,8 @@ import {
 
 type MarginAccountSelectorFormPreviewProps = {
   token: string;
-  balanceCompactFormatted: MarginAccountUI['balanceCompactFormat'];
-  initialMarginPretradeValueFormatted: string;
+  balanceCompactFormatted: CompactFormatParts;
+  initialMarginPretradeValueFormatted: CompactFormatParts;
   marginAccountsUI: MarginAccountUI[];
   marginAccountsLoading: boolean;
   selectedMarginAccountId?: MarginAccountUI['id'];
@@ -89,10 +90,11 @@ export const MarginAccountSelectorFormPreview: React.FunctionComponent<
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            prefixToken="$"
-            token={balanceCompactFormatted.compactSuffix}
+            token={`${initialMarginPretradeValueFormatted.compactSuffix} ${(
+              token || ''
+            ).toUpperCase()}`}
             typographyToken="secondaryBodySmallRegular"
-            value={balanceCompactFormatted.compactNumber}
+            value={initialMarginPretradeValueFormatted.compactNumber}
           />
         </DetailBox>
       </DetailsBox>

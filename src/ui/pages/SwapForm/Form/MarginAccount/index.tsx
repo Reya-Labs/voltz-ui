@@ -33,8 +33,10 @@ export const MarginAccount: React.FunctionComponent = () => {
 
   return (
     <MarginAccountSelectorFormPreview
-      balanceCompactFormatted={selectedMarginAccountUI?.balanceCompactFormat}
-      initialMarginPretradeValueFormatted={'123'}
+      balanceCompactFormatted={selectedMarginAccountUI?.balanceCompactFormatted}
+      initialMarginPretradeValueFormatted={
+        selectedMarginAccountUI?.initialMarginPreTradeCompactFormatted
+      }
       marginAccountsLoading={loading}
       marginAccountsUI={marginAccountsUI}
       selectedMarginAccountId={selectedMarginAccountUI?.id}

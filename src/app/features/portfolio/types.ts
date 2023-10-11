@@ -111,7 +111,8 @@ export type MarginAccountUI = {
   id: string;
   chainId: SupportedChainId;
   name: string;
-  balanceCompactFormat: CompactFormatParts;
+  balanceCompactFormatted: CompactFormatParts;
+  initialMarginPreTradeCompactFormatted: CompactFormatParts;
   positionsCount: string;
   marginRatioPercentage: number;
   marginRatioHealth: 'danger' | 'warning' | 'healthy';

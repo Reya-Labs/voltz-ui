@@ -26,8 +26,8 @@ const MarginAccountListItem: SearchFieldProps['itemRenderer'] = (props) => {
     item: MarginAccountListItemProps;
     searchedValue?: string;
   };
-  const { chainId, name, balanceCompactFormat } = item;
-  const { compactSuffix, compactNumber } = balanceCompactFormat;
+  const { chainId, name, balanceCompactFormatted } = item;
+  const { compactSuffix, compactNumber } = balanceCompactFormatted;
   const chainIcon = <ChainIcon chainId={chainId} hideForChains={[]} />;
   return (
     <Wrapper>

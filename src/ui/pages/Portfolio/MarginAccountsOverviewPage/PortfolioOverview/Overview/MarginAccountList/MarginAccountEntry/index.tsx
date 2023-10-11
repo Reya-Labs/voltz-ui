@@ -37,7 +37,7 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
       marginRatioPercentage,
       chainId,
       name,
-      balanceCompactFormat,
+      balanceCompactFormatted,
     },
     ref,
   ) => {
@@ -87,9 +87,9 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
               <TokenTypography
                 colorToken="lavenderWeb"
                 prefixToken="$"
-                token={balanceCompactFormat.compactSuffix}
+                token={balanceCompactFormatted.compactSuffix}
                 typographyToken={numbersTypographyToken}
-                value={balanceCompactFormat.compactNumber}
+                value={balanceCompactFormatted.compactNumber}
               />
             </BalanceBox>
             <PositionsCountBox>
