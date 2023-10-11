@@ -87,14 +87,6 @@ export const selectGasInfoFormatted = (state: RootState) => {
 
 export const selectInfoPostSwap = (state: RootState) =>
   state.swapForm.prospectiveSwap.swapSimulation;
-export const selectInfoPostSwapAverageFixedRate = (state: RootState) =>
-  state.swapForm.prospectiveSwap.swapSimulation.status !== 'success'
-    ? null
-    : state.swapForm.prospectiveSwap.swapSimulation.value.averageFixedRate;
-export const selectInfoPostSwapVariableTokenDeltaBalance = (state: RootState) =>
-  state.swapForm.prospectiveSwap.swapSimulation.status !== 'success'
-    ? null
-    : state.swapForm.prospectiveSwap.swapSimulation.value.variableTokenDeltaBalance;
 
 export const selectAvailableNotional = (state: RootState) => {
   return getAvailableNotional(state.swapForm);
@@ -157,18 +149,8 @@ export const selectSubmitButtonText = (state: RootState) => {
   switch (state.swapForm.submitButton.state) {
     case 'swap':
       return 'Swap';
-    // TODO: FB - Should be part of the deposit flow
-    // case 'not-enough-balance':
-    //   return 'Not enough balance';
     case 'paused':
       return 'Paused';
-    // TODO: FB - Should be part of the deposit flow
-    // case 'approve':
-    //   return `Approve ${
-    //     state.swapForm.pool ? state.swapForm.pool.underlyingToken.name.toUpperCase() : ''
-    //   }`;
-    // case 'approving':
-    //   return `Approving...`;
     case 'connect-wallet':
       return 'Connect Your Wallet to Start Trading';
   }

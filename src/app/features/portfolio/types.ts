@@ -112,6 +112,7 @@ export type MarginAccountUI = {
   chainId: SupportedChainId;
   name: string;
   balanceCompactFormatted: CompactFormatParts;
+  balanceUSDCompactFormatted: CompactFormatParts;
   initialMarginPreTradeCompactFormatted: CompactFormatParts;
   positionsCount: string;
   marginRatioPercentage: number;

@@ -12,6 +12,7 @@ export const mapMarginAccountToMarginAccountUI = (
     name: marginAccount.name,
     positionsCount: marginAccount.positionsCount.toString(),
     balanceCompactFormatted: compactFormatToParts(marginAccount.balance, 2, 2),
+    balanceUSDCompactFormatted: compactFormatToParts(marginAccount.balanceUSD, 2, 2),
     initialMarginPreTradeCompactFormatted: compactFormatToParts(
       marginAccount.initialMarginPreTrade,
       2,
