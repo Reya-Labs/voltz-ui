@@ -234,6 +234,7 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
         />
         <MarginAmountField
           disabled={availableAmountsLoading || !selectedMarginAccountId}
+          label="Amount to deposit"
           marginAmountOptions={availableAmounts}
           token={token}
           value={amount.toString()}

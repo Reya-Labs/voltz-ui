@@ -168,6 +168,7 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
         />
         <MarginAmountField
           disabled={availableAmountsLoading || !selectedMarginAccountId}
+          label="Amount to withdraw"
           marginAmountOptions={availableAmounts}
           token={token}
           value={amount.toString()}

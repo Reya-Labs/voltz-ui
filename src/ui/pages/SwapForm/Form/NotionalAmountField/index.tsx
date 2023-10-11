@@ -86,8 +86,8 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
   }
 
   const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodySmallRegular';
+    ? 'primaryBodyMediumBold'
+    : 'primaryBodySmallBold';
 
   const bottomRightTextTypographyToken: TypographyToken = isLargeDesktopDevice
     ? 'primaryBodySmallRegular'
