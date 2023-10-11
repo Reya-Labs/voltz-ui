@@ -1,5 +1,6 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
+import { CompactFormatParts } from '../../../utilities/number';
 import {
   AvailableAmountForMarginAccountWithdraw,
   MarginAccountSummary,
@@ -81,15 +82,9 @@ export type PositionUI = {
   token?: PortfolioPosition['pool']['underlyingToken']['name'];
   name: string;
   notionalUSD: number;
-  notionalUSDCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  notionalUSDCompactFormat: CompactFormatParts;
   marginUSD: number;
-  marginUSDCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  marginUSDCompactFormat: CompactFormatParts;
   maturityFormatted: string;
   maturityEndTimestampInMS: number;
   maturityStartTimestampInMS: number;
@@ -103,35 +98,20 @@ export type PositionUI = {
     fixHigh: number;
   };
   unrealizedPNLUSD: number;
-  unrealizedPNLUSDCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  unrealizedPNLUSDCompactFormat: CompactFormatParts;
   realizedPNLTotalUSD: number;
-  realizedPNLTotalUSDCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  realizedPNLTotalUSDCompactFormat: CompactFormatParts;
   realizedPNLFeesUSD: number;
-  realizedPNLFeesUSDCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  realizedPNLFeesUSDCompactFormat: CompactFormatParts;
   realizedPNLCashflowUSD: number;
-  realizedPNLCashflowUSDCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  realizedPNLCashflowUSDCompactFormat: CompactFormatParts;
 };
 
 export type MarginAccountUI = {
   id: string;
   chainId: SupportedChainId;
   name: string;
-  balanceCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  balanceCompactFormat: CompactFormatParts;
   positionsCount: string;
   marginRatioPercentage: number;
   marginRatioHealth: 'danger' | 'warning' | 'healthy';
@@ -169,10 +149,7 @@ export type PositionsSummaryFormatted = {
   totalPortfolioMarginValueUSDFormatted: string;
   totalPortfolioRealizedPNLValueUSDFormatted: string;
   totalPortfolioUnrealizedPNLValueUSDFormatted: string;
-  totalPortfolioNotionalValueUSDCompactFormatted: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  totalPortfolioNotionalValueUSDCompactFormatted: CompactFormatParts;
   filterOptions: {
     id: PositionsFilterId;
     label: string;
@@ -187,14 +164,8 @@ export type PortfolioSummaryFormatted = {
   totalPortfolioMarginValueUSDFormatted: string;
   totalPortfolioRealizedPNLValueUSDFormatted: string;
   totalPortfolioUnrealizedPNLValueUSDFormatted: string;
-  totalPortfolioNotionalValueUSDCompactFormatted: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-  totalPortfolioCollateralUSDCompactFormatted: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  totalPortfolioNotionalValueUSDCompactFormatted: CompactFormatParts;
+  totalPortfolioCollateralUSDCompactFormatted: CompactFormatParts;
   distributions: PortfolioSummary['distributions'];
 };
 
@@ -206,14 +177,8 @@ export type MarginAccountSummaryFormatted = {
   totalPortfolioMarginValueUSDFormatted: string;
   totalPortfolioRealizedPNLValueUSDFormatted: string;
   totalPortfolioUnrealizedPNLValueUSDFormatted: string;
-  totalPortfolioNotionalValueUSDCompactFormatted: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-  totalPortfolioCollateralUSDCompactFormatted: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  totalPortfolioNotionalValueUSDCompactFormatted: CompactFormatParts;
+  totalPortfolioCollateralUSDCompactFormatted: CompactFormatParts;
   marginRatioPercentage: number;
   marginRatioHealth: 'danger' | 'warning' | 'healthy';
   distributions: MarginAccountSummary['distributions'];

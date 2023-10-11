@@ -20,7 +20,6 @@ type MarginAccountSelectorFormPreviewProps = {
   balanceCompactFormatted: MarginAccountUI['balanceCompactFormat'];
   initialMarginPretradeValueFormatted: string;
   marginAccountsUI: MarginAccountUI[];
-  marginImpactValueFormatted: string;
   marginAccountsLoading: boolean;
   selectedMarginAccountId?: MarginAccountUI['id'];
   onMarginAccountClick: (marginAccountId: string) => void;
@@ -32,7 +31,6 @@ export const MarginAccountSelectorFormPreview: React.FunctionComponent<
   token,
   balanceCompactFormatted,
   initialMarginPretradeValueFormatted,
-  marginImpactValueFormatted,
   marginAccountsUI,
   selectedMarginAccountId,
   onMarginAccountClick,
@@ -80,8 +78,7 @@ export const MarginAccountSelectorFormPreview: React.FunctionComponent<
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            prefixToken="$"
-            token={balanceCompactFormatted.compactSuffix}
+            token={`${balanceCompactFormatted.compactSuffix} ${(token || '').toUpperCase()}`}
             typographyToken="secondaryBodySmallRegular"
             value={balanceCompactFormatted.compactNumber}
           />
@@ -89,18 +86,6 @@ export const MarginAccountSelectorFormPreview: React.FunctionComponent<
         <DetailBox>
           <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
             Account Initial Margin (Pre Trade)
-          </Typography>
-          <TokenTypography
-            colorToken="lavenderWeb"
-            prefixToken="$"
-            token={balanceCompactFormatted.compactSuffix}
-            typographyToken="secondaryBodySmallRegular"
-            value={balanceCompactFormatted.compactNumber}
-          />
-        </DetailBox>
-        <DetailBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-            Margin Impact
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"

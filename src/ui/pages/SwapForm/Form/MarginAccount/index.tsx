@@ -37,7 +37,6 @@ export const MarginAccount: React.FunctionComponent = () => {
       initialMarginPretradeValueFormatted={'123'}
       marginAccountsLoading={loading}
       marginAccountsUI={marginAccountsUI}
-      marginImpactValueFormatted={'123'}
       selectedMarginAccountId={selectedMarginAccountUI?.id}
       token={token}
       onMarginAccountClick={handleOnMarginAccountChange}
