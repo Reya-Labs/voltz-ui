@@ -43,6 +43,14 @@ export const selectPoolTokenFormatted = (state: RootState) => {
   return formatUnderlyingTokenName(selectSwapFormPool(state));
 };
 
+export const selectPoolToken = (state: RootState) => {
+  const pool = selectSwapFormPool(state);
+  if (!pool) {
+    return '';
+  }
+  return pool.underlyingToken.name;
+};
+
 export const selectPoolMaturityFormatted = (state: RootState) => {
   return formatPoolMaturity(selectSwapFormPool(state));
 };

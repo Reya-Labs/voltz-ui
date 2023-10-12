@@ -17,7 +17,7 @@ import {
 } from './MarginAccountSelectorFormPreview.styled';
 
 type MarginAccountSelectorFormPreviewProps = {
-  token: string;
+  poolToken: string;
   balanceCompactFormatted: CompactFormatParts;
   initialMarginPretradeValueFormatted: CompactFormatParts;
   marginAccountsUI: MarginAccountUI[];
@@ -29,7 +29,7 @@ type MarginAccountSelectorFormPreviewProps = {
 export const MarginAccountSelectorFormPreview: React.FunctionComponent<
   MarginAccountSelectorFormPreviewProps
 > = ({
-  token,
+  poolToken,
   balanceCompactFormatted,
   initialMarginPretradeValueFormatted,
   marginAccountsUI,
@@ -79,7 +79,7 @@ export const MarginAccountSelectorFormPreview: React.FunctionComponent<
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            token={`${balanceCompactFormatted.compactSuffix} ${(token || '').toUpperCase()}`}
+            token={`${balanceCompactFormatted.compactSuffix} ${(poolToken || '').toUpperCase()}`}
             typographyToken="secondaryBodySmallRegular"
             value={balanceCompactFormatted.compactNumber}
           />
@@ -91,7 +91,7 @@ export const MarginAccountSelectorFormPreview: React.FunctionComponent<
           <TokenTypography
             colorToken="lavenderWeb"
             token={`${initialMarginPretradeValueFormatted.compactSuffix} ${(
-              token || ''
+              poolToken || ''
             ).toUpperCase()}`}
             typographyToken="secondaryBodySmallRegular"
             value={initialMarginPretradeValueFormatted.compactNumber}

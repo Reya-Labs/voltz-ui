@@ -17,6 +17,8 @@ type UseMarginAccountsForSelectionResult = {
   marginAccounts: PortfolioMarginAccount[];
   loading: boolean;
   error: boolean;
+  getMarginAccountsUIForForm: (poolToken: string) => MarginAccountUI[];
+  getMarginAccountsForForm: (poolToken: string) => PortfolioMarginAccount[];
 };
 
 export const useMarginAccountsForSelection = (): UseMarginAccountsForSelectionResult => {
@@ -44,5 +46,9 @@ export const useMarginAccountsForSelection = (): UseMarginAccountsForSelectionRe
     marginAccounts,
     loading,
     error,
+    getMarginAccountsForForm: (poolToken: string) =>
+      marginAccounts.filter((mA) => !mA.settlementToken || mA.settlementToken === poolToken),
+    getMarginAccountsUIForForm: (poolToken: string) =>
+      marginAccountsUI.filter((mA) => !mA.settlementToken || mA.settlementToken === poolToken),
   };
 };

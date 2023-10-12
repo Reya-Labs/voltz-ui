@@ -21,13 +21,17 @@ const LeftWrapper = styled('div')`
   width: 100%;
 `;
 
+const RightWrapper = styled('div')`
+  width: 150px;
+`;
+
 const MarginAccountListItem: SearchFieldProps['itemRenderer'] = (props) => {
   const { item, searchedValue } = props as {
     item: MarginAccountListItemProps;
     searchedValue?: string;
   };
-  const { chainId, name, balanceUSDCompactFormatted } = item;
-  const { compactSuffix, compactNumber } = balanceUSDCompactFormatted;
+  const { chainId, name, settlementToken, balanceCompactFormatted, balanceUSDCompactFormatted } =
+    item;
   const chainIcon = <ChainIcon chainId={chainId} hideForChains={[]} />;
   return (
     <Wrapper>
@@ -37,13 +41,24 @@ const MarginAccountListItem: SearchFieldProps['itemRenderer'] = (props) => {
           <Highlight highlight={searchedValue}>{name}</Highlight>
         </Typography>
       </LeftWrapper>
-      <TokenTypography
-        colorToken="lavenderWeb"
-        prefixToken="$"
-        token={compactSuffix}
-        typographyToken="secondaryBodySmallRegular"
-        value={compactNumber}
-      />
+      <RightWrapper>
+        {settlementToken ? (
+          <TokenTypography
+            colorToken="lavenderWeb"
+            token={`${balanceCompactFormatted.compactSuffix} ${settlementToken.toUpperCase()}`}
+            typographyToken="secondaryBodySmallRegular"
+            value={balanceCompactFormatted.compactNumber}
+          />
+        ) : (
+          <TokenTypography
+            colorToken="lavenderWeb"
+            prefixToken="$"
+            token={balanceUSDCompactFormatted.compactSuffix}
+            typographyToken="secondaryBodySmallRegular"
+            value={balanceUSDCompactFormatted.compactNumber}
+          />
+        )}
+      </RightWrapper>
     </Wrapper>
   );
 };
