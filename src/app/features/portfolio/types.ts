@@ -1,3 +1,4 @@
+import { Tokens } from '@voltz-protocol/api-sdk-v2';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
 import { CompactFormatParts } from '../../../utilities/number';
@@ -110,6 +111,7 @@ export type PositionUI = {
 export type MarginAccountUI = {
   id: string;
   chainId: SupportedChainId;
+  settlementToken?: Tokens | null;
   name: string;
   balanceCompactFormatted: CompactFormatParts;
   balanceUSDCompactFormatted: CompactFormatParts;

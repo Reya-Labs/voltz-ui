@@ -19,5 +19,6 @@ export const mapMarginAccountToMarginAccountUI = (
       2,
     ),
     marginRatioHealth: marginAccount.marginRatioHealth as MarginAccountUI['marginRatioHealth'],
+    settlementToken: marginAccount.settlementToken ,
   };
 };

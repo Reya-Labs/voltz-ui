@@ -57,7 +57,7 @@ export const RightBox = styled('div')`
 
 export const BalanceBox = styled(InfoBox)`
   padding: 0px 4px;
-  width: 100px;
+  width: 150px;
 `;
 export const PositionsCountBox = styled(BorderBox)`
   width: 80px;

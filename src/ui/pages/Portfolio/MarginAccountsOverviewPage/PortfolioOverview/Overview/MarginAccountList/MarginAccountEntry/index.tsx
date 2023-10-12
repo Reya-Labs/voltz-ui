@@ -38,6 +38,8 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
       chainId,
       name,
       balanceCompactFormatted,
+      balanceUSDCompactFormatted,
+      settlementToken,
     },
     ref,
   ) => {
@@ -84,13 +86,24 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
               <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
                 Balance
               </Typography>
-              <TokenTypography
-                colorToken="lavenderWeb"
-                prefixToken="$"
-                token={balanceCompactFormatted.compactSuffix}
-                typographyToken={numbersTypographyToken}
-                value={balanceCompactFormatted.compactNumber}
-              />
+              {settlementToken ? (
+                <TokenTypography
+                  colorToken="lavenderWeb"
+                  token={`${
+                    balanceCompactFormatted.compactSuffix
+                  } ${settlementToken.toUpperCase()}`}
+                  typographyToken={numbersTypographyToken}
+                  value={balanceCompactFormatted.compactNumber}
+                />
+              ) : (
+                <TokenTypography
+                  colorToken="lavenderWeb"
+                  prefixToken="$"
+                  token={balanceUSDCompactFormatted.compactSuffix}
+                  typographyToken={numbersTypographyToken}
+                  value={balanceUSDCompactFormatted.compactNumber}
+                />
+              )}
             </BalanceBox>
             <PositionsCountBox>
               <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
