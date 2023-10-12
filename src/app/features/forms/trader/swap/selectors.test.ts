@@ -9,7 +9,6 @@ import {
   selectIsGetInfoPostSwapLoading,
   selectIsLeverageDisabled,
   selectMarginRequirementFormatted,
-  selectMaxAvailableNotionalFormatted,
   selectNewPositionCompactNotional,
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
@@ -32,7 +31,6 @@ import {
   selectWalletBalance,
 } from './selectors';
 import {
-  getMaxAvailableNotional,
   getNewPositionFixedRate,
   getProspectiveSwapMode,
   getProspectiveSwapNotional,
@@ -402,44 +400,6 @@ describe('swap-form.selectors', () => {
         },
       } as never;
       expect(selectInfoPostSwap(state)).toEqual({ foo: 'bar' });
-    });
-  });
-
-  describe('selectAvailableNotional', () => {
-    beforeEach(() => {
-      (getMaxAvailableNotional as jest.Mock).mockImplementationOnce(
-        (swapFormState: {
-          userInput: {
-            notionalAmount: {
-              value: number;
-            };
-          };
-          availableMargin: number;
-        }) => {
-          return swapFormState.userInput.notionalAmount.value + swapFormState.availableMargin;
-        },
-      );
-    });
-    beforeEach(() => {
-      // Clear mock call history after each test
-      jest.clearAllMocks();
-    });
-
-    it('should call getAvailableNotional with the swapForm state', () => {
-      const state = {
-        swapForm: {
-          userInput: {
-            notionalAmount: {
-              value: 1234.5678,
-            },
-          },
-          availableMargin: 5678.1234,
-        },
-      };
-      const result = selectMaxAvailableNotionalFormatted(state as never);
-
-      expect(result).toBe(6912.6912); // 1234.5678 + 5678.1234
-      expect(getMaxAvailableNotional).toHaveBeenCalledWith(state.swapForm);
     });
   });
 
