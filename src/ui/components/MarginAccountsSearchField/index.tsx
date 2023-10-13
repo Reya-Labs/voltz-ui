@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
-import { Highlight, SearchField, SearchFieldProps, TokenTypography, Typography } from 'brokoli-ui';
+import { Highlight, SearchField, SearchFieldProps, Typography } from 'brokoli-ui';
 import React, { useMemo } from 'react';
 
 import { MarginAccountUI } from '../../../app/features/portfolio/types';
 import { ChainIcon } from '../ChainIcon';
+import { TokenCompactTypography } from '../TokenCompactTypography';
 
 type MarginAccountListItemProps = SearchFieldProps['items'][0] & MarginAccountUI;
 
@@ -42,22 +43,12 @@ const MarginAccountListItem: SearchFieldProps['itemRenderer'] = (props) => {
         </Typography>
       </LeftWrapper>
       <RightWrapper>
-        {settlementToken ? (
-          <TokenTypography
-            colorToken="lavenderWeb"
-            token={`${balanceCompactFormatted.compactSuffix} ${settlementToken.toUpperCase()}`}
-            typographyToken="secondaryBodySmallRegular"
-            value={balanceCompactFormatted.compactNumber}
-          />
-        ) : (
-          <TokenTypography
-            colorToken="lavenderWeb"
-            prefixToken="$"
-            token={balanceUSDCompactFormatted.compactSuffix}
-            typographyToken="secondaryBodySmallRegular"
-            value={balanceUSDCompactFormatted.compactNumber}
-          />
-        )}
+        <TokenCompactTypography
+          colorToken="lavenderWeb"
+          compactData={!settlementToken ? balanceUSDCompactFormatted : balanceCompactFormatted}
+          token={!settlementToken ? '$' : settlementToken}
+          typographyToken="secondaryBodySmallRegular"
+        />
       </RightWrapper>
     </Wrapper>
   );

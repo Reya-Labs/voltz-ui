@@ -1,10 +1,11 @@
-import { ColorTokens, ToggleCaret, TokenTypography, Typography, TypographyToken } from 'brokoli-ui';
+import { ColorTokens, ToggleCaret, Typography, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 
 import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { MarginRatioDonut } from '../../../../../../../components/MarginRatioDonut';
 import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
+import { TokenCompactTypography } from '../../../../../../../components/TokenCompactTypography';
 import { useAppNavigate } from '../../../../../../../hooks/useAppNavigate';
 import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
 import {
@@ -86,24 +87,14 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
               <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
                 Balance
               </Typography>
-              {settlementToken ? (
-                <TokenTypography
-                  colorToken="lavenderWeb"
-                  token={`${
-                    balanceCompactFormatted.compactSuffix
-                  } ${settlementToken.toUpperCase()}`}
-                  typographyToken={numbersTypographyToken}
-                  value={balanceCompactFormatted.compactNumber}
-                />
-              ) : (
-                <TokenTypography
-                  colorToken="lavenderWeb"
-                  prefixToken="$"
-                  token={balanceUSDCompactFormatted.compactSuffix}
-                  typographyToken={numbersTypographyToken}
-                  value={balanceUSDCompactFormatted.compactNumber}
-                />
-              )}
+              <TokenCompactTypography
+                colorToken="lavenderWeb"
+                compactData={
+                  !settlementToken ? balanceUSDCompactFormatted : balanceCompactFormatted
+                }
+                token={!settlementToken ? '$' : settlementToken}
+                typographyToken={numbersTypographyToken}
+              />
             </BalanceBox>
             <PositionsCountBox>
               <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
