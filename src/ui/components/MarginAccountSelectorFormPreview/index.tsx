@@ -3,11 +3,10 @@ import React from 'react';
 
 import { useAppDispatch } from '../../../app';
 import { openMarginAccountDepositFlowAction } from '../../../app/features/deposit-flow';
-import { MarginAccountUI } from '../../../app/features/portfolio/types';
+import { MarginAccountForSwapLPUI } from '../../../app/features/margin-accounts-for-swap-lp';
 import { CompactFormatParts } from '../../../utilities/number';
 import { useWallet } from '../../hooks/useWallet';
 import { DepositMarginDialog } from '../../pages/Portfolio/PortfolioSubmenu/SubmenuActionButtons/WithdrawDepositFlow/DepositMarginDialog';
-import { MarginAccountsSearchField } from '../MarginAccountsSearchField';
 import {
   Box,
   DepositButton,
@@ -15,14 +14,15 @@ import {
   DetailBox,
   DetailsBox,
 } from './MarginAccountSelectorFormPreview.styled';
+import { MarginAccountsForSwapLPSearchField } from './MarginAccountsForSwapLPSearchField';
 
 type MarginAccountSelectorFormPreviewProps = {
   poolToken: string;
   balanceCompactFormatted: CompactFormatParts;
   initialMarginPretradeValueFormatted: CompactFormatParts;
-  marginAccountsUI: MarginAccountUI[];
+  marginAccountsUI: MarginAccountForSwapLPUI[];
   marginAccountsLoading: boolean;
-  selectedMarginAccountId?: MarginAccountUI['id'];
+  selectedMarginAccountId?: MarginAccountForSwapLPUI['id'];
   onMarginAccountClick: (marginAccountId: string) => void;
 };
 
@@ -57,7 +57,7 @@ export const MarginAccountSelectorFormPreview: React.FunctionComponent<
       <DepositMarginDialog />
       <DetailsBox>
         <DetailBox>
-          <MarginAccountsSearchField
+          <MarginAccountsForSwapLPSearchField
             disabled={marginAccountsLoading}
             marginAccounts={marginAccountsUI}
             selectedMarginAccountId={selectedMarginAccountId || ''}

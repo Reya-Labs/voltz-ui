@@ -7467,10 +7467,10 @@
     "@typescript-eslint/types" "5.10.0"
     eslint-visitor-keys "^3.0.0"
 
-"@voltz-protocol/api-sdk-v2@1.25.0", "@voltz-protocol/api-sdk-v2@1.31.0", "@voltz-protocol/api-sdk-v2@^1.31.0":
-  version "1.31.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/api-sdk-v2/-/api-sdk-v2-1.31.0.tgz#88ffe7b78991a1f0b9fca2b65d1051c5834c741f"
-  integrity sha512-pQv2P2QJxzGy9h3EBYi1DZf8wNCu/o05D8ohotoH2R40SQK9x8wsgLrNuo/msFOCbzL+3IjflYSAv55gJvq9mg==
+"@voltz-protocol/api-sdk-v2@1.25.0", "@voltz-protocol/api-sdk-v2@1.32.0", "@voltz-protocol/api-sdk-v2@^1.32.0":
+  version "1.32.0"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/api-sdk-v2/-/api-sdk-v2-1.32.0.tgz#c183e3666eac4c0c338759fea9e5639c40e6e411"
+  integrity sha512-WGM2C9L1mSnX1EjKSFYHpUllDMHeM24WI+IrnhD6qp67l2SDa70YUati7Sb7UP57Oe8vhn1j8qcZpxqFV8AHjg==
   dependencies:
     "@voltz-protocol/commons-v2" "^1.15.0"
     ethers "5.5.4"
@@ -7492,14 +7492,14 @@
     keccak256 "1.0.6"
     merkletreejs "^0.3.0"
 
-"@voltz-protocol/sdk-v1-stateless@1.27.28":
-  version "1.27.28"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.27.28.tgz#bbf8f029244ce25b4b7be22ef71313c9a17a2144"
-  integrity sha512-TOARJOyw3kmsR9mvTvHNHBDPPM6a5SNOG9fGRutU2hE5yO5igTiIO0X1GzpY47Wt0KlR8Xn308ZfZeR72fgctA==
+"@voltz-protocol/sdk-v1-stateless@1.27.29":
+  version "1.27.29"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v1-stateless/-/sdk-v1-stateless-1.27.29.tgz#70c6f481c10b03a37c5e1cf984eebebf48b88007"
+  integrity sha512-7gPGfUlLW+35pIKMP+vMz4irTW9FOI6I/zxVK2UXYQetzRriTbL97UnHnB+ElVh00a1BpWg4dSoizNrACm+z3Q==
   dependencies:
     "@sentry/browser" "7.25.0"
     "@sentry/tracing" "7.25.0"
-    "@voltz-protocol/api-sdk-v2" "^1.31.0"
+    "@voltz-protocol/api-sdk-v2" "^1.32.0"
     "@voltz-protocol/commons-v2" "^1.15.0"
     big.js "6.2.1"
     decimal.js-light "2.5.1"
@@ -7511,12 +7511,12 @@
     tiny-invariant "1.3.1"
     toformat "2.0.0"
 
-"@voltz-protocol/sdk-v2@1.62.0":
-  version "1.62.0"
-  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.62.0.tgz#a57cf38d46b488ead43ca23055fed03cabcb7415"
-  integrity sha512-kID78FNjCiEqb/e25OAWAmbgYjYVDmjWbyjRpEkQH9Q6A1LItgn3d0tc0h44VfpKrSVoprpYPoTx6h8JwJjfxg==
+"@voltz-protocol/sdk-v2@1.62.1":
+  version "1.62.1"
+  resolved "https://registry.yarnpkg.com/@voltz-protocol/sdk-v2/-/sdk-v2-1.62.1.tgz#9aed04399c562dea2303a0b9649f7a1f6a5ff820"
+  integrity sha512-MsZA9pz8Q8oeHZHEv825IPr+dyByJPTPof0ZR61iRj8RQVnkFXLqg6vZ7070iILwZ7u+aulfo5lqDC51t88whA==
   dependencies:
-    "@voltz-protocol/api-sdk-v2" "^1.31.0"
+    "@voltz-protocol/api-sdk-v2" "^1.32.0"
     "@voltz-protocol/commons-v2" "^1.15.0"
     crypto-js "4.1.1"
     jsbi "3.1.4"

@@ -4,20 +4,19 @@ import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../../app';
 import {
   selectPoolToken,
-  selectSwapFormMarginAccountUI,
+  selectSwapFormMarginAccountForSwapLPUI,
 } from '../../../../../app/features/forms/trader/swap';
 import { MarginAccountSelectorFormPreview } from '../../../../components/MarginAccountSelectorFormPreview';
 import { useAppNavigate } from '../../../../hooks/useAppNavigate';
-import { useMarginAccountsForSelection } from '../../../../hooks/useMarginAccountsForSelection';
+import { useMarginAccountsForSwapLP } from '../../../../hooks/useMarginAccountsForSwapLP';
 
 export const MarginAccount: React.FunctionComponent = () => {
+  const { ammId, poolId } = useParams();
   const navigate = useAppNavigate();
   const poolToken = useAppSelector(selectPoolToken);
-  const { getMarginAccountsUIForForm, loading } = useMarginAccountsForSelection();
-  const marginAccountsUI = getMarginAccountsUIForForm(poolToken);
-  const selectedMarginAccountUI = useAppSelector(selectSwapFormMarginAccountUI);
-  const { ammId, poolId } = useParams();
-  if (!selectedMarginAccountUI) {
+  const { marginAccountsUI, loading } = useMarginAccountsForSwapLP(ammId, poolToken);
+  const selectedMarginAccountUI = useAppSelector(selectSwapFormMarginAccountForSwapLPUI);
+  if (!selectedMarginAccountUI || !poolToken) {
     return null;
   }
   const handleOnMarginAccountChange = (id: string) => {

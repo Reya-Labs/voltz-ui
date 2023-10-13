@@ -14,6 +14,7 @@ import { rolloverSwapFormReducer } from './features/forms/trader/rollover-swap';
 import { swapFormReducer } from './features/forms/trader/swap';
 import { historicalRatesReducer } from './features/historical-rates';
 import { lpOptimisersReducer } from './features/lp-optimisers';
+import { marginAccountsForSwapLpReducer } from './features/margin-accounts-for-swap-lp';
 import { networkReducer } from './features/network';
 import { portfolioReducer } from './features/portfolio';
 import { positionDetailsReducer } from './features/position-details';
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   alphaPassClaimFlow: alphaPassClaimFlowReducer,
   alphaPassVerificationFlow: alphaPassVerificationFlowReducer,
   depositFlow: depositFlowReducer,
+  marginAccountsForSwapLp: marginAccountsForSwapLpReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>

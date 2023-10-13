@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app';
 import { V2Pool } from '../../../../app/features/aMMs';
 import {
+  selectPoolToken,
   selectSwapFormMarginAccount,
   selectSwapFormPool,
   setSwapFormMarginAccountAction,
@@ -11,7 +12,7 @@ import {
   setSwapFormSignerAction,
 } from '../../../../app/features/forms/trader/swap';
 import { generateAmmIdForRoute, generatePoolId } from '../../../../utilities/amm';
-import { useMarginAccountsForSelection } from '../../../hooks/useMarginAccountsForSelection';
+import { useMarginAccountsForSwapLP } from '../../../hooks/useMarginAccountsForSwapLP';
 import { usePools } from '../../../hooks/usePools';
 import { useWallet } from '../../../hooks/useWallet';
 
@@ -27,9 +28,12 @@ export const useSwapFormPoolAndMarginAccount = (): UseSwapFormPoolResult => {
   const dispatch = useAppDispatch();
   const { ammId, poolId, marginAccountId } = useParams();
   const { pools, loading: poolsLoading, error, idle } = usePools();
-  const { getMarginAccountsForForm, loading: marginAccountsLoading } =
-    useMarginAccountsForSelection();
   const pool = useAppSelector(selectSwapFormPool);
+  const poolToken = useAppSelector(selectPoolToken);
+  const { marginAccounts, loading: marginAccountsLoading } = useMarginAccountsForSwapLP(
+    ammId,
+    poolToken,
+  );
   const marginAccount = useAppSelector(selectSwapFormMarginAccount);
   const [loading, setLoading] = useState(true);
 
@@ -46,7 +50,6 @@ export const useSwapFormPoolAndMarginAccount = (): UseSwapFormPoolResult => {
     if (!marginAccountId || marginAccountsLoading || !pool) {
       return;
     }
-    const marginAccounts = getMarginAccountsForForm(pool.underlyingToken.name);
     const foundMarginAccount = marginAccounts.find(
       (ma) => ma.id.toLowerCase() === marginAccountId.toLowerCase(),
     );
@@ -56,7 +59,7 @@ export const useSwapFormPoolAndMarginAccount = (): UseSwapFormPoolResult => {
         marginAccount: foundMarginAccount ? foundMarginAccount : null,
       }),
     );
-  }, [dispatch, pool, getMarginAccountsForForm, marginAccountsLoading, marginAccountId]);
+  }, [dispatch, pool, marginAccounts, marginAccountsLoading, marginAccountId]);
 
   useEffect(() => {
     if (!ammId || !poolId) {

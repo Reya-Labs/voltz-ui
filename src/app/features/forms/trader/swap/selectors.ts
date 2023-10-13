@@ -2,7 +2,7 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
-import { mapMarginAccountToMarginAccountUI } from '../../../_common';
+import { mapMarginAccountForSwapLPToMarginAccountForSwapLPUI } from '../../../_common';
 import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
 import {
   formCompactFormat,
@@ -46,7 +46,7 @@ export const selectPoolTokenFormatted = (state: RootState) => {
 export const selectPoolToken = (state: RootState) => {
   const pool = selectSwapFormPool(state);
   if (!pool) {
-    return '';
+    return undefined;
   }
   return pool.underlyingToken.name;
 };
@@ -59,12 +59,13 @@ export const selectSwapFormMarginAccount = (state: RootState) => {
   return state.swapForm.marginAccount;
 };
 
-export const selectSwapFormMarginAccountUI = (state: RootState) => {
+export const selectSwapFormMarginAccountForSwapLPUI = (state: RootState) => {
   const marginAccount = selectSwapFormMarginAccount(state);
-  if (!marginAccount) {
+  const poolToken = selectPoolToken(state);
+  if (!marginAccount || !poolToken) {
     return null;
   }
-  return mapMarginAccountToMarginAccountUI(marginAccount);
+  return mapMarginAccountForSwapLPToMarginAccountForSwapLPUI(marginAccount, poolToken);
 };
 
 // User Input

@@ -3,7 +3,7 @@ import { SimulateSwapMarginAccountResult } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt, providers } from 'ethers';
 
 import { V2Pool } from '../../../aMMs';
-import { PortfolioMarginAccount } from '../../../portfolio';
+import { MarginAccountForSwapLP } from '../../../margin-accounts-for-swap-lp';
 import { initialState } from './state';
 import { getMaxNotionalAvailableThunk, simulateSwapThunk, swapThunk } from './thunks';
 import { validateUserInputAndUpdateSubmitButton } from './utils';
@@ -72,7 +72,7 @@ const slice = createSlice({
       {
         payload: { marginAccount },
       }: PayloadAction<{
-        marginAccount: PortfolioMarginAccount | null;
+        marginAccount: MarginAccountForSwapLP | null;
       }>,
     ) => {
       state.marginAccount = marginAccount;

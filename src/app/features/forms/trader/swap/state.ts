@@ -2,7 +2,7 @@ import { SimulateSwapMarginAccountResult } from '@voltz-protocol/sdk-v2';
 import { providers } from 'ethers';
 
 import { V2Pool } from '../../../aMMs';
-import { PortfolioMarginAccount } from '../../../portfolio';
+import { MarginAccountForSwapLP } from '../../../margin-accounts-for-swap-lp';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
@@ -19,7 +19,7 @@ export type SliceState = {
   };
   pool: V2Pool | null;
   signer: providers.JsonRpcSigner | null;
-  marginAccount: PortfolioMarginAccount | null;
+  marginAccount: MarginAccountForSwapLP | null;
   maxNotionalAvailable: {
     value: number;
     status: ThunkStatus;

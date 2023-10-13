@@ -17,7 +17,7 @@ import {
 import { TestNetIndicator } from '../../../../components/TestNetIndicator';
 import { V2EntryInformation } from '../../../../components/V2EntryInformation';
 import { useAppNavigate } from '../../../../hooks/useAppNavigate';
-import { useMarginAccountsForSelection } from '../../../../hooks/useMarginAccountsForSelection';
+import { useMarginAccountsForSwapLP } from '../../../../hooks/useMarginAccountsForSwapLP';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import {
   ButtonStyled,
@@ -70,8 +70,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     },
     ref,
   ) => {
-    const { getMarginAccountsForForm } = useMarginAccountsForSelection();
-    const marginAccountsUI = token ? getMarginAccountsForForm(token) : [];
+    const { marginAccountsUI } = useMarginAccountsForSwapLP(routeAmmId, token);
     const dispatch = useAppDispatch();
     const [waitingOnNetworkChange, setWaitingOnNetworkChange] = useState<
       null | 'lpForm' | 'swapForm'
