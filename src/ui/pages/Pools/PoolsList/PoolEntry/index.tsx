@@ -19,6 +19,7 @@ import { V2EntryInformation } from '../../../../components/V2EntryInformation';
 import { useAppNavigate } from '../../../../hooks/useAppNavigate';
 import { useMarginAccountsForSwapLP } from '../../../../hooks/useMarginAccountsForSwapLP';
 import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
+import { useWallet } from '../../../../hooks/useWallet';
 import {
   ButtonStyled,
   ChainIconContainer,
@@ -70,6 +71,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     },
     ref,
   ) => {
+    const { account, setRequired } = useWallet();
     const { marginAccountsUI } = useMarginAccountsForSwapLP(routeAmmId, token);
     const dispatch = useAppDispatch();
     const [waitingOnNetworkChange, setWaitingOnNetworkChange] = useState<
@@ -119,6 +121,10 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     }, [poolChainId, waitingOnNetworkChange, chainId]);
 
     const navigateToLPFormPage = () => {
+      if (!account) {
+        setRequired(true);
+        return;
+      }
       navigate.toLPFormPage({
         ammId: routeAmmId,
         poolId: routePoolId,
@@ -135,6 +141,10 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
 
     // TODO: FB evaluate before launch
     const navigateToSwapFormPage = () => {
+      if (!account) {
+        setRequired(true);
+        return;
+      }
       navigate.toSwapFormPage({
         ammId: routeAmmId,
         poolId: routePoolId,
