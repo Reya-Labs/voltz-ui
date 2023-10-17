@@ -1,5 +1,5 @@
 import { Tokens } from '@voltz-protocol/api-sdk-v2';
-import { TokenField, TypographyToken } from 'brokoli-ui';
+import { ToggleCaret, TokenField, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -18,7 +18,7 @@ import {
 import { stringToBigFloat } from '../../../utilities/number';
 import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { useWallet } from '../../hooks/useWallet';
-import { CashFlowCalculatorBox } from './CashflowCalculator.styled';
+import { CashFlowCalculatorBox, ToggleCaretBox } from './CashflowCalculator.styled';
 
 type CashflowCalculatorProps = {
   pool: V2Pool;
@@ -31,6 +31,7 @@ export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps
   mode,
   token,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
   const disabled = useAppSelector(selectCashflowCalculatorDisabled);
   const cashflowPool = useAppSelector(selectCashflowPool);
@@ -43,6 +44,8 @@ export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps
     estimatedApy.toString(),
   );
   const error = useAppSelector(selectCashflowCalculatorError);
+  const handleOnToggleClick = () => setIsOpen(!isOpen);
+
   const debouncedChangePredictedApy = useMemo(
     () =>
       debounce((value: number) => {
@@ -103,7 +106,22 @@ export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps
   const labelTypographyToken: TypographyToken = isLargeDesktopDevice
     ? 'primaryBodyMediumBold'
     : 'primaryBodySmallBold';
-
+  if (!isOpen) {
+    return (
+      <CashFlowCalculatorBox>
+        <TypographyWithTooltip
+          colorToken="lavenderWeb"
+          tooltip="This shows the combined cashflow you could generate from your new position and your existing."
+          typographyToken={labelTypographyToken}
+        >
+          Expected Variable APY - Calculator
+        </TypographyWithTooltip>
+        <ToggleCaretBox onClick={handleOnToggleClick}>
+          <ToggleCaret isOpen={isOpen} />
+        </ToggleCaretBox>
+      </CashFlowCalculatorBox>
+    );
+  }
   return (
     <CashFlowCalculatorBox>
       <TokenField
@@ -122,6 +140,9 @@ export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps
         value={localEstimatedApy}
         onChange={handleOnChange}
       />
+      <ToggleCaretBox onClick={handleOnToggleClick}>
+        <ToggleCaret isOpen={isOpen} />
+      </ToggleCaretBox>
     </CashFlowCalculatorBox>
   );
 };
