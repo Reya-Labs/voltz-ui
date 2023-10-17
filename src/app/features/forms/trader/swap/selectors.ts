@@ -43,6 +43,14 @@ export const selectPoolTokenFormatted = (state: RootState) => {
   return formatUnderlyingTokenName(selectSwapFormPool(state));
 };
 
+export const selectTradeTokenFormatted = (state: RootState) => {
+  const marginAccount = state.swapForm.marginAccount;
+  if (!marginAccount?.settlementToken || !state.swapForm.pool) {
+    return '$';
+  }
+  return state.swapForm.pool.underlyingToken.name;
+};
+
 export const selectPoolToken = (state: RootState) => {
   const pool = selectSwapFormPool(state);
   if (!pool) {
