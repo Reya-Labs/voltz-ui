@@ -1,4 +1,3 @@
-import { Tokens } from '@voltz-protocol/api-sdk-v2';
 import { ToggleCaret, TokenField, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -12,7 +11,7 @@ import {
   selectCashflowPool,
   selectEstimatedVariableApy,
   selectTotalCashflowFormatted,
-  setCashflowPoolAndTokenAction,
+  setCashflowPoolAction,
   setEstimatedVariableApyAction,
 } from '../../../app/features/cashflow-calculator';
 import { stringToBigFloat } from '../../../utilities/number';
@@ -23,13 +22,11 @@ import { CashFlowCalculatorBox, ToggleCaretBox } from './CashflowCalculator.styl
 type CashflowCalculatorProps = {
   pool: V2Pool;
   mode: 'fixed' | 'variable';
-  token: Tokens | '$';
 };
 
 export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps> = ({
   pool,
   mode,
-  token,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
@@ -62,12 +59,11 @@ export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps
 
   useEffect(() => {
     dispatch(
-      setCashflowPoolAndTokenAction({
+      setCashflowPoolAction({
         pool,
-        token,
       }),
     );
-  }, [dispatch, pool, token]);
+  }, [dispatch, pool]);
 
   useEffect(() => {
     setLocalEstimatedApy(estimatedApy.toString());

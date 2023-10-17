@@ -11,14 +11,13 @@ export const getExpectedCashflowThunk = createAsyncThunk<
 >('cashflowCalculator/getExpectedCashflowThunk', async (_, thunkAPI) => {
   try {
     const state = thunkAPI.getState().cashflowCalculator;
-    const { pool, token } = state;
+    const { pool } = state;
     if (!pool) {
       return;
     }
 
     return await getExpectedCashflow({
       poolId: pool.id,
-      token,
       estimatedVariableApy: state.estimatedVariableApy,
     });
   } catch (err) {

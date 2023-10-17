@@ -1,5 +1,6 @@
 import { RootState } from '../../store';
 import { formFormatNumber } from '../forms/common';
+import { formatUnderlyingTokenName } from '../helpers';
 
 export const selectCashflowPool = (state: RootState) => state.cashflowCalculator.pool;
 export const selectCashflowCalculatorDisabled = (state: RootState) => {
@@ -29,18 +30,12 @@ export const selectTotalCashflow = (state: RootState) => {
 
 export const selectTotalCashflowFormatted = (state: RootState) => {
   const totalCashflow = selectTotalCashflow(state);
-  const token = state.cashflowCalculator.token;
+  const token = formatUnderlyingTokenName(state.cashflowCalculator.pool);
   if (totalCashflow === null) {
     return '--';
   }
 
-  let totalCashflowFormatted = formFormatNumber(Math.abs(totalCashflow));
-
-  if (token === '$') {
-    totalCashflowFormatted = `${token}${totalCashflowFormatted}`;
-    return `${totalCashflow === 0 ? '' : totalCashflow > 0 ? '+' : '-'}${totalCashflowFormatted}`;
-  }
-  return `${totalCashflowFormatted} ${token.toUpperCase()}`;
+  return `${formFormatNumber(Math.abs(totalCashflow))}${token}`;
 };
 
 export const selectEstimatedVariableApy = (state: RootState) =>

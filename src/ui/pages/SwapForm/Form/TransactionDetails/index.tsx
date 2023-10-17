@@ -5,8 +5,11 @@ import { useAppSelector } from '../../../../../app';
 import {
   selectGasInfoFormatted,
   selectPoolTokenFormatted,
+  selectProspectiveSwapAccountInitialMarginPostTradeCompactFormatted,
   selectProspectiveSwapFeeFormatted,
+  selectReceivingRateFormatted,
   selectSlippageFormatted,
+  selectUserInputNotionalCompactFormatted,
 } from '../../../../../app/features/forms/trader/swap';
 import { ReactComponent as GasIcon } from './gas-icon.svg';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
@@ -14,8 +17,13 @@ import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styl
 type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
-  const token = useAppSelector(selectPoolTokenFormatted);
+  const tokenFormatted = useAppSelector(selectPoolTokenFormatted);
   const slippageFormatted = useAppSelector(selectSlippageFormatted);
+  const accountInitialMarginPostTradeCompactFormatted = useAppSelector(
+    selectProspectiveSwapAccountInitialMarginPostTradeCompactFormatted,
+  );
+  const notionalAmountFormatted = useAppSelector(selectUserInputNotionalCompactFormatted);
+  const receivingRateFormatted = useAppSelector(selectReceivingRateFormatted);
   const feeFormatted = useAppSelector(selectProspectiveSwapFeeFormatted);
   const { gasFeeFormatted, gasTokenFormatted } = useAppSelector(selectGasInfoFormatted);
 
@@ -27,9 +35,9 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={token}
+          token={`${accountInitialMarginPostTradeCompactFormatted.compactSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
-          value={feeFormatted}
+          value={accountInitialMarginPostTradeCompactFormatted.compactNumber}
         />
       </TransactionDetailBox>
       <TransactionDetailBox>
@@ -38,9 +46,9 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={token}
+          token="%"
           typographyToken="secondaryBodySmallRegular"
-          value={feeFormatted}
+          value={receivingRateFormatted}
         />
       </TransactionDetailBox>
       <TransactionDetailBox>
@@ -49,9 +57,9 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={token}
+          token={`${notionalAmountFormatted.compactSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
-          value={feeFormatted}
+          value={notionalAmountFormatted.compactNumber}
         />
       </TransactionDetailBox>
       <TransactionDetailBox>
@@ -71,7 +79,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </Typography>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={token}
+          token={tokenFormatted}
           typographyToken="secondaryBodySmallRegular"
           value={feeFormatted}
         />
@@ -85,7 +93,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
         </IconTextWrapper>
         <TokenTypography
           colorToken="lavenderWeb"
-          token={` ${gasTokenFormatted}`}
+          token={gasTokenFormatted}
           typographyToken="secondaryBodySmallRegular"
           value={gasFeeFormatted}
         />

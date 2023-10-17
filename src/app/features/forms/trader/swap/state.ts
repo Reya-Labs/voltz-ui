@@ -81,6 +81,7 @@ export const initialState: SliceState = {
   prospectiveSwap: {
     swapSimulation: {
       value: {
+        accountInitialMarginPostTrade: 0,
         marginRequirement: 0,
         maxMarginWithdrawable: 0,
         averageFixedRate: 0,

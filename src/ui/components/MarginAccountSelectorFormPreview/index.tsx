@@ -17,7 +17,7 @@ import {
 import { MarginAccountsForSwapLPSearchField } from './MarginAccountsForSwapLPSearchField';
 
 type MarginAccountSelectorFormPreviewProps = {
-  poolToken: string;
+  poolTokenFormatted: string;
   balanceCompactFormatted: CompactFormatParts;
   initialMarginPretradeValueFormatted: CompactFormatParts;
   marginAccountsUI: MarginAccountForSwapLPUI[];
@@ -29,7 +29,7 @@ type MarginAccountSelectorFormPreviewProps = {
 export const MarginAccountSelectorFormPreview: React.FunctionComponent<
   MarginAccountSelectorFormPreviewProps
 > = ({
-  poolToken,
+  poolTokenFormatted,
   balanceCompactFormatted,
   initialMarginPretradeValueFormatted,
   marginAccountsUI,
@@ -79,7 +79,7 @@ export const MarginAccountSelectorFormPreview: React.FunctionComponent<
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            token={`${balanceCompactFormatted.compactSuffix} ${(poolToken || '').toUpperCase()}`}
+            token={`${balanceCompactFormatted.compactSuffix}${poolTokenFormatted}`}
             typographyToken="secondaryBodySmallRegular"
             value={balanceCompactFormatted.compactNumber}
           />
@@ -90,9 +90,7 @@ export const MarginAccountSelectorFormPreview: React.FunctionComponent<
           </Typography>
           <TokenTypography
             colorToken="lavenderWeb"
-            token={`${initialMarginPretradeValueFormatted.compactSuffix} ${(
-              poolToken || ''
-            ).toUpperCase()}`}
+            token={`${initialMarginPretradeValueFormatted.compactSuffix}${poolTokenFormatted}`}
             typographyToken="secondaryBodySmallRegular"
             value={initialMarginPretradeValueFormatted.compactNumber}
           />

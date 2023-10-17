@@ -4,7 +4,6 @@ import { useAppSelector } from '../../../../app';
 import {
   selectProspectiveSwapMode,
   selectSwapFormPool,
-  selectTradeTokenFormatted,
 } from '../../../../app/features/forms/trader/swap';
 import { CashflowCalculator } from '../../../components/CashflowCalculator';
 import {
@@ -23,7 +22,6 @@ import { TransactionDetails } from './TransactionDetails';
 export const Form: React.FunctionComponent = () => {
   const pool = useAppSelector(selectSwapFormPool);
   const mode = useAppSelector(selectProspectiveSwapMode);
-  const tradeToken = useAppSelector(selectTradeTokenFormatted);
   if (!pool) {
     return null;
   }
@@ -43,7 +41,7 @@ export const Form: React.FunctionComponent = () => {
           </TransactionDetailsBox>
           <SubmitButton />
         </FormBox>
-        <CashflowCalculator mode={mode} pool={pool} token={tradeToken} />
+        <CashflowCalculator mode={mode} pool={pool} />
       </FormOuterBox>
     </React.Fragment>
   );

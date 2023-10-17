@@ -43,14 +43,6 @@ export const selectPoolTokenFormatted = (state: RootState) => {
   return formatUnderlyingTokenName(selectSwapFormPool(state));
 };
 
-export const selectTradeTokenFormatted = (state: RootState) => {
-  const marginAccount = state.swapForm.marginAccount;
-  if (!marginAccount?.settlementToken || !state.swapForm.pool) {
-    return '$';
-  }
-  return state.swapForm.pool.underlyingToken.name;
-};
-
 export const selectPoolToken = (state: RootState) => {
   const pool = selectSwapFormPool(state);
   if (!pool) {
@@ -80,7 +72,8 @@ export const selectSwapFormMarginAccountForSwapLPUI = (state: RootState) => {
 export const selectUserInputMode = (state: RootState) => state.swapForm.userInput.mode;
 export const selectUserInputNotionalInfo = (state: RootState) =>
   state.swapForm.userInput.notionalAmount;
-
+export const selectUserInputNotionalCompactFormatted = (state: RootState) =>
+  formCompactFormatToParts(state.swapForm.userInput.notionalAmount.value);
 export const selectProspectiveSwapMode = (state: RootState) =>
   getProspectiveSwapMode(state.swapForm);
 export const selectProspectiveSwapNotionalFormatted = (state: RootState) => {
@@ -92,6 +85,21 @@ export const selectProspectiveSwapFeeFormatted = (state: RootState) => {
   }
 
   return '--';
+};
+
+export const selectProspectiveSwapAccountInitialMarginPostTradeCompactFormatted = (
+  state: RootState,
+) => {
+  if (state.swapForm.prospectiveSwap.swapSimulation.status === 'success') {
+    return formCompactFormatToParts(
+      state.swapForm.prospectiveSwap.swapSimulation.value.accountInitialMarginPostTrade,
+    );
+  }
+
+  return {
+    compactNumber: '--',
+    compactSuffix: '',
+  };
 };
 
 export const selectGasInfoFormatted = (state: RootState) => {
@@ -138,6 +146,18 @@ export const selectNewPositionCompactNotional = (state: RootState) => {
     compactNotionalSuffix: compactParts.compactSuffix,
     compactNotionalNumber: compactParts.compactNumber,
   };
+};
+
+export const selectReceivingRateFormatted = (state: RootState) => {
+  const receiveFixedRateInfo = selectReceiveFixedRateInfo(state);
+  const variableRateInfo = selectVariableRateInfo(state);
+  const mode = selectUserInputMode(state);
+  const receiveFixedRate = receiveFixedRateInfo ? formatNumber(receiveFixedRateInfo) : '--';
+  const variableRate = variableRateInfo ? formatNumber(variableRateInfo) : '--';
+  if (mode === 'fixed') {
+    return receiveFixedRate;
+  }
+  return variableRate;
 };
 
 export const selectSlippageFormatted = (state: RootState) => {
