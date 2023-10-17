@@ -42,7 +42,7 @@ export const Form: React.FunctionComponent = () => {
           </TransactionDetailsBox>
           <SubmitButton />
         </FormBox>
-        <CashflowCalculator mode={mode} pool={pool} />
+        <CashflowCalculator mode={mode} pool={pool} token="$" />
       </FormOuterBox>
     </React.Fragment>
   );

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Tokens } from '@voltz-protocol/api-sdk-v2';
 import { GetExpectedCashflowResult } from '@voltz-protocol/sdk-v2';
 
 import { getPoolProtocol } from '../../../utilities/amm';
@@ -11,15 +12,17 @@ const slice = createSlice({
   name: 'cashflowCalculator',
   initialState,
   reducers: {
-    setCashflowPoolAction: (
+    setCashflowPoolAndTokenAction: (
       state,
       {
-        payload: { pool },
+        payload: { pool, token },
       }: PayloadAction<{
         pool: V2Pool;
+        token: Tokens | '$';
       }>,
     ) => {
       state.pool = pool;
+      state.token = token;
     },
     setEstimatedVariableApyAction: (
       state,
@@ -53,11 +56,11 @@ const slice = createSlice({
       .addCase(getExpectedCashflowThunk.fulfilled, (state, { payload }) => {
         const expectedCashflowInfo = payload as GetExpectedCashflowResult;
         state.cashflowInfo = {
-          totalCashflowUSD: expectedCashflowInfo.totalCashflowUSD,
+          totalCashflow: expectedCashflowInfo.totalCashflow,
           status: 'success',
         };
       });
   },
 });
-export const { setCashflowPoolAction, setEstimatedVariableApyAction } = slice.actions;
+export const { setCashflowPoolAndTokenAction, setEstimatedVariableApyAction } = slice.actions;
 export const cashflowCalculatorReducer = slice.reducer;
