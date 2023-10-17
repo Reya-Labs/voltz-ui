@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AMM, ExpectedCashflowInfo } from '@voltz-protocol/v1-sdk';
 
-import { getAmmProtocol } from '../../../utilities/amm';
+import { getAmmProtocol } from '../../../../utilities/amm';
 import { pushEstimatedApyChangeEvent } from './analytics';
 import { initialState } from './state';
 import { getExpectedCashflowInfoThunk } from './thunks';
 
 const slice = createSlice({
-  name: 'historicalRates',
+  name: 'deprecatedCashflowCalculator',
   initialState,
   reducers: {
     setCashflowAMMAction: (
@@ -63,4 +63,4 @@ const slice = createSlice({
   },
 });
 export const { setCashflowAMMAction, setEstimatedApyAction } = slice.actions;
-export const cashflowCalculatorReducer = slice.reducer;
+export const deprecatedCashflowCalculatorReducer = slice.reducer;

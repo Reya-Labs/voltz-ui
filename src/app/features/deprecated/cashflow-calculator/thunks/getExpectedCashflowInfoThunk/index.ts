@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ExpectedCashflowInfo, Position } from '@voltz-protocol/v1-sdk';
 
-import { RootState } from '../../../../store';
-import { rejectThunkWithError } from '../../../helpers';
+import { RootState } from '../../../../../store';
+import { rejectThunkWithError } from '../../../../helpers';
 
 export const getExpectedCashflowInfoThunk = createAsyncThunk<
   Awaited<ExpectedCashflowInfo | ReturnType<typeof rejectThunkWithError>>,
@@ -16,7 +16,7 @@ export const getExpectedCashflowInfoThunk = createAsyncThunk<
   'swapForm/getExpectedCashflowInfo',
   async ({ position, averageFixedRate, variableTokenDeltaBalance }, thunkAPI) => {
     try {
-      const state = thunkAPI.getState().cashflowCalculator;
+      const state = thunkAPI.getState().deprecatedCashflowCalculator;
       const amm = state.aMM;
       if (!amm) {
         return;

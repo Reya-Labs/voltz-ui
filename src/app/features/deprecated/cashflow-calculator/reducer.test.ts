@@ -1,8 +1,8 @@
 import { ExpectedCashflowInfo } from '@voltz-protocol/v1-sdk';
 
-import { getAmmProtocol } from '../../../utilities/amm';
+import { getAmmProtocol } from '../../../../utilities/amm';
 import { pushEstimatedApyChangeEvent } from './analytics';
-import { cashflowCalculatorReducer, setCashflowAMMAction } from './reducer';
+import { deprecatedCashflowCalculatorReducer, setCashflowAMMAction } from './reducer';
 import { initialState, SliceState } from './state';
 import { getExpectedCashflowInfoThunk } from './thunks';
 
@@ -10,11 +10,11 @@ jest.mock('./analytics', () => ({
   pushEstimatedApyChangeEvent: jest.fn(),
 }));
 
-jest.mock('../../../utilities/amm', () => ({
+jest.mock('../../../../utilities/amm', () => ({
   getAmmProtocol: jest.fn(),
 }));
 
-describe('cashflowCalculatorReducer', () => {
+describe('deprecatedCashflowCalculatorReducer', () => {
   let state: SliceState;
 
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('cashflowCalculatorReducer', () => {
 
   it('should set the cashflow AMM', () => {
     const amm = jest.fn() as never;
-    const nextState = cashflowCalculatorReducer(
+    const nextState = deprecatedCashflowCalculatorReducer(
       {} as never,
       setCashflowAMMAction({
         amm,
@@ -37,10 +37,10 @@ describe('cashflowCalculatorReducer', () => {
     const account = '0x123';
     const mode = 'fixed';
     const action = {
-      type: 'historicalRates/setEstimatedApyAction',
+      type: 'deprecatedCashflowCalculator/setEstimatedApyAction',
       payload: { value, account, mode },
     };
-    const nextState = cashflowCalculatorReducer(state, action);
+    const nextState = deprecatedCashflowCalculatorReducer(state, action);
     expect(nextState.estimatedApy).toEqual(value);
   });
 
@@ -50,11 +50,11 @@ describe('cashflowCalculatorReducer', () => {
     const mode = 'fixed';
     const amm = jest.fn() as never;
     const action = {
-      type: 'historicalRates/setEstimatedApyAction',
+      type: 'deprecatedCashflowCalculator/setEstimatedApyAction',
       payload: { value, account, mode },
     };
     (getAmmProtocol as jest.Mock).mockReturnValue('POOL');
-    const nextState = cashflowCalculatorReducer({ ...state, aMM: amm }, action);
+    const nextState = deprecatedCashflowCalculatorReducer({ ...state, aMM: amm }, action);
     expect(pushEstimatedApyChangeEvent).toHaveBeenCalledWith({
       estimatedApy: value,
       account,
@@ -66,14 +66,14 @@ describe('cashflowCalculatorReducer', () => {
   });
 
   it('should set the cashflowInfo status to pending when getExpectedCashflowInfoThunk is pending', () => {
-    const nextState = cashflowCalculatorReducer(state, {
+    const nextState = deprecatedCashflowCalculatorReducer(state, {
       type: getExpectedCashflowInfoThunk.pending,
     });
     expect(nextState.cashflowInfo.status).toEqual('pending');
   });
 
   it('should set the cashflowInfo status to error when getExpectedCashflowInfoThunk is rejected', () => {
-    const nextState = cashflowCalculatorReducer(state, {
+    const nextState = deprecatedCashflowCalculatorReducer(state, {
       type: getExpectedCashflowInfoThunk.rejected,
     });
     expect(nextState.cashflowInfo.status).toEqual('error');
@@ -91,7 +91,7 @@ describe('cashflowCalculatorReducer', () => {
       type: getExpectedCashflowInfoThunk.fulfilled,
       payload: expectedCashflowInfo,
     };
-    const nextState = cashflowCalculatorReducer(state, action);
+    const nextState = deprecatedCashflowCalculatorReducer(state, action);
     expect(nextState.cashflowInfo).toEqual({
       averageFixedRate: expectedCashflowInfo.averageFixedRate,
       accruedCashflowExistingPosition: expectedCashflowInfo.accruedCashflowExistingPosition,

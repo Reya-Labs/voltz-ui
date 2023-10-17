@@ -1,4 +1,4 @@
-import { pushEvent } from '../../../../utilities/googleAnalytics';
+import { pushEvent } from '../../../../../utilities/googleAnalytics';
 
 type EstimatedApyChangeEventParams = {
   estimatedApy: number;

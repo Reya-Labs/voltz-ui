@@ -15,7 +15,7 @@ import {
   selectVariableRateInfo,
   setCashflowAMMAction,
   setEstimatedApyAction,
-} from '../../../app/features/cashflow-calculator';
+} from '../../../app/features/deprecated/cashflow-calculator';
 import { formFormatNumber } from '../../../app/features/forms/common';
 import { stringToBigFloat } from '../../../utilities/number';
 import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';

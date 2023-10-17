@@ -12,7 +12,7 @@ describe('cashflow-calculator.selectors', () => {
   describe('selectCashflowAMM', () => {
     it('should return the AMM object from the state', () => {
       const mockState = {
-        cashflowCalculator: {
+        deprecatedCashflowCalculator: {
           aMM: {
             address: '0x123456789abcdef',
             name: 'Test AMM',
@@ -31,7 +31,7 @@ describe('cashflow-calculator.selectors', () => {
 
   describe('selectAMMTokenFormatted', () => {
     const mockState = {
-      cashflowCalculator: {
+      deprecatedCashflowCalculator: {
         aMM: {
           id: '1',
           underlyingToken: {
@@ -48,7 +48,7 @@ describe('cashflow-calculator.selectors', () => {
 
     it('returns an empty string when aMM is not defined', () => {
       const emptyState = {
-        cashflowCalculator: {
+        deprecatedCashflowCalculator: {
           aMM: undefined,
         },
       } as never;
@@ -62,7 +62,7 @@ describe('cashflow-calculator.selectors', () => {
   describe('selectCashflowInfoStatus', () => {
     it('should return the cashflow status from the state', () => {
       const mockState = {
-        cashflowCalculator: {
+        deprecatedCashflowCalculator: {
           cashflowInfo: {
             status: 'success',
           },
@@ -76,7 +76,7 @@ describe('cashflow-calculator.selectors', () => {
   describe('selectAdditionalCashflow', () => {
     it('should return null if cashflowInfo status is not success', () => {
       const mockState = {
-        cashflowCalculator: {
+        deprecatedCashflowCalculator: {
           cashflowInfo: {
             status: 'pending',
             estimatedAdditionalCashflow: jest.fn(),
@@ -89,7 +89,7 @@ describe('cashflow-calculator.selectors', () => {
 
     it('should call estimatedAdditionalCashflow with the estimatedApy value', () => {
       const mockState = {
-        cashflowCalculator: {
+        deprecatedCashflowCalculator: {
           estimatedApy: 0.05,
           cashflowInfo: {
             status: 'success',
@@ -99,7 +99,7 @@ describe('cashflow-calculator.selectors', () => {
       };
       const result = selectAdditionalCashflow(mockState as never);
       expect(
-        mockState.cashflowCalculator.cashflowInfo.estimatedAdditionalCashflow,
+        mockState.deprecatedCashflowCalculator.cashflowInfo.estimatedAdditionalCashflow,
       ).toHaveBeenCalledWith(0.05);
       expect(result).toEqual(1234.56);
     });
@@ -108,7 +108,7 @@ describe('cashflow-calculator.selectors', () => {
   describe('selectTotalCashflow', () => {
     it('should return null if cashflowInfo status is not success', () => {
       const mockState = {
-        cashflowCalculator: {
+        deprecatedCashflowCalculator: {
           cashflowInfo: {
             status: 'pending',
             estimatedTotalCashflow: jest.fn(),
@@ -121,7 +121,7 @@ describe('cashflow-calculator.selectors', () => {
 
     it('should call estimatedTotalCashflow with the estimatedApy value', () => {
       const mockState = {
-        cashflowCalculator: {
+        deprecatedCashflowCalculator: {
           estimatedApy: 0.05,
           cashflowInfo: {
             status: 'success',
@@ -131,9 +131,9 @@ describe('cashflow-calculator.selectors', () => {
       };
 
       const result = selectTotalCashflow(mockState as never);
-      expect(mockState.cashflowCalculator.cashflowInfo.estimatedTotalCashflow).toHaveBeenCalledWith(
-        0.05,
-      );
+      expect(
+        mockState.deprecatedCashflowCalculator.cashflowInfo.estimatedTotalCashflow,
+      ).toHaveBeenCalledWith(0.05);
       expect(result).toEqual(5678.9);
     });
   });
@@ -141,7 +141,7 @@ describe('cashflow-calculator.selectors', () => {
   describe('selectEstimatedApy', () => {
     it('should return the estimated APY value from the state', () => {
       const mockState = {
-        cashflowCalculator: {
+        deprecatedCashflowCalculator: {
           estimatedApy: 0.05,
         },
       };
@@ -153,7 +153,7 @@ describe('cashflow-calculator.selectors', () => {
   describe('selectVariableRateInfo', () => {
     it('returns the variable rate info from the cashflow calculator slice of state', () => {
       const state = {
-        cashflowCalculator: {
+        deprecatedCashflowCalculator: {
           aMM: {
             variableApy: 0.5,
           },
