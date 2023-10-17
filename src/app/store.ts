@@ -4,7 +4,7 @@ import logger from 'redux-logger';
 import { alphaPassClaimFlowReducer } from './features/alpha-pass-claim-flow';
 import { alphaPassVerificationFlowReducer } from './features/alpha-pass-verification-flow';
 import { aMMsReducer } from './features/aMMs';
-import { cashflowCalculatorModalReducer } from './features/cashflow-calculator-modal';
+import { cashflowCalculatorReducer } from './features/cashflow-calculator';
 import { depositFlowReducer } from './features/deposit-flow';
 import { deprecatedCashflowCalculatorReducer } from './features/deprecated/cashflow-calculator';
 import { lpFormReducer } from './features/forms/lps/lp';
@@ -33,7 +33,7 @@ const rootReducer = combineReducers({
   tradingLeague: tradingLeagueReducer,
   lpForm: lpFormReducer,
   deprecatedCashflowCalculator: deprecatedCashflowCalculatorReducer,
-  cashflowCalculatorModal: cashflowCalculatorModalReducer,
+  cashflowCalculator: cashflowCalculatorReducer,
   rolloverSwapForm: rolloverSwapFormReducer,
   settleFlow: settleFlowReducer,
   rolloverLpForm: rolloverLpFormReducer,

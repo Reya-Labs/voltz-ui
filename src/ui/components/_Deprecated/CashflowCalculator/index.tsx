@@ -1,24 +1,25 @@
+import { AMM, Position } from '@voltz-protocol/v1-sdk';
 import { CurrencyField, LabelTokenTypography, Typography, TypographyToken } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../../app';
-import { V2Pool } from '../../../app/features/aMMs';
+import { useAppDispatch, useAppSelector } from '../../../../app';
 import {
-  getExpectedCashflowThunk,
+  getExpectedCashflowInfoThunk,
   selectAdditionalCashflow,
+  selectAMMTokenFormatted,
+  selectCashflowAMM,
   selectCashflowInfoStatus,
-  selectCashflowPool,
-  selectEstimatedVariableApy,
-  selectPoolTokenFormatted,
+  selectEstimatedApy,
   selectTotalCashflow,
-  setCashflowPoolAction,
-  setEstimatedVariableApyAction,
-} from '../../../app/features/cashflow-calculator-modal';
-import { formFormatNumber } from '../../../app/features/forms/common';
-import { stringToBigFloat } from '../../../utilities/number';
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
-import { useWallet } from '../../hooks/useWallet';
+  selectVariableRateInfo,
+  setCashflowAMMAction,
+  setEstimatedApyAction,
+} from '../../../../app/features/deprecated/cashflow-calculator';
+import { formFormatNumber } from '../../../../app/features/forms/common';
+import { stringToBigFloat } from '../../../../utilities/number';
+import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
+import { useWallet } from '../../../hooks/useWallet';
 import {
   AdditionalCashFlowBox,
   CashFlowCalculatorBox,
@@ -26,22 +27,29 @@ import {
   CashFlowCalculatorRightBox,
   ExpectedApyBox,
   TotalCashFlowBox,
-} from './CashflowCalculatorModal.styled';
+} from './CashflowCalculator.styled';
 
-type CashflowCalculatorModalProps = {
-  pool: V2Pool;
+type CashFlowCalculatorProps = {
+  position: Position | null;
+  aMM: AMM;
+  averageFixedRate: number | null;
+  variableTokenDeltaBalance: number | null;
   mode: 'fixed' | 'variable';
 };
 
-export const CashflowCalculatorModal: React.FunctionComponent<CashflowCalculatorModalProps> = ({
-  pool,
+export const DeprecatedCashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps> = ({
+  aMM,
+  position,
+  averageFixedRate,
+  variableTokenDeltaBalance,
   mode,
 }) => {
   const dispatch = useAppDispatch();
-  const cashflowPool = useAppSelector(selectCashflowPool);
-  const token = useAppSelector(selectPoolTokenFormatted);
+  const cashflowAMM = useAppSelector(selectCashflowAMM);
+  const token = useAppSelector(selectAMMTokenFormatted);
   const { isLargeDesktopDevice } = useResponsiveQuery();
-  const estimatedApy = useAppSelector(selectEstimatedVariableApy);
+  const variableRateInfo = useAppSelector(selectVariableRateInfo);
+  const estimatedApy = useAppSelector(selectEstimatedApy);
   const { account } = useWallet();
 
   const additionalCashflow = useAppSelector(selectAdditionalCashflow);
@@ -55,7 +63,7 @@ export const CashflowCalculatorModal: React.FunctionComponent<CashflowCalculator
     () =>
       debounce((value: number) => {
         dispatch(
-          setEstimatedVariableApyAction({
+          setEstimatedApyAction({
             value,
             account: account || '',
             mode,
@@ -67,22 +75,38 @@ export const CashflowCalculatorModal: React.FunctionComponent<CashflowCalculator
 
   useEffect(() => {
     dispatch(
-      setCashflowPoolAction({
-        pool,
+      setCashflowAMMAction({
+        amm: aMM,
       }),
     );
-  }, [dispatch, pool]);
+  }, [dispatch, aMM]);
 
   useEffect(() => {
     setLocalEstimatedApy(estimatedApy.toString());
   }, [estimatedApy]);
 
   useEffect(() => {
-    if (!cashflowPool) {
+    if (variableRateInfo === undefined) {
       return;
     }
-    void dispatch(getExpectedCashflowThunk());
-  }, [dispatch, cashflowPool]);
+    debouncedChangePredictedApy(parseFloat(variableRateInfo.toFixed(2)));
+  }, [debouncedChangePredictedApy, variableRateInfo]);
+
+  useEffect(() => {
+    if (!cashflowAMM) {
+      return;
+    }
+    if (averageFixedRate === null || variableTokenDeltaBalance === null) {
+      return;
+    }
+    void dispatch(
+      getExpectedCashflowInfoThunk({
+        position,
+        averageFixedRate,
+        variableTokenDeltaBalance,
+      }),
+    );
+  }, [dispatch, cashflowAMM, position, averageFixedRate, variableTokenDeltaBalance]);
 
   const handleOnChange = useCallback(
     (value?: string) => {
@@ -102,7 +126,7 @@ export const CashflowCalculatorModal: React.FunctionComponent<CashflowCalculator
     };
   }, []);
 
-  if (!cashflowPool) {
+  if (!cashflowAMM) {
     return null;
   }
 

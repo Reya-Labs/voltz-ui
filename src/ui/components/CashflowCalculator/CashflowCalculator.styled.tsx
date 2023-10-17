@@ -35,12 +35,6 @@ export const ExpectedApyBox = styled('div')`
   width: 264px;
 `;
 
-export const AdditionalCashFlowBox = styled('div')`
-  box-sizing: border-box;
-  border-left: 1px solid ${colors.liberty5};
-  padding: 0px 16px;
-`;
-
 export const TotalCashFlowBox = styled('div')`
   box-sizing: border-box;
   border-left: 1px solid ${colors.liberty5};

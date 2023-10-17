@@ -8,7 +8,7 @@ import { initialState } from './state';
 import { getExpectedCashflowThunk } from './thunks';
 
 const slice = createSlice({
-  name: 'cashflowCalculatorModal',
+  name: 'cashflowCalculator',
   initialState,
   reducers: {
     setCashflowPoolAction: (
@@ -54,11 +54,10 @@ const slice = createSlice({
         const expectedCashflowInfo = payload as GetExpectedCashflowResult;
         state.cashflowInfo = {
           totalCashflowUSD: expectedCashflowInfo.totalCashflowUSD,
-          additionalCashflowUSD: expectedCashflowInfo.additionalCashflowUSD,
           status: 'success',
         };
       });
   },
 });
 export const { setCashflowPoolAction, setEstimatedVariableApyAction } = slice.actions;
-export const cashflowCalculatorModalReducer = slice.reducer;
+export const cashflowCalculatorReducer = slice.reducer;

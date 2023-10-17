@@ -7,7 +7,6 @@ export type SliceState = {
   estimatedVariableApy: number;
   cashflowInfo: {
     totalCashflowUSD: number;
-    additionalCashflowUSD: number;
     status: ThunkStatus;
   };
 };
@@ -17,7 +16,6 @@ export const initialState: SliceState = {
   estimatedVariableApy: 0,
   cashflowInfo: {
     totalCashflowUSD: 0,
-    additionalCashflowUSD: 0,
     status: 'idle',
   },
 };

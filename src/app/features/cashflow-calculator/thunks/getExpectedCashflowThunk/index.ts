@@ -8,9 +8,9 @@ export const getExpectedCashflowThunk = createAsyncThunk<
   Awaited<GetExpectedCashflowResult | ReturnType<typeof rejectThunkWithError>>,
   void,
   { state: RootState }
->('swapForm/getExpectedCashflowThunk', async (_, thunkAPI) => {
+>('cashflowCalculator/getExpectedCashflowThunk', async (_, thunkAPI) => {
   try {
-    const state = thunkAPI.getState().cashflowCalculatorModal;
+    const state = thunkAPI.getState().cashflowCalculator;
     const pool = state.pool;
     if (!pool) {
       return;

@@ -7,7 +7,7 @@ import {
   MarginAccountBox,
   TitleBox,
   TransactionDetailsBox,
-} from '../../../components/Deprecated/FormStyled';
+} from '../../../components/_Deprecated/FormStyled';
 import { FixedRangeFields } from './FixedRangeFields';
 import { LeverageField } from './LeverageField';
 import { MarginAccount } from './MarginAccount';

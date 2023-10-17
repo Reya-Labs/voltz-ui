@@ -5,7 +5,7 @@ import {
   selectProspectiveSwapMode,
   selectSwapFormPool,
 } from '../../../../app/features/forms/trader/swap';
-import { CashflowCalculatorModal } from '../../../components/CashflowCalculatorModal';
+import { CashflowCalculator } from '../../../components/CashflowCalculator';
 import {
   FormBox,
   FormOuterBox,
@@ -42,7 +42,7 @@ export const Form: React.FunctionComponent = () => {
           </TransactionDetailsBox>
           <SubmitButton />
         </FormBox>
-        <CashflowCalculatorModal mode={mode} pool={pool} />
+        <CashflowCalculator mode={mode} pool={pool} />
       </FormOuterBox>
     </React.Fragment>
   );

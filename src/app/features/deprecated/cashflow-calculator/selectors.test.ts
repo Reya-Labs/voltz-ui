@@ -1,5 +1,4 @@
 import {
-  selectAdditionalCashflow,
   selectAMMTokenFormatted,
   selectCashflowAMM,
   selectCashflowInfoStatus,
@@ -70,38 +69,6 @@ describe('cashflow-calculator.selectors', () => {
       };
       const result = selectCashflowInfoStatus(mockState as never);
       expect(result).toEqual('success');
-    });
-  });
-
-  describe('selectAdditionalCashflow', () => {
-    it('should return null if cashflowInfo status is not success', () => {
-      const mockState = {
-        deprecatedCashflowCalculator: {
-          cashflowInfo: {
-            status: 'pending',
-            estimatedAdditionalCashflow: jest.fn(),
-          },
-        },
-      };
-      const result = selectAdditionalCashflow(mockState as never);
-      expect(result).toBeNull();
-    });
-
-    it('should call estimatedAdditionalCashflow with the estimatedApy value', () => {
-      const mockState = {
-        deprecatedCashflowCalculator: {
-          estimatedApy: 0.05,
-          cashflowInfo: {
-            status: 'success',
-            estimatedAdditionalCashflow: jest.fn().mockReturnValue(1234.56),
-          },
-        },
-      };
-      const result = selectAdditionalCashflow(mockState as never);
-      expect(
-        mockState.deprecatedCashflowCalculator.cashflowInfo.estimatedAdditionalCashflow,
-      ).toHaveBeenCalledWith(0.05);
-      expect(result).toEqual(1234.56);
     });
   });
 
