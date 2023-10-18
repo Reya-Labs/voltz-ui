@@ -11,7 +11,7 @@ describe('getGasInfoFormatted', () => {
     const result = getGasInfoFormatted({ gasDetails, status } as never);
 
     expect(result.gasFeeFormatted).toEqual('0.0012');
-    expect(result.gasTokenFormatted).toEqual('ETH');
+    expect(result.gasTokenFormatted).toEqual(' ETH');
   });
 
   it('should return "--" when gas details and status are not provided', () => {

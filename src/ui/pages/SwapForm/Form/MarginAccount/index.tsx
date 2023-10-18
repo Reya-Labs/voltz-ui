@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { useAppSelector } from '../../../../../app';
 import {
+  selectPoolToken,
   selectPoolTokenFormatted,
   selectSwapFormMarginAccountForSwapLPUI,
 } from '../../../../../app/features/forms/trader/swap';
@@ -14,7 +15,8 @@ export const MarginAccount: React.FunctionComponent = () => {
   const { ammId, poolId } = useParams();
   const navigate = useAppNavigate();
   const poolTokenFormatted = useAppSelector(selectPoolTokenFormatted);
-  const { marginAccountsUI, loading } = useMarginAccountsForSwapLP(ammId, poolTokenFormatted);
+  const poolToken = useAppSelector(selectPoolToken);
+  const { marginAccountsUI, loading } = useMarginAccountsForSwapLP(ammId, poolToken);
   const selectedMarginAccountUI = useAppSelector(selectSwapFormMarginAccountForSwapLPUI);
   if (!selectedMarginAccountUI || !poolTokenFormatted) {
     return null;
