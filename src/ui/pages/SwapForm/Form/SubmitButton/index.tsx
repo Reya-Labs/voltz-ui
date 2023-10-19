@@ -2,10 +2,10 @@ import React, { useCallback } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
+  openDepositAndSwapConfirmationFlowAction,
   openSwapConfirmationFlowAction,
   selectInfoPostSwap,
   selectSubmitButtonInfo,
-  selectSubmitButtonText,
 } from '../../../../../app/features/forms/trader/swap';
 import { FormSubmitButton } from '../../../../components/FormSubmitButton';
 
@@ -14,13 +14,15 @@ type SubmitButtonProps = {};
 export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
   const dispatch = useAppDispatch();
   const submitButtonInfo = useAppSelector(selectSubmitButtonInfo);
-  const submitButtonText = useAppSelector(selectSubmitButtonText);
   const infoPostSwap = useAppSelector(selectInfoPostSwap);
 
   const handleButtonClick = useCallback(() => {
     switch (submitButtonInfo.state) {
       case 'swap':
         void dispatch(openSwapConfirmationFlowAction());
+        break;
+      case 'deposit-and-swap':
+        void dispatch(openDepositAndSwapConfirmationFlowAction());
         break;
       default:
         break;
@@ -41,7 +43,7 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
       loading={infoPostSwap.status === 'pending'}
       onClick={handleButtonClick}
     >
-      {submitButtonText}
+      {submitButtonInfo.text}
     </FormSubmitButton>
   );
 };

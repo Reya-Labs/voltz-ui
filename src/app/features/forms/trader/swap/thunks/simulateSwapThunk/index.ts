@@ -1,11 +1,19 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
-import { simulateSwapMarginAccount, SimulateSwapMarginAccountResult } from '@voltz-protocol/sdk-v2';
+import {
+  simulateDepositAndSwapMarginAccount,
+  simulateSwapMarginAccount,
+  SimulateSwapMarginAccountResult,
+} from '@voltz-protocol/sdk-v2';
 
 import { RootState } from '../../../../../../store';
 import { rejectThunkWithError } from '../../../../../helpers';
 import { isUserInputNotionalError } from '../../../../common';
 import { initialState } from '../../state';
-import { getProspectiveSwapMode, getProspectiveSwapNotional } from '../../utils';
+import {
+  getProspectiveSwapMode,
+  getProspectiveSwapNotional,
+  isDepositAndSwapFlow,
+} from '../../utils';
 
 export const simulateSwapHandler: AsyncThunkPayloadCreator<
   Awaited<
@@ -46,20 +54,24 @@ export const simulateSwapHandler: AsyncThunkPayloadCreator<
     const notionalAmount = prospectiveSwapNotional;
     const notional = prospectiveSwapMode === 'fixed' ? -notionalAmount : notionalAmount;
 
-    const infoPostSwapV1 = await simulateSwapMarginAccount({
-      ammId: pool.id,
-      notional,
-      signer,
-      marginAccountId: marginAccount.id,
-    });
-
-    // TODO: FB evaluate before launch
-    // margin requirement is collateral only now
-    if (infoPostSwapV1.marginRequirement > infoPostSwapV1.fee) {
-      infoPostSwapV1.marginRequirement -= infoPostSwapV1.fee;
-    } else {
-      infoPostSwapV1.marginRequirement = 0;
-    }
+    const infoPostSwapV1 = isDepositAndSwapFlow(swapFormState)
+      ? await simulateDepositAndSwapMarginAccount({
+          ammId: pool.id,
+          notional,
+          signer,
+          marginAccountId: marginAccount.id,
+          // TODO: FB evaluate before launch
+          deposit: {
+            amount: 0,
+            token: 'eth',
+          },
+        })
+      : await simulateSwapMarginAccount({
+          ammId: pool.id,
+          notional,
+          signer,
+          marginAccountId: marginAccount.id,
+        });
 
     return {
       notionalAmount,

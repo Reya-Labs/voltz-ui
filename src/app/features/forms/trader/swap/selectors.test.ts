@@ -8,7 +8,6 @@ import {
   selectInfoPostSwap,
   selectIsGetInfoPostSwapLoading,
   selectIsLeverageDisabled,
-  selectMarginRequirementFormatted,
   selectNewPositionCompactNotional,
   selectNewPositionPayingRate,
   selectNewPositionReceivingRate,
@@ -19,7 +18,6 @@ import {
   selectProspectiveSwapNotionalFormatted,
   selectSlippageFormatted,
   selectSubmitButtonInfo,
-  selectSubmitButtonText,
   selectSwapConfirmationFlowError,
   selectSwapConfirmationFlowEtherscanLink,
   selectSwapConfirmationFlowStep,
@@ -737,41 +735,6 @@ describe('swap-form.selectors', () => {
     });
   });
 
-  describe('selectSubmitButtonText', () => {
-    it('returns the correct text for the "paused" state', () => {
-      const state = {
-        swapForm: {
-          submitButton: {
-            state: 'paused',
-          },
-        },
-      };
-      expect(selectSubmitButtonText(state as never)).toBe('Paused');
-    });
-
-    it('returns the correct text for the "swap" state', () => {
-      const state = {
-        swapForm: {
-          submitButton: {
-            state: 'swap',
-          },
-        },
-      };
-      expect(selectSubmitButtonText(state as never)).toBe('Swap');
-    });
-
-    it('returns the correct text for the "connect-wallet" state', () => {
-      const state = {
-        swapForm: {
-          submitButton: {
-            state: 'connect-wallet',
-          },
-        },
-      };
-      expect(selectSubmitButtonText(state as never)).toBe('Connect Your Wallet to Start Trading');
-    });
-  });
-
   describe('selectIsLeverageDisabled', () => {
     const mockState = {
       swapForm: jest.fn(),
@@ -881,48 +844,6 @@ describe('swap-form.selectors', () => {
       const result = selectVariableRateValueFormatted(state as never);
       expect(result).toBe('formatted_123.456');
       expect(formatNumber).toHaveBeenCalledWith(123.456);
-    });
-  });
-
-  describe('selectMarginRequirementFormatted', () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-
-    it('should return formatted margin requirement when swapSimulation status is success', () => {
-      const state = {
-        swapForm: {
-          prospectiveSwap: {
-            swapSimulation: {
-              status: 'success',
-              value: {
-                marginRequirement: 0.05,
-              },
-            },
-          },
-        },
-      };
-      (formatNumber as jest.Mock).mockImplementationOnce((value: number) => String(value));
-
-      const result = selectMarginRequirementFormatted(state as never);
-
-      expect(result).toEqual('0.05');
-      expect(formatNumber).toHaveBeenCalledWith(0.05, 2, 4);
-    });
-
-    it('should return -- when swapSimulation status is not success', () => {
-      const state = {
-        swapForm: {
-          prospectiveSwap: {
-            swapSimulation: {
-              status: 'pending',
-            },
-          },
-        },
-      };
-
-      const result = selectMarginRequirementFormatted(state as never);
-      expect(result).toEqual('--');
     });
   });
 });

@@ -6,12 +6,18 @@ import { MarginAccountForSwapLP } from '../../../margin-accounts-for-swap-lp';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
-type SubmitButtonState = 'swap' | 'connect-wallet' | 'paused';
+type SubmitButtonState =
+  | 'swap'
+  | 'deposit-and-swap'
+  | 'connect-wallet'
+  | 'paused'
+  | 'select-margin-account';
 
 export type SliceState = {
   submitButton: {
     state: SubmitButtonState;
     disabled: boolean;
+    text: string;
     message: {
       text: string | null;
       type: 'error' | 'warning' | 'info';
@@ -49,12 +55,22 @@ export type SliceState = {
     error: string | null;
     txHash: string | null;
   };
+  depositAndSwapConfirmationFlow: {
+    step:
+      | 'depositAndSwapConfirmation'
+      | 'waitingForDepositAndSwapConfirmation'
+      | 'depositAndSwapCompleted'
+      | null;
+    error: string | null;
+    txHash: string | null;
+  };
 };
 
 export const initialState: SliceState = {
   submitButton: {
     state: 'connect-wallet',
     disabled: true,
+    text: 'Connect Wallet',
     message: {
       text: null,
       type: 'info',
@@ -82,6 +98,7 @@ export const initialState: SliceState = {
     swapSimulation: {
       value: {
         accountInitialMarginPostTrade: 0,
+        // TODO: FB evaluate before launch
         marginRequirement: 0,
         maxMarginWithdrawable: 0,
         averageFixedRate: 0,
@@ -96,6 +113,11 @@ export const initialState: SliceState = {
     },
   },
   swapConfirmationFlow: {
+    step: null,
+    error: null,
+    txHash: null,
+  },
+  depositAndSwapConfirmationFlow: {
     step: null,
     error: null,
     txHash: null,

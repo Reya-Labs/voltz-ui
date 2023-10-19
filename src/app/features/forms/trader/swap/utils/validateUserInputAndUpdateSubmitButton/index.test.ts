@@ -14,6 +14,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
   it('should update the submit button state to connect-wallet if pool is null', () => {
     const state = {
       pool: null,
+      marginAccount: {},
       maxNotionalAvailable: {
         status: 'success',
         value: 1000,
@@ -48,6 +49,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
     const expected = {
       state: 'connect-wallet',
       disabled: true,
+      text: 'Connect Wallet',
       message: {
         text: 'Almost ready',
         type: 'info',
@@ -69,6 +71,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
         status: 'success',
         value: 500,
       },
+      marginAccount: {},
       prospectiveSwap: {
         swapSimulation: {
           status: 'success',
@@ -94,6 +97,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
     };
     const expected = {
       state: 'connect-wallet',
+      text: 'Connect Wallet',
       disabled: true,
       message: {
         text: 'Almost ready',

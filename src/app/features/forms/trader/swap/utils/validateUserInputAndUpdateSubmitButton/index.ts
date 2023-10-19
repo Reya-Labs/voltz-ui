@@ -2,6 +2,7 @@ import { Draft } from '@reduxjs/toolkit';
 
 import { isPoolPaused } from '../../../../../../../utilities/amm';
 import { SliceState } from '../../state';
+import { isDepositAndSwapFlow } from '../isDepositAndSwapFlow';
 import { validateUserInput } from '../validateUserInput';
 
 export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void => {
@@ -11,9 +12,23 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   const notionalInputted = state.userInput.notionalAmount.value;
   const emptyNotionalValue = notionalInputted <= 0;
 
-  if (!state.pool || !state.signer) {
+  if (!state.marginAccount) {
+    state.submitButton = {
+      state: 'select-margin-account',
+      text: 'Select a Margin Account',
+      disabled: true,
+      message: {
+        text: 'Almost ready',
+        type: 'info',
+      },
+    };
+    return;
+  }
+
+  if (!state.pool || !state.signer || !state.marginAccount) {
     state.submitButton = {
       state: 'connect-wallet',
+      text: 'Connect Wallet',
       disabled: true,
       message: {
         text: 'Almost ready',
@@ -26,10 +41,24 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
   if (isPoolPaused(state.pool)) {
     state.submitButton = {
       state: 'paused',
+      text: 'Paused',
       disabled: true,
       message: {
         text: 'Pool paused until further notice. Check Discord for updates.',
         type: 'warning',
+      },
+    };
+    return;
+  }
+
+  if (isDepositAndSwapFlow(state)) {
+    state.submitButton = {
+      state: 'deposit-and-swap',
+      text: 'Deposit to Swap',
+      disabled: Boolean(state.userInput.notionalAmount.error) || emptyNotionalValue,
+      message: {
+        text: emptyNotionalValue ? 'Almost ready' : '',
+        type: 'info',
       },
     };
     return;
@@ -79,6 +108,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
 
   state.submitButton = {
     state: 'swap',
+    text: 'Swap',
     disabled: Boolean(state.userInput.notionalAmount.error) || emptyNotionalValue,
     message: {
       text: emptyNotionalValue ? 'Almost ready' : '',

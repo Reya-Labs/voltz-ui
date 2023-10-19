@@ -12,11 +12,12 @@ import {
   MarginAccountBox,
   TransactionDetailsBox,
 } from '../../../components/FormStyled';
+import { DepositAndSwapConfirmationFlow } from './Flows/DepositAndSwapConfirmationFlow';
+import { SwapConfirmationFlow } from './Flows/SwapConfirmationFlow';
 import { MarginAccount } from './MarginAccount';
 import { NotionalAmountField } from './NotionalAmountField';
 import { NotionalSwap } from './NotionalSwap';
 import { SubmitButton } from './SubmitButton';
-import { SwapConfirmationFlow } from './SwapConfirmationFlow';
 import { TransactionDetails } from './TransactionDetails';
 
 export const Form: React.FunctionComponent = () => {
@@ -29,6 +30,7 @@ export const Form: React.FunctionComponent = () => {
   return (
     <React.Fragment>
       <SwapConfirmationFlow />
+      <DepositAndSwapConfirmationFlow />
       <FormOuterBox>
         <MarginAccountBox>
           <MarginAccount />

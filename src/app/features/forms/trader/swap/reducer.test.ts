@@ -68,7 +68,6 @@ describe('swapFormReducer', () => {
         expect(nextState.prospectiveSwap.swapSimulation).toEqual({
           value: {
             accountInitialMarginPostTrade: 0,
-            marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
             variableTokenDeltaBalance: 0,
@@ -158,7 +157,6 @@ describe('swapFormReducer', () => {
         expect(nextState.prospectiveSwap.swapSimulation).toEqual({
           value: {
             accountInitialMarginPostTrade: 0,
-            marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
             variableTokenDeltaBalance: 0,
@@ -179,7 +177,6 @@ describe('swapFormReducer', () => {
         expect(nextState.prospectiveSwap.swapSimulation).toEqual({
           value: {
             accountInitialMarginPostTrade: 0,
-            marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
             variableTokenDeltaBalance: 0,
@@ -205,7 +202,6 @@ describe('swapFormReducer', () => {
         expect(nextState.prospectiveSwap.swapSimulation).toEqual({
           value: {
             accountInitialMarginPostTrade: 0,
-            marginRequirement: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
             variableTokenDeltaBalance: 0,

@@ -179,8 +179,13 @@ export const selectSlippageFormatted = (state: RootState) => {
 
 export const selectSwapConfirmationFlowStep = (state: RootState) =>
   state.swapForm.swapConfirmationFlow.step;
+export const selectDepositAndSwapConfirmationFlowStep = (state: RootState) =>
+  state.swapForm.depositAndSwapConfirmationFlow.step;
 export const selectSwapConfirmationFlowError = (state: RootState) =>
   state.swapForm.swapConfirmationFlow.error;
+export const selectDepositAndSwapConfirmationFlowError = (state: RootState) =>
+  state.swapForm.depositAndSwapConfirmationFlow.error;
+
 export const selectSwapConfirmationButtonState = (
   state: RootState,
 ): {
@@ -195,7 +200,7 @@ export const selectSwapConfirmationButtonState = (
   const error = selectSwapConfirmationFlowError(state);
   if (step === 'swapConfirmation') {
     return {
-      text: error ? 'Confirm Swap' : 'Try to swap again',
+      text: !error ? 'Confirm Swap' : 'Try to swap again',
       disabled: false,
       message: {
         text: error || '',
@@ -235,11 +240,77 @@ export const selectSwapConfirmationButtonState = (
     },
   };
 };
+
+export const selectDepositAndSwapConfirmationButtonState = (
+  state: RootState,
+): {
+  text: string;
+  disabled: boolean;
+  message: {
+    text: string;
+    type: 'info' | 'warning' | 'error';
+  };
+} => {
+  const step = selectDepositAndSwapConfirmationFlowStep(state);
+  const error = selectDepositAndSwapConfirmationFlowError(state);
+  if (step === 'depositAndSwapConfirmation') {
+    return {
+      text: !error ? 'Deposit and Swap' : 'Try to swap again',
+      disabled: false,
+      message: {
+        text: error || '',
+        type: error ? 'error' : 'info',
+      },
+    };
+  }
+
+  if (step === 'waitingForDepositAndSwapConfirmation') {
+    return {
+      text: 'Deposit and Swap in progress',
+      disabled: true,
+      message: {
+        text: error || '',
+        type: error ? 'error' : 'info',
+      },
+    };
+  }
+
+  if (step === 'depositAndSwapCompleted') {
+    return {
+      text: 'Go to Portfolio',
+      disabled: false,
+      message: {
+        text: error || '',
+        type: error ? 'error' : 'info',
+      },
+    };
+  }
+
+  return {
+    text: 'Ooops',
+    disabled: true,
+    message: {
+      text: '',
+      type: 'info',
+    },
+  };
+};
+
 export const selectSwapConfirmationFlowEtherscanLink = (state: RootState) => {
   if (!state.swapForm.swapConfirmationFlow.txHash) {
     return undefined;
   }
   return getViewOnEtherScanLink(state.network.chainId, state.swapForm.swapConfirmationFlow.txHash);
+};
+
+export const selectDepositAndSwapConfirmationFlowEtherscanLink = (state: RootState) => {
+  if (!state.swapForm.depositAndSwapConfirmationFlow.txHash) {
+    return undefined;
+  }
+  return getViewOnEtherScanLink(
+    state.network.chainId,
+    state.swapForm.depositAndSwapConfirmationFlow.txHash,
+  );
 };
 
 export const selectVariableRate24hDelta = (state: RootState) => {
@@ -271,10 +342,4 @@ export const selectFixedRateValueFormatted = (state: RootState) => {
 
 export const selectVariableRateValueFormatted = (state: RootState) => {
   return !state.swapForm.pool ? '--' : formatNumber(state.swapForm.pool.currentVariableRate);
-};
-
-export const selectMarginRequirementFormatted = (state: RootState) => {
-  return state.swapForm.prospectiveSwap.swapSimulation.status === 'success'
-    ? formatNumber(state.swapForm.prospectiveSwap.swapSimulation.value.marginRequirement, 2, 4)
-    : '--';
 };

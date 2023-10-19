@@ -5,7 +5,12 @@ import { ContractReceipt, providers } from 'ethers';
 import { V2Pool } from '../../../aMMs';
 import { MarginAccountForSwapLP } from '../../../margin-accounts-for-swap-lp';
 import { initialState } from './state';
-import { getMaxNotionalAvailableThunk, simulateSwapThunk, swapThunk } from './thunks';
+import {
+  depositAndSwapThunk,
+  getMaxNotionalAvailableThunk,
+  simulateSwapThunk,
+  swapThunk,
+} from './thunks';
 import { validateUserInputAndUpdateSubmitButton } from './utils';
 
 const slice = createSlice({
@@ -18,6 +23,16 @@ const slice = createSlice({
     },
     closeSwapConfirmationFlowAction: (state) => {
       state.swapConfirmationFlow = {
+        step: null,
+        error: null,
+        txHash: null,
+      };
+    },
+    openDepositAndSwapConfirmationFlowAction: (state) => {
+      state.depositAndSwapConfirmationFlow.step = 'depositAndSwapConfirmation';
+    },
+    closeDepositAndSwapConfirmationFlowAction: (state) => {
+      state.depositAndSwapConfirmationFlow = {
         step: null,
         error: null,
         txHash: null,
@@ -164,6 +179,27 @@ const slice = createSlice({
           error: null,
           txHash: (payload as ContractReceipt).transactionHash,
         };
+      })
+      .addCase(depositAndSwapThunk.pending, (state) => {
+        state.depositAndSwapConfirmationFlow = {
+          step: 'waitingForDepositAndSwapConfirmation',
+          error: null,
+          txHash: null,
+        };
+      })
+      .addCase(depositAndSwapThunk.rejected, (state, { payload }) => {
+        state.depositAndSwapConfirmationFlow = {
+          step: 'depositAndSwapConfirmation',
+          error: payload as string,
+          txHash: null,
+        };
+      })
+      .addCase(depositAndSwapThunk.fulfilled, (state, { payload }) => {
+        state.depositAndSwapConfirmationFlow = {
+          step: 'depositAndSwapCompleted',
+          error: null,
+          txHash: (payload as ContractReceipt).transactionHash,
+        };
       });
   },
 });
@@ -175,6 +211,8 @@ export const {
   setNotionalAmountAction,
   openSwapConfirmationFlowAction,
   closeSwapConfirmationFlowAction,
+  openDepositAndSwapConfirmationFlowAction,
+  closeDepositAndSwapConfirmationFlowAction,
   resetInfoPostSwapAction,
   setSwapFormSignerAction,
 } = slice.actions;

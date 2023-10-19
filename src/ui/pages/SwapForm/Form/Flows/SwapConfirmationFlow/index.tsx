@@ -2,7 +2,7 @@ import { Button, CloseButton, Dialog, Typography } from 'brokoli-ui';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { routes, useAppDispatch, useAppSelector } from '../../../../../app';
+import { routes, useAppDispatch, useAppSelector } from '../../../../../../app';
 import {
   closeSwapConfirmationFlowAction,
   selectSwapConfirmationButtonState,
@@ -10,9 +10,10 @@ import {
   selectSwapConfirmationFlowStep,
   selectSwapFormMarginAccount,
   swapThunk,
-} from '../../../../../app/features/forms/trader/swap';
-import { resetPortfolioStateAction } from '../../../../../app/features/portfolio';
-import { ExplorerLink } from '../../../../components/ExplorerLink';
+} from '../../../../../../app/features/forms/trader/swap';
+import { resetPortfolioStateAction } from '../../../../../../app/features/portfolio';
+import { ExplorerLink } from '../../../../../components/ExplorerLink';
+import { SwapDetails } from '../SwapDetails';
 import {
   ButtonBox,
   MarginAccountBox,
@@ -20,7 +21,6 @@ import {
   SwapDetailsBox,
   TitleBox,
 } from './SwapConfirmationFlow.styled';
-import { SwapDetails } from './SwapDetails';
 
 export const SwapConfirmationFlow: React.FunctionComponent = () => {
   const navigate = useNavigate();
