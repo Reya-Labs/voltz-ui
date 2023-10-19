@@ -347,8 +347,8 @@ describe('swap-form.selectors', () => {
       const mockRootState = {
         swapForm: {
           userInput: {
-            marginAmount: {
-              editMode: 'add',
+            notionalAmount: {
+              value: 0,
             },
           },
           prospectiveSwap: {
@@ -372,8 +372,8 @@ describe('swap-form.selectors', () => {
       const mockRootState = {
         swapForm: {
           userInput: {
-            marginAmount: {
-              editMode: 'add',
+            notionalAmount: {
+              value: 0,
             },
           },
           prospectiveSwap: {

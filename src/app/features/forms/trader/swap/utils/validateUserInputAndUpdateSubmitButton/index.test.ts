@@ -32,8 +32,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
         },
       },
       userInput: {
-        marginAmount: {
-          editMode: 'add',
+        notionalAmount: {
           value: 600,
         },
       },
@@ -80,8 +79,7 @@ describe('validateUserInputAndUpdateSubmitButton', () => {
         },
       },
       userInput: {
-        marginAmount: {
-          editMode: 'add',
+        notionalAmount: {
           value: 600,
         },
       },

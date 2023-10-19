@@ -24,6 +24,6 @@ export const getGasInfoFormatted = ({
 
   return {
     gasFeeFormatted: '--',
-    gasTokenFormatted: '--',
+    gasTokenFormatted: '',
   };
 };

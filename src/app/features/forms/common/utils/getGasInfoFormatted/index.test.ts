@@ -21,7 +21,7 @@ describe('getGasInfoFormatted', () => {
     const result = getGasInfoFormatted({ gasDetails, status } as never);
 
     expect(result.gasFeeFormatted).toEqual('--');
-    expect(result.gasTokenFormatted).toEqual('--');
+    expect(result.gasTokenFormatted).toEqual('');
   });
 
   it('should return "--" when status is not "success"', () => {
@@ -34,6 +34,6 @@ describe('getGasInfoFormatted', () => {
     const result = getGasInfoFormatted({ gasDetails, status } as never);
 
     expect(result.gasFeeFormatted).toEqual('--');
-    expect(result.gasTokenFormatted).toEqual('--');
+    expect(result.gasTokenFormatted).toEqual('');
   });
 });

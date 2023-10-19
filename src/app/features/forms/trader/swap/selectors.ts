@@ -181,11 +181,65 @@ export const selectSwapConfirmationFlowStep = (state: RootState) =>
   state.swapForm.swapConfirmationFlow.step;
 export const selectSwapConfirmationFlowError = (state: RootState) =>
   state.swapForm.swapConfirmationFlow.error;
+export const selectSwapConfirmationButtonState = (
+  state: RootState,
+): {
+  text: string;
+  disabled: boolean;
+  message: {
+    text: string;
+    type: 'info' | 'warning' | 'error';
+  };
+} => {
+  const step = selectSwapConfirmationFlowStep(state);
+  const error = selectSwapConfirmationFlowError(state);
+  if (step === 'swapConfirmation') {
+    return {
+      text: error ? 'Confirm Swap' : 'Try to swap again',
+      disabled: false,
+      message: {
+        text: error || '',
+        type: error ? 'error' : 'info',
+      },
+    };
+  }
+
+  if (step === 'waitingForSwapConfirmation') {
+    return {
+      text: 'Swap in progress',
+      disabled: true,
+      message: {
+        text: error || '',
+        type: error ? 'error' : 'info',
+      },
+    };
+  }
+
+  if (step === 'swapCompleted') {
+    return {
+      text: 'Go to Portfolio',
+      disabled: false,
+      message: {
+        text: error || '',
+        type: error ? 'error' : 'info',
+      },
+    };
+  }
+
+  return {
+    text: 'Ooops',
+    disabled: true,
+    message: {
+      text: '',
+      type: 'info',
+    },
+  };
+};
 export const selectSwapConfirmationFlowEtherscanLink = (state: RootState) => {
-  return getViewOnEtherScanLink(
-    state.network.chainId,
-    state.swapForm.swapConfirmationFlow.txHash || '',
-  );
+  if (!state.swapForm.swapConfirmationFlow.txHash) {
+    return undefined;
+  }
+  return getViewOnEtherScanLink(state.network.chainId, state.swapForm.swapConfirmationFlow.txHash);
 };
 
 export const selectVariableRate24hDelta = (state: RootState) => {

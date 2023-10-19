@@ -19,10 +19,6 @@ export const SubmitButton: React.FunctionComponent<SubmitButtonProps> = () => {
 
   const handleButtonClick = useCallback(() => {
     switch (submitButtonInfo.state) {
-      // TODO: FB - Should be part of the deposit flow
-      // case 'approve':
-      //   void dispatch(approvePoolUnderlyingTokenThunk());
-      //   break;
       case 'swap':
         void dispatch(openSwapConfirmationFlowAction());
         break;

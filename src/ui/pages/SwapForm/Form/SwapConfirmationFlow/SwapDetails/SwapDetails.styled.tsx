@@ -18,3 +18,8 @@ export const SwapDetailBox = styled('div')`
   justify-content: space-between;
   width: 100%;
 `;
+
+export const HorizontalLineBox = styled('div')`
+  padding: 24px 0;
+  width: 100%;
+`;

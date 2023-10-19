@@ -7,6 +7,10 @@ import { validateUserInput } from '../validateUserInput';
 export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>): void => {
   validateUserInput(state);
 
+  // validateUserInput mutates the state
+  const notionalInputted = state.userInput.notionalAmount.value;
+  const emptyNotionalValue = notionalInputted <= 0;
+
   if (!state.pool || !state.signer) {
     state.submitButton = {
       state: 'connect-wallet',
@@ -75,9 +79,9 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
 
   state.submitButton = {
     state: 'swap',
-    disabled: true,
+    disabled: Boolean(state.userInput.notionalAmount.error) || emptyNotionalValue,
     message: {
-      text: 'Almost ready',
+      text: emptyNotionalValue ? 'Almost ready' : '',
       type: 'info',
     },
   };

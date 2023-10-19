@@ -20,6 +20,14 @@ export const TitleBox = styled('div')`
   padding: 0px;
 `;
 
+export const MarginAccountBox = styled('div')`
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+`;
+
 export const SwapDetailsBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
@@ -30,7 +38,7 @@ export const SwapDetailsBox = styled('div')`
   gap: 16px;
 `;
 
-export const SwapFeeDetailsBox = styled('div')`
+export const ButtonBox = styled('div')`
   box-sizing: border-box;
   width: 100%;
   display: flex;
