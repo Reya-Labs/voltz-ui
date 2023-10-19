@@ -20,6 +20,7 @@ const slice = createSlice({
       }>,
     ) => {
       state.pool = pool;
+      state.estimatedVariableApy = pool.currentVariableRate;
     },
     setEstimatedVariableApyAction: (
       state,
