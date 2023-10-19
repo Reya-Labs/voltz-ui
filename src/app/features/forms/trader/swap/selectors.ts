@@ -1,8 +1,11 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
-import { formatNumber } from '../../../../../utilities/number';
+import { compactFormat, compactFormatToParts, formatNumber } from '../../../../../utilities/number';
 import { RootState } from '../../../../store';
-import { mapMarginAccountForSwapLPToMarginAccountForSwapLPUI } from '../../../_common';
+import {
+  mapAvailableAmountMarginAccountDepositToAvailableAmountsUI,
+  mapMarginAccountForSwapLPToMarginAccountForSwapLPUI,
+} from '../../../_common';
 import { formatPoolMaturity, formatUnderlyingTokenName } from '../../../helpers';
 import {
   formCompactFormat,
@@ -293,6 +296,38 @@ export const selectDepositAndSwapConfirmationButtonState = (
       text: '',
       type: 'info',
     },
+  };
+};
+
+export const selectMarginAccountAvailableAmountsLoadedState = (state: RootState) => {
+  return state.swapForm.depositAndSwapConfirmationFlow.availableAmountsLoadedState;
+};
+
+export const selectMarginAccountAvailableAmountsLoading = (state: RootState): boolean => {
+  const loadedState = selectMarginAccountAvailableAmountsLoadedState(state);
+  return loadedState === 'idle' || loadedState === 'pending';
+};
+
+export const selectMarginAccountAvailableAmounts = (state: RootState) => {
+  const isLoading = selectMarginAccountAvailableAmountsLoading(state);
+  return isLoading
+    ? []
+    : state.swapForm.depositAndSwapConfirmationFlow.availableAmounts.map(
+        mapAvailableAmountMarginAccountDepositToAvailableAmountsUI,
+      );
+};
+
+// TODO: FB evaluate before launch - refactor #2
+export const selectMarginAccountUserInputFormatted = (state: RootState) => {
+  const userInput = state.swapForm.depositAndSwapConfirmationFlow.userInput;
+
+  return {
+    amount: userInput.amount,
+    amountFormatted: compactFormatToParts(userInput.amount),
+    maxAmount: userInput.maxAmount,
+    maxAmountFormatted: compactFormat(userInput.maxAmount),
+    maxAmountUSDFormatted: compactFormat(userInput.maxAmountUSD),
+    token: userInput.token,
   };
 };
 

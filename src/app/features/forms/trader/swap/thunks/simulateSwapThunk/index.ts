@@ -1,4 +1,5 @@
 import { AsyncThunkPayloadCreator, createAsyncThunk } from '@reduxjs/toolkit';
+import { Tokens } from '@voltz-protocol/api-sdk-v2';
 import {
   simulateDepositAndSwapMarginAccount,
   simulateSwapMarginAccount,
@@ -25,9 +26,9 @@ export const simulateSwapHandler: AsyncThunkPayloadCreator<
       }
     | ReturnType<typeof rejectThunkWithError>
   >,
-  void,
+  { deposit?: { amount: number; token: Tokens } },
   { state: RootState }
-> = async (_, thunkAPI) => {
+> = async ({ deposit }, thunkAPI) => {
   try {
     const swapFormState = thunkAPI.getState().swapForm;
     const { pool, signer, marginAccount } = swapFormState;
@@ -54,24 +55,21 @@ export const simulateSwapHandler: AsyncThunkPayloadCreator<
     const notionalAmount = prospectiveSwapNotional;
     const notional = prospectiveSwapMode === 'fixed' ? -notionalAmount : notionalAmount;
 
-    const infoPostSwapV1 = isDepositAndSwapFlow(swapFormState)
-      ? await simulateDepositAndSwapMarginAccount({
-          ammId: pool.id,
-          notional,
-          signer,
-          marginAccountId: marginAccount.id,
-          // TODO: FB evaluate before launch
-          deposit: {
-            amount: 0,
-            token: 'eth',
-          },
-        })
-      : await simulateSwapMarginAccount({
-          ammId: pool.id,
-          notional,
-          signer,
-          marginAccountId: marginAccount.id,
-        });
+    const infoPostSwapV1 =
+      isDepositAndSwapFlow(swapFormState) && deposit
+        ? await simulateDepositAndSwapMarginAccount({
+            ammId: pool.id,
+            notional,
+            signer,
+            marginAccountId: marginAccount.id,
+            deposit,
+          })
+        : await simulateSwapMarginAccount({
+            ammId: pool.id,
+            notional,
+            signer,
+            marginAccountId: marginAccount.id,
+          });
 
     return {
       notionalAmount,
@@ -94,6 +92,6 @@ export const simulateSwapThunk = createAsyncThunk<
       }
     | ReturnType<typeof rejectThunkWithError>
   >,
-  void,
+  { deposit?: { amount: number; token: Tokens } },
   { state: RootState }
 >('swapForm/simulateSwap', simulateSwapHandler);

@@ -25,7 +25,7 @@ export const validateUserInputAndUpdateSubmitButton = (state: Draft<SliceState>)
     return;
   }
 
-  if (!state.pool || !state.signer || !state.marginAccount) {
+  if (!state.pool || !state.signer) {
     state.submitButton = {
       state: 'connect-wallet',
       text: 'Connect Wallet',

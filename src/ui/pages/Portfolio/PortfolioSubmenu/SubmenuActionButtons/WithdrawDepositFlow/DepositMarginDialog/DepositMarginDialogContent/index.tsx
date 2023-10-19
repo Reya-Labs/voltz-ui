@@ -105,7 +105,7 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
       }),
     );
   }, [dispatch, signer, step, token]);
-
+  // TODO: FB evaluate before launch - refactor #1
   const debouncedDepositSimulation = useMemo(
     () =>
       debounce(

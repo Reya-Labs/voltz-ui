@@ -3,6 +3,10 @@ import { SimulateSwapMarginAccountResult } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt, providers } from 'ethers';
 
 import { V2Pool } from '../../../aMMs';
+import {
+  AvailableAmountForMarginAccountDeposit,
+  fetchAvailableAmountsToDepositForMarginAccountThunk,
+} from '../../../deposit-flow';
 import { MarginAccountForSwapLP } from '../../../margin-accounts-for-swap-lp';
 import { initialState } from './state';
 import {
@@ -17,7 +21,10 @@ const slice = createSlice({
   name: 'swapForm',
   initialState,
   reducers: {
-    resetStateAction: () => initialState,
+    resetStateAction: () => {
+      validateUserInputAndUpdateSubmitButton(initialState);
+      return initialState;
+    },
     openSwapConfirmationFlowAction: (state) => {
       state.swapConfirmationFlow.step = 'swapConfirmation';
     },
@@ -33,9 +40,7 @@ const slice = createSlice({
     },
     closeDepositAndSwapConfirmationFlowAction: (state) => {
       state.depositAndSwapConfirmationFlow = {
-        step: null,
-        error: null,
-        txHash: null,
+        ...initialState.depositAndSwapConfirmationFlow,
       };
     },
     setUserInputModeAction: (
@@ -67,11 +72,6 @@ const slice = createSlice({
       }
       validateUserInputAndUpdateSubmitButton(state);
     },
-    resetInfoPostSwapAction: (state) => {
-      state.prospectiveSwap.swapSimulation = {
-        ...initialState.prospectiveSwap.swapSimulation,
-      };
-    },
     setSwapFormPoolAction: (
       state,
       {
@@ -81,6 +81,7 @@ const slice = createSlice({
       }>,
     ) => {
       state.pool = pool;
+      validateUserInputAndUpdateSubmitButton(state);
     },
     setSwapFormMarginAccountAction: (
       state,
@@ -91,6 +92,7 @@ const slice = createSlice({
       }>,
     ) => {
       state.marginAccount = marginAccount;
+      validateUserInputAndUpdateSubmitButton(state);
     },
     setSwapFormSignerAction: (
       state,
@@ -101,6 +103,30 @@ const slice = createSlice({
       }>,
     ) => {
       state.signer = signer;
+      validateUserInputAndUpdateSubmitButton(state);
+    },
+    // TODO: FB evaluate before launch - refactor potentially
+    marginAmountDepositFlowValueChangeAction: (
+      state,
+      {
+        payload: { value, maxAmount, maxAmountUSD, token },
+      }: PayloadAction<{
+        value: number;
+        maxAmount?: number;
+        maxAmountUSD?: number;
+        token: AvailableAmountForMarginAccountDeposit['token'];
+      }>,
+    ) => {
+      state.depositAndSwapConfirmationFlow.userInput.amount = value;
+      if (maxAmount !== undefined) {
+        state.depositAndSwapConfirmationFlow.userInput.maxAmount = maxAmount;
+      }
+      if (maxAmountUSD !== undefined) {
+        state.depositAndSwapConfirmationFlow.userInput.maxAmountUSD = maxAmountUSD;
+      }
+      if (token) {
+        state.depositAndSwapConfirmationFlow.userInput.token = token;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -126,6 +152,7 @@ const slice = createSlice({
       })
       .addCase(simulateSwapThunk.pending, (state) => {
         state.prospectiveSwap.swapSimulation = {
+          ...initialState.prospectiveSwap.swapSimulation,
           value: initialState.prospectiveSwap.swapSimulation.value,
           status: 'pending',
         };
@@ -181,26 +208,43 @@ const slice = createSlice({
         };
       })
       .addCase(depositAndSwapThunk.pending, (state) => {
-        state.depositAndSwapConfirmationFlow = {
-          step: 'waitingForDepositAndSwapConfirmation',
-          error: null,
-          txHash: null,
-        };
+        state.depositAndSwapConfirmationFlow.step = 'waitingForDepositAndSwapConfirmation';
+        state.depositAndSwapConfirmationFlow.error = null;
+        state.depositAndSwapConfirmationFlow.txHash = null;
       })
       .addCase(depositAndSwapThunk.rejected, (state, { payload }) => {
-        state.depositAndSwapConfirmationFlow = {
-          step: 'depositAndSwapConfirmation',
-          error: payload as string,
-          txHash: null,
-        };
+        state.depositAndSwapConfirmationFlow.step = 'depositAndSwapConfirmation';
+        state.depositAndSwapConfirmationFlow.error = payload as string;
+        state.depositAndSwapConfirmationFlow.txHash = null;
       })
       .addCase(depositAndSwapThunk.fulfilled, (state, { payload }) => {
-        state.depositAndSwapConfirmationFlow = {
-          step: 'depositAndSwapCompleted',
-          error: null,
-          txHash: (payload as ContractReceipt).transactionHash,
-        };
-      });
+        state.depositAndSwapConfirmationFlow.step = 'depositAndSwapCompleted';
+        state.depositAndSwapConfirmationFlow.error = null;
+        state.depositAndSwapConfirmationFlow.txHash = (payload as ContractReceipt).transactionHash;
+      })
+      .addCase(fetchAvailableAmountsToDepositForMarginAccountThunk.pending, (state) => {
+        state.depositAndSwapConfirmationFlow.availableAmountsLoadedState = 'pending';
+        state.depositAndSwapConfirmationFlow.availableAmounts = [];
+      })
+      .addCase(fetchAvailableAmountsToDepositForMarginAccountThunk.rejected, (state) => {
+        state.depositAndSwapConfirmationFlow.availableAmountsLoadedState = 'failed';
+        state.depositAndSwapConfirmationFlow.availableAmounts = [];
+      })
+      .addCase(
+        fetchAvailableAmountsToDepositForMarginAccountThunk.fulfilled,
+        (state, { payload }) => {
+          const availableAmounts = payload as AvailableAmountForMarginAccountDeposit[];
+          state.depositAndSwapConfirmationFlow.availableAmountsLoadedState = 'succeeded';
+          state.depositAndSwapConfirmationFlow.availableAmounts = availableAmounts;
+          if (availableAmounts.length > 0) {
+            const firstAvailableAmount = availableAmounts[0];
+            state.depositAndSwapConfirmationFlow.userInput.token = firstAvailableAmount.token;
+            state.depositAndSwapConfirmationFlow.userInput.maxAmount = firstAvailableAmount.value;
+            state.depositAndSwapConfirmationFlow.userInput.maxAmountUSD =
+              firstAvailableAmount.valueUSD;
+          }
+        },
+      );
   },
 });
 export const {
@@ -213,7 +257,7 @@ export const {
   closeSwapConfirmationFlowAction,
   openDepositAndSwapConfirmationFlowAction,
   closeDepositAndSwapConfirmationFlowAction,
-  resetInfoPostSwapAction,
   setSwapFormSignerAction,
+  marginAmountDepositFlowValueChangeAction,
 } = slice.actions;
 export const swapFormReducer = slice.reducer;

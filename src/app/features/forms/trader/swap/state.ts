@@ -2,6 +2,7 @@ import { SimulateSwapMarginAccountResult } from '@voltz-protocol/sdk-v2';
 import { providers } from 'ethers';
 
 import { V2Pool } from '../../../aMMs';
+import { AvailableAmountForMarginAccountDeposit } from '../../../deposit-flow';
 import { MarginAccountForSwapLP } from '../../../margin-accounts-for-swap-lp';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
@@ -60,9 +61,24 @@ export type SliceState = {
       | 'depositAndSwapConfirmation'
       | 'waitingForDepositAndSwapConfirmation'
       | 'depositAndSwapCompleted'
+      // | 'approveTokenError'
+      // | 'approvingToken'
       | null;
     error: string | null;
     txHash: string | null;
+    availableAmounts: AvailableAmountForMarginAccountDeposit[];
+    availableAmountsLoadedState: 'idle' | 'pending' | 'succeeded' | 'failed';
+    userInput: {
+      amount: number;
+      maxAmount: AvailableAmountForMarginAccountDeposit['value'];
+      maxAmountUSD: AvailableAmountForMarginAccountDeposit['valueUSD'];
+      token: undefined | AvailableAmountForMarginAccountDeposit['token'];
+    };
+    // required for approval flow, used to validate the deposit value against
+    walletTokenAllowance: {
+      value: number;
+      status: 'idle' | 'pending' | 'succeeded' | 'failed';
+    };
   };
 };
 
@@ -121,5 +137,17 @@ export const initialState: SliceState = {
     step: null,
     error: null,
     txHash: null,
+    availableAmounts: [],
+    availableAmountsLoadedState: 'idle',
+    userInput: {
+      amount: 0,
+      maxAmount: 0,
+      maxAmountUSD: 0,
+      token: undefined,
+    },
+    walletTokenAllowance: {
+      value: 0,
+      status: 'idle',
+    },
   },
 };

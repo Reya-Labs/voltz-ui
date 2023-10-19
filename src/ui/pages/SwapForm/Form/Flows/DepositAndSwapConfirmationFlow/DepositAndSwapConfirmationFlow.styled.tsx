@@ -35,7 +35,11 @@ export const SwapDetailsBox = styled('div')`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 16px;
+  gap: 8px;
+`;
+
+export const MarginAmountFieldBox = styled('div')`
+  width: 100%;
 `;
 
 export const ButtonBox = styled('div')`

@@ -29,7 +29,7 @@ export const NotionalSwap: React.FunctionComponent = () => {
           value,
         }),
       );
-      void dispatch(simulateSwapThunk());
+      void dispatch(simulateSwapThunk({}));
     },
     [dispatch],
   );

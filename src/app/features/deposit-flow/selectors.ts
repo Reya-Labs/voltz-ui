@@ -2,8 +2,10 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 
 import { compactFormat, compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
-import { mapMarginAccountToMarginAccountUI } from '../_common';
-import { mapAvailableAmountMarginAccountDepositToAvailableAmountsUI } from './helpers';
+import {
+  mapAvailableAmountMarginAccountDepositToAvailableAmountsUI,
+  mapMarginAccountToMarginAccountUI,
+} from '../_common';
 
 export const selectMarginAccountDepositFlowDisableMarginAccountSelection = (state: RootState) => {
   return state.depositFlow.disableMarginAccountSelection;
@@ -188,6 +190,7 @@ export const selectMarginAccountDepositFlowSelectedMarginAccountFormatted = (sta
   };
 };
 
+// TODO: FB evaluate before launch - refactor #2
 export const selectMarginAccountDepositFlowUserInputFormatted = (state: RootState) => {
   const userInput = state.depositFlow.userInput;
 

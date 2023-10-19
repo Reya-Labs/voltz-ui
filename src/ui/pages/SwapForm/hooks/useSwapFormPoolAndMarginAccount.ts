@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../../../app';
 import { V2Pool } from '../../../../app/features/aMMs';
+import { fetchAvailableAmountsToDepositForMarginAccountThunk } from '../../../../app/features/deposit-flow';
 import {
   selectPoolToken,
   selectSwapFormMarginAccount,
@@ -59,6 +60,13 @@ export const useSwapFormPoolAndMarginAccount = (): UseSwapFormPoolResult => {
         marginAccount: foundMarginAccount ? foundMarginAccount : null,
       }),
     );
+    if (foundMarginAccount) {
+      void dispatch(
+        fetchAvailableAmountsToDepositForMarginAccountThunk({
+          id: marginAccountId,
+        }),
+      );
+    }
   }, [dispatch, pool, marginAccounts, marginAccountsLoading, marginAccountId]);
 
   useEffect(() => {

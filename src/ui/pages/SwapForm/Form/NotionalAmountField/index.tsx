@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
-  resetInfoPostSwapAction,
   selectIsGetInfoPostSwapLoading,
   selectSwapFormPool,
   selectUserInputNotionalInfo,
@@ -34,8 +33,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const getInfoPostSwap = useCallback(() => {
     setGetInfoPostSwapNotional(localNotional);
-    dispatch(resetInfoPostSwapAction());
-    void dispatch(simulateSwapThunk());
+    void dispatch(simulateSwapThunk({}));
   }, [localNotional, dispatch]);
 
   const debouncedSetNotionalAmount = useMemo(
