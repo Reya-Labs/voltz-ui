@@ -131,6 +131,10 @@ export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps
         label="Expected Variable APY - Calculator"
         labelColorToken="lavenderWeb"
         labelTypographyToken={labelTypographyToken}
+        max={{
+          value: '100',
+          showButton: false,
+        }}
         token="%"
         tooltip="This shows the combined cashflow you could generate from your new position and your existing."
         value={localEstimatedApy}

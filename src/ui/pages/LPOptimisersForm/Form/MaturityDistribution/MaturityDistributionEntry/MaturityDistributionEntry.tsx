@@ -39,7 +39,10 @@ export const MaturityDistributionEntry: React.FunctionComponent<MaturityDistribu
           <CurrencyField
             allowNegativeValue={false}
             disabled={disabled}
-            max="100"
+            max={{
+              value: '100',
+              showButton: true,
+            }}
             min="0"
             suffix="%"
             value={value}

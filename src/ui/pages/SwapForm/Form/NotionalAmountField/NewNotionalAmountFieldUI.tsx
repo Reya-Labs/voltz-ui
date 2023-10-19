@@ -53,7 +53,14 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
         label="Notional Size"
         labelColorToken="lavenderWeb"
         labelTypographyToken={labelTypographyToken}
-        max={maxAvailableNotionalForMaxButton}
+        max={
+          maxAvailableNotionalForMaxButton
+            ? {
+                value: maxAvailableNotionalForMaxButton,
+                showButton: true,
+              }
+            : undefined
+        }
         maxLength={FormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When trading rates, the amount you receive and pay is calculated as a percentage of the notional value you choose."
