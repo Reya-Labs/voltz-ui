@@ -18,6 +18,7 @@ import {
   selectMarginAccountDepositFlowCTAText,
   selectMarginAccountDepositFlowDisableMarginAccountSelection,
   selectMarginAccountDepositFlowError,
+  selectMarginAccountDepositFlowHasSimulationError,
   selectMarginAccountDepositFlowMarginAccounts,
   selectMarginAccountDepositFlowMarginAccountsLoading,
   selectMarginAccountDepositFlowQueuedSelectedMarginAccountId,
@@ -42,6 +43,7 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
   const walletTokenAllowanceHasError = useAppSelector(
     selectMarginAccountDepositFlowWalletTokenAllowanceHasError,
   );
+  const hasSimulationError = useAppSelector(selectMarginAccountDepositFlowHasSimulationError);
   const { account, signer } = useWallet();
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectMarginAccountDepositFlowStep) === 'depositing';
@@ -77,6 +79,16 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
         getTokenAllowanceForPeripheryThunk({
           signer,
           tokenName: token,
+        }),
+      );
+      return;
+    }
+    if (hasSimulationError) {
+      void dispatch(
+        simulateDepositMarginFromMarginAccountThunk({
+          amount,
+          token,
+          marginAccountId: selectedMarginAccountId,
         }),
       );
       return;

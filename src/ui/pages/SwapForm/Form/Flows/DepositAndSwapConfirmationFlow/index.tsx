@@ -5,12 +5,17 @@ import { useNavigate } from 'react-router-dom';
 
 import { routes, useAppDispatch, useAppSelector } from '../../../../../../app';
 import {
+  approveTokenForPeripheryThunk,
   closeDepositAndSwapConfirmationFlowAction,
   depositAndSwapThunk,
+  getTokenAllowanceForPeripheryThunk,
   marginAmountDepositFlowValueChangeAction,
   selectDepositAndSwapConfirmationButtonState,
   selectDepositAndSwapConfirmationFlowEtherscanLink,
+  selectDepositAndSwapConfirmationFlowHasSimulationError,
+  selectDepositAndSwapConfirmationFlowShouldApproveToken,
   selectDepositAndSwapConfirmationFlowStep,
+  selectDepositAndSwapConfirmationFlowWalletTokenAllowanceHasError,
   selectMarginAccountAvailableAmounts,
   selectMarginAccountAvailableAmountsLoading,
   selectMarginAccountUserInputFormatted,
@@ -21,6 +26,7 @@ import { resetPortfolioStateAction } from '../../../../../../app/features/portfo
 import { AvailableAmountsUI } from '../../../../../../app/features/portfolio/types';
 import { localeParseFloat } from '../../../../../../utilities/localeParseFloat';
 import { ExplorerLink } from '../../../../../components/ExplorerLink';
+import { useWallet } from '../../../../../hooks/useWallet';
 import { MarginAmountField } from '../../../../Portfolio/PortfolioSubmenu/SubmenuActionButtons/WithdrawDepositFlow/MarginAmountField';
 import { SwapDetails } from '../SwapDetails';
 import {
@@ -33,12 +39,18 @@ import {
 } from './DepositAndSwapConfirmationFlow.styled';
 
 export const DepositAndSwapConfirmationFlow: React.FunctionComponent = () => {
+  const { signer } = useWallet();
   const navigate = useNavigate();
   const step = useAppSelector(selectDepositAndSwapConfirmationFlowStep);
+  const walletTokenAllowanceHasError = useAppSelector(
+    selectDepositAndSwapConfirmationFlowWalletTokenAllowanceHasError,
+  );
   const marginAccount = useAppSelector(selectSwapFormMarginAccount);
+  const hasSimulationError = useAppSelector(selectDepositAndSwapConfirmationFlowHasSimulationError);
   const dispatch = useAppDispatch();
   const { token, amount } = useAppSelector(selectMarginAccountUserInputFormatted);
   const availableAmountsLoading = useAppSelector(selectMarginAccountAvailableAmountsLoading);
+  const shouldApproveToken = useAppSelector(selectDepositAndSwapConfirmationFlowShouldApproveToken);
   const availableAmounts = useAppSelector(selectMarginAccountAvailableAmounts);
   const executeSwap = useCallback(() => {
     void dispatch(depositAndSwapThunk());
@@ -48,14 +60,62 @@ export const DepositAndSwapConfirmationFlow: React.FunctionComponent = () => {
     dispatch(resetPortfolioStateAction());
     navigate(`/${routes.PORTFOLIO_POSITIONS}`);
   }, [dispatch, navigate]);
-  const handleOnSubmitButtonClick = useCallback(() => {
+  const handleOnSubmitButtonClick = () => {
+    if (!token || !signer) {
+      return;
+    }
+
+    if (walletTokenAllowanceHasError) {
+      void dispatch(
+        getTokenAllowanceForPeripheryThunk({
+          signer,
+          tokenName: token,
+        }),
+      );
+      return;
+    }
+
+    if (hasSimulationError) {
+      void dispatch(
+        simulateSwapThunk({
+          deposit: {
+            amount,
+            token,
+          },
+        }),
+      );
+      return;
+    }
+
+    if (shouldApproveToken) {
+      void dispatch(
+        approveTokenForPeripheryThunk({
+          signer,
+          tokenName: token,
+        }),
+      );
+      return;
+    }
+
     if (step === 'depositAndSwapConfirmation') {
       executeSwap();
     }
     if (step === 'depositAndSwapCompleted') {
       visitPortfolio();
     }
-  }, [step, executeSwap, visitPortfolio]);
+  };
+
+  useEffect(() => {
+    if (step !== 'depositAndSwapConfirmation' || !signer || !token) {
+      return;
+    }
+    void dispatch(
+      getTokenAllowanceForPeripheryThunk({
+        signer,
+        tokenName: token,
+      }),
+    );
+  }, [dispatch, signer, step, token]);
 
   const etherscanLink = useAppSelector(selectDepositAndSwapConfirmationFlowEtherscanLink);
   const buttonState = useAppSelector(selectDepositAndSwapConfirmationButtonState);
@@ -145,16 +205,20 @@ export const DepositAndSwapConfirmationFlow: React.FunctionComponent = () => {
           </Typography>
         </MarginAccountBox>
         <SwapDetailsBox>
-          <MarginAmountFieldBox>
-            <MarginAmountField
-              disabled={availableAmountsLoading}
-              label="Amount to deposit"
-              marginAmountOptions={availableAmounts}
-              token={token}
-              value={amount.toString()}
-              onChange={handleMarginAmountOnChange}
-            />
-          </MarginAmountFieldBox>
+          {step !== 'depositAndSwapCompleted' ? (
+            <MarginAmountFieldBox>
+              <MarginAmountField
+                disabled={
+                  availableAmountsLoading || step === 'waitingForDepositAndSwapConfirmation'
+                }
+                label="Amount to deposit"
+                marginAmountOptions={availableAmounts}
+                token={token}
+                value={amount.toString()}
+                onChange={handleMarginAmountOnChange}
+              />
+            </MarginAmountFieldBox>
+          ) : null}
           <SwapDetails />
         </SwapDetailsBox>
         <ButtonBox>

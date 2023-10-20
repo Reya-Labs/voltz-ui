@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../../../app';
 import { V2Pool } from '../../../../app/features/aMMs';
-import { fetchAvailableAmountsToDepositForMarginAccountThunk } from '../../../../app/features/deposit-flow';
 import {
+  fetchAvailableAmountsToDepositForMarginAccountThunk,
   selectPoolToken,
   selectSwapFormMarginAccount,
   selectSwapFormPool,

@@ -244,6 +244,126 @@ export const selectSwapConfirmationButtonState = (
   };
 };
 
+export const selectDepositAndSwapConfirmationFlowHasSimulationError = (state: RootState) => {
+  return state.swapForm.prospectiveSwap.swapSimulation.status === 'error';
+};
+
+export const selectDepositAndSwapConfirmationFlowWalletTokenAllowanceHasError = (
+  state: RootState,
+) => {
+  const {
+    walletTokenAllowance: { status },
+  } = state.swapForm.depositAndSwapConfirmationFlow;
+  return status === 'failed';
+};
+
+export const selectDepositAndSwapConfirmationFlowWalletTokenAllowanceValue = (state: RootState) => {
+  if (state.swapForm.depositAndSwapConfirmationFlow.walletTokenAllowance.status === 'succeeded') {
+    return state.swapForm.depositAndSwapConfirmationFlow.walletTokenAllowance.value;
+  }
+  return 0;
+};
+
+export const selectDepositAndSwapConfirmationFlowShouldApproveToken = (state: RootState) => {
+  const {
+    userInput: { token, amount },
+  } = state.swapForm.depositAndSwapConfirmationFlow;
+  const simulationValue = state.swapForm.prospectiveSwap.swapSimulation.value;
+  if (!token || amount <= 0 || simulationValue === null) {
+    return false;
+  }
+  const value = selectDepositAndSwapConfirmationFlowWalletTokenAllowanceValue(state);
+  const fee = simulationValue.gasFee.value;
+  return amount + fee > value;
+};
+
+export const selectDepositAndSwapConfirmationFlowValidationError = (state: RootState) => {
+  const {
+    userInput: { amount, maxAmount },
+  } = state.swapForm.depositAndSwapConfirmationFlow;
+  if (amount <= 0) {
+    return {
+      validationError: '',
+      disableCTAButton: true,
+    };
+  }
+  if (selectDepositAndSwapConfirmationFlowHasSimulationError(state)) {
+    return {
+      validationError: 'Gas fee calculation failed',
+      disableCTAButton: false,
+    };
+  }
+  if (selectDepositAndSwapConfirmationFlowWalletTokenAllowanceHasError(state)) {
+    return {
+      validationError: 'Something went wrong, retry to fetch approve information.',
+      disableCTAButton: false,
+    };
+  }
+  if (amount > maxAmount) {
+    return {
+      validationError: 'You cannot deposit more than allowed maximum amount.',
+      disableCTAButton: true,
+    };
+  }
+  if (selectDepositAndSwapConfirmationFlowShouldApproveToken(state)) {
+    return {
+      validationError: 'You cannot deposit the inputted amount. Approve first!',
+      disableCTAButton: false,
+    };
+  }
+  return {
+    validationError: '',
+    disableCTAButton: false,
+  };
+};
+
+export const selectDepositAndSwapConfirmationFlowCTAText = (state: RootState) => {
+  const { token, amount } = state.swapForm.depositAndSwapConfirmationFlow.userInput;
+  const step = selectDepositAndSwapConfirmationFlowStep(state);
+  if (step === 'waitingForDepositAndSwapConfirmation') {
+    return 'Deposit and Swap in progress';
+  }
+  if (step === 'approvingToken') {
+    return 'Approval pending...';
+  }
+  if (amount <= 0) {
+    return 'Deposit and Swap';
+  }
+  if (selectDepositAndSwapConfirmationFlowHasSimulationError(state)) {
+    return 'Refresh Gas Calculation';
+  }
+  if (selectDepositAndSwapConfirmationFlowWalletTokenAllowanceHasError(state)) {
+    return 'Retry';
+  }
+  if (step === 'approveTokenError') {
+    return 'Try to approve again!';
+  }
+  if (selectDepositAndSwapConfirmationFlowShouldApproveToken(state)) {
+    return token ? `Approve ${(token as string).toUpperCase()}` : 'Approve';
+  }
+  return 'Deposit and Swap';
+};
+
+export const selectDepositAndSwapConfirmationFlowWalletTokenAllowanceLoading = (
+  state: RootState,
+) => {
+  const { status } = state.swapForm.depositAndSwapConfirmationFlow.walletTokenAllowance;
+  return status === 'idle' || status === 'pending';
+};
+
+export const selectDepositAndSwapConfirmationFlowCTADisabled = (state: RootState) => {
+  const walletTokenAllowanceLoading =
+    selectDepositAndSwapConfirmationFlowWalletTokenAllowanceLoading(state);
+  const { disableCTAButton } = selectDepositAndSwapConfirmationFlowValidationError(state);
+  const step = selectDepositAndSwapConfirmationFlowStep(state);
+  const loading =
+    walletTokenAllowanceLoading ||
+    step === 'waitingForDepositAndSwapConfirmation' ||
+    step === 'approvingToken';
+  const selectedMarginAccountId = state.swapForm.marginAccount?.id;
+  return disableCTAButton || Boolean(loading) || !Boolean(selectedMarginAccountId);
+};
+
 export const selectDepositAndSwapConfirmationButtonState = (
   state: RootState,
 ): {
@@ -254,15 +374,24 @@ export const selectDepositAndSwapConfirmationButtonState = (
     type: 'info' | 'warning' | 'error';
   };
 } => {
+  const disabled = selectDepositAndSwapConfirmationFlowCTADisabled(state);
   const step = selectDepositAndSwapConfirmationFlowStep(state);
   const error = selectDepositAndSwapConfirmationFlowError(state);
-  if (step === 'depositAndSwapConfirmation') {
+  const { validationError, disableCTAButton } =
+    selectDepositAndSwapConfirmationFlowValidationError(state);
+  const computedError = error || validationError;
+  const buttonText = selectDepositAndSwapConfirmationFlowCTAText(state);
+  if (
+    step === 'depositAndSwapConfirmation' ||
+    step === 'approvingToken' ||
+    step === 'approveTokenError'
+  ) {
     return {
-      text: !error ? 'Deposit and Swap' : 'Try to swap again',
-      disabled: false,
+      text: buttonText,
+      disabled: disabled || disableCTAButton,
       message: {
-        text: error || '',
-        type: error ? 'error' : 'info',
+        text: computedError || '',
+        type: computedError ? 'error' : 'info',
       },
     };
   }

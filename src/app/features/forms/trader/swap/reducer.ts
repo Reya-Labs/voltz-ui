@@ -3,15 +3,15 @@ import { SimulateSwapMarginAccountResult } from '@voltz-protocol/sdk-v2';
 import { ContractReceipt, providers } from 'ethers';
 
 import { V2Pool } from '../../../aMMs';
-import {
-  AvailableAmountForMarginAccountDeposit,
-  fetchAvailableAmountsToDepositForMarginAccountThunk,
-} from '../../../deposit-flow';
 import { MarginAccountForSwapLP } from '../../../margin-accounts-for-swap-lp';
 import { initialState } from './state';
 import {
+  approveTokenForPeripheryThunk,
+  AvailableAmountForMarginAccountDeposit,
   depositAndSwapThunk,
+  fetchAvailableAmountsToDepositForMarginAccountThunk,
   getMaxNotionalAvailableThunk,
+  getTokenAllowanceForPeripheryThunk,
   simulateSwapThunk,
   swapThunk,
 } from './thunks';
@@ -244,7 +244,38 @@ const slice = createSlice({
               firstAvailableAmount.valueUSD;
           }
         },
-      );
+      )
+      .addCase(getTokenAllowanceForPeripheryThunk.pending, (state) => {
+        state.depositAndSwapConfirmationFlow.walletTokenAllowance = {
+          value: 0,
+          status: 'pending',
+        };
+      })
+      .addCase(getTokenAllowanceForPeripheryThunk.rejected, (state) => {
+        state.depositAndSwapConfirmationFlow.walletTokenAllowance = {
+          value: 0,
+          status: 'failed',
+        };
+      })
+      .addCase(getTokenAllowanceForPeripheryThunk.fulfilled, (state, { payload }) => {
+        state.depositAndSwapConfirmationFlow.walletTokenAllowance = {
+          value: payload as number,
+          status: 'succeeded',
+        };
+      })
+      .addCase(approveTokenForPeripheryThunk.pending, (state) => {
+        state.depositAndSwapConfirmationFlow.step = 'approvingToken';
+        state.depositAndSwapConfirmationFlow.error = null;
+      })
+      .addCase(approveTokenForPeripheryThunk.rejected, (state, { payload }) => {
+        state.depositAndSwapConfirmationFlow.step = 'approveTokenError';
+        state.depositAndSwapConfirmationFlow.error = payload as string;
+      })
+      .addCase(approveTokenForPeripheryThunk.fulfilled, (state, { payload }) => {
+        state.depositAndSwapConfirmationFlow.step = 'depositAndSwapConfirmation';
+        state.depositAndSwapConfirmationFlow.error = null;
+        state.depositAndSwapConfirmationFlow.walletTokenAllowance.value = payload as number;
+      });
   },
 });
 export const {

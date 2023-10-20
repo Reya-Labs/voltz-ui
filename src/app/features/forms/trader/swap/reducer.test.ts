@@ -7,8 +7,9 @@ import {
   setUserInputModeAction,
   swapFormReducer,
 } from './reducer';
-import { initialState, SliceState } from './state';
+import { initialState } from './state';
 import { getMaxNotionalAvailableThunk, simulateSwapThunk, swapThunk } from './thunks';
+import { SliceState } from './types';
 import { validateUserInputAndUpdateSubmitButton } from './utils';
 
 jest.mock('../../../../../utilities/number');
@@ -67,6 +68,7 @@ describe('swapFormReducer', () => {
         expect(nextState.userInput.mode).toEqual('variable');
         expect(nextState.prospectiveSwap.swapSimulation).toEqual({
           value: {
+            marginRequirement: 0,
             accountInitialMarginPostTrade: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
@@ -156,6 +158,7 @@ describe('swapFormReducer', () => {
         });
         expect(nextState.prospectiveSwap.swapSimulation).toEqual({
           value: {
+            marginRequirement: 0,
             accountInitialMarginPostTrade: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
@@ -176,6 +179,7 @@ describe('swapFormReducer', () => {
         });
         expect(nextState.prospectiveSwap.swapSimulation).toEqual({
           value: {
+            marginRequirement: 0,
             accountInitialMarginPostTrade: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,
@@ -201,6 +205,7 @@ describe('swapFormReducer', () => {
         expect(validateUserInputAndUpdateSubmitButton).toHaveBeenCalledTimes(0);
         expect(nextState.prospectiveSwap.swapSimulation).toEqual({
           value: {
+            marginRequirement: 0,
             accountInitialMarginPostTrade: 0,
             maxMarginWithdrawable: 0,
             averageFixedRate: 0,

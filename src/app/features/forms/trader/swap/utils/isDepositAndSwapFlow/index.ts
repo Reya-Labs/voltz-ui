@@ -1,4 +1,4 @@
-import { SliceState } from '../../state';
+import { SliceState } from '../../types';
 
 export const isDepositAndSwapFlow = (state: SliceState) => {
   if (!state.marginAccount) {

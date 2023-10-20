@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { SliceState } from '../../state';
+import { SliceState } from '../../types';
 
 export const getNewPositionFixedRate = (state: Draft<SliceState>) => {
   if (!state.pool) {

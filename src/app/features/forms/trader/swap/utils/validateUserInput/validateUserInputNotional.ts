@@ -1,6 +1,6 @@
 import { Draft } from '@reduxjs/toolkit';
 
-import { SliceState } from '../../state';
+import { SliceState } from '../../types';
 import { getMaxAvailableNotional } from '../getMaxAvailableNotional';
 
 export const validateUserInputNotional = (state: Draft<SliceState>): void => {

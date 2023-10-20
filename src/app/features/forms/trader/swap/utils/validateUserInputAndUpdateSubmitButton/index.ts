@@ -1,7 +1,7 @@
 import { Draft } from '@reduxjs/toolkit';
 
 import { isPoolPaused } from '../../../../../../../utilities/amm';
-import { SliceState } from '../../state';
+import { SliceState } from '../../types';
 import { isDepositAndSwapFlow } from '../isDepositAndSwapFlow';
 import { validateUserInput } from '../validateUserInput';
 
