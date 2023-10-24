@@ -45,7 +45,7 @@ export const useSwapFormPoolAndMarginAccount = (): UseSwapFormPoolResult => {
         signer,
       }),
     );
-  }, [dispatch, signer]);
+  }, [dispatch, signer, marginAccountId]);
 
   useEffect(() => {
     if (!marginAccountId || marginAccountsLoading || !pool) {
