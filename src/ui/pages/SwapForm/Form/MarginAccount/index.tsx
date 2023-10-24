@@ -1,8 +1,9 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useAppSelector } from '../../../../../app';
+import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
+  resetStateAction,
   selectPoolToken,
   selectPoolTokenFormatted,
   selectSwapFormMarginAccountForSwapLPUI,
@@ -12,6 +13,7 @@ import { useAppNavigate } from '../../../../hooks/useAppNavigate';
 import { useMarginAccountsForSwapLP } from '../../../../hooks/useMarginAccountsForSwapLP';
 
 export const MarginAccount: React.FunctionComponent = () => {
+  const dispatch = useAppDispatch();
   const { ammId, poolId } = useParams();
   const navigate = useAppNavigate();
   const poolTokenFormatted = useAppSelector(selectPoolTokenFormatted);
@@ -25,7 +27,7 @@ export const MarginAccount: React.FunctionComponent = () => {
     if (!ammId || !poolId) {
       return;
     }
-    // TODO: FB evaluate before launch
+    dispatch(resetStateAction());
     navigate.toSwapFormPage({
       ammId,
       poolId,

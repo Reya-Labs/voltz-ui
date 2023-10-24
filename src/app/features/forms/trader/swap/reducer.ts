@@ -21,10 +21,7 @@ const slice = createSlice({
   name: 'swapForm',
   initialState,
   reducers: {
-    resetStateAction: () => {
-      validateUserInputAndUpdateSubmitButton(initialState);
-      return initialState;
-    },
+    resetStateAction: () => initialState,
     openSwapConfirmationFlowAction: (state) => {
       state.swapConfirmationFlow.step = 'swapConfirmation';
     },
