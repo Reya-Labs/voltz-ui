@@ -65,9 +65,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
     <PositionDetailsBox>
       <PositionDetailsLeftBox>
         <LabelTokenTypography
-          colorToken="wildStrawberry"
+          colorToken="error"
           label="Editing Position"
-          labelColorToken="lavenderWeb"
+          labelColorToken="white100"
           labelTypographyToken={actionLabelTypographyToken}
           token=""
           typographyToken={actionTypographyToken}
@@ -78,9 +78,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
         <NotionalBox>
           {sameNotional ? (
             <LabelTokenTypography
-              colorToken="lavenderWeb"
+              colorToken="white"
               label="Notional"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken={labelTypographyToken}
               token={editPositionCompactNotional.compactNotionalSuffix}
               typographyToken={typographyToken}
@@ -88,13 +88,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             />
           ) : (
             <FromToTokenTypography
-              fromColorToken="lavenderWeb"
+              fromColorToken="white"
               fromToken={existingPositionCompactNotional.compactNotionalSuffix}
               fromValue={existingPositionCompactNotional.compactNotionalNumber}
               label="Notional"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken={labelTypographyToken}
-              toColorToken="lavenderWeb"
+              toColorToken="white"
               toToken={editPositionCompactNotional.compactNotionalSuffix}
               toValue={editPositionCompactNotional.compactNotionalNumber}
               typographyToken={typographyToken}
@@ -103,9 +103,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
         </NotionalBox>
         <BorderedBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Range"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}

@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
+import { fireEvent, render, screen } from '../../../../../test-helpers';
 import { formatPOSIXTimestamp } from '../../../../../utilities/date';
 import { ClaimButton, ClaimButtonProps } from './ClaimButton';
 

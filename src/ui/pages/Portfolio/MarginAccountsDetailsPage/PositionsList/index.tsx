@@ -65,7 +65,7 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
           {Array.from({ length: 10 }, () => ({})).map((_, index) => (
             <PositionEntrySkeleton
               key={index}
-              colorToken="liberty2"
+              colorToken="black300"
               data-testid="PositionsList-PositionEntrySkeleton"
               variant="rectangular"
             />
@@ -84,7 +84,7 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
           >
             {positions.length > 0
               ? slicedPositions.map((position, index) => {
-                  const backgroundColorToken = index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8';
+                  const backgroundColorToken = index % 2 !== 0 ? 'black800' : 'white900';
 
                   if (positionsFilterId === 'matured') {
                     return (
@@ -121,11 +121,11 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
             {positions.length === 0 ? (
               <NoPositionsFoundBox>
                 <img alt="Gimme" src="/images/no-pools-found.png" />
-                <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
+                <Typography colorToken="white100" typographyToken="primaryBodyMediumRegular">
                   No {positionsFilterId === 'settled' ? 'settled' : 'active'} positions found. Visit
                   our{' '}
                   <AppLink
-                    colorToken="skyBlueCrayola"
+                    colorToken="primary"
                     data-testid="NoPositions-AppLink"
                     to={`/${routes.POOLS}`}
                     typographyToken="primaryBodyMediumRegular"

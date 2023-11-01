@@ -30,18 +30,18 @@ export const CollateralDistributionRow: React.FunctionComponent<CollateralDistri
     <Row>
       <LeftSide>
         <TokenIcon size={20} token={token} />
-        <Typography colorToken="lavenderWeb2" typographyToken="secondaryBodyMediumRegular">
+        <Typography colorToken="white300" typographyToken="secondaryBodyMediumRegular">
           {percentage}%
         </Typography>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
           {label}
         </Typography>
       </LeftSide>
       <RightSide>
-        <Typography colorToken="lavenderWeb2" typographyToken="secondaryBodySmallRegular">
+        <Typography colorToken="white300" typographyToken="secondaryBodySmallRegular">
           {distribution}
         </Typography>
-        <Typography colorToken="lavenderWeb3" typographyToken="secondaryBodyXSmallRegular">
+        <Typography colorToken="white400" typographyToken="secondaryBodyXSmallRegular">
           ({token === 'other' ? 'Multiple Token' : `$${distributionUSD}`})
         </Typography>
       </RightSide>

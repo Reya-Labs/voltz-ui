@@ -33,7 +33,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
     <NotificationContainer>
       <NotificationBox>
         <ProfileNotification
-          pillColorToken="wildStrawberry"
+          pillColorToken="error"
           pillText="Bonus"
           text="Earn badges by inviting others"
         />
@@ -51,7 +51,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
         <NotificationContainer>
           <NotificationBox>
             <ProfileNotification
-              pillColorToken="wildStrawberry"
+              pillColorToken="error"
               pillText="Claim"
               text="Unavailable until the end of the season"
             />
@@ -68,7 +68,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
         <NotificationContainer>
           <NotificationBox>
             <ProfileNotification
-              pillColorToken="wildStrawberry"
+              pillColorToken="error"
               pillText="Claim"
               text="Unavailable at this moment. Keep an eye out for announcements"
             />
@@ -85,7 +85,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
           {notClaimedBadgesCount !== 0 ? (
             <>
               <ProfileNotification
-                pillColorToken="wildStrawberry"
+                pillColorToken="error"
                 pillText={claimButtonBulkMode === 'claimError' ? 'Error' : 'Bulk Claim'}
                 text={
                   claimButtonBulkMode === 'claimError' ? (
@@ -101,7 +101,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
             </>
           ) : (
             <ProfileNotification
-              pillColorToken="wildStrawberry"
+              pillColorToken="error"
               pillText="Keep trading"
               text="No new badges to claim yet"
             />

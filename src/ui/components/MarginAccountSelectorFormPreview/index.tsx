@@ -74,22 +74,22 @@ export const MarginAccountSelectorFormPreview: React.FunctionComponent<
           </DepositButtonBox>
         </DetailBox>
         <DetailBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Margin Account Balance
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             token={`${balanceCompactFormatted.compactSuffix}${poolTokenFormatted}`}
             typographyToken="secondaryBodySmallRegular"
             value={balanceCompactFormatted.compactNumber}
           />
         </DetailBox>
         <DetailBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Account Initial Margin (Pre Trade)
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             token={`${initialMarginPretradeValueFormatted.compactSuffix}${poolTokenFormatted}`}
             typographyToken="secondaryBodySmallRegular"
             value={initialMarginPretradeValueFormatted.compactNumber}

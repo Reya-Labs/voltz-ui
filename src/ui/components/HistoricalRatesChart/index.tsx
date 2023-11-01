@@ -49,13 +49,13 @@ const filterOptions: ChartFiltersProps['filterOptions'] = [
   {
     id: 'fixed',
     label: 'Fix',
-    underlineColorToken: 'skyBlueCrayola',
+    underlineColorToken: 'primary100',
     isMode: true,
   },
   {
     id: 'variable',
     label: 'Var',
-    underlineColorToken: 'ultramarineBlue',
+    underlineColorToken: 'secondary100',
     isMode: true,
   },
 ];
@@ -124,7 +124,7 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
           axisTypographyToken={
             isLargeDesktopDevice ? 'secondaryBodySmallRegular' : 'primaryBodyXSmallRegular'
           }
-          colorToken={isFixed ? 'skyBlueCrayola' : 'ultramarineBlue'}
+          colorToken={isFixed ? 'primary100' : 'secondary100'}
           data={[
             {
               id: 'graph1',
@@ -132,7 +132,7 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
             },
           ]}
           yMarker={yMarker}
-          yMarkerColorToken={isFixed ? 'ultramarineBlue3' : 'skyBlueCrayola3'}
+          yMarkerColorToken={isFixed ? 'secondary400' : 'primary400'}
           yMarkerText={
             isFixed
               ? `Current Variable Rate: ${yMarker.toFixed(2)}%`

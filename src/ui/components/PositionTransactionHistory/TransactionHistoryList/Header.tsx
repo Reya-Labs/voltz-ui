@@ -13,22 +13,22 @@ export const Header: React.FunctionComponent = () => {
   return (
     <HeaderBox>
       <DateBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
           Date
         </Typography>
       </DateBox>
       <ActionBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
           Action
         </Typography>
       </ActionBox>
       <SizeBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
           Size
         </Typography>
       </SizeBox>
       <OutcomeBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
           Outcome
         </Typography>
       </OutcomeBox>

@@ -62,7 +62,7 @@ export const MarginAccountList: React.FunctionComponent = () => {
           {Array.from({ length: 10 }, () => ({})).map((_, index) => (
             <MarginAccountEntrySkeleton
               key={index}
-              colorToken="liberty2"
+              colorToken="black300"
               data-testid="MarginAccountsList-MarginAccountEntrySkeleton"
               variant="rectangular"
             />
@@ -80,7 +80,7 @@ export const MarginAccountList: React.FunctionComponent = () => {
           >
             {marginAccounts.length > 0
               ? marginAccounts.map((marginAccount, index) => {
-                  const backgroundColorToken = index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8';
+                  const backgroundColorToken = index % 2 !== 0 ? 'black800' : 'white900';
 
                   return (
                     <MarginAccountEntry
@@ -94,10 +94,10 @@ export const MarginAccountList: React.FunctionComponent = () => {
             {marginAccounts.length === 0 ? (
               <NoMarginAccountsFoundBox>
                 <img alt="Gimme" src="/images/no-pools-found.png" />
-                <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
+                <Typography colorToken="white100" typographyToken="primaryBodyMediumRegular">
                   No Margin Accounts found. Visit our{' '}
                   <AppLink
-                    colorToken="skyBlueCrayola"
+                    colorToken="primary"
                     data-testid="NoMarginAccounts-AppLink"
                     to={`/${routes.POOLS}`}
                     typographyToken="primaryBodyMediumRegular"

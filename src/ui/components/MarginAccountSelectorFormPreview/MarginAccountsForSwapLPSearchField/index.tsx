@@ -36,13 +36,13 @@ const MarginAccountForSwapLPListItem: SearchFieldProps['itemRenderer'] = (props)
     <Wrapper>
       <LeftWrapper>
         {chainIcon}
-        <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
           <Highlight highlight={searchedValue}>{name}</Highlight>
         </Typography>
       </LeftWrapper>
       <RightWrapper>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={`${balanceCompactFormatted.compactSuffix} ${poolToken.toUpperCase()}`}
           typographyToken="secondaryBodySmallRegular"
           value={balanceCompactFormatted.compactNumber}

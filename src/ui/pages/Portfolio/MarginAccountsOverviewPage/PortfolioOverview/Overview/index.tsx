@@ -17,12 +17,12 @@ export const Overview: React.FunctionComponent = () => {
       <BottomBox>
         <PositionsSelectorBox>
           <LeftBox>
-            <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
+            <Typography colorToken="white100" typographyToken="primaryBodyMediumBold">
               {totalMarginAccounts} Margin Accounts
             </Typography>
           </LeftBox>
           <RightBox>
-            <Typography colorToken="lavenderWeb" typographyToken="primaryBodyXSmallRegular">
+            <Typography colorToken="white100" typographyToken="primaryBodyXSmallRegular">
               Order by
             </Typography>
             <MarginAccountsSortOptions />

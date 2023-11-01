@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const MarketTokenBox = styled('div')`
   display: flex;
@@ -9,8 +8,8 @@ export const MarketTokenBox = styled('div')`
 `;
 
 export const ToggleCaretBox = styled('div')`
-  background: ${colors.lavenderWeb8};
-  color: ${colors.lavenderWeb};
+  background: ${({ theme }) => theme.colors.white900};
+  color: ${({ theme }) => theme.colors.white100};
   padding: 8px;
   display: flex;
   align-items: center;

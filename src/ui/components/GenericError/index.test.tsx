@@ -1,18 +1,13 @@
-import { render, screen } from '@testing-library/react';
 import React from 'react';
-import { HashRouter } from 'react-router-dom';
 
+import { render, screen } from '../../../test-helpers';
 import { GenericError } from '.';
 
 describe('<GenericError />', () => {
   const mockTo = '/pools';
 
   it('should render the title and subtitle correctly', () => {
-    render(
-      <HashRouter>
-        <GenericError to={mockTo} />
-      </HashRouter>,
-    );
+    render(<GenericError to={mockTo} />);
 
     const title = screen.getByTestId('GenericError-Title');
     expect(title).toBeInTheDocument();
@@ -26,11 +21,7 @@ describe('<GenericError />', () => {
   });
 
   it('should render the app link correctly', () => {
-    render(
-      <HashRouter>
-        <GenericError to={mockTo} />
-      </HashRouter>,
-    );
+    render(<GenericError to={mockTo} />);
 
     const appLink = screen.getByTestId('GenericError-AppLink');
     expect(appLink).toBeInTheDocument();

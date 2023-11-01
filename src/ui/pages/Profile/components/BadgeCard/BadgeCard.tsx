@@ -63,12 +63,12 @@ export const BadgeCard = forwardRef<BadgeCardHandle, BadgeCardProps>(
         <TitleBox>
           {loading ? (
             <TitleSkeleton
-              colorToken="liberty2"
+              colorToken="black300"
               typographyToken="primaryHeader3Black"
               variant="rectangular"
             />
           ) : (
-            <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Black">
+            <Typography colorToken="white100" typographyToken="primaryHeader3Black">
               {BADGE_VARIANT_TITLE_COPY_MAP[variant].toUpperCase()}
             </Typography>
           )}
@@ -76,12 +76,12 @@ export const BadgeCard = forwardRef<BadgeCardHandle, BadgeCardProps>(
         <DescriptionBox>
           {loading ? (
             <DescriptionSkeleton
-              colorToken="liberty2"
+              colorToken="black300"
               typographyToken="primaryBodySmallRegular"
               variant="rectangular"
             />
           ) : (
-            <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+            <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
               {BADGE_VARIANT_DESCRIPTION_COPY_MAP[variant]}
             </Typography>
           )}
@@ -90,7 +90,7 @@ export const BadgeCard = forwardRef<BadgeCardHandle, BadgeCardProps>(
           <ClaimButtonBox>
             {loading ? (
               <ClaimButtonSkeleton
-                colorToken="liberty2"
+                colorToken="black300"
                 typographyToken="primaryBodyMediumBold"
                 variant="rectangular"
               />

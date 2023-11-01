@@ -18,7 +18,7 @@ export const TransactionHistoryList: React.FunctionComponent<{
         {history.map((item, index) => (
           <TransactionHistoryEntry
             key={index}
-            backgroundColorToken={index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8'}
+            backgroundColorToken={index % 2 !== 0 ? 'black800' : 'white900'}
             entry={item}
           />
         ))}

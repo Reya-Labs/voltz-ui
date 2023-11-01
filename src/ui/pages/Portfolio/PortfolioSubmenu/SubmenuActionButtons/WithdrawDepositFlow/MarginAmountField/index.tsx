@@ -22,7 +22,7 @@ export const MarginAmountField: React.FunctionComponent<MarginAmountFieldProps> 
     <MarginAmountTokenField
       disabled={disabled}
       label={label}
-      labelColorToken="lavenderWeb3"
+      labelColorToken="white400"
       labelTypographyToken="primaryBodySmallRegular"
       marginAmountOptions={marginAmountOptions}
       token={token}

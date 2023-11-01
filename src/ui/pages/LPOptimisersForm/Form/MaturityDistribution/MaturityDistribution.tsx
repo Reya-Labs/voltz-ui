@@ -109,7 +109,7 @@ export const MaturityDistribution: React.FunctionComponent<MaturityDistributionP
       {distribution === 'manual' &&
       !allVaultsWeightEditingDisabled &&
       combinedWeightValue !== 100 ? (
-        <Typography colorToken="wildStrawberry" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="error100" typographyToken="primaryBodySmallRegular">
           The total distribution is {combinedWeightValue}%, it has to be 100%.
         </Typography>
       ) : null}

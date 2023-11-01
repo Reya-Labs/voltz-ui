@@ -20,43 +20,43 @@ export const LPStatusDetails: React.FunctionComponent<LPStatusDetailsProps> = ({
   const inRange = fixLow <= currentFixed && currentFixed <= fixHigh;
   return (
     <LPStatusDetailsBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallBold">
+      <Typography colorToken="white100" typographyToken="primaryBodySmallBold">
         {inRange ? 'LP Position in range' : 'LP Position out of range'}
       </Typography>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
         {inRange
           ? 'When the fixed rate is between your fixed low and fixed high rates your position will be in range.'
           : 'When the fixed rate is not between your fixed low or fixed high rates your position will be out of range.'}
       </Typography>
       <RowsBox>
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Current Fixed
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             token="%"
             typographyToken="primaryBodySmallRegular"
             value={formFormatNumber(currentFixed)}
           />
         </RowBox>
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Fixed low
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             token="%"
             typographyToken="primaryBodySmallRegular"
             value={formFormatNumber(fixLow)}
           />
         </RowBox>
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Fixed High
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             token="%"
             typographyToken="primaryBodySmallRegular"
             value={formFormatNumber(fixHigh)}
@@ -64,7 +64,7 @@ export const LPStatusDetails: React.FunctionComponent<LPStatusDetailsProps> = ({
         </RowBox>
         <HorizontalLine />
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Position
           </Typography>
           {inRange ? (

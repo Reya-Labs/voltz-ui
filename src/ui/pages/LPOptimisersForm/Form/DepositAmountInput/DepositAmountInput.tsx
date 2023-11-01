@@ -38,7 +38,7 @@ export const DepositAmountInput: React.FunctionComponent<Props> = ({
       <TokenField
         allowNegativeValue={false}
         bottomLeftText={subtext}
-        bottomLeftTextColorToken="lavenderWeb3"
+        bottomLeftTextColorToken="white400"
         bottomLeftTextTypographyToken="primaryBodySmallRegular"
         decimalsLimit={FormNumberLimits.decimalLimit}
         disabled={disabled}

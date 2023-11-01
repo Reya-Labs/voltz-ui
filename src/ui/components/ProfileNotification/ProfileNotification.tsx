@@ -19,7 +19,7 @@ export const ProfileNotification: React.FunctionComponent<ProfileNotificationPro
       {pillText}
     </Pill>
     <Typography
-      colorToken="lavenderWeb"
+      colorToken="white100"
       data-testid="ProfileNotification"
       typographyToken="primaryBodySmallRegular"
     >

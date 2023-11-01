@@ -25,55 +25,55 @@ export const LPDetails: React.FunctionComponent<LPDetailsProps> = () => {
   return (
     <DetailsBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Fixed Rate Low
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={fixedLower}
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Fixed Rate High
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={fixedUpper}
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Notional
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={token}
           typographyToken="secondaryBodySmallRegular"
           value={prospectiveLpNotionalFormatted}
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Margin
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={token}
           typographyToken="secondaryBodySmallRegular"
           value={prospectiveLpMarginFormatted}
         />
       </DetailBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token=" "
           typographyToken="secondaryBodySmallRegular"
           value={aMMMaturity}

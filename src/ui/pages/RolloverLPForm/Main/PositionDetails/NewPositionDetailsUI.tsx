@@ -39,9 +39,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
     <PositionDetailsBox>
       <PositionDetailsLeftBox>
         <LabelTokenTypography
-          colorToken="wildStrawberry"
+          colorToken="error"
           label="New Position"
-          labelColorToken="lavenderWeb"
+          labelColorToken="white100"
           labelTypographyToken={actionLabelTypographyToken}
           token=""
           typographyToken={actionTypographyToken}
@@ -51,9 +51,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
       <PositionDetailsRightBox>
         <NotionalBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Notional"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token={compactNotional ? `${compactNotional.compactNotionalSuffix}${token}` : token}
             typographyToken={typographyToken}
@@ -62,9 +62,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
         </NotionalBox>
         <BorderedBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Range"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}

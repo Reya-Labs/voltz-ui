@@ -32,7 +32,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = ({
     <PaginationBox data-testid="Pagination-PaginationBox">
       <div onClick={handleOnPreviousPageClick}>
         <ActionButton
-          colorToken={previousDisabled ? 'lavenderWeb4' : 'lavenderWeb'}
+          colorToken={previousDisabled ? 'white500' : 'white100'}
           data-testid={`Pagination-PreviousActionButton-${previousDisabled ? 'disabled' : ''}`}
           disabled={previousDisabled}
           typographyToken="secondaryBodyXSmallRegular"
@@ -47,7 +47,7 @@ export const Pagination: React.FunctionComponent<PaginationProps> = ({
       </BarBox>
       <div onClick={handleOnNextPageClick}>
         <ActionButton
-          colorToken={nextDisabled ? 'lavenderWeb4' : 'lavenderWeb'}
+          colorToken={nextDisabled ? 'white500' : 'white100'}
           data-testid={`Pagination-NextActionButton-${nextDisabled ? 'disabled' : ''}`}
           disabled={nextDisabled}
           typographyToken="secondaryBodyXSmallRegular"

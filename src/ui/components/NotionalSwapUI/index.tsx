@@ -91,7 +91,7 @@ export const NotionalSwapUI: React.FunctionComponent<NotionalSwapUIProps> = ({
   return (
     <NotionalSwapWrapperBox>
       <TypographyWithTooltip
-        colorToken="lavenderWeb2"
+        colorToken="white300"
         tooltip="When trading interest rate swaps, you receive one rate and pay out the other. Choose the rate you wish to receive vs. pay."
         typographyToken={labelTypographyToken}
       >
@@ -100,18 +100,18 @@ export const NotionalSwapUI: React.FunctionComponent<NotionalSwapUIProps> = ({
       <NotionalSwapBox>
         <NotionalSwapFixedBox>
           <TopTextContent>
-            <Typography colorToken="lavenderWeb" typographyToken={receiveTypographyToken}>
+            <Typography colorToken="white100" typographyToken={receiveTypographyToken}>
               {isFixedMode ? 'Receive Fixed' : 'Receive Variable'}
             </Typography>
             <TokenTypography
-              colorToken={isFixedMode ? 'skyBlueCrayola' : 'ultramarineBlue'}
+              colorToken={isFixedMode ? 'primary' : 'secondary'}
               token="%"
               typographyToken={percentageTypographyToken}
               value={isFixedMode ? fixedRate : variableRate}
             />
           </TopTextContent>
           <BottomTextContent>
-            <Typography colorToken="lavenderWeb2" typographyToken={payTypographyToken}>
+            <Typography colorToken="white300" typographyToken={payTypographyToken}>
               {isFixedMode ? `Pay Variable ${variableRate}%` : `Pay Fixed ${fixedRate}%`}
             </Typography>
           </BottomTextContent>
@@ -121,18 +121,18 @@ export const NotionalSwapUI: React.FunctionComponent<NotionalSwapUIProps> = ({
         </NotionalSwapSwapper>
         <NotionalSwapVariableBox>
           <TopTextContent>
-            <Typography colorToken="lavenderWeb2" typographyToken={receiveTypographyToken}>
+            <Typography colorToken="white300" typographyToken={receiveTypographyToken}>
               {isFixedMode ? 'Receive Variable' : 'Receive Fixed'}
             </Typography>
             <TokenTypography
-              colorToken={isFixedMode ? 'ultramarineBlue' : 'skyBlueCrayola'}
+              colorToken={isFixedMode ? 'secondary' : 'primary'}
               token="%"
               typographyToken={percentageTypographyToken}
               value={isFixedMode ? variableRate : fixedRate}
             />
           </TopTextContent>
           <BottomTextContent>
-            <Typography colorToken="lavenderWeb4" typographyToken={payTypographyToken}>
+            <Typography colorToken="white500" typographyToken={payTypographyToken}>
               {isFixedMode ? `Pay Fixed ${fixedRate}%` : `Pay Variable ${variableRate}%`}
             </Typography>
           </BottomTextContent>

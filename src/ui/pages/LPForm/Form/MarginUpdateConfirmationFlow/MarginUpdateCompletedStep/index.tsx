@@ -24,14 +24,14 @@ export const MarginUpdateCompletedStep: React.FunctionComponent = () => {
   }, [dispatch, navigate]);
   return (
     <MarginUpdateCompletedStepBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+      <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
         Margin Update Completed
       </Typography>
       <MarginUpdateDetails />
       <Confetti>
         <ExplorerLink link={etherscanLink} />
       </Confetti>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Your position will be updated in few minutes. You can track it from your your portfolio.
       </Typography>
       <Confetti>

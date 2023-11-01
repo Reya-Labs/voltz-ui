@@ -12,7 +12,7 @@ export const FormTransactionHistory: React.FunctionComponent<{
   }
   return (
     <FormTransactionHistoryBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
+      <Typography colorToken="white100" typographyToken="primaryBodyMediumBold">
         Transaction History
       </Typography>
       <PositionTransactionHistory positionId={positionId} />

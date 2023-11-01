@@ -17,7 +17,7 @@ export const WalletOptionButton: React.FunctionComponent<WalletOptionButtonProps
   disabled,
 }) => (
   <OptionButton data-testid={`WalletOptionButton-${title}`} disabled={disabled} onClick={onClick}>
-    <Typography colorToken="lavenderWeb" typographyToken="primaryBodyLargeRegular">
+    <Typography colorToken="white100" typographyToken="primaryBodyLargeRegular">
       {title}
     </Typography>
     {icon === 'metamask' && !disabled ? <MetamaskIcon viewBox="0 0 17 16" /> : null}

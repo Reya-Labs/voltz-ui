@@ -26,13 +26,13 @@ export const PnLDetailsWithTooltip: React.FunctionComponent<PnLDetailsWithToolti
     <LabelTokenTypography
       colorToken={
         realizedPnLTotal === '--'
-          ? 'lavenderWeb'
+          ? 'white'
           : realizedPnLTotal.indexOf('-') !== -1
-          ? 'wildStrawberry'
-          : 'skyBlueCrayola'
+          ? 'error'
+          : 'primary'
       }
       label="Realized PnL"
-      labelColorToken="lavenderWeb3"
+      labelColorToken="white400"
       labelTypographyToken={labelTypographyToken}
       token={` ${underlyingTokenName.toUpperCase()}`}
       tooltip={

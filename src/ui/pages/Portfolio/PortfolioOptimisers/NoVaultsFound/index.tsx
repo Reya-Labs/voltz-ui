@@ -9,13 +9,13 @@ export const NoVaultsFound: React.FunctionComponent<{
   description: string;
 }> = ({ title, description }) => (
   <ContentBox>
-    <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Black">
+    <Typography colorToken="white100" typographyToken="primaryHeader1Black">
       {title}
     </Typography>
-    <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
+    <Typography colorToken="white100" typographyToken="primaryBodyMediumRegular">
       {description}&nbsp;
       <AppLink
-        colorToken="skyBlueCrayola"
+        colorToken="primary"
         data-testid="NoPositionsOrVaultsFound-NavigateButton"
         to={`/${routes.LP_OPTIMISERS}`}
         typographyToken="primaryBodyMediumRegular"

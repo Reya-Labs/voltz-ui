@@ -1,18 +1,13 @@
-import { render, screen } from '@testing-library/react';
 import React from 'react';
-import { HashRouter } from 'react-router-dom';
 
+import { render, screen } from '../../../test-helpers';
 import { NoPoolFound } from '.';
 
 describe('<NoPoolFound />', () => {
   const mockTo = '/pools';
 
   it('should render the title and subtitle correctly', () => {
-    render(
-      <HashRouter>
-        <NoPoolFound to={mockTo} />
-      </HashRouter>,
-    );
+    render(<NoPoolFound to={mockTo} />);
 
     const title = screen.getByTestId('NoPoolFound-Title');
     expect(title).toBeInTheDocument();
@@ -26,11 +21,7 @@ describe('<NoPoolFound />', () => {
   });
 
   it('should render the app link correctly', () => {
-    render(
-      <HashRouter>
-        <NoPoolFound to={mockTo} />
-      </HashRouter>,
-    );
+    render(<NoPoolFound to={mockTo} />);
 
     const appLink = screen.getByTestId('NoPoolFound-AppLink');
     expect(appLink).toBeInTheDocument();

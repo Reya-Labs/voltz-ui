@@ -53,9 +53,9 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
     <PositionDetailsBox>
       <PositionDetailsLeftBox>
         <LabelTokenTypography
-          colorToken="wildStrawberry"
+          colorToken="error"
           label="Previous Position"
-          labelColorToken="lavenderWeb"
+          labelColorToken="white100"
           labelTypographyToken={actionLabelTypographyToken}
           token=""
           typographyToken={actionTypographyToken}
@@ -65,9 +65,9 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
       <PositionDetailsRightBox>
         <NotionalBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Notional"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token={compactNotional ? `${compactNotional.compactNotionalSuffix}${token}` : token}
             typographyToken={typographyToken}
@@ -76,9 +76,9 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
         </NotionalBox>
         <DepositedMarginBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Deposited Margin"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token={
               compactDepositedMargin
@@ -86,7 +86,7 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
                 : token
             }
             tooltip="Deposited Margin = Margin Provided at any time - Margin Removed at any time"
-            tooltipColorToken="lavenderWeb2"
+            tooltipColorToken="white300"
             typographyToken={typographyToken}
             value={
               compactDepositedMargin ? compactDepositedMargin.compactDepositedMarginNumber : '--'
@@ -95,9 +95,9 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
         </DepositedMarginBox>
         <FixedLowerAndUpperBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Range"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
@@ -118,15 +118,15 @@ export const PreviousPositionDetailsUI: React.FunctionComponent<PreviousPosition
         </RealisedPNLBox>
         <CashFlowBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Settling Balance"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token={
               compactSettlingBalance ? `${compactSettlingBalance.compactSuffix}${token}` : token
             }
             tooltip="Settling Balance = Deposited Margin + Realized PnL"
-            tooltipColorToken="lavenderWeb2"
+            tooltipColorToken="white300"
             typographyToken={typographyToken}
             value={compactSettlingBalance ? compactSettlingBalance.compactNumber : '--'}
           />

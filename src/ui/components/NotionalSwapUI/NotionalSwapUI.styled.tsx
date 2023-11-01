@@ -1,6 +1,5 @@
 import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 const spin = keyframes`
   0% {
@@ -47,10 +46,14 @@ const NotionalBox = styled('div')`
 `;
 
 export const NotionalSwapFixedBox = styled(NotionalBox)`
-  background: linear-gradient(270deg, ${colors.lavenderWeb8} 0%, ${colors.lavenderWeb7} 54.61%);
+  background: linear-gradient(
+    270deg,
+    ${({ theme }) => theme.colors.white900} 0%,
+    ${({ theme }) => theme.colors.white800} 54.61%
+  );
   box-shadow:
-    0px 4px 4px ${colors.liberty8},
-    0px 0px 1px ${colors.lavenderWeb1};
+    0px 4px 4px ${({ theme }) => theme.colors.black900},
+    0px 0px 1px ${({ theme }) => theme.colors.white200};
 `;
 
 export const NotionalSwapSwapper = styled('div', {
@@ -58,9 +61,9 @@ export const NotionalSwapSwapper = styled('div', {
 })<{
   animate: boolean;
 }>`
-  filter: drop-shadow(0px 1px 8px ${colors.liberty8})
-    drop-shadow(0px 2px 40px ${colors.lavenderWeb4});
-  background: ${colors.lavenderWeb};
+  filter: drop-shadow(0px 1px 8px ${({ theme }) => theme.colors.black900})
+    drop-shadow(0px 2px 40px ${({ theme }) => theme.colors.white500});
+  background: ${({ theme }) => theme.colors.white100};
   width: 28px;
   height: 28px;
   position: absolute;
@@ -77,13 +80,17 @@ export const NotionalSwapSwapper = styled('div', {
       : ''};
   &:hover {
     animation: ${spin} 500ms linear 2 forwards;
-    box-shadow: 0px 0px 20px ${colors.lavenderWeb5};
+    box-shadow: 0px 0px 20px ${({ theme }) => theme.colors.white600};
   }
 `;
 
 export const NotionalSwapVariableBox = styled(NotionalBox)`
-  background: linear-gradient(90.95deg, ${colors.lavenderWeb8} 0.66%, ${colors.liberty8} 99.34%);
-  box-shadow: 0px 0px 1px ${colors.lavenderWeb6};
+  background: linear-gradient(
+    90.95deg,
+    ${({ theme }) => theme.colors.white900} 0.66%,
+    ${({ theme }) => theme.colors.black900} 99.34%
+  );
+  box-shadow: 0px 0px 1px ${({ theme }) => theme.colors.white700};
 `;
 
 export const TopTextContent = styled('div')`

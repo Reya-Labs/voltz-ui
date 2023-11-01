@@ -5,17 +5,17 @@ import { AutomaticRolloverBox, CurrentBalanceBox, HeaderBox, RightBox } from './
 
 export const Header: React.FunctionComponent = React.memo(() => (
   <HeaderBox data-testid="Header-HeaderBox">
-    <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+    <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
       Vault
     </Typography>
     <RightBox>
       <CurrentBalanceBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
           Current Balance
         </Typography>
       </CurrentBalanceBox>
       <AutomaticRolloverBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
           Automatic Rollover
         </Typography>
       </AutomaticRolloverBox>

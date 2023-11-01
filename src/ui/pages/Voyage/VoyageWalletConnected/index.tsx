@@ -80,11 +80,11 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
       <Dialog open={isLearnMoreOpen}>
         <LearnMoreAboutVoyage onCloseButtonClick={closeLearnMoreModal} />
       </Dialog>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Black">
+      <Typography colorToken="white100" typographyToken="primaryHeader1Black">
         {`Welcome to the Voyage ${formatEthereumAddress(accountENS)}`}
       </Typography>
       <Subheading
-        colorToken="lavenderWeb2"
+        colorToken="white300"
         data-testid="Voyage-VoyageExplained"
         typographyToken="primaryBodyMediumRegular"
       >
@@ -99,7 +99,7 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
       <NotificationSection onLearnMoreClick={openLearnMoreModal} />
       <BadgesBox>
         <BadgeCollectionBox data-testid="Voyage-BadgeCollectionBox">
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+          <Typography colorToken="white100" typographyToken="primaryHeader2Black">
             Voltz Protocol v2 Voyage
           </Typography>
           <VoyageBadgesGrid itemsPerRow={3}>
@@ -124,13 +124,10 @@ export const VoyageWalletConnected: React.FunctionComponent<VoyagePageWalletConn
           </VoyageBadgesGrid>
         </BadgeCollectionBox>
         <VoyageBadgesListBox data-testid="Voyage-AchievedBadgesListBox">
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+          <Typography colorToken="white100" typographyToken="primaryHeader2Black">
             Your Voyage Collection
           </Typography>
-          <BadgesListSubheading
-            colorToken="lavenderWeb2"
-            typographyToken="primaryBodyMediumRegular"
-          >
+          <BadgesListSubheading colorToken="white300" typographyToken="primaryBodyMediumRegular">
             Trade or LP on the protocol to earn unique Voyage badges.
           </BadgesListSubheading>
           <BadgesListGrid data-testid="Voyage-AchievedBadgesListGrid" itemsPerRow={1}>

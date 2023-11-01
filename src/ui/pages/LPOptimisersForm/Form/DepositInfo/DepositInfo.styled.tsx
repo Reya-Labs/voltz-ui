@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { colors, Typography } from 'brokoli-ui';
+import { Typography } from 'brokoli-ui';
 
 export const VaultInfoBox = styled('div')`
   display: flex;
@@ -18,7 +18,7 @@ export const PositionBox = styled('div')`
   padding: 8px 16px;
   gap: 8px;
 
-  background: ${colors.liberty5};
+  background: ${({ theme }) => theme.colors.black600};
   border-radius: 4px;
 
   align-self: stretch;
@@ -26,9 +26,9 @@ export const PositionBox = styled('div')`
 
 export const PendingDepositTypography = styled(Typography)`
   margin-top: -8px;
-  color: ${colors.lavenderWeb3};
+  color: ${({ theme }) => theme.colors.white400};
 `;
 
 export const PendingDepositAmountSpan = styled('span')`
-  color: ${colors.skyBlueCrayola};
+  color: ${({ theme }) => theme.colors.primary100};
 `;

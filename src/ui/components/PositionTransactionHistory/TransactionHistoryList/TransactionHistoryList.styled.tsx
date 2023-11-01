@@ -27,7 +27,8 @@ export const EntryBox = styled('div', {
   width: 100%;
   box-sizing: border-box;
   padding: 8px;
-  background-color: ${({ backgroundColorToken }) => getColorFromToken(backgroundColorToken)};
+  background-color: ${({ theme, backgroundColorToken }) =>
+    getColorFromToken({ theme, colorToken: backgroundColorToken })};
 `;
 
 const InfoBox = styled('div')`
@@ -64,9 +65,9 @@ export const TransactionHistoryEntriesBox = styled('div')`
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
-  background: ${getColorFromToken('liberty8')};
+  background: ${({ theme }) => theme.colors.black900};
   padding: 4px;
-  border: 1px solid ${getColorFromToken('lavenderWeb7')};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
   border-radius: 4px;
 `;
 export const LiquidationIcon = styled(Liquidation)`

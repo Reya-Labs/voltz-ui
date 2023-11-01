@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { Button, colors } from 'brokoli-ui';
+import { Button } from 'brokoli-ui';
 
 import { Icon as IconComponent } from '../../../../components/Icon/Icon';
 
 export const Container = styled('div')`
-  background-color: ${colors.liberty8};
+  background-color: ${({ theme }) => theme.colors.black900};
   border-radius: 8px;
   padding: 16px;
   display: flex;
@@ -15,7 +15,7 @@ export const Container = styled('div')`
   box-sizing: border-box;
 
   &:hover {
-    box-shadow: ${colors.liberty2} 0px 0px 35px;
+    box-shadow: ${({ theme }) => theme.colors.black300} 0px 0px 35px;
   }
 `;
 

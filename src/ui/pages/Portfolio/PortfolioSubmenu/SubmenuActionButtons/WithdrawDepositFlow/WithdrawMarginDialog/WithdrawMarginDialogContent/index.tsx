@@ -150,12 +150,12 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
   return (
     <ContentBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Withdraw Margin
         </Typography>
         <CloseButton onClick={handleOnCloseClick} />
       </TitleBox>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia
         consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
       </Typography>
@@ -178,7 +178,7 @@ export const WithdrawMarginDialogContent: React.FunctionComponent = () => {
       </MidBox>
       <Button
         bottomLeftText={computedError ? computedError : ''}
-        bottomLeftTextColorToken={computedError ? 'wildStrawberry' : undefined}
+        bottomLeftTextColorToken={computedError ? 'error100' : undefined}
         bottomLeftTextTypographyToken={computedError ? 'primaryBodyXSmallRegular' : undefined}
         disabled={disabled}
         loading={loading}

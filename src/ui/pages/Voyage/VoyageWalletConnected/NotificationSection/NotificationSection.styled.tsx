@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
-import { Button, colors } from 'brokoli-ui';
+import { Button } from 'brokoli-ui';
 
 export const NotificationBox = styled('div')`
   padding: 8px 16px;
 `;
 
 export const NotificationContainer = styled('div')`
-  background-color: ${colors.lavenderWeb8};
+  background-color: ${({ theme }) => theme.colors.white900};
   display: flex;
   align-items: center;
   justify-content: space-between;

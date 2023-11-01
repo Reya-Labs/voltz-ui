@@ -162,7 +162,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
         >
           <LeftBox>
             <MarketTokenInformation
-              colorToken="lavenderWeb"
+              colorToken="white100"
               iconSize={24}
               isAaveV3={isAaveV3}
               isBorrowing={isBorrowing}
@@ -174,7 +174,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
           <MiddleBox>
             <FixedAPRBox>
               <TokenTypography
-                colorToken="lavenderWeb"
+                colorToken="white"
                 token="%"
                 typographyToken={typographyToken}
                 value={fixedRateFormatted}
@@ -182,7 +182,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
             </FixedAPRBox>
             <VariableAPYBox>
               <TokenTypography
-                colorToken="lavenderWeb"
+                colorToken="white"
                 differenceToken="%"
                 differenceValue={variableRate24hDelta}
                 token="%"
@@ -192,7 +192,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
             </VariableAPYBox>
             <MaturityBox>
               <TokenTypography
-                colorToken="lavenderWeb"
+                colorToken="white"
                 token=""
                 typographyToken={typographyToken}
                 value={aMMMaturity}

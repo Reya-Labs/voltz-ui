@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, colors } from 'brokoli-ui';
+import { Button } from 'brokoli-ui';
 
 export const Box = styled('div')`
   box-sizing: border-box;
@@ -38,7 +38,7 @@ export const DepositButtonBox = styled('div')`
 
 export const DepositButton = styled(Button)`
   padding: 4px 8px;
-  border: 1px solid ${colors.lavenderWeb7};
-  background: ${colors.lavenderWeb7};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
+  background: ${({ theme }) => theme.colors.white800};
   height: 100%;
 `;

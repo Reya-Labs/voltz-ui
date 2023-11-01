@@ -12,7 +12,7 @@ export const PositionTransactionHistory: React.FunctionComponent<{
 
   if (!positionDetails && positionDetailsLoadingState === 'error') {
     return (
-      <Typography colorToken="wildStrawberry" typographyToken="primaryBodyMediumBold">
+      <Typography colorToken="error100" typographyToken="primaryBodyMediumBold">
         Something went wrong while fetching history...
       </Typography>
     );

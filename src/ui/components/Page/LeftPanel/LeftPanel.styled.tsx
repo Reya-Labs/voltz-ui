@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const PanelBox = styled('div')`
   box-sizing: border-box;
@@ -13,7 +12,7 @@ export const PanelBox = styled('div')`
   width: 63px;
   height: 100%;
 
-  border: 1px solid ${colors.lavenderWeb7};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
 `;
 
 export const CraftedByBox = styled('div')`
@@ -48,5 +47,5 @@ export const SubmenuBox = styled('div')`
   padding: 16px;
   height: 100%;
 
-  border: 1px solid ${colors.lavenderWeb7};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
 `;

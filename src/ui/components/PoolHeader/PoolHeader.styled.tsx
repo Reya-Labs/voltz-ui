@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const PoolHeaderBox = styled('div')`
   box-sizing: border-box;
@@ -8,7 +7,7 @@ export const PoolHeaderBox = styled('div')`
   align-items: center;
   padding: 0px 24px 0px 0px;
 
-  border-bottom: 1px solid ${colors.lavenderWeb7};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.white800};
 `;
 
 export const PoolHeaderDetailsBox = styled('div')`
@@ -38,7 +37,7 @@ export const VariableBox = styled('div')`
   flex-direction: row;
   align-items: center;
   padding: 0 12px;
-  border-left: 1px solid ${colors.lavenderWeb7};
+  border-left: 1px solid ${({ theme }) => theme.colors.white800};
 `;
 
 export const MaturityBox = styled('div')`
@@ -46,7 +45,7 @@ export const MaturityBox = styled('div')`
   flex-direction: row;
   align-items: center;
   padding: 0 12px;
-  border-left: 1px solid ${colors.lavenderWeb7};
+  border-left: 1px solid ${({ theme }) => theme.colors.white800};
 `;
 
 export const V2InfoBox = styled('div')`
@@ -54,6 +53,6 @@ export const V2InfoBox = styled('div')`
   flex-direction: row;
   align-items: center;
   padding: 0 12px;
-  border-left: 1px solid ${colors.lavenderWeb7};
+  border-left: 1px solid ${({ theme }) => theme.colors.white800};
   width: 160px;
 `;

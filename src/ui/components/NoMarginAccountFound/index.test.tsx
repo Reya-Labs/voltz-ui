@@ -1,18 +1,13 @@
-import { render, screen } from '@testing-library/react';
 import React from 'react';
-import { HashRouter } from 'react-router-dom';
 
+import { render, screen } from '../../../test-helpers';
 import { NoMarginAccountFound } from '.';
 
 describe('<NoMarginAccountFound />', () => {
   const mockTo = '/pools';
 
   it('should render the title and subtitle correctly', () => {
-    render(
-      <HashRouter>
-        <NoMarginAccountFound to={mockTo} />
-      </HashRouter>,
-    );
+    render(<NoMarginAccountFound to={mockTo} />);
 
     const title = screen.getByTestId('NoMarginAccountFound-Title');
     expect(title).toBeInTheDocument();
@@ -26,11 +21,7 @@ describe('<NoMarginAccountFound />', () => {
   });
 
   it('should render the app link correctly', () => {
-    render(
-      <HashRouter>
-        <NoMarginAccountFound to={mockTo} />
-      </HashRouter>,
-    );
+    render(<NoMarginAccountFound to={mockTo} />);
 
     const appLink = screen.getByTestId('NoMarginAccountFound-AppLink');
     expect(appLink).toBeInTheDocument();

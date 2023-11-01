@@ -1,6 +1,5 @@
 import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 const spin = keyframes`
   0% {
@@ -48,8 +47,8 @@ const NotionalBox = styled('div')`
 
 export const NotionalSwapFixedBox = styled(NotionalBox)`
   border-radius: 4px;
-  border: 1px solid ${colors.lavenderWeb5};
-  background: ${colors.lavenderWeb8};
+  border: 1px solid ${({ theme }) => theme.colors.white600};
+  background: ${({ theme }) => theme.colors.white900};
   flex: 1;
   padding: 8px;
 `;
@@ -59,9 +58,9 @@ export const NotionalSwapSwapper = styled('div', {
 })<{
   animate: boolean;
 }>`
-  filter: drop-shadow(0px 1px 8px ${colors.liberty8})
-    drop-shadow(0px 2px 40px ${colors.lavenderWeb4});
-  background: ${colors.lavenderWeb};
+  filter: drop-shadow(0px 1px 8px ${({ theme }) => theme.colors.black900})
+    drop-shadow(0px 2px 40px ${({ theme }) => theme.colors.white500});
+  background: ${({ theme }) => theme.colors.white100};
   width: 24px;
   height: 24px;
   position: absolute;
@@ -78,14 +77,14 @@ export const NotionalSwapSwapper = styled('div', {
       : ''};
   &:hover {
     animation: ${spin} 500ms linear 2 forwards;
-    box-shadow: 0px 0px 20px ${colors.lavenderWeb5};
+    box-shadow: 0px 0px 20px ${({ theme }) => theme.colors.white600};
   }
 `;
 
 export const NotionalSwapVariableBox = styled(NotionalBox)`
   border-radius: 4px;
-  border: 1px solid ${colors.lavenderWeb7};
-  background: ${colors.liberty7};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
+  background: ${({ theme }) => theme.colors.black800};
   flex: 1;
   padding: 8px 8px 8px 16px;
 `;

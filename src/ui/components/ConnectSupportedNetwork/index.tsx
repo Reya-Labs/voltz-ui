@@ -13,10 +13,10 @@ export const ConnectSupportedNetwork: React.FunctionComponent<ConnectSupportedNe
     const { setRequired } = useWallet();
     return (
       <ContainerBox onClick={() => setRequired(true)}>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader1Bold">
           {heading}
         </Typography>
-        <Typography colorToken="skyBlueCrayola" typographyToken="primaryBodyMediumRegular">
+        <Typography colorToken="primary100" typographyToken="primaryBodyMediumRegular">
           {subheading}
         </Typography>
       </ContainerBox>

@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const TopBox = styled('div')`
   display: flex;
@@ -48,7 +47,7 @@ const PositionBox = styled('div')`
 `;
 
 const BorderBox = styled(PositionBox)`
-  border-left: 1px solid ${colors.lavenderWeb7};
+  border-left: 1px solid ${({ theme }) => theme.colors.white800};
   padding-left: 24px;
 `;
 

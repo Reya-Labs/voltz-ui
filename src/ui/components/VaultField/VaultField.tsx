@@ -30,7 +30,7 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
     <VaultFieldBox>
       <TitleBox>
         <MarketToken
-          colorToken="lavenderWeb"
+          colorToken="white100"
           iconSize={24}
           infoFormatter={() => title}
           token={token.toLowerCase() as MarketTokenProps['token']}
@@ -39,13 +39,13 @@ export const VaultField: React.FunctionComponent<VaultFieldProps> = ({
       </TitleBox>
       <VaultMetricsBox>
         <FromToTokenTypography
-          fromColorToken="wildStrawberry"
+          fromColorToken="error"
           fromToken="%"
           fromValue={Number(Math.round(averageApyFrom))}
           label="Historic Estimated APY Ranging From"
-          labelColorToken="lavenderWeb3"
+          labelColorToken="white400"
           labelTypographyToken="primaryBodySmallRegular"
-          toColorToken="wildStrawberry"
+          toColorToken="error"
           tooltip="Estimated return of this strategy had it been running during the last quarter of 2022, depending on when the deposit was made."
           toToken="%"
           toValue={Number(Math.round(averageApyTo))}

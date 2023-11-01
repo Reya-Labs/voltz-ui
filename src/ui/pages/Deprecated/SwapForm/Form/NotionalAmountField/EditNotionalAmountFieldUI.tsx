@@ -49,9 +49,9 @@ export const EditNotionalAmountFieldUI: React.FunctionComponent<EditNotionalAmou
       <TokenSwitchField
         allowNegativeValue={false}
         bottomLeftText={bottomLeftText}
-        bottomLeftTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb3'}
+        bottomLeftTextColorToken={notionalAmount.error ? 'error100' : 'white400'}
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
-        bottomRightTextColorToken={notionalAmount.error ? 'wildStrawberry' : 'lavenderWeb'}
+        bottomRightTextColorToken={notionalAmount.error ? 'error' : 'white'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={formatNumber(notionalAvailable)}
         decimalsLimit={FormNumberLimits.decimalLimit}

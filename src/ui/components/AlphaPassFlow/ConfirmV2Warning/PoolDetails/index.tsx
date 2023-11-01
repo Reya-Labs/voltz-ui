@@ -15,20 +15,20 @@ export const PoolDetails: React.FunctionComponent<{
   return (
     <DetailsBox>
       <DetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Contracts
         </Typography>
-        <Typography colorToken="orangeYellow" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="warning100" typographyToken="primaryBodySmallRegular">
           Unaudited
         </Typography>
       </DetailBox>
       {isTestnet(chainId) ? null : (
         <DetailBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Pool cap
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken="$"
             token={compactSuffix}
             typographyToken="primaryBodySmallRegular"

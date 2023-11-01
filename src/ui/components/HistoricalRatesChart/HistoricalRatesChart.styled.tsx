@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const ChartBox = styled('div')`
   position: relative;
@@ -9,13 +8,13 @@ export const ChartBox = styled('div')`
   align-items: center;
   padding: 0px;
 
-  border-bottom: 1px solid ${colors.lavenderWeb7};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.white800};
 `;
 
 export const LineChartBox = styled('div')`
   flex: 1;
   box-sizing: border-box;
-  border-right: 1px solid ${colors.lavenderWeb8};
+  border-right: 1px solid ${({ theme }) => theme.colors.white900};
 `;
 
 export const LoadingBox = styled('div')`

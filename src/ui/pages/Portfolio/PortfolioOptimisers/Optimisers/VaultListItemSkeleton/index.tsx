@@ -11,7 +11,7 @@ export const Skeleton = styled(SkeletonComponent)`
 export const VaultListItemSkeleton: React.FunctionComponent = () => {
   return (
     <Skeleton
-      colorToken="liberty2"
+      colorToken="black300"
       data-testid="VaultListItemSkeleton-Skeleton"
       typographyToken="primaryBodySmallRegular"
       variant="rectangular"

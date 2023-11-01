@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const ContentBox = styled('div')`
   display: flex;
@@ -39,7 +38,7 @@ export const DepositFeeContentBox = styled('div')`
   gap: 8px;
   justify-content: space-between;
 
-  background: ${colors.liberty5};
+  background: ${({ theme }) => theme.colors.black600};
   border-radius: 4px;
 
   width: 100%;

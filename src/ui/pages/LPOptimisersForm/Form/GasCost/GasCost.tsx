@@ -14,7 +14,7 @@ export const GasCost = ({ gasCost }: GasCostProps) => (
     <GasIcon data-testid="GasCost-GasIcon" />
     {gasCost === -1 ? (
       <Typography
-        colorToken="lavenderWeb3"
+        colorToken="white400"
         data-testid="GasCost-GasCostLoading"
         typographyToken="primaryBodyMediumRegular"
       >
@@ -22,7 +22,7 @@ export const GasCost = ({ gasCost }: GasCostProps) => (
       </Typography>
     ) : (
       <TokenTypography
-        colorToken="lavenderWeb"
+        colorToken="white"
         data-testid="GasCost-GasCostUSD"
         prefixToken="$"
         token=""

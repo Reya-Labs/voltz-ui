@@ -14,7 +14,7 @@ export const MarketTokenInformationCompact: React.FunctionComponent<
   return (
     <MarketTokenInformationCompactBox data-testid="MarketTokenInformationCompact-MarketTokenBox">
       <MarketToken
-        colorToken="lavenderWeb"
+        colorToken="white100"
         data-testid="MarketTokenInformationCompact-MarketToken"
         iconSize={0}
         market={market}

@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const CashFlowCalculatorBox = styled('div')`
   box-sizing: border-box;
@@ -8,13 +7,13 @@ export const CashFlowCalculatorBox = styled('div')`
   padding: 16px 16px 120px;
   height: 240px;
   position: relative;
-  border-bottom: 1px solid ${colors.lavenderWeb7};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.white800};
   border-radius: 4px;
   width: 100%;
 `;
 
 export const ToggleCaretBox = styled('div')`
-  color: ${colors.lavenderWeb};
+  color: ${({ theme }) => theme.colors.white100};
   padding: 4px;
   height: 16px;
   width: 16px;
@@ -26,11 +25,11 @@ export const ToggleCaretBox = styled('div')`
   position: absolute;
   right: 16px;
   top: 8px;
-  background: ${colors.lavenderWeb8};
-  border: 1px solid ${colors.lavenderWeb7};
+  background: ${({ theme }) => theme.colors.white900};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
   transition: background 200ms ease-in;
 
   &:hover {
-    background: ${colors.lavenderWeb6};
+    background: ${({ theme }) => theme.colors.white700};
   }
 `;

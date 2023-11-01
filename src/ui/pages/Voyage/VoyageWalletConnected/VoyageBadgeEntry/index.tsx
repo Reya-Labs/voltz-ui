@@ -28,7 +28,7 @@ export const VoyageBadgeEntry: React.FunctionComponent<VoyageBadgeEntryProps> = 
   if (loading) {
     return (
       <Skeleton
-        colorToken="liberty2"
+        colorToken="black300"
         data-testid="AchievedBadge-Skeleton"
         typographyToken="primaryBodyMediumRegular"
         variant="rectangular"
@@ -49,10 +49,10 @@ export const VoyageBadgeEntry: React.FunctionComponent<VoyageBadgeEntryProps> = 
           </Pill>
         </div>
       </BadgePillBox>
-      <TitleTypography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
+      <TitleTypography colorToken="white100" typographyToken="primaryBodyMediumRegular">
         {BADGE_ID_TITLE_COPY_MAP[variant]}
       </TitleTypography>
-      <AchievedAtTypography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
+      <AchievedAtTypography colorToken="white100" typographyToken="primaryBodyMediumRegular">
         {achievedText}
       </AchievedAtTypography>
     </Container>

@@ -23,44 +23,44 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
   return (
     <MarginUpdateDetailsBox>
       <MarginUpdateDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Fixed Rate Low
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={fixedLower}
         />
       </MarginUpdateDetailBox>
       <MarginUpdateDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Fixed Rate High
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={fixedUpper}
         />
       </MarginUpdateDetailBox>
       <MarginUpdateDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Margin
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={token}
           typographyToken="secondaryBodySmallRegular"
           value={prospectiveLpMarginFormFormatted}
         />
       </MarginUpdateDetailBox>
       <MarginUpdateDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token=" "
           typographyToken="secondaryBodySmallRegular"
           value={aMMMaturity}

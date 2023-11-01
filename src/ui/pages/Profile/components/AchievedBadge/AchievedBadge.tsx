@@ -33,7 +33,7 @@ export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
   if (loading) {
     return (
       <Skeleton
-        colorToken="liberty2"
+        colorToken="black300"
         data-testid="AchievedBadge-Skeleton"
         typographyToken="primaryBodyMediumRegular"
         variant="rectangular"
@@ -55,10 +55,10 @@ export const AchievedBadge: React.FunctionComponent<AchievedBadgeProps> = ({
           <BadgePill variant={variant} />
         </div>
       </BadgePillBox>
-      <TitleTypography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
+      <TitleTypography colorToken="white100" typographyToken="primaryBodyMediumRegular">
         {BADGE_VARIANT_TITLE_COPY_MAP[variant].toUpperCase()}
       </TitleTypography>
-      <AchievedAtTypography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
+      <AchievedAtTypography colorToken="white100" typographyToken="primaryBodyMediumRegular">
         {NON_PROGRAMMATIC_BADGES_DISCORD.indexOf(variant as NonProgrammaticBadges) !== -1
           ? awardedText
           : achievedText}

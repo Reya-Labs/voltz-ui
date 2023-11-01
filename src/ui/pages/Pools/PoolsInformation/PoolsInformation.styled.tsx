@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { colors, Pill } from 'brokoli-ui';
+import { Pill } from 'brokoli-ui';
 
 export const PoolsInformationBox = styled('div')`
   display: flex;
@@ -24,7 +24,7 @@ export const FiltersBox = styled('div')`
 `;
 
 export const VerticalLine = styled('div')`
-  background-color: ${colors.lavenderWeb7};
+  background-color: ${({ theme }) => theme.colors.white800};
   width: 1px;
 `;
 

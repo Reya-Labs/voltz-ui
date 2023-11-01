@@ -15,27 +15,27 @@ export const V2InfoTooltip: React.FunctionComponent<{
 
   return (
     <V2InfoTooltipBox>
-      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
         This pool is a new pool operating on Voltz Protocol v2. The v2 contracts haven’t been
         audited yet, so trading is only available in an Alpha State. This means there’s a cap on the
         margin that can be deployed into the pool.
       </Typography>
       <RowsBox>
         <RowBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Contracts
           </Typography>
-          <Typography colorToken="orangeYellow" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="warning100" typographyToken="primaryBodySmallRegular">
             Unaudited
           </Typography>
         </RowBox>
         {isTestnet(chainId) ? null : (
           <RowBox>
-            <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+            <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
               Pool cap
             </Typography>
             <TokenTypography
-              colorToken="lavenderWeb"
+              colorToken="white"
               prefixToken="$"
               token={compactSuffix}
               typographyToken="primaryBodySmallRegular"

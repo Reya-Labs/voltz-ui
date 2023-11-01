@@ -94,7 +94,7 @@ export const Optimisers: React.FunctionComponent = () => {
 
   return (
     <OptimisersBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
+      <Typography colorToken="white100" typographyToken="primaryBodyMediumBold">
         Optimisers
       </Typography>
       {vaultsLoading &&

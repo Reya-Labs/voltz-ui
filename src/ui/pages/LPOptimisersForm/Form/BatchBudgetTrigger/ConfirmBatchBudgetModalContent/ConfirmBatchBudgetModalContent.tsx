@@ -44,7 +44,7 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
   <ContentBox data-testid="ConfirmBatchBudgetModalContent-ContentBox">
     <TitleBox>
       <Typography
-        colorToken="lavenderWeb"
+        colorToken="white100"
         data-testid="ConfirmBatchBudgetModalContent-TitleTypography"
         typographyToken="primaryHeader3Bold"
       >
@@ -53,7 +53,7 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
       <CloseButton onClick={onCancel} />
     </TitleBox>
     <Typography
-      colorToken="lavenderWeb3"
+      colorToken="white400"
       data-testid="ConfirmBatchBudgetModalContent-DescriptionTypography"
       typographyToken="primaryBodyMediumRegular"
     >
@@ -62,13 +62,13 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
     </Typography>
     <GasCost gasCost={gasCost} />
     <BatchFeeContentBox>
-      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
         Batch Budget&nbsp;
       </Typography>
       {batchBudgetUSD === -1 ? (
         <BatchBudgetValueBox>
           <Typography
-            colorToken="lavenderWeb3"
+            colorToken="white400"
             data-testid="ConfirmBatchBudgetModalContent-BatchBudgetLoading"
             typographyToken="primaryBodySmallRegular"
           >
@@ -78,14 +78,14 @@ export const ConfirmBatchBudgetModalContent: React.FunctionComponent<Props> = ({
       ) : (
         <BatchBudgetValueBox>
           <TokenTypography
-            colorToken="skyBlueCrayola"
+            colorToken="primary"
             data-testid="ConfirmBatchBudgetModalContent-BatchBudgetUnderlyingTypography"
             token={` ${token.toUpperCase()}`}
             typographyToken="primaryBodySmallRegular"
             value={formFormatNumber(batchBudgetUnderlying)}
           />
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             data-testid="ConfirmBatchBudgetModalContent-BatchBudgetTextTypography"
             prefixToken="$"
             token=" USD"

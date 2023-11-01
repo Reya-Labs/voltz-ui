@@ -8,20 +8,20 @@ export const GenericError: React.FunctionComponent<{
 }> = React.memo(({ to }) => (
   <ContainerBox>
     <Typography
-      colorToken="wildStrawberry"
+      colorToken="error100"
       data-testid="GenericError-Title"
       typographyToken="primaryHeader1Black"
     >
       Oops... Something went wrong!
     </Typography>
     <Typography
-      colorToken="lavenderWeb2"
+      colorToken="white300"
       data-testid="GenericError-Subtitle"
       typographyToken="primaryBodyMediumRegular"
     >
       Unfortunately we couldn't process your request. We encourage you to&nbsp;
       <ExternalLink
-        colorToken="skyBlueCrayola"
+        colorToken="primary"
         href="https://discord.com/channels/896685581487210577/1005057396160336004"
         typographyToken="primaryBodyMediumRegular"
       >
@@ -29,7 +29,7 @@ export const GenericError: React.FunctionComponent<{
       </ExternalLink>
       &nbsp; this to our support team, and in the meantime please{' '}
       <AppLink
-        colorToken="skyBlueCrayola"
+        colorToken="primary"
         data-testid="GenericError-AppLink"
         to={to}
         typographyToken="primaryBodyMediumRegular"

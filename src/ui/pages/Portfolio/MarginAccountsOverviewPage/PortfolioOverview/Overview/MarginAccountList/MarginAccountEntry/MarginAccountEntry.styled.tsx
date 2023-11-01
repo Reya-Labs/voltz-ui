@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { Button, ColorTokens, getColorFromToken } from 'brokoli-ui';
 
 export const MarginAccountEntryBoxWrapper = styled('div')`
   position: relative;
@@ -19,16 +19,17 @@ export const MarginAccountEntryBox = styled('div', {
   justify-content: space-between;
   align-items: center;
   padding: 4px;
-  box-shadow: -2px 0px 8px 0px ${colors.liberty8};
-  background-color: ${({ backgroundColorToken }) => getColorFromToken(backgroundColorToken)};
-  border: 1px solid ${colors.lavenderWeb7};
+  box-shadow: -2px 0px 8px 0px ${({ theme }) => theme.colors.black900};
+  background-color: ${({ theme, backgroundColorToken }) =>
+    getColorFromToken({ theme, colorToken: backgroundColorToken })};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
   border-radius: ${({ isPositionListShown }) => (isPositionListShown ? '8px 8px 0px 0px' : '8px')};
   transition: all 200ms ease-in;
 
   &:hover {
-    border: 1px solid ${colors.lavenderWeb4};
+    border: 1px solid ${({ theme }) => theme.colors.white500};
     cursor: pointer;
-    background-color: ${colors.lavenderWeb7};
+    background-color: ${({ theme }) => theme.colors.white800};
   }
 `;
 
@@ -84,12 +85,12 @@ export const TestPillContainer = styled('div')`
 
 export const ViewDetailsButton = styled(Button)`
   padding: 4px 8px;
-  border: 1px solid ${colors.lavenderWeb7};
-  background: ${colors.lavenderWeb7};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
+  background: ${({ theme }) => theme.colors.white800};
 `;
 
 export const ToggleCaretBox = styled('div')`
-  color: ${colors.lavenderWeb};
+  color: ${({ theme }) => theme.colors.white100};
   padding: 4px;
   display: flex;
   align-items: center;

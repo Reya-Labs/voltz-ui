@@ -28,11 +28,11 @@ export const ConfirmV2Warning: React.FunctionComponent<{ chainId: SupportedChain
   return (
     <ConfirmV2WarningBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           You are in. Welcome to v2.
         </Typography>
       </TitleBox>
-      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
         We want to remind you that Voltz Protocol v2 has not yet undergone an audit by an
         independent third-party. Whilst rigorous security measures and best practices have been used
         it's important to reiterate that, though you cannot ever rely on the accuracy or performance

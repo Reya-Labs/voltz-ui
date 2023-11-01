@@ -35,11 +35,11 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
     <WithdrawMarginDetailsWrapperBox>
       <WithdrawMarginDetailsBox>
         <TransactionDetailBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Account Margin
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken="$"
             token={balanceCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
@@ -47,25 +47,25 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
           />
         </TransactionDetailBox>
         <TransactionDetailBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Available To Withdraw
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             token={`($${maxAmountUSDFormatted})`}
             typographyToken="secondaryBodySmallRegular"
             value={maxAmountFormatted}
           />
         </TransactionDetailBox>
         <TransactionDetailBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Account Margin Ratio
           </Typography>
           <FromToTokenTypography
             fromColorToken={
               marginRatioHealth !== '--'
                 ? MARGIN_RATIO_COLOR_MAP[marginRatioHealth as MarginAccountUI['marginRatioHealth']]
-                : 'lavenderWeb'
+                : 'white'
             }
             fromToken="%"
             fromValue={marginRatioPercentage}
@@ -74,7 +74,7 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
                 ? MARGIN_RATIO_COLOR_MAP[
                     simulationMarginRatioHealth as MarginAccountUI['marginRatioHealth']
                   ]
-                : 'lavenderWeb'
+                : 'white'
             }
             toToken="%"
             toValue={simulationMarginRatioPercentage}
@@ -86,12 +86,12 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
       <TransactionDetailBox>
         <IconTextWrapper>
           <GasIcon />
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>
         </IconTextWrapper>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           prefixToken="$"
           token={` ${gasFeeUSDFormatted.compactSuffix}`}
           typographyToken="secondaryBodySmallRegular"

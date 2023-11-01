@@ -25,40 +25,40 @@ export const MaturityDetails: React.FunctionComponent<MaturityDetailsProps> = ({
   const maturityFormatted = formatPOSIXTimestampWithHoursMinutesUTC(maturityEndTimestampInMS);
   return (
     <DetailsBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallBold">
+      <Typography colorToken="white100" typographyToken="primaryBodySmallBold">
         Maturity
       </Typography>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
         Time until the pool expires. Trading will stop 1 hour before maturity and once new pools are
         deployed trading will resume.
       </Typography>
       <RowsBox>
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Expiry
           </Typography>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
             {maturityFormatted} UTC
           </Typography>
         </RowBox>
         {daysRemaining > 0 ? (
           <RowBox>
-            <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+            <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
               Days Remaining
             </Typography>
-            <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+            <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
               {daysRemaining}
             </Typography>
           </RowBox>
         ) : null}
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Progress
           </Typography>
           <ProgressBarBox>
             <ProgressBar percentageComplete={percentageCompleted} />
             <TokenTypography
-              colorToken="lavenderWeb"
+              colorToken="white"
               token="%"
               typographyToken="primaryBodySmallRegular"
               value={Math.min(100, percentageCompleted)}

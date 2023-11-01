@@ -15,10 +15,10 @@ type Props = {
 };
 
 const TransactionStatusColorMap: Record<Props['transactionStatus'], ColorTokens> = {
-  idle: 'lavenderWeb2',
-  pending: 'lavenderWeb2',
-  error: 'wildStrawberry',
-  success: 'skyBlueCrayola',
+  idle: 'white300',
+  pending: 'white300',
+  error: 'error100',
+  success: 'primary100',
 };
 
 export const ActiveRolloverModalContent: React.FunctionComponent<Props> = ({
@@ -32,10 +32,10 @@ export const ActiveRolloverModalContent: React.FunctionComponent<Props> = ({
   const loading = transactionStatus === 'pending';
   return (
     <ContentBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+      <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
         Automatic Rollover
       </Typography>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
+      <Typography colorToken="white100" typographyToken="primaryBodyMediumRegular">
         {!triggersOnChainTransaction
           ? `This configuration will be applied to all your funds in this Optimiser when you confirm the new deposit.
 Your choice will be saved on chain, so there will be an additional one-time, small gas fee.`
@@ -44,7 +44,7 @@ Your choice will be saved on chain, so there will be an additional one-time, sma
       <GasCostBox>
         <GasIcon />
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           prefixToken="$"
           token=""
           typographyToken="primaryBodySmallRegular"

@@ -9,9 +9,9 @@ type InRangeProps = {
 export const InRange: React.FunctionComponent<InRangeProps> = ({ typographyToken }) => {
   return (
     <PositionStatusBox>
-      <AttentionIndicator colorToken="skyBlueCrayola" />
+      <AttentionIndicator colorToken="primary100" />
       &nbsp;&nbsp;
-      <Typography colorToken="lavenderWeb3" typographyToken={typographyToken}>
+      <Typography colorToken="white400" typographyToken={typographyToken}>
         In range
       </Typography>
     </PositionStatusBox>

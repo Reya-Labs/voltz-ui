@@ -106,7 +106,7 @@ export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps
     return (
       <CashFlowCalculatorBox>
         <TypographyWithTooltip
-          colorToken="lavenderWeb"
+          colorToken="white100"
           tooltip="This shows the combined cashflow you could generate from your new position and your existing."
           typographyToken={labelTypographyToken}
         >
@@ -123,13 +123,13 @@ export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps
       <TokenField
         allowNegativeValue={false}
         bottomLeftText={error ? error : 'Total Expected Cashflow (Estimation)'}
-        bottomLeftTextColorToken={error ? 'wildStrawberry' : 'lavenderWeb'}
-        bottomRightTextColorToken="lavenderWeb"
+        bottomLeftTextColorToken={error ? 'error100' : 'white100'}
+        bottomRightTextColorToken="white"
         bottomRightTextToken=" "
         bottomRightTextValue={totalCashflowFormatted}
         disabled={disabled}
         label="Expected Variable APY - Calculator"
-        labelColorToken="lavenderWeb"
+        labelColorToken="white100"
         labelTypographyToken={labelTypographyToken}
         max={{
           value: '100',

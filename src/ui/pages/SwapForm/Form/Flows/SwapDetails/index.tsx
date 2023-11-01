@@ -43,85 +43,85 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   return (
     <SwapDetailsBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Pool
         </Typography>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
           {pool.market}
         </Typography>
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Margin Account Balance
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={`${balanceCompactFormatted.compactSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={balanceCompactFormatted.compactNumber}
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Account Initial Margin Post Trade
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={`${accountInitialMarginPostTradeCompactFormatted.compactSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={accountInitialMarginPostTradeCompactFormatted.compactNumber}
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Receiving rate
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={receivingRateFormatted}
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Size
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={`${notionalAmountFormatted.compactSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={notionalAmountFormatted.compactNumber}
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Estimated Slippage
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={slippageFormatted}
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Fees
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={tokenFormatted}
           typographyToken="secondaryBodySmallRegular"
           value={feeFormatted}
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token=" "
           typographyToken="secondaryBodySmallRegular"
           value={poolMaturity}
@@ -133,12 +133,12 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
       <SwapDetailBox>
         <IconTextWrapper>
           <GasIcon />
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>
         </IconTextWrapper>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={gasTokenFormatted}
           typographyToken="secondaryBodySmallRegular"
           value={gasFeeFormatted}

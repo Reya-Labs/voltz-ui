@@ -10,10 +10,10 @@ export const LeftPanelWithoutSubmenu: React.FunctionComponent = React.memo(() =>
       <VoltzLogo />
     </VoltzLogoBox>
     <CraftedByBoxWithoutSubmenu data-testid="LeftPanel-CraftedByBox">
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodyXSmallRegular">
+      <Typography colorToken="white100" typographyToken="primaryBodyXSmallRegular">
         Voltz
       </Typography>
-      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+      <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
         {process.env.APP_VERSION}
       </Typography>
     </CraftedByBoxWithoutSubmenu>

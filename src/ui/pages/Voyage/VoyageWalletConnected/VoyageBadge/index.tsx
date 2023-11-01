@@ -32,7 +32,7 @@ export const VoyageBadge: React.FunctionComponent<VoyageBadgeProps> = ({
       <VoyageBadgeBox>
         <VoyagePillBox>
           <SkeletonPill
-            colorToken="liberty2"
+            colorToken="black300"
             data-testid="VoyageBadge-SkeletonPill"
             typographyToken="primaryBodySmallRegular"
             variant="rectangular"
@@ -40,7 +40,7 @@ export const VoyageBadge: React.FunctionComponent<VoyageBadgeProps> = ({
         </VoyagePillBox>
         <VoyageBadgeImageBox completed={true}>
           <SkeletonImage
-            colorToken="liberty2"
+            colorToken="black300"
             data-testid="VoyageBadge-SkeletonImage"
             typographyToken="primaryBodySmallRegular"
             variant="rectangular"
@@ -48,13 +48,13 @@ export const VoyageBadge: React.FunctionComponent<VoyageBadgeProps> = ({
         </VoyageBadgeImageBox>
         <VoyageBadgeTextBox>
           <SkeletonHeaderTypography
-            colorToken="liberty2"
+            colorToken="black300"
             data-testid="VoyageBadge-SkeletonHeaderTypography"
             typographyToken="primaryHeader3Black"
             variant="rectangular"
           />
           <SkeletonSubheaderTypography
-            colorToken="liberty2"
+            colorToken="black300"
             data-testid="VoyageBadge-SkeletonSubheaderTypography"
             typographyToken="primaryBodySmallRegular"
             variant="rectangular"
@@ -62,7 +62,7 @@ export const VoyageBadge: React.FunctionComponent<VoyageBadgeProps> = ({
         </VoyageBadgeTextBox>
         <VoyageButtonBox>
           <SkeletonButton
-            colorToken="liberty2"
+            colorToken="black300"
             data-testid="VoyageBadge-Skeleton"
             typographyToken="primaryBodySmallRegular"
             variant="rectangular"
@@ -83,17 +83,17 @@ export const VoyageBadge: React.FunctionComponent<VoyageBadgeProps> = ({
       </VoyageBadgeImageBox>
       <VoyageBadgeTextBox>
         <VoyageBadgeHeaderBox>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Black">
+          <Typography colorToken="white100" typographyToken="primaryHeader3Black">
             EPIC VOLTZ v2 VOYAGE -
           </Typography>
           <Typography
-            colorToken={completed ? 'skyBlueCrayola' : 'wildStrawberry'}
+            colorToken={completed ? 'primary100' : 'error100'}
             typographyToken="primaryHeader3Black"
           >
             &nbsp;{completed ? 'Completed' : 'Incomplete'}
           </Typography>
         </VoyageBadgeHeaderBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
           {completed
             ? 'Congratulations, you earned the Voltz Protocol v2 Voyage Badge. This will have a number of unique benefits, including early access to Voltz Protocol v2.'
             : 'Keep trading and LPing to achieve Voltz Protocol v2 Status'}

@@ -25,7 +25,7 @@ export const LPCompletedStep: React.FunctionComponent = () => {
   return (
     <LPCompletedStepBox>
       <Confetti>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           LP Completed
         </Typography>
       </Confetti>
@@ -33,7 +33,7 @@ export const LPCompletedStep: React.FunctionComponent = () => {
       <Confetti>
         <ExplorerLink link={etherscanLink} />
       </Confetti>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Your position will be available in few minutes. You can track it from your your portfolio.
       </Typography>
       <Confetti>

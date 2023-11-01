@@ -37,7 +37,7 @@ export const MarginUpdateConfirmationStep: React.FunctionComponent = () => {
   return (
     <MarginUpdateConfirmationStepBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Confirm Margin Update
         </Typography>
         <CloseButton onClick={handleCloseButtonClick} />
@@ -55,7 +55,7 @@ export const MarginUpdateConfirmationStep: React.FunctionComponent = () => {
       </MarginUpdateFeeDetailsBox>
       <Button
         bottomLeftText={error ? error : ''}
-        bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
+        bottomLeftTextColorToken={error ? 'error100' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
         variant="primary"
         onClick={handleConfirmMarginUpdate}

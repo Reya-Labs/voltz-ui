@@ -34,7 +34,7 @@ export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
         />
 
         <Typography
-          colorToken="lavenderWeb3"
+          colorToken="white400"
           data-testid="VaultEntry-DescriptionTypography"
           typographyToken="primaryBodyMediumRegular"
         >
@@ -42,17 +42,13 @@ export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
         </Typography>
 
         <PoolOutlineBox>
-          <Pill
-            colorToken="wildStrawberry"
-            typographyToken="primaryBodySmallRegular"
-            variant="regular"
-          >
+          <Pill colorToken="error" typographyToken="primaryBodySmallRegular" variant="regular">
             {`${lpVault.underlyingPools.length} ${lpVault.tokenName} ${
               lpVault.underlyingPools.length === 1 ? 'POOL' : 'POOLS'
             }`}
           </Pill>
 
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyMediumRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodyMediumRegular">
             Liquidity Spread Across
           </Typography>
 
@@ -60,7 +56,7 @@ export const VaultEntry: React.FunctionComponent<VaultEntryProps> = ({
             {lpVault.underlyingPools.map((pool, index) => (
               <MarketToken
                 key={`${pool}-${index}`}
-                colorToken="lavenderWeb"
+                colorToken="white100"
                 iconSize={24}
                 infoFormatter={() => pool}
                 market={

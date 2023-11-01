@@ -38,13 +38,13 @@ const MarginAccountListItem: SearchFieldProps['itemRenderer'] = (props) => {
     <Wrapper>
       <LeftWrapper>
         {chainIcon}
-        <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
           <Highlight highlight={searchedValue}>{name}</Highlight>
         </Typography>
       </LeftWrapper>
       <RightWrapper>
         <TokenCompactTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           compactData={!settlementToken ? balanceUSDCompactFormatted : balanceCompactFormatted}
           token={!settlementToken ? '$' : settlementToken}
           typographyToken="secondaryBodySmallRegular"

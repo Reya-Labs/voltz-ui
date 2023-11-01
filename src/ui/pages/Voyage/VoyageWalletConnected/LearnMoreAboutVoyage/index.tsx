@@ -43,7 +43,7 @@ export const LearnMoreAboutVoyage: React.FunctionComponent<LearnMoreAboutVoyageP
   return (
     <LearnMoreAboutVoyageBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Voltz Protocol v2 Voyage
         </Typography>
         <CloseButton onClick={onCloseButtonClick} />
@@ -52,10 +52,10 @@ export const LearnMoreAboutVoyage: React.FunctionComponent<LearnMoreAboutVoyageP
         <Step />
       </StepBox>
       <TextBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
+        <Typography colorToken="white100" typographyToken="primaryBodyMediumBold">
           {STEP_TITLE_MAP[step]}
         </Typography>
-        <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
           {STEP_DESCRIPTION_MAP[step]}
         </Typography>
       </TextBox>

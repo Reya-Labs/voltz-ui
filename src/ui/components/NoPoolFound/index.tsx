@@ -8,21 +8,21 @@ export const NoPoolFound: React.FunctionComponent<{
 }> = React.memo(({ to }) => (
   <ContainerBox>
     <Typography
-      colorToken="lavenderWeb"
+      colorToken="white100"
       data-testid="NoPoolFound-Title"
       typographyToken="primaryHeader1Black"
     >
       Gas is cheap but... Pool not found
     </Typography>
     <Typography
-      colorToken="lavenderWeb2"
+      colorToken="white300"
       data-testid="NoPoolFound-Subtitle"
       typographyToken="primaryBodyMediumRegular"
     >
       Unfortunately we couldn't fetch any existing pool matching this criteria. However we have
       several other markets currently operating,{' '}
       <AppLink
-        colorToken="skyBlueCrayola"
+        colorToken="primary"
         data-testid="NoPoolFound-AppLink"
         to={to}
         typographyToken="primaryBodyMediumRegular"

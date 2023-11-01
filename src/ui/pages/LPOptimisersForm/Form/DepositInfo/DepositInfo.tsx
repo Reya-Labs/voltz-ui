@@ -31,11 +31,11 @@ export const DepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps>
         weights={weights}
       />
       <PositionBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
           Your Position:
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={` ${mellowProduct.tokenName}`}
           typographyToken="primaryBodySmallRegular"
           value={
@@ -44,10 +44,7 @@ export const DepositInfo: React.FunctionComponent<LPMellowVaultDepositInfoProps>
         />
       </PositionBox>
       {userOptimiserPendingDeposit > 0 && (
-        <PendingDepositTypography
-          colorToken="lavenderWeb3"
-          typographyToken="primaryBodySmallRegular"
-        >
+        <PendingDepositTypography colorToken="white400" typographyToken="primaryBodySmallRegular">
           {`Pending `}
           <PendingDepositAmountSpan>
             {`${userOptimiserPendingDeposit.toFixed(2)} ${mellowProduct.tokenName}`}

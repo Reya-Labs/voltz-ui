@@ -58,7 +58,7 @@ export const Leaderboard: React.FunctionComponent<RankingTableProps> = ({
       />
       <LeaderboardGridBox data-testid="Leaderboard-LeaderboardGridBox">
         <Typography
-          colorToken="lavenderWeb"
+          colorToken="white100"
           data-testid="Leaderboard-SeasonTypography"
           typographyToken="primaryHeader2Black"
         >

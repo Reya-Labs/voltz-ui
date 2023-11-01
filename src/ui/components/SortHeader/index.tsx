@@ -42,7 +42,7 @@ export const SortHeader: React.FunctionComponent<SortHeaderProps> = ({
       onClick={handleOnRowClick}
     >
       <TypographyWithIcon
-        colorToken="lavenderWeb3"
+        colorToken="white400"
         data-testid={`SortHeader-TypographyWithIcon-${
           disabled ? 'WithDirectionIcon' : 'WithoutDirectionIcon'
         }`}
@@ -58,7 +58,7 @@ export const SortHeader: React.FunctionComponent<SortHeaderProps> = ({
       </TypographyWithIcon>
       {subtext ? (
         <Typography
-          colorToken="lavenderWeb5"
+          colorToken="white600"
           data-testid="SortHeader-SubtextTypography"
           typographyToken={typographyToken}
         >

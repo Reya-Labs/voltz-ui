@@ -191,16 +191,16 @@ export const DepositAndSwapConfirmationFlow: React.FunctionComponent = () => {
     <Dialog open={step !== null}>
       <SwapConfirmationStepBox>
         <TitleBox>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+          <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
             Deposit and Swap
           </Typography>
           <CloseButton onClick={handleCloseButtonClick} />
         </TitleBox>
         <MarginAccountBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Margin Account
           </Typography>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
+          <Typography colorToken="white100" typographyToken="primaryBodyMediumBold">
             {marginAccount.name}
           </Typography>
         </MarginAccountBox>
@@ -226,10 +226,10 @@ export const DepositAndSwapConfirmationFlow: React.FunctionComponent = () => {
             bottomLeftText={buttonState.message.text}
             bottomLeftTextColorToken={
               buttonState.message.type === 'error'
-                ? 'wildStrawberry'
+                ? 'error100'
                 : buttonState.message.type === 'warning'
-                ? 'orangeYellow'
-                : 'lavenderWeb2'
+                ? 'warning100'
+                : 'white300'
             }
             bottomLeftTextTypographyToken="primaryBodyXSmallRegular"
             disabled={buttonState.disabled}

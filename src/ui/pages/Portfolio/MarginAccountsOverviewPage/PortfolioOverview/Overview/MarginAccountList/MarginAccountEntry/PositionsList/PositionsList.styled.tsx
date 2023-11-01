@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { colors, getColorFromToken, Skeleton } from 'brokoli-ui';
+import { Skeleton } from 'brokoli-ui';
 import FlipMove from 'react-flip-move';
 
 export const PositionsListBox = styled(FlipMove)`
@@ -16,7 +16,7 @@ export const PositionsHeaderAndListBox = styled('div')`
   box-sizing: border-box;
   border-radius: 0px 0px 8px 8px;
   padding: 8px;
-  border: 1px solid ${colors.lavenderWeb7};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
   border-top: 0px;
 `;
 
@@ -34,7 +34,7 @@ export const NoPositionsFoundBox = styled('div')`
   gap: 8px;
   align-items: center;
   border-radius: 8px;
-  background-color: ${getColorFromToken('liberty7')};
+  background-color: ${({ theme }) => theme.colors.black800};
 `;
 
 export const PaginationBox = styled('div')`

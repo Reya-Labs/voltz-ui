@@ -69,14 +69,14 @@ export const LeverageField: React.FunctionComponent<LeverageFieldProps> = ({
         disabled={disabled}
         error={!localLeverage}
         label="Leverage"
-        labelColorToken="lavenderWeb2"
+        labelColorToken="white300"
         labelTypographyToken={labelTypographyToken}
         leverageOptions={leverageOptions}
-        maxLeverageColorToken="lavenderWeb3"
+        maxLeverageColorToken="white400"
         maxLeverageText={`Max ${maxLeverage}x Leverage`}
         maxLeverageTypographyToken={maxLeverageTypographyToken}
         tooltip="Leverage is the notional amount divided by the margin amount. The more leverage you take the higher your potential profit or loss."
-        tooltipColorToken="lavenderWeb2"
+        tooltipColorToken="white300"
         value={localLeverage}
         onLeverageChange={handleOnChange}
       />

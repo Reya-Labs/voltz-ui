@@ -9,7 +9,7 @@ export const Pools: React.FunctionComponent = () => {
   return (
     <PoolsBox>
       <HeaderBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Black">
+        <Typography colorToken="white100" typographyToken="primaryHeader1Black">
           Fixed and Variable Rates Markets
         </Typography>
         <PoolsInformation />

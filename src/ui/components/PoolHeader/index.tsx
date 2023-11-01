@@ -73,7 +73,7 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
       >
         <MarketTokenInformationBox>
           <MarketTokenInformation
-            colorToken="lavenderWeb"
+            colorToken="white100"
             iconSize={30}
             isAaveV3={isAaveV3}
             isBorrowing={isBorrowing}
@@ -89,9 +89,9 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
       <PoolHeaderDetailsBox>
         <FixedBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Fixed"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
@@ -100,11 +100,11 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
         </FixedBox>
         <VariableBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             differenceToken="%"
             differenceValue={variableRate24hDelta}
             label="Variable"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token="%"
             tooltip="Variable rate and the absolute change in the past 24 hours."
@@ -114,9 +114,9 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
         </VariableBox>
         <MaturityBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Maturity"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token=""
             typographyToken={typographyToken}

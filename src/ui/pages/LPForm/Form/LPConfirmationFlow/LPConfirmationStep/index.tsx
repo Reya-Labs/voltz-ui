@@ -36,7 +36,7 @@ export const LPConfirmationStep: React.FunctionComponent = () => {
   return (
     <LpConfirmationStepBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Confirm
         </Typography>
         <CloseButton onClick={handleCloseButtonClick} />
@@ -54,7 +54,7 @@ export const LPConfirmationStep: React.FunctionComponent = () => {
       </LpFeeDetailsBox>
       <Button
         bottomLeftText={error ? error : ''}
-        bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
+        bottomLeftTextColorToken={error ? 'error100' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
         variant="primary"
         onClick={handleConfirmLp}

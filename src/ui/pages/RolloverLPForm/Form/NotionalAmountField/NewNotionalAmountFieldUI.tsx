@@ -34,9 +34,9 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
       <TokenField
         allowNegativeValue={false}
         bottomLeftText={notionalInfo.error ? notionalInfo.error : ''}
-        bottomLeftTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb3'}
+        bottomLeftTextColorToken={notionalInfo.error ? 'error100' : 'white400'}
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
-        bottomRightTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb'}
+        bottomRightTextColorToken={notionalInfo.error ? 'error' : 'white'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         decimalsLimit={FormNumberLimits.decimalLimit}
         disabled={disabled}

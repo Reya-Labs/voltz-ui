@@ -149,16 +149,13 @@ export const DeprecatedCashFlowCalculator: React.FunctionComponent<CashFlowCalcu
   return (
     <CashFlowCalculatorBox>
       <CashFlowCalculatorLeftBox>
-        <Typography colorToken="lavenderWeb" typographyToken={titleTypographyToken}>
+        <Typography colorToken="white100" typographyToken={titleTypographyToken}>
           Cashflow Simulator
         </Typography>
       </CashFlowCalculatorLeftBox>
       <CashFlowCalculatorRightBox>
         <ExpectedApyBox>
-          <Typography
-            colorToken="lavenderWeb3"
-            typographyToken={expectedVariableApyTypographyToken}
-          >
+          <Typography colorToken="white400" typographyToken={expectedVariableApyTypographyToken}>
             Expected Variable APY
           </Typography>
           <CurrencyField
@@ -171,9 +168,9 @@ export const DeprecatedCashFlowCalculator: React.FunctionComponent<CashFlowCalcu
         </ExpectedApyBox>
         <AdditionalCashFlowBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Additional Cashflow"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             prefixToken={additionalCashflow !== null ? (additionalCashflow > 0 ? '+' : '-') : ''}
             token={token}
@@ -186,9 +183,9 @@ export const DeprecatedCashFlowCalculator: React.FunctionComponent<CashFlowCalcu
         </AdditionalCashFlowBox>
         <TotalCashFlowBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Total Cashflow"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             prefixToken={totalCashflow !== null ? (totalCashflow > 0 ? '+' : '-') : ''}
             token={token}

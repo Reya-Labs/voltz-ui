@@ -33,55 +33,55 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
   return (
     <SwapDetailsBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           {mode === 'fixed' ? 'Fixed' : 'Variable'} Rate Receiving
         </Typography>
         <TokenTypography
-          colorToken={mode === 'fixed' ? 'skyBlueCrayola' : 'ultramarineBlue'}
+          colorToken={mode === 'fixed' ? 'primary' : 'secondary'}
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={receivingRate}
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           {mode === 'fixed' ? 'Variable' : 'Fixed'} Rate Paying
         </Typography>
         <TokenTypography
-          colorToken={mode === 'fixed' ? 'ultramarineBlue' : 'skyBlueCrayola'}
+          colorToken={mode === 'fixed' ? 'secondary' : 'primary'}
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={payingRate}
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Notional
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={token}
           typographyToken="secondaryBodySmallRegular"
           value={prospectiveSwapNotionalFormatted}
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Margin
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={token}
           typographyToken="secondaryBodySmallRegular"
           value={prospectiveSwapMarginFormatted}
         />
       </SwapDetailBox>
       <SwapDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token=" "
           typographyToken="secondaryBodySmallRegular"
           value={aMMMaturity}

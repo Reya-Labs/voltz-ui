@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const FormBox = styled('div')`
   display: flex;
@@ -8,7 +7,7 @@ export const FormBox = styled('div')`
   padding: 24px;
   gap: 16px;
 
-  background: ${colors.liberty6};
+  background: ${({ theme }) => theme.colors.black700};
   border-radius: 8px;
   width: 400px;
   margin-left: auto;

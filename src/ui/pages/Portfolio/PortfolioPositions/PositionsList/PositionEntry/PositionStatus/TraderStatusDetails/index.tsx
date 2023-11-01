@@ -19,41 +19,41 @@ export const TraderStatusDetails: React.FunctionComponent<TraderStatusDetailsPro
 }) => {
   return (
     <TraderStatusDetailsBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallBold">
+      <Typography colorToken="white100" typographyToken="primaryBodySmallBold">
         Receiving rate
       </Typography>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
         The delta between your paying and receiving rates determines your position.
       </Typography>
       <RowsBox>
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Current Fixed
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             token="%"
             typographyToken="primaryBodySmallRegular"
             value={formFormatNumber(currentFixed)}
           />
         </RowBox>
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Receiving
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             token="%"
             typographyToken="primaryBodySmallRegular"
             value={formFormatNumber(receiving)}
           />
         </RowBox>
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Paying
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             token="%"
             typographyToken="primaryBodySmallRegular"
             value={formFormatNumber(paying)}
@@ -61,17 +61,11 @@ export const TraderStatusDetails: React.FunctionComponent<TraderStatusDetailsPro
         </RowBox>
         <HorizontalLine />
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Position
           </Typography>
           <TokenTypography
-            colorToken={
-              positionRate === 0
-                ? 'lavenderWeb'
-                : positionRate < 0
-                ? 'wildStrawberry'
-                : 'skyBlueCrayola'
-            }
+            colorToken={positionRate === 0 ? 'white' : positionRate < 0 ? 'error' : 'primary'}
             token="%"
             typographyToken="primaryBodySmallRegular"
             value={formFormatNumber(positionRate)}

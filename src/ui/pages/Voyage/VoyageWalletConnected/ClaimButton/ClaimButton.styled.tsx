@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { Button, colors } from 'brokoli-ui';
+import { Button } from 'brokoli-ui';
 
 export const ClaimedAtTypography = styled('span')`
-  color: ${colors.skyBlueCrayola};
+  color: ${({ theme }) => theme.colors.primary100};
   margin-left: 4px;
 `;
 

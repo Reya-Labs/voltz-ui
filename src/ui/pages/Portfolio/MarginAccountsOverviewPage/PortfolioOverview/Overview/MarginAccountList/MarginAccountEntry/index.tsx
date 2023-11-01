@@ -74,7 +74,7 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
           <LeftBox>
             <ChainIconAndNameContainer>
               {chainIcon}
-              <Typography colorToken="lavenderWeb" typographyToken={textsTypographyToken}>
+              <Typography colorToken="white100" typographyToken={textsTypographyToken}>
                 {name}
               </Typography>
               <ToggleCaretBox>
@@ -84,11 +84,11 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
           </LeftBox>
           <RightBox>
             <BalanceBox>
-              <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
+              <Typography colorToken="white400" typographyToken={textsTypographyToken}>
                 Balance
               </Typography>
               <TokenCompactTypography
-                colorToken="lavenderWeb"
+                colorToken="white"
                 compactData={
                   !settlementToken ? balanceUSDCompactFormatted : balanceCompactFormatted
                 }
@@ -97,18 +97,18 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
               />
             </BalanceBox>
             <PositionsCountBox>
-              <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
+              <Typography colorToken="white400" typographyToken={textsTypographyToken}>
                 Positions
               </Typography>
-              <Typography colorToken="lavenderWeb" typographyToken={numbersTypographyToken}>
+              <Typography colorToken="white100" typographyToken={numbersTypographyToken}>
                 {positionsCount}
               </Typography>
             </PositionsCountBox>
             <MarginRatioBox>
-              <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
+              <Typography colorToken="white400" typographyToken={textsTypographyToken}>
                 Margin Ratio
               </Typography>
-              <Typography colorToken="lavenderWeb" typographyToken={numbersTypographyToken}>
+              <Typography colorToken="white100" typographyToken={numbersTypographyToken}>
                 {marginRatioPercentage}%
               </Typography>
               <MarginRatioDonut health={marginRatioHealth} percentage={marginRatioPercentage} />

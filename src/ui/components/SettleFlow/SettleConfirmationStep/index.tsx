@@ -46,7 +46,7 @@ export const SettleConfirmationStep: React.FunctionComponent = () => {
   return (
     <ConfirmationStepBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Settling Position
         </Typography>
         <CloseButton onClick={handleCloseButtonClick} />
@@ -71,7 +71,7 @@ export const SettleConfirmationStep: React.FunctionComponent = () => {
             : ''
         }
         bottomLeftTextColorToken={
-          !isSettlementAllowed ? 'orangeYellow' : error ? 'wildStrawberry' : undefined
+          !isSettlementAllowed ? 'warning100' : error ? 'error100' : undefined
         }
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
         disabled={!isSettlementAllowed}

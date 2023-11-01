@@ -12,7 +12,7 @@ export const WaitingForLPConfirmationStep: React.FunctionComponent = () => {
   const mode = useAppSelector(selectUserInputNotionalAmountEditMode);
   return (
     <WaitingForConfirmationStepBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+      <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
         Waiting for confirmation
       </Typography>
       <RainbowLoaderBox>
@@ -21,7 +21,7 @@ export const WaitingForLPConfirmationStep: React.FunctionComponent = () => {
           text={mode === 'add' ? 'Adding Liquidity...' : 'Removing Liquidity...'}
         />
       </RainbowLoaderBox>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Confirm this transaction in your wallet
       </Typography>
     </WaitingForConfirmationStepBox>

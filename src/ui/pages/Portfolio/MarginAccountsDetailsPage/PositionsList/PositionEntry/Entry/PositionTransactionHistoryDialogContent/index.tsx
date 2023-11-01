@@ -196,7 +196,7 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<
       {canSettle ? <SettleFlow /> : null}
       <ContentBox>
         <TitleBox>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+          <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
             {variant === 'active'
               ? 'Position History'
               : variant === 'matured'

@@ -38,22 +38,22 @@ export const AdminPassDialogContent: React.FunctionComponent<{
         </Typography>
         <CloseButton onClick={onClose} />
       </TitleBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
         With this pass, you have early access to trade. For each pass you transfer to a friend, they
         also gain early access to trade, and their trades will benefit you later on. No friends? No
         worries. You can always list the pass for sale.
       </Typography>
       <DetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Total Passes
         </Typography>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
           {totalPasses}
         </Typography>
       </DetailBox>
       <Button
         bottomLeftText={error ? error : ''}
-        bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
+        bottomLeftTextColorToken={error ? 'error100' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
         disabled={loading}
         loading={loading}

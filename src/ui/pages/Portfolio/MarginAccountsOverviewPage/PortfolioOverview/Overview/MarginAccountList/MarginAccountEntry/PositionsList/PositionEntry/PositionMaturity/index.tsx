@@ -21,7 +21,7 @@ export const PositionMaturity: React.FunctionComponent<PositionMaturityProps> = 
     <Tooltip
       trigger={
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token=""
           typographyToken={typographyToken}
           value={maturityFormatted}

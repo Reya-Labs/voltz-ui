@@ -74,7 +74,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
           <MarketTokenInformation token={token} />
           {depositable ? (
             <DepositButton
-              colorToken="lavenderWeb"
+              colorToken="white"
               to={`/${generatePath(routes.LP_OPTIMISERS_DEPOSIT_FORM, {
                 actions: 'deposit',
                 vaultId: id,
@@ -88,7 +88,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
         <TopRightBox>
           <TotalBalanceBox>
             <TokenTypography
-              colorToken="lavenderWeb"
+              colorToken="white"
               prefixToken="$"
               token={totalBalanceCompactFormat.compactSuffix}
               typographyToken="secondaryBodySmallRegular"
@@ -114,29 +114,29 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
         <HeaderBox>
           <ListEntryLeftBox>
             <MaturityBox>
-              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+              <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
                 Maturity
               </Typography>
             </MaturityBox>
             <StatusBox>
-              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+              <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
                 Status
               </Typography>
             </StatusBox>
           </ListEntryLeftBox>
           <ListEntryRightBox>
             <DistributionBox>
-              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+              <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
                 Distribution
               </Typography>
             </DistributionBox>
             <BalanceBox>
-              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+              <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
                 Balance
               </Typography>
             </BalanceBox>
             <PoolsBox>
-              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+              <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
                 Pools
               </Typography>
             </PoolsBox>
@@ -165,16 +165,13 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                 <VaultListItemInfo key={maturityTimestampMS}>
                   <ListEntryLeftBox>
                     <MaturityBox>
-                      <Typography
-                        colorToken="lavenderWeb"
-                        typographyToken="primaryBodyXSmallRegular"
-                      >
+                      <Typography colorToken="white100" typographyToken="primaryBodyXSmallRegular">
                         {formatPOSIXTimestamp(maturityTimestampMS)}
                       </Typography>
                     </MaturityBox>
                     <StatusBox>
                       <Typography
-                        colorToken={isCompleted ? 'skyBlueCrayola' : 'skyBlueCrayola3'}
+                        colorToken={isCompleted ? 'primary100' : 'primary400'}
                         typographyToken="primaryBodyXSmallRegular"
                       >
                         {isCompleted ? 'Completed' : 'In progress'}
@@ -182,7 +179,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                     </StatusBox>
                     {isCompleted && canManageVaultPosition ? (
                       <ManageButton
-                        colorToken="lavenderWeb"
+                        colorToken="white"
                         to={`/${generatePath(routes.LP_OPTIMISERS_WITHDRAW_ROLLOVER_FORM, {
                           actions: 'manage',
                           vaultId: id,
@@ -197,7 +194,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                   <ListEntryRightBox>
                     <DistributionBox>
                       <TokenTypography
-                        colorToken="lavenderWeb"
+                        colorToken="white"
                         token="%"
                         typographyToken="secondaryBodySmallRegular"
                         value={distribution}
@@ -205,7 +202,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                     </DistributionBox>
                     <BalanceBox>
                       <TokenTypography
-                        colorToken="lavenderWeb"
+                        colorToken="white"
                         prefixToken="$"
                         token={currentBalanceCompactFormat.compactSuffix}
                         typographyToken="secondaryBodySmallRegular"
@@ -213,10 +210,7 @@ export const VaultListItem: React.FunctionComponent<VaultListItemProps> = ({
                       />
                     </BalanceBox>
                     <PoolsBox>
-                      <Typography
-                        colorToken="lavenderWeb"
-                        typographyToken="secondaryBodySmallRegular"
-                      >
+                      <Typography colorToken="white100" typographyToken="secondaryBodySmallRegular">
                         {poolsCount}
                       </Typography>
                     </PoolsBox>

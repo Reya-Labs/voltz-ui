@@ -1,6 +1,5 @@
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { colors, primaryBodyMediumRegularCSSObject } from 'brokoli-ui';
+import { getResponsiveTypographyStyleFromToken } from 'brokoli-ui';
 import { Link } from 'react-router-dom';
 
 export const SubmenuLinkStyled = styled(Link, {
@@ -15,35 +14,36 @@ export const SubmenuLinkStyled = styled(Link, {
   padding: 10px 12px;
   gap: 16px;
 
-  ${css(primaryBodyMediumRegularCSSObject)};
+  ${({ theme }) =>
+    getResponsiveTypographyStyleFromToken({ theme, token: 'primaryBodyMediumRegular' })};
 
-  color: ${colors.lavenderWeb3};
+  color: ${({ theme }) => theme.colors.white400};
   text-decoration: none;
-  background-color: ${colors.liberty7};
+  background-color: ${({ theme }) => theme.colors.black800};
   border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
   pointer-events: ${({ disabled }) => (disabled ? 'none' : '')};
 
   & path {
-    stroke: ${colors.lavenderWeb3};
+    stroke: ${({ theme }) => theme.colors.white400};
   }
 
   &:hover {
     text-decoration: none;
-    background-color: ${colors.lavenderWeb8};
-    color: ${colors.lavenderWeb};
+    background-color: ${({ theme }) => theme.colors.white900};
+    color: ${({ theme }) => theme.colors.white100};
   }
   &:hover path {
-    stroke: ${colors.lavenderWeb};
+    stroke: ${({ theme }) => theme.colors.white100};
   }
 `;
 
 export const ActiveSubmenuLink = styled(SubmenuLinkStyled)`
   text-decoration: none;
-  background: ${colors.lavenderWeb8};
-  color: ${colors.lavenderWeb};
+  background: ${({ theme }) => theme.colors.white900};
+  color: ${({ theme }) => theme.colors.white100};
   & path {
-    stroke: ${colors.lavenderWeb};
+    stroke: ${({ theme }) => theme.colors.white100};
   }
 `;

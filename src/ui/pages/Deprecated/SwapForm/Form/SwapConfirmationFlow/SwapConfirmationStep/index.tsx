@@ -36,7 +36,7 @@ export const SwapConfirmationStep: React.FunctionComponent = () => {
   return (
     <SwapConfirmationStepBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Confirm Swap
         </Typography>
         <CloseButton onClick={handleCloseButtonClick} />
@@ -54,7 +54,7 @@ export const SwapConfirmationStep: React.FunctionComponent = () => {
       </SwapFeeDetailsBox>
       <Button
         bottomLeftText={error ? error : ''}
-        bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
+        bottomLeftTextColorToken={error ? 'error100' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
         variant="primary"
         onClick={handleConfirmSwap}

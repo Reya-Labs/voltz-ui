@@ -4,13 +4,13 @@ import { HeaderBox, PointsTypography, RankTypography, TraderTypography } from '.
 
 export const Header: React.FunctionComponent = React.memo(() => (
   <HeaderBox data-testid="Header-HeaderBox">
-    <RankTypography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+    <RankTypography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
       Rank
     </RankTypography>
-    <TraderTypography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+    <TraderTypography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
       Trader
     </TraderTypography>
-    <PointsTypography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+    <PointsTypography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
       Points
     </PointsTypography>
   </HeaderBox>

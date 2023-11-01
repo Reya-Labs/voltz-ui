@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const WalletConnectedBox = styled('div')`
   display: flex;
@@ -38,7 +37,7 @@ export const AvatarAddressBox = styled('div')`
   padding: 10px 18px 10px 16px;
   gap: 10px;
 
-  background: ${colors.lavenderWeb8};
+  background: ${({ theme }) => theme.colors.white900};
   border-radius: 8px;
   width: 100%;
   box-sizing: border-box;

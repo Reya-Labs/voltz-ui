@@ -42,7 +42,7 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
   if (loading) {
     return (
       <EntrySkeleton
-        colorToken="liberty2"
+        colorToken="black300"
         data-testid="Entry-EntrySkeleton"
         variant="rectangular"
       />
@@ -52,7 +52,7 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
   return (
     <EntryBox data-testid={`RankingEntry-${rank}-${variant}`}>
       <RankBox>
-        <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyMediumRegular">
+        <Typography colorToken="white100" typographyToken="secondaryBodyMediumRegular">
           {rank <= 0 ? '---' : rank}
           {rank === 1 && <Gold data-testid="Entry-GoldIcon" />}
           {rank === 2 && <Silver data-testid="Entry-SilverIcon" />}
@@ -68,7 +68,7 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
           />
         ) : (
           <Typography
-            colorToken="lavenderWeb"
+            colorToken="white100"
             data-testid="Entry-NoAddressTypography"
             typographyToken="secondaryBodyMediumRegular"
           >

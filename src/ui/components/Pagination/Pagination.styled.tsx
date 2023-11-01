@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { colors, Typography } from 'brokoli-ui';
+import { Typography } from 'brokoli-ui';
 
 export const PaginationBox = styled('div')`
   display: flex;
@@ -20,7 +20,7 @@ export const ActionButton = styled(Typography, {
 
 export const BarBox = styled('div')`
   width: 96px;
-  background: ${colors.lavenderWeb4};
+  background: ${({ theme }) => theme.colors.white500};
   height: 10px;
   margin: 8px;
 `;
@@ -29,7 +29,7 @@ export const AnimatedBarBox = styled('div', {
   shouldForwardProp: (prop) => prop !== 'width',
 })<{ width: number }>`
   width: ${({ width }) => width}%;
-  background: ${colors.lavenderWeb};
+  background: ${({ theme }) => theme.colors.white100};
   height: 100%;
   transition: width 500ms ease-in;
 `;

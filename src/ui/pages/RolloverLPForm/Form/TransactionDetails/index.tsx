@@ -14,12 +14,12 @@ export const TransactionDetails: React.FunctionComponent = () => {
       <TransactionDetailBox>
         <IconTextWrapper>
           <GasIcon />
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>
         </IconTextWrapper>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={` ${gasTokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={gasFeeFormatted}

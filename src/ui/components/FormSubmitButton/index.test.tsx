@@ -1,5 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-
+import { fireEvent, render, screen } from '../../../test-helpers';
 import { FormSubmitButton } from '.';
 
 describe('<FormSubmitButton />', () => {
@@ -7,7 +6,7 @@ describe('<FormSubmitButton />', () => {
     render(
       <FormSubmitButton
         bottomLeftText="Optional text"
-        bottomLeftTextColorToken="wildStrawberry"
+        bottomLeftTextColorToken="error100"
         disabled={false}
         loading={false}
         onClick={() => {}}
@@ -28,7 +27,7 @@ describe('<FormSubmitButton />', () => {
     render(
       <FormSubmitButton
         bottomLeftText="Optional text"
-        bottomLeftTextColorToken="wildStrawberry"
+        bottomLeftTextColorToken="error100"
         disabled={false}
         loading={true}
         onClick={handleClick}
@@ -53,7 +52,7 @@ describe('<FormSubmitButton />', () => {
     render(
       <FormSubmitButton
         bottomLeftText="Optional text"
-        bottomLeftTextColorToken="wildStrawberry"
+        bottomLeftTextColorToken="error100"
         disabled={false}
         loading={false}
         onClick={handleClick}
@@ -75,7 +74,7 @@ describe('<FormSubmitButton />', () => {
     render(
       <FormSubmitButton
         bottomLeftText="Optional text"
-        bottomLeftTextColorToken="wildStrawberry"
+        bottomLeftTextColorToken="error100"
         disabled={true}
         loading={true}
         onClick={handleClick}

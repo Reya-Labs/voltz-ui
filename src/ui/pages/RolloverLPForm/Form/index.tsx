@@ -26,7 +26,7 @@ export const Form: React.FunctionComponent = () => {
           <MarginAccount />
         </MarginAccountBox>
         <TitleBox>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Black">
+          <Typography colorToken="white100" typographyToken="primaryHeader3Black">
             Provide Liquidity
           </Typography>
         </TitleBox>

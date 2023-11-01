@@ -1,4 +1,4 @@
-import { ColorTokens, getColorFromToken, Typography } from 'brokoli-ui';
+import { ColorTokens, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import {
@@ -54,7 +54,7 @@ export const ChartFilters: React.FunctionComponent<ChartFiltersProps> = ({
         >
           <ChartFilterButton disabled={disabled}>
             <Typography
-              colorToken="lavenderWeb"
+              colorToken="white100"
               data-testid="ChartFilterButtonBox-TypographyLabel"
               typographyToken="primaryBodySmallRegular"
             >
@@ -63,7 +63,7 @@ export const ChartFilters: React.FunctionComponent<ChartFiltersProps> = ({
           </ChartFilterButton>
           {underlineColorToken ? (
             <Underline
-              color={getColorFromToken(underlineColorToken)}
+              colorToken={underlineColorToken}
               data-testid="ChartFilterButtonBox-Underline"
             />
           ) : null}

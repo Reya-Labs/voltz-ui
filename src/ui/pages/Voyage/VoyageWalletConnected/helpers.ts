@@ -25,10 +25,10 @@ export const STATUS_TEXT_MAP: Record<VoyageBadgeUI['status'], string> = {
 };
 
 export const STATUS_COLOR_TOKEN_MAP: Record<VoyageBadgeUI['status'], ColorTokens> = {
-  notAchieved: 'wildStrawberry',
-  notStarted: 'skyBlueCrayola3',
-  achieved: 'skyBlueCrayola',
-  inProgress: 'orangeYellow',
+  notAchieved: 'error100',
+  notStarted: 'primary400',
+  achieved: 'primary100',
+  inProgress: 'warning100',
 };
 
 export const BADGE_ID_PILL_TEXT_MAP: Record<VoyageBadgeUI['id'], string> = {

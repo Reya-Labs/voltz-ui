@@ -30,55 +30,55 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
   return (
     <React.Fragment>
       <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Account Initial Margin Post Trade
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={`${accountInitialMarginPostTradeCompactFormatted.compactSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={accountInitialMarginPostTradeCompactFormatted.compactNumber}
         />
       </TransactionDetailBox>
       <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Receiving rate
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={receivingRateFormatted}
         />
       </TransactionDetailBox>
       <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Size
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={`${notionalAmountFormatted.compactSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={notionalAmountFormatted.compactNumber}
         />
       </TransactionDetailBox>
       <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Estimated Slippage
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={slippageFormatted}
         />
       </TransactionDetailBox>
       <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Fees
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={tokenFormatted}
           typographyToken="secondaryBodySmallRegular"
           value={feeFormatted}
@@ -87,12 +87,12 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
       <TransactionDetailBox>
         <IconTextWrapper>
           <GasIcon />
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>
         </IconTextWrapper>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={gasTokenFormatted}
           typographyToken="secondaryBodySmallRegular"
           value={gasFeeFormatted}

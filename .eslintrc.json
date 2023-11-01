@@ -82,6 +82,12 @@
         "patterns": [
           {
             "group": [
+              "@testing-library/react"
+            ],
+            "message": "Don't import from '@testing-library/react' direclty! Use test-helpers instead. It provides needed Providers for tests to work!"
+          },
+          {
+            "group": [
               "**/dist/**"
             ],
             "message": "Don't import types/modules from 'dist' directories!"

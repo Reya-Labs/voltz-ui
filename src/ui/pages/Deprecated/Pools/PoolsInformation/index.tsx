@@ -37,9 +37,9 @@ export const PoolsInformation: React.FunctionComponent = () => {
     <PoolsInformationBox>
       <InformationBox>
         <LabelTokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           label="Markets"
-          labelColorToken="lavenderWeb3"
+          labelColorToken="white400"
           labelTypographyToken={labelTypographyToken}
           token=""
           typographyToken={typographyToken}
@@ -49,9 +49,9 @@ export const PoolsInformation: React.FunctionComponent = () => {
       <VerticalLine />
       <InformationBox>
         <LabelTokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           label="Trading Volume 30d"
-          labelColorToken="lavenderWeb3"
+          labelColorToken="white400"
           labelTypographyToken={labelTypographyToken}
           token={volume30DaysFormatted.compactSuffix}
           tooltip="Cumulative notional traded in all pools over the past 30 days"
@@ -62,9 +62,9 @@ export const PoolsInformation: React.FunctionComponent = () => {
       <VerticalLine />
       <InformationBox>
         <LabelTokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           label="Total Liquidity"
-          labelColorToken="lavenderWeb3"
+          labelColorToken="white400"
           labelTypographyToken={labelTypographyToken}
           token={totalLiquidityFormatted.compactSuffix}
           typographyToken={typographyToken}
@@ -74,7 +74,7 @@ export const PoolsInformation: React.FunctionComponent = () => {
       <VerticalLine />
       <FilterBox>
         <TypographyWithTooltip
-          colorToken="lavenderWeb3"
+          colorToken="white400"
           tooltip="Filter pools by selecting a pool criteria"
           typographyToken={labelTypographyToken}
         >
@@ -84,7 +84,7 @@ export const PoolsInformation: React.FunctionComponent = () => {
           {filterOptions.map((filter) => (
             <PoolFilterPill
               key={filter.id}
-              colorToken={filter.isActive ? 'lavenderWeb' : 'liberty'}
+              colorToken={filter.isActive ? 'white' : 'black'}
               typographyToken="primaryBodySmallRegular"
               variant="compact"
               onClick={() => {

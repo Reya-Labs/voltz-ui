@@ -11,14 +11,14 @@ type PointsProps = {
 export const Points: React.FunctionComponent<PointsProps> = ({ points }) => {
   if (points <= 0) {
     return (
-      <PointsTypography colorToken="lavenderWeb" typographyToken="secondaryBodyMediumRegular">
+      <PointsTypography colorToken="white100" typographyToken="secondaryBodyMediumRegular">
         ---
       </PointsTypography>
     );
   }
 
   return (
-    <PointsTypography colorToken="lavenderWeb" typographyToken="secondaryBodyMediumRegular">
+    <PointsTypography colorToken="white100" typographyToken="secondaryBodyMediumRegular">
       <CountUp delay={0} end={points} formattingFn={formatNumber} start={0}>
         {({ countUpRef }) => <span ref={countUpRef} />}
       </CountUp>

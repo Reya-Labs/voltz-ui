@@ -8,21 +8,21 @@ export const NoMarginAccountFound: React.FunctionComponent<{
 }> = React.memo(({ to }) => (
   <ContainerBox>
     <Typography
-      colorToken="lavenderWeb"
+      colorToken="white100"
       data-testid="NoMarginAccountFound-Title"
       typographyToken="primaryHeader1Black"
     >
       Margin account not found
     </Typography>
     <Typography
-      colorToken="lavenderWeb2"
+      colorToken="white300"
       data-testid="NoMarginAccountFound-Subtitle"
       typographyToken="primaryBodyMediumRegular"
     >
       Unfortunately we couldn't fetch any existing margin account matching this criteria. We
       encourage you to{' '}
       <AppLink
-        colorToken="skyBlueCrayola"
+        colorToken="primary"
         data-testid="NoMarginAccountFound-AppLink"
         to={to}
         typographyToken="primaryBodyMediumRegular"

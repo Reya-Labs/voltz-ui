@@ -25,7 +25,7 @@ export const Positions: React.FunctionComponent = () => {
     <PositionsBox>
       <BottomBox>
         <PositionsSelectorBox>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumBold">
+          <Typography colorToken="white100" typographyToken="primaryBodyMediumBold">
             {activeFilter === 'active'
               ? activePositionsLength
               : activeFilter === 'settled'

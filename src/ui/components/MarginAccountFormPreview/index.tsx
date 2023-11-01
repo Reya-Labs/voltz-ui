@@ -17,9 +17,9 @@ export const MarginAccountFormPreview: React.FunctionComponent<MarginAccountForm
   <Box>
     <AccountBox>
       <LabelTokenTypography
-        colorToken="lavenderWeb"
+        colorToken="white"
         label="Account"
-        labelColorToken="lavenderWeb2"
+        labelColorToken="white300"
         labelTypographyToken="primaryBodyXSmallRegular"
         token=""
         typographyToken="primaryBodyMediumBold"
@@ -28,9 +28,9 @@ export const MarginAccountFormPreview: React.FunctionComponent<MarginAccountForm
     </AccountBox>
     <BalanceBox>
       <LabelTokenTypography
-        colorToken="lavenderWeb"
+        colorToken="white"
         label="Margin"
-        labelColorToken="lavenderWeb2"
+        labelColorToken="white300"
         labelTypographyToken="primaryBodyXSmallRegular"
         token={token}
         typographyToken="secondaryBodyMediumRegular"
