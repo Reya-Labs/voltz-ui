@@ -131,8 +131,8 @@
     "@voltz-protocol/api-sdk-v2": "1.32.0"
   },
   "dependencies": {
-    "@emotion/react": "11.7.1",
-    "@emotion/styled": "11.6.0",
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
     "@metamask/detect-provider": "1.2.0",
     "@metamask/jazzicon": "2.0.0",
     "@reduxjs/toolkit": "1.9.5",
@@ -147,7 +147,7 @@
     "@walletconnect/modal": "2.6.1",
     "@walletconnect/web3-provider": "1.8.0",
     "aws-amplify": "4.3.44",
-    "brokoli-ui": "2.13.0",
+    "brokoli-ui": "2.14.0",
     "copy-to-clipboard": "3.3.3",
     "ethers": "5.5.4",
     "isomorphic-fetch": "3.0.0",
