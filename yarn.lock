@@ -33763,7 +33763,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-underscore.string@~2.2.0rc:
+"underscore.string@npm:2.2.1":
   version: 2.2.1
   resolution: "underscore.string@npm:2.2.1"
   checksum: ec2239f8d16587200a500cf3d2b741390c491acbc849911f0e5a7ae476fbbd3ed0999a0c03a402c9dfe5412a8b0b18bfb67225ea6cd2085f2045742fde98111a
