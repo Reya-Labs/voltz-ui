@@ -8,7 +8,6 @@ import {
   togglePoolFilterAction,
 } from '../../../../app/features/aMMs';
 import { usePoolsInformation } from '../../../hooks/usePoolsInformation';
-import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import {
   FilterBox,
   FiltersBox,
@@ -23,15 +22,9 @@ export const PoolsInformation: React.FunctionComponent = () => {
   const poolsSize = useAppSelector(selectPoolsSize);
   const { volume30DaysFormatted, totalLiquidityFormatted } = usePoolsInformation();
   const filterOptions = useAppSelector(selectPoolFilterOptions);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
 
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyLargeBold'
-    : 'secondaryBodyMediumBold';
+  const labelTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const typographyToken: TypographyToken = 'secondaryBodyMediumBold';
 
   return (
     <PoolsInformationBox>

@@ -3,30 +3,17 @@ import React from 'react';
 
 import { useAppSelector } from '../../../../../app';
 import { selectRolloverSwapFormAMM } from '../../../../../app/features/forms/trader/rollover-swap';
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';
 import { PreviousPositionDetailsUI } from './PreviousPositionDetailsUI';
 
 type PositionDetailsProps = {};
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
   const aMM = useAppSelector(selectRolloverSwapFormAMM);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
 
-  const actionLabelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyLargeBold'
-    : 'primaryBodyMediumBold';
-
-  const actionTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyMediumRegular'
-    : 'secondaryBodySmallRegular';
-
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodySmallRegular'
-    : 'secondaryBodyMediumRegular';
+  const actionLabelTypographyToken: TypographyToken = 'primaryBodyMediumBold';
+  const actionTypographyToken: TypographyToken = 'secondaryBodySmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const typographyToken: TypographyToken = 'secondaryBodyMediumRegular';
 
   if (!aMM) {
     return null;

@@ -18,7 +18,6 @@ import { TestNetIndicator } from '../../../../components/TestNetIndicator';
 import { V2EntryInformation } from '../../../../components/V2EntryInformation';
 import { useAppNavigate } from '../../../../hooks/useAppNavigate';
 import { useMarginAccountsForSwapLP } from '../../../../hooks/useMarginAccountsForSwapLP';
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { useWallet } from '../../../../hooks/useWallet';
 import {
   ButtonStyled,
@@ -80,11 +79,9 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     const chainId = useAppSelector(selectChainId);
     const chainStateChangeError = useAppSelector(selectChainChangeState) === 'error';
     const promptForNetworkChange = chainId !== null ? chainId !== poolChainId : false;
-    const { isLargeDesktopDevice } = useResponsiveQuery();
+
     const navigate = useAppNavigate();
-    const typographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'secondaryBodyLargeRegular'
-      : 'secondaryBodyMediumRegular';
+    const typographyToken: TypographyToken = 'secondaryBodyMediumRegular';
 
     const switchNetwork = (form: 'lpForm' | 'swapForm') => {
       setWaitingOnNetworkChange(form);

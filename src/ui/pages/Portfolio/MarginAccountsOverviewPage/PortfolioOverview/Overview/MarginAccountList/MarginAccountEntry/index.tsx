@@ -7,7 +7,6 @@ import { MarginRatioDonut } from '../../../../../../../components/MarginRatioDon
 import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
 import { TokenCompactTypography } from '../../../../../../../components/TokenCompactTypography';
 import { useAppNavigate } from '../../../../../../../hooks/useAppNavigate';
-import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
 import {
   BalanceBox,
   ChainIconAndNameContainer,
@@ -45,13 +44,9 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
     ref,
   ) => {
     const [isPositionListShown, setIsPositionListShown] = useState(false);
-    const { isLargeDesktopDevice } = useResponsiveQuery();
-    const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'secondaryBodyMediumRegular'
-      : 'secondaryBodySmallRegular';
-    const textsTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'primaryBodyMediumRegular'
-      : 'primaryBodySmallRegular';
+
+    const numbersTypographyToken: TypographyToken = 'secondaryBodySmallRegular';
+    const textsTypographyToken: TypographyToken = 'primaryBodySmallRegular';
     const { toMarginAccountDetailsPage } = useAppNavigate();
     const handleOnEntryClick = () => {
       setIsPositionListShown(!isPositionListShown);

@@ -9,7 +9,6 @@ import {
   selectHistoricalRatesStatus,
 } from '../../../app/features/historical-rates';
 import { selectChainId } from '../../../app/features/network';
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
 import {
   ChartBox,
@@ -73,7 +72,6 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
   const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1m');
   const [activeModeId, setActiveModeId] = useState<string>('variable');
   const chainId = useAppSelector(selectChainId);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
   const granularity =
     activeTimeRangeId === '1d' || activeModeId === '1w'
       ? Granularity.ONE_HOUR
@@ -121,9 +119,7 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
         ) : null}
         <LineChart
           axisBottomFormat={activeTimeRangeId === '1d' ? 'hours' : 'days'}
-          axisTypographyToken={
-            isLargeDesktopDevice ? 'secondaryBodySmallRegular' : 'primaryBodyXSmallRegular'
-          }
+          axisTypographyToken={'primaryBodyXSmallRegular'}
           colorToken={isFixed ? 'primary100' : 'secondary100'}
           data={[
             {

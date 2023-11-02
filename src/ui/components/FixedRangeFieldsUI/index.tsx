@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FormNumberLimits } from '../../../app/features/forms/common';
 import { stringToBigFloat } from '../../../utilities/number';
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { FixedRangeFieldsBox } from './FixedRangeFieldsUI.styled';
 type FixedRangeFieldsUIProps = {
   fixedLower: string;
@@ -25,7 +24,6 @@ export const FixedRangeFieldsUI: React.FunctionComponent<FixedRangeFieldsUIProps
 }) => {
   const [localFixedLower, setLocalFixedLower] = useState<string>(fixedLower);
   const [localFixedUpper, setLocalFixedUpper] = useState<string>(fixedUpper);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
 
   useEffect(() => {
     setLocalFixedUpper(fixedUpper);
@@ -78,9 +76,7 @@ export const FixedRangeFieldsUI: React.FunctionComponent<FixedRangeFieldsUIProps
     };
   }, []);
 
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodySmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodySmallRegular';
 
   return (
     <FixedRangeFieldsBox>

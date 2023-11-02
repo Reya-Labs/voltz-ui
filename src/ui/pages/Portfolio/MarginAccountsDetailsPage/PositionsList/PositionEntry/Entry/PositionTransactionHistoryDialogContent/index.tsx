@@ -14,7 +14,6 @@ import { PositionTransactionHistory } from '../../../../../../../components/Posi
 import { SettleFlow } from '../../../../../../../components/SettleFlow';
 import { useAppNavigate } from '../../../../../../../hooks/useAppNavigate';
 import { usePositionDetails } from '../../../../../../../hooks/usePositionDetails';
-import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
 import { useWallet } from '../../../../../../../hooks/useWallet';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
 import { ButtonsBox, ContentBox, TitleBox } from './PositionTransactionHistoryDialogContent.styled';
@@ -54,7 +53,6 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<
   market,
   routePositionId,
 }) => {
-  const { isLargeDesktopDevice } = useResponsiveQuery();
   const dispatch = useAppDispatch();
   const [waitingOnNetworkChange, setWaitingOnNetworkChange] = useState<null | SwitchNetworkParams>(
     null,
@@ -69,9 +67,7 @@ export const PositionTransactionHistoryDialogContent: React.FunctionComponent<
   const canRollover = positionDetails?.canRollover;
   const canSettle = positionDetails?.canSettle;
   const variant = status.variant;
-  const textsTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodySmallRegular';
+  const textsTypographyToken: TypographyToken = 'primaryBodySmallRegular';
 
   const navigateToLPFormPage = () => {
     navigate.toLPFormPage({

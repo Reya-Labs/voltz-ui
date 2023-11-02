@@ -3,7 +3,6 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { formatNumber } from '../../../utilities/number';
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { ReactComponent as ArrowsSvg } from './arrows.svg';
 import {
   BottomTextContent,
@@ -33,7 +32,6 @@ export const NotionalSwapUI: React.FunctionComponent<NotionalSwapUIProps> = ({
   const fixedRate = fixedRateInfo ? formatNumber(fixedRateInfo) : '--';
   const variableRate = variableRateInfo ? formatNumber(variableRateInfo) : '--';
   const isFixedMode = localMode === 'fixed';
-  const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const debouncedSetMode = useMemo(
     () =>
@@ -72,21 +70,10 @@ export const NotionalSwapUI: React.FunctionComponent<NotionalSwapUIProps> = ({
     };
   }, []);
 
-  const receiveTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyExtraLargeBold'
-    : 'primaryBodyMediumBold';
-
-  const payTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodySmallRegular';
-
-  const percentageTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyLargeRegular'
-    : 'secondaryBodyMediumRegular';
+  const receiveTypographyToken: TypographyToken = 'primaryBodyMediumBold';
+  const payTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodySmallRegular';
+  const percentageTypographyToken: TypographyToken = 'secondaryBodyMediumRegular';
 
   return (
     <NotionalSwapWrapperBox>

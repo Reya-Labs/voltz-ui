@@ -1,7 +1,6 @@
 import { Typography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { DirectionIcon } from './DirectionIcon';
 import { RowsBox, TypographyWithIcon } from './SortHeader.styled';
 
@@ -22,11 +21,7 @@ export const SortHeader: React.FunctionComponent<SortHeaderProps> = ({
   loading,
   onClick,
 }) => {
-  const { isLargeDesktopDevice } = useResponsiveQuery();
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
+  const typographyToken: TypographyToken = 'primaryBodyXSmallRegular';
 
   const computedDisabled = loading || disabled;
   const handleOnRowClick = () => {
