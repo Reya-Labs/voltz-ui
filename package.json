@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "yarn code-quality:check",
-    "build": "GENERATE_SOURCEMAP=false node scripts/build.js",
+    "build": "yarn prebuild && GENERATE_SOURCEMAP=false node scripts/build.js",
     "build-storybook": "build-storybook",
     "ts:check": "yarn ts:check-types && yarn ts:circular-check",
     "ts:check-types": "tsc --noEmit",
@@ -259,7 +259,7 @@
   },
   "engines": {
     "node": ">= 16.17.0",
-    "yarn": ">= 1.22.0",
     "npm": "please-use-yarn"
-  }
+  },
+  "packageManager": "yarn@4.0.0"
 }
