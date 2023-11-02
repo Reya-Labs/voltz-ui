@@ -14345,9 +14345,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"brokoli-ui@npm:2.14.0":
-  version: 2.14.0
-  resolution: "brokoli-ui@npm:2.14.0"
+"brokoli-ui@npm:2.15.0":
+  version: 2.15.0
+  resolution: "brokoli-ui@npm:2.15.0"
   dependencies:
     "@floating-ui/react": "npm:0.19.0"
     "@nivo/core": "npm:0.80.0"
@@ -14366,7 +14366,7 @@ __metadata:
     react: 17.0.2
     react-dom: 17.0.2
     react-router-dom: 6.9.0
-  checksum: e64203b59caaba44489db2233f80ae7d43b6aa0b13e0f8f8125c76826c5a7b4740a6148587d509a32d66193c7b89948e6566ea1f0084689fff4c5f8e36377f89
+  checksum: bdbf02d54dec3036e60a8a002edae84a1d1ab14c86568e279bdd5df83ebda4b6b31faf9ed3497f30eb4961830fea0650907865b479f07874a226d2a21d43fa7f
   languageName: node
   linkType: hard
 
@@ -34548,7 +34548,7 @@ __metadata:
     babel-loader: "npm:8.3.0"
     babel-plugin-named-asset-import: "npm:0.3.8"
     babel-preset-react-app: "npm:10.0.1"
-    brokoli-ui: "npm:2.14.0"
+    brokoli-ui: "npm:2.15.0"
     browserslist: "npm:4.21.3"
     camelcase: "npm:6.3.0"
     case-sensitive-paths-webpack-plugin: "npm:2.4.0"
@@ -34595,7 +34595,6 @@ __metadata:
     react-gtm-module: "npm:2.0.11"
     react-redux: "npm:8.1.2"
     react-refresh: "npm:0.11.0"
-    react-responsive: "npm:9.0.2"
     react-router-dom: "npm:6.9.0"
     redux: "npm:4.2.1"
     redux-logger: "npm:3.0.6"

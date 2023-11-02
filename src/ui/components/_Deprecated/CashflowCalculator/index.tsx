@@ -18,7 +18,6 @@ import {
 } from '../../../../app/features/deprecated/cashflow-calculator';
 import { formFormatNumber } from '../../../../app/features/forms/common';
 import { stringToBigFloat } from '../../../../utilities/number';
-import { useResponsiveQuery } from '../../../hooks/useResponsiveQuery';
 import { useWallet } from '../../../hooks/useWallet';
 import {
   AdditionalCashFlowBox,
@@ -47,7 +46,7 @@ export const DeprecatedCashFlowCalculator: React.FunctionComponent<CashFlowCalcu
   const dispatch = useAppDispatch();
   const cashflowAMM = useAppSelector(selectCashflowAMM);
   const token = useAppSelector(selectAMMTokenFormatted);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
+
   const variableRateInfo = useAppSelector(selectVariableRateInfo);
   const estimatedApy = useAppSelector(selectEstimatedApy);
   const { account } = useWallet();
@@ -130,21 +129,10 @@ export const DeprecatedCashFlowCalculator: React.FunctionComponent<CashFlowCalcu
     return null;
   }
 
-  const titleTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyLargeBold'
-    : 'primaryBodyMediumBold';
-
-  const expectedVariableApyTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyMediumRegular'
-    : 'secondaryBodySmallRegular';
+  const titleTypographyToken: TypographyToken = 'primaryBodyMediumBold';
+  const expectedVariableApyTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const typographyToken: TypographyToken = 'secondaryBodySmallRegular';
 
   return (
     <CashFlowCalculatorBox>

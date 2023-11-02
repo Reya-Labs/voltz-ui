@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-
-import { mediaQuery } from '../../hooks/useResponsiveQuery/mediaQuery';
+import { mediaBreakPoints } from 'brokoli-ui';
 
 export const PageSectionBox = styled('div', {
   shouldForwardProp: (prop) => prop !== 'hasSubmenu',
@@ -42,7 +41,7 @@ export const RightSectionBox = styled('div')`
 
   height: 100%;
 
-  @media ${mediaQuery.largeDesktopDevice} {
+  @media ${mediaBreakPoints.largeDesktopDevice} {
     width: 544px;
   }
 `;

@@ -1,7 +1,6 @@
 import { Typography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { useResponsiveQuery } from '../../../../../../../../../hooks/useResponsiveQuery';
 import {
   LeftBox,
   MarginBox,
@@ -15,11 +14,7 @@ import {
 } from './PositionsHeader.styled';
 
 export const PositionsHeader: React.FunctionComponent = () => {
-  const { isLargeDesktopDevice } = useResponsiveQuery();
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
+  const typographyToken: TypographyToken = 'primaryBodyXSmallRegular';
 
   return (
     <PositionsHeaderBox>

@@ -1,7 +1,6 @@
 import { LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import {
   MarketTokenInformation,
   MarketTokenInformationProps,
@@ -38,15 +37,8 @@ export const PoolItem: React.FunctionComponent<PoolItemProps> = ({
   aMMMaturity,
   onClick,
 }) => {
-  const { isLargeDesktopDevice } = useResponsiveQuery();
-
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyLargeBold'
-    : 'secondaryBodyMediumBold';
+  const labelTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const typographyToken: TypographyToken = 'secondaryBodyMediumBold';
 
   return (
     <PoolHeaderBox onClick={onClick}>

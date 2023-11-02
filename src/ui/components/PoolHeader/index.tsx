@@ -2,7 +2,6 @@ import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { LabelTokenTypography, Popover, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import React, { useState } from 'react';
 
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { MarketTokenInformation, MarketTokenInformationProps } from '../MarketTokenInformation';
 import {
   FixedBox,
@@ -46,19 +45,9 @@ export const PoolHeader: React.FunctionComponent<PoolHeaderProps> = ({
   pools,
   poolCap,
 }) => {
-  const { isLargeDesktopDevice } = useResponsiveQuery();
-
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyLargeBold'
-    : 'secondaryBodyMediumBold';
-
-  const v2TypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyMediumBold'
-    : 'secondaryBodySmallBold';
+  const labelTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const typographyToken: TypographyToken = 'secondaryBodyMediumBold';
+  const v2TypographyToken: TypographyToken = 'secondaryBodySmallBold';
   const [isToggleCaretOpen, setIsToggleCaretOpen] = useState(false);
   const handleOnToggleCaretClick = () => setIsToggleCaretOpen(!isToggleCaretOpen);
   const handleOnClickOutside = () => setIsToggleCaretOpen(false);

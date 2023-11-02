@@ -15,7 +15,6 @@ import {
   setEstimatedVariableApyAction,
 } from '../../../app/features/cashflow-calculator';
 import { stringToBigFloat } from '../../../utilities/number';
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { useWallet } from '../../hooks/useWallet';
 import { CashFlowCalculatorBox, ToggleCaretBox } from './CashflowCalculator.styled';
 
@@ -32,7 +31,6 @@ export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps
   const dispatch = useAppDispatch();
   const disabled = useAppSelector(selectCashflowCalculatorDisabled);
   const cashflowPool = useAppSelector(selectCashflowPool);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
   const estimatedApy = useAppSelector(selectEstimatedVariableApy);
   const { account } = useWallet();
 
@@ -99,9 +97,7 @@ export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps
     return null;
   }
 
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumBold'
-    : 'primaryBodySmallBold';
+  const labelTypographyToken: TypographyToken = 'primaryBodySmallBold';
   if (!isOpen) {
     return (
       <CashFlowCalculatorBox>

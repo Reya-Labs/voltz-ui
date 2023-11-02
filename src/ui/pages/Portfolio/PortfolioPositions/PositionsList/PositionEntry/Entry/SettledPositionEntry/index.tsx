@@ -7,7 +7,6 @@ import { PositionUI } from '../../../../../../../../app/features/portfolio/types
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
 import { V2EntryInformation } from '../../../../../../../components/V2EntryInformation';
-import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
 import { HealthIndicator } from '../../HealthIndicator';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
 import {
@@ -47,13 +46,8 @@ export const SettledPositionEntry = React.forwardRef<HTMLDivElement, EntryProps>
     ref,
   ) => {
     const [transactionHistoryDialogOpen, setTransactionHistoryDialogOpen] = useState(false);
-    const { isLargeDesktopDevice } = useResponsiveQuery();
-    const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'secondaryBodyMediumRegular'
-      : 'secondaryBodySmallRegular';
-    const textsTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'primaryBodyMediumRegular'
-      : 'primaryBodySmallRegular';
+    const numbersTypographyToken: TypographyToken = 'secondaryBodySmallRegular';
+    const textsTypographyToken: TypographyToken = 'primaryBodySmallRegular';
 
     const chainIcon = (
       <ChainIcon

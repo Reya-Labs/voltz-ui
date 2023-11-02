@@ -9,7 +9,6 @@ import {
   setMarginAmountAction,
 } from '../../../../../app/features/forms/lps/rollover-lp';
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { NewMarginAmountFieldUI } from './NewMarginAmountFieldUI';
 type NotionalAmountProps = {};
 
@@ -19,23 +18,11 @@ export const MarginAmountField: React.FunctionComponent<NotionalAmountProps> = (
   const aMM = useAppSelector(selectRolloverLpFormAMM);
 
   const [localMargin, setLocalMargin] = useState<string | null>(marginAmount.value.toString());
-  const { isLargeDesktopDevice } = useResponsiveQuery();
 
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodySmallRegular';
-
-  const bottomRightTextTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodySmallRegular'
-    : 'secondaryBodyXSmallRegular';
-
-  const bottomLeftTextTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const topRightTextTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodySmallRegular'
-    : 'secondaryBodyXSmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodySmallRegular';
+  const bottomRightTextTypographyToken: TypographyToken = 'secondaryBodyXSmallRegular';
+  const bottomLeftTextTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const topRightTextTypographyToken: TypographyToken = 'secondaryBodyXSmallRegular';
 
   useEffect(() => {
     setLocalMargin(marginAmount.value.toString());
