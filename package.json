@@ -126,6 +126,7 @@
     ]
   },
   "resolutions": {
+    "underscore.string@~2.2.0rc": "2.2.1",
     "@sentry/react": "7.25.0",
     "@sentry/tracing": "7.25.0",
     "@voltz-protocol/api-sdk-v2": "1.32.0"
