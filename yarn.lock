@@ -8644,34 +8644,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-links@npm:6.5.12":
-  version: 6.5.12
-  resolution: "@storybook/addon-links@npm:6.5.12"
-  dependencies:
-    "@storybook/addons": "npm:6.5.12"
-    "@storybook/client-logger": "npm:6.5.12"
-    "@storybook/core-events": "npm:6.5.12"
-    "@storybook/csf": "npm:0.0.2--canary.4566f4d.1"
-    "@storybook/router": "npm:6.5.12"
-    "@types/qs": "npm:^6.9.5"
-    core-js: "npm:^3.8.2"
-    global: "npm:^4.4.0"
-    prop-types: "npm:^15.7.2"
-    qs: "npm:^6.10.0"
-    regenerator-runtime: "npm:^0.13.7"
-    ts-dedent: "npm:^2.0.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    react:
-      optional: true
-    react-dom:
-      optional: true
-  checksum: bbef6348caf1a714f43e2ea4ed1f88ae0e05ad629882333a2ff006c184748d186a20ca6c7f71673818687d4883a3624a385a77bcf2ca80cfb096af47949882d6
-  languageName: node
-  linkType: hard
-
 "@storybook/addon-measure@npm:6.5.12":
   version: 6.5.12
   resolution: "@storybook/addon-measure@npm:6.5.12"
@@ -34540,9 +34512,7 @@ __metadata:
     "@sentry/react": "npm:7.25.0"
     "@sentry/tracing": "npm:7.25.0"
     "@sentry/webpack-plugin": "npm:1.20.0"
-    "@storybook/addon-actions": "npm:6.5.12"
     "@storybook/addon-essentials": "npm:6.5.12"
-    "@storybook/addon-links": "npm:6.5.12"
     "@storybook/builder-webpack5": "npm:6.5.12"
     "@storybook/manager-webpack5": "npm:6.5.12"
     "@storybook/preset-create-react-app": "npm:4.1.2"
