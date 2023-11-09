@@ -1,13 +1,14 @@
 import styled from '@emotion/styled';
-import { Button, ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { Button, ColorTokens, getColorFromToken, shouldNotForwardProps } from 'brokoli-ui';
 
 export const MarginAccountEntryBoxWrapper = styled('div')`
   position: relative;
 `;
 
-export const MarginAccountEntryBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'backgroundColorToken' && prop !== 'isPositionListShown',
-})<{
+export const MarginAccountEntryBox = styled(
+  'div',
+  shouldNotForwardProps(['backgroundColorToken', 'isPositionListShown']),
+)<{
   backgroundColorToken: ColorTokens;
   isPositionListShown: boolean;
 }>`

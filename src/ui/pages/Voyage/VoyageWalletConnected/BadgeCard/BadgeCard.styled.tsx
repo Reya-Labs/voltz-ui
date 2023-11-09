@@ -1,6 +1,6 @@
 import { keyframes, Theme } from '@emotion/react';
 import styled from '@emotion/styled';
-import { Skeleton as SkeletonComponent } from 'brokoli-ui';
+import { shouldNotForwardProps, Skeleton as SkeletonComponent } from 'brokoli-ui';
 
 const highlightAnimation = (theme: Theme) => keyframes`
   0% { 
@@ -41,9 +41,7 @@ export const BadgePillBox = styled('div')`
   margin-bottom: 16px;
 `;
 
-export const BadgeBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'achieved',
-})<{ achieved: boolean }>`
+export const BadgeBox = styled('div', shouldNotForwardProps(['achieved']))<{ achieved: boolean }>`
   opacity: ${({ achieved }) => (achieved ? '1' : '0.3')};
   display: flex;
   justify-content: center;

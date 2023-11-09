@@ -1,13 +1,14 @@
 import styled from '@emotion/styled';
-import { Button, ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { Button, ColorTokens, getColorFromToken, shouldNotForwardProps } from 'brokoli-ui';
 
 export const PoolEntryBoxWrapper = styled('div')`
   position: relative;
 `;
 
-export const PoolEntryBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'backgroundColorToken' && prop !== 'borderColorToken',
-})<{
+export const PoolEntryBox = styled(
+  'div',
+  shouldNotForwardProps(['backgroundColorToken', 'borderColorToken']),
+)<{
   backgroundColorToken: ColorTokens;
   borderColorToken: ColorTokens | 'transparent';
 }>`

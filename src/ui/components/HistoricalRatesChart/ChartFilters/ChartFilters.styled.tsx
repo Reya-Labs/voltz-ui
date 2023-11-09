@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { ColorTokens, getColorFromToken, shouldNotForwardProps } from 'brokoli-ui';
 
 export const ChartFiltersBox = styled('div')`
   display: flex;
@@ -11,9 +11,10 @@ export const ChartFiltersBox = styled('div')`
   width: 40px;
 `;
 
-export const ChartFilterButtonBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'active' && prop !== 'disabled',
-})<{ disabled: boolean; active: boolean }>`
+export const ChartFilterButtonBox = styled('div', shouldNotForwardProps(['disabled', 'active']))<{
+  disabled: boolean;
+  active: boolean;
+}>`
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -43,9 +44,9 @@ export const ChartFilterButton = styled('button')`
   }
 `;
 
-export const Underline = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'colorToken',
-})<{ colorToken: ColorTokens }>`
+export const Underline = styled('div', shouldNotForwardProps(['colorToken']))<{
+  colorToken: ColorTokens;
+}>`
   background: ${({ theme, colorToken }) => getColorFromToken({ theme, colorToken })};
   box-sizing: border-box;
   width: 24px;

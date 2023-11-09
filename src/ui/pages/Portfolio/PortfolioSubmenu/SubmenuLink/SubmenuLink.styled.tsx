@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
-import { getResponsiveTypographyStyleFromToken } from 'brokoli-ui';
+import { getResponsiveTypographyStyleFromToken, shouldNotForwardProps } from 'brokoli-ui';
 import { Link } from 'react-router-dom';
 
-export const SubmenuLinkStyled = styled(Link, {
-  shouldForwardProp: (prop) => prop !== 'disabled',
-})<{
+export const SubmenuLinkStyled = styled(Link, shouldNotForwardProps(['disabled']))<{
   disabled: boolean;
 }>`
   cursor: pointer;

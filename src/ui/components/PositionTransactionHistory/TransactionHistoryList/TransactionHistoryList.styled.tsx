@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { ColorTokens, getColorFromToken, shouldNotForwardProps } from 'brokoli-ui';
 
 import { ReactComponent as Burn } from './assets/burn.svg';
 import { ReactComponent as Liquidation } from './assets/liquidation.svg';
@@ -17,9 +17,7 @@ export const HeaderBox = styled('div')`
   padding-left: 8px;
 `;
 
-export const EntryBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'backgroundColorToken',
-})<{
+export const EntryBox = styled('div', shouldNotForwardProps(['backgroundColorToken']))<{
   backgroundColorToken: ColorTokens;
 }>`
   display: flex;

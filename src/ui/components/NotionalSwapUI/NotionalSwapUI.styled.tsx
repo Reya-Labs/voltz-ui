@@ -1,5 +1,6 @@
 import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+import { shouldNotForwardProps } from 'brokoli-ui';
 
 const spin = keyframes`
   0% {
@@ -56,9 +57,7 @@ export const NotionalSwapFixedBox = styled(NotionalBox)`
     0px 0px 1px ${({ theme }) => theme.colors.white200};
 `;
 
-export const NotionalSwapSwapper = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'animate',
-})<{
+export const NotionalSwapSwapper = styled('div', shouldNotForwardProps(['animate']))<{
   animate: boolean;
 }>`
   filter: drop-shadow(0px 1px 8px ${({ theme }) => theme.colors.black900})

@@ -1,3 +1,4 @@
+import { checkForRiskyWallet, checkForTOSSignature } from '@voltz-protocol/wallet-sdk';
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -11,9 +12,10 @@ import {
 import { resetPortfolioStateAction } from '../../../app/features/portfolio';
 import { getENSDetails } from '../../../utilities/getENSDetails';
 import { getErrorMessage } from '../../../utilities/getErrorMessage';
+import { isEnvVarProvided } from '../../../utilities/isEnvVarProvided';
 import { getReferrer } from '../../../utilities/referrer-store';
 import { getSentryTracker } from '../../../utilities/sentry';
-import { checkForRiskyWallet, checkForTOSSignature, getWalletProvider } from './services';
+import { getWalletProvider } from './services';
 import { WalletName, WalletStatus } from './types';
 import { WalletContext } from './WalletContext';
 
@@ -88,7 +90,11 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
 
           if (!skipTOSCheck) {
             const referralCode = getReferrer() || '';
-            await checkForTOSSignature({ signer: newSigner, referralCode });
+            await checkForTOSSignature({
+              signer: newSigner,
+              referralCode,
+              sandbox: isEnvVarProvided(process.env.REACT_APP_IS_TEST_ENV),
+            });
           }
           const providerNetwork = await newProvider.getNetwork();
           const networkValidation = detectIfNetworkSupported(providerNetwork.chainId);

@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import { mediaBreakPoints } from 'brokoli-ui';
+import { mediaBreakPoints, shouldNotForwardProps } from 'brokoli-ui';
 
-export const PageSectionBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'hasSubmenu',
-})<{ hasSubmenu: boolean }>`
+export const PageSectionBox = styled('div', shouldNotForwardProps(['hasSubmenu']))<{
+  hasSubmenu: boolean;
+}>`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
