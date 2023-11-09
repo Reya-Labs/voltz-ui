@@ -24,7 +24,10 @@ export type EntryProps = {
   variant: 'rank1' | 'rank2' | 'rank3' | 'other' | 'me';
 };
 
-const VariantEntryBoxMap: Record<EntryProps['variant'], React.FunctionComponent> = {
+const VariantEntryBoxMap: Record<
+  EntryProps['variant'],
+  React.FunctionComponent<React.PropsWithChildren>
+> = {
   rank1: Rank1EntryBox,
   rank2: Rank2EntryBox,
   rank3: Rank3EntryBox,

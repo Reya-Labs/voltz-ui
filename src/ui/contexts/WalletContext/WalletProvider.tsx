@@ -19,7 +19,7 @@ import { getWalletProvider } from './services';
 import { WalletName, WalletStatus } from './types';
 import { WalletContext } from './WalletContext';
 
-export const WalletProvider: React.FunctionComponent = ({ children }) => {
+export const WalletProvider: React.FunctionComponent<React.PropsWithChildren> = ({ children }) => {
   const [provider, setProvider] = useState<ethers.providers.JsonRpcProvider | null>(null);
   const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner | null>(null);
   const [walletError, setWalletError] = useState<string | null>(null);

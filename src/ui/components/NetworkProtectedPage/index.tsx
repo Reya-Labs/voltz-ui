@@ -6,9 +6,14 @@ import { ConnectSupportedNetwork } from '../ConnectSupportedNetwork';
 import { NotFoundPageContent } from '../NotFoundPageContent';
 import { Page } from '../Page';
 
-export const NetworkProtectedPage: React.FunctionComponent<{
+type Props = React.PropsWithChildren<{
   hidden?: boolean;
-}> = ({ hidden = false, children }) => {
+}>;
+
+export const NetworkProtectedPage: React.FunctionComponent<Props> = ({
+  hidden = false,
+  children,
+}) => {
   const isSupportedChain = useAppSelector(selectIsSupportedChain);
   if (hidden) {
     return <Page mainSlot={<NotFoundPageContent />} />;

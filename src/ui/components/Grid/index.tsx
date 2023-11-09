@@ -2,10 +2,10 @@ import React from 'react';
 
 import { Box } from './Grid.styled';
 
-type GridProps = {
+type GridProps = React.PropsWithChildren<{
   itemsPerRow: number;
   className?: string;
-};
+}>;
 
 export const Grid: React.FunctionComponent<GridProps> = ({ className, itemsPerRow, children }) => {
   const templateLayout = React.useMemo(
