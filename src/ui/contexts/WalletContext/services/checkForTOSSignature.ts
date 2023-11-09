@@ -1,19 +1,27 @@
 import { ethers } from 'ethers';
 
-import { getReferrer } from '../../../../utilities/referrer-store';
 import { getSentryTracker } from '../../../../utilities/sentry';
 import { getSignature } from './getSignature';
 import { getTOSText } from './getTOSText';
 import { isMessageEIP1271Signed } from './isMessageEIP1271Signed';
 import { saveSignatureWithTOS } from './saveSignatureWithTOS';
 
+interface CheckForTOSSignatureParams {
+  signer: ethers.providers.JsonRpcSigner;
+  referralCode?: string;
+}
+
 /**
  * Will make the wallet open a prompt, asking the user to agree to the T&Cs. It will throw an
  * error if the user disagrees / closes the window. The signature is stored in a database to
  * avoid having to sign the terms every time you connect your wallet.
  * @param signer - The ethers signer
- */
-export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigner) => {
+ * @param referralCode - The referral code
+ * */
+export const checkForTOSSignature = async ({
+  signer,
+  referralCode = '',
+}: CheckForTOSSignatureParams) => {
   const signerAddress = await signer.getAddress();
 
   const signatureData = await getSignature(signerAddress);
@@ -37,7 +45,6 @@ export const checkForTOSSignature = async (signer: ethers.providers.JsonRpcSigne
   if (!termsAccepted) {
     try {
       // The latest terms of service have not been accepted. Get a signature now.
-      const referralCode = getReferrer() || '';
       const signature = await signer.signMessage(latestTOS);
       const response = await saveSignatureWithTOS(
         signerAddress,

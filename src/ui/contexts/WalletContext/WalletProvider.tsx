@@ -11,6 +11,7 @@ import {
 import { resetPortfolioStateAction } from '../../../app/features/portfolio';
 import { getENSDetails } from '../../../utilities/getENSDetails';
 import { getErrorMessage } from '../../../utilities/getErrorMessage';
+import { getReferrer } from '../../../utilities/referrer-store';
 import { getSentryTracker } from '../../../utilities/sentry';
 import { checkForRiskyWallet, checkForTOSSignature, getWalletProvider } from './services';
 import { WalletName, WalletStatus } from './types';
@@ -86,7 +87,8 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
             process.env.REACT_APP_SKIP_TOS_CHECK !== 'UNPROVIDED';
 
           if (!skipTOSCheck) {
-            await checkForTOSSignature(newSigner);
+            const referralCode = getReferrer() || '';
+            await checkForTOSSignature({ signer: newSigner, referralCode });
           }
           const providerNetwork = await newProvider.getNetwork();
           const networkValidation = detectIfNetworkSupported(providerNetwork.chainId);
