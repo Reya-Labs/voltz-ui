@@ -84,9 +84,7 @@ export const WalletProvider: React.FunctionComponent<React.PropsWithChildren> = 
           const walletAddress = await newSigner.getAddress();
 
           // Do checks that could stop us allowing the wallet to connect
-          const skipTOSCheck =
-            process.env.REACT_APP_SKIP_TOS_CHECK &&
-            process.env.REACT_APP_SKIP_TOS_CHECK !== 'UNPROVIDED';
+          const skipTOSCheck = isEnvVarProvided(process.env.REACT_APP_SKIP_TOS_CHECK);
 
           if (!skipTOSCheck) {
             const referralCode = getReferrer() || '';
