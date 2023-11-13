@@ -8,8 +8,8 @@ import {
   selectMarginAccountWithdrawFlowUserInputFormatted,
 } from '../../../../../../../../../app/features/portfolio';
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
+import { Icon } from '../../../../../../../../components/Icon/Icon';
 import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../../../components/MarginRatioDonut/constants';
-import { ReactComponent as GasIcon } from './gas-icon.svg';
 import {
   IconTextWrapper,
   TransactionDetailBox,
@@ -85,7 +85,7 @@ export const WithdrawMarginDetails: React.FunctionComponent<TransactionDetailsPr
       <HorizontalLine />
       <TransactionDetailBox>
         <IconTextWrapper>
-          <GasIcon />
+          <Icon name="gasIcon" />
           <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>

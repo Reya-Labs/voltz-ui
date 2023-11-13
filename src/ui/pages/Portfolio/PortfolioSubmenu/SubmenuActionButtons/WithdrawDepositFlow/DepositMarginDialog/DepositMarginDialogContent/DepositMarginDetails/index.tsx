@@ -8,6 +8,7 @@ import {
   selectMarginAccountDepositFlowUserInputFormatted,
 } from '../../../../../../../../../app/features/deposit-flow';
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
+import { Icon } from '../../../../../../../../components/Icon/Icon';
 import { MARGIN_RATIO_COLOR_MAP } from '../../../../../../../../components/MarginRatioDonut/constants';
 import {
   DepositMarginDetailsBox,
@@ -15,7 +16,6 @@ import {
   IconTextWrapper,
   TransactionDetailBox,
 } from './DepositMarginDetails.styled';
-import { ReactComponent as GasIcon } from './gas-icon.svg';
 
 type TransactionDetailsProps = {};
 
@@ -85,7 +85,7 @@ export const DepositMarginDetails: React.FunctionComponent<TransactionDetailsPro
       <HorizontalLine />
       <TransactionDetailBox>
         <IconTextWrapper>
-          <GasIcon />
+          <Icon name="gasIcon" />
           <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>

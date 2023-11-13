@@ -993,11 +993,8 @@ export const VoyageWeek4: React.FunctionComponent<IconProps> = ({
 }) => (
   <IconImage className={className} data-testid={dataTestId} src="/images/badges/voyage/week4.svg" />
 );
-// season4 badges
-// export { ReactComponent as S4MellowLpVaultTier1 } from '/images/badges/season2/s2MellowLpVaultTier1.svg';
-// export { ReactComponent as S4MellowLpVaultTier2 } from '/images/badges/season2/s2MellowLpVaultTier2.svg';
-// export { ReactComponent as S4MellowLpVaultTier3 } from '/images/badges/season2/s2MellowLpVaultTier3.svg';
 
+// season4 badges
 export const S4BeWaterMyFriend: React.FunctionComponent<IconProps> = ({
   'data-testid': dataTestId,
   className,
@@ -1352,3 +1349,8 @@ export const S4YikesArbitrum: React.FunctionComponent<IconProps> = ({
     src="/images/badges/season4/arbitrum/s4Yikes.svg"
   />
 );
+
+export const GasIcon: React.FunctionComponent<IconProps> = ({
+  'data-testid': dataTestId,
+  className,
+}) => <IconImage className={className} data-testid={dataTestId} src="/images/icons/gas-icon.svg" />;

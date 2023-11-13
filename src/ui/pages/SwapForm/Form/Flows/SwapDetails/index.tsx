@@ -14,8 +14,8 @@ import {
   selectSwapFormPool,
   selectUserInputNotionalCompactFormatted,
 } from '../../../../../../app/features/forms/trader/swap';
+import { Icon } from '../../../../../components/Icon/Icon';
 import { IconTextWrapper } from '../../TransactionDetails/TransactionDetails.styled';
-import { ReactComponent as GasIcon } from './gas-icon.svg';
 import { HorizontalLineBox, SwapDetailBox, SwapDetailsBox } from './SwapDetails.styled';
 
 type SwapDetailsProps = {};
@@ -132,7 +132,7 @@ export const SwapDetails: React.FunctionComponent<SwapDetailsProps> = () => {
       </HorizontalLineBox>
       <SwapDetailBox>
         <IconTextWrapper>
-          <GasIcon />
+          <Icon name="gasIcon" />
           <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useAppSelector } from '../../../../app';
 import { selectGasInfoFormatted } from '../../../../app/features/settle-flow';
-import { ReactComponent as GasIcon } from './gas-icon.svg';
+import { Icon } from '../../Icon/Icon';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 
 type TransactionDetailsProps = {};
@@ -15,7 +15,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
     <React.Fragment>
       <TransactionDetailBox>
         <IconTextWrapper>
-          <GasIcon />
+          <Icon name="gasIcon" />
           <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fee To Settle
           </Typography>

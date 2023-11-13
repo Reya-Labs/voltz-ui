@@ -9,6 +9,7 @@ import {
   Diplomatz,
   DryIce,
   FixedTrader,
+  GasIcon,
   Governorz,
   IrsConnoisseur,
   LeverageCrowbar,
@@ -277,7 +278,9 @@ export type SupportedIcons =
   | 'voyageWeek1'
   | 'voyageWeek2'
   | 'voyageWeek3'
-  | 'voyageWeek4';
+  | 'voyageWeek4'
+  // icons
+  | 'gasIcon';
 
 export const iconMap: Record<
   SupportedIcons,
@@ -436,4 +439,7 @@ export const iconMap: Record<
   voyageWeek2: VoyageWeek2,
   voyageWeek3: VoyageWeek3,
   voyageWeek4: VoyageWeek4,
+
+  // icons
+  gasIcon: GasIcon,
 };

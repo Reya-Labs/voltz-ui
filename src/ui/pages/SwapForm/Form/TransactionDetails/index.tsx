@@ -11,7 +11,7 @@ import {
   selectSlippageFormatted,
   selectUserInputNotionalCompactFormatted,
 } from '../../../../../app/features/forms/trader/swap';
-import { ReactComponent as GasIcon } from './gas-icon.svg';
+import { Icon } from '../../../../components/Icon/Icon';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 
 type TransactionDetailsProps = {};
@@ -86,7 +86,7 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
       </TransactionDetailBox>
       <TransactionDetailBox>
         <IconTextWrapper>
-          <GasIcon />
+          <Icon name="gasIcon" />
           <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>

@@ -2,8 +2,8 @@ import { Button, ColorTokens, Ellipsis, TokenTypography, Typography } from 'brok
 import React from 'react';
 
 import { formFormatNumber } from '../../../../app/features/forms/common';
+import { Icon } from '../../Icon/Icon';
 import { ButtonBox, ContentBox, GasCostBox } from './ActiveRolloverModalContent.styled';
-import { ReactComponent as GasIcon } from './gas-icon.svg';
 
 type Props = {
   onProceed: () => void;
@@ -42,7 +42,7 @@ Your choice will be saved on chain, so there will be an additional one-time, sma
           : 'This transaction will save your choice on chain, so there will be a small gas fee.'}
       </Typography>
       <GasCostBox>
-        <GasIcon />
+        <Icon name="gasIcon" />
         <TokenTypography
           colorToken="white"
           prefixToken="$"
