@@ -34,11 +34,11 @@ export const PortfolioHeader = () => {
   return (
     <TopBox>
       <TotalPortfolioValueBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Total Portfolio Value (USD)
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           prefixToken="$"
           token=""
           typographyToken="secondaryBodyExtraLargeBold"
@@ -48,9 +48,9 @@ export const PortfolioHeader = () => {
       <PositionDetailsBox>
         <MarginBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Margin"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             prefixToken="$"
             token={''}
@@ -60,9 +60,9 @@ export const PortfolioHeader = () => {
         </MarginBox>
         <RealizedPNLBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Realised PnL"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             prefixToken={
               totalPortfolioRealizedPNLValueUSDFormatted === '--'
@@ -82,9 +82,9 @@ export const PortfolioHeader = () => {
         </RealizedPNLBox>
         <UnrealizedPNLBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Unrealised PnL"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             prefixToken={
               totalPortfolioUnrealizedPNLValueUSDFormatted === '--'
@@ -104,9 +104,9 @@ export const PortfolioHeader = () => {
         </UnrealizedPNLBox>
         <TotalNotionalBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Total Notional"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             prefixToken="$"
             token={totalPortfolioNotionalValueUSDCompactFormatted.compactSuffix}
@@ -116,9 +116,9 @@ export const PortfolioHeader = () => {
         </TotalNotionalBox>
         <TotalCollateralBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Collateral"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             prefixToken="$"
             token={totalPortfolioCollateralUSDCompactFormatted.compactSuffix}
@@ -130,10 +130,10 @@ export const PortfolioHeader = () => {
         <HealthStatusBox>
           <HealthBox>
             <LabelTokenTypography
-              attentionIndicatorColorToken="skyBlueCrayola"
-              colorToken="lavenderWeb"
+              attentionIndicatorColorToken="primary100"
+              colorToken="white"
               label="Healthy"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken="primaryBodyXSmallRegular"
               token={''}
               typographyToken="secondaryBodyMediumBold"
@@ -142,10 +142,10 @@ export const PortfolioHeader = () => {
           </HealthBox>
           <HealthBox>
             <LabelTokenTypography
-              attentionIndicatorColorToken="orangeYellow"
-              colorToken="lavenderWeb"
+              attentionIndicatorColorToken="warning100"
+              colorToken="white"
               label="Warning"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken="primaryBodyXSmallRegular"
               token={''}
               typographyToken="secondaryBodyMediumBold"
@@ -154,10 +154,10 @@ export const PortfolioHeader = () => {
           </HealthBox>
           <HealthBox>
             <LabelTokenTypography
-              attentionIndicatorColorToken="wildStrawberry"
-              colorToken="lavenderWeb"
+              attentionIndicatorColorToken="error100"
+              colorToken="white"
               label="Danger"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken="primaryBodyXSmallRegular"
               token={''}
               typographyToken="secondaryBodyMediumBold"

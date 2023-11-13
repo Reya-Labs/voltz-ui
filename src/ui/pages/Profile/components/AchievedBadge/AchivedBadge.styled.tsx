@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { colors, Skeleton as SkeletonComponent, Typography } from 'brokoli-ui';
+import { Skeleton as SkeletonComponent, Typography } from 'brokoli-ui';
 
 export const Skeleton = styled(SkeletonComponent)`
   padding: 8px 24px 8px 16px;
@@ -7,7 +7,7 @@ export const Skeleton = styled(SkeletonComponent)`
 `;
 
 export const ContainerBox = styled('div')`
-  background-color: ${colors.lavenderWeb8};
+  background-color: ${({ theme }) => theme.colors.white900};
   border-radius: 8px;
   padding: 8px 24px 8px 16px;
   display: flex;
@@ -19,10 +19,10 @@ export const ContainerBox = styled('div')`
 export const AchievedContainerBox = styled(ContainerBox)`
   cursor: pointer;
   pointer-events: auto;
-  background-color: ${colors.lavenderWeb7};
+  background-color: ${({ theme }) => theme.colors.white800};
 
   &:hover {
-    box-shadow: ${colors.liberty} 0px 0px 10px;
+    box-shadow: ${({ theme }) => theme.colors.black100} 0px 0px 10px;
   }
 `;
 

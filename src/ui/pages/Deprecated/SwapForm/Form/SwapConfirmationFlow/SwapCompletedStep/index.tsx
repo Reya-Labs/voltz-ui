@@ -25,7 +25,7 @@ export const SwapCompletedStep: React.FunctionComponent = () => {
   return (
     <SwapCompletedStepBox>
       <Confetti>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Swap Completed
         </Typography>
       </Confetti>
@@ -33,7 +33,7 @@ export const SwapCompletedStep: React.FunctionComponent = () => {
       <Confetti>
         <ExplorerLink link={etherscanLink} />
       </Confetti>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Your position will be available in few minutes. You can track it from your your portfolio.
       </Typography>
       <Confetti>

@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const LogoAndNavBox = styled('div')`
   display: flex;
@@ -16,7 +15,7 @@ export const PanelBox = styled('div')`
   align-items: center;
   padding: 0px 24px 0px 0px;
 
-  border-bottom: 1px solid ${colors.lavenderWeb7};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.white800};
 `;
 
 export const RightContent = styled('div')`

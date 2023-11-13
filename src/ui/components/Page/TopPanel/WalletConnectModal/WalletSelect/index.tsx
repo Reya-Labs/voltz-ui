@@ -27,7 +27,7 @@ export const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({
 }) => (
   <WalletSelectBox>
     <TitleBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+      <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
         Connect your wallet
       </Typography>
       <CloseButton onClick={onClose} />
@@ -44,7 +44,7 @@ export const WalletSelect: React.FunctionComponent<WalletSelectProps> = ({
       ))}
     </WalletOptionsBox>
     <ExternalLink
-      colorToken="lavenderWeb"
+      colorToken="white"
       href="https://ethereum.org/en/wallets/"
       typographyToken="primaryBodyXSmallRegular"
     >

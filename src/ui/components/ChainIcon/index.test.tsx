@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 
+import { render, screen } from '../../../test-helpers';
 import { ChainIcon } from '.';
 
 describe('<ChainIcon />', () => {

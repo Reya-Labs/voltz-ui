@@ -19,7 +19,7 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
     <NotificationContainer>
       <NotificationBox>
         <ProfileNotification
-          pillColorToken="orangeYellow"
+          pillColorToken="warning"
           pillText="Voltz Protocol v2 Voyage"
           text="Time to go on a trip"
         />

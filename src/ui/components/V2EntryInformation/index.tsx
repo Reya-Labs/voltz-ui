@@ -21,7 +21,7 @@ export const V2EntryInformation: React.FunctionComponent<{
       {isTestnet(chainId) ? null : (
         <V2BorderDetailBox>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken="Pool cap: $"
             token={compactSuffix}
             typographyToken="primaryBodyXSmallRegular"
@@ -30,7 +30,7 @@ export const V2EntryInformation: React.FunctionComponent<{
         </V2BorderDetailBox>
       )}
       <V2DetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
           Unaudited Contracts
         </Typography>
       </V2DetailBox>

@@ -26,11 +26,11 @@ export const MellowPosition: React.FunctionComponent<MellowPositionProps> = ({
     <MellowPositionBoxAndButtonContainer>
       <MellowPositionBox>
         <MellowPositionInfoBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             {`Your position: ${userDeposit === undefined ? ' ---' : ''}`}&nbsp;
           </Typography>
           <TokenTypography
-            colorToken="skyBlueCrayola"
+            colorToken="primary"
             token={` ${tokenName}`}
             typographyToken="primaryBodySmallRegular"
             value={userDeposit === undefined ? '---' : formFormatNumber(userDeposit)}

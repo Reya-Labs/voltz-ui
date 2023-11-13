@@ -5,15 +5,15 @@ import { HeaderBox } from './Header.styled';
 
 export const Header: React.FunctionComponent = React.memo(() => (
   <HeaderBox>
-    <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Bold">
+    <Typography colorToken="white100" typographyToken="primaryHeader1Bold">
       LP Optimiser Vaults
     </Typography>
-    <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyLargeRegular">
+    <Typography colorToken="white400" typographyToken="primaryBodyLargeRegular">
       The Voltz-Mellow Vaults run automated strategies, optimizing deposits for high LP fees while
       taking away the complex math, empowering every user to become a Voltz LP.
     </Typography>
     <ExternalLink
-      colorToken="skyBlueCrayola"
+      colorToken="primary"
       href="https://www.voltz.xyz/resource-centre/optimizing-the-optimizooor-the-new-mellow-voltz-eth-and-stablecoin-lp-optimizers"
       typographyToken="primaryBodyMediumRegular"
     >

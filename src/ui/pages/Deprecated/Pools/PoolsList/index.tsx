@@ -24,7 +24,7 @@ export const PoolsList: React.FunctionComponent = () => {
           {Array.from({ length: 10 }, () => ({})).map((ranking, index) => (
             <PoolEntrySkeleton
               key={index}
-              colorToken="liberty2"
+              colorToken="black300"
               data-testid="PoolsList-PoolEntrySkeleton"
               variant="rectangular"
             />
@@ -44,8 +44,8 @@ export const PoolsList: React.FunctionComponent = () => {
                 <PoolEntry
                   key={pool.id}
                   aMMMaturity={pool.aMMMaturity}
-                  backgroundColorToken={index % 2 !== 0 ? 'liberty7' : 'lavenderWeb8'}
-                  borderColorToken={index % 2 !== 0 ? 'lavenderWeb8' : 'transparent'}
+                  backgroundColorToken={index % 2 !== 0 ? 'black800' : 'white900'}
+                  borderColorToken={index % 2 !== 0 ? 'white900' : 'transparent'}
                   chainId={pool.chainId}
                   fixedRateFormatted={pool.fixedAPRRateFormatted}
                   isAaveV3={pool.isAaveV3}
@@ -63,7 +63,7 @@ export const PoolsList: React.FunctionComponent = () => {
           {pools.length === 0 ? (
             <NoPoolsFoundBox>
               <img alt="Gimme" src="/images/no-pools-found.png" />
-              <Typography colorToken="lavenderWeb" typographyToken="primaryBodyLargeBold">
+              <Typography colorToken="white100" typographyToken="primaryBodyLargeBold">
                 No pools match the filter criteria. Try refining them.
               </Typography>
             </NoPoolsFoundBox>

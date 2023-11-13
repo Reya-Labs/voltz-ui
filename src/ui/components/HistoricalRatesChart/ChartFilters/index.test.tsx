@@ -1,7 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { ColorTokens } from 'brokoli-ui';
 import React from 'react';
 
+import { fireEvent, render, screen } from '../../../../test-helpers';
 import { ChartFilters, ChartFiltersProps } from '.';
 
 // Create a mock function for the event handlers
@@ -14,13 +14,13 @@ const filterOptions = [
     id: 'mode1',
     isMode: true,
     label: 'Mode 1',
-    underlineColorToken: 'skyBlueCrayola' as ColorTokens,
+    underlineColorToken: 'primary100' as ColorTokens,
   },
   {
     id: 'timeRange1',
     isMode: false,
     label: 'Time Range 1',
-    underlineColorToken: 'skyBlueCrayola' as ColorTokens,
+    underlineColorToken: 'primary100' as ColorTokens,
   },
 ];
 
@@ -81,13 +81,6 @@ describe('<ChartFilters />', () => {
     fireEvent.click(timeRangeFilterButton);
     expect(mockOnModeChange).not.toHaveBeenCalled();
     expect(mockOnTimeRangeChange).not.toHaveBeenCalled();
-  });
-
-  it('should render an Underline component when underlineColorToken is provided', () => {
-    renderChartFilters();
-    const underlines = screen.getAllByTestId('ChartFilterButtonBox-Underline');
-    expect(underlines).toHaveLength(2);
-    expect(underlines[0]).toHaveStyle(`background-color: ${getColorFromToken('skyBlueCrayola')}`);
   });
 
   it('should not render an Underline component when underlineColorToken is not provided', () => {

@@ -22,7 +22,7 @@ describe('useLowLeverageNotification', () => {
       title: 'Reminder',
       content:
         'If you take small amounts of leverage when providing liquidity, whilst your risk is lower, your payoff is likely to be low.',
-      colorToken: 'orangeYellow',
+      colorToken: 'warning',
       autoClose: 5000,
     });
   });

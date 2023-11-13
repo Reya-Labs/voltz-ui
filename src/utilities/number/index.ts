@@ -60,6 +60,11 @@ export const compactFormat = (
   return `${compactNumber}${compactSuffix}`;
 };
 
+export type CompactFormatParts = {
+  compactNumber: string;
+  compactSuffix: string;
+};
+
 /**
  * It takes a number and returns a string using Intl.NumberFormat formatter
  * it creates compact number format
@@ -76,10 +81,7 @@ export const compactFormatToParts = (
   number: number,
   minimumFractionDigits: number = 0,
   maximumFractionDigits: number = 2,
-): {
-  compactNumber: string;
-  compactSuffix: string;
-} => {
+): CompactFormatParts => {
   // Create formatter instances for the 'en-US' locale and the user's locale
   const enUsFormatter = new Intl.NumberFormat('en-US', {
     notation: 'compact',

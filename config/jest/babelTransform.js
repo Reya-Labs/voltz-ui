@@ -1,5 +1,3 @@
-'use strict';
-
 const babelJest = require('babel-jest').default;
 
 const hasJsxRuntime = (() => {
@@ -24,6 +22,7 @@ module.exports = babelJest.createTransformer({
       },
     ],
   ],
+  plugins: [require.resolve('./emotionStyledTransform.js')],
   babelrc: false,
   configFile: false,
 });

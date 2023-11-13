@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FormNumberLimits } from '../../../app/features/forms/common';
 import { stringToBigFloat } from '../../../utilities/number';
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { FixedRangeFieldsBox } from './FixedRangeFieldsUI.styled';
 type FixedRangeFieldsUIProps = {
   fixedLower: string;
@@ -25,7 +24,6 @@ export const FixedRangeFieldsUI: React.FunctionComponent<FixedRangeFieldsUIProps
 }) => {
   const [localFixedLower, setLocalFixedLower] = useState<string>(fixedLower);
   const [localFixedUpper, setLocalFixedUpper] = useState<string>(fixedUpper);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
 
   useEffect(() => {
     setLocalFixedUpper(fixedUpper);
@@ -78,9 +76,7 @@ export const FixedRangeFieldsUI: React.FunctionComponent<FixedRangeFieldsUIProps
     };
   }, []);
 
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodySmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodySmallRegular';
 
   return (
     <FixedRangeFieldsBox>
@@ -90,11 +86,11 @@ export const FixedRangeFieldsUI: React.FunctionComponent<FixedRangeFieldsUIProps
         disabled={false}
         error={error}
         label="Fixed Rate Low"
-        labelColorToken="lavenderWeb3"
+        labelColorToken="white400"
         labelTypographyToken={labelTypographyToken}
         suffix="%"
         tooltip="The lowest rate of the fixed rate range within which to deposit liquidity."
-        tooltipColorToken="lavenderWeb3"
+        tooltipColorToken="white400"
         value={localFixedLower}
         onBlur={handleFixedLowerOnBlur}
         onChange={handleFixedLowerOnChange}
@@ -104,11 +100,11 @@ export const FixedRangeFieldsUI: React.FunctionComponent<FixedRangeFieldsUIProps
         decimalsLimit={FormNumberLimits.fixedRangeDecimalLimit}
         disabled={false}
         label="Fixed Rate High"
-        labelColorToken="lavenderWeb3"
+        labelColorToken="white400"
         labelTypographyToken={labelTypographyToken}
         suffix="%"
         tooltip="The highest rate of the fixed rate range within which to deposit liquidity."
-        tooltipColorToken="lavenderWeb3"
+        tooltipColorToken="white400"
         value={localFixedUpper}
         onBlur={handleFixedUpperOnBlur}
         onChange={handleFixedUpperOnChange}

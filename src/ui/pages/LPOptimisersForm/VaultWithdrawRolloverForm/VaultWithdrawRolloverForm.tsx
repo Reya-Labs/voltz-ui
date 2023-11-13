@@ -1,3 +1,4 @@
+import { useTheme } from '@emotion/react';
 import { rollover as executeRollover, withdraw as executeWithdraw } from '@voltz-protocol/v1-sdk';
 import React, { useState } from 'react';
 
@@ -27,6 +28,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
 }) => {
   const { signer } = useWallet();
   const dispatch = useAppDispatch();
+  const theme = useTheme();
   const chainId = useAppSelector(selectChainId);
 
   const subvault = vault.vaults[vaultIndex];
@@ -136,6 +138,7 @@ export const VaultWithdrawRolloverForm: React.FunctionComponent<VaultWithdrawRol
     error,
     tokenName: vault.tokenName,
     loading,
+    theme,
   });
 
   return (

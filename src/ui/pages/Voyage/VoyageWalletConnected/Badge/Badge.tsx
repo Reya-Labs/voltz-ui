@@ -18,7 +18,7 @@ const BADGE_ID_ICON_NAME_MAP: Record<VoyageBadgeUI['id'], SupportedIcons> = {
 
 export const Badge: React.FunctionComponent<BadgeProps> = ({ loading, variant }) => {
   if (loading) {
-    return <Skeleton colorToken="liberty2" data-testid="Badge-Skeleton" variant="circular" />;
+    return <Skeleton colorToken="black300" data-testid="Badge-Skeleton" variant="circular" />;
   }
   return <Icon data-testid={`Badge-${variant}`} name={BADGE_ID_ICON_NAME_MAP[variant]} />;
 };

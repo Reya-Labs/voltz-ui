@@ -13,7 +13,7 @@ export const MarketTokenInformation: React.FunctionComponent<MarketTokenInformat
   return (
     <MarketTokenBox data-testid="MarketTokenInformation-MarketTokenBox">
       <MarketToken
-        colorToken="lavenderWeb"
+        colorToken="white100"
         data-testid="MarketTokenInformation-MarketToken"
         iconSize={24}
         infoFormatter={() => (

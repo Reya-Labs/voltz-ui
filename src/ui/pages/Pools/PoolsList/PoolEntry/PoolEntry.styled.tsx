@@ -1,13 +1,14 @@
 import styled from '@emotion/styled';
-import { Button, colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { Button, ColorTokens, getColorFromToken, shouldNotForwardProps } from 'brokoli-ui';
 
 export const PoolEntryBoxWrapper = styled('div')`
   position: relative;
 `;
 
-export const PoolEntryBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'backgroundColorToken' && prop !== 'borderColorToken',
-})<{
+export const PoolEntryBox = styled(
+  'div',
+  shouldNotForwardProps(['backgroundColorToken', 'borderColorToken']),
+)<{
   backgroundColorToken: ColorTokens;
   borderColorToken: ColorTokens | 'transparent';
 }>`
@@ -18,11 +19,14 @@ export const PoolEntryBox = styled('div', {
   flex-direction: row;
   align-items: center;
   padding: 10px 8px;
-  box-shadow: -2px 0px 8px 0px ${colors.liberty8};
-  background-color: ${({ backgroundColorToken }) => getColorFromToken(backgroundColorToken)};
+  box-shadow: -2px 0px 8px 0px ${({ theme }) => theme.colors.black900};
+  background-color: ${({ theme, backgroundColorToken }) =>
+    getColorFromToken({ theme, colorToken: backgroundColorToken })};
   border: 1px solid
-    ${({ borderColorToken }) =>
-      borderColorToken !== 'transparent' ? getColorFromToken(borderColorToken) : 'transparent'};
+    ${({ theme, borderColorToken }) =>
+      borderColorToken !== 'transparent'
+        ? getColorFromToken({ theme, colorToken: borderColorToken })
+        : 'transparent'};
   border-radius: 8px;
 `;
 

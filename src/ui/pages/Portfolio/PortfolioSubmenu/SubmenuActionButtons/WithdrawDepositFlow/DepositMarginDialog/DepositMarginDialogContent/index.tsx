@@ -16,9 +16,12 @@ import {
   selectMarginAccountDepositFlowAvailableAmountsLoading,
   selectMarginAccountDepositFlowCTADisabled,
   selectMarginAccountDepositFlowCTAText,
+  selectMarginAccountDepositFlowDisableMarginAccountSelection,
   selectMarginAccountDepositFlowError,
+  selectMarginAccountDepositFlowHasSimulationError,
   selectMarginAccountDepositFlowMarginAccounts,
   selectMarginAccountDepositFlowMarginAccountsLoading,
+  selectMarginAccountDepositFlowQueuedSelectedMarginAccountId,
   selectMarginAccountDepositFlowSelectedMarginAccountFormatted,
   selectMarginAccountDepositFlowShouldApproveToken,
   selectMarginAccountDepositFlowStep,
@@ -40,17 +43,24 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
   const walletTokenAllowanceHasError = useAppSelector(
     selectMarginAccountDepositFlowWalletTokenAllowanceHasError,
   );
+  const hasSimulationError = useAppSelector(selectMarginAccountDepositFlowHasSimulationError);
   const { account, signer } = useWallet();
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectMarginAccountDepositFlowStep) === 'depositing';
   const error = useAppSelector(selectMarginAccountDepositFlowError);
   const { validationError } = useAppSelector(selectMarginAccountDepositFlowValidationError);
   const computedError = error || validationError;
+  const disableMarginAccountSelection = useAppSelector(
+    selectMarginAccountDepositFlowDisableMarginAccountSelection,
+  );
   const disabled = useAppSelector(selectMarginAccountDepositFlowCTADisabled);
   const marginAccounts = useAppSelector(selectMarginAccountDepositFlowMarginAccounts);
   const marginAccountsLoading = useAppSelector(selectMarginAccountDepositFlowMarginAccountsLoading);
   const { id: selectedMarginAccountId } = useAppSelector(
     selectMarginAccountDepositFlowSelectedMarginAccountFormatted,
+  );
+  const queuedSelectedMarginAccountId = useAppSelector(
+    selectMarginAccountDepositFlowQueuedSelectedMarginAccountId,
   );
   const ctaText = useAppSelector(selectMarginAccountDepositFlowCTAText);
   const { token, amount } = useAppSelector(selectMarginAccountDepositFlowUserInputFormatted);
@@ -69,6 +79,16 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
         getTokenAllowanceForPeripheryThunk({
           signer,
           tokenName: token,
+        }),
+      );
+      return;
+    }
+    if (hasSimulationError) {
+      void dispatch(
+        simulateDepositMarginFromMarginAccountThunk({
+          amount,
+          token,
+          marginAccountId: selectedMarginAccountId,
         }),
       );
       return;
@@ -97,7 +117,7 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
       }),
     );
   }, [dispatch, signer, step, token]);
-
+  // TODO: FB evaluate before launch - refactor #1
   const debouncedDepositSimulation = useMemo(
     () =>
       debounce(
@@ -186,6 +206,17 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
     );
   }, [dispatch, selectedMarginAccountId]);
 
+  useEffect(() => {
+    if (!queuedSelectedMarginAccountId || marginAccounts.length === 0 || marginAccountsLoading) {
+      return;
+    }
+    dispatch(
+      selectMarginAccountDepositFlowAction({
+        id: queuedSelectedMarginAccountId,
+      }),
+    );
+  }, [dispatch, marginAccountsLoading, marginAccounts, queuedSelectedMarginAccountId]);
+
   // Stop the invocation of the debounced function
   // after unmounting
   useEffect(() => {
@@ -197,24 +228,25 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
   return (
     <ContentBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Deposit Margin
         </Typography>
         <CloseButton onClick={handleOnCloseClick} />
       </TitleBox>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia
         consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
       </Typography>
       <MidBox>
         <MarginAccountsSearchField
-          disabled={marginAccountsLoading}
+          disabled={marginAccountsLoading || disableMarginAccountSelection}
           marginAccounts={marginAccounts}
           selectedMarginAccountId={selectedMarginAccountId}
           onMarginAccountClick={handleOnMarginAccountClick}
         />
         <MarginAmountField
           disabled={availableAmountsLoading || !selectedMarginAccountId}
+          label="Amount to deposit"
           marginAmountOptions={availableAmounts}
           token={token}
           value={amount.toString()}
@@ -224,7 +256,7 @@ export const DepositMarginDialogContent: React.FunctionComponent = () => {
       </MidBox>
       <Button
         bottomLeftText={computedError ? computedError : ''}
-        bottomLeftTextColorToken={computedError ? 'wildStrawberry' : undefined}
+        bottomLeftTextColorToken={computedError ? 'error100' : undefined}
         bottomLeftTextTypographyToken={computedError ? 'primaryBodyXSmallRegular' : undefined}
         disabled={disabled}
         loading={loading}

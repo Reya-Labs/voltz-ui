@@ -13,7 +13,7 @@ export const MaturityDistributionHeader: React.FunctionComponent = () => {
     <MaturityDistributionBox>
       <DistributionBox>
         <TypographyWithTooltip
-          colorToken="lavenderWeb3"
+          colorToken="white400"
           tooltip="Input what % of your funds you would like to allocate to each maturity. The total must add to 100%."
           typographyToken="primaryBodySmallRegular"
         >
@@ -21,12 +21,12 @@ export const MaturityDistributionHeader: React.FunctionComponent = () => {
         </TypographyWithTooltip>
       </DistributionBox>
       <MaturityBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
       </MaturityBox>
       <PoolBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Pool
         </Typography>
       </PoolBox>

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { getColorFromToken, Skeleton } from 'brokoli-ui';
+import { Skeleton } from 'brokoli-ui';
 import FlipMove from 'react-flip-move';
 
 export const PoolsListBox = styled(FlipMove)`
@@ -32,5 +32,5 @@ export const NoPoolsFoundBox = styled('div')`
   gap: 8px;
   align-items: center;
   border-radius: 8px;
-  background-color: ${getColorFromToken('liberty7')};
+  background-color: ${({ theme }) => theme.colors.black800};
 `;

@@ -1,69 +1,51 @@
-import { AMM, Position } from '@voltz-protocol/v1-sdk';
-import { CurrencyField, LabelTokenTypography, Typography, TypographyToken } from 'brokoli-ui';
+import { ToggleCaret, TokenField, TypographyToken, TypographyWithTooltip } from 'brokoli-ui';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../app';
+import { V2Pool } from '../../../app/features/aMMs';
 import {
-  getExpectedCashflowInfoThunk,
-  selectAdditionalCashflow,
-  selectAMMTokenFormatted,
-  selectCashflowAMM,
-  selectCashflowInfoStatus,
-  selectEstimatedApy,
-  selectTotalCashflow,
-  selectVariableRateInfo,
-  setCashflowAMMAction,
-  setEstimatedApyAction,
+  getExpectedCashflowThunk,
+  selectCashflowCalculatorDisabled,
+  selectCashflowCalculatorError,
+  selectCashflowPool,
+  selectEstimatedVariableApy,
+  selectTotalCashflowFormatted,
+  setCashflowPoolAction,
+  setEstimatedVariableApyAction,
 } from '../../../app/features/cashflow-calculator';
-import { formFormatNumber } from '../../../app/features/forms/common';
 import { stringToBigFloat } from '../../../utilities/number';
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { useWallet } from '../../hooks/useWallet';
-import {
-  AdditionalCashFlowBox,
-  CashFlowCalculatorBox,
-  CashFlowCalculatorLeftBox,
-  CashFlowCalculatorRightBox,
-  ExpectedApyBox,
-  TotalCashFlowBox,
-} from './CashflowCalculator.styled';
+import { CashFlowCalculatorBox, ToggleCaretBox } from './CashflowCalculator.styled';
 
-type CashFlowCalculatorProps = {
-  position: Position | null;
-  aMM: AMM;
-  averageFixedRate: number | null;
-  variableTokenDeltaBalance: number | null;
+type CashflowCalculatorProps = {
+  pool: V2Pool;
   mode: 'fixed' | 'variable';
 };
 
-export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps> = ({
-  aMM,
-  position,
-  averageFixedRate,
-  variableTokenDeltaBalance,
+export const CashflowCalculator: React.FunctionComponent<CashflowCalculatorProps> = ({
+  pool,
   mode,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const cashflowAMM = useAppSelector(selectCashflowAMM);
-  const token = useAppSelector(selectAMMTokenFormatted);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
-  const variableRateInfo = useAppSelector(selectVariableRateInfo);
-  const estimatedApy = useAppSelector(selectEstimatedApy);
+  const disabled = useAppSelector(selectCashflowCalculatorDisabled);
+  const cashflowPool = useAppSelector(selectCashflowPool);
+  const estimatedApy = useAppSelector(selectEstimatedVariableApy);
   const { account } = useWallet();
 
-  const additionalCashflow = useAppSelector(selectAdditionalCashflow);
-  const totalCashflow = useAppSelector(selectTotalCashflow);
+  const totalCashflowFormatted = useAppSelector(selectTotalCashflowFormatted);
   const [localEstimatedApy, setLocalEstimatedApy] = useState<string | undefined>(
     estimatedApy.toString(),
   );
+  const error = useAppSelector(selectCashflowCalculatorError);
+  const handleOnToggleClick = () => setIsOpen(!isOpen);
 
-  const cashflowInfoStatus = useAppSelector(selectCashflowInfoStatus);
   const debouncedChangePredictedApy = useMemo(
     () =>
       debounce((value: number) => {
         dispatch(
-          setEstimatedApyAction({
+          setEstimatedVariableApyAction({
             value,
             account: account || '',
             mode,
@@ -75,38 +57,23 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
 
   useEffect(() => {
     dispatch(
-      setCashflowAMMAction({
-        amm: aMM,
+      setCashflowPoolAction({
+        pool,
       }),
     );
-  }, [dispatch, aMM]);
+  }, [dispatch, pool]);
 
   useEffect(() => {
     setLocalEstimatedApy(estimatedApy.toString());
-  }, [estimatedApy]);
+    void dispatch(getExpectedCashflowThunk());
+  }, [dispatch, estimatedApy]);
 
   useEffect(() => {
-    if (variableRateInfo === undefined) {
+    if (!cashflowPool) {
       return;
     }
-    debouncedChangePredictedApy(parseFloat(variableRateInfo.toFixed(2)));
-  }, [debouncedChangePredictedApy, variableRateInfo]);
-
-  useEffect(() => {
-    if (!cashflowAMM) {
-      return;
-    }
-    if (averageFixedRate === null || variableTokenDeltaBalance === null) {
-      return;
-    }
-    void dispatch(
-      getExpectedCashflowInfoThunk({
-        position,
-        averageFixedRate,
-        variableTokenDeltaBalance,
-      }),
-    );
-  }, [dispatch, cashflowAMM, position, averageFixedRate, variableTokenDeltaBalance]);
+    void dispatch(getExpectedCashflowThunk());
+  }, [dispatch, cashflowPool]);
 
   const handleOnChange = useCallback(
     (value?: string) => {
@@ -126,78 +93,52 @@ export const CashFlowCalculator: React.FunctionComponent<CashFlowCalculatorProps
     };
   }, []);
 
-  if (!cashflowAMM) {
+  if (!cashflowPool) {
     return null;
   }
 
-  const titleTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyLargeBold'
-    : 'primaryBodyMediumBold';
-
-  const expectedVariableApyTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyMediumRegular'
-    : 'secondaryBodySmallRegular';
-
+  const labelTypographyToken: TypographyToken = 'primaryBodySmallBold';
+  if (!isOpen) {
+    return (
+      <CashFlowCalculatorBox>
+        <TypographyWithTooltip
+          colorToken="white100"
+          tooltip="This shows the combined cashflow you could generate from your new position and your existing."
+          typographyToken={labelTypographyToken}
+        >
+          Expected Variable APY - Calculator
+        </TypographyWithTooltip>
+        <ToggleCaretBox onClick={handleOnToggleClick}>
+          <ToggleCaret isOpen={isOpen} />
+        </ToggleCaretBox>
+      </CashFlowCalculatorBox>
+    );
+  }
   return (
     <CashFlowCalculatorBox>
-      <CashFlowCalculatorLeftBox>
-        <Typography colorToken="lavenderWeb" typographyToken={titleTypographyToken}>
-          Cashflow Simulator
-        </Typography>
-      </CashFlowCalculatorLeftBox>
-      <CashFlowCalculatorRightBox>
-        <ExpectedApyBox>
-          <Typography
-            colorToken="lavenderWeb3"
-            typographyToken={expectedVariableApyTypographyToken}
-          >
-            Expected Variable APY
-          </Typography>
-          <CurrencyField
-            allowNegativeValue={false}
-            disabled={cashflowInfoStatus !== 'success'}
-            suffix="%"
-            value={localEstimatedApy}
-            onChange={handleOnChange}
-          />
-        </ExpectedApyBox>
-        <AdditionalCashFlowBox>
-          <LabelTokenTypography
-            colorToken="lavenderWeb"
-            label="Additional Cashflow"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken={labelTypographyToken}
-            prefixToken={additionalCashflow !== null ? (additionalCashflow > 0 ? '+' : '-') : ''}
-            token={token}
-            tooltip="This shows the cashflow you could generate from your new position."
-            typographyToken={typographyToken}
-            value={
-              additionalCashflow !== null ? formFormatNumber(Math.abs(additionalCashflow)) : '--'
-            }
-          />
-        </AdditionalCashFlowBox>
-        <TotalCashFlowBox>
-          <LabelTokenTypography
-            colorToken="lavenderWeb"
-            label="Total Cashflow"
-            labelColorToken="lavenderWeb3"
-            labelTypographyToken={labelTypographyToken}
-            prefixToken={totalCashflow !== null ? (totalCashflow > 0 ? '+' : '-') : ''}
-            token={token}
-            tooltip="This shows the combined cashflow you could generate from your new position and your existing."
-            typographyToken={typographyToken}
-            value={totalCashflow !== null ? formFormatNumber(Math.abs(totalCashflow)) : '--'}
-          />
-        </TotalCashFlowBox>
-      </CashFlowCalculatorRightBox>
+      <TokenField
+        allowNegativeValue={false}
+        bottomLeftText={error ? error : 'Total Expected Cashflow (Estimation)'}
+        bottomLeftTextColorToken={error ? 'error100' : 'white100'}
+        bottomRightTextColorToken="white"
+        bottomRightTextToken=" "
+        bottomRightTextValue={totalCashflowFormatted}
+        disabled={disabled}
+        label="Expected Variable APY - Calculator"
+        labelColorToken="white100"
+        labelTypographyToken={labelTypographyToken}
+        max={{
+          value: '100',
+          showButton: false,
+        }}
+        token="%"
+        tooltip="This shows the combined cashflow you could generate from your new position and your existing."
+        value={localEstimatedApy}
+        onChange={handleOnChange}
+      />
+      <ToggleCaretBox onClick={handleOnToggleClick}>
+        <ToggleCaret isOpen={isOpen} />
+      </ToggleCaretBox>
     </CashFlowCalculatorBox>
   );
 };

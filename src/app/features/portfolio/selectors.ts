@@ -3,6 +3,7 @@ import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
 import { isOnlyV2PoolsPositions } from '../../../utilities/is-only-v2-pools-positions';
 import { compactFormat, compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
+import { mapMarginAccountToMarginAccountUI } from '../_common';
 import { formFormatNumber } from '../forms/common';
 import {
   defaultMarginAccountSummaryFormatted,
@@ -16,7 +17,6 @@ import {
 import {
   getPositionsSummary,
   mapAvailableAmountMarginAccountWithdrawToAvailableAmountsUI,
-  mapMarginAccountToMarginAccountUI,
   mapPortfolioPositionToPortfolioUI,
   sortPositions,
 } from './helpers';
@@ -600,7 +600,17 @@ export const selectMarginAccountsForSelectionLoading = (state: RootState): boole
   return loadedState === 'idle' || loadedState === 'pending';
 };
 
+export const selectMarginAccountsForSelectionError = (state: RootState): boolean => {
+  const loadedState = selectMarginAccountsForSelectionLoadedState(state);
+  return loadedState === 'failed';
+};
+
 export const selectMarginAccountsForSelectionMarginAccounts = (state: RootState) => {
+  const isLoading = selectMarginAccountsForSelectionLoading(state);
+  return isLoading ? [] : state.portfolio.marginAccountsForSelection;
+};
+
+export const selectMarginAccountsForSelectionMarginAccountsUI = (state: RootState) => {
   const isLoading = selectMarginAccountsForSelectionLoading(state);
   return isLoading
     ? []

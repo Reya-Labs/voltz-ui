@@ -13,6 +13,7 @@ const cache = new Map<
   Promise<AvailableAmountForMarginAccountDeposit[] | ReturnType<typeof rejectThunkWithError>>
 >();
 
+// TODO: FB evaluate before launch - refactor #01
 export const fetchAvailableAmountsToDepositForMarginAccountThunk = createAsyncThunk<
   Awaited<AvailableAmountForMarginAccountDeposit[] | ReturnType<typeof rejectThunkWithError>>,
   {

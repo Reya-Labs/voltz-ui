@@ -8,7 +8,7 @@ import {
   selectProspectiveSwapFeeFormatted,
   selectSlippageFormatted,
 } from '../../../../../app/features/forms/trader/rollover-swap';
-import { ReactComponent as GasIcon } from './gas-icon.svg';
+import { Icon } from '../../../../components/Icon/Icon';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 
 type TransactionDetailsProps = {};
@@ -22,22 +22,22 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
   return (
     <React.Fragment>
       <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Fees
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={token}
           typographyToken="secondaryBodySmallRegular"
           value={feeFormatted}
         />
       </TransactionDetailBox>
       <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Estimated Slippage
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={slippageFormatted}
@@ -45,13 +45,13 @@ export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps
       </TransactionDetailBox>
       <TransactionDetailBox>
         <IconTextWrapper>
-          <GasIcon />
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Icon name="gasIcon" />
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>
         </IconTextWrapper>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={` ${gasTokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={gasFeeFormatted}

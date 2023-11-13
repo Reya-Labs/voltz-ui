@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { colors, Skeleton } from 'brokoli-ui';
+import { Skeleton } from 'brokoli-ui';
 
 import { ReactComponent as BronzeIcon } from './icons/bronze.svg';
 import { ReactComponent as GoldIcon } from './icons/gold.svg';
@@ -43,17 +43,17 @@ const EntryBox = styled('div')`
 `;
 
 export const Rank1EntryBox = styled(EntryBox)`
-  background-color: ${colors.lavenderWeb6};
+  background-color: ${({ theme }) => theme.colors.white700};
 `;
 export const Rank2EntryBox = styled(EntryBox)`
-  background-color: ${colors.lavenderWeb7};
+  background-color: ${({ theme }) => theme.colors.white800};
 `;
 export const Rank3EntryBox = styled(EntryBox)`
-  background-color: ${colors.lavenderWeb8};
+  background-color: ${({ theme }) => theme.colors.white900};
 `;
 export const OtherEntryBox = styled(EntryBox)`
-  background-color: ${colors.lavenderWeb8};
+  background-color: ${({ theme }) => theme.colors.white900};
 `;
 export const MeEntryBox = styled(EntryBox)`
-  background-color: ${colors.liberty4};
+  background-color: ${({ theme }) => theme.colors.black500};
 `;

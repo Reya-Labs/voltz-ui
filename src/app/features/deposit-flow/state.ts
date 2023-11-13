@@ -1,12 +1,14 @@
 import { SliceState } from './types';
 
 export const initialState: SliceState = {
+  disableMarginAccountSelection: false,
   availableAmounts: [],
   availableAmountsLoadedState: 'idle',
   marginAccounts: [],
   marginAccountsLoadedState: 'idle',
   step: 'closed',
   selectedMarginAccount: null,
+  queuedSelectedMarginAccountId: null,
   error: null,
   txHash: null,
   simulation: {

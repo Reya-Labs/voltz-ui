@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const FormTransactionHistoryBox = styled('div')`
   box-sizing: border-box;
@@ -9,6 +8,10 @@ export const FormTransactionHistoryBox = styled('div')`
   gap: 16px;
   position: relative;
 
-  background: linear-gradient(90.95deg, ${colors.liberty8} 0.66%, ${colors.lavenderWeb8} 99.34%);
+  background: linear-gradient(
+    90.95deg,
+    ${({ theme }) => theme.colors.black900} 0.66%,
+    ${({ theme }) => theme.colors.white900} 99.34%
+  );
   border-radius: 4px;
 `;

@@ -4,10 +4,10 @@ import React from 'react';
 import { useAppSelector } from '../../../../../app';
 import { FormNumberLimits } from '../../../../../app/features/forms/common';
 import {
-  selectAvailableNotional,
+  selectMaxAvailableNotionalFormatted,
+  selectMaxAvailableNotionalForMaxButton,
   selectUserInputNotionalInfo,
 } from '../../../../../app/features/forms/trader/swap';
-import { formatNumber } from '../../../../../utilities/number';
 import { NotionalAmountFieldBox } from './NotionalAmountField.styled';
 
 type NewNotionalAmountFieldUIProps = {
@@ -32,23 +32,35 @@ export const NewNotionalAmountFieldUI: React.FunctionComponent<NewNotionalAmount
   disabled,
 }) => {
   const notionalInfo = useAppSelector(selectUserInputNotionalInfo);
-  const notionalAvailable = useAppSelector(selectAvailableNotional);
+  const maxAvailableNotionalAvailableFormatted = useAppSelector(
+    selectMaxAvailableNotionalFormatted,
+  );
+  const maxAvailableNotionalForMaxButton = useAppSelector(selectMaxAvailableNotionalForMaxButton);
 
   return (
     <NotionalAmountFieldBox>
       <TokenField
         allowNegativeValue={false}
-        bottomLeftText={notionalInfo.error ? notionalInfo.error : 'Liquidity Available'}
-        bottomLeftTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb3'}
+        bottomLeftText={notionalInfo.error ? notionalInfo.error : 'Max Notional Possible'}
+        bottomLeftTextColorToken={notionalInfo.error ? 'error100' : 'white400'}
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
-        bottomRightTextColorToken={notionalInfo.error ? 'wildStrawberry' : 'lavenderWeb'}
+        bottomRightTextColorToken={notionalInfo.error ? 'error' : 'white'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
-        bottomRightTextValue={formatNumber(notionalAvailable)}
+        bottomRightTextValue={maxAvailableNotionalAvailableFormatted}
         decimalsLimit={FormNumberLimits.decimalLimit}
         disabled={disabled}
         error={notionalInfo.error !== null}
-        label="Notional Amount"
+        label="Notional Size"
+        labelColorToken="white100"
         labelTypographyToken={labelTypographyToken}
+        max={
+          maxAvailableNotionalForMaxButton
+            ? {
+                value: maxAvailableNotionalForMaxButton,
+                showButton: true,
+              }
+            : undefined
+        }
         maxLength={FormNumberLimits.digitLimit}
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="When trading rates, the amount you receive and pay is calculated as a percentage of the notional value you choose."

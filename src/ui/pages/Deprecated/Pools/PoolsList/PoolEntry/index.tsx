@@ -17,7 +17,6 @@ import {
 import { TestNetIndicator } from '../../../../../components/TestNetIndicator';
 import { V2EntryInformation } from '../../../../../components/V2EntryInformation';
 import { useAppNavigate } from '../../../../../hooks/useAppNavigate';
-import { useResponsiveQuery } from '../../../../../hooks/useResponsiveQuery';
 import {
   ButtonStyled,
   ChainIconContainer,
@@ -76,11 +75,8 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
     const chainId = useAppSelector(selectChainId);
     const chainStateChangeError = useAppSelector(selectChainChangeState) === 'error';
     const promptForNetworkChange = chainId !== null ? chainId !== poolChainId : false;
-    const { isLargeDesktopDevice } = useResponsiveQuery();
     const navigate = useAppNavigate();
-    const typographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'secondaryBodyLargeRegular'
-      : 'secondaryBodyMediumRegular';
+    const typographyToken: TypographyToken = 'secondaryBodyMediumRegular';
 
     const switchNetwork = (form: 'lpForm' | 'swapForm') => {
       setWaitingOnNetworkChange(form);
@@ -162,7 +158,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
         >
           <LeftBox>
             <MarketTokenInformation
-              colorToken="lavenderWeb"
+              colorToken="white100"
               iconSize={24}
               isAaveV3={isAaveV3}
               isBorrowing={isBorrowing}
@@ -174,7 +170,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
           <MiddleBox>
             <FixedAPRBox>
               <TokenTypography
-                colorToken="lavenderWeb"
+                colorToken="white"
                 token="%"
                 typographyToken={typographyToken}
                 value={fixedRateFormatted}
@@ -182,7 +178,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
             </FixedAPRBox>
             <VariableAPYBox>
               <TokenTypography
-                colorToken="lavenderWeb"
+                colorToken="white"
                 differenceToken="%"
                 differenceValue={variableRate24hDelta}
                 token="%"
@@ -192,7 +188,7 @@ export const PoolEntry = React.forwardRef<HTMLDivElement, PoolEntryProps>(
             </VariableAPYBox>
             <MaturityBox>
               <TokenTypography
-                colorToken="lavenderWeb"
+                colorToken="white"
                 token=""
                 typographyToken={typographyToken}
                 value={aMMMaturity}

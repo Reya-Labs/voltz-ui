@@ -17,6 +17,8 @@ export type SliceState = {
     | 'deposit-error'
     | 'approveTokenError'
     | 'approvingToken';
+  disableMarginAccountSelection: boolean;
+  queuedSelectedMarginAccountId: null | PortfolioMarginAccount['id'];
   selectedMarginAccount: null | PortfolioMarginAccount;
   error: string | null;
   txHash: string | null;

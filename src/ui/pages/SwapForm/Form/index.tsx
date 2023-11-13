@@ -5,24 +5,24 @@ import {
   selectProspectiveSwapMode,
   selectSwapFormPool,
 } from '../../../../app/features/forms/trader/swap';
-import { CashflowCalculatorModal } from '../../../components/CashflowCalculatorModal';
+import { CashflowCalculator } from '../../../components/CashflowCalculator';
 import {
   FormBox,
   FormOuterBox,
   MarginAccountBox,
   TransactionDetailsBox,
 } from '../../../components/FormStyled';
+import { DepositAndSwapConfirmationFlow } from './Flows/DepositAndSwapConfirmationFlow';
+import { SwapConfirmationFlow } from './Flows/SwapConfirmationFlow';
 import { MarginAccount } from './MarginAccount';
 import { NotionalAmountField } from './NotionalAmountField';
 import { NotionalSwap } from './NotionalSwap';
 import { SubmitButton } from './SubmitButton';
-import { SwapConfirmationFlow } from './SwapConfirmationFlow';
 import { TransactionDetails } from './TransactionDetails';
 
 export const Form: React.FunctionComponent = () => {
   const pool = useAppSelector(selectSwapFormPool);
   const mode = useAppSelector(selectProspectiveSwapMode);
-
   if (!pool) {
     return null;
   }
@@ -30,6 +30,7 @@ export const Form: React.FunctionComponent = () => {
   return (
     <React.Fragment>
       <SwapConfirmationFlow />
+      <DepositAndSwapConfirmationFlow />
       <FormOuterBox>
         <MarginAccountBox>
           <MarginAccount />
@@ -37,12 +38,12 @@ export const Form: React.FunctionComponent = () => {
         <FormBox>
           <NotionalSwap />
           <NotionalAmountField />
+          <TransactionDetailsBox>
+            <TransactionDetails />
+          </TransactionDetailsBox>
           <SubmitButton />
         </FormBox>
-        <TransactionDetailsBox>
-          <TransactionDetails />
-        </TransactionDetailsBox>
-        <CashflowCalculatorModal mode={mode} pool={pool} />
+        <CashflowCalculator mode={mode} pool={pool} />
       </FormOuterBox>
     </React.Fragment>
   );

@@ -53,9 +53,9 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
       <TokenSwitchField
         allowNegativeValue={false}
         bottomLeftText={bottomLeftText}
-        bottomLeftTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb3'}
+        bottomLeftTextColorToken={isMarginRequiredError ? 'error100' : 'white400'}
         bottomLeftTextTypographyToken={bottomLeftTextTypographyToken}
-        bottomRightTextColorToken={isMarginRequiredError ? 'wildStrawberry' : 'lavenderWeb'}
+        bottomRightTextColorToken={isMarginRequiredError ? 'error' : 'white'}
         bottomRightTextTypographyToken={bottomRightTextTypographyToken}
         bottomRightTextValue={bottomRightNumber !== null ? bottomRightNumber : '--'}
         decimalsLimit={FormNumberLimits.decimalLimit}
@@ -71,7 +71,7 @@ export const EditMarginAmountFieldUI: React.FunctionComponent<EditMarginAmountFi
         token={underlyingTokenName.toLowerCase() as TokenFieldProps['token']}
         tooltip="The protocol requires every position to have enough margin to support trades. Adding more than the minimum reduces liquidation risk."
         topRightText={`Wallet: ${walletBalance} ${underlyingTokenName.toUpperCase()}`}
-        topRightTextColorToken={isWalletMarginError ? 'wildStrawberry' : 'lavenderWeb2'}
+        topRightTextColorToken={isWalletMarginError ? 'error100' : 'white300'}
         topRightTextTypographyToken={topRightTextTypographyToken}
         value={localMargin !== null ? localMargin : undefined}
         onChange={handleOnMarginChange}

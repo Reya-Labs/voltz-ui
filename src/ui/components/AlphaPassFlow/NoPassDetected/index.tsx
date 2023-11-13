@@ -9,11 +9,11 @@ export const NoPassDetected: React.FunctionComponent = () => {
   return (
     <NoPassDetectedBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           No Pass Detected
         </Typography>
       </TitleBox>
-      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
         Unfortunately we couldn’t verify your Voltz Alpha Pass in your wallet. Check out other v1
         pools until the v2 pools are opened to all.{' '}
       </Typography>

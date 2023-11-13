@@ -34,7 +34,7 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
       <TopBox>
         <TitleBox>
           <Typography
-            colorToken="lavenderWeb"
+            colorToken="white100"
             data-testid="ConfirmBatchBudgetModalContent-TitleTypography"
             typographyToken="primaryHeader3Bold"
           >
@@ -43,7 +43,7 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
           <CloseButton onClick={onBatchBudgetModalClose} />
         </TitleBox>
         <ExternalLink
-          colorToken="skyBlueCrayola"
+          colorToken="primary"
           data-testid="DepositSuccessModalContent-ViewOnEtherScanLink"
           href={getViewOnEtherScanLink(chainId, depositTransactionId)}
           typographyToken="primaryBodyMediumRegular"
@@ -51,7 +51,7 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
           View on Etherscan
         </ExternalLink>
         <AppLink
-          colorToken="skyBlueCrayola"
+          colorToken="primary"
           data-testid="DepositSuccessModalContent-GotoYourPortfolioLink"
           to={`/${routes.PORTFOLIO_POSITIONS}`}
           typographyToken="primaryBodyMediumRegular"

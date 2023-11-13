@@ -11,7 +11,7 @@ export type PortfolioMarginAccount = Awaited<
 export type ReturnTypeFetchMarginAccounts = Awaited<ReturnType<typeof getMarginAccounts>>;
 
 // Define a cache object to store promises
-const positionsCache = new Map<
+const cache = new Map<
   string,
   Promise<PortfolioMarginAccount[] | ReturnType<typeof rejectThunkWithError>>
 >();
@@ -40,7 +40,7 @@ export const fetchMarginAccountsThunk = createAsyncThunk<
   const cacheId = `${account.toLowerCase()}-${chainIds.join(',')}-${sort.id}${
     sort.direction
   }-${page}`;
-  const cachedPromise = positionsCache.get(cacheId);
+  const cachedPromise = cache.get(cacheId);
   if (cachedPromise) {
     return await cachedPromise;
   }
@@ -60,7 +60,7 @@ export const fetchMarginAccountsThunk = createAsyncThunk<
     }
   })();
 
-  positionsCache.set(cacheId, promise);
+  cache.set(cacheId, promise);
 
   return await promise;
 });

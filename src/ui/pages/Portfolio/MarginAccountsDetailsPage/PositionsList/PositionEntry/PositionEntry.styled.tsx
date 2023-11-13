@@ -1,13 +1,11 @@
 import styled from '@emotion/styled';
-import { colors, ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { ColorTokens, getColorFromToken, shouldNotForwardProps } from 'brokoli-ui';
 
 export const PositionEntryBoxWrapper = styled('div')`
   position: relative;
 `;
 
-export const PositionEntryBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'backgroundColorToken',
-})<{
+export const PositionEntryBox = styled('div', shouldNotForwardProps(['backgroundColorToken']))<{
   backgroundColorToken: ColorTokens;
 }>`
   position: relative;
@@ -18,16 +16,17 @@ export const PositionEntryBox = styled('div', {
   justify-content: space-between;
   align-items: center;
   padding: 8px;
-  box-shadow: -2px 0px 8px 0px ${colors.liberty8};
-  background-color: ${({ backgroundColorToken }) => getColorFromToken(backgroundColorToken)};
-  border: 1px solid ${colors.lavenderWeb7};
+  box-shadow: -2px 0px 8px 0px ${({ theme }) => theme.colors.black900};
+  background-color: ${({ theme, backgroundColorToken }) =>
+    getColorFromToken({ theme, colorToken: backgroundColorToken })};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
   border-radius: 8px;
   transition: all 200ms ease-in;
 
   &:hover {
-    border: 1px solid ${colors.lavenderWeb4};
+    border: 1px solid ${({ theme }) => theme.colors.white500};
     cursor: pointer;
-    background-color: ${colors.lavenderWeb7};
+    background-color: ${({ theme }) => theme.colors.white800};
   }
 `;
 
@@ -39,7 +38,7 @@ const InfoBox = styled('div')`
 
 const BorderBox = styled(InfoBox)`
   justify-content: center;
-  border-left: 1px solid ${colors.lavenderWeb7};
+  border-left: 1px solid ${({ theme }) => theme.colors.white800};
 `;
 
 export const LeftBox = styled(InfoBox)`
@@ -57,9 +56,7 @@ export const MarginBox = styled(BorderBox)`
 export const MaturityBox = styled(BorderBox)`
   width: 88px;
 `;
-export const StatusBox = styled(BorderBox, {
-  shouldForwardProp: (prop) => prop !== 'variant',
-})<{
+export const StatusBox = styled(BorderBox, shouldNotForwardProps(['variant']))<{
   variant: 'small' | 'large';
 }>`
   width: ${({ variant }) => (variant === 'small' ? '60px' : '128px')}};

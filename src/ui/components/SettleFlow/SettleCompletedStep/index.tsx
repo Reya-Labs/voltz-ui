@@ -21,7 +21,7 @@ export const SettleCompletedStep: React.FunctionComponent = () => {
   return (
     <SettleCompletedStepBox>
       <Confetti>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Settle Completed
         </Typography>
       </Confetti>
@@ -29,7 +29,7 @@ export const SettleCompletedStep: React.FunctionComponent = () => {
       <Confetti>
         <ExplorerLink link={etherscanLink} />
       </Confetti>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Your position will be settled in few minutes. You can track it from your your portfolio.
       </Typography>
       <Confetti>

@@ -24,7 +24,10 @@ export type EntryProps = {
   variant: 'rank1' | 'rank2' | 'rank3' | 'other' | 'me';
 };
 
-const VariantEntryBoxMap: Record<EntryProps['variant'], React.FunctionComponent> = {
+const VariantEntryBoxMap: Record<
+  EntryProps['variant'],
+  React.FunctionComponent<React.PropsWithChildren>
+> = {
   rank1: Rank1EntryBox,
   rank2: Rank2EntryBox,
   rank3: Rank3EntryBox,
@@ -42,7 +45,7 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
   if (loading) {
     return (
       <EntrySkeleton
-        colorToken="liberty2"
+        colorToken="black300"
         data-testid="Entry-EntrySkeleton"
         variant="rectangular"
       />
@@ -52,7 +55,7 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
   return (
     <EntryBox data-testid={`RankingEntry-${rank}-${variant}`}>
       <RankBox>
-        <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyMediumRegular">
+        <Typography colorToken="white100" typographyToken="secondaryBodyMediumRegular">
           {rank <= 0 ? '---' : rank}
           {rank === 1 && <Gold data-testid="Entry-GoldIcon" />}
           {rank === 2 && <Silver data-testid="Entry-SilverIcon" />}
@@ -68,7 +71,7 @@ export const Entry: React.FunctionComponent<EntryProps> = ({
           />
         ) : (
           <Typography
-            colorToken="lavenderWeb"
+            colorToken="white100"
             data-testid="Entry-NoAddressTypography"
             typographyToken="secondaryBodyMediumRegular"
           >

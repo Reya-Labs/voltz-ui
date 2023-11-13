@@ -1,29 +1,21 @@
-import { AMM } from '@voltz-protocol/v1-sdk';
+import { V2Pool } from '../aMMs';
 
 type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
 
 export type SliceState = {
-  aMM: AMM | null;
-  estimatedApy: number;
+  pool: V2Pool | null;
+  estimatedVariableApy: number;
   cashflowInfo: {
-    averageFixedRate: number;
-    accruedCashflowExistingPosition: number;
-    accruedCashflowEditPosition: number;
-    estimatedAdditionalCashflow: (estimatedApy: number) => number;
-    estimatedTotalCashflow: (estimatedApy: number) => number;
+    totalCashflow: number;
     status: ThunkStatus;
   };
 };
 
 export const initialState: SliceState = {
-  aMM: null,
-  estimatedApy: 0,
+  pool: null,
+  estimatedVariableApy: 0,
   cashflowInfo: {
-    averageFixedRate: 0,
-    accruedCashflowExistingPosition: 0,
-    accruedCashflowEditPosition: 0,
-    estimatedAdditionalCashflow: () => 0,
-    estimatedTotalCashflow: () => 0,
+    totalCashflow: 0,
     status: 'idle',
   },
 };

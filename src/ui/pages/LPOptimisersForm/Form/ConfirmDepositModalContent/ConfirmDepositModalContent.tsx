@@ -50,7 +50,7 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
   <ContentBox data-testid="ConfirmDepositModalContent-ContentBox">
     <TitleBox>
       <Typography
-        colorToken="lavenderWeb"
+        colorToken="white100"
         data-testid="ConfirmDepositModalContent-TitleTypography"
         typographyToken="primaryHeader3Bold"
       >
@@ -59,7 +59,7 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
       <CloseButton onClick={onCancel} />
     </TitleBox>
     <Typography
-      colorToken="lavenderWeb3"
+      colorToken="white400"
       data-testid="ConfirmDepositModalContent-DescriptionTypography"
       typographyToken="primaryBodyMediumRegular"
     >
@@ -69,13 +69,13 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
     </Typography>
     <GasCost gasCost={gasCost} />
     <DepositFeeContentBox>
-      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
         Batch Fee&nbsp;{' '}
       </Typography>
       {depositFeeUSD === -1 || depositFeeUnderlying === -1 ? (
         <DepositBudgetValueBox>
           <Typography
-            colorToken="lavenderWeb3"
+            colorToken="white400"
             data-testid="ConfirmDepositModalContent-DepositFeeLoading"
             typographyToken="primaryBodySmallRegular"
           >
@@ -85,14 +85,14 @@ export const ConfirmDepositModalContent: React.FunctionComponent<Props> = ({
       ) : (
         <DepositBudgetValueBox>
           <TokenTypography
-            colorToken="skyBlueCrayola"
+            colorToken="primary"
             data-testid="ConfirmDepositModalContent-DepositBudgetUnderlyingTypography"
             token={` ${token.toUpperCase()}`}
             typographyToken="primaryBodySmallRegular"
             value={formFormatNumber(depositFeeUnderlying)}
           />
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             data-testid="ConfirmDepositModalContent-DepositBudgetTextTypography"
             prefixToken="$"
             token=" USD"

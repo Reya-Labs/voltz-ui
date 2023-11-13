@@ -43,18 +43,18 @@ export const CreateMarginAccountDialogContent: React.FunctionComponent<{
   return (
     <ContentBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Create a Margin Account
         </Typography>
         <CloseButton onClick={onCloseClick} />
       </TitleBox>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia
         consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
       </Typography>
       <TextField
         label="Name of the account"
-        labelColorToken="lavenderWeb3"
+        labelColorToken="white400"
         labelTypographyToken="primaryBodySmallRegular"
         placeHolder="Example Name"
         type="text"
@@ -64,7 +64,7 @@ export const CreateMarginAccountDialogContent: React.FunctionComponent<{
       />
       <Button
         bottomLeftText={error ? error : ''}
-        bottomLeftTextColorToken={error ? 'wildStrawberry' : undefined}
+        bottomLeftTextColorToken={error ? 'error100' : undefined}
         bottomLeftTextTypographyToken={error ? 'primaryBodyXSmallRegular' : undefined}
         disabled={loading || name.length < 3}
         loading={loading}

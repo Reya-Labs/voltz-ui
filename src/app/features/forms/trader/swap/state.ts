@@ -1,60 +1,10 @@
-import { SimulateSwapMarginAccountResult } from '@voltz-protocol/sdk-v2';
-import { providers } from 'ethers';
-
-import { V2Pool } from '../../../aMMs';
-import { PortfolioMarginAccount } from '../../../portfolio';
-
-type ThunkStatus = 'idle' | 'pending' | 'success' | 'error';
-
-type SubmitButtonState = 'swap' | 'connect-wallet' | 'paused';
-
-export type SliceState = {
-  submitButton: {
-    state: SubmitButtonState;
-    disabled: boolean;
-    message: {
-      text: string | null;
-      type: 'error' | 'warning' | 'info';
-    };
-  };
-  pool: V2Pool | null;
-  signer: providers.JsonRpcSigner | null;
-  marginAccount: PortfolioMarginAccount | null;
-  maxNotionalAvailable: {
-    value: number;
-    status: ThunkStatus;
-  };
-  walletTokenAllowance: {
-    value: number;
-    status: ThunkStatus;
-  };
-  userInput: {
-    // Side chosen by user in the UI
-    mode: 'fixed' | 'variable';
-    // User-inputted notional amount
-    notionalAmount: {
-      value: number;
-      error: string | null;
-    };
-  };
-  // State of prospective swap
-  prospectiveSwap: {
-    swapSimulation: {
-      value: SimulateSwapMarginAccountResult;
-      status: ThunkStatus;
-    };
-  };
-  swapConfirmationFlow: {
-    step: 'swapConfirmation' | 'waitingForSwapConfirmation' | 'swapCompleted' | null;
-    error: string | null;
-    txHash: string | null;
-  };
-};
+import { SliceState } from './types';
 
 export const initialState: SliceState = {
   submitButton: {
     state: 'connect-wallet',
     disabled: true,
+    text: 'Connect Wallet',
     message: {
       text: null,
       type: 'info',
@@ -81,6 +31,8 @@ export const initialState: SliceState = {
   prospectiveSwap: {
     swapSimulation: {
       value: {
+        accountInitialMarginPostTrade: 0,
+        // TODO: FB evaluate before launch
         marginRequirement: 0,
         maxMarginWithdrawable: 0,
         averageFixedRate: 0,
@@ -98,5 +50,22 @@ export const initialState: SliceState = {
     step: null,
     error: null,
     txHash: null,
+  },
+  depositAndSwapConfirmationFlow: {
+    step: null,
+    error: null,
+    txHash: null,
+    availableAmounts: [],
+    availableAmountsLoadedState: 'idle',
+    userInput: {
+      amount: 0,
+      maxAmount: 0,
+      maxAmountUSD: 0,
+      token: undefined,
+    },
+    walletTokenAllowance: {
+      value: 0,
+      status: 'idle',
+    },
   },
 };

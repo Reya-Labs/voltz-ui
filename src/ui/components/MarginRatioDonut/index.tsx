@@ -18,8 +18,8 @@ export const MarginRatioDonut: React.FunctionComponent<MarginRatioDonutProps> = 
   }
   return (
     <Donut
-      colorToken={MARGIN_RATIO_COLOR_MAP[health]!}
-      holeColorToken="lavenderWeb8"
+      colorToken={`${MARGIN_RATIO_COLOR_MAP[health]!}100`}
+      holeColorToken="white900"
       percentage={percentage}
     />
   );

@@ -1,26 +1,28 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AMM, ExpectedCashflowInfo } from '@voltz-protocol/v1-sdk';
+import { GetExpectedCashflowResult } from '@voltz-protocol/sdk-v2';
 
-import { getAmmProtocol } from '../../../utilities/amm';
+import { getPoolProtocol } from '../../../utilities/amm';
+import { V2Pool } from '../aMMs';
 import { pushEstimatedApyChangeEvent } from './analytics';
 import { initialState } from './state';
-import { getExpectedCashflowInfoThunk } from './thunks';
+import { getExpectedCashflowThunk } from './thunks';
 
 const slice = createSlice({
-  name: 'historicalRates',
+  name: 'cashflowCalculator',
   initialState,
   reducers: {
-    setCashflowAMMAction: (
+    setCashflowPoolAction: (
       state,
       {
-        payload: { amm },
+        payload: { pool },
       }: PayloadAction<{
-        amm: AMM;
+        pool: V2Pool;
       }>,
     ) => {
-      state.aMM = amm;
+      state.pool = pool;
+      state.estimatedVariableApy = pool.currentVariableRate;
     },
-    setEstimatedApyAction: (
+    setEstimatedVariableApyAction: (
       state,
       {
         payload: { value, account, mode },
@@ -30,37 +32,33 @@ const slice = createSlice({
         mode: 'fixed' | 'variable';
       }>,
     ) => {
-      if (!isNaN(value)) {
+      if (!isNaN(value) && state.pool) {
         pushEstimatedApyChangeEvent({
           estimatedApy: value,
           account,
-          pool: getAmmProtocol(state.aMM as AMM),
+          pool: getPoolProtocol(state.pool),
           isFT: mode === 'fixed',
         });
       }
-      state.estimatedApy = value;
+      state.estimatedVariableApy = value;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getExpectedCashflowInfoThunk.pending, (state) => {
+      .addCase(getExpectedCashflowThunk.pending, (state) => {
         state.cashflowInfo.status = 'pending';
       })
-      .addCase(getExpectedCashflowInfoThunk.rejected, (state, {}) => {
+      .addCase(getExpectedCashflowThunk.rejected, (state, {}) => {
         state.cashflowInfo.status = 'error';
       })
-      .addCase(getExpectedCashflowInfoThunk.fulfilled, (state, { payload }) => {
-        const expectedCashflowInfo = payload as ExpectedCashflowInfo;
+      .addCase(getExpectedCashflowThunk.fulfilled, (state, { payload }) => {
+        const expectedCashflowInfo = payload as GetExpectedCashflowResult;
         state.cashflowInfo = {
-          averageFixedRate: expectedCashflowInfo.averageFixedRate,
-          accruedCashflowExistingPosition: expectedCashflowInfo.accruedCashflowExistingPosition,
-          accruedCashflowEditPosition: expectedCashflowInfo.accruedCashflowEditPosition,
-          estimatedAdditionalCashflow: expectedCashflowInfo.estimatedAdditionalCashflow,
-          estimatedTotalCashflow: expectedCashflowInfo.estimatedTotalCashflow,
+          totalCashflow: expectedCashflowInfo.totalCashflow,
           status: 'success',
         };
       });
   },
 });
-export const { setCashflowAMMAction, setEstimatedApyAction } = slice.actions;
+export const { setCashflowPoolAction, setEstimatedVariableApyAction } = slice.actions;
 export const cashflowCalculatorReducer = slice.reducer;

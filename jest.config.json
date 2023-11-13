@@ -28,7 +28,7 @@
   "setupFiles": [
     "react-app-polyfill/jsdom"
   ],
-  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect", "<rootDir>/src/test-helpers/setupTests.ts"],
+  "setupFilesAfterEnv": ["<rootDir>/src/test-helpers/setupTests.ts"],
   "testEnvironment": "jsdom",
   "testMatch": [
     "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
@@ -40,7 +40,7 @@
     "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
   },
   "transformIgnorePatterns": [
-    "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
+    "[/\\\\]node_modules[/\\\\](?!brokoli-ui[/\\\\]).+\\.(js|jsx|mjs|cjs|ts|tsx)$",
     "^.+\\.module\\.(css)$"
   ]
 }

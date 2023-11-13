@@ -32,10 +32,10 @@ export const CollateralDistribution: React.FunctionComponent<CollateralDistribut
   distributions,
 }) => (
   <TooltipBox>
-    <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+    <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
       Collateral by token
     </Typography>
-    <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+    <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
       Collateral distribution breakdown by token of assets you've deposited on Voltz so far.
     </Typography>
     <DistributionsBox>

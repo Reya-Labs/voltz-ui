@@ -81,7 +81,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           <LabelTokenTypography
             colorToken={MODE_COLOR_TOKEN_MAP[editPositionMode]}
             label="Editing Position"
-            labelColorToken="lavenderWeb"
+            labelColorToken="white100"
             labelTypographyToken={actionLabelTypographyToken}
             token=""
             typographyToken={actionTypographyToken}
@@ -92,7 +92,7 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             fromColorToken={MODE_COLOR_TOKEN_MAP[existingPositionMode]}
             fromValue={MODE_TEXT_MAP[existingPositionMode]}
             label="Editing Position"
-            labelColorToken="lavenderWeb"
+            labelColorToken="white100"
             labelTypographyToken={actionLabelTypographyToken}
             toColorToken={MODE_COLOR_TOKEN_MAP[editPositionMode]}
             toValue={MODE_TEXT_MAP[editPositionMode]}
@@ -104,9 +104,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
         <NotionalBox>
           {sameNotional ? (
             <LabelTokenTypography
-              colorToken="lavenderWeb"
+              colorToken="white"
               label="Notional"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken={labelTypographyToken}
               token={
                 editPositionCompactNotional
@@ -120,13 +120,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             />
           ) : (
             <FromToTokenTypography
-              fromColorToken="lavenderWeb"
+              fromColorToken="white"
               fromToken={existingPositionCompactNotional.compactNotionalSuffix}
               fromValue={existingPositionCompactNotional.compactNotionalNumber}
               label="Notional"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken={labelTypographyToken}
-              toColorToken="lavenderWeb"
+              toColorToken="white"
               toToken={editPositionCompactNotional.compactNotionalSuffix}
               toValue={editPositionCompactNotional.compactNotionalNumber}
               typographyToken={typographyToken}
@@ -136,9 +136,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
         <ReceivingBox>
           {receivingRateFrom === receivingRateTo ? (
             <LabelTokenTypography
-              colorToken="lavenderWeb"
+              colorToken="white"
               label="Receiving"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken={labelTypographyToken}
               token="%"
               typographyToken={typographyToken}
@@ -146,13 +146,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             />
           ) : (
             <FromToTokenTypography
-              fromColorToken="lavenderWeb"
+              fromColorToken="white"
               fromToken="%"
               fromValue={receivingRateFrom}
               label="Receiving"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken={labelTypographyToken}
-              toColorToken="lavenderWeb"
+              toColorToken="white"
               toToken="%"
               toValue={receivingRateTo}
               typographyToken={typographyToken}
@@ -162,9 +162,9 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
         <PayingBox>
           {payingRateFrom === payingRateTo ? (
             <LabelTokenTypography
-              colorToken="lavenderWeb"
+              colorToken="white"
               label="Paying"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken={labelTypographyToken}
               token="%"
               typographyToken={typographyToken}
@@ -172,13 +172,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
             />
           ) : (
             <FromToTokenTypography
-              fromColorToken="lavenderWeb"
+              fromColorToken="white"
               fromToken="%"
               fromValue={payingRateFrom}
               label="Paying"
-              labelColorToken="lavenderWeb3"
+              labelColorToken="white400"
               labelTypographyToken={labelTypographyToken}
-              toColorToken="lavenderWeb"
+              toColorToken="white"
               toToken="%"
               toValue={payingRateTo}
               typographyToken={typographyToken}
@@ -200,13 +200,13 @@ export const EditPositionDetailsUI: React.FunctionComponent<EditPositionDetailsU
           <LabelTokenTypography
             colorToken={
               unrealizedPnLFromSwaps === '--'
-                ? 'lavenderWeb'
+                ? 'white'
                 : unrealizedPnLFromSwaps.indexOf('-') !== -1
-                ? 'wildStrawberry'
-                : 'skyBlueCrayola'
+                ? 'error'
+                : 'primary'
             }
             label="Unrealized PnL"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
             tooltip={<UnrealizedPNLDetails />}

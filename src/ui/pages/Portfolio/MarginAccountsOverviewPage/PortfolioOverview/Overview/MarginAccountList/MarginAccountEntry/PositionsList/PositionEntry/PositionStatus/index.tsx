@@ -23,14 +23,14 @@ export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
 }) => {
   if (status.variant === 'settled') {
     return (
-      <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
+      <Typography colorToken="white400" typographyToken={textsTypographyToken}>
         Settled
       </Typography>
     );
   }
   if (status.variant === 'matured') {
     return (
-      <Typography colorToken="skyBlueCrayola" typographyToken={textsTypographyToken}>
+      <Typography colorToken="primary100" typographyToken={textsTypographyToken}>
         Matured
       </Typography>
     );
@@ -62,12 +62,12 @@ export const PositionStatus: React.FunctionComponent<PositionStatusProps> = ({
     <Tooltip
       trigger={
         <PositionStatusBox>
-          <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
+          <Typography colorToken="white400" typographyToken={textsTypographyToken}>
             {isReceiving ? 'Receiving' : 'Paying'}
           </Typography>
           &nbsp;&nbsp;
           <TokenTypography
-            colorToken={isReceiving ? 'skyBlueCrayola' : 'wildStrawberry'}
+            colorToken={isReceiving ? 'primary' : 'error'}
             token="%"
             typographyToken={numbersTypographyToken}
             value={formFormatNumber(value)}

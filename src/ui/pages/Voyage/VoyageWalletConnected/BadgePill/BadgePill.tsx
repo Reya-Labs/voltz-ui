@@ -12,7 +12,7 @@ export const BadgePill: React.FunctionComponent<{
   if (loading) {
     return (
       <Skeleton
-        colorToken="liberty2"
+        colorToken="black300"
         data-testid="BadgePill-Skeleton"
         typographyToken="primaryBodySmallRegular"
         variant="rectangular"

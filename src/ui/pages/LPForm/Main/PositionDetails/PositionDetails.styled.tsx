@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 export const PositionDetailsBox = styled('div')`
   box-sizing: border-box;
@@ -12,7 +11,11 @@ export const PositionDetailsBox = styled('div')`
   position: relative;
   height: 80px;
 
-  background: linear-gradient(90.95deg, ${colors.liberty8} 0.66%, ${colors.lavenderWeb8} 99.34%);
+  background: linear-gradient(
+    90.95deg,
+    ${({ theme }) => theme.colors.black900} 0.66%,
+    ${({ theme }) => theme.colors.white900} 99.34%
+  );
   border-radius: 4px;
 `;
 
@@ -34,7 +37,7 @@ export const NotionalBox = styled('div')`
 `;
 
 export const BorderedBox = styled('div')`
-  border-left: 1px solid ${colors.liberty5};
+  border-left: 1px solid ${({ theme }) => theme.colors.black600};
   padding: 0px 16px;
   min-width: 100px;
 `;

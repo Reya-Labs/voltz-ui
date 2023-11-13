@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 
 import { PositionUI } from '../../../../../../../../app/features/portfolio/types';
 import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
-import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
 import { HealthIndicator } from '../../HealthIndicator';
 import { MarketTokenInformation } from '../../MarketTokenInformation';
 import {
@@ -56,13 +55,9 @@ export const ActivePositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
     ref,
   ) => {
     const [transactionHistoryDialogOpen, setTransactionHistoryDialogOpen] = useState(false);
-    const { isLargeDesktopDevice } = useResponsiveQuery();
-    const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'secondaryBodyMediumRegular'
-      : 'secondaryBodySmallRegular';
-    const textsTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'primaryBodyMediumRegular'
-      : 'primaryBodySmallRegular';
+
+    const numbersTypographyToken: TypographyToken = 'secondaryBodySmallRegular';
+    const textsTypographyToken: TypographyToken = 'primaryBodySmallRegular';
 
     const handleOnEntryClick = () => setTransactionHistoryDialogOpen(true);
     const handleOnClose = () => setTransactionHistoryDialogOpen(false);

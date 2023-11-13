@@ -118,11 +118,11 @@ export const ProfilePageWalletConnected: React.FunctionComponent<
 
   return (
     <ContainerBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryHeader1Black">
+      <Typography colorToken="white100" typographyToken="primaryHeader1Black">
         {`Welcome to your profile ${formatEthereumAddress(account)}`}
       </Typography>
       <Subheading
-        colorToken="lavenderWeb2"
+        colorToken="white300"
         data-testid="Profile-BadgesExplained"
         typographyToken="primaryBodyMediumRegular"
       >
@@ -145,7 +145,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<
       <BadgesBox>
         <BadgeCollectionBox data-testid="ProfilePageWalletConnected-BadgeCollectionBox">
           <BadgeCollectionTypographyBox>
-            <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+            <Typography colorToken="white100" typographyToken="primaryHeader2Black">
               Your Badge Collection
             </Typography>
             <SeasonToggle season={season} seasons={seasonOptions} onChange={onSeasonChange} />
@@ -179,7 +179,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<
               <NoAchievedBadgesBox>
                 <Badge variant="noClaimedBadges" />
                 <NoAchievedBadgesTypography
-                  colorToken="lavenderWeb2"
+                  colorToken="white300"
                   typographyToken="primaryBodyMediumRegular"
                 >
                   Make contributions to the community or trade on the protocol to earn badges
@@ -190,11 +190,11 @@ export const ProfilePageWalletConnected: React.FunctionComponent<
         </BadgeCollectionBox>
 
         <AchievedBadgesListBox data-testid="ProfilePageWalletConnected-AchievedBadgesListBox">
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+          <Typography colorToken="white100" typographyToken="primaryHeader2Black">
             The Collection -&nbsp;{seasonLabel}
           </Typography>
           <AchievedBadgesListSubheading
-            colorToken="lavenderWeb2"
+            colorToken="white300"
             typographyToken="primaryBodyMediumRegular"
           >
             Make contributions to the community or trade on the protocol to earn badges{' '}
@@ -215,7 +215,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<
         </AchievedBadgesListBox>
 
         <CommunityEngagementBox data-testid="ProfilePageWalletConnected-CommunityEngagementBox">
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader2Black">
+          <Typography colorToken="white100" typographyToken="primaryHeader2Black">
             Community Engagement
           </Typography>
           <CommunityEngagementGrid

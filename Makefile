@@ -1,7 +1,7 @@
 .PHONY: build
 
 install-ci:
-	yarn --frozen-lockfile --prefer-offline
+	yarn --immutable
 
 test:
 	yarn test

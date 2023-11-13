@@ -12,7 +12,6 @@ import {
   setNotionalAmountAction,
 } from '../../../../../app/features/forms/lps/rollover-lp';
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 
 type NotionalAmountProps = {};
@@ -23,7 +22,6 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     notionalAmount.value.toString(),
   );
   const [getInfoPostLpNotional, setGetInfoPostLpNotional] = useState<string | null>(null);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const dispatch = useAppDispatch();
   const aMM = useAppSelector(selectRolloverLpFormAMM);
@@ -85,17 +83,9 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     return null;
   }
 
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodySmallRegular';
-
-  const bottomRightTextTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const bottomLeftTextTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodySmallRegular';
+  const bottomRightTextTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const bottomLeftTextTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
 
   return (
     <NewNotionalAmountFieldUI

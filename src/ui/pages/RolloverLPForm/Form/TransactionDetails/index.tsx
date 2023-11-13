@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useAppSelector } from '../../../../../app';
 import { selectGasInfoFormatted } from '../../../../../app/features/forms/lps/rollover-lp';
-import { ReactComponent as GasIcon } from './gas-icon.svg';
+import { Icon } from '../../../../components/Icon/Icon';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 
 export const TransactionDetails: React.FunctionComponent = () => {
@@ -13,13 +13,13 @@ export const TransactionDetails: React.FunctionComponent = () => {
     <React.Fragment>
       <TransactionDetailBox>
         <IconTextWrapper>
-          <GasIcon />
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Icon name="gasIcon" />
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>
         </IconTextWrapper>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={` ${gasTokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
           value={gasFeeFormatted}

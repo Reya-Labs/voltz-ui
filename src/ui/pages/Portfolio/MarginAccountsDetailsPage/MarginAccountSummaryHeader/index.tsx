@@ -44,7 +44,7 @@ export const MarginAccountSummaryHeader = () => {
     totalPortfolioCollateralUSDCompactFormatted,
   } = useAppSelector(selectMarginAccountSummary(marginAccountId));
   const { toMarginAccountDetailsPage } = useAppNavigate();
-  const { marginAccounts, loading: marginAccountsLoading } = useMarginAccountsForSelection();
+  const { marginAccountsUI, loading: marginAccountsLoading } = useMarginAccountsForSelection();
 
   const handleOnMarginAccountClick = (id: string) => {
     toMarginAccountDetailsPage({
@@ -61,14 +61,14 @@ export const MarginAccountSummaryHeader = () => {
           <NameBox>
             {chainIcon ? chainIcon : null}
             <TokenTypography
-              colorToken="lavenderWeb"
+              colorToken="white"
               token=" Total Value (USD)"
               typographyToken="primaryBodySmallRegular"
               value={name}
             />
           </NameBox>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken="$"
             token=""
             typographyToken="secondaryBodyExtraLargeBold"
@@ -78,7 +78,7 @@ export const MarginAccountSummaryHeader = () => {
         <RightBox>
           <MarginAccountsSearchField
             disabled={marginAccountsLoading}
-            marginAccounts={marginAccounts}
+            marginAccounts={marginAccountsUI}
             selectedMarginAccountId={marginAccountId || ''}
             onMarginAccountClick={handleOnMarginAccountClick}
           />
@@ -87,9 +87,9 @@ export const MarginAccountSummaryHeader = () => {
       <PositionDetailsBox>
         <MarginBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Margin"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             prefixToken="$"
             token={''}
@@ -99,9 +99,9 @@ export const MarginAccountSummaryHeader = () => {
         </MarginBox>
         <RealizedPNLBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Realised PnL"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             prefixToken={
               totalPortfolioRealizedPNLValueUSDFormatted === '--'
@@ -121,9 +121,9 @@ export const MarginAccountSummaryHeader = () => {
         </RealizedPNLBox>
         <UnrealizedPNLBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Unrealised PnL"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             prefixToken={
               totalPortfolioUnrealizedPNLValueUSDFormatted === '--'
@@ -143,9 +143,9 @@ export const MarginAccountSummaryHeader = () => {
         </UnrealizedPNLBox>
         <TotalNotionalBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Total Notional"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             prefixToken="$"
             token={totalPortfolioNotionalValueUSDCompactFormatted.compactSuffix}
@@ -155,9 +155,9 @@ export const MarginAccountSummaryHeader = () => {
         </TotalNotionalBox>
         <TotalCollateralBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Collateral"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             prefixToken="$"
             token={totalPortfolioCollateralUSDCompactFormatted.compactSuffix}
@@ -168,10 +168,10 @@ export const MarginAccountSummaryHeader = () => {
         </TotalCollateralBox>
         <TotalPositionsBox>
           <LabelTokenTypography
-            attentionIndicatorColorToken="skyBlueCrayola"
-            colorToken="lavenderWeb"
+            attentionIndicatorColorToken="primary100"
+            colorToken="white"
             label="Positions"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken="primaryBodyXSmallRegular"
             token={''}
             typographyToken="secondaryBodyMediumBold"
@@ -179,11 +179,11 @@ export const MarginAccountSummaryHeader = () => {
           />
         </TotalPositionsBox>
         <MarginRatioBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
             Margin Ratio
           </Typography>
           <MarginRatioDonutBox>
-            <Typography colorToken="lavenderWeb" typographyToken="secondaryBodyMediumBold">
+            <Typography colorToken="white100" typographyToken="secondaryBodyMediumBold">
               {marginRatioPercentage}%
             </Typography>
             <MarginRatioDonut

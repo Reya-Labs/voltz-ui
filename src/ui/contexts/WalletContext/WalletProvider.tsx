@@ -1,3 +1,4 @@
+import { checkForRiskyWallet, checkForTOSSignature } from '@voltz-protocol/wallet-sdk';
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -11,12 +12,14 @@ import {
 import { resetPortfolioStateAction } from '../../../app/features/portfolio';
 import { getENSDetails } from '../../../utilities/getENSDetails';
 import { getErrorMessage } from '../../../utilities/getErrorMessage';
+import { isEnvVarProvided } from '../../../utilities/isEnvVarProvided';
+import { getReferrer } from '../../../utilities/referrer-store';
 import { getSentryTracker } from '../../../utilities/sentry';
-import { checkForRiskyWallet, checkForTOSSignature, getWalletProvider } from './services';
+import { getWalletProvider } from './services';
 import { WalletName, WalletStatus } from './types';
 import { WalletContext } from './WalletContext';
 
-export const WalletProvider: React.FunctionComponent = ({ children }) => {
+export const WalletProvider: React.FunctionComponent<React.PropsWithChildren> = ({ children }) => {
   const [provider, setProvider] = useState<ethers.providers.JsonRpcProvider | null>(null);
   const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner | null>(null);
   const [walletError, setWalletError] = useState<string | null>(null);
@@ -81,12 +84,15 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
           const walletAddress = await newSigner.getAddress();
 
           // Do checks that could stop us allowing the wallet to connect
-          const skipTOSCheck =
-            process.env.REACT_APP_SKIP_TOS_CHECK &&
-            process.env.REACT_APP_SKIP_TOS_CHECK !== 'UNPROVIDED';
+          const skipTOSCheck = isEnvVarProvided(process.env.REACT_APP_SKIP_TOS_CHECK);
 
           if (!skipTOSCheck) {
-            await checkForTOSSignature(newSigner);
+            const referralCode = getReferrer() || '';
+            await checkForTOSSignature({
+              signer: newSigner,
+              referralCode,
+              sandbox: isEnvVarProvided(process.env.REACT_APP_IS_TEST_ENV),
+            });
           }
           const providerNetwork = await newProvider.getNetwork();
           const networkValidation = detectIfNetworkSupported(providerNetwork.chainId);

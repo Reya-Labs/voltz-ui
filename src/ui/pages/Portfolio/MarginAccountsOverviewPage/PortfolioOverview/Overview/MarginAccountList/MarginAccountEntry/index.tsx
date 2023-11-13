@@ -1,12 +1,12 @@
-import { ColorTokens, ToggleCaret, TokenTypography, Typography, TypographyToken } from 'brokoli-ui';
+import { ColorTokens, ToggleCaret, Typography, TypographyToken } from 'brokoli-ui';
 import React, { useState } from 'react';
 
 import { MarginAccountUI } from '../../../../../../../../app/features/portfolio/types';
 import { ChainIcon } from '../../../../../../../components/ChainIcon';
 import { MarginRatioDonut } from '../../../../../../../components/MarginRatioDonut';
 import { TestNetIndicator } from '../../../../../../../components/TestNetIndicator';
+import { TokenCompactTypography } from '../../../../../../../components/TokenCompactTypography';
 import { useAppNavigate } from '../../../../../../../hooks/useAppNavigate';
-import { useResponsiveQuery } from '../../../../../../../hooks/useResponsiveQuery';
 import {
   BalanceBox,
   ChainIconAndNameContainer,
@@ -37,18 +37,16 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
       marginRatioPercentage,
       chainId,
       name,
-      balanceCompactFormat,
+      balanceCompactFormatted,
+      balanceUSDCompactFormatted,
+      settlementToken,
     },
     ref,
   ) => {
     const [isPositionListShown, setIsPositionListShown] = useState(false);
-    const { isLargeDesktopDevice } = useResponsiveQuery();
-    const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'secondaryBodyMediumRegular'
-      : 'secondaryBodySmallRegular';
-    const textsTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'primaryBodyMediumRegular'
-      : 'primaryBodySmallRegular';
+
+    const numbersTypographyToken: TypographyToken = 'secondaryBodySmallRegular';
+    const textsTypographyToken: TypographyToken = 'primaryBodySmallRegular';
     const { toMarginAccountDetailsPage } = useAppNavigate();
     const handleOnEntryClick = () => {
       setIsPositionListShown(!isPositionListShown);
@@ -71,7 +69,7 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
           <LeftBox>
             <ChainIconAndNameContainer>
               {chainIcon}
-              <Typography colorToken="lavenderWeb" typographyToken={textsTypographyToken}>
+              <Typography colorToken="white100" typographyToken={textsTypographyToken}>
                 {name}
               </Typography>
               <ToggleCaretBox>
@@ -81,30 +79,31 @@ export const MarginAccountEntry = React.forwardRef<HTMLDivElement, MarginAccount
           </LeftBox>
           <RightBox>
             <BalanceBox>
-              <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
+              <Typography colorToken="white400" typographyToken={textsTypographyToken}>
                 Balance
               </Typography>
-              <TokenTypography
-                colorToken="lavenderWeb"
-                prefixToken="$"
-                token={balanceCompactFormat.compactSuffix}
+              <TokenCompactTypography
+                colorToken="white"
+                compactData={
+                  !settlementToken ? balanceUSDCompactFormatted : balanceCompactFormatted
+                }
+                token={!settlementToken ? '$' : settlementToken}
                 typographyToken={numbersTypographyToken}
-                value={balanceCompactFormat.compactNumber}
               />
             </BalanceBox>
             <PositionsCountBox>
-              <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
+              <Typography colorToken="white400" typographyToken={textsTypographyToken}>
                 Positions
               </Typography>
-              <Typography colorToken="lavenderWeb" typographyToken={numbersTypographyToken}>
+              <Typography colorToken="white100" typographyToken={numbersTypographyToken}>
                 {positionsCount}
               </Typography>
             </PositionsCountBox>
             <MarginRatioBox>
-              <Typography colorToken="lavenderWeb3" typographyToken={textsTypographyToken}>
+              <Typography colorToken="white400" typographyToken={textsTypographyToken}>
                 Margin Ratio
               </Typography>
-              <Typography colorToken="lavenderWeb" typographyToken={numbersTypographyToken}>
+              <Typography colorToken="white100" typographyToken={numbersTypographyToken}>
                 {marginRatioPercentage}%
               </Typography>
               <MarginRatioDonut health={marginRatioHealth} percentage={marginRatioPercentage} />

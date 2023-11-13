@@ -1311,7 +1311,7 @@ describe('swap-form.selectors', () => {
   describe('selectEditPositionReceivingRateFormatted', () => {
     const state = {
       deprecatedSwapForm: jest.fn(),
-      cashflowCalculator: jest.fn(),
+      deprecatedCashflowCalculator: jest.fn(),
     };
     beforeEach(() => {
       // Clear mock call history after each test
@@ -1327,7 +1327,7 @@ describe('swap-form.selectors', () => {
 
       expect(getEditPositionMode).toHaveBeenCalledWith(state.deprecatedSwapForm);
       expect(getEditPositionFixedRate).toHaveBeenCalledWith(
-        state.cashflowCalculator,
+        state.deprecatedCashflowCalculator,
         state.deprecatedSwapForm,
       );
       expect(formFormatNumber).toHaveBeenCalledWith(1.5);
@@ -1355,7 +1355,7 @@ describe('swap-form.selectors', () => {
 
       expect(getEditPositionMode).toHaveBeenCalledWith(state.deprecatedSwapForm);
       expect(getEditPositionFixedRate).toHaveBeenCalledWith(
-        state.cashflowCalculator,
+        state.deprecatedCashflowCalculator,
         state.deprecatedSwapForm,
       );
       expect(result).toEqual('--');
@@ -1365,7 +1365,7 @@ describe('swap-form.selectors', () => {
   describe('selectEditPositionPayingRateFormatted', () => {
     const state = {
       deprecatedSwapForm: jest.fn(),
-      cashflowCalculator: jest.fn(),
+      deprecatedCashflowCalculator: jest.fn(),
     };
     beforeEach(() => {
       // Clear mock call history after each test
@@ -1394,7 +1394,7 @@ describe('swap-form.selectors', () => {
 
       expect(getEditPositionMode).toHaveBeenCalledWith(state.deprecatedSwapForm);
       expect(getEditPositionFixedRate).toHaveBeenCalledWith(
-        state.cashflowCalculator,
+        state.deprecatedCashflowCalculator,
         state.deprecatedSwapForm,
       );
       expect(formFormatNumber).toHaveBeenCalledWith(1.2);

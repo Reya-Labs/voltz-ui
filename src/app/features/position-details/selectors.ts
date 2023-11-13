@@ -2,7 +2,7 @@ import {
   formatPOSIXTimestamp,
   formatPOSIXTimestampWithHoursMinutes,
 } from '../../../utilities/date';
-import { compactFormatToParts } from '../../../utilities/number';
+import { CompactFormatParts, compactFormatToParts } from '../../../utilities/number';
 import { RootState } from '../../store';
 import { formFormatNumber } from '../forms/common';
 import { PortfolioPositionPool } from './thunks';
@@ -32,26 +32,11 @@ export type PositionDetailsUI = {
   creationTimestampInMSFormatted: string;
   fixLowPercentage: number;
   fixHighPercentage: number;
-  notionalUSDCompactFormatted: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-  marginUSDCompactFormatted: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-  realizedPNLFeesUSDCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-  realizedPNLCashflowUSDCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
-  realizedPNLTotalUSDCompactFormat: {
-    compactNumber: string;
-    compactSuffix: string;
-  };
+  notionalUSDCompactFormatted: CompactFormatParts;
+  marginUSDCompactFormatted: CompactFormatParts;
+  realizedPNLFeesUSDCompactFormat: CompactFormatParts;
+  realizedPNLCashflowUSDCompactFormat: CompactFormatParts;
+  realizedPNLTotalUSDCompactFormat: CompactFormatParts;
 
   history: {
     type: 'swap' | 'mint' | 'burn' | 'margin-update' | 'liquidation' | 'settlement' | 'maturity';
@@ -61,19 +46,10 @@ export type PositionDetailsUI = {
     fixedRate: number;
     marginDelta: number;
     creationTimestampInMSFormatted: string;
-    notionalUSDCompactFormat: {
-      compactNumber: string;
-      compactSuffix: string;
-    };
-    paidFeesUSDCompactFormat: {
-      compactNumber: string;
-      compactSuffix: string;
-    };
+    notionalUSDCompactFormat: CompactFormatParts;
+    paidFeesUSDCompactFormat: CompactFormatParts;
     fixedRatePercentage: string;
-    marginDeltaUSDCompactFormat: {
-      compactNumber: string;
-      compactSuffix: string;
-    };
+    marginDeltaUSDCompactFormat: CompactFormatParts;
   }[];
 };
 

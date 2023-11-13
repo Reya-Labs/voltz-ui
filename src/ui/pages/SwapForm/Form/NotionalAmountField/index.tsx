@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../app';
 import {
-  resetInfoPostSwapAction,
   selectIsGetInfoPostSwapLoading,
   selectSwapFormPool,
   selectUserInputNotionalInfo,
@@ -12,7 +11,6 @@ import {
   simulateSwapThunk,
 } from '../../../../../app/features/forms/trader/swap';
 import { stringToBigFloat } from '../../../../../utilities/number';
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { NewNotionalAmountFieldUI } from './NewNotionalAmountFieldUI';
 
 type NotionalAmountProps = {};
@@ -23,8 +21,6 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     notionalAmount.value.toString(),
   );
   const [getInfoPostSwapNotional, setGetInfoPostSwapNotional] = useState<string | null>(null);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
-
   const dispatch = useAppDispatch();
   const pool = useAppSelector(selectSwapFormPool);
 
@@ -34,8 +30,7 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
 
   const getInfoPostSwap = useCallback(() => {
     setGetInfoPostSwapNotional(localNotional);
-    dispatch(resetInfoPostSwapAction());
-    void dispatch(simulateSwapThunk());
+    void dispatch(simulateSwapThunk({}));
   }, [localNotional, dispatch]);
 
   const debouncedSetNotionalAmount = useMemo(
@@ -85,17 +80,9 @@ export const NotionalAmountField: React.FunctionComponent<NotionalAmountProps> =
     return null;
   }
 
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodySmallRegular';
-
-  const bottomRightTextTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const bottomLeftTextTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodySmallBold';
+  const bottomRightTextTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const bottomLeftTextTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
 
   return (
     <NewNotionalAmountFieldUI

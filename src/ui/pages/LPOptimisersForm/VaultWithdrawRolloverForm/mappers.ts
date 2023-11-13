@@ -1,4 +1,4 @@
-import { colors } from 'brokoli-ui';
+import { Theme } from '@emotion/react';
 
 export enum WithdrawStates {
   READY = 'READY',
@@ -42,6 +42,7 @@ export const getSubmissionState = ({
   rollover,
   error,
   loading,
+  theme,
 }: {
   withdrawOrRolloverState: WithdrawStates | RolloverStates;
   withdraw: () => void;
@@ -49,6 +50,7 @@ export const getSubmissionState = ({
   error: string;
   tokenName: string;
   loading: boolean;
+  theme: Theme;
 }): SubmissionState => {
   const initialisingState: SubmissionState = {
     hintText: {
@@ -75,7 +77,7 @@ export const getSubmissionState = ({
   const errorState = {
     hintText: {
       text: error,
-      textColor: colors.wildStrawberry,
+      textColor: theme.colors.error100,
     },
     disabled: false,
     withdraw: {
@@ -98,7 +100,7 @@ export const getSubmissionState = ({
       return {
         hintText: {
           text: 'Rollover deposit will be completed at 7PM UTC',
-          textColor: colors.lavenderWeb,
+          textColor: theme.colors.white100,
         },
         disabled: false,
         withdraw: {
@@ -122,7 +124,7 @@ export const getSubmissionState = ({
         hintText: {
           prefixText: 'Withdraw in progress',
           text: '',
-          textColor: colors.skyBlueCrayola,
+          textColor: theme.colors.primary100,
         },
         disabled: true,
         withdraw: {
@@ -143,7 +145,7 @@ export const getSubmissionState = ({
       return {
         hintText: {
           text: 'Withdrawn successfully',
-          textColor: colors.skyBlueCrayola,
+          textColor: theme.colors.primary100,
         },
         disabled: true,
         withdraw: {
@@ -165,7 +167,7 @@ export const getSubmissionState = ({
         hintText: {
           prefixText: 'Rollover in progress',
           text: '',
-          textColor: colors.skyBlueCrayola,
+          textColor: theme.colors.primary100,
         },
         disabled: true,
         withdraw: {
@@ -186,7 +188,7 @@ export const getSubmissionState = ({
       return {
         hintText: {
           text: 'Rolled over successfully',
-          textColor: colors.skyBlueCrayola,
+          textColor: theme.colors.primary100,
         },
         disabled: true,
         withdraw: {

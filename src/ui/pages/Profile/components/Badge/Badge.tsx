@@ -10,7 +10,7 @@ type BadgeProps = {
 
 export const Badge: React.FunctionComponent<BadgeProps> = ({ loading, variant }) => {
   if (loading) {
-    return <Skeleton colorToken="liberty2" data-testid="Badge-Skeleton" variant="circular" />;
+    return <Skeleton colorToken="black300" data-testid="Badge-Skeleton" variant="circular" />;
   }
   return <Icon data-testid={`Badge-${variant}`} name={variant} />;
 };

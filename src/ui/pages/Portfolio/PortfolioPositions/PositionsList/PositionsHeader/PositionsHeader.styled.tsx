@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { shouldNotForwardProps } from 'brokoli-ui';
 
 export const PositionsHeaderBox = styled('div')`
   display: flex;
@@ -32,9 +33,7 @@ export const MarginBox = styled(CenterTextBox)`
 export const MaturityBox = styled(CenterTextBox)`
   width: 88px;
 `;
-export const StatusBox = styled(CenterTextBox, {
-  shouldForwardProp: (prop) => prop !== 'variant',
-})<{
+export const StatusBox = styled(CenterTextBox, shouldNotForwardProps(['variant']))<{
   variant: 'small' | 'large';
 }>`
   width: ${({ variant }) => (variant === 'small' ? '60px' : '128px')}};

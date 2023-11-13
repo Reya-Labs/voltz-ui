@@ -19,22 +19,22 @@ export const MarginUpdateDetails: React.FunctionComponent<MarginUpdateDetailsPro
   return (
     <MarginUpdateDetailsBox>
       <MarginUpdateDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Margin
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token={token}
           typographyToken="secondaryBodySmallRegular"
           value={prospectiveSwapMarginFormFormatted}
         />
       </MarginUpdateDetailBox>
       <MarginUpdateDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Maturity
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token=" "
           typographyToken="secondaryBodySmallRegular"
           value={aMMMaturity}

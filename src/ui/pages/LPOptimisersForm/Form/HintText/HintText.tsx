@@ -32,7 +32,7 @@ export const HintText: React.FunctionComponent<{
   }
   return (
     <Typography
-      colorToken="lavenderWeb3"
+      colorToken="white400"
       data-testid="HintText-HintTextTypography"
       typographyToken="primaryBodySmallRegular"
     >

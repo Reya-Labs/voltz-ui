@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
-import { Highlight, SearchField, SearchFieldProps, TokenTypography, Typography } from 'brokoli-ui';
+import { Highlight, SearchField, SearchFieldProps, Typography } from 'brokoli-ui';
 import React, { useMemo } from 'react';
 
 import { MarginAccountUI } from '../../../app/features/portfolio/types';
 import { ChainIcon } from '../ChainIcon';
+import { TokenCompactTypography } from '../TokenCompactTypography';
 
 type MarginAccountListItemProps = SearchFieldProps['items'][0] & MarginAccountUI;
 
@@ -21,29 +22,34 @@ const LeftWrapper = styled('div')`
   width: 100%;
 `;
 
+const RightWrapper = styled('div')`
+  width: 150px;
+`;
+
 const MarginAccountListItem: SearchFieldProps['itemRenderer'] = (props) => {
   const { item, searchedValue } = props as {
     item: MarginAccountListItemProps;
     searchedValue?: string;
   };
-  const { chainId, name, balanceCompactFormat } = item;
-  const { compactSuffix, compactNumber } = balanceCompactFormat;
+  const { chainId, name, settlementToken, balanceCompactFormatted, balanceUSDCompactFormatted } =
+    item;
   const chainIcon = <ChainIcon chainId={chainId} hideForChains={[]} />;
   return (
     <Wrapper>
       <LeftWrapper>
         {chainIcon}
-        <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
           <Highlight highlight={searchedValue}>{name}</Highlight>
         </Typography>
       </LeftWrapper>
-      <TokenTypography
-        colorToken="lavenderWeb"
-        prefixToken="$"
-        token={compactSuffix}
-        typographyToken="secondaryBodySmallRegular"
-        value={compactNumber}
-      />
+      <RightWrapper>
+        <TokenCompactTypography
+          colorToken="white"
+          compactData={!settlementToken ? balanceUSDCompactFormatted : balanceCompactFormatted}
+          token={!settlementToken ? '$' : settlementToken}
+          typographyToken="secondaryBodySmallRegular"
+        />
+      </RightWrapper>
     </Wrapper>
   );
 };

@@ -7,7 +7,7 @@ import {
   MarginAccountBox,
   TitleBox,
   TransactionDetailsBox,
-} from '../../../../components/FormStyled';
+} from '../../../../components/_Deprecated/FormStyled';
 import { LeverageField } from './LeverageField';
 import { MarginAccount } from './MarginAccount';
 import { MarginAmountField } from './MarginAmountField';
@@ -28,7 +28,7 @@ export const Form: React.FunctionComponent = () => {
           <MarginAccount />
         </MarginAccountBox>
         <TitleBox>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Black">
+          <Typography colorToken="white100" typographyToken="primaryHeader3Black">
             SWAP Rates
           </Typography>
         </TitleBox>

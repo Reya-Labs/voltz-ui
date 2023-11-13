@@ -26,20 +26,20 @@ export const RealizedPNLDetails: React.FunctionComponent<RealizedPNLDetailsProps
 }) => {
   return (
     <RealizedPnLDetailsBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallBold">
+      <Typography colorToken="white100" typographyToken="primaryBodySmallBold">
         Realized PnL = Cashflow from Swaps {variant === 'lp' ? '+' : '-'} Fees
       </Typography>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
         Profit or loss already captured from fee income as well as the position while it is locked
         into an active swap.
       </Typography>
       <RowsBox>
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Cashflow
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken={pnlFromSwapsPrefixToken}
             token={underlyingTokenName ? ` ${underlyingTokenName.toUpperCase()}` : ''}
             typographyToken="primaryBodySmallRegular"
@@ -47,11 +47,11 @@ export const RealizedPNLDetails: React.FunctionComponent<RealizedPNLDetailsProps
           />
         </RowBox>
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Fees
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken={pnlFromFeesPrefixToken}
             token={underlyingTokenName ? ` ${underlyingTokenName.toUpperCase()}` : ''}
             typographyToken="primaryBodySmallRegular"
@@ -60,11 +60,11 @@ export const RealizedPNLDetails: React.FunctionComponent<RealizedPNLDetailsProps
         </RowBox>
         <HorizontalLine />
         <RowBox>
-          <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
             Realized PnL
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken={pnlTotalPrefixToken}
             token={underlyingTokenName ? ` ${underlyingTokenName.toUpperCase()}` : ''}
             typographyToken="primaryBodySmallRegular"

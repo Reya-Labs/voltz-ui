@@ -12,7 +12,7 @@ export const TestNetIndicator: React.FunctionComponent<{ chainId: SupportedChain
     return null;
   }
   return (
-    <Pill colorToken="skyBlueCrayola" typographyToken="primaryBodySmallRegular" variant="compact">
+    <Pill colorToken="primary" typographyToken="primaryBodySmallRegular" variant="compact">
       Testnet
     </Pill>
   );

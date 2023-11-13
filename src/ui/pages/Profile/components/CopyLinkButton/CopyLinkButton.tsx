@@ -26,7 +26,7 @@ const DISABLED_MAP: Record<CopyLinkButtonProps['mode'], boolean> = {
 export const CopyLinkButton: React.FunctionComponent<CopyLinkButtonProps> = ({ onClick, mode }) => (
   <CopyLinkButtonUI
     bottomLeftText={mode === 'copyError' ? 'Oops, try again' : ''}
-    bottomLeftTextColorToken="wildStrawberry"
+    bottomLeftTextColorToken="error100"
     bottomLeftTextTypographyToken="primaryBodySmallRegular"
     data-testid={`CopyLinkButton-CopyLinkButtonUI-${mode}`}
     disabled={DISABLED_MAP[mode]}

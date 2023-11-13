@@ -13,12 +13,12 @@ export const DepositMarginSuccessDialogContent: React.FunctionComponent = () => 
   return (
     <ContentBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Successful Deposit
         </Typography>
         <CloseButton onClick={handleOnCloseClick} />
       </TitleBox>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia
         consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
       </Typography>

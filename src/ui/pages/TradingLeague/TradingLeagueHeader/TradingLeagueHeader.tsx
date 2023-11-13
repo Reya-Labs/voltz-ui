@@ -6,14 +6,14 @@ import { TradingLeagueHeaderBox } from './TradingLeagueHeader.styled';
 export const TradingLeagueHeader = React.memo(() => (
   <TradingLeagueHeaderBox data-testid="TradingLeagueHeader-TradingLeagueHeaderBox">
     <Typography
-      colorToken="lavenderWeb"
+      colorToken="white100"
       data-testid="TradingLeagueHeader-Typography-Title"
       typographyToken="primaryHeader1Black"
     >
       Voltz Trading League
     </Typography>
     <Typography
-      colorToken="lavenderWeb3"
+      colorToken="white400"
       data-testid="TradingLeagueHeader-Typography-Subtitle"
       typographyToken="primaryBodyMediumRegular"
     >

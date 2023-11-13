@@ -11,10 +11,10 @@ export const CannotRegisterRolloverModalContent: React.FunctionComponent<Props> 
 }) => {
   return (
     <ContentBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+      <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
         Automatic Rollover
       </Typography>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodyMediumRegular">
+      <Typography colorToken="white100" typographyToken="primaryBodyMediumRegular">
         The autorollover for this optimiser was triggered, but not yet executed. During this period,
         it is not possible to change the autorollover configuration. You will be able to change this
         configuration as soon as the autorollover is executed.

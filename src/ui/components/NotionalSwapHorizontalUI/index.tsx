@@ -3,7 +3,6 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { formatNumber } from '../../../utilities/number';
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { ReactComponent as ArrowsSvg } from './arrows.svg';
 import {
   BottomTextContent,
@@ -36,7 +35,6 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
   const variableRate = variableRateInfo ? formatNumber(variableRateInfo) : '--';
   const payFixedRate = payFixedRateInfo ? formatNumber(payFixedRateInfo) : '--';
   const isFixedMode = localMode === 'fixed';
-  const { isLargeDesktopDevice } = useResponsiveQuery();
 
   const debouncedSetMode = useMemo(
     () =>
@@ -75,26 +73,15 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
     };
   }, []);
 
-  const receiveTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallBold'
-    : 'primaryBodyXSmallBold';
-
-  const payTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumBold'
-    : 'primaryBodySmallBold';
-
-  const percentageTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallBold'
-    : 'primaryBodyXSmallBold';
+  const receiveTypographyToken: TypographyToken = 'primaryBodyXSmallBold';
+  const payTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodySmallBold';
+  const percentageTypographyToken: TypographyToken = 'primaryBodyXSmallBold';
 
   return (
     <NotionalSwapWrapperBox>
       <TypographyWithTooltip
-        colorToken="lavenderWeb"
+        colorToken="white100"
         tooltip="When trading interest rate swaps, you receive one rate and pay out the other. Choose the rate you wish to receive vs. pay."
         typographyToken={labelTypographyToken}
       >
@@ -103,18 +90,18 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
       <NotionalSwapBox>
         <NotionalSwapFixedBox>
           <TopTextContent>
-            <Typography colorToken="lavenderWeb" typographyToken={receiveTypographyToken}>
+            <Typography colorToken="white100" typographyToken={receiveTypographyToken}>
               {isFixedMode ? 'Receive Fixed' : 'Receive Variable'}
             </Typography>
             <TokenTypography
-              colorToken={isFixedMode ? 'skyBlueCrayola' : 'wildStrawberry'}
+              colorToken={isFixedMode ? 'primary' : 'error'}
               token="%"
               typographyToken={percentageTypographyToken}
               value={isFixedMode ? receiveFixedRate : variableRate}
             />
           </TopTextContent>
           <BottomTextContent>
-            <Typography colorToken="lavenderWeb2" typographyToken={payTypographyToken}>
+            <Typography colorToken="white300" typographyToken={payTypographyToken}>
               {isFixedMode ? `Pay Variable ${variableRate}%` : `Pay Fixed ${payFixedRate}%`}
             </Typography>
           </BottomTextContent>
@@ -124,18 +111,18 @@ export const NotionalSwapHorizontalUI: React.FunctionComponent<NotionalSwapHoriz
         </NotionalSwapSwapper>
         <NotionalSwapVariableBox>
           <TopTextContent>
-            <Typography colorToken="lavenderWeb2" typographyToken={receiveTypographyToken}>
+            <Typography colorToken="white300" typographyToken={receiveTypographyToken}>
               {isFixedMode ? 'Receive Variable' : 'Receive Fixed'}
             </Typography>
             <TokenTypography
-              colorToken={isFixedMode ? 'wildStrawberry' : 'skyBlueCrayola'}
+              colorToken={isFixedMode ? 'error' : 'primary'}
               token="%"
               typographyToken={percentageTypographyToken}
               value={isFixedMode ? variableRate : receiveFixedRate}
             />
           </TopTextContent>
           <BottomTextContent>
-            <Typography colorToken="lavenderWeb4" typographyToken={payTypographyToken}>
+            <Typography colorToken="white500" typographyToken={payTypographyToken}>
               {isFixedMode ? `Pay Fixed ${payFixedRate}%` : `Pay Variable ${variableRate}%`}
             </Typography>
           </BottomTextContent>

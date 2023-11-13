@@ -2,7 +2,7 @@ import { ExclaimTooltip, TokenTypography, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { formFormatNumber } from '../../../../../app/features/forms/common';
-import { ReactComponent as GasIcon } from './gas-icon.svg';
+import { Icon } from '../../../../components/Icon/Icon';
 import { GasCostBox } from './GasCost.styled';
 
 type GasCostProps = {
@@ -11,10 +11,10 @@ type GasCostProps = {
 
 export const GasCost = ({ gasCost }: GasCostProps) => (
   <GasCostBox data-testid="GasCost-GasCostBox">
-    <GasIcon data-testid="GasCost-GasIcon" />
+    <Icon data-testid="GasCost-GasIcon" name="gasIcon" />
     {gasCost === -1 ? (
       <Typography
-        colorToken="lavenderWeb3"
+        colorToken="white400"
         data-testid="GasCost-GasCostLoading"
         typographyToken="primaryBodyMediumRegular"
       >
@@ -22,7 +22,7 @@ export const GasCost = ({ gasCost }: GasCostProps) => (
       </Typography>
     ) : (
       <TokenTypography
-        colorToken="lavenderWeb"
+        colorToken="white"
         data-testid="GasCost-GasCostUSD"
         prefixToken="$"
         token=""

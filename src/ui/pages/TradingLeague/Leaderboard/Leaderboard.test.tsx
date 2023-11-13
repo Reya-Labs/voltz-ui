@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
 import { RankType } from '@voltz-protocol/v1-sdk';
 import React from 'react';
 
+import { render, screen } from '../../../../test-helpers';
 import { Leaderboard } from './Leaderboard';
 
 describe('<Leaderboard />', () => {

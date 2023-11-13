@@ -11,8 +11,8 @@ import {
   selectVariableRateInfo,
 } from '../../../../../app/features/forms/trader/deprecated/swap';
 import { isV2AMM } from '../../../../../utilities/amm';
+import { DeprecatedCashFlowCalculator } from '../../../../components/_Deprecated/CashflowCalculator';
 import { AlphaPassFlow } from '../../../../components/AlphaPassFlow';
-import { CashFlowCalculator } from '../../../../components/CashflowCalculator';
 import { FormTransactionHistory } from '../../../../components/FormTransactionHistory';
 import { HistoricalRatesChart } from '../../../../components/HistoricalRatesChart';
 import { BottomMainBox, MainBox } from './Main.styled';
@@ -44,7 +44,7 @@ export const Main: React.FunctionComponent = () => {
       <BottomMainBox>
         <PositionDetails />
         {isV2AMM(aMM) ? null : (
-          <CashFlowCalculator
+          <DeprecatedCashFlowCalculator
             aMM={aMM}
             averageFixedRate={averageFixedRate}
             mode={mode}

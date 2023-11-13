@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
+import { ColorTokens, getColorFromToken, shouldNotForwardProps } from 'brokoli-ui';
 
 export const ChartFiltersBox = styled('div')`
   display: flex;
@@ -11,9 +11,10 @@ export const ChartFiltersBox = styled('div')`
   width: 40px;
 `;
 
-export const ChartFilterButtonBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'active' && prop !== 'disabled',
-})<{ disabled: boolean; active: boolean }>`
+export const ChartFilterButtonBox = styled('div', shouldNotForwardProps(['disabled', 'active']))<{
+  disabled: boolean;
+  active: boolean;
+}>`
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -21,14 +22,14 @@ export const ChartFilterButtonBox = styled('div', {
   justify-content: center;
   align-items: center;
   padding: 4px 8px;
-  background: ${({ active }) => (active ? colors.lavenderWeb7 : 'transparent')};
+  background: ${({ theme, active }) => (active ? theme.colors.white800 : 'transparent')};
 
   border-radius: 4px;
   transition: background 200ms ease-in;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   &:hover {
-    background: ${colors.lavenderWeb7};
+    background: ${({ theme }) => theme.colors.white800};
   }
 `;
 
@@ -43,10 +44,10 @@ export const ChartFilterButton = styled('button')`
   }
 `;
 
-export const Underline = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'color',
-})<{ color: string }>`
-  background: ${({ color }) => color};
+export const Underline = styled('div', shouldNotForwardProps(['colorToken']))<{
+  colorToken: ColorTokens;
+}>`
+  background: ${({ theme, colorToken }) => getColorFromToken({ theme, colorToken })};
   box-sizing: border-box;
   width: 24px;
   height: 1px;

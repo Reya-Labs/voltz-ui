@@ -130,7 +130,7 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
         />
       </Dialog>
       <ContentBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
           Trigger the batch of deposits, and claim the batch budget at any time! Careful with the
           batch gas cost.
         </Typography>
@@ -138,19 +138,19 @@ export const BatchBudgetTrigger: React.FunctionComponent<Props> = ({
         <ActionBox>
           <ActionLeftContentBox>
             <BatchBudgetContentBox>
-              <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+              <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
                 Batch Budget:&nbsp;
               </Typography>
               <BatchBudgetValueBox>
                 <TokenTypography
-                  colorToken="skyBlueCrayola"
+                  colorToken="primary"
                   data-testid="BatchBudgetTrigger-BatchBudgetUnderlyingTypography"
                   token={` ${lpVault.tokenName.toUpperCase()}`}
                   typographyToken="primaryBodySmallRegular"
                   value={formFormatNumber(lpVault.accumulatedFees)}
                 />
                 <TokenTypography
-                  colorToken="lavenderWeb"
+                  colorToken="white"
                   data-testid="BatchBudgetTrigger-BatchBudgetTextTypography"
                   prefixToken="$"
                   token=" USD"

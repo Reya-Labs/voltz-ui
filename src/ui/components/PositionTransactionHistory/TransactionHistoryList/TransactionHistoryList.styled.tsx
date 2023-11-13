@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ColorTokens, getColorFromToken } from 'brokoli-ui';
+import { ColorTokens, getColorFromToken, shouldNotForwardProps } from 'brokoli-ui';
 
 import { ReactComponent as Burn } from './assets/burn.svg';
 import { ReactComponent as Liquidation } from './assets/liquidation.svg';
@@ -17,9 +17,7 @@ export const HeaderBox = styled('div')`
   padding-left: 8px;
 `;
 
-export const EntryBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'backgroundColorToken',
-})<{
+export const EntryBox = styled('div', shouldNotForwardProps(['backgroundColorToken']))<{
   backgroundColorToken: ColorTokens;
 }>`
   display: flex;
@@ -27,7 +25,8 @@ export const EntryBox = styled('div', {
   width: 100%;
   box-sizing: border-box;
   padding: 8px;
-  background-color: ${({ backgroundColorToken }) => getColorFromToken(backgroundColorToken)};
+  background-color: ${({ theme, backgroundColorToken }) =>
+    getColorFromToken({ theme, colorToken: backgroundColorToken })};
 `;
 
 const InfoBox = styled('div')`
@@ -64,9 +63,9 @@ export const TransactionHistoryEntriesBox = styled('div')`
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
-  background: ${getColorFromToken('liberty8')};
+  background: ${({ theme }) => theme.colors.black900};
   padding: 4px;
-  border: 1px solid ${getColorFromToken('lavenderWeb7')};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
   border-radius: 4px;
 `;
 export const LiquidationIcon = styled(Liquidation)`

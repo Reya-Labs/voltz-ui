@@ -18,12 +18,12 @@ export const getGasInfoFormatted = ({
   if (status === 'success' && gasDetails) {
     return {
       gasFeeFormatted: formatNumber(gasDetails.value, 2, 4),
-      gasTokenFormatted: gasDetails.token,
+      gasTokenFormatted: ` ${gasDetails.token}`,
     };
   }
 
   return {
     gasFeeFormatted: '--',
-    gasTokenFormatted: '--',
+    gasTokenFormatted: '',
   };
 };

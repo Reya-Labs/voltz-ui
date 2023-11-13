@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { colors, Typography } from 'brokoli-ui';
+import { shouldNotForwardProps, Typography } from 'brokoli-ui';
 
 export const PaginationBox = styled('div')`
   display: flex;
@@ -7,9 +7,9 @@ export const PaginationBox = styled('div')`
   align-items: center;
 `;
 
-export const ActionButton = styled(Typography, {
-  shouldForwardProp: (prop) => prop !== 'disabled',
-})<{ disabled: boolean }>`
+export const ActionButton = styled(Typography, shouldNotForwardProps(['disabled']))<{
+  disabled: boolean;
+}>`
   display: flex;
   flex-direction: row;
   gap: 8px;
@@ -20,16 +20,14 @@ export const ActionButton = styled(Typography, {
 
 export const BarBox = styled('div')`
   width: 96px;
-  background: ${colors.lavenderWeb4};
+  background: ${({ theme }) => theme.colors.white500};
   height: 10px;
   margin: 8px;
 `;
 
-export const AnimatedBarBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'width',
-})<{ width: number }>`
+export const AnimatedBarBox = styled('div', shouldNotForwardProps(['width']))<{ width: number }>`
   width: ${({ width }) => width}%;
-  background: ${colors.lavenderWeb};
+  background: ${({ theme }) => theme.colors.white100};
   height: 100%;
   transition: width 500ms ease-in;
 `;

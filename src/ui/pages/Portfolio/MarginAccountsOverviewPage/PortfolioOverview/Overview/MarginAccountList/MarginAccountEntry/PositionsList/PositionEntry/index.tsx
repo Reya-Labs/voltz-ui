@@ -1,7 +1,6 @@
 import { TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { useResponsiveQuery } from '../../../../../../../../../hooks/useResponsiveQuery';
 import { HealthIndicator } from './HealthIndicator';
 import { MarketTokenInformation } from './MarketTokenInformation';
 import {
@@ -52,13 +51,8 @@ export const PositionEntry = React.forwardRef<HTMLDivElement, EntryProps>(
     },
     ref,
   ) => {
-    const { isLargeDesktopDevice } = useResponsiveQuery();
-    const numbersTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'secondaryBodyMediumRegular'
-      : 'secondaryBodySmallRegular';
-    const textsTypographyToken: TypographyToken = isLargeDesktopDevice
-      ? 'primaryBodyMediumRegular'
-      : 'primaryBodySmallRegular';
+    const numbersTypographyToken: TypographyToken = 'secondaryBodySmallRegular';
+    const textsTypographyToken: TypographyToken = 'primaryBodySmallRegular';
 
     return (
       <React.Fragment>

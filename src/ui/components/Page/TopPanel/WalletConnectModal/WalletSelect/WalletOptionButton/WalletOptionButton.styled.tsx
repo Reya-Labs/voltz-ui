@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from 'brokoli-ui';
 
 import { ReactComponent as Metamask } from './metamask.svg';
 import { ReactComponent as WalletConnect } from './walletconnect.svg';
@@ -16,9 +15,9 @@ export const OptionButton = styled('button')`
   box-sizing: border-box;
   cursor: pointer;
 
-  background: ${colors.lavenderWeb8};
+  background: ${({ theme }) => theme.colors.white900};
   & p {
-    color: ${colors.lavenderWeb};
+    color: ${({ theme }) => theme.colors.white100};
   }
   border-radius: 8px;
   transition:
@@ -26,19 +25,19 @@ export const OptionButton = styled('button')`
     color 200ms ease-in;
 
   &:hover {
-    background: ${colors.lavenderWeb7};
+    background: ${({ theme }) => theme.colors.white800};
   }
 
   &:active {
-    background: ${colors.lavenderWeb8};
+    background: ${({ theme }) => theme.colors.white900};
   }
 
   &:disabled {
-    background: ${colors.lavenderWeb8};
+    background: ${({ theme }) => theme.colors.white900};
     cursor: not-allowed;
   }
   &:disabled p {
-    color: ${colors.lavenderWeb6};
+    color: ${({ theme }) => theme.colors.white700};
   }
 `;
 

@@ -1,1 +1,1 @@
-export * from './getExpectedCashflowInfoThunk';
+export * from './getExpectedCashflowThunk';

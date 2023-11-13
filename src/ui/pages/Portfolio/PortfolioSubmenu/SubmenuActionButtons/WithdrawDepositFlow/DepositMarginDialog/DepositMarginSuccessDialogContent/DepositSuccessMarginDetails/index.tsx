@@ -35,33 +35,33 @@ export const DepositSuccessMarginDetails: React.FunctionComponent<TransactionDet
     <DepositMarginDetailsWrapperBox>
       <DepositMarginDetailsBox>
         <TransactionDetailBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Account
           </Typography>
-          <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
             {name}
           </Typography>
         </TransactionDetailBox>
         <TransactionDetailBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Withdrew
           </Typography>
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             token={`${amountFormatted.compactSuffix} ${(token || '').toUpperCase()}`}
             typographyToken="secondaryBodySmallRegular"
             value={amountFormatted.compactNumber}
           />
         </TransactionDetailBox>
         <TransactionDetailBox>
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Account Margin Ratio
           </Typography>
           <FromToTokenTypography
             fromColorToken={
               marginRatioHealth !== '--'
                 ? MARGIN_RATIO_COLOR_MAP[marginRatioHealth as MarginAccountUI['marginRatioHealth']]
-                : 'lavenderWeb'
+                : 'white'
             }
             fromToken="%"
             fromValue={marginRatioPercentage}
@@ -70,7 +70,7 @@ export const DepositSuccessMarginDetails: React.FunctionComponent<TransactionDet
                 ? MARGIN_RATIO_COLOR_MAP[
                     simulationMarginRatioHealth as MarginAccountUI['marginRatioHealth']
                   ]
-                : 'lavenderWeb'
+                : 'white'
             }
             toToken="%"
             toValue={simulationMarginRatioPercentage}

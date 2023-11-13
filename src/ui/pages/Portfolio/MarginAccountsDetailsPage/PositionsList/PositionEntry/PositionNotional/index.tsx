@@ -19,7 +19,7 @@ export const PositionNotional: React.FunctionComponent<PositionNotionalProps> = 
   }
   return (
     <TokenTypography
-      colorToken="lavenderWeb"
+      colorToken="white"
       prefixToken="$"
       token={notionalUSDCompactFormat.compactSuffix}
       typographyToken={typographyToken}

@@ -3,56 +3,97 @@ import React from 'react';
 
 import { useAppSelector } from '../../../../../app';
 import {
-  selectAMMTokenFormatted,
   selectGasInfoFormatted,
+  selectPoolTokenFormatted,
+  selectProspectiveSwapAccountInitialMarginPostTradeCompactFormatted,
   selectProspectiveSwapFeeFormatted,
+  selectReceivingRateFormatted,
   selectSlippageFormatted,
+  selectUserInputNotionalCompactFormatted,
 } from '../../../../../app/features/forms/trader/swap';
-import { ReactComponent as GasIcon } from './gas-icon.svg';
+import { Icon } from '../../../../components/Icon/Icon';
 import { IconTextWrapper, TransactionDetailBox } from './TransactionDetails.styled';
 
 type TransactionDetailsProps = {};
 
 export const TransactionDetails: React.FunctionComponent<TransactionDetailsProps> = () => {
-  const token = useAppSelector(selectAMMTokenFormatted);
+  const tokenFormatted = useAppSelector(selectPoolTokenFormatted);
   const slippageFormatted = useAppSelector(selectSlippageFormatted);
+  const accountInitialMarginPostTradeCompactFormatted = useAppSelector(
+    selectProspectiveSwapAccountInitialMarginPostTradeCompactFormatted,
+  );
+  const notionalAmountFormatted = useAppSelector(selectUserInputNotionalCompactFormatted);
+  const receivingRateFormatted = useAppSelector(selectReceivingRateFormatted);
   const feeFormatted = useAppSelector(selectProspectiveSwapFeeFormatted);
   const { gasFeeFormatted, gasTokenFormatted } = useAppSelector(selectGasInfoFormatted);
 
   return (
     <React.Fragment>
       <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
-          Fees
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
+          Account Initial Margin Post Trade
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
-          token={token}
+          colorToken="white"
+          token={`${accountInitialMarginPostTradeCompactFormatted.compactSuffix}${tokenFormatted}`}
           typographyToken="secondaryBodySmallRegular"
-          value={feeFormatted}
+          value={accountInitialMarginPostTradeCompactFormatted.compactNumber}
         />
       </TransactionDetailBox>
       <TransactionDetailBox>
-        <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
+          Receiving rate
+        </Typography>
+        <TokenTypography
+          colorToken="white"
+          token="%"
+          typographyToken="secondaryBodySmallRegular"
+          value={receivingRateFormatted}
+        />
+      </TransactionDetailBox>
+      <TransactionDetailBox>
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
+          Size
+        </Typography>
+        <TokenTypography
+          colorToken="white"
+          token={`${notionalAmountFormatted.compactSuffix}${tokenFormatted}`}
+          typographyToken="secondaryBodySmallRegular"
+          value={notionalAmountFormatted.compactNumber}
+        />
+      </TransactionDetailBox>
+      <TransactionDetailBox>
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
           Estimated Slippage
         </Typography>
         <TokenTypography
-          colorToken="lavenderWeb"
+          colorToken="white"
           token="%"
           typographyToken="secondaryBodySmallRegular"
           value={slippageFormatted}
         />
       </TransactionDetailBox>
       <TransactionDetailBox>
+        <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
+          Fees
+        </Typography>
+        <TokenTypography
+          colorToken="white"
+          token={tokenFormatted}
+          typographyToken="secondaryBodySmallRegular"
+          value={feeFormatted}
+        />
+      </TransactionDetailBox>
+      <TransactionDetailBox>
         <IconTextWrapper>
-          <GasIcon />
-          <Typography colorToken="lavenderWeb3" typographyToken="primaryBodySmallRegular">
+          <Icon name="gasIcon" />
+          <Typography colorToken="white400" typographyToken="primaryBodySmallRegular">
             Gas Fees
           </Typography>
         </IconTextWrapper>
         <TokenTypography
-          colorToken="lavenderWeb"
-          token={` ${gasTokenFormatted}`}
+          colorToken="white"
+          token={gasTokenFormatted}
           typographyToken="secondaryBodySmallRegular"
           value={gasFeeFormatted}
         />

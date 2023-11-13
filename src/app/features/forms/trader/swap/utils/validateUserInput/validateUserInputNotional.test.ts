@@ -1,7 +1,7 @@
-import { getAvailableNotional } from '../getAvailableNotional';
+import { getMaxAvailableNotional } from '../getMaxAvailableNotional';
 import { validateUserInputNotional } from './validateUserInputNotional';
 
-jest.mock('../getAvailableNotional');
+jest.mock('../getMaxAvailableNotional');
 
 describe('validateUserInputNotional', () => {
   let mockState = {
@@ -26,14 +26,14 @@ describe('validateUserInputNotional', () => {
   });
 
   it('sets error when and there is not enough notional', () => {
-    (getAvailableNotional as jest.Mock).mockReturnValueOnce(5);
+    (getMaxAvailableNotional as jest.Mock).mockReturnValueOnce(5);
     validateUserInputNotional(mockState as never);
 
     expect(mockState.userInput.notionalAmount.error).not.toBeNull();
   });
 
   it('sets error to null when there is enough notional', () => {
-    (getAvailableNotional as jest.Mock).mockReturnValueOnce(100);
+    (getMaxAvailableNotional as jest.Mock).mockReturnValueOnce(100);
 
     validateUserInputNotional(mockState as never);
 

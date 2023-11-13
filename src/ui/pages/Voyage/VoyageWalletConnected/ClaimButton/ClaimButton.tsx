@@ -71,7 +71,7 @@ export const ClaimButton: React.FunctionComponent<ClaimButtonProps> = ({
         bottomLeftText={
           mode === 'claimError' && displayError ? 'Error when claiming, try again' : ''
         }
-        bottomLeftTextColorToken="wildStrawberry"
+        bottomLeftTextColorToken="error100"
         bottomLeftTextTypographyToken="primaryBodySmallRegular"
         data-testid={`ClaimButton-ClaimButtonStyled-${mode}`}
         disabled={DISABLED_MAP[mode]}

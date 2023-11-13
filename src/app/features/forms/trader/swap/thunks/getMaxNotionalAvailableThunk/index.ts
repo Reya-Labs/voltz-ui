@@ -9,14 +9,10 @@ const cache = new Map<string, Promise<number | ReturnType<typeof rejectThunkWith
 
 export const getMaxNotionalAvailableHandler: AsyncThunkPayloadCreator<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
+  { mode: 'fixed' | 'variable' },
   { state: RootState }
-> = async (_, thunkAPI) => {
-  const {
-    pool,
-    marginAccount,
-    userInput: { mode },
-  } = thunkAPI.getState().swapForm;
+> = async ({ mode }, thunkAPI) => {
+  const { pool, marginAccount } = thunkAPI.getState().swapForm;
 
   if (!pool || !marginAccount) {
     return 0;
@@ -48,6 +44,6 @@ export const getMaxNotionalAvailableHandler: AsyncThunkPayloadCreator<
 
 export const getMaxNotionalAvailableThunk = createAsyncThunk<
   Awaited<number | ReturnType<typeof rejectThunkWithError>>,
-  void,
+  { mode: 'fixed' | 'variable' },
   { state: RootState }
 >('swapForm/getMaxNotionalAvailableThunk', getMaxNotionalAvailableHandler);

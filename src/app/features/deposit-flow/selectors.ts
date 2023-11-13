@@ -5,9 +5,12 @@ import { RootState } from '../../store';
 import {
   mapAvailableAmountMarginAccountDepositToAvailableAmountsUI,
   mapMarginAccountToMarginAccountUI,
-} from './helpers';
+} from '../_common';
 
-// Deposit flow
+export const selectMarginAccountDepositFlowDisableMarginAccountSelection = (state: RootState) => {
+  return state.depositFlow.disableMarginAccountSelection;
+};
+
 export const selectMarginAccountDepositFlowStep = (state: RootState) => {
   return state.depositFlow.step;
 };
@@ -81,12 +84,16 @@ export const selectMarginAccountDepositFlowValidationError = (state: RootState) 
 };
 
 export const selectMarginAccountDepositFlowCTAText = (state: RootState) => {
+  const { token, amount } = state.depositFlow.userInput;
   const step = selectMarginAccountDepositFlowStep(state);
   if (step === 'depositing') {
     return 'Waiting for deposit';
   }
   if (step === 'approvingToken') {
     return 'Approval pending...';
+  }
+  if (amount <= 0) {
+    return 'Deposit Margin';
   }
   if (selectMarginAccountDepositFlowHasSimulationError(state)) {
     return 'Refresh Gas Calculation';
@@ -98,7 +105,6 @@ export const selectMarginAccountDepositFlowCTAText = (state: RootState) => {
     return 'Try to approve again!';
   }
   if (selectMarginAccountDepositFlowShouldApproveToken(state)) {
-    const { token } = state.depositFlow.userInput;
     return token ? `Approve ${(token as string).toUpperCase()} and deposit` : 'Approve and deposit';
   }
   return 'Deposit Margin';
@@ -156,6 +162,10 @@ export const selectMarginAccountDepositFlowSimulationValueFormatted = (state: Ro
   };
 };
 
+export const selectMarginAccountDepositFlowQueuedSelectedMarginAccountId = (state: RootState) => {
+  return state.depositFlow.queuedSelectedMarginAccountId;
+};
+
 export const selectMarginAccountDepositFlowSelectedMarginAccountFormatted = (state: RootState) => {
   const selectedMarginAccount = state.depositFlow.selectedMarginAccount;
   if (selectedMarginAccount === null) {
@@ -180,6 +190,7 @@ export const selectMarginAccountDepositFlowSelectedMarginAccountFormatted = (sta
   };
 };
 
+// TODO: FB evaluate before launch - refactor #2
 export const selectMarginAccountDepositFlowUserInputFormatted = (state: RootState) => {
   const userInput = state.depositFlow.userInput;
 

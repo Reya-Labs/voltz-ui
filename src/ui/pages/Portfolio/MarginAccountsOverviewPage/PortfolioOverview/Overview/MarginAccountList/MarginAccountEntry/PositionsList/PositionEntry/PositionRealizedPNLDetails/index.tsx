@@ -26,9 +26,7 @@ export const PositionRealizedPNLDetails: React.FunctionComponent<PositionPNLDeta
       trigger={
         <TokenTypography
           colorToken={
-            realizedPNLTotalUSDCompactFormat.compactNumber.indexOf('-') === -1
-              ? 'skyBlueCrayola'
-              : 'wildStrawberry'
+            realizedPNLTotalUSDCompactFormat.compactNumber.indexOf('-') === -1 ? 'primary' : 'error'
           }
           prefixToken={
             realizedPNLTotalUSDCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'

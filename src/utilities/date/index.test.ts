@@ -70,12 +70,12 @@ describe('utilities.date', () => {
     it('should format the timestamp correctly', () => {
       // Test case 1
       const timestamp1 = 1625376000000;
-      const expected1 = '07/04/21, 05:20 AM';
+      const expected1 = '07/04/21, 05:20 AM';
       expect(formatPOSIXTimestampWithHoursMinutesUTC(timestamp1)).toBe(expected1);
 
       // Test case 2
       const timestamp2 = 1663033600000;
-      const expected2 = '09/13/22, 01:46 AM';
+      const expected2 = '09/13/22, 01:46 AM';
       expect(formatPOSIXTimestampWithHoursMinutesUTC(timestamp2)).toBe(expected2);
     });
   });

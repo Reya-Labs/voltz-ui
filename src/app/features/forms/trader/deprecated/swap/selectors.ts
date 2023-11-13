@@ -216,7 +216,7 @@ export const selectEditPositionMode = (state: RootState) => {
 export const selectEditPositionReceivingRateFormatted = (state: RootState) => {
   const receivingRate =
     getEditPositionMode(state.deprecatedSwapForm) === 'fixed'
-      ? getEditPositionFixedRate(state.cashflowCalculator, state.deprecatedSwapForm)
+      ? getEditPositionFixedRate(state.deprecatedCashflowCalculator, state.deprecatedSwapForm)
       : getEditPositionVariableRate(state.deprecatedSwapForm);
 
   return receivingRate === null ? '--' : formFormatNumber(receivingRate);
@@ -256,7 +256,7 @@ export const selectEditPositionPayingRateFormatted = (state: RootState) => {
   const payingRate =
     getEditPositionMode(state.deprecatedSwapForm) === 'fixed'
       ? getEditPositionVariableRate(state.deprecatedSwapForm)
-      : getEditPositionFixedRate(state.cashflowCalculator, state.deprecatedSwapForm);
+      : getEditPositionFixedRate(state.deprecatedCashflowCalculator, state.deprecatedSwapForm);
 
   return payingRate === null ? '--' : formFormatNumber(payingRate);
 };

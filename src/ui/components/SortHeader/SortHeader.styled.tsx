@@ -1,9 +1,7 @@
 import styled from '@emotion/styled';
-import { Typography } from 'brokoli-ui';
+import { shouldNotForwardProps, Typography } from 'brokoli-ui';
 
-export const RowsBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'disabled',
-})<{ disabled: boolean }>`
+export const RowsBox = styled('div', shouldNotForwardProps(['disabled']))<{ disabled: boolean }>`
   display: flex;
   flex-direction: column;
   cursor: ${({ disabled }) => (disabled ? undefined : 'pointer')};

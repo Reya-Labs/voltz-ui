@@ -1,5 +1,4 @@
-import { render, screen } from '@testing-library/react';
-
+import { render, screen } from '../../../../test-helpers';
 import { Entry, EntryProps } from './Entry';
 
 describe('Entry', () => {

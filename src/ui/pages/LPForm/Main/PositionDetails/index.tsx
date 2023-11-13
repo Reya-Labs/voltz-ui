@@ -3,7 +3,6 @@ import React from 'react';
 
 import { useAppSelector } from '../../../../../app';
 import { selectLpFormAMM, selectLpFormMode } from '../../../../../app/features/forms/lps/lp';
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import { EditPositionDetailsUI } from './EditPositionDetailsUI';
 import { NewPositionDetailsUI } from './NewPositionDetailsUI';
 
@@ -11,23 +10,11 @@ type PositionDetailsProps = {};
 export const PositionDetails: React.FunctionComponent<PositionDetailsProps> = () => {
   const lpFormMode = useAppSelector(selectLpFormMode);
   const aMM = useAppSelector(selectLpFormAMM);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
 
-  const actionLabelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyLargeBold'
-    : 'primaryBodyMediumBold';
-
-  const actionTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyMediumRegular'
-    : 'secondaryBodySmallRegular';
-
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodySmallRegular'
-    : 'secondaryBodyMediumRegular';
+  const actionLabelTypographyToken: TypographyToken = 'primaryBodyMediumBold';
+  const actionTypographyToken: TypographyToken = 'secondaryBodySmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const typographyToken: TypographyToken = 'secondaryBodyMediumRegular';
 
   if (!aMM) {
     return null;

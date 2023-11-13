@@ -12,10 +12,10 @@ export const LeftPanelWithSubmenu: React.FunctionComponent<LeftPanelWithSubmenuP
   <SubmenuBox data-testid="LeftPanel-PanelBox">
     {submenu}
     <CraftedByBox data-testid="LeftPanel-CraftedByBox">
-      <Typography colorToken="lavenderWeb" typographyToken="primaryBodyXSmallRegular">
+      <Typography colorToken="white100" typographyToken="primaryBodyXSmallRegular">
         Voltz
       </Typography>
-      <Typography colorToken="lavenderWeb3" typographyToken="primaryBodyXSmallRegular">
+      <Typography colorToken="white400" typographyToken="primaryBodyXSmallRegular">
         {process.env.APP_VERSION}
       </Typography>
     </CraftedByBox>

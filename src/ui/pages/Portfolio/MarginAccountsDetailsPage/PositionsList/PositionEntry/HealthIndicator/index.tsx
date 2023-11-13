@@ -5,9 +5,9 @@ import { PositionUI } from '../../../../../../../app/features/portfolio/types';
 import { HealthIndicatorBox } from './HealthIndicator.styled';
 
 const HealthColorMap: Record<PositionUI['status']['health'], ColorTokens | undefined> = {
-  danger: 'wildStrawberry',
+  danger: 'error100',
   healthy: undefined,
-  warning: 'orangeYellow',
+  warning: 'warning100',
 };
 
 export const HealthIndicator: React.FunctionComponent<{

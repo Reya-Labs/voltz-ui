@@ -9,13 +9,13 @@ import {
 export const WaitingForSwapConfirmationStep: React.FunctionComponent = () => {
   return (
     <WaitingForSwapConfirmationStepBox>
-      <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+      <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
         Waiting for confirmation
       </Typography>
       <RainbowLoaderBox>
         <RainbowLoader height={2} text="Swapping Rates..." />
       </RainbowLoaderBox>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Confirm this transaction in your wallet
       </Typography>
     </WaitingForSwapConfirmationStepBox>

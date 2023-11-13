@@ -47,7 +47,7 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
         <LabelTokenTypography
           colorToken={MODE_COLOR_TOKEN_MAP[mode]}
           label="New Position"
-          labelColorToken="lavenderWeb"
+          labelColorToken="white100"
           labelTypographyToken={actionLabelTypographyToken}
           token=""
           typographyToken={actionTypographyToken}
@@ -57,9 +57,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
       <PositionDetailsRightBox>
         <NotionalBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Notional"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token={
               compactNotional
@@ -72,9 +72,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
         </NotionalBox>
         <ReceivingBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Receiving"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
@@ -83,9 +83,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
         </ReceivingBox>
         <PayingBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Paying"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
@@ -94,9 +94,9 @@ export const NewPositionDetailsUI: React.FunctionComponent<NewPositionDetailsUIP
         </PayingBox>
         <CashFlowBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Cash Flow"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token={` ${underlyingTokenName.toUpperCase()}`}
             typographyToken={typographyToken}

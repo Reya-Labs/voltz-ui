@@ -95,7 +95,7 @@ export const AutomaticRolloverToggle: React.FunctionComponent<AutomaticRolloverT
     <AutomaticRolloverToggleBox>
       {showTooltip ? (
         <TypographyWithTooltip
-          colorToken="lavenderWeb3"
+          colorToken="white400"
           tooltip="Automatically redistributes funds from maturing pools to new pools. This configuration will affect all your deposits in this Optimiser, and will not affect pools that matured before the automatic rollover was activated."
           typographyToken="primaryBodySmallRegular"
         >

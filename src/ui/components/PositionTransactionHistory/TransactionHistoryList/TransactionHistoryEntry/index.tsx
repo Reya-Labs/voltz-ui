@@ -46,13 +46,13 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
   return (
     <EntryBox backgroundColorToken={backgroundColorToken}>
       <DateBox>
-        <Typography colorToken="lavenderWeb" typographyToken="secondaryBodySmallRegular">
+        <Typography colorToken="white100" typographyToken="secondaryBodySmallRegular">
           {entry.creationTimestampInMSFormatted}
         </Typography>
       </DateBox>
       <ActionBox>
         {Icon ? <Icon /> : null}
-        <Typography colorToken="lavenderWeb" typographyToken="primaryBodySmallRegular">
+        <Typography colorToken="white100" typographyToken="primaryBodySmallRegular">
           {TRANSACTION_TYPE_LABEL_MAP[entry.type]}
           {entry.type !== 'swap' ? null : entry.notional > 0 ? ' Variable' : ' Fixed'}
         </Typography>
@@ -60,7 +60,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
       <SizeBox>
         {entry.type === 'swap' ? (
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken="Notional $"
             token={entry.notionalUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
@@ -68,7 +68,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
           />
         ) : entry.type === 'liquidation' ? (
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken={entry.notional >= 0 ? 'Unwound $' : 'Unwound -$'}
             token={entry.notionalUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
@@ -76,7 +76,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
           />
         ) : entry.type === 'mint' || entry.type === 'burn' ? (
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken={entry.notional >= 0 ? 'Notional $' : 'Notional -$'}
             token={entry.notionalUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
@@ -87,7 +87,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
       <OutcomeBox>
         {entry.type === 'swap' ? (
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken="Fixed Rate "
             token="%"
             typographyToken="secondaryBodySmallRegular"
@@ -95,7 +95,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
           />
         ) : entry.type === 'margin-update' ? (
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken={entry.marginDelta >= 0 ? 'Deposited $' : 'Withdraw $'}
             token={entry.marginDeltaUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
@@ -103,7 +103,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
           />
         ) : entry.type === 'liquidation' ? (
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken="Realized PnL -$"
             token={entry.marginDeltaUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"
@@ -111,7 +111,7 @@ export const TransactionHistoryEntry: React.FunctionComponent<{
           />
         ) : entry.type === 'maturity' ? (
           <TokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             prefixToken={entry.marginDelta >= 0 ? 'Realized PnL +$' : 'Realized PnL -$'}
             token={entry.marginDeltaUSDCompactFormat.compactSuffix}
             typographyToken="secondaryBodySmallRegular"

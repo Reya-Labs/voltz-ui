@@ -30,7 +30,7 @@ export const WalletConnected: React.FunctionComponent<WalletConnectedProps> = ({
   return (
     <WalletConnectedBox>
       <TitleBox>
-        <Typography colorToken="lavenderWeb" typographyToken="primaryHeader3Bold">
+        <Typography colorToken="white100" typographyToken="primaryHeader3Bold">
           Connected with {`${walletName[0].toUpperCase()}${walletName.substring(1)}`}
         </Typography>
         <CloseButton onClick={onCloseClick} />
@@ -42,7 +42,7 @@ export const WalletConnected: React.FunctionComponent<WalletConnectedProps> = ({
           typographyToken="primaryBodyLargeRegular"
         />
       </AvatarAddressBox>
-      <Typography colorToken="lavenderWeb2" typographyToken="primaryBodySmallRegular">
+      <Typography colorToken="white300" typographyToken="primaryBodySmallRegular">
         Change your wallet if you would like to start trading with a different one, or disconnect
         here.
       </Typography>

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { AppLink, colors } from 'brokoli-ui';
+import { AppLink } from 'brokoli-ui';
 
 export const VaultListItemBox = styled('div')`
   box-sizing: border-box;
@@ -10,10 +10,10 @@ export const VaultListItemBox = styled('div')`
   padding: 8px;
   gap: 16px;
 
-  background: ${colors.liberty8};
-  border: 1px solid ${colors.lavenderWeb7};
+  background: ${({ theme }) => theme.colors.black900};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
 
-  box-shadow: -2px 0px 8px ${colors.liberty8};
+  box-shadow: -2px 0px 8px ${({ theme }) => theme.colors.black900};
   border-radius: 8px;
 `;
 
@@ -48,11 +48,11 @@ export const DepositButton = styled(AppLink)`
   padding: 4px 8px;
   gap: 10px;
 
-  background: ${colors.lavenderWeb7};
-  border: 1px solid ${colors.lavenderWeb7};
+  background: ${({ theme }) => theme.colors.white800};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
 
   box-shadow:
-    0px 2px 10px ${colors.liberty6},
+    0px 2px 10px ${({ theme }) => theme.colors.black700},
     0px 8px 40px rgba(38, 103, 255, 0.2),
     0px 5px 40px rgba(255, 74, 169, 0.2);
   border-radius: 4px;
@@ -66,11 +66,11 @@ export const ManageButton = styled(AppLink)`
   padding: 4px 8px;
   gap: 10px;
 
-  background: ${colors.lavenderWeb7};
-  border: 1px solid ${colors.lavenderWeb7};
+  background: ${({ theme }) => theme.colors.white800};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
 
   box-shadow:
-    0px 2px 10px ${colors.liberty6},
+    0px 2px 10px ${({ theme }) => theme.colors.black700},
     0px 8px 40px rgba(38, 103, 255, 0.2),
     0px 5px 40px rgba(255, 74, 169, 0.2);
   border-radius: 4px;
@@ -108,10 +108,10 @@ export const VaultListItemInfo = styled('div')`
   padding: 8px 0px;
   gap: 8px;
 
-  background: ${colors.lavenderWeb8};
-  border: 1px solid ${colors.lavenderWeb7};
+  background: ${({ theme }) => theme.colors.white900};
+  border: 1px solid ${({ theme }) => theme.colors.white800};
 
-  box-shadow: -2px 0px 8px ${colors.liberty8};
+  box-shadow: -2px 0px 8px ${({ theme }) => theme.colors.black900};
   border-radius: 8px;
 `;
 

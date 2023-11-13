@@ -9,7 +9,6 @@ import {
   selectHistoricalRatesStatus,
 } from '../../../app/features/historical-rates';
 import { selectChainId } from '../../../app/features/network';
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { ChartFilters, ChartFiltersProps } from './ChartFilters';
 import {
   ChartBox,
@@ -49,13 +48,13 @@ const filterOptions: ChartFiltersProps['filterOptions'] = [
   {
     id: 'fixed',
     label: 'Fix',
-    underlineColorToken: 'skyBlueCrayola',
+    underlineColorToken: 'primary100',
     isMode: true,
   },
   {
     id: 'variable',
     label: 'Var',
-    underlineColorToken: 'ultramarineBlue',
+    underlineColorToken: 'secondary100',
     isMode: true,
   },
 ];
@@ -73,7 +72,6 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
   const [activeTimeRangeId, setActiveTimeRangeId] = useState<string>('1m');
   const [activeModeId, setActiveModeId] = useState<string>('variable');
   const chainId = useAppSelector(selectChainId);
-  const { isLargeDesktopDevice } = useResponsiveQuery();
   const granularity =
     activeTimeRangeId === '1d' || activeModeId === '1w'
       ? Granularity.ONE_HOUR
@@ -121,10 +119,8 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
         ) : null}
         <LineChart
           axisBottomFormat={activeTimeRangeId === '1d' ? 'hours' : 'days'}
-          axisTypographyToken={
-            isLargeDesktopDevice ? 'secondaryBodySmallRegular' : 'primaryBodyXSmallRegular'
-          }
-          colorToken={isFixed ? 'skyBlueCrayola' : 'ultramarineBlue'}
+          axisTypographyToken={'primaryBodyXSmallRegular'}
+          colorToken={isFixed ? 'primary100' : 'secondary100'}
           data={[
             {
               id: 'graph1',
@@ -132,7 +128,7 @@ export const HistoricalRatesChart: React.FunctionComponent<HistoricalRatesChartP
             },
           ]}
           yMarker={yMarker}
-          yMarkerColorToken={isFixed ? 'ultramarineBlue3' : 'skyBlueCrayola3'}
+          yMarkerColorToken={isFixed ? 'secondary400' : 'primary400'}
           yMarkerText={
             isFixed
               ? `Current Variable Rate: ${yMarker.toFixed(2)}%`

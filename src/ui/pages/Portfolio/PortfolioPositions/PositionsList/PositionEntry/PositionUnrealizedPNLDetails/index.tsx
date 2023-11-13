@@ -14,7 +14,7 @@ export const PositionUnrealizedPNLDetails: React.FunctionComponent<
 > = ({ type, numbersTypographyToken, unrealizedPNLUSDCompactFormat }) => {
   if (type === 'LP') {
     return (
-      <Typography colorToken="lavenderWeb" typographyToken={numbersTypographyToken}>
+      <Typography colorToken="white100" typographyToken={numbersTypographyToken}>
         --
       </Typography>
     );
@@ -25,9 +25,7 @@ export const PositionUnrealizedPNLDetails: React.FunctionComponent<
       trigger={
         <TokenTypography
           colorToken={
-            unrealizedPNLUSDCompactFormat.compactNumber.indexOf('-') === -1
-              ? 'skyBlueCrayola'
-              : 'wildStrawberry'
+            unrealizedPNLUSDCompactFormat.compactNumber.indexOf('-') === -1 ? 'primary' : 'error'
           }
           prefixToken={
             unrealizedPNLUSDCompactFormat.compactNumber.indexOf('-') === -1 ? '+$' : '-$'

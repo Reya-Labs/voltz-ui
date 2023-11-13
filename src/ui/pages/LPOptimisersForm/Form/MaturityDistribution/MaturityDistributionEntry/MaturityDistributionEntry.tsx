@@ -39,7 +39,10 @@ export const MaturityDistributionEntry: React.FunctionComponent<MaturityDistribu
           <CurrencyField
             allowNegativeValue={false}
             disabled={disabled}
-            max="100"
+            max={{
+              value: '100',
+              showButton: true,
+            }}
             min="0"
             suffix="%"
             value={value}
@@ -66,7 +69,7 @@ export const MaturityDistributionEntry: React.FunctionComponent<MaturityDistribu
       </DistributionBox>
       <MaturityBox>
         <Typography
-          colorToken={notCompleted ? 'lavenderWeb' : 'skyBlueCrayola'}
+          colorToken={notCompleted ? 'white100' : 'primary100'}
           typographyToken="primaryBodySmallRegular"
         >
           {notCompleted
@@ -77,7 +80,7 @@ export const MaturityDistributionEntry: React.FunctionComponent<MaturityDistribu
       <PoolBox>
         {poolsCount !== 0 ? (
           <TypographyWithTooltip
-            colorToken="lavenderWeb"
+            colorToken="white100"
             tooltip={
               <>
                 {poolsCount} Pools sharing the same maturity:

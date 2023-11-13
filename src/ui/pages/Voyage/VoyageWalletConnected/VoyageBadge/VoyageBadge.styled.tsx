@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Skeleton } from 'brokoli-ui';
+import { shouldNotForwardProps, Skeleton } from 'brokoli-ui';
 
 export const VoyageBadgeBox = styled('div')`
   display: flex;
@@ -16,9 +16,9 @@ export const VoyagePillBox = styled('div')`
   width: 100%;
 `;
 
-export const VoyageBadgeImageBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'completed',
-})<{ completed: boolean }>`
+export const VoyageBadgeImageBox = styled('div', shouldNotForwardProps(['completed']))<{
+  completed: boolean;
+}>`
   width: 100%;
   ${({ completed }) => (completed ? '' : 'opacity: 0.1')};
 `;

@@ -3,7 +3,6 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { stringToBigFloat } from '../../../utilities/number';
-import { useResponsiveQuery } from '../../hooks/useResponsiveQuery';
 import { LeverageFieldBox } from './LeverageField.styled';
 
 type LeverageFieldProps = {
@@ -20,14 +19,8 @@ export const LeverageField: React.FunctionComponent<LeverageFieldProps> = ({
   maxLeverage,
   disabled,
 }) => {
-  const { isLargeDesktopDevice } = useResponsiveQuery();
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodyMediumRegular'
-    : 'primaryBodySmallRegular';
-
-  const maxLeverageTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
+  const labelTypographyToken: TypographyToken = 'primaryBodySmallRegular';
+  const maxLeverageTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
 
   const [localLeverage, setLocalLeverage] = useState<string | undefined>(
     leverage !== undefined && leverage !== null ? leverage.toFixed(2) : '',
@@ -69,14 +62,14 @@ export const LeverageField: React.FunctionComponent<LeverageFieldProps> = ({
         disabled={disabled}
         error={!localLeverage}
         label="Leverage"
-        labelColorToken="lavenderWeb2"
+        labelColorToken="white300"
         labelTypographyToken={labelTypographyToken}
         leverageOptions={leverageOptions}
-        maxLeverageColorToken="lavenderWeb3"
+        maxLeverageColorToken="white400"
         maxLeverageText={`Max ${maxLeverage}x Leverage`}
         maxLeverageTypographyToken={maxLeverageTypographyToken}
         tooltip="Leverage is the notional amount divided by the margin amount. The more leverage you take the higher your potential profit or loss."
-        tooltipColorToken="lavenderWeb2"
+        tooltipColorToken="white300"
         value={localLeverage}
         onLeverageChange={handleOnChange}
       />

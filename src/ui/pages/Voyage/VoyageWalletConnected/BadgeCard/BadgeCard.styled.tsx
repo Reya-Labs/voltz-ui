@@ -1,24 +1,24 @@
-import { keyframes } from '@emotion/react';
+import { keyframes, Theme } from '@emotion/react';
 import styled from '@emotion/styled';
-import { colors, Skeleton as SkeletonComponent } from 'brokoli-ui';
+import { shouldNotForwardProps, Skeleton as SkeletonComponent } from 'brokoli-ui';
 
-const highlightAnimation = keyframes`
+const highlightAnimation = (theme: Theme) => keyframes`
   0% { 
     transform: scale(1);
-    box-shadow: ${colors.liberty2} 0px 0px 35px;
+    box-shadow: ${theme.colors.black300} 0px 0px 35px;
   }
   50% { 
     transform: scale(1.1);
-    box-shadow: ${colors.liberty2} 0px 0px 55px;
+    box-shadow: ${theme.colors.black300} 0px 0px 55px;
   }
   100% {
     transform: scale(1);
-    box-shadow: ${colors.liberty2} 0px 0px 35px;
+    box-shadow: ${theme.colors.black300} 0px 0px 35px;
   }
 `;
 
 export const Container = styled('div')`
-  background-color: ${colors.lavenderWeb8};
+  background-color: ${({ theme }) => theme.colors.white900};
   border-radius: 8px;
   padding: 16px;
   display: flex;
@@ -29,21 +29,19 @@ export const Container = styled('div')`
   box-sizing: border-box;
 
   &:hover {
-    box-shadow: ${colors.liberty2} 0px 0px 35px;
+    box-shadow: ${({ theme }) => theme.colors.black300} 0px 0px 35px;
   }
 `;
 
 export const HighlightedContainer = styled(Container)`
-  animation: ${highlightAnimation} 350ms linear forwards;
+  animation: ${({ theme }) => highlightAnimation(theme)} 350ms linear forwards;
 `;
 
 export const BadgePillBox = styled('div')`
   margin-bottom: 16px;
 `;
 
-export const BadgeBox = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'achieved',
-})<{ achieved: boolean }>`
+export const BadgeBox = styled('div', shouldNotForwardProps(['achieved']))<{ achieved: boolean }>`
   opacity: ${({ achieved }) => (achieved ? '1' : '0.3')};
   display: flex;
   justify-content: center;

@@ -7,11 +7,11 @@ import { BadgeTier } from '../../types';
 import { Skeleton } from './BadgePill.styled';
 
 const TIER_COLOR_TOKEN_MAP: Record<BadgeTier, PillProps['colorToken']> = {
-  tier1: 'wildStrawberry',
-  tier2: 'orangeYellow',
-  tier3: 'skyBlueCrayola',
+  tier1: 'error',
+  tier2: 'warning',
+  tier3: 'primary',
   easterEgg: 'rainbow',
-  legendary: 'lavenderWeb',
+  legendary: 'white',
 };
 
 export const BadgePill: React.FunctionComponent<{
@@ -21,7 +21,7 @@ export const BadgePill: React.FunctionComponent<{
   if (loading) {
     return (
       <Skeleton
-        colorToken="liberty2"
+        colorToken="black300"
         data-testid="BadgePill-Skeleton"
         typographyToken="primaryBodySmallRegular"
         variant="rectangular"

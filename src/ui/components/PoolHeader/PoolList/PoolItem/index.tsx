@@ -1,7 +1,6 @@
 import { LabelTokenTypography, TypographyToken } from 'brokoli-ui';
 import React from 'react';
 
-import { useResponsiveQuery } from '../../../../hooks/useResponsiveQuery';
 import {
   MarketTokenInformation,
   MarketTokenInformationProps,
@@ -38,21 +37,14 @@ export const PoolItem: React.FunctionComponent<PoolItemProps> = ({
   aMMMaturity,
   onClick,
 }) => {
-  const { isLargeDesktopDevice } = useResponsiveQuery();
-
-  const labelTypographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'primaryBodySmallRegular'
-    : 'primaryBodyXSmallRegular';
-
-  const typographyToken: TypographyToken = isLargeDesktopDevice
-    ? 'secondaryBodyLargeBold'
-    : 'secondaryBodyMediumBold';
+  const labelTypographyToken: TypographyToken = 'primaryBodyXSmallRegular';
+  const typographyToken: TypographyToken = 'secondaryBodyMediumBold';
 
   return (
     <PoolHeaderBox onClick={onClick}>
       <MarketTokenInformationBox>
         <MarketTokenInformation
-          colorToken="lavenderWeb"
+          colorToken="white100"
           iconSize={24}
           isAaveV3={isAaveV3}
           isBorrowing={isBorrowing}
@@ -64,9 +56,9 @@ export const PoolItem: React.FunctionComponent<PoolItemProps> = ({
       <PoolHeaderDetailsBox>
         <FixedBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Fixed"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token="%"
             typographyToken={typographyToken}
@@ -75,11 +67,11 @@ export const PoolItem: React.FunctionComponent<PoolItemProps> = ({
         </FixedBox>
         <VariableBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             differenceToken="%"
             differenceValue={variableRate24hDelta}
             label="Variable"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token="%"
             tooltip="Variable rate and the absolute change in the past 24 hours."
@@ -89,9 +81,9 @@ export const PoolItem: React.FunctionComponent<PoolItemProps> = ({
         </VariableBox>
         <MaturityBox>
           <LabelTokenTypography
-            colorToken="lavenderWeb"
+            colorToken="white"
             label="Maturity"
-            labelColorToken="lavenderWeb3"
+            labelColorToken="white400"
             labelTypographyToken={labelTypographyToken}
             token=""
             typographyToken={typographyToken}
