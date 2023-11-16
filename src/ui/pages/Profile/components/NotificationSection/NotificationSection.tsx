@@ -44,23 +44,6 @@ export const NotificationSection: React.FunctionComponent<NotificationSectionPro
     </NotificationContainer>
   );
 
-  if (isOnGoingSeason) {
-    return (
-      <NotificationsContainer>
-        {copyLinkNotification}
-        <NotificationContainer>
-          <NotificationBox>
-            <ProfileNotification
-              pillColorToken="error"
-              pillText="Claim"
-              text="Unavailable until the end of the season"
-            />
-          </NotificationBox>
-        </NotificationContainer>
-      </NotificationsContainer>
-    );
-  }
-
   if (claimingDisabled) {
     return (
       <NotificationsContainer>
