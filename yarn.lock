@@ -13432,9 +13432,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"brokoli-ui@npm:3.1.0":
-  version: 3.1.0
-  resolution: "brokoli-ui@npm:3.1.0"
+"brokoli-ui@npm:3.3.0":
+  version: 3.3.0
+  resolution: "brokoli-ui@npm:3.3.0"
   dependencies:
     "@floating-ui/react": "npm:0.19.0"
     "@nivo/core": "npm:0.80.0"
@@ -13453,7 +13453,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-router-dom: 6.9.0
-  checksum: 6ec3fd9160d3caab37ab9c0923a87b69102d066c48c8819283e15390388b3666ef29e4ddc39b65dc565c1469eb1309c32e2edddf737f5a16245b797aaf45b06b
+  checksum: 8016bac3ecf9f9a6cb967c6638a1533e7bbeeb86ad7d9bb48eabd191c90a81b1c82538ec7ee3d14efbdad4a280b550a78b0ef8254d319087cf9c0de64686d686
   languageName: node
   linkType: hard
 
@@ -32740,7 +32740,7 @@ __metadata:
     babel-loader: "npm:8.3.0"
     babel-plugin-named-asset-import: "npm:0.3.8"
     babel-preset-react-app: "npm:10.0.1"
-    brokoli-ui: "npm:3.1.0"
+    brokoli-ui: "npm:3.3.0"
     browserslist: "npm:4.21.3"
     camelcase: "npm:6.3.0"
     case-sensitive-paths-webpack-plugin: "npm:2.4.0"
