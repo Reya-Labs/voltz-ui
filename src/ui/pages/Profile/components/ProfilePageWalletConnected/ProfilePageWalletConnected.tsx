@@ -169,7 +169,7 @@ export const ProfilePageWalletConnected: React.FunctionComponent<
                   ref={(ref: BadgeCardHandle) => (badgeCardRefs.current[badge.variant] = ref)}
                   claimButtonMode={claimButtonModes[badge.variant] || 'claim'}
                   claimedAt={badge.claimedAt}
-                  disableClaiming={isOnGoingSeason || !claimingEnabled}
+                  disableClaiming={!claimingEnabled}
                   loading={loading}
                   variant={badge.variant}
                   onClaimButtonClick={() => onClaimButtonClick(badge.variant)}
