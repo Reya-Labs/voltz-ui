@@ -13432,9 +13432,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"brokoli-ui@npm:4.0.1":
-  version: 4.0.1
-  resolution: "brokoli-ui@npm:4.0.1"
+"brokoli-ui@npm:4.0.2":
+  version: 4.0.2
+  resolution: "brokoli-ui@npm:4.0.2"
   dependencies:
     "@floating-ui/react": "npm:0.19.0"
     "@nivo/core": "npm:0.80.0"
@@ -13442,7 +13442,7 @@ __metadata:
     facepaint: "npm:1.2.1"
     react-animate-height: "npm:3.2.2"
     react-currency-input-field: "npm:3.6.11"
-    react-metamask-avatar: "npm:2.0.1"
+    react-metamask-avatar: "npm:2.0.3"
     react-responsive: "npm:9.0.2"
     react-tiny-popover: "npm:7.2.0"
     react-toastify: "npm:8.2.0"
@@ -13453,7 +13453,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-router-dom: 6.9.0
-  checksum: 794e199e3b31d6640c96a6e178caaa7bf7d4c69d4be00e66b0ae835d9770608733f6f6248122f68c6a21784455b221582abb19f0064224f7dd394105a05bc49f
+  checksum: 0d08391cd4277b85e76dd16e364e743b737a0c664fd613d7f384d7c8b358b4fab3da11806a022b2da32b51a65df128d454f732b7381f967b5d55ba2f1e06fa96
   languageName: node
   linkType: hard
 
@@ -28007,13 +28007,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-metamask-avatar@npm:2.0.1":
-  version: 2.0.1
-  resolution: "react-metamask-avatar@npm:2.0.1"
+"react-metamask-avatar@npm:2.0.3":
+  version: 2.0.3
+  resolution: "react-metamask-avatar@npm:2.0.3"
   peerDependencies:
+    "@emotion/react": 11.7.1
+    "@emotion/styled": 11.6.0
+    "@metamask/jazzicon": 2.0.0
     react: ">=17.0.2"
     react-dom: ">=17.0.2"
-  checksum: 614131a80aec3223b2efe16cabc1a3865e8a5609f060fcbc413527ae0bf03bf396630eeadfdd5b80b50cbde2ff7d23adc79060feb388c6058d18c74acc4e0071
+  checksum: 06e5281d5966a74f703824e170716de1f0ef2faee6d3bb6946d04bc2cad14a748cc0d141d614715463732c0907e581a9e183b1272fc70e1f454cd1b7e85f978a
   languageName: node
   linkType: hard
 
@@ -32740,7 +32743,7 @@ __metadata:
     babel-loader: "npm:8.3.0"
     babel-plugin-named-asset-import: "npm:0.3.8"
     babel-preset-react-app: "npm:10.0.1"
-    brokoli-ui: "npm:4.0.1"
+    brokoli-ui: "npm:4.0.2"
     browserslist: "npm:4.21.3"
     camelcase: "npm:6.3.0"
     case-sensitive-paths-webpack-plugin: "npm:2.4.0"
