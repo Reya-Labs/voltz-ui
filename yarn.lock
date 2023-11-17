@@ -13432,9 +13432,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"brokoli-ui@npm:3.3.0":
-  version: 3.3.0
-  resolution: "brokoli-ui@npm:3.3.0"
+"brokoli-ui@npm:4.0.1":
+  version: 4.0.1
+  resolution: "brokoli-ui@npm:4.0.1"
   dependencies:
     "@floating-ui/react": "npm:0.19.0"
     "@nivo/core": "npm:0.80.0"
@@ -13442,7 +13442,7 @@ __metadata:
     facepaint: "npm:1.2.1"
     react-animate-height: "npm:3.2.2"
     react-currency-input-field: "npm:3.6.11"
-    react-metamask-avatar: "npm:1.6.2"
+    react-metamask-avatar: "npm:2.0.1"
     react-responsive: "npm:9.0.2"
     react-tiny-popover: "npm:7.2.0"
     react-toastify: "npm:8.2.0"
@@ -13453,7 +13453,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-router-dom: 6.9.0
-  checksum: 8016bac3ecf9f9a6cb967c6638a1533e7bbeeb86ad7d9bb48eabd191c90a81b1c82538ec7ee3d14efbdad4a280b550a78b0ef8254d319087cf9c0de64686d686
+  checksum: 794e199e3b31d6640c96a6e178caaa7bf7d4c69d4be00e66b0ae835d9770608733f6f6248122f68c6a21784455b221582abb19f0064224f7dd394105a05bc49f
   languageName: node
   linkType: hard
 
@@ -28007,13 +28007,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-metamask-avatar@npm:1.6.2":
-  version: 1.6.2
-  resolution: "react-metamask-avatar@npm:1.6.2"
+"react-metamask-avatar@npm:2.0.1":
+  version: 2.0.1
+  resolution: "react-metamask-avatar@npm:2.0.1"
   peerDependencies:
     react: ">=17.0.2"
     react-dom: ">=17.0.2"
-  checksum: 8cb88d8fdebc66fa6b8a290eac7521e3c523bde1c909bbe6a226e94d415d9ae9d259bdd0ea2a622abbde4f91dd7ebafbe26d21bbf472fb3c0e336baa88d53ace
+  checksum: 614131a80aec3223b2efe16cabc1a3865e8a5609f060fcbc413527ae0bf03bf396630eeadfdd5b80b50cbde2ff7d23adc79060feb388c6058d18c74acc4e0071
   languageName: node
   linkType: hard
 
@@ -32740,7 +32740,7 @@ __metadata:
     babel-loader: "npm:8.3.0"
     babel-plugin-named-asset-import: "npm:0.3.8"
     babel-preset-react-app: "npm:10.0.1"
-    brokoli-ui: "npm:3.3.0"
+    brokoli-ui: "npm:4.0.1"
     browserslist: "npm:4.21.3"
     camelcase: "npm:6.3.0"
     case-sensitive-paths-webpack-plugin: "npm:2.4.0"
