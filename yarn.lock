@@ -10001,9 +10001,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@voltz-protocol/v1-sdk@npm:1.177.1":
-  version: 1.177.1
-  resolution: "@voltz-protocol/v1-sdk@npm:1.177.1"
+"@voltz-protocol/v1-sdk@npm:1.177.2":
+  version: 1.177.2
+  resolution: "@voltz-protocol/v1-sdk@npm:1.177.2"
   dependencies:
     "@ethersproject/address": "npm:^5.7.0"
     "@metamask/detect-provider": "npm:^1.2.0"
@@ -10026,7 +10026,7 @@ __metadata:
     merkletreejs: "npm:^0.3.0"
     tiny-invariant: "npm:^1.2.0"
     toformat: "npm:^2.0.0"
-  checksum: 7261d6f1576c735b74dea25509be7694116ccfe8b5b46cf8227d22707f2167440d168831ad307c5cef24e3f61c086aee25d7a44ba947065d69c4f4cbe5b43a04
+  checksum: a10ca0f5fb097ced0d567b26e48920a345bfc8e5f3200e467fd24f77a563a62d57a07f03ed931e37caac60a7cc40a9727e353feb6f3f8e401c8169f0b6f80da9
   languageName: node
   linkType: hard
 
@@ -32733,7 +32733,7 @@ __metadata:
     "@voltz-protocol/community-sdk": "npm:1.5.2"
     "@voltz-protocol/sdk-v1-stateless": "npm:1.27.29"
     "@voltz-protocol/sdk-v2": "npm:1.64.1"
-    "@voltz-protocol/v1-sdk": "npm:1.177.1"
+    "@voltz-protocol/v1-sdk": "npm:1.177.2"
     "@voltz-protocol/wallet-sdk": "npm:1.0.1"
     "@walletconnect/ethereum-provider": "npm:2.9.1"
     "@walletconnect/modal": "npm:2.6.1"
