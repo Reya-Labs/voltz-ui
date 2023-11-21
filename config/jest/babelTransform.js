@@ -22,7 +22,7 @@ module.exports = babelJest.createTransformer({
       },
     ],
   ],
-  plugins: [require.resolve('./emotionStyledTransform.js')],
+  plugins: [],
   babelrc: false,
   configFile: false,
 });

@@ -10001,9 +10001,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@voltz-protocol/v1-sdk@npm:1.177.1":
-  version: 1.177.1
-  resolution: "@voltz-protocol/v1-sdk@npm:1.177.1"
+"@voltz-protocol/v1-sdk@npm:1.177.2":
+  version: 1.177.2
+  resolution: "@voltz-protocol/v1-sdk@npm:1.177.2"
   dependencies:
     "@ethersproject/address": "npm:^5.7.0"
     "@metamask/detect-provider": "npm:^1.2.0"
@@ -10026,7 +10026,7 @@ __metadata:
     merkletreejs: "npm:^0.3.0"
     tiny-invariant: "npm:^1.2.0"
     toformat: "npm:^2.0.0"
-  checksum: 7261d6f1576c735b74dea25509be7694116ccfe8b5b46cf8227d22707f2167440d168831ad307c5cef24e3f61c086aee25d7a44ba947065d69c4f4cbe5b43a04
+  checksum: a10ca0f5fb097ced0d567b26e48920a345bfc8e5f3200e467fd24f77a563a62d57a07f03ed931e37caac60a7cc40a9727e353feb6f3f8e401c8169f0b6f80da9
   languageName: node
   linkType: hard
 
@@ -13432,9 +13432,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"brokoli-ui@npm:3.1.0":
-  version: 3.1.0
-  resolution: "brokoli-ui@npm:3.1.0"
+"brokoli-ui@npm:4.0.2":
+  version: 4.0.2
+  resolution: "brokoli-ui@npm:4.0.2"
   dependencies:
     "@floating-ui/react": "npm:0.19.0"
     "@nivo/core": "npm:0.80.0"
@@ -13442,7 +13442,7 @@ __metadata:
     facepaint: "npm:1.2.1"
     react-animate-height: "npm:3.2.2"
     react-currency-input-field: "npm:3.6.11"
-    react-metamask-avatar: "npm:1.6.2"
+    react-metamask-avatar: "npm:2.0.3"
     react-responsive: "npm:9.0.2"
     react-tiny-popover: "npm:7.2.0"
     react-toastify: "npm:8.2.0"
@@ -13453,7 +13453,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-router-dom: 6.9.0
-  checksum: 6ec3fd9160d3caab37ab9c0923a87b69102d066c48c8819283e15390388b3666ef29e4ddc39b65dc565c1469eb1309c32e2edddf737f5a16245b797aaf45b06b
+  checksum: 0d08391cd4277b85e76dd16e364e743b737a0c664fd613d7f384d7c8b358b4fab3da11806a022b2da32b51a65df128d454f732b7381f967b5d55ba2f1e06fa96
   languageName: node
   linkType: hard
 
@@ -28007,13 +28007,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-metamask-avatar@npm:1.6.2":
-  version: 1.6.2
-  resolution: "react-metamask-avatar@npm:1.6.2"
+"react-metamask-avatar@npm:2.0.3":
+  version: 2.0.3
+  resolution: "react-metamask-avatar@npm:2.0.3"
   peerDependencies:
+    "@emotion/react": 11.7.1
+    "@emotion/styled": 11.6.0
+    "@metamask/jazzicon": 2.0.0
     react: ">=17.0.2"
     react-dom: ">=17.0.2"
-  checksum: 8cb88d8fdebc66fa6b8a290eac7521e3c523bde1c909bbe6a226e94d415d9ae9d259bdd0ea2a622abbde4f91dd7ebafbe26d21bbf472fb3c0e336baa88d53ace
+  checksum: 06e5281d5966a74f703824e170716de1f0ef2faee6d3bb6946d04bc2cad14a748cc0d141d614715463732c0907e581a9e183b1272fc70e1f454cd1b7e85f978a
   languageName: node
   linkType: hard
 
@@ -32730,7 +32733,7 @@ __metadata:
     "@voltz-protocol/community-sdk": "npm:1.5.2"
     "@voltz-protocol/sdk-v1-stateless": "npm:1.27.29"
     "@voltz-protocol/sdk-v2": "npm:1.64.1"
-    "@voltz-protocol/v1-sdk": "npm:1.177.1"
+    "@voltz-protocol/v1-sdk": "npm:1.177.2"
     "@voltz-protocol/wallet-sdk": "npm:1.0.1"
     "@walletconnect/ethereum-provider": "npm:2.9.1"
     "@walletconnect/modal": "npm:2.6.1"
@@ -32740,7 +32743,7 @@ __metadata:
     babel-loader: "npm:8.3.0"
     babel-plugin-named-asset-import: "npm:0.3.8"
     babel-preset-react-app: "npm:10.0.1"
-    brokoli-ui: "npm:3.1.0"
+    brokoli-ui: "npm:4.0.2"
     browserslist: "npm:4.21.3"
     camelcase: "npm:6.3.0"
     case-sensitive-paths-webpack-plugin: "npm:2.4.0"
