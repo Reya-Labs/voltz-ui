@@ -1,4 +1,4 @@
-import { AppLink, Typography } from 'brokoli-ui';
+import { Typography } from 'brokoli-ui';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import AnimateHeight from 'react-animate-height';
 
@@ -10,6 +10,7 @@ import {
   selectMarginAccountPositionsLoading,
 } from '../../../../../../../../../app/features/portfolio';
 import { MarginAccountUI } from '../../../../../../../../../app/features/portfolio/types';
+import { VoltzAppLink } from '../../../../../../../../components/VoltzAppLink';
 import { PositionEntry } from './PositionEntry';
 import { PositionsHeader } from './PositionsHeader';
 import {
@@ -91,14 +92,14 @@ export const PositionsList: React.FunctionComponent<{
                   <img alt="Gimme" src="/images/no-pools-found.png" />
                   <Typography colorToken="white100" typographyToken="primaryBodyMediumRegular">
                     No positions found. Visit our{' '}
-                    <AppLink
+                    <VoltzAppLink
                       colorToken="primary"
                       data-testid="NoPositions-AppLink"
                       to={`/${routes.POOLS}`}
                       typographyToken="primaryBodyMediumRegular"
                     >
                       pool page
-                    </AppLink>{' '}
+                    </VoltzAppLink>{' '}
                     and start trading!
                   </Typography>
                 </NoPositionsFoundBox>

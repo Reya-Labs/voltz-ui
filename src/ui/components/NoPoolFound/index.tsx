@@ -1,6 +1,7 @@
-import { AppLink, Typography } from 'brokoli-ui';
+import { Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { VoltzAppLink } from '../VoltzAppLink';
 import { ContainerBox } from './NoPoolFound.styled';
 
 export const NoPoolFound: React.FunctionComponent<{
@@ -21,14 +22,14 @@ export const NoPoolFound: React.FunctionComponent<{
     >
       Unfortunately we couldn't fetch any existing pool matching this criteria. However we have
       several other markets currently operating,{' '}
-      <AppLink
+      <VoltzAppLink
         colorToken="primary"
         data-testid="NoPoolFound-AppLink"
         to={to}
         typographyToken="primaryBodyMediumRegular"
       >
         visit our pool page
-      </AppLink>{' '}
+      </VoltzAppLink>{' '}
       to discover those.
     </Typography>
   </ContainerBox>

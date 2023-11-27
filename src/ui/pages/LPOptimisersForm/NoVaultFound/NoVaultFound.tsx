@@ -1,7 +1,8 @@
-import { AppLink, ExternalLink, Typography } from 'brokoli-ui';
+import { ExternalLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { routes } from '../../../../app';
+import { VoltzAppLink } from '../../../components/VoltzAppLink';
 import { ContainerBox } from './NoVaultFound.styled';
 
 export const NoVaultFound: React.FunctionComponent = React.memo(() => (
@@ -28,14 +29,14 @@ export const NoVaultFound: React.FunctionComponent = React.memo(() => (
         report
       </ExternalLink>
       &nbsp; this to our support team, and in the meantime please{' '}
-      <AppLink
+      <VoltzAppLink
         colorToken="primary"
         data-testid="GenericError-AppLink"
         to={`/${routes.LP_OPTIMISERS}`}
         typographyToken="primaryBodyMediumRegular"
       >
         visit the vaults page.
-      </AppLink>
+      </VoltzAppLink>
     </Typography>
   </ContainerBox>
 ));

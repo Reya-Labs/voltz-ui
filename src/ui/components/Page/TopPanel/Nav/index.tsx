@@ -1,6 +1,7 @@
 import { SupportedChainId } from '@voltz-protocol/v1-sdk';
 import { Nav as BrokoliNav, NavProps } from 'brokoli-ui';
 import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
 import { routes, useAppSelector } from '../../../../../app';
 import {
@@ -50,5 +51,5 @@ export const Nav: React.FunctionComponent = () => {
   const chainId = useAppSelector(selectChainId);
   const links = useMemo(() => getLinks(chainId), [chainId]);
 
-  return <BrokoliNav links={links} />;
+  return <BrokoliNav Component={Link} links={links} />;
 };

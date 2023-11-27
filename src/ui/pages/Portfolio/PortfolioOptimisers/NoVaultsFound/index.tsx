@@ -1,7 +1,8 @@
-import { AppLink, Typography } from 'brokoli-ui';
+import { Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { routes } from '../../../../../app';
+import { VoltzAppLink } from '../../../../components/VoltzAppLink';
 import { ContentBox } from './NoVaultsFound.styled';
 
 export const NoVaultsFound: React.FunctionComponent<{
@@ -14,14 +15,14 @@ export const NoVaultsFound: React.FunctionComponent<{
     </Typography>
     <Typography colorToken="white100" typographyToken="primaryBodyMediumRegular">
       {description}&nbsp;
-      <AppLink
+      <VoltzAppLink
         colorToken="primary"
         data-testid="NoPositionsOrVaultsFound-NavigateButton"
         to={`/${routes.LP_OPTIMISERS}`}
         typographyToken="primaryBodyMediumRegular"
       >
         LP Optimisers
-      </AppLink>
+      </VoltzAppLink>
     </Typography>
   </ContentBox>
 );

@@ -1,6 +1,7 @@
-import { AppLink, ExternalLink, Typography } from 'brokoli-ui';
+import { ExternalLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { VoltzAppLink } from '../VoltzAppLink';
 import { ContainerBox } from './GenericError.styled';
 
 export const GenericError: React.FunctionComponent<{
@@ -28,14 +29,14 @@ export const GenericError: React.FunctionComponent<{
         report
       </ExternalLink>
       &nbsp; this to our support team, and in the meantime please{' '}
-      <AppLink
+      <VoltzAppLink
         colorToken="primary"
         data-testid="GenericError-AppLink"
         to={to}
         typographyToken="primaryBodyMediumRegular"
       >
         visit our pool page.
-      </AppLink>
+      </VoltzAppLink>
     </Typography>
   </ContainerBox>
 ));
