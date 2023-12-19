@@ -10,9 +10,6 @@
 
 
 <p align="center">
-  <a href="https://discord.com/invite/NZgsbT8kWX">
-    <img src="https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat" />
-  </a>
   <a href="https://twitter.com/intent/follow?screen_name=voltz_xyz">
     <img src="https://badgen.net/twitter/follow/voltz_xyz?icon=twitter&label=%voltz_xyz" alt="Official Twitter Handle" />
   </a>

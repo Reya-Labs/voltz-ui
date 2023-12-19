@@ -1,4 +1,4 @@
-import { ExternalLink, Typography } from 'brokoli-ui';
+import { Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { VoltzAppLink } from '../VoltzAppLink';
@@ -20,15 +20,8 @@ export const GenericError: React.FunctionComponent<{
       data-testid="GenericError-Subtitle"
       typographyToken="primaryBodyMediumRegular"
     >
-      Unfortunately we couldn't process your request. We encourage you to&nbsp;
-      <ExternalLink
-        colorToken="primary"
-        href="https://discord.com/channels/896685581487210577/1005057396160336004"
-        typographyToken="primaryBodyMediumRegular"
-      >
-        report
-      </ExternalLink>
-      &nbsp; this to our support team, and in the meantime please{' '}
+      Unfortunately we couldn't process your request. We encourage you to report this to our support
+      team, and in the meantime please{' '}
       <VoltzAppLink
         colorToken="primary"
         data-testid="GenericError-AppLink"
