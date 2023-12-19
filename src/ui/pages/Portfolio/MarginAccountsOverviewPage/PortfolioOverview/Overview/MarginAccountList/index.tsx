@@ -1,4 +1,4 @@
-import { AppLink, Typography } from 'brokoli-ui';
+import { Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { routes, useAppDispatch, useAppSelector } from '../../../../../../../app';
@@ -12,6 +12,7 @@ import {
   selectTotalMarginAccounts,
 } from '../../../../../../../app/features/portfolio';
 import { Pagination } from '../../../../../../components/Pagination';
+import { VoltzAppLink } from '../../../../../../components/VoltzAppLink';
 import { useWallet } from '../../../../../../hooks/useWallet';
 import { MarginAccountEntry } from './MarginAccountEntry';
 import {
@@ -96,14 +97,14 @@ export const MarginAccountList: React.FunctionComponent = () => {
                 <img alt="Gimme" src="/images/no-pools-found.png" />
                 <Typography colorToken="white100" typographyToken="primaryBodyMediumRegular">
                   No Margin Accounts found. Visit our{' '}
-                  <AppLink
+                  <VoltzAppLink
                     colorToken="primary"
                     data-testid="NoMarginAccounts-AppLink"
                     to={`/${routes.POOLS}`}
                     typographyToken="primaryBodyMediumRegular"
                   >
                     pool page
-                  </AppLink>{' '}
+                  </VoltzAppLink>{' '}
                   and start trading!
                 </Typography>
               </NoMarginAccountsFoundBox>

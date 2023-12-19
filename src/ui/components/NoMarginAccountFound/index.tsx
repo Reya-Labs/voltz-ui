@@ -1,6 +1,7 @@
-import { AppLink, Typography } from 'brokoli-ui';
+import { Typography } from 'brokoli-ui';
 import React from 'react';
 
+import { VoltzAppLink } from '../VoltzAppLink';
 import { ContainerBox } from './NoMarginAccountFound.styled';
 
 export const NoMarginAccountFound: React.FunctionComponent<{
@@ -21,14 +22,14 @@ export const NoMarginAccountFound: React.FunctionComponent<{
     >
       Unfortunately we couldn't fetch any existing margin account matching this criteria. We
       encourage you to{' '}
-      <AppLink
+      <VoltzAppLink
         colorToken="primary"
         data-testid="NoMarginAccountFound-AppLink"
         to={to}
         typographyToken="primaryBodyMediumRegular"
       >
         visit our pool page
-      </AppLink>
+      </VoltzAppLink>
     </Typography>
   </ContainerBox>
 ));

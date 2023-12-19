@@ -1,10 +1,11 @@
-import { AppLink, Typography } from 'brokoli-ui';
+import { Typography } from 'brokoli-ui';
 import React, { useEffect, useState } from 'react';
 
 import { routes, useAppSelector } from '../../../../../app';
 import { selectPositions, selectPositionsLoading } from '../../../../../app/features/portfolio';
 import { PositionsFilterId } from '../../../../../app/features/portfolio/types';
 import { Pagination } from '../../../../components/Pagination';
+import { VoltzAppLink } from '../../../../components/VoltzAppLink';
 import { ActivePositionEntry } from './PositionEntry/Entry/ActivePositionEntry';
 import { MaturedPositionEntry } from './PositionEntry/Entry/MaturedPositionEntry';
 import { SettledPositionEntry } from './PositionEntry/Entry/SettledPositionEntry';
@@ -119,14 +120,14 @@ export const PositionsList: React.FunctionComponent<PositionsListProps> = ({
                 <Typography colorToken="white100" typographyToken="primaryBodyMediumRegular">
                   No {positionsFilterId === 'settled' ? 'settled' : 'active'} positions found. Visit
                   our{' '}
-                  <AppLink
+                  <VoltzAppLink
                     colorToken="primary"
                     data-testid="NoPositions-AppLink"
                     to={`/${routes.POOLS}`}
                     typographyToken="primaryBodyMediumRegular"
                   >
                     pool page
-                  </AppLink>{' '}
+                  </VoltzAppLink>{' '}
                   and start trading!
                 </Typography>
               </NoPositionsFoundBox>

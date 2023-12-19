@@ -1,5 +1,5 @@
 import { getViewOnEtherScanLink } from '@voltz-protocol/v1-sdk';
-import { AppLink, CloseButton, ExternalLink, Typography } from 'brokoli-ui';
+import { CloseButton, ExternalLink, Typography } from 'brokoli-ui';
 import React from 'react';
 
 import { routes, useAppSelector } from '../../../../../app';
@@ -7,6 +7,7 @@ import { OptimiserInfo } from '../../../../../app/features/lp-optimisers';
 import { selectChainId } from '../../../../../app/features/network';
 import { doNothing } from '../../../../../utilities/doNothing';
 import { TitleBox } from '../../../../components/SettleFlow/SettleConfirmationStep/SettleConfirmationStep.styled';
+import { VoltzAppLink } from '../../../../components/VoltzAppLink';
 import { BatchBudgetTrigger } from '../BatchBudgetTrigger/BatchBudgetTrigger';
 import { BottomBox, ContentBox, TopBox } from './DepositSuccessModalContent.styled';
 
@@ -50,14 +51,14 @@ export const DepositSuccessModalContent: React.FunctionComponent<Props> = ({
         >
           View on Etherscan
         </ExternalLink>
-        <AppLink
+        <VoltzAppLink
           colorToken="primary"
           data-testid="DepositSuccessModalContent-GotoYourPortfolioLink"
           to={`/${routes.PORTFOLIO_POSITIONS}`}
           typographyToken="primaryBodyMediumRegular"
         >
           Go to Your Portfolio
-        </AppLink>
+        </VoltzAppLink>
       </TopBox>
       <BottomBox>
         <BatchBudgetTrigger
